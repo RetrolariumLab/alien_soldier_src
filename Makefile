@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model check-graphics-models
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model check-graphics-models check-graphics-workspace
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -317,10 +317,27 @@ build-content-runtime: verify-runtime-toolchain
 
 # Write a migrated copy of an older screen workspace; the original stays.
 
+check-graphics-workspace: check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_studio_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_studio_model.py check --profile eu
+
+check-compressed-graphics-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/compressed_graphics_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/compressed_graphics_model.py check --profile eu
+
+check-palette-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/palette_studio_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/palette_studio_model.py check --profile eu
+
+.PHONY: check-mapping-workspace
+check-mapping-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/mapping_studio_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/mapping_studio_model.py check --profile eu
+
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
 check-content: init-content-all
-	@$(MAKE) --no-print-directory check-level-model check-graphics-models
+	@$(MAKE) --no-print-directory check-level-model check-graphics-models check-graphics-workspace
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit

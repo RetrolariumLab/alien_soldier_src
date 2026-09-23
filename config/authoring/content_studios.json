@@ -42,7 +42,29 @@
         "bounded-map-preview"
       ]
     },
-    {"id": "graphics", "name": "Graphics Studio", "status": "planned", "artifacts": []},
+    {
+      "id": "graphics",
+      "name": "Graphics Studio",
+      "status": "foundation",
+      "artifacts": [
+        "tile_art",
+        "compressed_tile_art",
+        "palette_commands",
+        "sprite_mappings"
+      ],
+      "derived_views": [
+        "object_gallery"
+      ],
+      "model_gate": "check-graphics-models",
+      "workspace_gate": "check-graphics-workspace",
+      "workstation_gate": "check-graphics-studio",
+      "workstation_actions": [
+        "save",
+        "reload",
+        "build",
+        "dirty-close"
+      ]
+    },
     {"id": "screen", "name": "Screen Studio", "status": "planned", "artifacts": []},
     {"id": "text", "name": "Text Studio", "status": "planned", "artifacts": []},
     {"id": "sound", "name": "Sound Studio", "status": "planned", "artifacts": []}
@@ -67,6 +89,148 @@
         "src/gameplay/object_dispatch_table.s",
         "src/stages/configuration_records.s",
         "src/stages/configuration.s"
+      ]
+    },
+    {
+      "id": "tile_art",
+      "studio": "graphics",
+      "kind": "graphics_tile_document",
+      "workspace": "graphics/tile_art.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "payload_count": 289,
+      "tile_count": 3230,
+      "source_owners": [
+        "src/data/japanese_font_and_credits_tile_art.s",
+        "src/data/player_sprite_art.s",
+        "src/data/sega_screen_assets.s",
+        "src/data/shared_frontend_and_gameplay_tile_art.s"
+      ]
+    },
+    {
+      "id": "palette_commands",
+      "studio": "graphics",
+      "kind": "palette_document",
+      "workspace": "graphics/palettes.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "block_count": 55,
+      "command_count": 95,
+      "offset_list_count": 29,
+      "source_owners": [
+        "src/rendering/palettes.s",
+        "data/mappings/byte_BB72.bin",
+        "data/other/byte_BE1E.bin",
+        "data/other/byte_C05C.bin"
+      ]
+    },
+    {
+      "id": "compressed_tile_art",
+      "studio": "graphics",
+      "kind": "compressed_tile_document",
+      "workspace": "graphics/compressed_tile_art.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "payload_count": 153,
+      "tile_count": 29405,
+      "decoded_byte_count": 940960,
+      "compressed_capacity": 598058,
+      "source_owners": [
+        "data/artcomp",
+        "data/mappings",
+        "src/data/credits_scene_assets.s",
+        "src/data/frontend_scene_assets.s",
+        "src/data/japanese_font_and_credits_tile_art.s",
+        "src/data/shared_frontend_and_transition_assets.s"
+      ]
+    },
+    {
+      "id": "sprite_mappings",
+      "studio": "graphics",
+      "kind": "mapping_document",
+      "workspace": "graphics/sprite_mappings.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "block_count": 764,
+      "mapping_count": 1169,
+      "piece_count": 3566,
+      "static_mapping_count": 1101,
+      "dynamic_mapping_count": 68,
+      "payload_block_count": 9,
+      "source_owners": [
+        "data/mappings/byte_193010.bin",
+        "data/mappings/byte_19AF40.bin",
+        "data/mappings/byte_19C492.bin",
+        "data/mappings/byte_1ABB28.bin",
+        "data/mappings/byte_1C0FB2.bin",
+        "data/mappings/byte_1C6620.bin",
+        "data/other/entity_type_1c0_early_form_part_mapping.bin",
+        "data/other/word_E99BE.bin",
+        "data/other/word_EC82E.bin",
+        "src/bosses/entity_type_1c0_core.s",
+        "src/credits/palette_data.s",
+        "src/cutscenes/scene_control.s",
+        "src/data/antroid_sprite_mappings.s",
+        "src/data/back_stringer_sprite_mappings.s",
+        "src/data/bird_animation_mappings.s",
+        "src/data/caterpillar_sprite_mappings.s",
+        "src/data/circling_enemy_sprite_mappings.s",
+        "src/data/deep_strider_sprite_mappings.s",
+        "src/data/destroyer_mk2_sprite_mappings.s",
+        "src/data/enemy_projectile_animation_mappings.s",
+        "src/data/entity_type_1c0_part_sprite_mappings.s",
+        "src/data/entity_type_1c0_second_form_sprite_mapping.s",
+        "src/data/epsilon_1_mapping_data.s",
+        "src/data/epsilon_1_sprite_mappings.s",
+        "src/data/flying_neo_sprite_mappings.s",
+        "src/data/frontend_sprite_mappings.s",
+        "src/data/gusthead_sprite_mappings.s",
+        "src/data/indexed_object_and_stage_effect_mappings.s",
+        "src/data/jampan_sprite_mappings.s",
+        "src/data/joker_sprite_mappings.s",
+        "src/data/missiray_entry_sprite_mappings.s",
+        "src/data/phase_pattern_sprite_mappings.s",
+        "src/data/planet_cutscene_assets.s",
+        "src/data/player_movement_and_dash_sprite_mappings.s",
+        "src/data/player_special_and_death_sprite_mappings.s",
+        "src/data/player_state_animation_sprite_mappings.s",
+        "src/data/seven_forces_valkirie_and_stage24_mappings.s",
+        "src/data/shared_combat_sprite_frames.s",
+        "src/data/shared_frontend_and_transition_assets.s",
+        "src/data/shared_stage_object_sprite_mappings.s",
+        "src/data/sharpssteel_sprite_mappings.s",
+        "src/data/shellshogun_sprite_mappings.s",
+        "src/data/shield_viper_and_missiray_mappings.s",
+        "src/data/ship_sequence_sprite_mappings.s",
+        "src/data/sniper_honeyviper_tentacle_sprite_mappings.s",
+        "src/data/stage10_wasp_sprite_mappings.s",
+        "src/data/stage18_and_stage19_assets.s",
+        "src/data/stage24_scene_sprite_mapping.s",
+        "src/data/stage3_assets.s",
+        "src/data/stage_21_asteroid_and_destroyer_proto_mappings.s",
+        "src/data/stage_combat_object_sprite_mappings.s",
+        "src/data/stage_object_assets.s",
+        "src/data/sunset_sting_segment_sprite_mappings.s",
+        "src/data/terobuster_sprite_mappings.s",
+        "src/data/valkirie_shared_rotation_c_mappings.s",
+        "src/data/valkirie_sprite_mappings.s",
+        "src/data/viblack_missile_sprite_animations.s",
+        "src/data/victor_and_sunset_sting_shared_sprite_mappings.s",
+        "src/data/weapon_select_and_enemy_sprite_mappings.s",
+        "src/data/wolf_garopa_and_z_leo_mappings.s",
+        "src/data/xi_tiger_and_boss_art.s",
+        "src/data/xi_tiger_entrance_sprite_mappings.s",
+        "src/data/xi_tiger_sprite_mappings.s",
+        "src/ui/options_shared_helpers_and_assets.s",
+        "src/ui/password_screen.s"
       ]
     }
   ]
