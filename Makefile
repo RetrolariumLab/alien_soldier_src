@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout check-content check-graphics-models
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -240,6 +240,8 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
+.PHONY: art-validate palette-validate mapping-validate check-graphics-models
+
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
 # chooses which cartridge is used as the editable project's base.
@@ -247,12 +249,26 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 # This deliberately ignores local workspace documents and stages directly
 # from tracked preservation inputs. Both regional baselines are mandatory.
 
+art-validate:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/tile_art.py validate
+
+palette-validate:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/palettes.py validate
+
+mapping-validate:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sprite_mappings.py validate
+
+check-graphics-models: art-validate palette-validate mapping-validate
+
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
 
 # Write a migrated copy of an older screen workspace; the original stays.
 
 # Every content model, workspace and Studio check against both cartridges.
+.PHONY: check-content
+check-content:
+	@$(MAKE) --no-print-directory check-graphics-models
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit
@@ -778,6 +794,7 @@ help:
 	@echo "Checks:"
 	@echo "  make lint               - Assembly style, source policy and project hygiene"
 	@echo "  make test               - Every test module, TEST_JOBS at a time"
+	@echo "  make check-content      - Every content model and Studio against both cartridges"
 	@echo "  make runtime-capture    - Twelve Japanese scenarios in the pinned emulator"
 	@echo "  make release-check      - All of the above from a clean build"
 	@echo ""
@@ -847,4 +864,5 @@ release-check:
 	@$(MAKE) --no-print-directory verify-all
 	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=jp
 	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=eu
+	@$(MAKE) --no-print-directory check-content
 	@$(MAKE) --no-print-directory runtime-capture PROFILE=jp
