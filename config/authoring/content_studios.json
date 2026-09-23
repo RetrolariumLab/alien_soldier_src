@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "profile_manifest": "config/rom_profiles.json",
+  "profiles": [
+    "jp",
+    "eu"
+  ],
+  "workspace": "content/workspace",
+  "workspace_document": "workspace.json",
+  "profile_outputs": {
+    "jp": "build/content/jp/alien_soldier.bin",
+    "eu": "build/content/eu/alien_soldier.bin"
+  },
+  "zero_edit_outputs": {
+    "jp": "build/content/zero-edit/jp/alien_soldier.bin",
+    "eu": "build/content/zero-edit/eu/alien_soldier.bin"
+  },
+  "assembler_defines": {
+    "jp": [],
+    "eu": [
+      "BuildProfileEU=1"
+    ]
+  },
+  "studios": [
+    {
+      "id": "level",
+      "name": "Level Studio",
+      "status": "foundation",
+      "artifacts": [
+        "level_layouts"
+      ],
+      "model_gate": "check-level-model",
+      "render_gate": "check-graphics-models",
+      "workstation_gate": "check-level-studio",
+      "workstation_actions": [
+        "save",
+        "reload",
+        "build",
+        "dirty-close",
+        "plain-stage-route-edit",
+        "raw-map-edit",
+        "bounded-map-preview"
+      ]
+    },
+    {"id": "graphics", "name": "Graphics Studio", "status": "planned", "artifacts": []},
+    {"id": "screen", "name": "Screen Studio", "status": "planned", "artifacts": []},
+    {"id": "text", "name": "Text Studio", "status": "planned", "artifacts": []},
+    {"id": "sound", "name": "Sound Studio", "status": "planned", "artifacts": []}
+  ],
+  "artifacts": [
+    {
+      "id": "level_layouts",
+      "studio": "level",
+      "kind": "level_document",
+      "workspace": "level/levels.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "spawn_list_count": 19,
+      "placement_count": 314,
+      "configuration_count": 30,
+      "stage_slot_count": 26,
+      "entry_bytes": 12,
+      "source_owners": [
+        "src/gameplay/object_spawner.s",
+        "src/gameplay/object_dispatch_table.s",
+        "src/stages/configuration_records.s",
+        "src/stages/configuration.s"
+      ]
+    }
+  ]
+}

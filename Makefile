@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout check-content check-level-model check-graphics-models
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model check-graphics-models
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -114,6 +114,10 @@ derive-eu-layout:
 .PHONY: check-profile-as-args
 check-profile-as-args:
 	@$(PYTHON) $(SCRIPTS_DIR)/check_profile_as_args.py --flags="$(AS_ARGS)"
+
+.PHONY: check-profile-flags
+check-profile-flags:
+	@$(PYTHON) -m unittest tests.test_profile_make_args
 
 # Initialize project from original ROM
 # Usage: make init
@@ -240,14 +244,51 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
 # chooses which cartridge is used as the editable project's base.
+init-content:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/content_workspace.py init \
+		--manifest $(CONTENT_MANIFEST) --profile $(CONTENT_PROFILE) \
+		$(if $(filter true,$(FORCE)),--force,)
+
+init-content-all:
+	@$(MAKE) --no-print-directory init-content CONTENT_PROFILE=jp
+	@$(MAKE) --no-print-directory init-content CONTENT_PROFILE=eu
+
+inspect-content:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/content_workspace.py inspect \
+		--manifest $(CONTENT_MANIFEST) --profile $(CONTENT_PROFILE)
+
+validate-content:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/content_workspace.py validate \
+		--manifest $(CONTENT_MANIFEST) --profile $(CONTENT_PROFILE)
+
+validate-content-all:
+	@$(MAKE) --no-print-directory validate-content CONTENT_PROFILE=jp
+	@$(MAKE) --no-print-directory validate-content CONTENT_PROFILE=eu
+
+build-content: check-profile-as-args init-content
+	@$(MAKE) --no-print-directory check-init check-assets verify-toolchain \
+		PROFILE=$(CONTENT_PROFILE)
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/build_content.py \
+		--manifest $(CONTENT_MANIFEST) --profile $(CONTENT_PROFILE) \
+		--as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(AS_ARGS)" \
+		$(if $(CONTENT_LISTING),--listing "$(CONTENT_LISTING)",)
 
 # This deliberately ignores local workspace documents and stages directly
 # from tracked preservation inputs. Both regional baselines are mandatory.
+check-content-zero-edit:
+	@$(MAKE) --no-print-directory check-init check-assets verify-toolchain PROFILE=jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/build_content.py --zero-edit \
+		--manifest $(CONTENT_MANIFEST) --profile jp \
+		--as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args "-maxerrors 2"
+	@$(MAKE) --no-print-directory check-init check-assets verify-toolchain PROFILE=eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/build_content.py --zero-edit \
+		--manifest $(CONTENT_MANIFEST) --profile eu \
+		--as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args "-maxerrors 2"
 
 check-level-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/level_studio_model.py check --profile jp
@@ -269,12 +310,16 @@ check-graphics-models: art-validate palette-validate mapping-validate tilemap-va
 
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
+.PHONY: build-content-runtime
+build-content-runtime: verify-runtime-toolchain
+	@$(MAKE) --no-print-directory build-content CONTENT_PROFILE=$(CONTENT_PROFILE) \
+		AS_ARGS='-q -maxerrors 2' CONTENT_LISTING="$(SOUND_LISTING)"
 
 # Write a migrated copy of an older screen workspace; the original stays.
 
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
-check-content:
+check-content: init-content-all
 	@$(MAKE) --no-print-directory check-level-model check-graphics-models
 # Source policy, tests and the semantic audit tools.
 
@@ -806,6 +851,11 @@ help:
 	@echo "  make release-check      - All of the above from a clean build"
 	@echo ""
 	@echo "Content studios (CONTENT_PROFILE=jp by default, CONTENT_PROFILE=eu for Europe):"
+	@echo "  make init-content               - Initialize missing workspace files"
+	@echo "  make inspect-content            - Report edited workspace artifacts"
+	@echo "  make validate-content           - Validate the workspace"
+	@echo "  make build-content              - Build an edited ROM into build/content"
+	@echo "  make check-content-zero-edit    - An unedited workspace must build both cartridges"
 	@echo ""
 	@echo "Watching a movie (requires MOVIE=tas|longplay|menus):"
 	@echo "  make play MOVIE=tas                       - Watch it, on $(ROM)"
@@ -871,5 +921,6 @@ release-check:
 	@$(MAKE) --no-print-directory verify-all
 	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=jp
 	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=eu
+	@$(MAKE) --no-print-directory check-content-zero-edit
 	@$(MAKE) --no-print-directory check-content
 	@$(MAKE) --no-print-directory runtime-capture PROFILE=jp
