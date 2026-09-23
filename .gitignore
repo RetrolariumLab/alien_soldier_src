@@ -163,6 +163,10 @@ reference/
 diffs/
 logs/
 runtime/
+# Runtime code is public; only captures remain private generated outputs.
+!/scripts/runtime/
+!/scripts/runtime/*.py
+!/scripts/runtime/*.lua
 analysis_report*
 unnamed_procedures.txt
 tmp/
@@ -178,3 +182,9 @@ batch_renames.csv
 
 # Local reference repositories
 references/
+
+# Local editable content projects. Editors write here, never into src/ or data/.
+content/workspace/
+
+# Local agent settings
+/.claude/settings.local.json

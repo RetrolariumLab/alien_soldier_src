@@ -212,8 +212,8 @@ make stop               # Kill all running Gens emulator instances
   then compares every output byte directly with it.
 - The original checksum and region checks are preserved. Modified gameplay builds
   are outside the Source Reconstruction 1.0 preservation profile.
-- The release contract is tracked in `docs/release_contract.md`; source
-  partitioning rules and naming confidence are documented in `docs/source_layout.md`.
+- Source partitioning rules and naming confidence are documented in
+  `docs/source_layout.md`.
 
 ## Binary Trace System
 

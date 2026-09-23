@@ -1,4 +1,4 @@
-# Alien Soldier (J) Makefile
+# Alien Soldier multi-profile Makefile
 # Build configuration for AS assembler
 
 PYTHON ?= python
@@ -26,22 +26,55 @@ TOOLS_DIR = bin/$(PLATFORM)
 # Tools
 AS_BIN = $(TOOLS_DIR)/$(AS_EXE)
 P2BIN = $(TOOLS_DIR)/$(P2BIN_EXE)
-AS_ARGS = -maxerrors 2
 
 # Set message path for AS assembler (needed for as.msg, cmdarg.msg, etc.)
 export AS_MSGPATH = $(TOOLS_DIR)
 
-# Files
+# Preservation profile. The Source 1.0 command surface remains the JP default;
+# PROFILE=eu selects the independent European reference contract.
+PROFILE ?= jp
+PROFILE_CONFIG = config/rom_profiles.json
+
+ifeq ($(PROFILE),jp)
+override PROFILE_AS_ARGS =
 SRC = src/main.s
 OBJ = build/main.p
 ROM = asbuilt.bin
 LISTING = build/main.lst
 ORIG_ROM = Alien Soldier (J) [!].bin
 ASSET_MANIFEST = assets/manifest.json
-TOOLCHAIN_MANIFEST = config/toolchain.json
 ROM_LAYOUT = config/rom_layout.json
+DATA_ADDRS = data/data_addrs.txt
+else ifeq ($(PROFILE),eu)
+override PROFILE_AS_ARGS = -D BuildProfileEU=1
+SRC = src/main.s
+OBJ = build/eu/main.p
+ROM = asbuilt_eu.bin
+LISTING = build/eu/main.lst
+ORIG_ROM = Alien Soldier (E) [!].bin
+ASSET_MANIFEST = assets/manifest_eu.json
+ROM_LAYOUT = config/rom_layout_eu.json
+DATA_ADDRS = data/data_addrs_eu.txt
+else
+$(error Unknown PROFILE "$(PROFILE)"; expected jp or eu)
+endif
+
+# Caller flags are independent of mandatory preservation-profile selection.
+AS_ARGS = -maxerrors 2
+override PRESERVATION_AS_ARGS = $(strip $(AS_ARGS) $(PROFILE_AS_ARGS))
+
+TOOLCHAIN_MANIFEST = config/toolchain.json
 RUNTIME_SCENARIOS = config/runtime_scenarios.json
 RUNTIME_DIR = runtime/captures
+RUNTIME_REQUIRE_RECEIPT ?= 0
+CONTENT_MANIFEST = config/authoring/content_studios.json
+CONTENT_PROFILE ?= $(PROFILE)
+CONTENT_ROM = build/content/$(CONTENT_PROFILE)/alien_soldier.bin
+PLAYTEST_STAGE ?= 1
+PLAYTEST_DIFFICULTY ?= easy
+SOUND_REQUEST ?= 0x81
+SOUND_FRAMES ?= 1800
+SOUND_LISTING = $(abspath build/content/$(CONTENT_PROFILE)/sound_audition.lst)
 
 # Directories
 DATA_DIR = data
@@ -49,28 +82,21 @@ SRC_DIR = src
 SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
-# Data addresses file (for binclude segments)
-DATA_ADDRS = $(DATA_DIR)/data_addrs.txt
-
 # Default target
-.PHONY: all build verify check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-audit release-check source-inventory semantic-audit
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check
 all: build
+
+# Preservation profile selection, extraction, assembly and identity.
+
+# Preservation commands accept only profiles whose byte identity is supported.
+
+# Reject caller-owned profile symbols before preservation assembly/extraction.
 
 # Initialize project from original ROM
 # Usage: make init
 .PHONY: init
 init:
-	@$(PYTHON) $(SCRIPTS_DIR)/init_project.py \
-		--orig-rom "$(ORIG_ROM)" \
-		--manifest $(ASSET_MANIFEST) \
-		--data-dir $(DATA_DIR) \
-		--data-addrs $(DATA_ADDRS) \
-		--source $(SRC) \
-		--obj $(OBJ) \
-		--output $(ROM) \
-		--as-bin $(AS_BIN) \
-		--p2bin $(P2BIN) \
-		--as-args "$(AS_ARGS)"
+	@$(PYTHON) $(SCRIPTS_DIR)/init_project.py --orig-rom "$(ORIG_ROM)" --manifest $(ASSET_MANIFEST) --data-dir $(DATA_DIR) --data-addrs $(DATA_ADDRS) --source $(SRC) --obj $(OBJ) --output $(ROM) --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)"
 
 # Check if project is initialized (data/ directory with subfolders exists)
 # If missing, print a friendly hint instead of cryptic "error in opening file"
@@ -84,32 +110,19 @@ check-init:
 .PHONY: build
 build: check-init check-assets verify-toolchain
 	@echo "Building ROM..."
-	$(PYTHON) $(SCRIPTS_DIR)/build_rom.py \
-		--source $(SRC) \
-		--obj $(OBJ) \
-		--output $(ROM) \
-		--manifest $(ASSET_MANIFEST) \
-		--original-rom "$(ORIG_ROM)" \
-		--as-bin $(AS_BIN) \
-		--p2bin $(P2BIN) \
-		--as-args "$(AS_ARGS)"
+	$(PYTHON) $(SCRIPTS_DIR)/build_rom.py --source $(SRC) --obj $(OBJ) --output $(ROM) --manifest $(ASSET_MANIFEST) --original-rom "$(ORIG_ROM)" --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)"
 	@echo ""
 	@echo "Build complete: $(ROM)"
 
-# Permanent preservation gate: assemble from source and require the canonical
-# Japanese cartridge image byte for byte. The European ROM is not in this profile.
+# Permanent preservation gate: assemble from source and require the selected
+# profile's declared cartridge image byte for byte.
 verify: check-init check-assets verify-toolchain
-	@$(PYTHON) $(SCRIPTS_DIR)/build_rom.py \
-		--source $(SRC) \
-		--obj $(OBJ) \
-		--output $(ROM) \
-		--manifest $(ASSET_MANIFEST) \
-		--original-rom "$(ORIG_ROM)" \
-		--as-bin $(AS_BIN) \
-		--p2bin $(P2BIN) \
-		--as-args "$(AS_ARGS)" \
-		--verify
+	@$(PYTHON) $(SCRIPTS_DIR)/build_rom.py --source $(SRC) --obj $(OBJ) --output $(ROM) --manifest $(ASSET_MANIFEST) --original-rom "$(ORIG_ROM)" --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)" --verify
 	@$(MAKE) --no-print-directory verify-layout
+
+verify-all:
+	@$(MAKE) --no-print-directory verify PROFILE=jp
+	@$(MAKE) --no-print-directory verify PROFILE=eu
 
 # Split original ROM into data files
 .PHONY: split
@@ -137,75 +150,27 @@ update-asset-manifest:
 verify-toolchain:
 	@$(PYTHON) $(SCRIPTS_DIR)/verify_toolchain.py \
 		--config $(TOOLCHAIN_MANIFEST) \
-		--platform $(PLATFORM)
+		--platform $(PLATFORM) \
+		$(if $(filter default file,$(origin GENS_DIR)),,--emulator-dir "$(GENS_DIR)")
+
+.PHONY: verify-runtime-toolchain
+verify-runtime-toolchain:
+	@$(PYTHON) $(SCRIPTS_DIR)/verify_toolchain.py \
+		--config $(TOOLCHAIN_MANIFEST) --platform $(PLATFORM) \
+		--require-emulator --emulator-dir "$(GENS_DIR)"
 
 verify-layout: $(LISTING)
 	@$(PYTHON) $(SCRIPTS_DIR)/verify_layout.py \
 		--layout $(ROM_LAYOUT) \
 		--listing $(LISTING) \
-		--rom $(ROM)
+		--rom $(ROM) \
+		--manifest $(ASSET_MANIFEST)
 
 # Rebuild with the layout perturbed and require every reference to follow it.
 # A reference the assembler owns moves; a value written as a literal does not,
 # and that difference is what this separates. No emulator is involved.
 verify-relocation: $(LISTING)
 	@$(PYTHON) $(SCRIPTS_DIR)/verify_relocation.py 		--layout $(ROM_LAYOUT) 		--listing $(LISTING) 		--rom $(ROM)
-
-lint:
-	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src
-	@$(PYTHON) $(SCRIPTS_DIR)/lint_source.py \
-		--policy config/source_policy.json
-	@$(PYTHON) $(SCRIPTS_DIR)/lint_project.py
-
-format:
-	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src --fix
-	@$(MAKE) --no-print-directory lint
-
-test:
-	@$(PYTHON) -m unittest discover -s tests -p "test_*.py"
-
-source-inventory: $(LISTING)
-	@$(PYTHON) $(SCRIPTS_DIR)/source_inventory.py \
-		--layout $(ROM_LAYOUT) \
-		--listing $(LISTING) \
-		--output build/source_inventory.json
-
-semantic-audit:
-	@$(PYTHON) $(SCRIPTS_DIR)/semantic_audit_queue.py
-
-runtime: verify
-	@$(MAKE) --no-print-directory runtime-capture
-
-runtime-capture:
-	@$(PYTHON) $(SCRIPTS_DIR)/run_runtime_scenarios.py \
-		--scenarios $(RUNTIME_SCENARIOS) \
-		--gens "$(GENS_EXE)" \
-		--rom $(ROM) \
-		--output-dir $(RUNTIME_DIR)
-	@$(MAKE) --no-print-directory runtime-validate
-
-runtime-validate:
-	@$(PYTHON) $(SCRIPTS_DIR)/validate_runtime_scenarios.py \
-		--scenarios $(RUNTIME_SCENARIOS) \
-		--capture-dir $(RUNTIME_DIR) \
-		--ram-map src/ram_addrs.inc
-
-release-audit:
-	@$(PYTHON) $(SCRIPTS_DIR)/release_audit.py \
-		--contract config/release_contract.json
-
-# Ordered, clean-room release gate. Sub-makes are intentional: each phase is
-# visible in logs and no stale build/listing/runtime output can satisfy it.
-release-check:
-	@$(MAKE) --no-print-directory check-assets
-	@$(MAKE) --no-print-directory lint
-	@$(MAKE) --no-print-directory test
-	@$(MAKE) --no-print-directory clean
-	@$(MAKE) --no-print-directory verify
-	@$(MAKE) --no-print-directory verify-symbols
-	@$(MAKE) --no-print-directory verify-relocation
-	@$(MAKE) --no-print-directory runtime-capture
-	@$(MAKE) --no-print-directory release-audit
 
 # Unpack LZSS-compressed data from ROM to data/uncompressed/
 # Attempts to decompress all entries from data/data_addrs.txt
@@ -220,30 +185,76 @@ unpack-data:
 clean:
 	@python $(SCRIPTS_DIR)/clean_project.py
 
-# Analysis configuration
-# Workflow directory (for reports, procedure lists, etc.)
-WORKFLOW_DIR = workflow
+# Generate listing file (prerequisite for symbols)
 
-# Movie files for each analysis type
-MOVIE_FILE_tas = movies/dammit,truncated-aliensoldier.gmv
-MOVIE_FILE_longplay = movies/alien_soldier_j_longplay.gmv
-MOVIE_FILE_menus = movies/alien_soldier_j_menus.gmv
+$(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) |
+	@echo "Building listing file..."
+	@python -c "import os; os.makedirs('build', exist_ok=True)"
+	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
+# Content: the workspace, its models, the five Studios and the content build.
 
-# Max frames per movie type (0 = play until end)
-MAX_FRAMES_tas = 90000
-MAX_FRAMES_longplay = 0
-MAX_FRAMES_menus = 0
-ANALYSIS_WORKERS ?= 1
-ANALYSIS_GRID_COLS = 6
-ANALYSIS_FRAMESKIP = 8
-ANALYSIS_INTERVAL = 20
-# Reference captures are the full frame-by-frame baseline; analysis/debug may
-# sample this superset at ANALYSIS_INTERVAL without regenerating it.
-REFERENCE_INTERVAL ?= 1
-ANALYSIS_MAX_FRAMES = 90000
-ANALYSIS_MAX_DIFFS = 10
-ANALYSIS_DIFF_COLOR = pink
-PROCEDURES_FILE = $(WORKFLOW_DIR)/unanalyzed_procedures.txt
+# Content builds live under build/content and never write src/ or data/.
+# PROFILE remains the preservation selector; CONTENT_PROFILE independently
+# chooses which cartridge is used as the editable project's base.
+
+# This deliberately ignores local workspace documents and stages directly
+# from tracked preservation inputs. Both regional baselines are mandatory.
+
+# Play one music or sound request through the cartridge's own driver, on the
+# saved workspace: make audition-sound SOUND_REQUEST=0x81
+
+# Write a migrated copy of an older screen workspace; the original stays.
+
+# Every content model, workspace and Studio check against both cartridges.
+# Source policy, tests and the semantic audit tools.
+
+.PHONY: lint format test source-inventory semantic-audit
+
+lint:
+	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src
+	@$(PYTHON) $(SCRIPTS_DIR)/lint_source.py \
+		--policy config/source_policy.json
+	@$(PYTHON) $(SCRIPTS_DIR)/lint_project.py
+
+format:
+	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src --fix
+	@$(MAKE) --no-print-directory lint
+
+# Every test module in its own process, TEST_JOBS at a time. Name a few with
+# TESTS="sound level" to run only the modules whose names contain them.
+TEST_JOBS ?= 8
+test:
+	@$(PYTHON) -B tests/run_tests.py --jobs $(TEST_JOBS) $(TESTS)
+
+source-inventory: $(LISTING)
+	@$(PYTHON) $(SCRIPTS_DIR)/source_inventory.py \
+		--layout $(ROM_LAYOUT) \
+		--listing $(LISTING) \
+		--output build/source_inventory.json
+
+semantic-audit:
+	@$(PYTHON) $(SCRIPTS_DIR)/semantic_audit_queue.py
+# Runtime baseline capture, playback and emulator selection.
+
+# Boot the European cartridge from cold and watch it reach the attract demo.
+
+runtime: verify
+	@$(MAKE) --no-print-directory runtime-capture
+
+runtime-capture: verify-runtime-toolchain
+	@$(PYTHON) $(SCRIPTS_DIR)/run_runtime_scenarios.py \
+		--scenarios $(RUNTIME_SCENARIOS) \
+		--gens "$(GENS_EXE)" \
+		--rom "$(ROM)" \
+		--output-dir $(RUNTIME_DIR)
+	@$(MAKE) --no-print-directory runtime-validate RUNTIME_REQUIRE_RECEIPT=1
+
+runtime-validate:
+	@$(PYTHON) $(SCRIPTS_DIR)/validate_runtime_scenarios.py \
+		--scenarios $(RUNTIME_SCENARIOS) \
+		--capture-dir $(RUNTIME_DIR) \
+		--ram-map src/ram_addrs.inc \
+		$(if $(filter 1 true,$(RUNTIME_REQUIRE_RECEIPT)),--require-receipt --gens "$(GENS_EXE)" --rom "$(ROM)",)
 
 # Watch a recorded movie play, on whichever image you name. Nothing is captured
 # and nothing is checked: this is for looking at the game with your own eyes,
@@ -283,10 +294,13 @@ endif
 endif
 endif
 
-# Generate a screenshot and full emulator state for every movie frame by default.
-# Usage: make reference MOVIE=tas|longplay|menus
+# Generate exact-frame PNG/state archives in a new private session each time.
+# TAS defaults to 90000 frames (including post-input credits), menus to its
+# authenticated stream length; longplay requires an explicit bounded prefix.
+# Usage: make reference MOVIE=tas|menus
+#        make reference MOVIE=longplay REFERENCE_MAX_FRAMES=100000
 .PHONY: reference
-reference: verify
+reference: verify-runtime-toolchain verify
 ifndef MOVIE
 	@echo "ERROR: MOVIE parameter required!"
 	@echo ""
@@ -298,20 +312,102 @@ ifndef MOVIE
 	@echo "  make reference MOVIE=menus    - Menu exploration reference"
 	@exit 1
 else
-	@echo "Generating reference screenshots and memory dumps from $(MOVIE)..."
-	python -c "import os; os.makedirs('reference/$(MOVIE)', exist_ok=True)"
+	@$(PYTHON) $(SCRIPTS_DIR)/capture_reference.py \
+		--movie "$(MOVIE)" --rom "$(ROM)" --gens "$(GENS_EXE)" \
+		--interval $(REFERENCE_INTERVAL) \
+		$(if $(REFERENCE_MAX_FRAMES),--max-frames $(REFERENCE_MAX_FRAMES),) \
+		--output-dir "reference/$(MOVIE)"
+endif
+
+# Gens emulator paths
+GENS_DIR ?= ../gens_automation
+GENS_EXE = $(GENS_DIR)/Output/Gens.exe
+GENS_REPO = https://github.com/oranguthang/gens_automation.git
+
+# Debug: Build ROM and run with screenshot + memory comparison
+# Stops after N visual differences (memory diffs won't end the run)
+# Usage: make debug MOVIE=tas|longplay|menus
+.PHONY: debug
+debug: build
+ifndef MOVIE
+	@echo "ERROR: MOVIE parameter required!"
+	@echo ""
+	@echo "Usage: make debug MOVIE=<type>"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make debug MOVIE=tas"
+	@exit 1
+else
+	@echo "Running $(MOVIE) with visual comparison (debug mode)..."
+	python -c "import os; os.makedirs('diffs/$(MOVIE)', exist_ok=True); os.makedirs('reports', exist_ok=True)"
 	"$(GENS_EXE)" \
 		-rom $(ROM) \
 		-play $(MOVIE_FILE_$(MOVIE)) \
-		-screenshot-interval $(REFERENCE_INTERVAL) \
-		-screenshot-dir reference/$(MOVIE) \
+		-screenshot-interval $(ANALYSIS_INTERVAL) \
+		-screenshot-dir diffs/$(MOVIE) \
+		-reference-dir reference/$(MOVIE) \
 		$(if $(MAX_FRAMES_$(MOVIE)),-max-frames $(MAX_FRAMES_$(MOVIE)),) \
-		-save-state-dumps \
+		-max-diffs 10 \
+		-max-memory-diffs 0 \
+		-compare-state-dumps \
 		-turbo \
 		-frameskip 0 \
 		-nosound
-	@echo "Reference saved to reference/$(MOVIE)/"
+	@echo ""
+	@echo "Emulator run complete. Generating comparison report..."
+	@python $(SCRIPTS_DIR)/compare_states.py \
+		--diffs-dir diffs/$(MOVIE) \
+		--reference-dir reference/$(MOVIE) \
+		--output-dir reports
+	@echo ""
+	@echo "Debug complete! Check:"
+	@echo "  - diffs/$(MOVIE)/*.genstate - Memory dumps for diff frames"
+	@echo "  - diffs/$(MOVIE)/*.png - Screenshots for diff frames"
+	@echo "  - reports/diff_frame_*.md - Detailed LLM-friendly analysis report"
 endif
+
+# Stop all running emulators and analysis
+.PHONY: stop
+stop:
+	@echo "Stopping analysis and emulators..."
+	-taskkill /F /IM Gens.exe 2>nul
+	-taskkill /F /IM python.exe 2>nul
+	@echo "Done"
+
+# Build Gens emulator (clone if not present)
+.PHONY: build-gens
+build-gens:
+	@python -c "import os, subprocess; os.path.isdir('$(GENS_DIR)') or (print('Cloning gens_automation...'), subprocess.run(['git', 'clone', '$(GENS_REPO)', '$(GENS_DIR)']))"
+	@echo "Building Gens emulator..."
+	$(MAKE) -C $(GENS_DIR)
+	@echo "Build complete: $(GENS_EXE)"
+# Optional research, analysis and source naming workflow.
+
+# Analysis configuration
+# Workflow directory (for reports, procedure lists, etc.)
+WORKFLOW_DIR = workflow
+
+# Movie files for each analysis type
+MOVIE_FILE_tas = movies/dammit,truncated-aliensoldier.gmv
+MOVIE_FILE_longplay = movies/alien_soldier_j_longplay.gmv
+MOVIE_FILE_menus = movies/alien_soldier_j_menus.gmv
+
+# Max frames per movie type (0 = play until end)
+MAX_FRAMES_tas = 90000
+MAX_FRAMES_longplay = 0
+MAX_FRAMES_menus = 0
+ANALYSIS_WORKERS ?= 1
+ANALYSIS_GRID_COLS = 6
+ANALYSIS_FRAMESKIP = 8
+ANALYSIS_INTERVAL = 20
+# Reference captures are the full frame-by-frame baseline; analysis/debug may
+# sample this superset at ANALYSIS_INTERVAL without regenerating it.
+REFERENCE_INTERVAL ?= 1
+REFERENCE_MAX_FRAMES ?= $(filter-out 0,$(MAX_FRAMES_$(MOVIE)))
+ANALYSIS_MAX_FRAMES = 90000
+ANALYSIS_MAX_DIFFS = 10
+ANALYSIS_DIFF_COLOR = pink
+PROCEDURES_FILE = $(WORKFLOW_DIR)/unanalyzed_procedures.txt
 
 # Analyze procedures for visual/memory impact
 # Usage: make analyze MOVIE=tas|longplay|menus
@@ -400,69 +496,6 @@ prepare-batch:
 rename:
 	@$(PYTHON) $(SCRIPTS_DIR)/rename_batch.py --database $(WORKFLOW_DIR)/rename_batch.csv --movie-file $(WORKFLOW_DIR)/.movie
 
-# Gens emulator paths
-GENS_DIR ?= ../gens_automation
-GENS_EXE = $(GENS_DIR)/Output/Gens.exe
-GENS_REPO = https://github.com/oranguthang/gens_automation.git
-
-# Debug: Build ROM and run with screenshot + memory comparison
-# Stops after N visual differences (memory diffs won't end the run)
-# Usage: make debug MOVIE=tas|longplay|menus
-.PHONY: debug
-debug: build
-ifndef MOVIE
-	@echo "ERROR: MOVIE parameter required!"
-	@echo ""
-	@echo "Usage: make debug MOVIE=<type>"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make debug MOVIE=tas"
-	@exit 1
-else
-	@echo "Running $(MOVIE) with visual comparison (debug mode)..."
-	python -c "import os; os.makedirs('diffs/$(MOVIE)', exist_ok=True); os.makedirs('reports', exist_ok=True)"
-	"$(GENS_EXE)" \
-		-rom $(ROM) \
-		-play $(MOVIE_FILE_$(MOVIE)) \
-		-screenshot-interval $(ANALYSIS_INTERVAL) \
-		-screenshot-dir diffs/$(MOVIE) \
-		-reference-dir reference/$(MOVIE) \
-		$(if $(MAX_FRAMES_$(MOVIE)),-max-frames $(MAX_FRAMES_$(MOVIE)),) \
-		-max-diffs 10 \
-		-max-memory-diffs 0 \
-		-compare-state-dumps \
-		-turbo \
-		-frameskip 0 \
-		-nosound
-	@echo ""
-	@echo "Emulator run complete. Generating comparison report..."
-	@python $(SCRIPTS_DIR)/compare_states.py \
-		--diffs-dir diffs/$(MOVIE) \
-		--reference-dir reference/$(MOVIE) \
-		--output-dir reports
-	@echo ""
-	@echo "Debug complete! Check:"
-	@echo "  - diffs/$(MOVIE)/*.genstate - Memory dumps for diff frames"
-	@echo "  - diffs/$(MOVIE)/*.png - Screenshots for diff frames"
-	@echo "  - reports/diff_frame_*.md - Detailed LLM-friendly analysis report"
-endif
-
-# Stop all running emulators and analysis
-.PHONY: stop
-stop:
-	@echo "Stopping analysis and emulators..."
-	-taskkill /F /IM Gens.exe 2>nul
-	-taskkill /F /IM python.exe 2>nul
-	@echo "Done"
-
-# Build Gens emulator (clone if not present)
-.PHONY: build-gens
-build-gens:
-	@python -c "import os, subprocess; os.path.isdir('$(GENS_DIR)') or (print('Cloning gens_automation...'), subprocess.run(['git', 'clone', '$(GENS_REPO)', '$(GENS_DIR)']))"
-	@echo "Building Gens emulator..."
-	$(MAKE) -C $(GENS_DIR)
-	@echo "Build complete: $(GENS_EXE)"
-
 # Debug pointer issues by testing data blocks from END of ROM
 # Retired: the old debugger mutates a monolithic file and can delete diff data.
 # Use verify-relocation for the address-ordered source instead.
@@ -471,8 +504,10 @@ debug-pointers:
 	@$(PYTHON) $(SCRIPTS_DIR)/debug_pointers.py
 
 # Retired with the old pointer debugger; preserved as a safe diagnostic.
+.PHONY: report-pointers
 report-pointers:
 	@$(PYTHON) $(SCRIPTS_DIR)/report_pointers.py
+# CPU trace capture and stopped trace analysis.
 
 # Trace CPU execution after breakpoint
 # Usage: make trace MOVIE=tas BP=0xNNNN [FRAMES=20] [LOG=trace.log]
@@ -559,33 +594,6 @@ else
 	@echo "  make trace-story LOG=$(if $(LOG),$(LOG),logs/trace_$(START)_$(END).btrc)"
 	@echo "  make trace-graph LOG=$(if $(LOG),$(LOG),logs/trace_$(START)_$(END).btrc) MODE=pointers"
 endif
-
-# Default symbol file
-SYMBOLS_FILE = logs/symbols.txt
-
-# Generate symbol file from assembly listing
-# Export one canonical symbol for every ROM, RAM, and hardware address.
-.PHONY: symbols verify-symbols
-symbols: $(LISTING)
-	@python -c "import os; os.makedirs('logs', exist_ok=True)"
-	@echo "Extracting symbols from $(LISTING)..."
-	python $(SCRIPTS_DIR)/extract_symbols.py $(LISTING) \
-		--stats --all -o $(if $(SYMBOLS),$(SYMBOLS),$(SYMBOLS_FILE))
-
-verify-symbols: symbols
-	@$(PYTHON) $(SCRIPTS_DIR)/verify_symbols.py \
-		--symbols $(if $(SYMBOLS),$(SYMBOLS),$(SYMBOLS_FILE)) \
-		--listing $(LISTING) \
-		--name-audit config/name_audit.json \
-		--layout $(ROM_LAYOUT) \
-		--runtime $(RUNTIME_SCENARIOS) \
-		--minimum 15000
-
-# Generate listing file (prerequisite for symbols)
-$(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc)
-	@echo "Building listing file..."
-	@python -c "import os; os.makedirs('build', exist_ok=True)"
-	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(AS_ARGS) $(SRC)
 
 # Generate human-readable story log from binary trace
 # Usage: make trace-story LOG=<path.btrc> [OUT=<path.txt>] [SYMBOLS=<path.txt>]
@@ -679,21 +687,54 @@ else ifndef T2
 else
 	python $(SCRIPTS_DIR)/compare_traces.py $(T1) $(T2) $(if $(EXEC_ONLY),--exec-only,)
 endif
+# Profile-aware debugger symbol exports and validation.
+
+SYMBOLS_FILE = logs/symbols.txt
+
+# Generate symbol file from assembly listing
+# Export one canonical symbol for every ROM, RAM, and hardware address.
+.PHONY: symbols verify-symbols
+symbols: $(LISTING)
+	@python -c "import os; os.makedirs('logs', exist_ok=True)"
+	@echo "Extracting symbols from $(LISTING)..."
+	python $(SCRIPTS_DIR)/extract_symbols.py $(LISTING) \
+		--stats --all -o $(if $(SYMBOLS),$(SYMBOLS),$(SYMBOLS_FILE))
+
+verify-symbols: symbols
+	@$(PYTHON) $(SCRIPTS_DIR)/verify_symbols.py \
+		--symbols $(if $(SYMBOLS),$(SYMBOLS),$(SYMBOLS_FILE)) \
+		--listing $(LISTING) \
+		--name-audit config/name_audit.json \
+		--layout $(ROM_LAYOUT) \
+		--runtime $(RUNTIME_SCENARIOS) \
+		--minimum 15000
+# The command summary, then every public target grouped by file.
 
 # Help
 .PHONY: help
 help:
-	@echo "Alien Soldier (J) Build System"
+	@echo "Alien Soldier JP/EU source and authoring"
 	@echo ""
-	@echo "Basic commands:"
-	@echo "  make build              - Assemble and build ROM (default)"
-	@echo "  make verify             - Build and require canonical byte identity"
-	@echo "  make compare            - Compare built ROM with original"
-	@echo "  make check-assets       - Validate all extracted private segments"
-	@echo "  make verify-toolchain   - Hash-check build tools and pin the emulator"
+	@echo "Build and verify (PROFILE=jp by default, PROFILE=eu for Europe):"
+	@echo "  make init               - Extract the data from your original cartridge"
+	@echo "  make build              - Assemble the ROM (default)"
+	@echo "  make verify             - Build and require the original cartridge byte for byte"
+	@echo "  make verify-all         - verify for both cartridges"
 	@echo "  make verify-relocation  - Perturb the layout; every pointer must follow"
-	@echo "  make split              - Extract data from original ROM"
-	@echo "  make clean              - Remove build artifacts; preserve extracted data"
+	@echo "  make verify-symbols     - Export and check the debugger symbols"
+	@echo "  make compare            - Compare the built ROM with the original"
+	@echo "  make check-assets       - Check the extracted data against its manifest"
+	@echo "  make verify-toolchain   - Hash-check the assembler and pin the emulator"
+	@echo "  make split              - Extract data from the original ROM again"
+	@echo "  make clean              - Remove build output; keep extracted data"
+	@echo ""
+	@echo "Checks:"
+	@echo "  make lint               - Assembly style, source policy and project hygiene"
+	@echo "  make test               - Every test module, TEST_JOBS at a time"
+	@echo "  make runtime-capture    - Twelve Japanese scenarios in the pinned emulator"
+	@echo "  make release-check      - All of the above from a clean build"
+	@echo ""
+	@echo "Content studios (CONTENT_PROFILE=jp by default, CONTENT_PROFILE=eu for Europe):"
 	@echo ""
 	@echo "Watching a movie (requires MOVIE=tas|longplay|menus):"
 	@echo "  make play MOVIE=tas                       - Watch it, on $(ROM)"
@@ -723,10 +764,7 @@ help:
 	@echo "Debugging (pointer issues):"
 	@echo "  make reference MOVIE=tas       - Generate reference (required first!)"
 	@echo "  make verify-relocation        - Check pointers after moving code and data"
-	@echo "     -> Tests data blocks by inserting padding ($(ANALYSIS_WORKERS) parallel workers)"
-	@echo "     -> Works backwards from END to minimize displacement"
-	@echo "     -> Collects 10 genstate dumps + screenshots when diff found"
-	@echo "     -> Stops after first problem found"
+	@echo "     -> Static perturbation build only; no emulator or screenshot capture"
 	@echo ""
 	@echo "CPU tracing (binary format, ~10-50x smaller than text):"
 	@echo "  make trace-frames MOVIE=tas START=100 END=110"
@@ -747,3 +785,19 @@ help:
 	@echo ""
 	@echo "MOVIE types: tas, longplay, menus"
 	@echo "Workflow dir: $(WORKFLOW_DIR)/"
+	@$(PYTHON) -B $(SCRIPTS_DIR)/make_interface.py --list
+
+# Everything a release needs, in order: the inputs, the tests, both cartridges
+# rebuilt from a clean tree, their symbols and relocation, the content
+# pipeline, then the game itself in the pinned emulator (twelve Japanese
+# scenarios and the European boot).
+release-check:
+	@$(MAKE) --no-print-directory check-assets PROFILE=jp
+	@$(MAKE) --no-print-directory check-assets PROFILE=eu
+	@$(MAKE) --no-print-directory lint
+	@$(MAKE) --no-print-directory test
+	@$(MAKE) --no-print-directory clean
+	@$(MAKE) --no-print-directory verify-all
+	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=jp
+	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=eu
+	@$(MAKE) --no-print-directory runtime-capture PROFILE=jp

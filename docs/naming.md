@@ -237,7 +237,7 @@ Seven visual boss identities remain hypotheses (`NAME-003`).
   comments without allowing generated annotations to grow without bound.
 
 The preservation subset of these rules is currently enforced by `make lint`.
-The stricter destination and its migration order are declared in
-`config/source_reconstruction_1_0.json` and `docs/modularization_plan.md`.
+The stricter destination and its migration order are described in
+`docs/modularization_plan.md`.
 Passing mechanical style checks never establishes semantic confidence in a
 label.

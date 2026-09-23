@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from scripts.make_interface import make_text
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class TraceContractTests(unittest.TestCase):
     def test_breakpoint_trace_retains_emulator_termination_workaround(self) -> None:
-        makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+        makefile = make_text(ROOT)
         trace_recipe = makefile.split("# Binary trace CPU execution", 1)[0].rsplit(
             ".PHONY: trace", 1
         )[1]

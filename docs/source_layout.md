@@ -14,15 +14,11 @@ ROM. `make verify` runs this check after the byte-identity build.
 The Source Reconstruction 1.0 layout is normally 200-700 lines per
 cohesive module, with a default hard ceiling of 1,000 lines. The sole possible
 exception is one concrete boss whose state machine and private data cannot be
-split without harming readability. Exceptions are reviewed individually and
-declared in `config/source_reconstruction_1_0.json`. See
+split without harming readability. Exceptions are reviewed individually. See
 `docs/modularization_plan.md` for the migration rules and measured baseline.
 
-The 1,000-line ceiling is now identical in `config/rom_layout.json`, the
-development release contract, and the Source Reconstruction 1.0 contract.
-`make lint` checks every declared module against it, while `make release-audit`
-rejects a release threshold that attempts to weaken the destination contract.
-The same audit rejects generic module filenames declared in the ROM layout.
+The 1,000-line ceiling is set in `config/rom_layout.json`, and `make lint`
+checks every declared module against it.
 
 The current 17 modules above the preferred 700-line target are all concrete
 boss modules (703–869 lines); none exceeds the hard ceiling. Their length

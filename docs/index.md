@@ -4,7 +4,6 @@
 
 | Document | What it answers |
 | --- | --- |
-| [`source_reconstruction_1_0.md`](source_reconstruction_1_0.md) | What the 1.0 release claims, and what it does not |
 | [`source_layout.md`](source_layout.md) | Where the code lives and why it is split that way |
 | [`source_map.md`](source_map.md) | What the program does and which module owns each part |
 | [`release_check.md`](release_check.md) | Which command proves what, and in which order |
