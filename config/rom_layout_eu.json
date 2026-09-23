@@ -1,0 +1,2687 @@
+{
+  "schema_version": 1,
+  "target": {
+    "platform": "Sega Mega Drive / Genesis",
+    "cpu": "Motorola 68000",
+    "cartridge_size": 2097152,
+    "translation_unit": "single",
+    "entrypoint": "src/main.s",
+    "max_module_lines": 1000,
+    "entrypoint_note": "AS assembles one translation unit. Include order in src/main.s is ROM order; there is no linker script."
+  },
+  "memory_regions": [
+    {
+      "id": "rom",
+      "start": "0x000000",
+      "end": "0x1FFFFF",
+      "size": 2097152,
+      "access": "read-only",
+      "owner": "src/main.s"
+    },
+    {
+      "id": "work_ram",
+      "start": "0xFF0000",
+      "end": "0xFFFFFF",
+      "size": 65536,
+      "access": "read-write",
+      "owner": "src/ram_addrs.inc"
+    },
+    {
+      "id": "z80_ram",
+      "start": "0xA00000",
+      "end": "0xA01FFF",
+      "size": 8192,
+      "access": "read-write via bus request",
+      "owner": "src/ports.inc"
+    },
+    {
+      "id": "io_and_vdp",
+      "start": "0xA10000",
+      "end": "0xC0001F",
+      "access": "memory-mapped registers",
+      "owner": "src/ports.inc"
+    }
+  ],
+  "rom_image": {
+    "size": 2097152,
+    "padding_byte": "0xFF",
+    "padding_tool": "p2bin -p=FF",
+    "vector_table": {
+      "start": "0x000000",
+      "end": "0x0000FF",
+      "symbol": "dword_0",
+      "owner": "src/system/cartridge_header.s"
+    },
+    "header": {
+      "start": "0x000100",
+      "end": "0x0001FF",
+      "symbol": "CopyRights",
+      "owner": "src/system/cartridge_header.s"
+    },
+    "gaps": [
+      {
+        "start": "0x05D2F2",
+        "end": "0x082323",
+        "size": 151602,
+        "filled_by": "org $82324 and p2bin -p=FF"
+      },
+      {
+        "start": "0x0D9A5E",
+        "end": "0x0E7FFF",
+        "size": 58786,
+        "filled_by": "org $E8000 and p2bin -p=FF"
+      },
+      {
+        "start": "0x1653C8",
+        "end": "0x17FFFF",
+        "size": 109624,
+        "filled_by": "org $180000 and p2bin -p=FF"
+      }
+    ],
+    "landmarks": [
+      {
+        "symbol": "Sys_VectorTable",
+        "address": "0x000000",
+        "role": "Exception vector table"
+      },
+      {
+        "symbol": "CopyRights",
+        "address": "0x000100",
+        "role": "Mega Drive cartridge header"
+      },
+      {
+        "symbol": "Checksum",
+        "address": "0x00018E",
+        "role": "Header checksum word"
+      },
+      {
+        "symbol": "Reset",
+        "address": "0x000200",
+        "role": "Reset entry"
+      },
+      {
+        "symbol": "Sound_UpdateThunk",
+        "address": "0x082324",
+        "role": "Main sound update entry"
+      },
+      {
+        "symbol": "SegaScreenPalette",
+        "address": "0x0E8000",
+        "role": "SEGA screen palette and data boundary"
+      },
+      {
+        "symbol": "MessageDisplay_FontPatternFillSource",
+        "address": "0x180000",
+        "role": "Message-display font-pattern source at asset-bank boundary"
+      },
+      {
+        "symbol": "RomFinalPaddingByte",
+        "address": "0x1FFFFF",
+        "role": "Last emitted ROM byte"
+      }
+    ]
+  },
+  "dma_alignment": {
+    "block_size": "0x20000",
+    "reason": "The VDP latches the upper bits of a DMA source address, so a transfer that crosses a block boundary wraps to the start of that block instead of continuing. The cartridge is laid out so that no transferred payload straddles one, and the $FF gaps between regions are part of how that is achieved: they are alignment, not filler.",
+    "transferred_regions": [
+      "artunc"
+    ],
+    "maximum_crossings": 0,
+    "compressed_regions_excluded": [
+      "artcomp"
+    ],
+    "exclusion_reason": "Compressed art is expanded by the 68000 a byte at a time, not transferred by the VDP, so a block boundary inside it is harmless; three such payloads cross one in the canonical image.",
+    "emulator_note": "The vendored Gens increments the ROM DMA source without masking it, so make runtime cannot observe a violation. See docs/runtime.md."
+  },
+  "relocation_probe": {
+    "output_dir": "build/relocation",
+    "block_size": "0x20000",
+    "reason": "A reference the assembler owns moves when the layout moves. A value written as a literal does not. Perturbing the layout and requiring every reference to follow is what separates the two, and it needs no emulator.",
+    "probes": [
+      {
+        "id": "content",
+        "why": "Grows every padding gap by whole DMA blocks, so all content moves while the code keeps its shape and the DMA alignment invariant is preserved.",
+        "gap_growth": [
+          {
+            "file": "src/data/pre_sound_padding.s",
+            "org": "0x82324",
+            "blocks": 4
+          },
+          {
+            "file": "src/sound/pcm_samples.s",
+            "org": "0xE8000",
+            "blocks": 8
+          },
+          {
+            "file": "src/data/credits_scene_assets.s",
+            "org": "0x180000",
+            "blocks": 12
+          },
+          {
+            "file": "src/data/rom_final_padding.s",
+            "org": "0x1FFFFF",
+            "blocks": 16
+          }
+        ]
+      },
+      {
+        "id": "code",
+        "why": "Inserts unreachable nops inside the code region, so code labels move relative to one another while the org directives hold the content still.",
+        "code_filler": [
+          {
+            "file": "src/gameplay/main_loop.s",
+            "words": 1024
+          }
+        ]
+      },
+      {
+        "id": "returns",
+        "why": "Duplicates every safe rts, which moves each procedure relative to every other one without costing a cycle. A nop would cost four, and four cycles anywhere move the frame counter, which desynchronises a recorded movie on a ROM that plays perfectly by hand. This probe checks the source still assembles that way; the recorded run on the perturbed image is what confirms the behaviour.",
+        "return_filler": {
+          "maximum_skipped_modules": 5,
+          "skip_reason": "A short branch inside these stops reaching its target across an inserted word. An rts that is the first entry of a jmp Table(pc,d0.w) branch table is skipped automatically: a return is followed by a label, a table slot by another instruction.",
+          "skip_modules": [
+            "src/sound/psg_playback_and_envelopes.s",
+            "src/player/terrain_responses.s",
+            "src/system/game_variables.s",
+            "src/bosses/shellshogun_rendering.s",
+            "src/bosses/missiray_segments.s"
+          ]
+        }
+      }
+    ],
+    "accepted_coincidences": [
+      {
+        "value": "0x0A0000",
+        "directive": "dc.l",
+        "why": "Weapon_DirectionVectorsSpeed10 peaks at 10.0 in 16.16, which is the address Sound_PCMBank2 happens to start at."
+      },
+      {
+        "value": "0x0B0000",
+        "directive": "dc.l",
+        "why": "Weapon_DirectionVectorsSpeed11 peaks at 11.0 in 16.16."
+      },
+      {
+        "value": "0x0C0000",
+        "directive": "dc.l",
+        "why": "Weapon_DirectionVectorsSpeed12 peaks at 12.0 in 16.16."
+      },
+      {
+        "value": "0x0D0000",
+        "directive": "dc.l",
+        "why": "Weapon_DirectionVectorsSpeed13 peaks at 13.0 in 16.16."
+      },
+      {
+        "value": "0x180000",
+        "directive": "dc.l",
+        "why": "A dc.l pair whose halves read as one longword; the bytes are a count and a VDP word, not an address."
+      },
+      {
+        "value": "0x0A0000",
+        "directive": "dc.b",
+        "why": "A nibble-packed data table whose bytes coincide with a PCM bank boundary."
+      },
+      {
+        "value": "0x0A0000",
+        "directive": "move.l",
+        "why": "ContinueCountdownValue is seeded with 10.0 in 16.16."
+      },
+      {
+        "value": "0x0C0000",
+        "directive": "move.l",
+        "why": "A 12.0 scroll velocity in 16.16, written into work RAM."
+      },
+      {
+        "value": "0x180000",
+        "directive": "move.l",
+        "why": "A 24.0 corridor coordinate in 16.16."
+      },
+      {
+        "value": "0x0C0000",
+        "directive": "cmpi.l",
+        "why": "The same 12.0 threshold, compared rather than stored."
+      },
+      {
+        "value": "0x040CEE",
+        "directive": "dc.b",
+        "why": "A byte table whose window coincides with a code label; a pointer is never authored a byte at a time."
+      },
+      {
+        "value": "0x040024",
+        "directive": "dc.b",
+        "why": "A byte table of small offsets whose window coincides with a code label."
+      },
+      {
+        "value": "0x04C680",
+        "directive": "dc.w",
+        "why": "A word table of VDP parameters whose window coincides with a code label."
+      },
+      {
+        "value": "0x050004",
+        "directive": "dc.w",
+        "why": "A descending counter table whose window coincides with a code label."
+      }
+    ],
+    "coincidence_note": "A value that equals a symbol address by accident cannot be told from a pointer by its bytes, so each one is listed with why it is a number. A new entry appearing means look at it first.",
+    "content_modules": [
+      "src/data/",
+      "src/sound/"
+    ],
+    "ignore_symbols_aligned_to": "0x8000",
+    "ignore_alignment_reason": "Symbols on a $8000 boundary are the PCM banks. Their addresses are the same round numbers the ROM uses for VDP commands and 16.16 constants, so a four-byte window matches one by accident constantly, and the banks are referenced as (symbol >> 8), which a 32-bit scan cannot see."
+  },
+  "shared_definitions": [
+    {
+      "file": "src/build_profile.inc",
+      "emits_bytes": false
+    },
+    {
+      "file": "src/macros.inc",
+      "emits_bytes": false
+    },
+    {
+      "file": "src/ports.inc",
+      "emits_bytes": false
+    },
+    {
+      "file": "src/equals.inc",
+      "emits_bytes": false
+    },
+    {
+      "file": "src/ram_addrs.inc",
+      "emits_bytes": false
+    }
+  ],
+  "modules": [
+    {
+      "file": "src/system/cartridge_header.s",
+      "subsystem": "system",
+      "start": "0x000000",
+      "end": "0x0001FF"
+    },
+    {
+      "file": "src/system/boot.s",
+      "subsystem": "system",
+      "start": "0x000200",
+      "end": "0x0005B5"
+    },
+    {
+      "file": "src/system/region_check.s",
+      "subsystem": "system",
+      "start": "0x0005B6",
+      "end": "0x0006AD"
+    },
+    {
+      "file": "src/gameplay/object_dispatch_table.s",
+      "subsystem": "gameplay",
+      "start": "0x0006AE",
+      "end": "0x000B4B"
+    },
+    {
+      "file": "src/system/vblank.s",
+      "subsystem": "system",
+      "start": "0x000B4C",
+      "end": "0x000DF9"
+    },
+    {
+      "file": "src/rendering/vblank_dma.s",
+      "subsystem": "rendering",
+      "start": "0x000DFA",
+      "end": "0x000FDB"
+    },
+    {
+      "file": "src/rendering/palette_fades.s",
+      "subsystem": "rendering",
+      "start": "0x000FDC",
+      "end": "0x00143D"
+    },
+    {
+      "file": "src/rendering/vblank_effects.s",
+      "subsystem": "rendering",
+      "start": "0x00143E",
+      "end": "0x001A43"
+    },
+    {
+      "file": "src/rendering/hblank_effects.s",
+      "subsystem": "rendering",
+      "start": "0x001A44",
+      "end": "0x001E19"
+    },
+    {
+      "file": "src/rendering/dma_queue.s",
+      "subsystem": "rendering",
+      "start": "0x001E1A",
+      "end": "0x0020FD"
+    },
+    {
+      "file": "src/rendering/sprite_object_pipeline.s",
+      "subsystem": "rendering",
+      "start": "0x0020FE",
+      "end": "0x0022D7"
+    },
+    {
+      "file": "src/rendering/sprite_mapping_and_oam.s",
+      "subsystem": "rendering",
+      "start": "0x0022D8",
+      "end": "0x002725"
+    },
+    {
+      "file": "src/gameplay/object_data.s",
+      "subsystem": "gameplay",
+      "start": "0x002726",
+      "end": "0x002B3F"
+    },
+    {
+      "file": "src/rendering/tile_processing.s",
+      "subsystem": "rendering",
+      "start": "0x002B40",
+      "end": "0x002E27"
+    },
+    {
+      "file": "src/system/game_initialization.s",
+      "subsystem": "system",
+      "start": "0x002E28",
+      "end": "0x002F65"
+    },
+    {
+      "file": "src/system/memory_initialization.s",
+      "subsystem": "system",
+      "start": "0x002F66",
+      "end": "0x00321B"
+    },
+    {
+      "file": "src/system/memory_clearing.s",
+      "subsystem": "system",
+      "start": "0x00321C",
+      "end": "0x00348B"
+    },
+    {
+      "file": "src/system/input.s",
+      "subsystem": "system",
+      "start": "0x00348C",
+      "end": "0x0035C1"
+    },
+    {
+      "file": "src/sound/request_queue.s",
+      "subsystem": "sound",
+      "start": "0x0035C2",
+      "end": "0x003631"
+    },
+    {
+      "file": "src/math/angles.s",
+      "subsystem": "math",
+      "start": "0x003632",
+      "end": "0x003A3B"
+    },
+    {
+      "file": "src/math/bcd_and_random.s",
+      "subsystem": "math",
+      "start": "0x003A3C",
+      "end": "0x003A91"
+    },
+    {
+      "file": "src/rendering/palette_transitions.s",
+      "subsystem": "rendering",
+      "start": "0x003A92",
+      "end": "0x003CEF"
+    },
+    {
+      "file": "src/rendering/color_fades.s",
+      "subsystem": "rendering",
+      "start": "0x003CF0",
+      "end": "0x00417B"
+    },
+    {
+      "file": "src/rendering/palette_effects.s",
+      "subsystem": "rendering",
+      "start": "0x00417C",
+      "end": "0x00446D"
+    },
+    {
+      "file": "src/rendering/text_and_numbers.s",
+      "subsystem": "rendering",
+      "start": "0x00446E",
+      "end": "0x004927"
+    },
+    {
+      "file": "src/cutscenes/story_screen_and_title_transition.s",
+      "subsystem": "cutscenes",
+      "start": "0x004928",
+      "end": "0x005233"
+    },
+    {
+      "file": "src/cutscenes/planet_ship_and_star_sequences.s",
+      "subsystem": "cutscenes",
+      "start": "0x005234",
+      "end": "0x00596F"
+    },
+    {
+      "file": "src/cutscenes/story_text.s",
+      "subsystem": "cutscenes",
+      "start": "0x005970",
+      "end": "0x007DCD"
+    },
+    {
+      "file": "src/cutscenes/sprite_grid_and_pattern_effects.s",
+      "subsystem": "cutscenes",
+      "start": "0x007DCE",
+      "end": "0x0082B9"
+    },
+    {
+      "file": "src/cutscenes/ending_sequence_credits.s",
+      "subsystem": "cutscenes",
+      "start": "0x0082BA",
+      "end": "0x0084F1"
+    },
+    {
+      "file": "src/cutscenes/ending_starfield_and_planet.s",
+      "subsystem": "cutscenes",
+      "start": "0x0084F2",
+      "end": "0x008DA1"
+    },
+    {
+      "file": "src/math/sine.s",
+      "subsystem": "math",
+      "start": "0x008DA2",
+      "end": "0x008E79"
+    },
+    {
+      "file": "src/cutscenes/ship_sequence.s",
+      "subsystem": "cutscenes",
+      "start": "0x008E7A",
+      "end": "0x009719"
+    },
+    {
+      "file": "src/cutscenes/ship_piece_and_debris.s",
+      "subsystem": "cutscenes",
+      "start": "0x00971A",
+      "end": "0x009AAB"
+    },
+    {
+      "file": "src/ui/title_screen.s",
+      "subsystem": "ui",
+      "start": "0x009AAC",
+      "end": "0x009D31"
+    },
+    {
+      "file": "src/ui/options_menu_controllers.s",
+      "subsystem": "ui",
+      "start": "0x009D32",
+      "end": "0x00A6F5"
+    },
+    {
+      "file": "src/ui/options_shared_helpers_and_assets.s",
+      "subsystem": "ui",
+      "start": "0x00A6F6",
+      "end": "0x00AAFB"
+    },
+    {
+      "file": "src/ui/password_screen.s",
+      "subsystem": "ui",
+      "start": "0x00AAFC",
+      "end": "0x00B0D7"
+    },
+    {
+      "file": "src/ui/message_sequence_engine.s",
+      "subsystem": "ui",
+      "start": "0x00B0D8",
+      "end": "0x00B601"
+    },
+    {
+      "file": "src/ui/stage_message_sequences.s",
+      "subsystem": "ui",
+      "start": "0x00B602",
+      "end": "0x00BBA5"
+    },
+    {
+      "file": "src/ui/message_scripts_and_glyph_lists.s",
+      "subsystem": "ui",
+      "start": "0x00BBA6",
+      "end": "0x00C067"
+    },
+    {
+      "file": "src/rendering/palettes.s",
+      "subsystem": "rendering",
+      "start": "0x00C068",
+      "end": "0x00CFA5"
+    },
+    {
+      "file": "src/stages/early_stage_process_states.s",
+      "subsystem": "stages",
+      "start": "0x00CFA6",
+      "end": "0x00D561"
+    },
+    {
+      "file": "src/stages/stage7_transition_and_stage8_train_flying_neo.s",
+      "subsystem": "stages",
+      "start": "0x00D562",
+      "end": "0x00D81B"
+    },
+    {
+      "file": "src/stages/stage_9_flies_caterpillar_and_xi_tiger.s",
+      "subsystem": "stages",
+      "start": "0x00D81C",
+      "end": "0x00DD23"
+    },
+    {
+      "file": "src/stages/terobuster_intro_projectiles.s",
+      "subsystem": "stages",
+      "start": "0x00DD24",
+      "end": "0x00DE3D"
+    },
+    {
+      "file": "src/stages/flying_neo_effects.s",
+      "subsystem": "stages",
+      "start": "0x00DE3E",
+      "end": "0x00E075"
+    },
+    {
+      "file": "src/stages/stage10_to_stage13.s",
+      "subsystem": "stages",
+      "start": "0x00E076",
+      "end": "0x00E5AB"
+    },
+    {
+      "file": "src/stages/stage14_to_stage16.s",
+      "subsystem": "stages",
+      "start": "0x00E5AC",
+      "end": "0x00E8A1"
+    },
+    {
+      "file": "src/stages/stage17_epsilon1_states.s",
+      "subsystem": "stages",
+      "start": "0x00E8A2",
+      "end": "0x00EA0D"
+    },
+    {
+      "file": "src/projectiles/shared_directional_volley_helpers.s",
+      "subsystem": "projectiles",
+      "start": "0x00EA0E",
+      "end": "0x00EAD3"
+    },
+    {
+      "file": "src/rendering/snake_background_scroll.s",
+      "subsystem": "rendering",
+      "start": "0x00EAD4",
+      "end": "0x00EBB1"
+    },
+    {
+      "file": "src/stages/late_game_state_dispatch.s",
+      "subsystem": "stages",
+      "start": "0x00EBB2",
+      "end": "0x00EC61"
+    },
+    {
+      "file": "src/stages/stage18_to_stage20.s",
+      "subsystem": "stages",
+      "start": "0x00EC62",
+      "end": "0x00EF5D"
+    },
+    {
+      "file": "src/stages/seven_forces_stage_states.s",
+      "subsystem": "stages",
+      "start": "0x00EF5E",
+      "end": "0x00F1FB"
+    },
+    {
+      "file": "src/stages/seven_forces_transition_graphics.s",
+      "subsystem": "stages",
+      "start": "0x00F1FC",
+      "end": "0x00F875"
+    },
+    {
+      "file": "src/stages/stage_and_boss_transition_states.s",
+      "subsystem": "stages",
+      "start": "0x00F876",
+      "end": "0x00FF7F"
+    },
+    {
+      "file": "src/stages/missiray_stage24_z_leo_transitions.s",
+      "subsystem": "stages",
+      "start": "0x00FF80",
+      "end": "0x0102A9"
+    },
+    {
+      "file": "src/stages/asteroid_and_destroyer_proto_scroll.s",
+      "subsystem": "stages",
+      "start": "0x0102AA",
+      "end": "0x0103F9"
+    },
+    {
+      "file": "src/stages/stage_transition_backdrop_effects.s",
+      "subsystem": "stages",
+      "start": "0x0103FA",
+      "end": "0x010625"
+    },
+    {
+      "file": "src/stages/wolf_garopa_arena_boundaries.s",
+      "subsystem": "stages",
+      "start": "0x010626",
+      "end": "0x010695"
+    },
+    {
+      "file": "src/stages/stage_process_dispatch.s",
+      "subsystem": "stages",
+      "start": "0x010696",
+      "end": "0x0107AB"
+    },
+    {
+      "file": "src/rendering/camera_tracking_and_stage_scroll.s",
+      "subsystem": "rendering",
+      "start": "0x0107AC",
+      "end": "0x010B15"
+    },
+    {
+      "file": "src/stages/stage_phase_transition_control.s",
+      "subsystem": "stages",
+      "start": "0x010B16",
+      "end": "0x010B7F"
+    },
+    {
+      "file": "src/rendering/scroll_plane_buffers.s",
+      "subsystem": "rendering",
+      "start": "0x010B80",
+      "end": "0x010E4B"
+    },
+    {
+      "file": "src/rendering/tilemap_column_streaming.s",
+      "subsystem": "rendering",
+      "start": "0x010E4C",
+      "end": "0x01112D"
+    },
+    {
+      "file": "src/rendering/tilemap_row_streaming.s",
+      "subsystem": "rendering",
+      "start": "0x01112E",
+      "end": "0x01149B"
+    },
+    {
+      "file": "src/rendering/tilemap_dma_primitives.s",
+      "subsystem": "rendering",
+      "start": "0x01149C",
+      "end": "0x0118F5"
+    },
+    {
+      "file": "src/rendering/vdp_asset_transfers.s",
+      "subsystem": "rendering",
+      "start": "0x0118F6",
+      "end": "0x011A9B"
+    },
+    {
+      "file": "src/rendering/boss_asset_sets.s",
+      "subsystem": "rendering",
+      "start": "0x011A9C",
+      "end": "0x011EA7"
+    },
+    {
+      "file": "src/stages/object_loading.s",
+      "subsystem": "stages",
+      "start": "0x011EA8",
+      "end": "0x0121E1"
+    },
+    {
+      "file": "src/stages/phase_loading.s",
+      "subsystem": "stages",
+      "start": "0x0121E2",
+      "end": "0x012557"
+    },
+    {
+      "file": "src/stages/visual_asset_loading.s",
+      "subsystem": "stages",
+      "start": "0x012558",
+      "end": "0x0129A1"
+    },
+    {
+      "file": "src/stages/configuration.s",
+      "subsystem": "stages",
+      "start": "0x0129A2",
+      "end": "0x012DCD"
+    },
+    {
+      "file": "src/rendering/stage3_tile_resampling.s",
+      "subsystem": "rendering",
+      "start": "0x012DCE",
+      "end": "0x012EB9"
+    },
+    {
+      "file": "src/stages/configuration_records.s",
+      "subsystem": "stages",
+      "start": "0x012EBA",
+      "end": "0x0132EF"
+    },
+    {
+      "file": "src/ui/gameplay_hud.s",
+      "subsystem": "ui",
+      "start": "0x0132F0",
+      "end": "0x0135D5"
+    },
+    {
+      "file": "src/ui/hud_rendering.s",
+      "subsystem": "ui",
+      "start": "0x0135D6",
+      "end": "0x0139FD"
+    },
+    {
+      "file": "src/ui/hud_sprite_list.s",
+      "subsystem": "ui",
+      "start": "0x0139FE",
+      "end": "0x013B59"
+    },
+    {
+      "file": "src/ui/weapon_state_icon_transfer.s",
+      "subsystem": "ui",
+      "start": "0x013B5A",
+      "end": "0x013C0D"
+    },
+    {
+      "file": "src/ui/debug_status_display.s",
+      "subsystem": "ui",
+      "start": "0x013C0E",
+      "end": "0x013EAF"
+    },
+    {
+      "file": "src/ui/debug_menu.s",
+      "subsystem": "ui",
+      "start": "0x013EB0",
+      "end": "0x014263"
+    },
+    {
+      "file": "src/collision/detection.s",
+      "subsystem": "collision",
+      "start": "0x014264",
+      "end": "0x014915"
+    },
+    {
+      "file": "src/collision/terrain_and_combat.s",
+      "subsystem": "collision",
+      "start": "0x014916",
+      "end": "0x014E81"
+    },
+    {
+      "file": "src/player/terrain_collision.s",
+      "subsystem": "player",
+      "start": "0x014E82",
+      "end": "0x015397"
+    },
+    {
+      "file": "src/player/terrain_responses.s",
+      "subsystem": "player",
+      "start": "0x015398",
+      "end": "0x01568B"
+    },
+    {
+      "file": "src/player/core_states.s",
+      "subsystem": "player",
+      "start": "0x01568C",
+      "end": "0x015E3D"
+    },
+    {
+      "file": "src/player/dash_and_phoenix.s",
+      "subsystem": "player",
+      "start": "0x015E3E",
+      "end": "0x0163EB"
+    },
+    {
+      "file": "src/player/fall_and_special_attack.s",
+      "subsystem": "player",
+      "start": "0x0163EC",
+      "end": "0x01681F"
+    },
+    {
+      "file": "src/player/cutscene_and_damage_states.s",
+      "subsystem": "player",
+      "start": "0x016820",
+      "end": "0x016C61"
+    },
+    {
+      "file": "src/player/air_and_ground_states.s",
+      "subsystem": "player",
+      "start": "0x016C62",
+      "end": "0x017289"
+    },
+    {
+      "file": "src/player/input_and_status.s",
+      "subsystem": "player",
+      "start": "0x01728A",
+      "end": "0x01744D"
+    },
+    {
+      "file": "src/player/terrain_wrappers.s",
+      "subsystem": "player",
+      "start": "0x01744E",
+      "end": "0x0176BB"
+    },
+    {
+      "file": "src/player/rendering_and_defeat.s",
+      "subsystem": "player",
+      "start": "0x0176BC",
+      "end": "0x017B7F"
+    },
+    {
+      "file": "src/player/projectiles_and_effects.s",
+      "subsystem": "player",
+      "start": "0x017B80",
+      "end": "0x018083"
+    },
+    {
+      "file": "src/ui/weapon_state_and_selection.s",
+      "subsystem": "ui",
+      "start": "0x018084",
+      "end": "0x01865D"
+    },
+    {
+      "file": "src/weapons/firing.s",
+      "subsystem": "weapons",
+      "start": "0x01865E",
+      "end": "0x018CB5"
+    },
+    {
+      "file": "src/weapons/special_firing_and_feedback.s",
+      "subsystem": "weapons",
+      "start": "0x018CB6",
+      "end": "0x0191EB"
+    },
+    {
+      "file": "src/weapons/projectile_impacts.s",
+      "subsystem": "weapons",
+      "start": "0x0191EC",
+      "end": "0x0199C9"
+    },
+    {
+      "file": "src/system/object_pool_clearing.s",
+      "subsystem": "system",
+      "start": "0x0199CA",
+      "end": "0x019A17"
+    },
+    {
+      "file": "src/weapons/targeting_and_projectile_runtime.s",
+      "subsystem": "weapons",
+      "start": "0x019A18",
+      "end": "0x01A179"
+    },
+    {
+      "file": "src/player/scripted_input_sequences.s",
+      "subsystem": "player",
+      "start": "0x01A17A",
+      "end": "0x01A533"
+    },
+    {
+      "file": "src/player/seven_forces_battle.s",
+      "subsystem": "player",
+      "start": "0x01A534",
+      "end": "0x01AA05"
+    },
+    {
+      "file": "src/gameplay/object_spawner.s",
+      "subsystem": "gameplay",
+      "start": "0x01AA06",
+      "end": "0x01BB89"
+    },
+    {
+      "file": "src/gameplay/math_and_buffer_helpers.s",
+      "subsystem": "gameplay",
+      "start": "0x01BB8A",
+      "end": "0x01C08B"
+    },
+    {
+      "file": "src/gameplay/sprite_initialization.s",
+      "subsystem": "gameplay",
+      "start": "0x01C08C",
+      "end": "0x01C7D5"
+    },
+    {
+      "file": "src/gameplay/projectile_slots.s",
+      "subsystem": "gameplay",
+      "start": "0x01C7D6",
+      "end": "0x01CB7F"
+    },
+    {
+      "file": "src/stages/gameplay_entry_states.s",
+      "subsystem": "stages",
+      "start": "0x01CB80",
+      "end": "0x01CDE1"
+    },
+    {
+      "file": "src/gameplay/main_loop.s",
+      "subsystem": "gameplay",
+      "start": "0x01CDE2",
+      "end": "0x01D2B7"
+    },
+    {
+      "file": "src/debug/frame_timing_toggle.s",
+      "subsystem": "debug",
+      "start": "0x01D2B8",
+      "end": "0x01D2DF"
+    },
+    {
+      "file": "src/effects/plane_shake.s",
+      "subsystem": "effects",
+      "start": "0x01D2E0",
+      "end": "0x01D33F"
+    },
+    {
+      "file": "src/debug/controller_helpers.s",
+      "subsystem": "debug",
+      "start": "0x01D340",
+      "end": "0x01D43B"
+    },
+    {
+      "file": "src/gameplay/orphaned_object_record_setup.s",
+      "subsystem": "gameplay",
+      "start": "0x01D43C",
+      "end": "0x01D471"
+    },
+    {
+      "file": "src/system/game_variables.s",
+      "subsystem": "system",
+      "start": "0x01D472",
+      "end": "0x01D603"
+    },
+    {
+      "file": "src/ui/frontend_loop.s",
+      "subsystem": "ui",
+      "start": "0x01D604",
+      "end": "0x01D8C3"
+    },
+    {
+      "file": "src/ui/screen_transitions.s",
+      "subsystem": "ui",
+      "start": "0x01D8C4",
+      "end": "0x01DB4D"
+    },
+    {
+      "file": "src/cutscenes/scene_control.s",
+      "subsystem": "cutscenes",
+      "start": "0x01DB4E",
+      "end": "0x01DDAD"
+    },
+    {
+      "file": "src/ui/post_stage_results_flow.s",
+      "subsystem": "ui",
+      "start": "0x01DDAE",
+      "end": "0x01E0D1"
+    },
+    {
+      "file": "src/ui/continue_screen.s",
+      "subsystem": "ui",
+      "start": "0x01E0D2",
+      "end": "0x01E3D1"
+    },
+    {
+      "file": "src/ui/results_screen.s",
+      "subsystem": "ui",
+      "start": "0x01E3D2",
+      "end": "0x01E73B"
+    },
+    {
+      "file": "src/ui/stage_ready_and_retry_prompt.s",
+      "subsystem": "ui",
+      "start": "0x01E73C",
+      "end": "0x01E8F1"
+    },
+    {
+      "file": "src/credits/entry.s",
+      "subsystem": "credits",
+      "start": "0x01E8F2",
+      "end": "0x01E9D9"
+    },
+    {
+      "file": "src/ui/stage_transition_messages.s",
+      "subsystem": "ui",
+      "start": "0x01E9DA",
+      "end": "0x01EEF1"
+    },
+    {
+      "file": "src/stages/transition_control.s",
+      "subsystem": "stages",
+      "start": "0x01EEF2",
+      "end": "0x01EFEF"
+    },
+    {
+      "file": "src/cutscenes/xi_tiger.s",
+      "subsystem": "cutscenes",
+      "start": "0x01EFF0",
+      "end": "0x01F547"
+    },
+    {
+      "file": "src/stages/gameplay_initialization.s",
+      "subsystem": "stages",
+      "start": "0x01F548",
+      "end": "0x01F937"
+    },
+    {
+      "file": "src/ui/weapon_setup_screen.s",
+      "subsystem": "ui",
+      "start": "0x01F938",
+      "end": "0x01FFB3"
+    },
+    {
+      "file": "src/ui/weapon_setup_background_and_text.s",
+      "subsystem": "ui",
+      "start": "0x01FFB4",
+      "end": "0x020371"
+    },
+    {
+      "file": "src/ui/results_scrolling.s",
+      "subsystem": "ui",
+      "start": "0x020372",
+      "end": "0x0209CF"
+    },
+    {
+      "file": "src/ui/results_data.s",
+      "subsystem": "ui",
+      "start": "0x0209D0",
+      "end": "0x0210DB"
+    },
+    {
+      "file": "src/credits/main.s",
+      "subsystem": "credits",
+      "start": "0x0210DC",
+      "end": "0x021C3B"
+    },
+    {
+      "file": "src/credits/palette_data.s",
+      "subsystem": "credits",
+      "start": "0x021C3C",
+      "end": "0x0221E1"
+    },
+    {
+      "file": "src/credits/animated_glyph_sequence.s",
+      "subsystem": "credits",
+      "start": "0x0221E2",
+      "end": "0x022855"
+    },
+    {
+      "file": "src/credits/z_leo_sequence.s",
+      "subsystem": "credits",
+      "start": "0x022856",
+      "end": "0x02443F"
+    },
+    {
+      "file": "src/demo/playback.s",
+      "subsystem": "demo",
+      "start": "0x024440",
+      "end": "0x026827"
+    },
+    {
+      "file": "src/cutscenes/frame_projection.s",
+      "subsystem": "cutscenes",
+      "start": "0x026828",
+      "end": "0x02695D"
+    },
+    {
+      "file": "src/effects/wave_transition.s",
+      "subsystem": "effects",
+      "start": "0x02695E",
+      "end": "0x02707F"
+    },
+    {
+      "file": "src/effects/defeat_transition_control.s",
+      "subsystem": "effects",
+      "start": "0x027080",
+      "end": "0x0273DD"
+    },
+    {
+      "file": "src/effects/transition_scroll.s",
+      "subsystem": "effects",
+      "start": "0x0273DE",
+      "end": "0x027D4B"
+    },
+    {
+      "file": "src/cutscenes/game_over_landscape.s",
+      "subsystem": "cutscenes",
+      "start": "0x027D4C",
+      "end": "0x0280B9"
+    },
+    {
+      "file": "src/effects/tunnel_transition.s",
+      "subsystem": "effects",
+      "start": "0x0280BA",
+      "end": "0x0281B3"
+    },
+    {
+      "file": "src/data/game_over_perspective_lookup.s",
+      "subsystem": "data",
+      "start": "0x0281B4",
+      "end": "0x02A5B3"
+    },
+    {
+      "file": "src/rendering/raster_buffer_layouts.s",
+      "subsystem": "rendering",
+      "start": "0x02A5B4",
+      "end": "0x02A7C1"
+    },
+    {
+      "file": "src/projectiles/shared_boss_projectiles.s",
+      "subsystem": "projectiles",
+      "start": "0x02A7C2",
+      "end": "0x02AA93"
+    },
+    {
+      "file": "src/actors/shared_object_helpers.s",
+      "subsystem": "actors",
+      "start": "0x02AA94",
+      "end": "0x02B18D"
+    },
+    {
+      "file": "src/debug/sprite_editor.s",
+      "subsystem": "debug",
+      "start": "0x02B18E",
+      "end": "0x02B375"
+    },
+    {
+      "file": "src/data/shared_effect_sprite_frames.s",
+      "subsystem": "data",
+      "start": "0x02B376",
+      "end": "0x02B743"
+    },
+    {
+      "file": "src/projectiles/directional_and_gravity_shots.s",
+      "subsystem": "projectiles",
+      "start": "0x02B744",
+      "end": "0x02BE59"
+    },
+    {
+      "file": "src/projectiles/proximity_and_falling_hazards.s",
+      "subsystem": "projectiles",
+      "start": "0x02BE5A",
+      "end": "0x02C239"
+    },
+    {
+      "file": "src/actors/max_health_upgrade.s",
+      "subsystem": "actors",
+      "start": "0x02C23A",
+      "end": "0x02C2F5"
+    },
+    {
+      "file": "src/ui/weapon_selection_object.s",
+      "subsystem": "ui",
+      "start": "0x02C2F6",
+      "end": "0x02C481"
+    },
+    {
+      "file": "src/actors/health_pickups.s",
+      "subsystem": "actors",
+      "start": "0x02C482",
+      "end": "0x02C5DB"
+    },
+    {
+      "file": "src/effects/explosion_patterns.s",
+      "subsystem": "effects",
+      "start": "0x02C5DC",
+      "end": "0x02C9D9"
+    },
+    {
+      "file": "src/projectiles/bugmax_debris_spawner.s",
+      "subsystem": "projectiles",
+      "start": "0x02C9DA",
+      "end": "0x02CABF"
+    },
+    {
+      "file": "src/enemies/spawn_and_movement.s",
+      "subsystem": "enemies",
+      "start": "0x02CAC0",
+      "end": "0x02CE2D"
+    },
+    {
+      "file": "src/enemies/jetsripper_stage_actors.s",
+      "subsystem": "enemies",
+      "start": "0x02CE2E",
+      "end": "0x02D30B"
+    },
+    {
+      "file": "src/enemies/projectile_attack_states.s",
+      "subsystem": "enemies",
+      "start": "0x02D30C",
+      "end": "0x02D69D"
+    },
+    {
+      "file": "src/enemies/shared_enemy_helpers.s",
+      "subsystem": "enemies",
+      "start": "0x02D69E",
+      "end": "0x02D7A5"
+    },
+    {
+      "file": "src/enemies/phase_and_debris_states.s",
+      "subsystem": "enemies",
+      "start": "0x02D7A6",
+      "end": "0x02DA01"
+    },
+    {
+      "file": "src/enemies/circling_enemies.s",
+      "subsystem": "enemies",
+      "start": "0x02DA02",
+      "end": "0x02DDF1"
+    },
+    {
+      "file": "src/enemies/stage_9_flies_and_viblack_shots.s",
+      "subsystem": "enemies",
+      "start": "0x02DDF2",
+      "end": "0x02E1BF"
+    },
+    {
+      "file": "src/enemies/bird_enemy.s",
+      "subsystem": "enemies",
+      "start": "0x02E1C0",
+      "end": "0x02E703"
+    },
+    {
+      "file": "src/enemies/stage_10_wasp_and_falling_shot.s",
+      "subsystem": "enemies",
+      "start": "0x02E704",
+      "end": "0x02EA43"
+    },
+    {
+      "file": "src/enemies/stage_12_enemies.s",
+      "subsystem": "enemies",
+      "start": "0x02EA44",
+      "end": "0x02EE47"
+    },
+    {
+      "file": "src/enemies/stage_10_beetles.s",
+      "subsystem": "enemies",
+      "start": "0x02EE48",
+      "end": "0x02F181"
+    },
+    {
+      "file": "src/enemies/stage_11_fish.s",
+      "subsystem": "enemies",
+      "start": "0x02F182",
+      "end": "0x02F6B7"
+    },
+    {
+      "file": "src/cutscenes/xi_tiger_entrance_sequences.s",
+      "subsystem": "cutscenes",
+      "start": "0x02F6B8",
+      "end": "0x02F927"
+    },
+    {
+      "file": "src/debug/orphaned_radial_particle_test.s",
+      "subsystem": "debug",
+      "start": "0x02F928",
+      "end": "0x02FB1B"
+    },
+    {
+      "file": "src/effects/stage_environment.s",
+      "subsystem": "effects",
+      "start": "0x02FB1C",
+      "end": "0x02FD45"
+    },
+    {
+      "file": "src/stages/stage_12_yacht.s",
+      "subsystem": "stages",
+      "start": "0x02FD46",
+      "end": "0x0303AB"
+    },
+    {
+      "file": "src/debug/orphaned_cross_stage_handlers.s",
+      "subsystem": "debug",
+      "start": "0x0303AC",
+      "end": "0x03047B"
+    },
+    {
+      "file": "src/enemies/stage_18.s",
+      "subsystem": "enemies",
+      "start": "0x03047C",
+      "end": "0x030C69"
+    },
+    {
+      "file": "src/stages/stage_15_fragment_hazards.s",
+      "subsystem": "stages",
+      "start": "0x030C6A",
+      "end": "0x031515"
+    },
+    {
+      "file": "src/stages/stage_11_rising_hazards.s",
+      "subsystem": "stages",
+      "start": "0x031516",
+      "end": "0x03186B"
+    },
+    {
+      "file": "src/enemies/entity_type_390_linked_chain.s",
+      "subsystem": "enemies",
+      "start": "0x03186C",
+      "end": "0x031C47"
+    },
+    {
+      "file": "src/bosses/destroyer_proto_core.s",
+      "subsystem": "bosses",
+      "start": "0x031C48",
+      "end": "0x031FB5"
+    },
+    {
+      "file": "src/bosses/destroyer_proto_combat.s",
+      "subsystem": "bosses",
+      "start": "0x031FB6",
+      "end": "0x03251F"
+    },
+    {
+      "file": "src/bosses/destroyer_proto_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x032520",
+      "end": "0x03277D"
+    },
+    {
+      "file": "src/projectiles/destroyer_proto_and_victor_projectiles.s",
+      "subsystem": "projectiles",
+      "start": "0x03277E",
+      "end": "0x032B67"
+    },
+    {
+      "file": "src/bosses/victor_core_and_ring.s",
+      "subsystem": "bosses",
+      "start": "0x032B68",
+      "end": "0x03312B"
+    },
+    {
+      "file": "src/bosses/victor_parts_and_projectiles.s",
+      "subsystem": "bosses",
+      "start": "0x03312C",
+      "end": "0x033583"
+    },
+    {
+      "file": "src/bosses/wolf_garopa_reward_shower.s",
+      "subsystem": "bosses",
+      "start": "0x033584",
+      "end": "0x033665"
+    },
+    {
+      "file": "src/enemies/formation_wave.s",
+      "subsystem": "enemies",
+      "start": "0x033666",
+      "end": "0x03382B"
+    },
+    {
+      "file": "src/stages/stage_21_asteroids.s",
+      "subsystem": "stages",
+      "start": "0x03382C",
+      "end": "0x033DE9"
+    },
+    {
+      "file": "src/effects/rising_shot_waves.s",
+      "subsystem": "effects",
+      "start": "0x033DEA",
+      "end": "0x033F69"
+    },
+    {
+      "file": "src/debug/orphaned_rising_shot_pair.s",
+      "subsystem": "debug",
+      "start": "0x033F6A",
+      "end": "0x0340DB"
+    },
+    {
+      "file": "src/projectiles/missiray_and_rising_shots.s",
+      "subsystem": "projectiles",
+      "start": "0x0340DC",
+      "end": "0x0346B5"
+    },
+    {
+      "file": "src/bosses/stage_3_orbiting_formation.s",
+      "subsystem": "bosses",
+      "start": "0x0346B6",
+      "end": "0x034B53"
+    },
+    {
+      "file": "src/rendering/boss_metasprites.s",
+      "subsystem": "rendering",
+      "start": "0x034B54",
+      "end": "0x0350D1"
+    },
+    {
+      "file": "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s",
+      "subsystem": "data",
+      "start": "0x0350D2",
+      "end": "0x03553B"
+    },
+    {
+      "file": "src/data/madam_barbar_flying_neo_joker_back_stringer_sharpssteel_metasprites.s",
+      "subsystem": "data",
+      "start": "0x03553C",
+      "end": "0x035A2B"
+    },
+    {
+      "file": "src/data/wolf_garopa_valkirie_z_leo_metasprites.s",
+      "subsystem": "data",
+      "start": "0x035A2C",
+      "end": "0x035D99"
+    },
+    {
+      "file": "src/bosses/jetsripper_core.s",
+      "subsystem": "bosses",
+      "start": "0x035D9A",
+      "end": "0x0365A3"
+    },
+    {
+      "file": "src/bosses/jetsripper_segments.s",
+      "subsystem": "bosses",
+      "start": "0x0365A4",
+      "end": "0x036A53"
+    },
+    {
+      "file": "src/projectiles/jetsripper.s",
+      "subsystem": "projectiles",
+      "start": "0x036A54",
+      "end": "0x036B9F"
+    },
+    {
+      "file": "src/bosses/sniper_honeyviper_core.s",
+      "subsystem": "bosses",
+      "start": "0x036BA0",
+      "end": "0x03719F"
+    },
+    {
+      "file": "src/bosses/sniper_honeyviper_movement.s",
+      "subsystem": "bosses",
+      "start": "0x0371A0",
+      "end": "0x037773"
+    },
+    {
+      "file": "src/bosses/sniper_honeyviper_scroll_and_effects.s",
+      "subsystem": "bosses",
+      "start": "0x037774",
+      "end": "0x0378E5"
+    },
+    {
+      "file": "src/projectiles/shellshogun_debris.s",
+      "subsystem": "projectiles",
+      "start": "0x0378E6",
+      "end": "0x03796D"
+    },
+    {
+      "file": "src/projectiles/sniper_honeyviper.s",
+      "subsystem": "projectiles",
+      "start": "0x03796E",
+      "end": "0x037C4B"
+    },
+    {
+      "file": "src/bosses/antroid_core.s",
+      "subsystem": "bosses",
+      "start": "0x037C4C",
+      "end": "0x038125"
+    },
+    {
+      "file": "src/bosses/antroid_jump_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x038126",
+      "end": "0x0384BF"
+    },
+    {
+      "file": "src/bosses/antroid_charge_and_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x0384C0",
+      "end": "0x038611"
+    },
+    {
+      "file": "src/bosses/antroid_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x038612",
+      "end": "0x038771"
+    },
+    {
+      "file": "src/projectiles/antroid.s",
+      "subsystem": "projectiles",
+      "start": "0x038772",
+      "end": "0x03889F"
+    },
+    {
+      "file": "src/bosses/antroid_animation.s",
+      "subsystem": "bosses",
+      "start": "0x0388A0",
+      "end": "0x038C9D"
+    },
+    {
+      "file": "src/bosses/terobuster_core.s",
+      "subsystem": "bosses",
+      "start": "0x038C9E",
+      "end": "0x0392E1"
+    },
+    {
+      "file": "src/bosses/terobuster_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x0392E2",
+      "end": "0x039627"
+    },
+    {
+      "file": "src/projectiles/terobuster.s",
+      "subsystem": "projectiles",
+      "start": "0x039628",
+      "end": "0x039875"
+    },
+    {
+      "file": "src/effects/terobuster_defeat_parts.s",
+      "subsystem": "effects",
+      "start": "0x039876",
+      "end": "0x039951"
+    },
+    {
+      "file": "src/bosses/terobuster_animation.s",
+      "subsystem": "bosses",
+      "start": "0x039952",
+      "end": "0x039C5D"
+    },
+    {
+      "file": "src/bosses/shellshogun_core.s",
+      "subsystem": "bosses",
+      "start": "0x039C5E",
+      "end": "0x03A5E3"
+    },
+    {
+      "file": "src/bosses/shellshogun_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x03A5E4",
+      "end": "0x03A86F"
+    },
+    {
+      "file": "src/bosses/madam_barbar_palette_cycle.s",
+      "subsystem": "bosses",
+      "start": "0x03A870",
+      "end": "0x03A8A7"
+    },
+    {
+      "file": "src/bosses/shellshogun_animation.s",
+      "subsystem": "bosses",
+      "start": "0x03A8A8",
+      "end": "0x03AC01"
+    },
+    {
+      "file": "src/bosses/madam_barbar_core.s",
+      "subsystem": "bosses",
+      "start": "0x03AC02",
+      "end": "0x03B5BB"
+    },
+    {
+      "file": "src/projectiles/madam_barbar.s",
+      "subsystem": "projectiles",
+      "start": "0x03B5BC",
+      "end": "0x03BA23"
+    },
+    {
+      "file": "src/bosses/joker_core.s",
+      "subsystem": "bosses",
+      "start": "0x03BA24",
+      "end": "0x03C19F"
+    },
+    {
+      "file": "src/bosses/joker_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x03C1A0",
+      "end": "0x03C77B"
+    },
+    {
+      "file": "src/bosses/flying_neo_core.s",
+      "subsystem": "bosses",
+      "start": "0x03C77C",
+      "end": "0x03CF37"
+    },
+    {
+      "file": "src/bosses/flying_neo_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x03CF38",
+      "end": "0x03D533"
+    },
+    {
+      "file": "src/bosses/flying_neo_parts_and_pose.s",
+      "subsystem": "bosses",
+      "start": "0x03D534",
+      "end": "0x03D833"
+    },
+    {
+      "file": "src/bosses/caterpillar.s",
+      "subsystem": "bosses",
+      "start": "0x03D834",
+      "end": "0x03DF99"
+    },
+    {
+      "file": "src/bosses/xi_tiger_battle_states.s",
+      "subsystem": "bosses",
+      "start": "0x03DF9A",
+      "end": "0x03E63F"
+    },
+    {
+      "file": "src/bosses/xi_tiger_defeat_and_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x03E640",
+      "end": "0x03E9A1"
+    },
+    {
+      "file": "src/bosses/xi_tiger_pose_animation.s",
+      "subsystem": "bosses",
+      "start": "0x03E9A2",
+      "end": "0x03ED07"
+    },
+    {
+      "file": "src/bosses/deep_strider_controller_and_battle.s",
+      "subsystem": "bosses",
+      "start": "0x03ED08",
+      "end": "0x03F34F"
+    },
+    {
+      "file": "src/bosses/deep_strider_defeat_and_dive_helpers.s",
+      "subsystem": "bosses",
+      "start": "0x03F350",
+      "end": "0x03F65D"
+    },
+    {
+      "file": "src/bosses/deep_strider_parts_and_projectiles.s",
+      "subsystem": "bosses",
+      "start": "0x03F65E",
+      "end": "0x03F899"
+    },
+    {
+      "file": "src/enemies/bouncing_object.s",
+      "subsystem": "enemies",
+      "start": "0x03F89A",
+      "end": "0x03F91D"
+    },
+    {
+      "file": "src/bosses/gusthead_core.s",
+      "subsystem": "bosses",
+      "start": "0x03F91E",
+      "end": "0x040201"
+    },
+    {
+      "file": "src/bosses/gusthead_combat.s",
+      "subsystem": "bosses",
+      "start": "0x040202",
+      "end": "0x0408B7"
+    },
+    {
+      "file": "src/bosses/gusthead_tentacles.s",
+      "subsystem": "bosses",
+      "start": "0x0408B8",
+      "end": "0x040F23"
+    },
+    {
+      "file": "src/bosses/snake.s",
+      "subsystem": "bosses",
+      "start": "0x040F24",
+      "end": "0x041473"
+    },
+    {
+      "file": "src/bosses/entity_type_1c0_core.s",
+      "subsystem": "bosses",
+      "start": "0x041474",
+      "end": "0x042081"
+    },
+    {
+      "file": "src/bosses/entity_type_1c0_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x042082",
+      "end": "0x04278F"
+    },
+    {
+      "file": "src/bosses/entity_type_1c0_transition_and_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x042790",
+      "end": "0x042F35"
+    },
+    {
+      "file": "src/math/shared_boss_angle_helpers.s",
+      "subsystem": "math",
+      "start": "0x042F36",
+      "end": "0x043039"
+    },
+    {
+      "file": "src/bosses/sunset_sting_wave.s",
+      "subsystem": "bosses",
+      "start": "0x04303A",
+      "end": "0x043195"
+    },
+    {
+      "file": "src/bosses/sunset_sting_main.s",
+      "subsystem": "bosses",
+      "start": "0x043196",
+      "end": "0x043AB9"
+    },
+    {
+      "file": "src/bosses/sunset_sting_segments.s",
+      "subsystem": "bosses",
+      "start": "0x043ABA",
+      "end": "0x0440AF"
+    },
+    {
+      "file": "src/bosses/viblack_core.s",
+      "subsystem": "bosses",
+      "start": "0x0440B0",
+      "end": "0x04466F"
+    },
+    {
+      "file": "src/bosses/viblack_support.s",
+      "subsystem": "bosses",
+      "start": "0x044670",
+      "end": "0x044B23"
+    },
+    {
+      "file": "src/projectiles/viblack_chain.s",
+      "subsystem": "projectiles",
+      "start": "0x044B24",
+      "end": "0x044E2D"
+    },
+    {
+      "file": "src/bosses/back_stringer_core.s",
+      "subsystem": "bosses",
+      "start": "0x044E2E",
+      "end": "0x0456CF"
+    },
+    {
+      "file": "src/bosses/back_stringer_support.s",
+      "subsystem": "bosses",
+      "start": "0x0456D0",
+      "end": "0x045EFB"
+    },
+    {
+      "file": "src/projectiles/back_stringer_projectiles.s",
+      "subsystem": "projectiles",
+      "start": "0x045EFC",
+      "end": "0x04624F"
+    },
+    {
+      "file": "src/bosses/epsilon_1_core.s",
+      "subsystem": "bosses",
+      "start": "0x046250",
+      "end": "0x046925"
+    },
+    {
+      "file": "src/bosses/epsilon_1_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x046926",
+      "end": "0x046F57"
+    },
+    {
+      "file": "src/bosses/epsilon_1_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x046F58",
+      "end": "0x0474E7"
+    },
+    {
+      "file": "src/bosses/epsilon_1_ring_controller.s",
+      "subsystem": "bosses",
+      "start": "0x0474E8",
+      "end": "0x047841"
+    },
+    {
+      "file": "src/projectiles/epsilon_1_projectiles.s",
+      "subsystem": "projectiles",
+      "start": "0x047842",
+      "end": "0x047F57"
+    },
+    {
+      "file": "src/bosses/epsilon_1_shared_support.s",
+      "subsystem": "bosses",
+      "start": "0x047F58",
+      "end": "0x04839B"
+    },
+    {
+      "file": "src/bosses/sharpssteel_core.s",
+      "subsystem": "bosses",
+      "start": "0x04839C",
+      "end": "0x048C63"
+    },
+    {
+      "file": "src/bosses/sharpssteel_blades.s",
+      "subsystem": "bosses",
+      "start": "0x048C64",
+      "end": "0x04951F"
+    },
+    {
+      "file": "src/projectiles/sharpssteel.s",
+      "subsystem": "projectiles",
+      "start": "0x049520",
+      "end": "0x0498AD"
+    },
+    {
+      "file": "src/bosses/jampan_core.s",
+      "subsystem": "bosses",
+      "start": "0x0498AE",
+      "end": "0x04A193"
+    },
+    {
+      "file": "src/bosses/jampan_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x04A194",
+      "end": "0x04A7FD"
+    },
+    {
+      "file": "src/bosses/jampan_support.s",
+      "subsystem": "bosses",
+      "start": "0x04A7FE",
+      "end": "0x04AD6F"
+    },
+    {
+      "file": "src/bosses/jampan_geometry_and_input.s",
+      "subsystem": "bosses",
+      "start": "0x04AD70",
+      "end": "0x04AFCD"
+    },
+    {
+      "file": "src/bosses/destroyer_mk2_core.s",
+      "subsystem": "bosses",
+      "start": "0x04AFCE",
+      "end": "0x04B7CB"
+    },
+    {
+      "file": "src/bosses/destroyer_mk2_patterns_and_components.s",
+      "subsystem": "bosses",
+      "start": "0x04B7CC",
+      "end": "0x04BE0B"
+    },
+    {
+      "file": "src/bosses/destroyer_mk2_linked_parts_and_debris.s",
+      "subsystem": "bosses",
+      "start": "0x04BE0C",
+      "end": "0x04C63B"
+    },
+    {
+      "file": "src/bosses/bugmax_controller_and_geometry.s",
+      "subsystem": "bosses",
+      "start": "0x04C63C",
+      "end": "0x04CB57"
+    },
+    {
+      "file": "src/bosses/bugmax_opening_states.s",
+      "subsystem": "bosses",
+      "start": "0x04CB58",
+      "end": "0x04D0B7"
+    },
+    {
+      "file": "src/bosses/bugmax_battle_and_final_sequence.s",
+      "subsystem": "bosses",
+      "start": "0x04D0B8",
+      "end": "0x04DB43"
+    },
+    {
+      "file": "src/projectiles/bugmax.s",
+      "subsystem": "projectiles",
+      "start": "0x04DB44",
+      "end": "0x04E1A1"
+    },
+    {
+      "file": "src/bosses/bugmax_movement.s",
+      "subsystem": "bosses",
+      "start": "0x04E1A2",
+      "end": "0x04E551"
+    },
+    {
+      "file": "src/bosses/shield_viper_core.s",
+      "subsystem": "bosses",
+      "start": "0x04E552",
+      "end": "0x04ED3F"
+    },
+    {
+      "file": "src/bosses/shield_viper_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x04ED40",
+      "end": "0x04F3DD"
+    },
+    {
+      "file": "src/projectiles/shield_viper.s",
+      "subsystem": "projectiles",
+      "start": "0x04F3DE",
+      "end": "0x04F925"
+    },
+    {
+      "file": "src/bosses/shield_viper_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x04F926",
+      "end": "0x04FD57"
+    },
+    {
+      "file": "src/bosses/shield_viper_debug_and_effects.s",
+      "subsystem": "bosses",
+      "start": "0x04FD58",
+      "end": "0x05006F"
+    },
+    {
+      "file": "src/bosses/wolf_garopa_core.s",
+      "subsystem": "bosses",
+      "start": "0x050070",
+      "end": "0x05099F"
+    },
+    {
+      "file": "src/projectiles/wolf_garopa.s",
+      "subsystem": "projectiles",
+      "start": "0x0509A0",
+      "end": "0x0512FD"
+    },
+    {
+      "file": "src/bosses/wolf_garopa_defeat.s",
+      "subsystem": "bosses",
+      "start": "0x0512FE",
+      "end": "0x051453"
+    },
+    {
+      "file": "src/bosses/wolf_garopa_attack_effects_and_transition.s",
+      "subsystem": "bosses",
+      "start": "0x051454",
+      "end": "0x051725"
+    },
+    {
+      "file": "src/debug/valkirie_composite_viewer.s",
+      "subsystem": "debug",
+      "start": "0x051726",
+      "end": "0x051D2D"
+    },
+    {
+      "file": "src/debug/valkirie_secondary_composite_viewer.s",
+      "subsystem": "debug",
+      "start": "0x051D2E",
+      "end": "0x051FC1"
+    },
+    {
+      "file": "src/debug/valkirie_tertiary_composite_viewer.s",
+      "subsystem": "debug",
+      "start": "0x051FC2",
+      "end": "0x052255"
+    },
+    {
+      "file": "src/bosses/z_leo_core.s",
+      "subsystem": "bosses",
+      "start": "0x052256",
+      "end": "0x052C91"
+    },
+    {
+      "file": "src/bosses/z_leo_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x052C92",
+      "end": "0x0536B1"
+    },
+    {
+      "file": "src/projectiles/z_leo.s",
+      "subsystem": "projectiles",
+      "start": "0x0536B2",
+      "end": "0x053C7F"
+    },
+    {
+      "file": "src/bosses/valkirie_force.s",
+      "subsystem": "bosses",
+      "start": "0x053C80",
+      "end": "0x053F27"
+    },
+    {
+      "file": "src/bosses/missiray_core.s",
+      "subsystem": "bosses",
+      "start": "0x053F28",
+      "end": "0x0545E7"
+    },
+    {
+      "file": "src/bosses/missiray_attacks.s",
+      "subsystem": "bosses",
+      "start": "0x0545E8",
+      "end": "0x054BD7"
+    },
+    {
+      "file": "src/bosses/missiray_segments.s",
+      "subsystem": "bosses",
+      "start": "0x054BD8",
+      "end": "0x05506D"
+    },
+    {
+      "file": "src/actors/unreferenced_nine_auxiliary_sprites.s",
+      "subsystem": "actors",
+      "start": "0x05506E",
+      "end": "0x055161"
+    },
+    {
+      "file": "src/stages/stage_24_scene_object.s",
+      "subsystem": "stages",
+      "start": "0x055162",
+      "end": "0x055303"
+    },
+    {
+      "file": "src/cutscenes/seven_forces_intro_setup_and_debug.s",
+      "subsystem": "cutscenes",
+      "start": "0x055304",
+      "end": "0x05571D"
+    },
+    {
+      "file": "src/cutscenes/seven_forces_form_sequences.s",
+      "subsystem": "cutscenes",
+      "start": "0x05571E",
+      "end": "0x0559BB"
+    },
+    {
+      "file": "src/cutscenes/seven_forces_intro_finale_and_effects.s",
+      "subsystem": "cutscenes",
+      "start": "0x0559BC",
+      "end": "0x055D47"
+    },
+    {
+      "file": "src/cutscenes/seven_forces_post_battle_transitions.s",
+      "subsystem": "cutscenes",
+      "start": "0x055D48",
+      "end": "0x055EDD"
+    },
+    {
+      "file": "src/bosses/valkirie_battle.s",
+      "subsystem": "bosses",
+      "start": "0x055EDE",
+      "end": "0x0567DB"
+    },
+    {
+      "file": "src/bosses/valkirie_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x0567DC",
+      "end": "0x05711B"
+    },
+    {
+      "file": "src/bosses/medusa.s",
+      "subsystem": "bosses",
+      "start": "0x05711C",
+      "end": "0x057C17"
+    },
+    {
+      "file": "src/bosses/sirene.s",
+      "subsystem": "bosses",
+      "start": "0x057C18",
+      "end": "0x05863D"
+    },
+    {
+      "file": "src/bosses/artemis_core.s",
+      "subsystem": "bosses",
+      "start": "0x05863E",
+      "end": "0x058C5B"
+    },
+    {
+      "file": "src/bosses/artemis_rendering.s",
+      "subsystem": "bosses",
+      "start": "0x058C5C",
+      "end": "0x059167"
+    },
+    {
+      "file": "src/projectiles/artemis.s",
+      "subsystem": "projectiles",
+      "start": "0x059168",
+      "end": "0x0593E1"
+    },
+    {
+      "file": "src/bosses/unidentified_seven_force.s",
+      "subsystem": "bosses",
+      "start": "0x0593E2",
+      "end": "0x05976D"
+    },
+    {
+      "file": "src/bosses/valkirie_alternate.s",
+      "subsystem": "bosses",
+      "start": "0x05976E",
+      "end": "0x059B53"
+    },
+    {
+      "file": "src/bosses/sylpheed_core.s",
+      "subsystem": "bosses",
+      "start": "0x059B54",
+      "end": "0x05A17F"
+    },
+    {
+      "file": "src/bosses/sylpheed_pose.s",
+      "subsystem": "bosses",
+      "start": "0x05A180",
+      "end": "0x05A4AB"
+    },
+    {
+      "file": "src/rendering/seven_forces_metasprites.s",
+      "subsystem": "rendering",
+      "start": "0x05A4AC",
+      "end": "0x05ABBB"
+    },
+    {
+      "file": "src/data/pre_sound_padding.s",
+      "subsystem": "data",
+      "start": "0x05ABBC",
+      "end": "0x082323"
+    },
+    {
+      "file": "src/sound/driver_core.s",
+      "subsystem": "sound",
+      "start": "0x082324",
+      "end": "0x0829A9"
+    },
+    {
+      "file": "src/sound/command_dispatch_and_dac.s",
+      "subsystem": "sound",
+      "start": "0x0829AA",
+      "end": "0x082F6B"
+    },
+    {
+      "file": "src/sound/playback_and_loading.s",
+      "subsystem": "sound",
+      "start": "0x082F6C",
+      "end": "0x0834D1"
+    },
+    {
+      "file": "src/sound/hardware_interface.s",
+      "subsystem": "sound",
+      "start": "0x0834D2",
+      "end": "0x08369F"
+    },
+    {
+      "file": "src/sound/volume_transitions.s",
+      "subsystem": "sound",
+      "start": "0x0836A0",
+      "end": "0x08381F"
+    },
+    {
+      "file": "src/sound/sequence_dispatch_and_instrument_commands.s",
+      "subsystem": "sound",
+      "start": "0x083820",
+      "end": "0x083B09"
+    },
+    {
+      "file": "src/sound/sequence_channel_and_extended_commands.s",
+      "subsystem": "sound",
+      "start": "0x083B0A",
+      "end": "0x083E6F"
+    },
+    {
+      "file": "src/sound/z80_program.s",
+      "subsystem": "sound",
+      "start": "0x083E70",
+      "end": "0x084A6F"
+    },
+    {
+      "file": "src/sound/psg_playback_and_envelopes.s",
+      "subsystem": "sound",
+      "start": "0x084A70",
+      "end": "0x084E77"
+    },
+    {
+      "file": "src/sound/request_and_track_tables.s",
+      "subsystem": "sound",
+      "start": "0x084E78",
+      "end": "0x085265"
+    },
+    {
+      "file": "src/sound/music_tracks.s",
+      "subsystem": "sound",
+      "start": "0x085266",
+      "end": "0x094D4B"
+    },
+    {
+      "file": "src/sound/sfx_tracks_a0_to_ef.s",
+      "subsystem": "sound",
+      "start": "0x094D4C",
+      "end": "0x0967EB"
+    },
+    {
+      "file": "src/sound/sfx_tracks_40_to_7f_and_f0_to_fc.s",
+      "subsystem": "sound",
+      "start": "0x0967EC",
+      "end": "0x097FFF"
+    },
+    {
+      "file": "src/sound/pcm_samples.s",
+      "subsystem": "sound",
+      "start": "0x098000",
+      "end": "0x0E7FFF"
+    },
+    {
+      "file": "src/data/sega_screen_assets.s",
+      "subsystem": "data",
+      "start": "0x0E8000",
+      "end": "0x0E867F"
+    },
+    {
+      "file": "src/data/player_movement_and_dash_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0E8680",
+      "end": "0x0E8A19"
+    },
+    {
+      "file": "src/data/player_state_animation_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0E8A1A",
+      "end": "0x0E8E69"
+    },
+    {
+      "file": "src/data/player_special_and_death_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0E8E6A",
+      "end": "0x0E9079"
+    },
+    {
+      "file": "src/data/shared_combat_sprite_frames.s",
+      "subsystem": "data",
+      "start": "0x0E907A",
+      "end": "0x0E953B"
+    },
+    {
+      "file": "src/data/shared_combat_sprite_animations.s",
+      "subsystem": "data",
+      "start": "0x0E953C",
+      "end": "0x0E98AF"
+    },
+    {
+      "file": "src/data/frontend_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0E98B0",
+      "end": "0x0E9951"
+    },
+    {
+      "file": "src/data/weapon_select_and_enemy_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0E9952",
+      "end": "0x0EA059"
+    },
+    {
+      "file": "src/data/enemy_projectile_animation_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EA05A",
+      "end": "0x0EA6B3"
+    },
+    {
+      "file": "src/data/bird_animation_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EA6B4",
+      "end": "0x0EA86B"
+    },
+    {
+      "file": "src/data/phase_pattern_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EA86C",
+      "end": "0x0EAE75"
+    },
+    {
+      "file": "src/data/stage10_wasp_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EAE76",
+      "end": "0x0EB2E3"
+    },
+    {
+      "file": "src/data/circling_enemy_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB2E4",
+      "end": "0x0EB337"
+    },
+    {
+      "file": "src/data/stage_combat_object_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB338",
+      "end": "0x0EB5E5"
+    },
+    {
+      "file": "src/data/caterpillar_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB5E6",
+      "end": "0x0EB653"
+    },
+    {
+      "file": "src/data/jetsripper_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB654",
+      "end": "0x0EB71F"
+    },
+    {
+      "file": "src/data/antroid_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB720",
+      "end": "0x0EB7CD"
+    },
+    {
+      "file": "src/data/terobuster_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB7CE",
+      "end": "0x0EB875"
+    },
+    {
+      "file": "src/data/shellshogun_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB876",
+      "end": "0x0EB9E9"
+    },
+    {
+      "file": "src/data/sniper_honeyviper_tentacle_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EB9EA",
+      "end": "0x0EBA19"
+    },
+    {
+      "file": "src/data/xi_tiger_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBA1A",
+      "end": "0x0EBB27"
+    },
+    {
+      "file": "src/data/madam_barbar_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBB28",
+      "end": "0x0EBBB7"
+    },
+    {
+      "file": "src/data/flying_neo_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBBB8",
+      "end": "0x0EBC23"
+    },
+    {
+      "file": "src/data/joker_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBC24",
+      "end": "0x0EBCD7"
+    },
+    {
+      "file": "src/data/xi_tiger_entrance_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBCD8",
+      "end": "0x0EBD9D"
+    },
+    {
+      "file": "src/data/entity_type_1c0_part_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBD9E",
+      "end": "0x0EBDCD"
+    },
+    {
+      "file": "src/data/deep_strider_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBDCE",
+      "end": "0x0EBE87"
+    },
+    {
+      "file": "src/data/entity_type_1c0_second_form_sprite_mapping.s",
+      "subsystem": "data",
+      "start": "0x0EBE88",
+      "end": "0x0EBE93"
+    },
+    {
+      "file": "src/data/victor_and_sunset_sting_shared_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBE94",
+      "end": "0x0EBEA5"
+    },
+    {
+      "file": "src/data/sunset_sting_segment_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBEA6",
+      "end": "0x0EBF8F"
+    },
+    {
+      "file": "src/data/viblack_missile_sprite_animations.s",
+      "subsystem": "data",
+      "start": "0x0EBF90",
+      "end": "0x0EBFDF"
+    },
+    {
+      "file": "src/data/gusthead_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EBFE0",
+      "end": "0x0EC045"
+    },
+    {
+      "file": "src/data/epsilon_1_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC046",
+      "end": "0x0EC08D"
+    },
+    {
+      "file": "src/data/sharpssteel_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC08E",
+      "end": "0x0EC237"
+    },
+    {
+      "file": "src/data/jampan_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC238",
+      "end": "0x0EC291"
+    },
+    {
+      "file": "src/data/destroyer_mk2_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC292",
+      "end": "0x0EC2E5"
+    },
+    {
+      "file": "src/data/back_stringer_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC2E6",
+      "end": "0x0EC43D"
+    },
+    {
+      "file": "src/data/unreferenced_post_back_stringer_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC43E",
+      "end": "0x0EC6BF"
+    },
+    {
+      "file": "src/data/valkirie_shared_rotation_c_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC6C0",
+      "end": "0x0EC6EF"
+    },
+    {
+      "file": "src/data/valkirie_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0EC6F0",
+      "end": "0x0ECB1B"
+    },
+    {
+      "file": "src/data/bugmax_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0ECB1C",
+      "end": "0x0ECC85"
+    },
+    {
+      "file": "src/data/seven_forces_valkirie_and_stage24_mappings.s",
+      "subsystem": "data",
+      "start": "0x0ECC86",
+      "end": "0x0ECEF1"
+    },
+    {
+      "file": "src/data/destroyer_proto_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x0ECEF2",
+      "end": "0x0ECF75"
+    },
+    {
+      "file": "src/data/shield_viper_and_missiray_mappings.s",
+      "subsystem": "data",
+      "start": "0x0ECF76",
+      "end": "0x0ED171"
+    },
+    {
+      "file": "src/data/wolf_garopa_and_z_leo_mappings.s",
+      "subsystem": "data",
+      "start": "0x0ED172",
+      "end": "0x0ED4B3"
+    },
+    {
+      "file": "src/data/shared_frontend_and_gameplay_tile_art.s",
+      "subsystem": "data",
+      "start": "0x0ED4B4",
+      "end": "0x0F2825"
+    },
+    {
+      "file": "src/data/player_sprite_art.s",
+      "subsystem": "data",
+      "start": "0x0F2826",
+      "end": "0x0FEB6D"
+    },
+    {
+      "file": "src/data/gameplay_tile_art.s",
+      "subsystem": "data",
+      "start": "0x0FEB6E",
+      "end": "0x1198D1"
+    },
+    {
+      "file": "src/data/xi_tiger_and_boss_art.s",
+      "subsystem": "data",
+      "start": "0x1198D2",
+      "end": "0x13F4AF"
+    },
+    {
+      "file": "src/data/shared_boss_and_stage_mapping_data.s",
+      "subsystem": "data",
+      "start": "0x13F4B0",
+      "end": "0x1412B5"
+    },
+    {
+      "file": "src/data/japanese_font_and_credits_tile_art.s",
+      "subsystem": "data",
+      "start": "0x1412B6",
+      "end": "0x14AE07"
+    },
+    {
+      "file": "src/data/credits_scene_assets.s",
+      "subsystem": "data",
+      "start": "0x14AE08",
+      "end": "0x17FFFF"
+    },
+    {
+      "file": "src/data/frontend_scene_assets.s",
+      "subsystem": "data",
+      "start": "0x180000",
+      "end": "0x189D37"
+    },
+    {
+      "file": "src/data/planet_cutscene_assets.s",
+      "subsystem": "data",
+      "start": "0x189D38",
+      "end": "0x18B14B"
+    },
+    {
+      "file": "src/data/shared_frontend_and_transition_assets.s",
+      "subsystem": "data",
+      "start": "0x18B14C",
+      "end": "0x18E5D1"
+    },
+    {
+      "file": "src/data/stage_object_assets.s",
+      "subsystem": "data",
+      "start": "0x18E5D2",
+      "end": "0x19C4A3"
+    },
+    {
+      "file": "src/data/indexed_object_and_stage_effect_mappings.s",
+      "subsystem": "data",
+      "start": "0x19C4A4",
+      "end": "0x19C77D"
+    },
+    {
+      "file": "src/data/stage10_stage12_and_teleport_assets.s",
+      "subsystem": "data",
+      "start": "0x19C77E",
+      "end": "0x1A0CA5"
+    },
+    {
+      "file": "src/data/shared_stage_object_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x1A0CA6",
+      "end": "0x1A0FD9"
+    },
+    {
+      "file": "src/data/stage10_and_teleport_mapping_data7800.s",
+      "subsystem": "data",
+      "start": "0x1A0FDA",
+      "end": "0x1A1025"
+    },
+    {
+      "file": "src/data/stage10_and_teleport_tile_art_and_mapping_data.s",
+      "subsystem": "data",
+      "start": "0x1A1026",
+      "end": "0x1A2C45"
+    },
+    {
+      "file": "src/data/stage16_assets.s",
+      "subsystem": "data",
+      "start": "0x1A2C46",
+      "end": "0x1A7529"
+    },
+    {
+      "file": "src/data/stage2_phase1_assets.s",
+      "subsystem": "data",
+      "start": "0x1A752A",
+      "end": "0x1A9AD7"
+    },
+    {
+      "file": "src/data/epsilon_1_mapping_data.s",
+      "subsystem": "data",
+      "start": "0x1A9AD8",
+      "end": "0x1A9B9D"
+    },
+    {
+      "file": "src/data/ship_sequence_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x1A9B9E",
+      "end": "0x1A9CC3"
+    },
+    {
+      "file": "src/data/stage18_and_stage19_assets.s",
+      "subsystem": "data",
+      "start": "0x1A9CC4",
+      "end": "0x1B10F9"
+    },
+    {
+      "file": "src/data/stage2_phase2_assets.s",
+      "subsystem": "data",
+      "start": "0x1B10FA",
+      "end": "0x1B3A25"
+    },
+    {
+      "file": "src/data/shared_stage18_and_stage20_mapping_data.s",
+      "subsystem": "data",
+      "start": "0x1B3A26",
+      "end": "0x1B3A9D"
+    },
+    {
+      "file": "src/data/stage20_assets.s",
+      "subsystem": "data",
+      "start": "0x1B3A9E",
+      "end": "0x1B6F85"
+    },
+    {
+      "file": "src/data/seven_forces_artemis_and_victory_assets.s",
+      "subsystem": "data",
+      "start": "0x1B6F86",
+      "end": "0x1BE761"
+    },
+    {
+      "file": "src/data/stage3_assets.s",
+      "subsystem": "data",
+      "start": "0x1BE762",
+      "end": "0x1CE4F7"
+    },
+    {
+      "file": "src/data/stage24_scene_sprite_mapping.s",
+      "subsystem": "data",
+      "start": "0x1CE4F8",
+      "end": "0x1CE515"
+    },
+    {
+      "file": "src/data/stage21_tile_art.s",
+      "subsystem": "data",
+      "start": "0x1CE516",
+      "end": "0x1CEC6B"
+    },
+    {
+      "file": "src/data/stage_21_asteroid_and_destroyer_proto_mappings.s",
+      "subsystem": "data",
+      "start": "0x1CEC6C",
+      "end": "0x1CECB3"
+    },
+    {
+      "file": "src/data/stage_3_phase_3_tiles.s",
+      "subsystem": "data",
+      "start": "0x1CECB4",
+      "end": "0x1CF761"
+    },
+    {
+      "file": "src/data/missiray_entry_sprite_mappings.s",
+      "subsystem": "data",
+      "start": "0x1CF762",
+      "end": "0x1CF797"
+    },
+    {
+      "file": "src/data/stage3_phase_mapping_data.s",
+      "subsystem": "data",
+      "start": "0x1CF798",
+      "end": "0x1CF804"
+    },
+    {
+      "file": "src/data/rom_final_padding.s",
+      "subsystem": "data",
+      "start": "0x1CF805",
+      "end": "0x1FFFFF"
+    }
+  ],
+  "profile": "eu"
+}

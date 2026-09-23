@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -101,6 +101,14 @@ check-profile-ready:
 derive-eu-assets:
 	@$(PYTHON) $(SCRIPTS_DIR)/derive_profile_assets.py \
 		--profiles $(PROFILE_CONFIG)
+
+derive-eu-layout:
+	@$(MAKE) --no-print-directory build/eu/main.lst PROFILE=eu
+	@$(PYTHON) $(SCRIPTS_DIR)/derive_profile_layout.py \
+		--base config/rom_layout.json \
+		--listing build/eu/main.lst \
+		--profile eu \
+		--output config/rom_layout_eu.json
 
 # Reject caller-owned profile symbols before preservation assembly/extraction.
 .PHONY: check-profile-as-args
