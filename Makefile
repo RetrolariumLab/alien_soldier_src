@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -97,6 +97,10 @@ check-profile-ready:
 	@$(PYTHON) $(SCRIPTS_DIR)/rom_profiles.py \
 		--config $(PROFILE_CONFIG) --profile $(PROFILE) --require-supported \
 		--field status
+
+derive-eu-assets:
+	@$(PYTHON) $(SCRIPTS_DIR)/derive_profile_assets.py \
+		--profiles $(PROFILE_CONFIG)
 
 # Reject caller-owned profile symbols before preservation assembly/extraction.
 .PHONY: check-profile-as-args
@@ -118,7 +122,8 @@ init: check-profile-as-args check-profile-ready
 		--as-bin $(AS_BIN) \
 		--p2bin $(P2BIN) \
 		--as-args="$(PRESERVATION_AS_ARGS)" \
-		--preserve-manifest assets/manifest.json
+		--preserve-manifest assets/manifest.json \
+		--preserve-manifest assets/manifest_eu.json
 
 # Check if project is initialized (data/ directory with subfolders exists)
 # If missing, print a friendly hint instead of cryptic "error in opening file"
@@ -162,14 +167,16 @@ split:
 		--output $(DATA_DIR) \
 		--addrs $(DATA_ADDRS) \
 		--manifest $(ASSET_MANIFEST) \
-		--preserve-manifest assets/manifest.json
+		--preserve-manifest assets/manifest.json \
+		--preserve-manifest assets/manifest_eu.json
 
 # Read-only prerequisite for every ordinary build.
 check-assets:
 	@$(PYTHON) $(SCRIPTS_DIR)/check_assets.py \
 		--manifest $(ASSET_MANIFEST) \
 		--asset-dir $(DATA_DIR) \
-		--preserve-manifest assets/manifest.json
+		--preserve-manifest assets/manifest.json \
+		--preserve-manifest assets/manifest_eu.json
 
 # Explicit maintainer operation used only when the extraction map changes.
 update-asset-manifest:

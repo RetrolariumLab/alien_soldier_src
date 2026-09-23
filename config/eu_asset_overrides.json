@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "base_profile": "jp",
+  "target_profile": "eu",
+  "overrides": [
+    {
+      "name": "title_screen_unreferenced",
+      "address": "0x009BC6",
+      "end": "0x009BE0",
+      "reason": "The 26-byte sequence is repeated; surrounding EU code places this copy at the JP label's shifted position."
+    },
+    {
+      "name": "story_text_primary_rows",
+      "address": "0x005B60",
+      "end": "0x006BB7",
+      "path": "profiles/eu/other/story_text_primary_rows.bin",
+      "region": "profiles/eu/other",
+      "reason": "The EU StoryText initializer loads $005B60 as the primary row stream and $006BB7 as its exclusive end."
+    },
+    {
+      "name": "story_text_accent_rows",
+      "address": "0x006BB7",
+      "end": "0x007C0E",
+      "path": "profiles/eu/other/story_text_accent_rows.bin",
+      "region": "profiles/eu/other",
+      "reason": "The EU StoryText initializer loads $006BB7 as the accent row stream; the following StoryFont code begins at $007C0E."
+    }
+  ]
+}
