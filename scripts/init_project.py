@@ -29,6 +29,10 @@ def main():
     parser.add_argument('--as-bin', required=True, help='AS assembler binary')
     parser.add_argument('--p2bin', required=True, help='P2BIN converter')
     parser.add_argument('--as-args', default='', help='AS assembler arguments')
+    parser.add_argument(
+        '--preserve-manifest', action='append', default=[],
+        help='Additional asset manifest whose extracted files must survive cleanup',
+    )
 
     args = parser.parse_args()
 
@@ -51,7 +55,8 @@ def main():
         reference = json.load(manifest_file)['reference_rom']
     original_sha1 = hashlib.sha1(original).hexdigest()
     if len(original) != reference['size'] or original_sha1 != reference['sha1']:
-        print('ERROR: Input is not the canonical Japanese ROM!')
+        reference_name = reference.get('name', 'declared preservation')
+        print(f'ERROR: Input is not the {reference_name} ROM!')
         print(f"  Expected: {reference['size']} bytes, SHA1 {reference['sha1']}")
         print(f"  Actual:   {len(original)} bytes, SHA1 {original_sha1}")
         return 1
@@ -61,12 +66,16 @@ def main():
     scripts_dir = os.path.dirname(os.path.abspath(__file__))
     split_script = os.path.join(scripts_dir, 'split_data_from_rom.py')
 
-    result = subprocess.run([
+    split_command = [
         sys.executable, split_script,
         '--rom-file', args.orig_rom,
         '--output', args.data_dir,
-        '--addrs', args.data_addrs
-    ])
+        '--addrs', args.data_addrs,
+        '--manifest', args.manifest
+    ]
+    for preserve_manifest in args.preserve_manifest:
+        split_command.extend(['--preserve-manifest', preserve_manifest])
+    result = subprocess.run(split_command)
 
     if result.returncode != 0:
         print('ERROR: Failed to extract data!')
@@ -93,7 +102,7 @@ def main():
         '--output', args.output,
         '--as-bin', args.as_bin,
         '--p2bin', args.p2bin,
-        '--as-args', args.as_args,
+        '--as-args=' + args.as_args,
         '--manifest', args.manifest,
         '--original-rom', args.orig_rom,
         '--verify'
@@ -106,7 +115,7 @@ def main():
 
     print('=== Project initialized successfully! ===')
     print()
-    print('Canonical ROM reproduced. You can now:')
+    print('Declared preservation ROM reproduced. You can now:')
     print('  make build   - Build ROM from source')
     print('  make compare - Compare with reference')
     return 0

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "default_profile": "jp",
+  "profiles": [
+    {
+      "id": "jp",
+      "name": "Japanese preservation profile",
+      "status": "supported",
+      "source": "src/main.s",
+      "object": "build/main.p",
+      "listing": "build/main.lst",
+      "output": "asbuilt.bin",
+      "asset_manifest": "assets/manifest.json",
+      "asset_ranges": "data/data_addrs.txt",
+      "asset_directory": "data",
+      "rom_layout": "config/rom_layout.json",
+      "reference_rom": {
+        "name": "Alien Soldier (Japan)",
+        "filename": "Alien Soldier (J) [!].bin",
+        "size": 2097152,
+        "sha1": "8f6eb584ed9487b8504fbc21d86783f58e6c9cd6",
+        "sha256": "5613637d267cf8d0bf3ff1e396d7929526cd5221cb8af06349528c8bedced1a0",
+        "md5": "fd04c4616bb559e646937effdd343a09",
+        "crc32": "90FA1539",
+        "padding_byte": "0xFF"
+      }
+    },
+    {
+      "id": "eu",
+      "name": "European preservation profile",
+      "status": "supported",
+      "source": "src/main.s",
+      "object": "build/eu/main.p",
+      "listing": "build/eu/main.lst",
+      "output": "asbuilt_eu.bin",
+      "asset_manifest": "assets/manifest_eu.json",
+      "asset_ranges": "data/data_addrs_eu.txt",
+      "asset_directory": "data",
+      "rom_layout": "config/rom_layout_eu.json",
+      "reference_rom": {
+        "name": "Alien Soldier (Europe)",
+        "filename": "Alien Soldier (E) [!].bin",
+        "size": 2097152,
+        "sha1": "fa141778bd6540775194d77318f27d2a934e1ac1",
+        "sha256": "afd4642f78ee1ae3004d630b1228e54a6e51e5dc7a991e1c192d91a41f366f71",
+        "md5": "32aeea27591d0cb88dc571baa738804e",
+        "crc32": "0496E06C",
+        "padding_byte": "0xFF"
+      },
+      "reconstruction_evidence": {
+        "kit": "../alien_soldier_src_kit_eu",
+        "verification": "verification-result.json",
+        "rebuilt_sha256": "afd4642f78ee1ae3004d630b1228e54a6e51e5dc7a991e1c192d91a41f366f71"
+      }
+    }
+  ],
+  "shared_image_region": {
+    "start": "0x05D2F2",
+    "end": "0x200000",
+    "size": 1715470,
+    "sha256": "8d06361abfaf66feebc12b9fb56f31daa0de14d5ea77f094dac98249c9862898"
+  },
+  "asset_reuse": {
+    "total_jp_assets": 589,
+    "shared_exact_assets": 587,
+    "eu_specific_assets": 2,
+    "eu_specific_paths": [
+      "profiles/eu/other/story_text_primary_rows.bin",
+      "profiles/eu/other/story_text_accent_rows.bin"
+    ]
+  }
+}

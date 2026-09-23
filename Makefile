@@ -83,20 +83,42 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
 
+profile-info:
+	@$(PYTHON) $(SCRIPTS_DIR)/rom_profiles.py \
+		--config $(PROFILE_CONFIG) --profile $(PROFILE)
+
 # Preservation commands accept only profiles whose byte identity is supported.
+check-profile-ready:
+	@$(PYTHON) $(SCRIPTS_DIR)/rom_profiles.py \
+		--config $(PROFILE_CONFIG) --profile $(PROFILE) --require-supported \
+		--field status
 
 # Reject caller-owned profile symbols before preservation assembly/extraction.
+.PHONY: check-profile-as-args
+check-profile-as-args:
+	@$(PYTHON) $(SCRIPTS_DIR)/check_profile_as_args.py --flags="$(AS_ARGS)"
 
 # Initialize project from original ROM
 # Usage: make init
 .PHONY: init
-init:
-	@$(PYTHON) $(SCRIPTS_DIR)/init_project.py --orig-rom "$(ORIG_ROM)" --manifest $(ASSET_MANIFEST) --data-dir $(DATA_DIR) --data-addrs $(DATA_ADDRS) --source $(SRC) --obj $(OBJ) --output $(ROM) --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)"
+init: check-profile-as-args check-profile-ready
+	@$(PYTHON) $(SCRIPTS_DIR)/init_project.py \
+		--orig-rom "$(ORIG_ROM)" \
+		--manifest $(ASSET_MANIFEST) \
+		--data-dir $(DATA_DIR) \
+		--data-addrs $(DATA_ADDRS) \
+		--source $(SRC) \
+		--obj $(OBJ) \
+		--output $(ROM) \
+		--as-bin $(AS_BIN) \
+		--p2bin $(P2BIN) \
+		--as-args="$(PRESERVATION_AS_ARGS)" \
+		--preserve-manifest assets/manifest.json
 
 # Check if project is initialized (data/ directory with subfolders exists)
 # If missing, print a friendly hint instead of cryptic "error in opening file"
@@ -108,15 +130,23 @@ check-init:
 
 # Build ROM from assembly source
 .PHONY: build
-build: check-init check-assets verify-toolchain
+build: check-profile-as-args check-profile-ready check-init check-assets verify-toolchain
 	@echo "Building ROM..."
-	$(PYTHON) $(SCRIPTS_DIR)/build_rom.py --source $(SRC) --obj $(OBJ) --output $(ROM) --manifest $(ASSET_MANIFEST) --original-rom "$(ORIG_ROM)" --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)"
+	$(PYTHON) $(SCRIPTS_DIR)/build_rom.py \
+		--source $(SRC) \
+		--obj $(OBJ) \
+		--output $(ROM) \
+		--manifest $(ASSET_MANIFEST) \
+		--original-rom "$(ORIG_ROM)" \
+		--as-bin $(AS_BIN) \
+		--p2bin $(P2BIN) \
+		--as-args="$(PRESERVATION_AS_ARGS)"
 	@echo ""
 	@echo "Build complete: $(ROM)"
 
 # Permanent preservation gate: assemble from source and require the selected
 # profile's declared cartridge image byte for byte.
-verify: check-init check-assets verify-toolchain
+verify: check-profile-as-args check-profile-ready check-init check-assets verify-toolchain
 	@$(PYTHON) $(SCRIPTS_DIR)/build_rom.py --source $(SRC) --obj $(OBJ) --output $(ROM) --manifest $(ASSET_MANIFEST) --original-rom "$(ORIG_ROM)" --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)" --verify
 	@$(MAKE) --no-print-directory verify-layout
 
@@ -131,13 +161,15 @@ split:
 		--rom-file "$(ORIG_ROM)" \
 		--output $(DATA_DIR) \
 		--addrs $(DATA_ADDRS) \
-		--manifest $(ASSET_MANIFEST)
+		--manifest $(ASSET_MANIFEST) \
+		--preserve-manifest assets/manifest.json
 
 # Read-only prerequisite for every ordinary build.
 check-assets:
 	@$(PYTHON) $(SCRIPTS_DIR)/check_assets.py \
 		--manifest $(ASSET_MANIFEST) \
-		--asset-dir $(DATA_DIR)
+		--asset-dir $(DATA_DIR) \
+		--preserve-manifest assets/manifest.json
 
 # Explicit maintainer operation used only when the extraction map changes.
 update-asset-manifest:
@@ -187,7 +219,7 @@ clean:
 
 # Generate listing file (prerequisite for symbols)
 
-$(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) |
+$(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	@echo "Building listing file..."
 	@python -c "import os; os.makedirs('build', exist_ok=True)"
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)

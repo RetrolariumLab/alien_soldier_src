@@ -137,7 +137,7 @@ if __name__ == '__main__':
     parser.add_argument('--manifest', default='assets/manifest.json',
                         help='Canonical ROM and padding manifest')
     parser.add_argument('--original-rom', default='Alien Soldier (J) [!].bin',
-                        help='Canonical Japanese cartridge dump')
+                        help='Reference cartridge dump declared by the asset manifest')
     parser.add_argument('--verify', action='store_true',
                         help='Fail unless output is byte-identical to the canonical ROM')
     args = parser.parse_args()
@@ -181,11 +181,13 @@ if __name__ == '__main__':
             original_sha1 = hashlib.sha1(original).hexdigest()
             identity_error = canonical_rom_error(original, reference)
             if identity_error:
-                print(f'ERROR: {args.original_rom} is not the canonical Japanese ROM')
+                reference_name = reference.get('name', 'declared preservation')
+                print(f'ERROR: {args.original_rom} is not the {reference_name} ROM')
                 print(f'  {identity_error}')
                 ret = 1
             elif built == original:
-                print(f'[OK] Byte-identical canonical ROM reproduced (SHA1 {original_sha1})')
+                reference_name = reference.get('name', 'declared preservation')
+                print(f'[OK] Byte-identical {reference_name} ROM reproduced (SHA1 {original_sha1})')
             else:
                 offset = first_difference(built, original)
                 message = f'Built ROM differs from canonical ROM at 0x{offset:06X}'

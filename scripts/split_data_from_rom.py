@@ -27,6 +27,10 @@ def main():
                         help='Addresses file (default: data/data_addrs.txt)')
     parser.add_argument('--manifest', default='assets/manifest.json',
                         help='Canonical ROM manifest')
+    parser.add_argument(
+        '--preserve-manifest', action='append', default=[],
+        help='Additional asset manifest whose files must survive stale cleanup',
+    )
 
     args = parser.parse_args()
 
@@ -50,7 +54,8 @@ def main():
         reference = json.load(manifest_file)['reference_rom']
     rom_sha1 = hashlib.sha1(rom_data).hexdigest()
     if len(rom_data) != reference['size'] or rom_sha1 != reference['sha1']:
-        print(f'Error: "{args.rom_file}" is not the canonical Japanese ROM')
+        reference_name = reference.get('name', 'declared preservation')
+        print(f'Error: "{args.rom_file}" is not the {reference_name} ROM')
         print(f"  Expected: {reference['size']} bytes, SHA1 {reference['sha1']}")
         print(f'  Actual:   {len(rom_data)} bytes, SHA1 {rom_sha1}')
         return 1
@@ -89,6 +94,13 @@ def main():
         Path(subdir) / f'{name}.bin'
         for name, _start, _end, subdir in entries
     }
+    for preserve_manifest in args.preserve_manifest:
+        preserve_document = json.loads(
+            Path(preserve_manifest).read_text(encoding='utf-8')
+        )
+        expected_paths.update(
+            Path(asset['path']) for asset in preserve_document.get('assets', [])
+        )
     removed_stale = 0
     for subdir in subdirs:
         for existing in (output_root / subdir).rglob('*.bin'):

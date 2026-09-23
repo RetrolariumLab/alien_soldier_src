@@ -65,7 +65,8 @@ def main():
     original_data = original_file.read_bytes()
     original_sha1 = hashlib.sha1(original_data).hexdigest()
     if len(original_data) != reference['size'] or original_sha1 != reference['sha1']:
-        print(f"Error: {original_file.name} is not the canonical Japanese ROM")
+        reference_name = reference.get('name', 'declared preservation')
+        print(f"Error: {original_file.name} is not the {reference_name} ROM")
         print(f"  Expected: {reference['size']} bytes, SHA1 {reference['sha1']}")
         print(f"  Actual:   {len(original_data)} bytes, SHA1 {original_sha1}")
         return 1
@@ -80,8 +81,9 @@ def main():
         print(f"  Built:    {built_file.name} ({built_file.stat().st_size:,} bytes)")
         print(f"  Original: {original_file.name} ({original_file.stat().st_size:,} bytes)")
         print()
-        print(f"[OK] Byte-identical canonical ROM reproduced (SHA1 {original_sha1})")
-        print("[OK] The complete assembled source preserves every canonical byte")
+        reference_name = reference.get('name', 'declared preservation')
+        print(f"[OK] Byte-identical {reference_name} ROM reproduced (SHA1 {original_sha1})")
+        print("[OK] The complete assembled source preserves every declared byte")
         return 0
     else:
         print("=" * 60)
