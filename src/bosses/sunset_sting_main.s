@@ -84,7 +84,9 @@ Boss_SunsetStingInit:                                   ; DATA XREF: ROM:Boss_Su
                 move.w  #$1EC,d0
                 moveq   #0,d1
                 jsr     (Object_ClearEntityRecordsExceptTwoTypes).l
+                if      BuildProfileJP
                 move.b  #1,(SoundFadeOutDelay).w
+                endif
                 move.w  #$1E0,$10(a5)
                 move.w  #$D8,$14(a5)
                 move.w  #$8D00,2(a5)

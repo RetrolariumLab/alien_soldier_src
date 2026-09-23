@@ -64,7 +64,8 @@ ShipName_SelectScript:                                  ; CODE XREF: ShipName_St
                 rts
 ; End of function ShipName_StartScript
 ; ---------------------------------------------------------------------------
-ShipNameScriptPointerTable: dc.w    0, $B8E8, 0, $B8E8, 4, $FFFF, $D08A, $1D1E, $B11, $F02, 0  ; was: word_B506
+ShipNameScriptPointerTable: dc.l    ShipAndValkirieMessageScript, ShipAndValkirieMessageScript  ; was: word_B506
+                dc.w    4, $FFFF, $D08A, $1D1E, $B11, $F02, 0
                 dc.w    $2113, $1811, $19, $1000, $1E12, $F00, $1619, $1D0B, $1811, $F16, $F1D
                 dc.w    $FF00
 StageIntro_GlyphSourceList: dc.w    $102, $304, $506, $708, $90A, $1D1E, $B11, $FFF  ; was: word_B534

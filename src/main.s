@@ -3,6 +3,7 @@
                 supmode on
                 padding off
 
+                include "src/build_profile.inc"
                 include "src/macros.inc"
                 include "src/ports.inc"
                 include "src/equals.inc"

@@ -132,6 +132,14 @@ Sys_VBlankEventHandler_UpdateSound:                     ; CODE XREF: Sys_VBlankE
                 bne.w   Sys_VBlankEventHandler_Return
                 move.b  #1,(SoundUpdateBusy).w
                 jsr     (Sound_UpdateThunk).l
+                if      BuildProfileEU
+                addq.w  #1,(PALSoundCompensationCounter).w
+                cmpi.w  #5,(PALSoundCompensationCounter).w
+                bcs.s   Sys_VBlankEventHandler_ClearSoundBusy
+                clr.w   (PALSoundCompensationCounter).w
+                jsr     (Sound_UpdateThunk).l
+                endif
+Sys_VBlankEventHandler_ClearSoundBusy:
                 clr.b   (SoundUpdateBusy).w
 Sys_VBlankEventHandler_Return:                          ; CODE XREF: Sys_VBlankEventHandler+2C   j  ; was: locret_C14
                 rts

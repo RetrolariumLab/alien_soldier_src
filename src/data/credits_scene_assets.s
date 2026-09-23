@@ -99,5 +99,6 @@ Credits_SegaMappingData:    dc.b    0, $4A, $6A, $60, $40, $44, $48, $4C, $50, $
                                         ; DATA XREF: ROM:00021A28   o
                 dc.b    $61, $65, $69, $6D, $5F, 0, 0, $51, 0, 0, $6A, $60, $42, $46, $4A, $4E, $52, $56, $5A, $5E, $62, $66, $6A, $6E, $5F, 0, 0, $51, 0, 0, $6A, $60
                 dc.b    $43, $47, $4B, $4F, $53, $57, $5B, $5F, $63, $67, $6B, $6F
+Credits_SegaMappingData_End:
                 ; dc.b [$1AC38]$FF
                 org     $180000

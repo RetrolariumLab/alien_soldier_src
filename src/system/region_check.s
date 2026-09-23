@@ -2,7 +2,9 @@ Sys_CheckRegionLock:                                    ; DATA XREF: Sys_Dispatc
                 tst.w   (GameSubstateIndex).w
                 bne.w   Sys_CheckRegionLock_Return
                 move.b  (IO_PCBVER+1).l,d0
+                if      BuildProfileJP
                 bpl.s   Sys_EnterInitialGameModeAfterRegionCheck
+                endif
                 btst    #6,d0
                 beq.s   RegionRestricted
 
@@ -23,10 +25,11 @@ RegionRestricted:                                       ; CODE XREF: Sys_CheckRe
                 lea     (FrontendPaletteCommands).l,a0
                 jsr     (Gfx_LoadPaletteCommand).l
                 move.w  #$8300,d0
-                move.w  #$438C,d4
+                move.w  #RegionLockTextPosition,d4
                 lea     RegionLock_DevelopedForUseOnlyWithText(pc),a0
                 nop
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
+                if      BuildProfileJP
                 move.w  #$8300,d0
                 move.w  #$4518,d4
                 lea     RegionLock_NTSCMegaDriveText(pc),a0
@@ -37,13 +40,22 @@ RegionRestricted:                                       ; CODE XREF: Sys_CheckRe
                 lea     RegionLock_AndText(pc),a0
                 nop
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
+                endif
                 move.w  #$8300,d0
+                if      BuildProfileEU
+                move.w  #$4688,d4
+                else
                 move.w  #$4808,d4
+                endif
                 lea     RegionLock_PALAndFrenchSecamMegaDriveText(pc),a0
                 nop
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
                 move.w  #$8300,d0
+                if      BuildProfileEU
+                move.w  #$4820,d4
+                else
                 move.w  #$49A0,d4
+                endif
                 lea     RegionLock_SystemsText(pc),a0
                 nop
                 jsr     (Text_QueueDoubleHeightStringWrapped).l

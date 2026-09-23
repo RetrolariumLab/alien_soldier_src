@@ -61,7 +61,11 @@ StoryText_UpdateScroll:                                 ; DATA XREF: ROM:000058A
                 bne.s   StoryText_RenderAccentRow
                 movea.l #StoryText_BlankRow,a0
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
+                if      BuildProfileEU
+                bra.w   StoryText_PrepareTrailingBlankRow
+                else
                 bra.s   StoryText_PrepareTrailingBlankRow
+                endif
 ; ---------------------------------------------------------------------------
 StoryText_RenderAccentRow:                              ; CODE XREF: StoryText_UpdateScroll+3A   j  ; was: loc_5980
                 move.w  #$E300,d0
@@ -74,10 +78,44 @@ StoryText_SkipAccentLeadingBlanks:                      ; CODE XREF: StoryText_U
                 addq.w  #1,a0
                 addq.w  #2,d4
                 dbf     d1,StoryText_SkipAccentLeadingBlanks
+                if      BuildProfileEU
+                bra.s   StoryText_ScanSecondAccentRun
+                else
                 bra.s   StoryText_AdvanceRowPointers
+                endif
 ; ---------------------------------------------------------------------------
 StoryText_QueueAccentRow:                               ; CODE XREF: StoryText_UpdateScroll+60   j  ; was: loc_59A2
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
+                if      BuildProfileEU
+StoryText_ScanSecondAccentRun:
+                move.w  #$E300,d0
+                move.w  (StoryTextVRAMAddress).l,d4
+                movea.l (StoryTextAccentCursor).l,a0
+                move.w  #$1F,d1
+StoryText_SkipSecondAccentLeadingBlanks:
+                tst.b   (a0)
+                bne.s   StoryText_SkipFirstAccentRun
+                addq.w  #1,a0
+                addq.w  #2,d4
+                dbf     d1,StoryText_SkipSecondAccentLeadingBlanks
+                bra.s   StoryText_AdvanceRowPointers
+StoryText_SkipFirstAccentRun:
+                tst.b   (a0)
+                beq.s   StoryText_SkipSecondAccentGap
+                addq.w  #1,a0
+                addq.w  #2,d4
+                dbf     d1,StoryText_SkipFirstAccentRun
+                bra.s   StoryText_AdvanceRowPointers
+StoryText_SkipSecondAccentGap:
+                tst.b   (a0)
+                bne.s   StoryText_QueueSecondAccentRun
+                addq.w  #1,a0
+                addq.w  #2,d4
+                dbf     d1,StoryText_SkipSecondAccentGap
+                bra.s   StoryText_AdvanceRowPointers
+StoryText_QueueSecondAccentRun:
+                jsr     (Text_QueueDoubleHeightStringWrapped).l
+                endif
 StoryText_AdvanceRowPointers:                           ; CODE XREF: StoryText_UpdateScroll+6A   j  ; was: loc_59A8
                 addi.l  #$22,(StoryTextAccentCursor).l  ; '"'
                 move.w  #$C300,d0
@@ -107,9 +145,19 @@ StoryText_BlankRow: dc.w    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0  ; wa
                                         ; DATA XREF: StoryText_UpdateScroll+3C   o
                                         ; sub_5936:loc_59EA   o
                 dc.w    $FF
-StoryText_PrimaryRows:  binclude "data/other/story_text_primary_rows.bin"  ; was: byte_5A36
+StoryText_PrimaryRows:
+                if      BuildProfileEU
+                binclude "data/profiles/eu/other/story_text_primary_rows.bin"
+                else
+                binclude "data/other/story_text_primary_rows.bin"  ; was: byte_5A36
+                endif
 StoryText_PrimaryRows_End:                              ; was: byte_5A36_End
-StoryText_AccentRows:   binclude "data/other/story_text_accent_rows.bin"  ; was: byte_675D
+StoryText_AccentRows:
+                if      BuildProfileEU
+                binclude "data/profiles/eu/other/story_text_accent_rows.bin"
+                else
+                binclude "data/other/story_text_accent_rows.bin"  ; was: byte_675D
+                endif
 StoryText_AccentRows_End:                               ; was: byte_675D_End
 
 ; Advances the Japanese-font scroll coordinate and dispatches its stream state

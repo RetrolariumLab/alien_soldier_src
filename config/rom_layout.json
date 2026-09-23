@@ -273,6 +273,10 @@
   },
   "shared_definitions": [
     {
+      "file": "src/build_profile.inc",
+      "emits_bytes": false
+    },
+    {
       "file": "src/macros.inc",
       "emits_bytes": false
     },

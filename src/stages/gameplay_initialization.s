@@ -242,15 +242,15 @@ WeaponSetup_UpdateScreen_CheckExit:                     ; CODE XREF: WeaponSetup
 ; ---------------------------------------------------------------------------
 WeaponSetup_UpdateScreen_HandleExit:                    ; CODE XREF: WeaponSetup_UpdateScreen+70   j  ; was: loc_1F0F8
                 tst.w   (StageTableIndex).w
-                bne.s   WeaponSetup_ExitToContinueScreen
+                bne.s   WeaponSetup_ExitToStageReady
                 move.l  #StageTransitionMessageSequence_StageZero,(StageMessageCursor).w  ; text?
                 move.w  #$34,(GameModeIndex).w          ; '4'
                 clr.w   (GameSubstateIndex).w
                 jsr     (Sound_QueueStageBGMOrStop).l
                 jmp     Game_InitializeNewSession
 ; ---------------------------------------------------------------------------
-; Leaves weapon setup through the continue-screen route
-WeaponSetup_ExitToContinueScreen:                       ; CODE XREF: WeaponSetup_UpdateScreen+78   j  ; was: loc_1F11C
+; Leaves weapon setup through the nonzero-stage ready-screen route
+WeaponSetup_ExitToStageReady:                           ; CODE XREF: WeaponSetup_UpdateScreen+78   j  ; was: loc_1F11C
                 move.w  #$3C,(GameModeIndex).w          ; '<'
                 clr.w   (GameSubstateIndex).w
                 jmp     UI_ResetPaletteAndMessageMode_Clear

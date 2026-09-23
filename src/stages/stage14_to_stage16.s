@@ -52,6 +52,9 @@ Stage15_UpdateSunsetStingApproach:                      ; DATA XREF: ROM:0000D9A
                 bsr.w   Scroll_UpdateAndRenderSylpheedBackdrop
                 cmpi.w  #$E3E8,(PrimaryCameraYPosition).w
                 bmi.w   Stage_MidgameStateReturn
+                if      BuildProfileEU
+                clr.w   (Stage15SunsetStingAssetDelay).w
+                endif
                 bclr    #0,(PaletteFadeControlFlags).w
                 move.w  #$FFE4,(MidgameFadeLevel).w
                 move.w  #6,(PaletteSecondaryIndex).w
@@ -59,19 +62,39 @@ Stage15_UpdateSunsetStingApproach:                      ; DATA XREF: ROM:0000D9A
 ; End of function Stage15_UpdateSunsetStingApproach
 ; Clamp Stage 15 and submit Sunset Sting's asset set
 Stage15_InitializeSunsetStingEncounter:                 ; DATA XREF: ROM:0000D9AA   o  ; was: sub_DEEE
+                if      BuildProfileEU
+                tst.w   (Stage15SunsetStingAssetDelay).w
+                beq.s   Stage15_ClampSunsetStingEncounter
+                subq.w  #1,(Stage15SunsetStingAssetDelay).w
+                bne.w   Stage_MidgameStateReturn
+                addq.w  #2,(StageStateOffset).w
+                lea     (Boss_SunsetStingAssetSet).l,a1
+                bra.w   Boss_LoadAssetSet
+Stage15_ClampSunsetStingEncounter:
+                endif
                 bsr.w   Scroll_AdvanceVerticalAndRenderSylpheedBackdrop
                 move.w  #$E420,d0
                 cmp.w   (PrimaryCameraYPosition).w,d0
                 bpl.w   Stage_MidgameStateReturn
+                if      BuildProfileJP
                 addq.w  #2,(StageStateOffset).w
+                endif
                 move.w  d0,(PrimaryCameraYPosition).w
                 move.w  #$660,(CameraXLowerBound).w
                 move.w  #$660,(CameraXUpperBound).w
+                if      BuildProfileEU
+                move.w  #$20,(Stage15SunsetStingAssetDelay).w
+                move.b  #1,(SoundFadeOutDelay).w
+                endif
                 moveq   #0,d0
                 moveq   #0,d1
+                if      BuildProfileEU
+                jmp     (Object_ClearEntityRecordsExceptTwoTypes).l
+                else
                 jsr     (Object_ClearEntityRecordsExceptTwoTypes).l
                 lea     (Boss_SunsetStingAssetSet).l,a1
                 bra.w   Boss_LoadAssetSet
+                endif
 ; End of function Stage15_InitializeSunsetStingEncounter
 ; Wait for Sunset Sting to clear, then start the time bonus and preload
 Stage15_UpdateSunsetStingEncounter:                     ; DATA XREF: ROM:0000D9AC   o  ; was: sub_DF26

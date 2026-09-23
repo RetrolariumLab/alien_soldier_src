@@ -356,6 +356,7 @@ WeaponSetupHighlight            equ     SceneScratchLong3
 Epsilon1VScrollValue            equ     SceneScratchLong3
 XiTigerWavePhase                equ     SceneScratchLong3
 XiTigerSpriteXOffset            equ     SceneScratchLong3+2
+Stage15SunsetStingAssetDelay    equ     SceneScratchLong3+2
 ScriptedInputActive             equ     $FFFF8138       ; was: word_FF8138
 ScriptedInputTimeout            equ     $FFFF813A       ; was: word_FF813A
 FrameFreezeTimer                equ     $FFFF813C       ; was: word_FF813C
@@ -1265,6 +1266,7 @@ SavedSoundDisableFlags          equ     $FFFFFF60       ; was: word_FFFF60
 DemoRotationIndex               equ     $FFFFFF62       ; was: word_FFFF62
 DemoStageTableIndex             equ     $FFFFFF64       ; was: word_FFFF64
 SavedControlLayoutFlags         equ     $FFFFFF66       ; was: byte_FFFF66
+PALSoundCompensationCounter     equ     $FFFFFF68
 M68K_RAM_LAST_BYTE              equ     $FFFFFFFF       ; was: byte_FFFFFF
 Z80_RAM                         equ     $A00000
 PauseMenuZ80SpriteData          equ     $A00C00         ; was: byte_A00C00

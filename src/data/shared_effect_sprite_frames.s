@@ -40,7 +40,7 @@ Projectile_TerobusterGravityShotSpriteFrames:   dc.l    $244F6, $FCFC  ; DATA XR
                 dc.l    $254F8, $FCFC
                 dc.l    $254F7, $FCFC
                 dc.l    $FFFF0002
-                dc.w    $ACD0
+                dc.w    Projectile_TerobusterGravityShotSpriteFrames-$20000
 Effect_KnockbackImpactSpriteFrames: dc.l    $244AC, $500F8F8  ; DATA XREF: Effect_UpdateKnockbackParticle+70   o  ; was: dword_2AD16
                                         ; Projectile_UpdateEightDirectionShotCollision+A0   o
                 dc.l    $244C4, $500F8F8

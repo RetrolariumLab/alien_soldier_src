@@ -43,13 +43,20 @@ def listing_symbols(lines: list[str]) -> dict[str, int]:
     return symbols
 
 
-def listing_payloads(lines: list[str]) -> dict[str, int]:
-    """Where each binincluded payload actually landed, by data/ path."""
+def listing_payloads(lines: list[str], expected_paths: set[str] | None = None) -> dict[str, int]:
+    """Where selected binincluded payloads landed, by data/ path.
+
+    AS prints inactive conditional branches in its listing too.  When a
+    profile manifest is available, restrict the result to that manifest so a
+    regional alternative is not mistaken for a second emitted payload.
+    """
     payloads: dict[str, int] = {}
     for line in lines:
         match = BINCLUDE_ROW.match(line)
         if match:
-            payloads[match.group(2).replace("\\", "/")] = int(match.group(1), 16)
+            path = match.group(2).replace("\\", "/")
+            if expected_paths is None or path in expected_paths:
+                payloads[path] = int(match.group(1), 16)
     return payloads
 
 
@@ -76,11 +83,16 @@ def check_dma_alignment(
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assets = {("data/" + item["path"]).replace("\\", "/"): item for item in manifest["assets"]}
-    payloads = listing_payloads(lines)
+    payloads = listing_payloads(lines, set(assets))
     if len(payloads) != len(assets):
+        missing = sorted(set(assets) - set(payloads))
         errors.append(
             f"listing places {len(payloads)} payloads; the asset manifest declares {len(assets)}"
         )
+        for path in missing[:10]:
+            errors.append(f"manifest payload is absent from the listing: {path}")
+        if len(missing) > 10:
+            errors.append(f"... and {len(missing) - 10} more missing manifest payloads")
 
     checked = 0
     crossings = []

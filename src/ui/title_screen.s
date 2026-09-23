@@ -41,11 +41,15 @@ TitleScreen_FinalizeInitialization:                     ; CODE XREF: TitleScreen
                 move.w  d0,(SecondaryCameraXPos).w
                 move.w  d1,(SecondaryCameraYPos).w
                 jsr     (Tilemap_TransferFullMapDirectToVRAM).l
+                if      BuildProfileEU
+                move.w  #$FFF0,(PrimaryCameraYPosition).w
+                endif
                 move.b  #0,(VDPReg18Shadow+1).w
                 move.w  #2,(TitleMenuSelection).w
                 move.b  #$91,d0
                 jsr     (Sound_QueueRequest).l
                 jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l
+                if      BuildProfileJP
                 lea     (Text_TitleFeatureList).l,a0
                 move.w  #$A300,d0
                 move.w  #$4086,d4
@@ -54,6 +58,7 @@ TitleScreen_FinalizeInitialization:                     ; CODE XREF: TitleScreen
                 move.w  #$A300,d0
                 move.w  #$4202,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
+                endif
                 lea     (Text_ForMegaDriversCustom).l,a0
                 move.w  #$8300,d0
                 move.w  #$4892,d4

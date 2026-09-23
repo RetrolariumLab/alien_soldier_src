@@ -83,8 +83,17 @@ Sys_VectorTable:    dc.l    $FFFFFF00                   ; DATA XREF: ROM:Boss_Sn
                 dc.l    Reserv3F
 CopyRights:     dc.b    'SEGA MEGA DRIVE (C)SEGA 1995.FEBALIEN SOLDIER                  '
                 dc.b    '                 ALIEN SOLDIER                                 '
+                if      BuildProfileEU
+                dc.b    '  GM MK-01186-00'
+                else
                 dc.b    '  GM G-004130-00'
-Checksum:       dc.w    $834F                           ; DATA XREF: Reset+164   o
+                endif
+Checksum:
+                if      BuildProfileEU
+                dc.w    $A62B
+                else
+                dc.w    $834F                           ; DATA XREF: Reset+164   o
+                endif
 Peripherials:   dc.b    'J               '
 RomStart:       dc.l    0
 RomEnd:         dc.l    RomFinalPaddingByte
@@ -93,7 +102,12 @@ RamEnd:         dc.l    M68K_RAM_END_PHYSICAL
 SramCode:       dc.b    '            '
 ModemCode:      dc.b    '            '
 Reserved:       dc.b    '                                        '
-CountryCode:    dc.b    'B               '
+CountryCode:
+                if      BuildProfileEU
+                dc.b    'A               '
+                else
+                dc.b    'B               '
+                endif
 
 ; External research associates several dormant records and patch experiments
 ; with prerelease content. The ROM itself proves entity types, resource lists,

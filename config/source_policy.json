@@ -34,6 +34,7 @@
       "Boss",
       "BossMessage",
       "BossMessageScript",
+      "Build",
       "Camera",
       "Checksum",
       "Collision",

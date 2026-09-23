@@ -96,12 +96,24 @@ Reset_CheckDeveloperSignature:                          ; CODE XREF: Reset+120  
 ChecksumCheck:                                          ; CODE XREF: Reset+134   j
                                         ; Reset+140   j
                 movea.l #Reset,a0
+                if      BuildProfileEU
+                move.w  #$1FFD,d0
+                moveq   #0,d1
+Reset_ChecksumUnrolledLoop:                             ; 128 words per iteration across the complete EU ROM
+.words          :=      $80
+                while   .words > 0
+                add.w   (a0)+,d1
+.words          :=      .words-1
+                endm
+                dbf     d0,Reset_ChecksumUnrolledLoop
+                else
                 move.l  #$60000,d0
                 moveq   #0,d1
 Reset_ChecksumLoop:                                     ; CODE XREF: Reset+162   j  ; was: loc_35E
                 add.w   (a0)+,d1
                 cmp.l   a0,d0
                 bcc.s   Reset_ChecksumLoop
+                endif
                 movea.l #Checksum,a1
                 cmp.w   (a1),d1
                 bne.w   Boot_ShowRedScreen

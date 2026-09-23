@@ -186,7 +186,7 @@ Credits_ScrollWithColorCycle:                           ; DATA XREF: ROM:00020BC
                 nop
                 bsr.w   Credits_CyclePaletteColors
                 move.w  (FrameCounter).w,d0
-                cmpi.w  #$11C0,d0
+                cmpi.w  #CreditsFadeStartFrame,d0
                 bcs.w   Credits_StateReturn
                 andi.w  #$F,d0
                 bne.w   Credits_StateReturn
@@ -377,9 +377,9 @@ Credits_FadeOutAndExit:                                 ; DATA XREF: ROM:00020BC
 ; Queue the Xi-Tiger credits music cues at their three scroll milestones
 Credits_HandleXiTigerMusicCues:                         ; CODE XREF: Credits_ScrollWithColorCycle+6   p  ; was: sub_20ECC
                                         ; Credits_WaitForTimerEnd+6   p
-                cmpi.w  #$1F40,(CreditsMasterCountdown).l
+                cmpi.w  #CreditsMusicFadeOutCountdown,(CreditsMasterCountdown).l
                 beq.s   Credits_QueueXiTigerMusicFadeOut
-                cmpi.w  #$1EC0,(CreditsMasterCountdown).l
+                cmpi.w  #CreditsXiTigerBGMCountdown,(CreditsMasterCountdown).l
                 beq.s   Credits_QueueXiTigerBGM94
                 cmpi.w  #$A0,(CreditsMasterCountdown).l
                 beq.s   Credits_QueueXiTigerMusicFadeOut

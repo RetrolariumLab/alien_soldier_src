@@ -70,7 +70,9 @@ StoryScreen_RunFrame:                                   ; CODE XREF: StoryScreen
                 jsr     (Sys_ProcessVisibleObjects).l
                 bsr.w   StoryScreen_DispatchState
                 bsr.w   StoryText_Dispatch
+                if      BuildProfileJP
                 bsr.w   StoryFont_UpdateAndDispatch
+                endif
                 jsr     (Sys_UpdateObjectCount).l
                 jsr     (Sprite_RenderObjectList).l
                 jsr     (Gfx_FadePaletteTransition).l
@@ -103,13 +105,13 @@ StoryScreen_StateOffsets:   dc.w    StoryScreen_StartLongTimer-*  ; DATA XREF: S
 
 ; Starts the story sequence's initial long timer
 StoryScreen_StartLongTimer:                             ; DATA XREF: ROM:StoryScreen_StateOffsets   o  ; was: sub_498A
-                move.w  #$2900,(CutsceneTimer).l
+                move.w  #StoryInitialTimer,(CutsceneTimer).l
                 addq.w  #2,(GameSubstateIndex).w
                 rts
 ; End of function StoryScreen_StartLongTimer
 ; Plays the first timed story-screen sound cue
 StoryScreen_WaitForCueTime:                             ; DATA XREF: ROM:00004972   o  ; was: sub_4998
-                cmpi.w  #$18C0,(CutsceneTimer).l
+                cmpi.w  #StoryFirstCueTimer,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.b  #1,d0
                 jsr     (Sound_QueueRequest).l
@@ -118,7 +120,7 @@ StoryScreen_WaitForCueTime:                             ; DATA XREF: ROM:0000497
 ; End of function StoryScreen_WaitForCueTime
 ; Resets the story fade accumulator at the second timed cue
 StoryScreen_WaitToBeginFade:                            ; DATA XREF: ROM:00004974   o  ; was: sub_49B4
-                cmpi.w  #$1880,(CutsceneTimer).l
+                cmpi.w  #StoryFadeCueTimer,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.w  #0,(ScenePaletteFadeOffset).l
                 addq.w  #2,(GameSubstateIndex).w
@@ -654,7 +656,7 @@ StoryTitle_CompletedLogoRightAdvanceRow:                ; was: loc_50D0
 StoryTitle_FinishCompletedLogoExpansion:                ; was: loc_50E0
                 move.b  #$38,d0                         ; '8'
                 jsr     (Sound_QueueSFXRequest).l
-                move.w  #$1C0,(CutsceneTimer).l
+                move.w  #StoryLogoExpansionWait,(CutsceneTimer).l
                 addq.w  #2,(GameSubstateIndex).w
                 rts
 ; End of function StoryTitle_ExpandCompletedLogo

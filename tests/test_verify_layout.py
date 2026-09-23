@@ -26,6 +26,16 @@ class VerifyLayoutTests(unittest.TestCase):
         self.assertEqual([(0, "src/system/example.s")], verify_layout.listing_includes(lines))
         self.assertEqual({"Reset": 0x200}, verify_layout.listing_symbols(lines))
 
+    def test_payload_parser_ignores_inactive_profile_alternatives(self) -> None:
+        lines = [
+            '(1)    1/    5A36 :                     binclude "data/profiles/eu/story.bin"',
+            '(1)    2/    5A36 :                     binclude "data/other/story.bin"',
+        ]
+        self.assertEqual(
+            {"data/other/story.bin": 0x5A36},
+            verify_layout.listing_payloads(lines, {"data/other/story.bin"}),
+        )
+
 
     def test_dma_boundary_crossing_is_rejected(self) -> None:
         layout = {
