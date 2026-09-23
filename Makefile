@@ -240,7 +240,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: check-level-model art-validate palette-validate mapping-validate check-graphics-models
+.PHONY: check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -262,7 +262,10 @@ palette-validate:
 mapping-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sprite_mappings.py validate
 
-check-graphics-models: art-validate palette-validate mapping-validate
+tilemap-validate:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_tilemaps.py validate
+
+check-graphics-models: art-validate palette-validate mapping-validate tilemap-validate
 
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
