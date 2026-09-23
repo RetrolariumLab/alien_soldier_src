@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout check-content check-graphics-models
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout check-content check-level-model check-graphics-models
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -240,7 +240,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: art-validate palette-validate mapping-validate check-graphics-models
+.PHONY: check-level-model art-validate palette-validate mapping-validate check-graphics-models
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -248,6 +248,10 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 
 # This deliberately ignores local workspace documents and stages directly
 # from tracked preservation inputs. Both regional baselines are mandatory.
+
+check-level-model:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/level_studio_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/level_studio_model.py check --profile eu
 
 art-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/tile_art.py validate
@@ -268,7 +272,7 @@ check-graphics-models: art-validate palette-validate mapping-validate
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
 check-content:
-	@$(MAKE) --no-print-directory check-graphics-models
+	@$(MAKE) --no-print-directory check-level-model check-graphics-models
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit
