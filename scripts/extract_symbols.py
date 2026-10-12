@@ -45,10 +45,54 @@ def symbol_rank(name):
     return 2
 
 
-def extract_symbols(lst_path):
+def load_resolved_symbols(lst_path):
+    """Read AS's final table; inactive source-column labels are not symbols."""
+    with Path(lst_path).open(encoding='latin-1') as listing:
+        return _resolved_symbols(listing)
+
+
+def _resolved_symbols(lines):
+    names = {}
+    in_table = False
+    pattern = re.compile(r'\b([A-Z_][A-Z_0-9]*)\s*:\s*([0-9A-Fa-f]+)\s+[-A-Z]\s*\|')
+    for line in lines:
+        if line.strip() == 'Symbol Table (* = unused):':
+            in_table = True
+            continue
+        if not in_table:
+            continue
+        for match in pattern.finditer(line):
+            name, address = match[1], int(match[2], 16)
+            if name in names and names[name] != address:
+                raise ValueError('conflicting resolved listing symbol: ' + name)
+            names[name] = address
+    return names
+
+
+def extract_symbols(lst_path, *, resolved_only=False):
     """Return one deterministic, best available symbol for every address."""
+    if resolved_only:
+        return read_listing_symbols(lst_path)[1]
+    return _addressed_symbols(Path(lst_path).read_text(encoding='latin-1').splitlines(), None)
+
+
+def read_listing_symbols(lst_path):
+    """Parse both strict symbol views from one freshly read listing body.
+
+    This shares input bytes, not a validation result or a persistent cache.
+    Every call rereads the file; callers still close original raw identities.
+    """
+    body = Path(lst_path).read_text(encoding='latin-1')
+    # File iteration splits on normalized newlines, not every Unicode line
+    # separator; preserve that behavior for the resolved-table boundary.
+    resolved = _resolved_symbols(body.split('\n'))
+    if not resolved:
+        raise ValueError('strict symbol export requires the final assembler symbol table')
+    return resolved, _addressed_symbols(body.splitlines(), resolved)
+
+
+def _addressed_symbols(lines, resolved):
     symbols = {}
-    lines = Path(lst_path).read_text(encoding='latin-1').splitlines()
 
     for line in lines:
         row = LISTING_ROW.match(line)
@@ -72,6 +116,12 @@ def extract_symbols(lst_path):
                 continue
         else:
             continue
+
+        if resolved is not None:
+            if name.upper() not in resolved:
+                continue
+            if (resolved[name.upper()] & 0xFFFFFF) != (addr & 0xFFFFFF):
+                raise ValueError('source row differs from resolved symbol table: ' + name)
 
         current = symbols.get(addr)
         if current is None or symbol_rank(name) > symbol_rank(current):
@@ -123,11 +173,13 @@ def main():
                        help='Print statistics')
     parser.add_argument('--json', action='store_true',
                        help='Output as JSON')
+    parser.add_argument('--resolved-only', action='store_true',
+                       help='Exclude inactive source rows using the final AS symbol table')
 
     args = parser.parse_args()
 
     # Extract all symbols
-    symbols = extract_symbols(args.lst_file)
+    symbols = extract_symbols(args.lst_file, resolved_only=args.resolved_only)
 
     # Apply filters
     if args.all:

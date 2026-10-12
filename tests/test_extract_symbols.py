@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,11 +14,11 @@ import extract_symbols  # noqa: E402
 
 
 class ExtractSymbolsTests(unittest.TestCase):
-    def extract(self, listing: str) -> dict[int, str]:
+    def extract(self, listing: str, *, resolved_only=False) -> dict[int, str]:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "main.lst"
             path.write_text(listing, encoding="latin-1")
-            return extract_symbols.extract_symbols(path)
+            return extract_symbols.extract_symbols(path, resolved_only=resolved_only)
 
     def test_included_labels_data_and_equates(self) -> None:
         symbols = self.extract(
@@ -59,6 +60,52 @@ class ExtractSymbolsTests(unittest.TestCase):
             {0x200: "Reset", 0xFFFFA284: "GameModeIndex"},
             extract_symbols.filter_symbols(symbols),
         )
+
+    def test_resolved_filter_runs_before_canonical_alias_selection(self):
+        listing = ("(1)    1/     200 :".ljust(40) + "InactiveReviewedAlias:\n"
+                   + "(1)    2/     200 :".ljust(40) + "sub_200:\n"
+                   + "(1)    3/     200 :".ljust(40) + "Reset:\n"
+                   + "Symbol Table (* = unused):\n SUB_200 : 200 C | RESET : 200 C |\n")
+        self.assertEqual({0x200: "InactiveReviewedAlias"}, self.extract(listing))
+        self.assertEqual({0x200: "Reset"}, self.extract(listing, resolved_only=True))
+
+    def test_strict_export_rejects_missing_table_conflicts_and_wrong_row_address(self):
+        label = "(1)    1/     200 :".ljust(40) + "Reset:\n"
+        for table in ("", "Symbol Table (* = unused):\n RESET : 202 C |\n",
+                      "Symbol Table (* = unused):\n RESET : 200 C | RESET : 202 C |\n"):
+            with self.subTest(table=table), self.assertRaises(ValueError):
+                self.extract(label + table, resolved_only=True)
+
+    def test_strict_aliases_keep_actual_RAM_bus_addresses(self):
+        listing = ("(1)    1/       0 : =$FFFFA284".ljust(40) + "GameModeIndex equ $FFFFA284\n"
+                   + "Symbol Table (* = unused):\n GAMEMODEINDEX : FFFFA284 I |\n")
+        self.assertEqual({0xFFA284: "GameModeIndex"}, self.extract(listing, resolved_only=True))
+
+    def test_source_or_comment_symbol_table_spoof_is_ignored_before_real_boundary(self):
+        listing = ("(1)    1/     200 :".ljust(40) + "Reset:\n"
+                   + "(1)    2/     200 :".ljust(40) + "; RESET : 202 C |\n"
+                   + " RESET : 202 C |\n"
+                   + "Symbol Table (* = unused):\n RESET : 200 C |\n")
+        self.assertEqual({0x200: "Reset"}, self.extract(listing, resolved_only=True))
+
+    def test_combined_strict_views_read_one_body_without_reopening(self):
+        listing = ("(1)    1/     200 :".ljust(40) + "Reset:\n"
+                   + "Symbol Table (* = unused):\n RESET : 200 C |\n")
+        with patch.object(Path, "read_text", autospec=True, return_value=listing) as read:
+            resolved, addressed = extract_symbols.read_listing_symbols(Path("fresh.lst"))
+        self.assertEqual({"RESET": 0x200}, resolved)
+        self.assertEqual({0x200: "Reset"}, addressed)
+        read.assert_called_once_with(Path("fresh.lst"), encoding="latin-1")
+
+    def test_combined_strict_views_do_not_cache_a_previous_file_verdict(self):
+        label = "(1)    1/     200 :".ljust(40) + "Reset:\n"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "fresh.lst"
+            path.write_text(label + "Symbol Table (* = unused):\n RESET : 200 C |\n", encoding="latin-1")
+            self.assertEqual({"RESET": 0x200}, extract_symbols.read_listing_symbols(path)[0])
+            path.write_text(label + "Symbol Table (* = unused):\n RESET : 202 C |\n", encoding="latin-1")
+            with self.assertRaisesRegex(ValueError, "source row differs"):
+                extract_symbols.read_listing_symbols(path)
 
 
 if __name__ == "__main__":
