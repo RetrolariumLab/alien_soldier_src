@@ -50,7 +50,8 @@
         "tile_art",
         "compressed_tile_art",
         "palette_commands",
-        "sprite_mappings"
+        "sprite_mappings",
+        "sprite_animations"
       ],
       "derived_views": [
         "object_gallery"
@@ -231,6 +232,39 @@
         "src/data/xi_tiger_sprite_mappings.s",
         "src/ui/options_shared_helpers_and_assets.s",
         "src/ui/password_screen.s"
+      ]
+    },
+    {
+      "id": "sprite_animations",
+      "studio": "graphics",
+      "kind": "animation_document",
+      "workspace": "graphics/sprite_animations.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "script_count": 112,
+      "frame_count": 670,
+      "jump_count": 63,
+      "target_count": 272,
+      "source_owners": [
+        "src/data/back_stringer_sprite_mappings.s",
+        "src/data/bird_animation_mappings.s",
+        "src/data/bugmax_sprite_mappings.s",
+        "src/data/caterpillar_sprite_mappings.s",
+        "src/data/circling_enemy_sprite_mappings.s",
+        "src/data/enemy_projectile_animation_mappings.s",
+        "src/data/indexed_object_and_stage_effect_mappings.s",
+        "src/data/phase_pattern_sprite_mappings.s",
+        "src/data/planet_cutscene_assets.s",
+        "src/data/seven_forces_valkirie_and_stage24_mappings.s",
+        "src/data/shared_combat_sprite_animations.s",
+        "src/data/shared_stage_object_sprite_mappings.s",
+        "src/data/shield_viper_and_missiray_mappings.s",
+        "src/data/stage10_wasp_sprite_mappings.s",
+        "src/data/stage_combat_object_sprite_mappings.s",
+        "src/data/viblack_missile_sprite_animations.s",
+        "src/data/weapon_select_and_enemy_sprite_mappings.s"
       ]
     }
   ]

@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -317,7 +317,7 @@ build-content-runtime: verify-runtime-toolchain
 
 # Write a migrated copy of an older screen workspace; the original stays.
 
-check-graphics-workspace: check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace
+check-graphics-workspace: check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_studio_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_studio_model.py check --profile eu
 
@@ -333,6 +333,10 @@ check-palette-workspace:
 check-mapping-workspace:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/mapping_studio_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/mapping_studio_model.py check --profile eu
+
+check-animation-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/animation_studio_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/animation_studio_model.py check --profile eu
 
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
