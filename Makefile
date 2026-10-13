@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -298,6 +298,10 @@ check-level-model:
 check-level-map-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_map_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_map_model.py check --profile eu
+
+.PHONY: check-map-references
+check-map-references:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/check_map_references.py --profile all
 
 art-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/tile_art.py validate
@@ -359,7 +363,7 @@ check-animation-workspace:
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
 check-content: init-content-all
-	@$(MAKE) --no-print-directory check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace
+	@$(MAKE) --no-print-directory check-map-references check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit
