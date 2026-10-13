@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    "jp",
+    "eu"
+  ],
+  "supported": [
+    {
+      "id": "title_background",
+      "name": "Title background planes",
+      "scope": "The two static title planes after asset loading, before menu text, copyright text, selection colours, and palette animation.",
+      "asset_list": "Frontend_TitleAssetLoadDescriptors",
+      "plane_a": "Gfx_TitleAndZLeoVRAMTransferParameters",
+      "plane_b": "Gfx_FrontendAlternateVRAMTransferParameters",
+      "camera_a_x": 0,
+      "camera_a_y": {
+        "jp": 0,
+        "eu": -16
+      },
+      "camera_b_x": 1536,
+      "camera_b_y": 0,
+      "palette_command": "FrontendPaletteCommands",
+      "width": 320,
+      "height": 224
+    },
+    {
+      "id": "options_background",
+      "name": "Options background plane",
+      "scope": "The static alternate frontend plane after asset loading, without text, cursor sprites, option values, or animated palette colours.",
+      "asset_list": "Options_AssetLoadDescriptors",
+      "asset_stop_label": "Options_OnLabelTiles",
+      "plane_a": null,
+      "plane_b": "Gfx_FrontendAlternateVRAMTransferParameters",
+      "camera_a_x": 0,
+      "camera_a_y": {
+        "jp": 0,
+        "eu": 0
+      },
+      "camera_b_x": 1536,
+      "camera_b_y": 0,
+      "palette_list": "OptionsScreenPaletteOffsetList",
+      "width": 320,
+      "height": 224
+    },
+    {
+      "id": "story_background",
+      "name": "Story background plane",
+      "scope": "The static story plane after asset loading, without story strings, Japanese glyph animation, raster motion, or transition effects.",
+      "asset_list": "StoryScreenAssetCommands",
+      "plane_a": null,
+      "plane_b": "Gfx_ScrollVRAMTransferParameters",
+      "camera_a_x": 0,
+      "camera_a_y": {
+        "jp": 0,
+        "eu": 0
+      },
+      "camera_b_x": 0,
+      "camera_b_y": 0,
+      "palette_list": "StoryScreenPaletteOffsetList",
+      "width": 320,
+      "height": 224
+    }
+  ],
+  "unsupported": [
+    {
+      "id": "sega_intro",
+      "reason": "Frontend_InitializeSegaScreen builds a sprite grid and planet pattern procedurally and the dissolve changes it over time."
+    },
+    {
+      "id": "title_complete",
+      "reason": "TitleScreen_FinalizeInitialization queues region-dependent strings; TitleScreen_Update redraws menu strings and animates palette colours each frame."
+    },
+    {
+      "id": "options_complete",
+      "reason": "UI_InitOptionsScreenLoadDisplay and its update path render text, changing values, a cursor sprite, and animated palette colours at runtime."
+    },
+    {
+      "id": "password",
+      "reason": "The password grid, character choices, and two cursor mappings are produced and updated by controller code rather than stored as one static layout."
+    },
+    {
+      "id": "story_complete",
+      "reason": "StoryText_Dispatch and the JP-only StoryFont_UpdateAndDispatch add timed text and glyph animation over the supported static background."
+    },
+    {
+      "id": "post_stage_results",
+      "reason": "Results_ActivatePostStageSummary queues indexed rows, then runtime routines draw scores, bonuses, history rows, and palette-dependent status."
+    },
+    {
+      "id": "final_results",
+      "reason": "Results_RenderScoreSummary composes labels and live statistics through text and number renderers rather than a static screen map."
+    },
+    {
+      "id": "continue",
+      "reason": "The continue scene combines runtime text, counters, object sprites, and multiple palette-list states."
+    },
+    {
+      "id": "weapon_setup",
+      "reason": "WeaponSetup_UpdateBackgroundEffect writes animated dither columns while selection text, slot sprites, and highlight palettes change at runtime."
+    },
+    {
+      "id": "game_over",
+      "reason": "The Game Over landscape is generated through perspective and raster routines from source art rather than stored as a complete static plane."
+    },
+    {
+      "id": "credits",
+      "reason": "Credits scenes are a sequenced family with per-scene asset lists, moving sprites, text, and transitions rather than one static screen."
+    }
+  ]
+}

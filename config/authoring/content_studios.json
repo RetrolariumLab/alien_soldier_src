@@ -27,7 +27,8 @@
       "name": "Level Studio",
       "status": "foundation",
       "artifacts": [
-        "level_layouts"
+        "level_layouts",
+        "stage_maps"
       ],
       "model_gate": "check-level-model",
       "render_gate": "check-graphics-models",
@@ -66,7 +67,28 @@
         "dirty-close"
       ]
     },
-    {"id": "screen", "name": "Screen Studio", "status": "planned", "artifacts": []},
+    {
+      "id": "screen",
+      "name": "Screen Studio",
+      "status": "foundation",
+      "artifacts": [
+        "screen_maps"
+      ],
+      "derived_views": [
+        "title_background",
+        "options_background",
+        "story_background"
+      ],
+      "model_gate": "check-screen-model",
+      "workspace_gate": "check-screen-workspace",
+      "workstation_gate": "check-screen-studio",
+      "workstation_actions": [
+        "save",
+        "reload",
+        "build",
+        "dirty-close"
+      ]
+    },
     {"id": "text", "name": "Text Studio", "status": "planned", "artifacts": []},
     {"id": "sound", "name": "Sound Studio", "status": "planned", "artifacts": []}
   ],
@@ -90,6 +112,29 @@
         "src/gameplay/object_dispatch_table.s",
         "src/stages/configuration_records.s",
         "src/stages/configuration.s"
+      ]
+    },
+    {
+      "id": "stage_maps",
+      "studio": "level",
+      "kind": "stage_map_document",
+      "workspace": "level/stage_maps.json",
+      "profiles": ["jp", "eu"],
+      "payload_count": 42,
+      "value_count": 51596,
+      "decoded_byte_count": 86808,
+      "compressed_capacity": 42420,
+      "source_owners": [
+        "data/mappings",
+        "src/data/shared_boss_and_stage_mapping_data.s",
+        "src/data/shared_stage18_and_stage20_mapping_data.s",
+        "src/data/stage10_and_teleport_tile_art_and_mapping_data.s",
+        "src/data/stage10_stage12_and_teleport_assets.s",
+        "src/data/stage18_and_stage19_assets.s",
+        "src/data/stage20_assets.s",
+        "src/data/stage2_phase1_assets.s",
+        "src/data/stage3_assets.s",
+        "src/data/stage_object_assets.s"
       ]
     },
     {
@@ -265,6 +310,28 @@
         "src/data/stage_combat_object_sprite_mappings.s",
         "src/data/viblack_missile_sprite_animations.s",
         "src/data/weapon_select_and_enemy_sprite_mappings.s"
+      ]
+    },
+    {
+      "id": "screen_maps",
+      "studio": "screen",
+      "kind": "screen_map_document",
+      "workspace": "screens/maps.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "payload_count": 8,
+      "value_count": 8744,
+      "decoded_byte_count": 14544,
+      "compressed_capacity": 4836,
+      "source_owners": [
+        "data/mappings/byte_182CE2.bin",
+        "data/mappings/byte_184688.bin",
+        "data/mappings/byte_1885A4.bin",
+        "data/mappings/byte_1889B0.bin",
+        "src/data/frontend_scene_assets.s",
+        "src/data/stage_object_assets.s"
       ]
     }
   ]
