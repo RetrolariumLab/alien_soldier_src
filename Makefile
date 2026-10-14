@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-stage-message-model check-scripted-message-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -338,6 +338,18 @@ migrate-screen-workspace:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/screen_map_model.py migrate-story-plane \
 		--profile $(CONTENT_PROFILE) --document content/workspace/$(CONTENT_PROFILE)/screens/maps.json \
 		--output $(or $(MIGRATION_OUTPUT),build/content/$(CONTENT_PROFILE)/story-plane-migrated.json)
+
+check-stage-message-model:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_message_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_message_model.py check --profile eu
+
+check-scripted-message-model:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile eu
+
+check-glyph-source-list-model:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/glyph_source_list_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/glyph_source_list_model.py check --profile eu
 
 check-graphics-workspace: check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_studio_model.py check --profile jp

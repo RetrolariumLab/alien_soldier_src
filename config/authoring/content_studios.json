@@ -89,7 +89,27 @@
         "dirty-close"
       ]
     },
-    {"id": "text", "name": "Text Studio", "status": "planned", "artifacts": []},
+    {
+      "id": "text",
+      "name": "Text Studio",
+      "status": "foundation",
+      "artifacts": [
+        "boss_and_ship_message_scripts",
+        "frontend_text_strings",
+        "glyph_source_lists",
+        "results_detail_text",
+        "stage_message_sequences",
+        "story_text_rows"
+      ],
+      "workspace_gate": "check-text-workspace",
+      "workstation_gate": "check-text-studio",
+      "workstation_actions": [
+        "save",
+        "reload",
+        "build",
+        "dirty-close"
+      ]
+    },
     {"id": "sound", "name": "Sound Studio", "status": "planned", "artifacts": []}
   ],
   "artifacts": [
@@ -332,6 +352,119 @@
         "data/mappings/byte_1889B0.bin",
         "src/data/frontend_scene_assets.s",
         "src/data/stage_object_assets.s"
+      ]
+    },
+    {
+      "id": "story_text_rows",
+      "studio": "text",
+      "kind": "story_text_document",
+      "workspace": "text/story_rows.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "row_bytes": 34,
+      "row_counts": {
+        "jp": 99,
+        "eu": 123
+      },
+      "source_owners": [
+        "data/other/story_text_primary_rows.bin",
+        "data/other/story_text_accent_rows.bin",
+        "data/profiles/eu/other/story_text_primary_rows.bin",
+        "data/profiles/eu/other/story_text_accent_rows.bin",
+        "src/cutscenes/story_text.s"
+      ]
+    },
+    {
+      "id": "frontend_text_strings",
+      "studio": "text",
+      "kind": "frontend_text_document",
+      "workspace": "text/frontend_strings.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "string_count": 37,
+      "glyph_count": 429,
+      "encoded_byte_count": 466,
+      "source_owners": [
+        "src/rendering/text_and_numbers.s"
+      ]
+    },
+    {
+      "id": "boss_and_ship_message_scripts",
+      "studio": "text",
+      "kind": "scripted_message_document",
+      "workspace": "text/boss_and_ship_messages.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "script_count": 9,
+      "command_count": 26,
+      "record_count": 17,
+      "glyph_count": 389,
+      "encoded_byte_count": 910,
+      "unexposed_byte_count": 418,
+      "source_owners": [
+        "src/ui/message_scripts_and_glyph_lists.s",
+        "data/artunc/font.bin"
+      ]
+    },
+    {
+      "id": "glyph_source_lists",
+      "studio": "text",
+      "kind": "glyph_source_list_document",
+      "workspace": "text/glyph_source_lists.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "list_count": 4,
+      "glyph_count": 57,
+      "encoded_byte_count": 62,
+      "source_owners": [
+        "src/ui/message_scripts_and_glyph_lists.s",
+        "data/artunc/font.bin"
+      ]
+    },
+    {
+      "id": "results_detail_text",
+      "studio": "text",
+      "kind": "results_text_document",
+      "workspace": "text/results_details.json",
+      "profiles": ["jp", "eu"],
+      "row_count": 31,
+      "row_bytes": 22,
+      "glyph_count": 651,
+      "encoded_byte_count": 682,
+      "max_glyph_id": 227,
+      "summary_label_count": 3,
+      "summary_glyph_count": 66,
+      "summary_encoded_byte_count": 70,
+      "source_owners": [
+        "data/other/results_stage_detail_text.bin",
+        "src/ui/results_data.s",
+        "data/artunc/font.bin"
+      ]
+    },
+    {
+      "id": "stage_message_sequences",
+      "studio": "text",
+      "kind": "stage_message_document",
+      "workspace": "text/stage_messages.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "stream_count": 4,
+      "sequence_count": 5,
+      "entry_count": 38,
+      "encoded_byte_count": 808,
+      "source_owners": [
+        "src/ui/stage_transition_messages.s",
+        "data/other/stage_transition_message_sequence_train_and_bugmax.bin"
       ]
     }
   ]
