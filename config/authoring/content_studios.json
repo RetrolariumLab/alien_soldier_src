@@ -112,7 +112,30 @@
         "dirty-close"
       ]
     },
-    {"id": "sound", "name": "Sound Studio", "status": "planned", "artifacts": []}
+    {
+      "id": "sound",
+      "name": "Sound Studio",
+      "status": "foundation",
+      "artifacts": [
+        "sound_envelopes",
+        "sound_instruments",
+        "sound_pcm_samples"
+      ],
+      "derived_views": [
+        "bgm_headers",
+        "sfx_headers",
+        "pcm_banks"
+      ],
+      "model_gate": "check-sound-model",
+      "workspace_gate": "check-sound-workspace",
+      "workstation_gate": "check-sound-studio",
+      "workstation_actions": [
+        "save",
+        "reload",
+        "build",
+        "dirty-close"
+      ]
+    }
   ],
   "artifacts": [
     {
@@ -509,6 +532,71 @@
       "source_owners": [
         "src/ui/stage_transition_messages.s",
         "data/other/stage_transition_message_sequence_train_and_bugmax.bin"
+      ]
+    },
+    {
+      "id": "sound_envelopes",
+      "studio": "sound",
+      "kind": "sound_envelope_document",
+      "workspace": "sound/envelopes.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "family_count": 2,
+      "envelope_count": 18,
+      "capacity": 360,
+      "value_count": 343,
+      "command_count": 16,
+      "protected_byte_count": 1,
+      "source_owners": [
+        "src/sound/psg_playback_and_envelopes.s"
+      ]
+    },
+    {
+      "id": "sound_instruments",
+      "studio": "sound",
+      "kind": "sound_instrument_document",
+      "workspace": "sound/instruments.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "payload_count": 182,
+      "instrument_count": 901,
+      "parameter_byte_count": 22525,
+      "padding_byte_count": 101,
+      "source_owners": [
+        "data/sound",
+        "src/sound/music_tracks.s",
+        "src/sound/sfx_tracks_40_to_7f_and_f0_to_fc.s",
+        "src/sound/sfx_tracks_a0_to_ef.s"
+      ]
+    },
+    {
+      "id": "sound_pcm_samples",
+      "studio": "sound",
+      "kind": "sound_pcm_document",
+      "workspace": "sound/pcm_samples.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "bank_count": 9,
+      "sample_count": 90,
+      "sample_byte_count": 253502,
+      "decoded_value_count": 507004,
+      "header_byte_count": 360,
+      "padding_byte_count": 15032,
+      "descriptor_record_count": 70,
+      "dispatchable_descriptor_count": 69,
+      "referenced_sample_count": 57,
+      "unreferenced_sample_count": 33,
+      "source_owners": [
+        "data/sound",
+        "src/sound/command_dispatch_and_dac.s",
+        "src/sound/driver_core.s",
+        "src/sound/pcm_samples.s"
       ]
     }
   ]
