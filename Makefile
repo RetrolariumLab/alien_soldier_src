@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-sound-workspace check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -353,6 +353,18 @@ check-sound-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_studio_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_studio_model.py check --profile eu
 
+check-sound-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_envelope_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_envelope_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_instrument_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_instrument_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_pcm_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_pcm_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_pcm_codec.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_pcm_codec.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_sequence_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_sequence_model.py check --profile eu
+
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
 .PHONY: build-content-runtime
@@ -407,7 +419,7 @@ check-animation-workspace:
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
 check-content: init-content-all
-	@$(MAKE) --no-print-directory check-map-references check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace check-text-workspace check-sound-model
+	@$(MAKE) --no-print-directory check-map-references check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace check-text-workspace check-sound-model check-sound-workspace
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit

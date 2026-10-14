@@ -119,7 +119,8 @@
       "artifacts": [
         "sound_envelopes",
         "sound_instruments",
-        "sound_pcm_samples"
+        "sound_pcm_samples",
+        "sound_sequences"
       ],
       "derived_views": [
         "bgm_headers",
@@ -597,6 +598,25 @@
         "src/sound/command_dispatch_and_dac.s",
         "src/sound/driver_core.s",
         "src/sound/pcm_samples.s"
+      ]
+    },
+    {
+      "id": "sound_sequences",
+      "studio": "sound",
+      "kind": "sound_sequence_document",
+      "workspace": "sound/sequences.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "payload_count": 182,
+      "instruction_count": 33062,
+      "reachable_byte_count": 51045,
+      "source_owners": [
+        "data/sound",
+        "src/sound/music_tracks.s",
+        "src/sound/sfx_tracks_40_to_7f_and_f0_to_fc.s",
+        "src/sound/sfx_tracks_a0_to_ef.s"
       ]
     }
   ]
