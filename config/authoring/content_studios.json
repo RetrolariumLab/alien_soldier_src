@@ -95,8 +95,10 @@
       "status": "foundation",
       "artifacts": [
         "boss_and_ship_message_scripts",
+        "credits_text_sequence",
         "frontend_text_strings",
         "glyph_source_lists",
+        "japanese_glyph_sequence",
         "results_detail_text",
         "stage_message_sequences",
         "story_text_rows"
@@ -390,6 +392,48 @@
       "encoded_byte_count": 466,
       "source_owners": [
         "src/rendering/text_and_numbers.s"
+      ]
+    },
+    {
+      "id": "japanese_glyph_sequence",
+      "studio": "text",
+      "kind": "japanese_glyph_document",
+      "workspace": "text/japanese_glyph_sequence.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "entry_count": 987,
+      "art_glyph_count": 295,
+      "encoded_byte_count": 1976,
+      "glyph_bytes": 128,
+      "source_owners": [
+        "data/mappings/font_japanese.bin",
+        "data/artunc/font_japanese.bin",
+        "src/cutscenes/story_text.s",
+        "src/data/japanese_font_and_credits_tile_art.s"
+      ]
+    },
+    {
+      "id": "credits_text_sequence",
+      "studio": "text",
+      "kind": "credits_text_document",
+      "workspace": "text/credits_sequence.json",
+      "profiles": [
+        "jp",
+        "eu"
+      ],
+      "record_count": 37,
+      "glyph_slot_count": 724,
+      "encoded_byte_count": 874,
+      "max_glyph_id": 227,
+      "source_owners": [
+        "data/credits/animated_glyph_sequence.bin",
+        "src/credits/animated_glyph_sequence.s",
+        "data/artunc/font.bin",
+        "src/data/shared_frontend_and_gameplay_tile_art.s",
+        "src/rendering/vdp_asset_transfers.s",
+        "src/credits/main.s"
       ]
     },
     {

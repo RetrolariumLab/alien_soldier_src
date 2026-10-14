@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-stage-message-model check-scripted-message-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -325,6 +325,30 @@ check-screen-workspace:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/screen_map_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/screen_map_model.py check --profile eu
 
+check-text-workspace:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/japanese_glyph_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/japanese_glyph_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/credits_text_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/credits_text_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/frontend_text_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/frontend_text_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/results_text_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/results_text_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/glyph_source_list_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/glyph_source_list_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_message_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_message_model.py check --profile eu
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/story_text_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/story_text_model.py check --profile eu
+
+.PHONY: migrate-credits-text
+migrate-credits-text:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/credits_text_model.py migrate \
+		--profile $(CONTENT_PROFILE) \
+		--document content/workspace/$(CONTENT_PROFILE)/text/credits_sequence.json
+
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
 .PHONY: build-content-runtime
@@ -346,6 +370,10 @@ check-stage-message-model:
 check-scripted-message-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/scripted_message_model.py check --profile eu
+
+check-credits-text-model:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/credits_text_model.py check --profile jp
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/credits_text_model.py check --profile eu
 
 check-glyph-source-list-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/glyph_source_list_model.py check --profile jp
@@ -375,7 +403,7 @@ check-animation-workspace:
 # Every content model, workspace and Studio check against both cartridges.
 .PHONY: check-content
 check-content: init-content-all
-	@$(MAKE) --no-print-directory check-map-references check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace
+	@$(MAKE) --no-print-directory check-map-references check-level-model check-level-map-model check-graphics-models check-graphics-workspace check-screen-model check-screen-workspace check-text-workspace
 # Source policy, tests and the semantic audit tools.
 
 .PHONY: lint format test source-inventory semantic-audit
