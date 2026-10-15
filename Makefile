@@ -83,7 +83,7 @@ SCRIPTS_DIR = scripts
 BIN_DIR = bin
 
 # Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model level-studio check-graphics-models check-graphics-workspace
+.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model level-studio playtest-level check-graphics-models check-graphics-workspace
 all: build
 
 # Preservation profile selection, extraction, assembly and identity.
@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-sound-workspace check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio playtest-level art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-sound-workspace check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -310,6 +310,12 @@ check-level-studio: init-content-all
 level-studio: init-content
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/level_studio.py \
 		--profile $(CONTENT_PROFILE) --stage $(or $(STAGE_INDEX),0)
+
+playtest-level: verify-runtime-toolchain build-content
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/level_playtest.py \
+		--gens "$(GENS_EXE)" --rom "$(CONTENT_ROM)" \
+		--profile $(CONTENT_PROFILE) --stage $(PLAYTEST_STAGE) \
+		--difficulty $(PLAYTEST_DIFFICULTY)
 
 art-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/tile_art.py validate
@@ -978,6 +984,7 @@ help:
 	@echo "  make validate-content           - Validate the workspace"
 	@echo "  make build-content              - Build an edited ROM into build/content"
 	@echo "  make check-content-zero-edit    - An unedited workspace must build both cartridges"
+	@echo "  make playtest-level PLAYTEST_STAGE=1 - Play a stage of the edited ROM"
 	@echo ""
 	@echo "Watching a movie (requires MOVIE=tas|longplay|menus):"
 	@echo "  make play MOVIE=tas                       - Watch it, on $(ROM)"
