@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Build plumbing for pinned e14b925; no Gens source file is modified.
+     Its vcxproj omits sound_trace.c. GCC's global variable names are undecorated,
+     while MSVC emits C++ decorations for tracer.cpp's extern declarations.
+     Debug and Current_PC are the existing debugger globals with C linkage;
+     the C tracer's FrameCount refers to the existing C++ movie counter. -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'Gens' and '$(Platform)' == 'Win32'">
+    <ClCompile Include="$(MSBuildProjectDirectory)\src\sound_trace.c">
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(MSBuildProjectName)' == 'Gens' and '$(Platform)' == 'Win32'">
+    <Link>
+      <AdditionalOptions>/alternatename:?Debug@@3HA=_Debug /alternatename:?Current_PC@@3IA=_Current_PC /alternatename:_FrameCount=?FrameCount@@3KA %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

@@ -78,22 +78,51 @@ the player state machine.
 
 ## Running it
 
-Run `make runtime`. Captures are reproducible outputs under `runtime/captures/`
-and are ignored by Git.
-For each scenario the runner replaces only that scenario's requested frame
-PNG and state dump; other files in the directory are left untouched.
+`make runtime-capture` replays the scenarios and `make runtime-validate` checks
+their RAM; `make runtime` builds the Japanese cartridge first and does both.
+Captures go to `runtime/captures/`, which Git ignores. For each scenario only
+that scenario's PNG and state dump are replaced.
 
-Each scenario is a separate emulator invocation that replays from frame zero, so
-its wall-clock cost is proportional to its frame number and the full set replays
-124,660 frames. The capture runner sizes each deadline from the frame count
-instead of applying one fixed timeout: a quiet Windows host reaches roughly 240
-frames per second, a loaded one closer to 100, so the whole set takes between ten
-and twenty minutes and `credits` alone accounts for more than half of it.
+Each scenario is a separate emulator run from power-on, so its cost grows with
+its frame number; the twelve frame numbers add up to 124,660. The runner gives
+each run a deadline sized from its frame count.
 
-The current Gens helper writes zero in the header frame field when a dump
-accompanies a screenshot, so the zero header is not used as evidence; the
-requested frame is encoded in the capture filename and chosen by the emulator's
-screenshot interval.
+`scripts/runtime_capture_frames.lua` drives the replay. It runs the emulator
+unthrottled and advances whole frames without writing to the controllers, RAM,
+registers or VDP; the movie owns all input. The command-line `-turbo` option is
+not used: in the pinned emulator it turns `-frameskip 0` into eight skipped
+frames, and skipped frames never reach the capture hook. The emulator dumps the
+state of the requested frame only, and the runner checks that the dump's header
+names that frame before publishing the PNG and the state under the same
+six-digit name.
+
+Every run starts in a fresh, empty startup directory with a private `Gens.cfg`
+whose patch, SRAM, state and similar directories all point inside the session.
+The emulator reads its configuration from the working directory before the
+command line overrides it, so running it in the repository or in its own
+checkout could pick up someone else's settings. Movies are checked against
+their SHA-256 before anything is replayed, and the ROM and movies are copied
+into the session first. `capture_receipt.json` lists what was captured; the
+validator, with `--require-receipt`, also checks that the captures came from
+the pinned emulator and the canonical Japanese ROM.
+
+## Building the pinned emulator
+
+The runtime checks use the [gens_automation](https://github.com/oranguthang/gens_automation)
+fork at the commit pinned in `config/toolchain.json`
+(`e14b92535acf85755321788634bf9179b621d8c0`). Check it out separately, for
+example under `build/runtime-emulator/pinned-e14b925`, build it, and pass that
+checkout as `GENS_DIR`; `make verify-runtime-toolchain` refuses a checkout at
+another commit or with tracked changes.
+
+With MSVC, the pinned project file misses `src/sound_trace.c` and three
+globals link under different names. `config/gens_pinned_msvc.targets` supplies
+both without touching the emulator source; pass it to MSBuild (VS 2019, toolset
+`v142`, `Release|Win32`):
+
+```text
+msbuild Gens.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:ForceImportAfterCppTargets=<repository>/config/gens_pinned_msvc.targets
+```
 
 ## Watching it yourself
 
@@ -113,20 +142,22 @@ damage reach a person's eyes and nothing else.
 
 ## Frame-by-frame reference archive
 
-`make reference MOVIE=tas` first verifies the canonical Japanese ROM, then
-replays the pinned TAS once. By default, `REFERENCE_INTERVAL=1` saves a PNG
-and a full `.genstate` under `reference/tas/` at every captured frame. Both
-files use the same six-digit frame number, so a screenshot can be paired with
-the precise work RAM, VRAM and CPU state behind it. The 90,000-frame limit is
-intentional: playback continues after the TAS input ends so the credits and
-results are included, and the target stops before capturing frame 90,000.
-The archive is ignored by Git and is not part of the Source 1.0 release gate.
+`make reference MOVIE=tas` verifies the Japanese cartridge, then replays the
+pinned movie once through `scripts/capture_reference.py` and saves a PNG and a
+full `.genstate` for every frame into a new `capture-<unique>/` directory under
+`reference/tas/`. Both files of a frame share its six-digit number, so a
+screenshot can be paired with the work RAM, VRAM and CPU state behind it.
+`REFERENCE_INTERVAL=20` keeps every twentieth frame instead, and
+`REFERENCE_MAX_FRAMES` bounds the run.
 
-The state dumps are about 211 KB each in existing captures. A full 90,000-frame
-TAS archive therefore needs roughly 20 GB including PNGs and creates up to
-180,000 files. The target uses one emulator process with no sound and no frame
-skipping. For a smaller diagnostic sample, pass `REFERENCE_INTERVAL=20`; the
-ordinary analysis/debug interval remains 20 independently.
+The TAS runs to frame 90,000, past the end of its input, so the credits are
+included; the menu tour runs to the end of its 90,860 input records; the
+longplay (206,611 records) needs an explicit bound of at most 100,000. A state
+dump is about 211 KB, so the full TAS archive is about 20 GB and 180,000 files:
+start with a short bound. Every capture is checked as it is written (the frame
+in its header, its sections, the PNG's chunks), and an earlier archive is never
+overwritten. The archive is ignored by Git and is not part of the release
+check.
 
 ## What the replay cannot see
 

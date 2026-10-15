@@ -459,6 +459,9 @@ semantic-audit:
 # Runtime baseline capture, playback and emulator selection.
 
 # Boot the European cartridge from cold and watch it reach the attract demo.
+.PHONY: check-region-runtime-eu
+check-region-runtime-eu: verify-runtime-toolchain
+	@$(PYTHON) -B -m scripts.runtime.region_smoke --gens "$(GENS_EXE)"
 
 runtime: verify
 	@$(MAKE) --no-print-directory runtime-capture
@@ -965,6 +968,7 @@ help:
 	@echo "  make test               - Every test module, TEST_JOBS at a time"
 	@echo "  make check-content      - Every content model and Studio against both cartridges"
 	@echo "  make runtime-capture    - Twelve Japanese scenarios in the pinned emulator"
+	@echo "  make check-region-runtime-eu - Boot the European cartridge to its demo"
 	@echo "  make release-check      - All of the above from a clean build"
 	@echo ""
 	@echo "Content studios (CONTENT_PROFILE=jp by default, CONTENT_PROFILE=eu for Europe):"
@@ -1042,3 +1046,4 @@ release-check:
 	@$(MAKE) --no-print-directory check-content-zero-edit
 	@$(MAKE) --no-print-directory check-content
 	@$(MAKE) --no-print-directory runtime-capture PROFILE=jp
+	@$(MAKE) --no-print-directory check-region-runtime-eu PROFILE=eu
