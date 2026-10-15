@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio playtest-level art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-sound-workspace check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio playtest-level graphics-inventory art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-text-workspace migrate-credits-text check-sound-model check-sound-workspace check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -317,6 +317,9 @@ playtest-level: verify-runtime-toolchain build-content
 		--profile $(CONTENT_PROFILE) --stage $(PLAYTEST_STAGE) \
 		--difficulty $(PLAYTEST_DIFFICULTY)
 
+graphics-inventory:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/graphics_inventory.py
+
 art-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/tile_art.py validate
 
@@ -329,7 +332,7 @@ mapping-validate:
 tilemap-validate:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/stage_tilemaps.py validate
 
-check-graphics-models: art-validate palette-validate mapping-validate tilemap-validate
+check-graphics-models: graphics-inventory art-validate palette-validate mapping-validate tilemap-validate
 
 check-screen-model:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/screen_studio_model.py check --profile jp
