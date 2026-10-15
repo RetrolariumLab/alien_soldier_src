@@ -25,7 +25,7 @@
     {
       "id": "level",
       "name": "Level Studio",
-      "status": "foundation",
+      "status": "supported",
       "artifacts": [
         "level_layouts",
         "stage_maps"
