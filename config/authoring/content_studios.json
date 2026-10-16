@@ -46,7 +46,7 @@
     {
       "id": "graphics",
       "name": "Graphics Studio",
-      "status": "foundation",
+      "status": "supported",
       "artifacts": [
         "tile_art",
         "compressed_tile_art",
