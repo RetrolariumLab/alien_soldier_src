@@ -70,7 +70,7 @@
     {
       "id": "screen",
       "name": "Screen Studio",
-      "status": "foundation",
+      "status": "supported",
       "artifacts": [
         "screen_maps"
       ],
