@@ -399,10 +399,15 @@ check-sound-workspace:
 
 # Play one music or sound request through the cartridge's own driver, on the
 # saved workspace: make audition-sound SOUND_REQUEST=0x81
-.PHONY: build-content-runtime
+.PHONY: build-content-runtime audition-sound
 build-content-runtime: verify-runtime-toolchain
 	@$(MAKE) --no-print-directory build-content CONTENT_PROFILE=$(CONTENT_PROFILE) \
 		AS_ARGS='-q -maxerrors 2' CONTENT_LISTING="$(SOUND_LISTING)"
+
+audition-sound: build-content-runtime
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/sound_audition.py \
+		--profile $(CONTENT_PROFILE) --request $(SOUND_REQUEST) --frames $(SOUND_FRAMES) \
+		--rom "$(CONTENT_ROM)" --listing "$(SOUND_LISTING)" --gens "$(GENS_EXE)"
 
 # Write a migrated copy of an older screen workspace; the original stays.
 .PHONY: migrate-screen-workspace
@@ -1014,6 +1019,7 @@ help:
 	@echo "  make build-content              - Build an edited ROM into build/content"
 	@echo "  make check-content-zero-edit    - An unedited workspace must build both cartridges"
 	@echo "  make playtest-level PLAYTEST_STAGE=1 - Play a stage of the edited ROM"
+	@echo "  make audition-sound SOUND_REQUEST=0x81 - Hear a request through the game's driver"
 	@echo ""
 	@echo "Watching a movie (requires MOVIE=tas|longplay|menus):"
 	@echo "  make play MOVIE=tas                       - Watch it, on $(ROM)"
