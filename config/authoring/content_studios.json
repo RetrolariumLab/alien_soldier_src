@@ -92,7 +92,7 @@
     {
       "id": "text",
       "name": "Text Studio",
-      "status": "foundation",
+      "status": "supported",
       "artifacts": [
         "boss_and_ship_message_scripts",
         "credits_text_sequence",
