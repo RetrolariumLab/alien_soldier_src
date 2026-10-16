@@ -115,7 +115,7 @@
     {
       "id": "sound",
       "name": "Sound Studio",
-      "status": "foundation",
+      "status": "supported",
       "artifacts": [
         "sound_envelopes",
         "sound_instruments",
