@@ -99,6 +99,8 @@ def setup_worker_dir(project_dir, proc_name, temp_base):
     shutil.copy2(project / 'Makefile', worker_dir / 'Makefile')
     for dirname in ('bin', 'data', 'src', 'scripts', 'assets', 'config'):
         shutil.copytree(project / dirname, worker_dir / dirname)
+    if (project / 'mk').is_dir():
+        shutil.copytree(project / 'mk', worker_dir / 'mk')
     # A perturbation build is intentionally not byte-identical. Its private
     # worker needs extracted assets, not another copy of the user's ROM dump.
     return str(worker_dir)

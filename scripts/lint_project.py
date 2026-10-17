@@ -14,7 +14,7 @@ MARKDOWN_LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 SOURCE_MAP_ROW = re.compile(
     r"^\| `0x([0-9A-F]+)-0x([0-9A-F]+)` \|[^|]*\|\s*(\d+)\s*\|[^|]*\|$"
 )
-TEXT_SUFFIXES = {".s", ".inc", ".py", ".md", ".txt", ".json", ".dot"}
+TEXT_SUFFIXES = {".mk", ".s", ".asm", ".inc", ".py", ".md", ".txt", ".json", ".dot"}
 TEXT_FILENAMES = {".gitattributes", ".gitignore", ".editorconfig", "Makefile"}
 
 
@@ -137,8 +137,8 @@ def check(project_root: Path) -> list[str]:
 
     check_source_map(project_root, errors)
 
-    python_files = sorted((project_root / "scripts").glob("*.py")) + sorted(
-        (project_root / "tests").glob("*.py")
+    python_files = sorted((project_root / "scripts").rglob("*.py")) + sorted(
+        (project_root / "tests").rglob("*.py")
     )
     for path in python_files:
         try:

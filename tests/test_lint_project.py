@@ -23,6 +23,8 @@ class ProjectPolicyTests(unittest.TestCase):
         names = {path.relative_to(ROOT).as_posix() for path in tracked}
         for expected in ("Makefile", "README.md", "src/main.s", "config/rom_layout.json"):
             self.assertIn(expected, names)
+        for expected in ("mk/runtime.mk", "src/sound/z80/driver.asm", "scripts/runtime/region_smoke.py"):
+            self.assertIn(expected, names)
 
     def test_text_hygiene_rejects_crlf_and_loose_whitespace(self) -> None:
         cases = {
