@@ -163,8 +163,17 @@ build: check-profile-as-args check-profile-ready check-init check-assets verify-
 
 # Permanent preservation gate: assemble from source and require the selected
 # profile's declared cartridge image byte for byte.
-verify: check-profile-as-args check-profile-ready check-init check-assets verify-toolchain
-	@$(PYTHON) $(SCRIPTS_DIR)/build_rom.py --source $(SRC) --obj $(OBJ) --output $(ROM) --manifest $(ASSET_MANIFEST) --original-rom "$(ORIG_ROM)" --as-bin $(AS_BIN) --p2bin $(P2BIN) --as-args="$(PRESERVATION_AS_ARGS)" --verify
+verify: check-profile-as-args check-profile-ready check-init check-assets verify-toolchain verify-z80-source
+	@$(PYTHON) $(SCRIPTS_DIR)/build_rom.py \
+		--source $(SRC) \
+		--obj $(OBJ) \
+		--output $(ROM) \
+		--manifest $(ASSET_MANIFEST) \
+		--original-rom "$(ORIG_ROM)" \
+		--as-bin $(AS_BIN) \
+		--p2bin $(P2BIN) \
+		--as-args="$(PRESERVATION_AS_ARGS)" \
+		--verify
 	@$(MAKE) --no-print-directory verify-layout
 
 verify-all:
@@ -237,8 +246,14 @@ clean:
 	@python $(SCRIPTS_DIR)/clean_project.py
 
 # Generate listing file (prerequisite for symbols)
+.PHONY: verify-z80-source
+build/z80/driver.bin: $(wildcard src/sound/z80/*.asm) scripts/build_z80.py | check-profile-as-args
+	@$(PYTHON) -B scripts/build_z80.py --as-bin "$(AS_BIN)" --p2bin "$(P2BIN)"
 
-$(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
+verify-z80-source: check-profile-as-args
+	@$(PYTHON) -B scripts/build_z80.py --as-bin "$(AS_BIN)" --p2bin "$(P2BIN)" --verify
+
+$(LISTING): build/z80/driver.bin $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	@echo "Building listing file..."
 	@python -c "import os; os.makedirs('build', exist_ok=True)"
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)

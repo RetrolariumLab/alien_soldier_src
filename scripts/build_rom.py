@@ -77,6 +77,17 @@ def assemble_main_src(base_dir, src_file, object_file, output_file, as_bin,
     p2bin_abs = os.path.abspath(p2bin)
     as_bin_abs = os.path.abspath(as_bin)
 
+    # The copied Z80 image is an assembly output, not an executable asset.
+    # A staged content tree owns its own output; never reuse the parent's ROM.
+    from pathlib import Path
+    from build_z80 import ENTRY as Z80_ENTRY, build as build_z80
+    if (Path(base_dir) / Z80_ENTRY).is_file():
+        try:
+            build_z80(Path(base_dir), Path(as_bin_abs), Path(p2bin_abs))
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            print(f'Z80 assembly failed: {error}')
+            return 1
+
     os.makedirs(os.path.dirname(object_abs), exist_ok=True)
 
     # Get bin directory

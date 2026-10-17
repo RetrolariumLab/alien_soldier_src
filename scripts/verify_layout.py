@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -83,7 +84,26 @@ def check_dma_alignment(
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assets = {("data/" + item["path"]).replace("\\", "/"): item for item in manifest["assets"]}
-    payloads = listing_payloads(lines, set(assets))
+    from build_z80 import ENTRY, OUTPUT, REFERENCE
+    generated, reference = OUTPUT.as_posix(), REFERENCE.as_posix()
+    payloads = listing_payloads(lines, set(assets) | {generated})
+    if generated in payloads:
+        # The Z80 image is now assembled, but it still occupies exactly the
+        # authenticated reference asset's range. Do not waive the asset census
+        # or accept a generated file merely because its name matches.
+        try:
+            if reference not in assets or reference in payloads:
+                raise ValueError("missing or duplicate Z80 reference payload")
+            root = manifest_path.resolve().parent.parent
+            if not (root / ENTRY).is_file():
+                raise ValueError("missing Z80 source owner")
+            body = (root / OUTPUT).read_bytes()
+            asset = assets[reference]
+            if len(body) != asset["size"] or hashlib.sha1(body).hexdigest() != asset["sha1"]:
+                raise ValueError("assembled Z80 payload differs from its asset identity")
+            payloads[reference] = payloads.pop(generated)
+        except (OSError, KeyError, ValueError) as error:
+            errors.append("assembled Z80 layout binding: " + str(error))
     if len(payloads) != len(assets):
         missing = sorted(set(assets) - set(payloads))
         errors.append(

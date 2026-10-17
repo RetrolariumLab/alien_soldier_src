@@ -34,8 +34,25 @@ includes whose pointer positions and sizes match the reference.
 The Z80 driver occupies `$83E70-$84A6F` (3,072 bytes).
 `Sound_Z80DriverProgram` names the embedded image by its proven loader role:
 `Sound_LoadZ80Driver` copies exactly `$C00` bytes to `Z80_RAM`, pulses reset,
-then releases the bus. It remains a binary include because the reference
-repository also contains a dump rather than reconstructable Z80 source.
+then releases the bus. The current source assembles that image from
+`src/sound/z80/driver.asm`: 870 Z80 instructions, a computed zero gap, two voice
+lookup pages and two DPCM delta pages. The reset/ordinary PCM path and the
+negative-request voice path have separate modules; fixed RAM and hardware
+bindings stay in `memory.asm`. Neutral `Dac_Path` and `Dac_FixedWord` names
+preserve unresolved semantics without asserting a behaviour.
+
+`make verify-z80-source` assembles all 3,072 bytes and compares them byte for
+byte with the private preservation reference. Cartridge and staged content
+builds independently rebuild `build/z80/driver.bin` from their own source tree.
+The 68000 include consumes this generated image; it no longer executes a
+verbatim extracted asset. The private `data/sound/z80_data.bin` remains the
+reference for identity and the existing PCM/source-evidence readers.
+
+The ROM layout check still checks all 589 asset positions. It accepts the
+assembled driver at the original asset's position only when its size and hash
+match, and rejects a build that includes both the extracted and the assembled
+driver. Indirect and self-modifying control flow in the driver is not fully
+named yet.
 
 ## 68000 request interface
 
@@ -204,8 +221,31 @@ The first eight are `$8000` bytes; the ninth is `$1A5E` bytes followed by an
 explicit `$E5A2`-byte `$FF` gap to `$E8000`. Descriptor tables select a bank's
 high address byte and add per-sample offsets, which proves the bank naming.
 The preservation assets retain their imported `PCMPart1.bin` through
-`PCMPart9.bin` filenames. Splitting them into individual samples remains a
-separate byte-verified reconstruction task.
+`PCMPart9.bin` filenames. Sound Studio now splits them non-destructively from
+their native four-byte little-endian `(start,length)` records. The first start
+pointer gives each bank's header-table size; all 90 records form contiguous
+sample chains. Header bytes and post-sample bank tails remain protected.
+
+The Z80 program itself proves the sample codec. During playback it indexes
+page `$0B00` by the encoded byte, adds that high-nibble delta to an accumulator
+initialised to `$80`, writes one DAC value, then repeats through page `$0A00`
+for the low nibble. Both 256-byte pages expand the same sixteen deltas:
+`0,1,2,4,8,16,32,64,$80,$FF,$FE,$FC,$F8,$F0,$E0,$C0`. The headless codec
+decodes 507,004 unsigned values from the 253,502 sample bytes and re-encodes all
+90 streams exactly. The ordinary PCM path copies the request-state byte from
+Z80 `$1FFD` to `$1FE0`, then loads it into `C` at `$0107-$010A` for the
+`LD B,C` / `DJNZ` delay at `$0139-$013A` and `$0177-$0178`. The 68000 writes
+`1` to this request state for music samples; voice requests write `$80` and
+branch to the separate mixing path at Z80 `$0068`. Thus the descriptor byte
+sent to `$1FFE` is not the direct `DJNZ` delay on the ordinary path. Exact
+output timing still depends on the full Z80 loop, buffer refills, bus waits,
+and voice mixing, and remains unproved.
+For music's request value one, each local `LD B,C` / `DJNZ -2` pair costs
+12 CPU T-states: four for `LD B,C` and eight for the fall-through `DJNZ`.
+The two byte sequences at `$0139` and `$0177` and the request-state load at
+`$0107` are pinned by `sound_pcm_codec.py`; the cycle counts follow the
+[Zilog Z80 CPU User Manual](https://www.zilog.com/docs/z80/um0080.pdf).
+This CPU-only delay is not the complete time between YM2612 DAC writes.
 
 ## Audited 68000 update core
 

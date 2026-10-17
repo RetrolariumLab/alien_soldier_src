@@ -22,6 +22,7 @@ from check_profile_as_args import validate_flags
 from authoring.build_content import assembler_args
 from authoring.atomic_output import atomic_write_bytes, atomic_write_json
 import init_project
+from make_interface import make_files
 
 FIXTURE = ROOT / "tests/fixtures/profile_flags_terminal.py"
 OUTPUTS = ROOT / "build/content/profile-flags"
@@ -113,9 +114,13 @@ class MakeFlags(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix="flags-", dir=parent)
         self.addCleanup(self.temp.cleanup)
         self.project = Path(self.temp.name).resolve()
-        self.makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
-        atomic_write_bytes(self.project / "Makefile", self.makefile.encode())
+        for relative, body in make_files(ROOT):
+            atomic_write_bytes(self.project / relative, body)
         atomic_write_bytes(self.project / "scripts/check_profile_as_args.py", (ROOT / "scripts/check_profile_as_args.py").read_bytes())
+        atomic_write_bytes(self.project / "scripts/build_z80.py", (ROOT / "scripts/build_z80.py").read_bytes())
+        # This fixture checks Make/profile dispatch only. Source assembly is
+        # exercised independently by test_build_z80_source, never by a fake ROM.
+        atomic_write_bytes(self.project / "build/z80/driver.bin", b"dispatch-only prerequisite")
         self.events = self.project / "events.json"
         atomic_write_json(self.events, [])
         self.env = dict(os.environ, PROFILE_FLAGS_EVENTS=str(self.events), PYTHONDONTWRITEBYTECODE="1")
@@ -159,7 +164,8 @@ class MakeFlags(unittest.TestCase):
                             self.assertIn(" " + expected + " src/main.s", output)
                         else:
                             self.assertIn('--as-args="%s"' % expected, output)
-                        self.assertFalse(list(self.project.rglob("*.bin")))
+                        self.assertEqual({self.project / "build/z80/driver.bin"}, set(self.project.rglob("*.bin")))
+                        self.assertEqual(b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes())
 
     def test_verify_all_recursive_dry_run_keeps_both_profile_arguments(self):
         result = self.run_make("verify-all", flags="-q")
@@ -187,7 +193,8 @@ class MakeFlags(unittest.TestCase):
                     self.assertEqual(self.expected(profile, "-q"), self.arguments(consumer))
                     checker = next(index for index, row in enumerate(rows) if row["arguments"][0].endswith("check_profile_as_args.py"))
                     self.assertLess(checker, rows.index(consumer))
-                    self.assertFalse(list(self.project.rglob("*.bin")))
+                    self.assertEqual({self.project / "build/z80/driver.bin"}, set(self.project.rglob("*.bin")))
+                    self.assertEqual(b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes())
                     self.assertFalse(list(self.project.rglob("*.p")))
                     self.assertFalse(list(self.project.rglob("*.lst")))
 

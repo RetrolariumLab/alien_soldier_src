@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sys
 import tempfile
 import unittest
@@ -14,6 +15,30 @@ import verify_layout  # noqa: E402
 
 
 class VerifyLayoutTests(unittest.TestCase):
+    def test_assembled_z80_binding_retains_the_asset_census_and_hash_check(self):
+        from build_z80 import ENTRY, OUTPUT
+        layout = {"dma_alignment": {"block_size": "0x20000", "transferred_regions": ["artunc"], "maximum_crossings": 0}}
+        expected = b"\xf3\xf3\xf3"
+        manifest = {"assets": [{"name": "z80_data", "path": "sound/z80_data.bin",
+                                "region": "sound", "size": len(expected),
+                                "sha1": hashlib.sha1(expected).hexdigest()}]}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "assets/manifest.json"
+            path.parent.mkdir()
+            path.write_text(json.dumps(manifest))
+            source, output = root / ENTRY, root / OUTPUT
+            source.parent.mkdir(parents=True)
+            source.write_text("cpu z80\n")
+            output.parent.mkdir(parents=True)
+            for body, extra, accepted in ((expected, [], True), (b"\0\0\0", [], False),
+                    (expected, ['(1) 2/ 83E70 : binclude "data/sound/z80_data.bin"'], False)):
+                output.write_bytes(body)
+                errors = []
+                lines = ['(1) 1/ 83E70 : binclude "build/z80/driver.bin"', *extra]
+                verify_layout.check_dma_alignment(layout, lines, path, errors)
+                self.assertEqual(accepted, not errors, errors)
+
     def test_numbers_accept_manifest_forms(self) -> None:
         self.assertEqual(0x82324, verify_layout.number("0x082324"))
         self.assertEqual(2097152, verify_layout.number(2097152))

@@ -1,8 +1,17 @@
 # Source layout
 
-`src/main.s` is the only assembly entrypoint. AS processes it as one translation
-unit, so the ordered `include` list is also the ROM layout; there is no linker
-or linker script.
+`src/main.s` is the cartridge assembly entrypoint. AS processes it as one
+translation unit, so the ordered `include` list is also the ROM layout; there
+is no linker or linker script.
+
+The standalone `src/sound/z80/driver.asm` entrypoint assembles the shared
+3,072-byte DAC program loaded at Z80 address zero. Its reset/PCM routines,
+voice-stream routines, memory aliases and four fixed lookup pages have separate
+source owners in `src/sound/z80/`. Cartridge and staged content builds consume
+the generated `build/z80/driver.bin`, never the extracted executable as source.
+`make verify-z80-source` independently checks that output against the private
+preservation reference; the cartridge layout check also binds it to the
+original asset census. See [sound driver](sound_driver.md).
 
 The ranges, subsystem ownership, fixed landmarks, padding gaps, and maximum
 module size are declared in `config/rom_layout.json`. Run `make verify-layout`
@@ -20,12 +29,19 @@ split without harming readability. Exceptions are reviewed individually. See
 The 1,000-line ceiling is set in `config/rom_layout.json`, and `make lint`
 checks every declared module against it.
 
-The current 17 modules above the preferred 700-line target are all concrete
-boss modules (703–869 lines); none exceeds the hard ceiling. Their length
+At the Source Reconstruction 1.0 snapshot, the 17 modules above the preferred
+700-line target were all concrete boss modules (703–869 lines); none exceeded
+the hard ceiling. Their length
 alone is not grounds for another split: a proposed boundary must isolate a
 coherent state family or private-data owner without separating a procedure
 from its tables. The size inventory is a review queue, not a waiver for
 unexamined semantics.
+
+The only module now above 900 lines is
+[`src/bosses/entity_type_1c0_core.s`](../src/bosses/entity_type_1c0_core.s), at
+922. Its dormant type-$1C0 controller, body-part recipe, angle data and the
+family-shared readers next to them stay together in ROM order; it is still
+under the 1,000-line ceiling.
 
 The former 889-line `ui/options_screen.s` had a real ownership boundary at
 ROM `$009F8E`: both options-menu controllers and their selection table end
@@ -85,6 +101,13 @@ that arrangement.
 `make verify-layout` enforces it with a ceiling of zero. Compressed art is
 exempt, because the 68000 expands it rather than the VDP transferring it; three
 `artcomp` payloads cross a boundary in the canonical image and always have.
+
+The pinned Gens DMA loop masks the ROM source once before incrementing it,
+rather than wrapping it inside the 128 KiB block as hardware does. Runtime RAM
+checks cannot replace this static invariant: a crossing corrupts VRAM and can
+remain invisible in that emulator. The old cached-entity-pointer explanation
+was superseded; relocation by the exact padding displacement is expected, not
+evidence of a stale pointer.
 
 Two directives in the source are alignment for the same kind of reason and must
 not be treated as decoration either: `align $8000` before the PCM banks keeps
