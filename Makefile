@@ -244,7 +244,7 @@ $(LISTING): $(wildcard src/*.s src/*/*.s src/*.inc) | check-profile-as-args
 	$(AS_BIN) -i . -L -olist $(LISTING) -o $(OBJ) $(PRESERVATION_AS_ARGS) $(SRC)
 # Content: the workspace, its models, the five Studios and the content build.
 
-.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio playtest-level graphics-inventory art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-screen-studio screen-studio check-text-workspace migrate-credits-text check-text-studio text-studio check-sound-model check-sound-workspace check-sound-studio sound-studio check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-palette-workspace check-mapping-workspace check-animation-workspace check-graphics-studio graphics-studio
+.PHONY: init-content init-content-all inspect-content validate-content validate-content-all build-content check-content-zero-edit check-level-model check-level-map-model check-map-references check-level-studio level-studio playtest-level graphics-inventory art-validate palette-validate mapping-validate tilemap-validate check-graphics-models check-screen-model check-screen-workspace check-screen-studio screen-studio check-text-workspace migrate-credits-text check-text-studio text-studio check-sound-model check-sound-workspace check-sound-studio sound-studio check-stage-message-model check-scripted-message-model check-credits-text-model check-glyph-source-list-model check-graphics-workspace check-compressed-graphics-workspace check-tile-codec-rom-edit check-palette-workspace check-mapping-workspace check-animation-workspace check-graphics-studio graphics-studio
 
 # Content builds live under build/content and never write src/ or data/.
 # PROFILE remains the preservation selector; CONTENT_PROFILE independently
@@ -446,6 +446,11 @@ check-graphics-workspace: check-compressed-graphics-workspace check-palette-work
 check-compressed-graphics-workspace:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/compressed_graphics_model.py check --profile jp
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/compressed_graphics_model.py check --profile eu
+
+.PHONY: check-tile-codec-rom-edit
+check-tile-codec-rom-edit:
+	@$(PYTHON) $(SCRIPTS_DIR)/authoring/check_tile_codec_rom.py --profile all \
+		--as-bin $(AS_BIN) --p2bin $(P2BIN)
 
 check-palette-workspace:
 	@$(PYTHON) $(SCRIPTS_DIR)/authoring/palette_studio_model.py check --profile jp
