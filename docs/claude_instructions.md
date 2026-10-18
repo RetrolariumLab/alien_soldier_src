@@ -1,274 +1,60 @@
-# Alien Soldier Disassembly - Documentation Workflow
-
-## Project Overview
-
-- **Source entrypoint**: `src/main.s` - Address-ordered include index
-- **ROM modules**: `src/**/*.s` - Source split by broad subsystem and ROM order
-- **Original ROM**: `Alien Soldier (J) [!].bin` - Canonical private ROM for verification
-- **Workflow dir**: `workflow/` - Reports, batch files, and state
-
-## Makefile Workflow
-
-### Step 1: Generate Reference Data
-
-Generate reference screenshots and memory dumps:
-
-```bash
-make reference MOVIE=tas       # TAS speedrun reference
-make reference MOVIE=longplay  # Full game reference
-make reference MOVIE=menus     # Menu exploration reference
-```
-
-Creates `reference/{type}/` with:
-- Screenshots every 20 frames (`.png`)
-- Memory state dumps (`.genstate`)
-
-### Step 2: Find Unanalyzed Procedures
-
-```bash
-make find-unanalyzed
-```
-
-Creates `workflow/unanalyzed_procedures.txt`.
-
-### Step 3: Run Analysis
-
-Analyze procedures by NoP'ing them out and comparing:
-
-```bash
-make analyze MOVIE=tas      # Analyze with TAS movie
-make analyze MOVIE=longplay # Analyze with longplay
-make analyze MOVIE=menus    # Analyze with menus
-```
-
-Output: `diffs/{type}/{procedure}/` with diff screenshots and state dumps.
-
-### Step 4: Generate Reports
-
-```bash
-make report MOVIE=tas
-```
-
-Generates:
-- `workflow/analysis_report_tas.txt` - Human-readable
-- `workflow/analysis_report_tas.csv` - For documentation workflow
-
----
-
-## Documentation Workflow (Claude + Human)
-
-### Step 1: Set Movie Type
-
-```bash
-make set-movie MOVIE=tas
-```
-
-Saves to `workflow/.movie` for subsequent commands.
-
-### Step 2: Prepare Batch
-
-```bash
-make prepare-batch COUNT=40
-```
-
-Creates `workflow/batch_procedures.txt` with:
-- Code for each procedure
-- Scene and frame context
-- Memory change indicators (RAM, VDP, Z80, etc.)
-- Links to visual diffs
-
-### Step 3: Claude Analyzes (use `/document` skill)
-
-Run the `/document` skill which:
-1. Reads `workflow/batch_procedures.txt`
-2. Analyzes each procedure's code and context
-3. Creates `workflow/rename_batch.csv`
-
-**CSV format:**
-```csv
-old_name,new_name,description
-sub_1234,Player_UpdateHealth,"Updates player health bar"
-```
-
-### Step 4: Apply Renames
-
-```bash
-make rename
-```
-
-`make rename` now uses the module-aware renamer across `src/**/*.s` and
-`src/**/*.inc`; the old single-file mutator refuses to run. Review all changed
-modules, record the evidence for any new semantic claim, and run `make verify`
-before committing. This exploratory workflow is not release evidence.
-
-### Step 5: Verify and Commit
-
-```bash
-make verify
-git add src
-git commit -m "Document batch N: X procedures"
-```
-
----
-
-## Naming Conventions
-
-### Category Prefixes
-
-| Prefix | Purpose |
-|--------|---------|
-| `Gfx_` | VDP, VRAM, palettes, tiles, DMA |
-| `Sys_` | Initialization, memory, game loop |
-| `Sound_` | Z80, audio driver, SFX, music |
-| `Input_` | Controllers, button handling |
-| `Physics_` | Movement, collisions, gravity |
-| `Sprite_` | Sprite rendering, OAM |
-| `Anim_` | Animation updates |
-| `Effect_` | Visual effects (explosions, particles) |
-| `Player_` | Player character logic |
-| `Boss_` | Boss AI and attacks |
-| `Enemy_` | Enemy AI |
-| `UI_` | Menus, HUD, text |
-| `Math_` | Calculations, RNG |
-| `Stage_` | Level/stage logic |
-| `Object_` | Game objects, entities |
-
-### Good Names
-
-```
-Gfx_LoadSegaLogoTiles       - Specific action
-Sys_InitWorkRAM             - Clear purpose
-Sound_InitZ80Driver         - What it does
-Player_UpdateXPosition      - Actor + action
-```
-
-### Bad Names
-
-```
-DoStuff                     - Too vague
-Function1                   - Meaningless
-Process                     - Too generic
-```
-
----
-
-## Understanding Procedure Context
-
-### Memory Change Indicators (CSV columns)
-
-| Column | Meaning |
-|--------|---------|
-| `RAM` | M68K work RAM modified |
-| `VDP` | Video registers or VRAM changed |
-| `Z80` | Sound CPU memory affected |
-| `YM2612` | FM synth registers |
-| `PSG` | PSG sound chip |
-
-### Change Types
-
-| Type | Visual Effect |
-|------|---------------|
-| `visual_change` | Graphics differ |
-| `black_screen` | Screen went black |
-| `frozen` | Game froze |
-| `red_screen` | Error screen |
-
-### Interpreting Visuals
-
-- **Black screen** - Clearing/initialization
-- **Graphics appeared** - Loading tiles/sprites
-- **Palette changed** - Setting colors
-- **Sprites moved** - Updating positions
-
----
-
-## Memory Dump Analysis
-
-For procedures with memory changes, compare states:
-
-```bash
-python scripts/compare_states.py \
-    --diffs-dir diffs/tas \
-    --reference-dir reference/tas \
-    --output-dir reports
-```
-
-Reports show:
-- RAM changes - Variable updates
-- VRAM changes - Graphics loading
-- CRAM changes - Palette updates
-- VDP register changes - Video configuration
-
----
-
-## Debug Workflow
-
-When modifications break the game:
-
-```bash
-make debug MOVIE=tas
-```
-
-This:
-1. Builds ROM
-2. Runs with memory comparison
-3. Stops at first difference
-4. Generates detailed report in `reports/`
-
----
-
-## File Reference
-
-### Generated (gitignored)
-
-- `reference/{type}/` - Reference screenshots + dumps
-- `diffs/{type}/` - Diff screenshots per procedure
-- `reports/` - Memory comparison reports
-- `workflow/batch_procedures.txt` - Current batch to document
-- `workflow/rename_batch.csv` - Renames to apply
-- `alien_soldier_j_backup_*.s` - Auto backups
-
-### In Git
-
-- `src/main.s` and `src/**/*.s` - Ordered source index and ROM modules
-- `Alien Soldier (J) [!].bin` - Canonical private ROM (ignored by Git)
-- `workflow/analysis_report_*.csv` - Analysis reports with processed status
-- `workflow/.movie` - Current movie type
-- `scripts/*.py` - Build and analysis scripts
-- `docs/` - Documentation
-
----
-
-## Troubleshooting
-
-### Build fails: "jump distance too big"
-
-A `bsr.s` became too far. Usually a name collision - check for duplicates.
-
-### Build fails: "symbol double defined"
-
-Two labels have the same name. Check batch_renames.csv for duplicates.
-
-### ROMs don't match
-
-Something changed binary output. Restore from backup and fix the issue.
-
-### No procedures to process
-
-All procedures marked as `processed=true`. Generate new analysis with different movie type.
-
----
-
-## Quick Reference
-
-```bash
-# Setup (once per movie type)
-make set-movie MOVIE=tas
-
-# Each batch iteration
-make prepare-batch COUNT=40   # Create batch
-/document                     # Claude documents (creates rename_batch.csv)
-make rename                   # Apply renames
-make verify                   # Verify byte identity
-git commit                    # Save progress
-```
+# Module-aware procedure research workflow
+
+This is optional research, not a release gate. Start with
+[tooling status](tooling_status.md), [naming](naming.md),
+[provenance](provenance.md) and [contribution rules](../CONTRIBUTING.md).
+The prior automated naming pass is not evidence that its semantic claims were
+correct. The live reviewed audit, not a processed-report flag, owns confidence.
+
+## Prepare a bounded investigation
+
+make find-unanalyzed selects hypothesis-level procedures from the reviewed name
+audit in ROM order. An empty result means that particular queue is empty; it
+does not prove all semantics or indirect paths are known. Active unknowns live
+in [the unknown register](unknowns.md).
+
+make prepare-batch COUNT=40 writes an ignored workflow/batch_procedures.txt with
+module-owned code and available analysis context. make set-movie MOVIE=tas
+selects the research movie. reference, analyze and report are exploratory;
+their older workflows are not the release scenario set. Read their current
+tooling-status limitations before requesting a run. Runtime permission and
+pinned inputs are explicit, never inferred from a naming task.
+
+## Propose, review and apply a name
+
+1. Locate the exact current definition in src/ and its callers, consumers,
+   tables, shared state and profile branches. src/main.s is the cartridge
+   include index; the standalone Z80 entrypoint has its own source namespace.
+2. Establish the narrow role from instructions and data flow. A screenshot,
+   caller name, RAM difference or scene alone is not sufficient to infer a
+   boss identity or complete function. Keep unresolved semantics role-neutral.
+3. Produce the private CSV workflow/rename_batch.csv with header
+   old_name,new_name,description. Require unique valid symbols and the owning
+   subsystem vocabulary. A description records the actual evidence, not a guess.
+4. Review the proposal before make rename. The current renamer updates the
+   module tree atomically and retains original was markers. Do not use the
+   retired single-file mutator or hand-copy output to alien_soldier_j.s.
+5. Update exact-address evidence and active unknown records together,
+   following their real schemas. Generated spelling mappings
+   do not upgrade evidence. Check both regional assembled addresses when the
+   changed shared source or profile interface makes that relevant.
+6. Run make lint and make verify-all, plus focused
+   regression controls for the changed contract. Review git diff and commit
+   only intended tracked source/configuration/documentation changes with the
+   required substantive English message. See [release verification](release_check.md)
+   for the stronger release gate; a naming loop is not a release PASS.
+
+## Private data and failed experiments
+
+ROMs, extracted data, reference screenshots/states, diffs, reports and private
+workflow files stay ignored. They are not source evidence suitable for Git
+merely because a local producer created them. Never stage the original ROM.
+
+If assembly or identity fails, inspect the exact diff and diagnostic before
+changing anything else. Do not restore a broad backup or discard another
+agent's work. Preserve the failed experiment with its input epoch; do not
+claim it passed because a different build or later source eventually worked.
+
+The old batch instruction remains available through
+[the Claude command entry](../.claude/commands/document.md), which delegates to
+this same policy instead of maintaining separate naming heuristics.

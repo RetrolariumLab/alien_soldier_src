@@ -2,13 +2,20 @@
 
 ## Overview
 
-Add state dump capability to Gens to capture complete emulator state at specific frames for debugging ROM modifications. This allows comparison between original and modified ROM behavior at the memory level, not just visual comparison.
+This reference explains the state-dump container consumed by the project tools.
+It preserves the original implementation design and examples; not every
+optional section or proposed flag is an accepted runtime capability. The current
+pinned runner, declared sections and exact-frame validation are described in
+[runtime verification](runtime.md). A container checksum identifies an input; it
+does not replace complete ROM identity or scenario acceptance predicates.
 
 ## Use Case
 
 When modifying ROMs (e.g., removing unused data), visual differences may appear but the root cause is unclear. By comparing full memory state between original and modified ROM runs, we can identify exactly what changed in RAM, VRAM, registers, etc.
 
-**Example:** Antlord boss missing hitbox sprite after ROM data shift - visual comparison shows missing sprite, but memory comparison would show which sprite table entries or pointers changed.
+An illustrative relocation failure can be investigated by comparing the
+first differing RAM/VRAM state. This is a debugging example, not a reproduced
+current-game defect, proof of a particular boss identity or an accepted patch.
 
 ## Command Line Interface
 

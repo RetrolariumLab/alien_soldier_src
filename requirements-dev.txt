@@ -1,0 +1,2 @@
+# Python packages the tools and tests use (tested with Python 3.14).
+Pillow==12.3.0

@@ -1,25 +1,41 @@
 # Release check
 
-`make release-check` is the single ordered release gate. It runs:
+`make release-check` runs everything a release needs, in order, and stops at
+the first failure:
 
-1. private asset identity and range policy;
-2. source and project lint: style, naming vocabulary, provenance, branch-target
-   resolution and text hygiene across every tracked text file;
-3. Python verification tests;
-4. cleanup of reproducible outputs;
-5. a fresh byte-identical Japanese ROM build plus layout verification, which
-   includes the 128 KiB DMA source boundary the emulator cannot check;
-6. canonical symbol export and contract coverage, and a relocation probe that
-   rebuilds the ROM with its layout perturbed and requires every pointer to
-   follow;
-7. all twelve emulator scenarios and 78 named RAM expectations.
+1. the extracted data of both cartridges against their manifests
+   (`make check-assets PROFILE=jp` and `PROFILE=eu`);
+2. `make lint`: assembly style, naming vocabulary, provenance markers, branch
+   targets and text hygiene across every tracked text file;
+3. `make test`: every test module;
+4. `make clean`, so that nothing below can be satisfied by an old output;
+5. `make verify-all`: the Z80 program, then both cartridges, each byte for byte
+   with its layout checked, including the 128 KiB DMA source boundary that the
+   emulator cannot see;
+6. `make verify-symbols verify-relocation` for each cartridge: the debugger
+   symbols, and a rebuild with the layout perturbed in which every pointer has
+   to follow its target;
+7. `make check-content-zero-edit`: an unedited content workspace must build
+   both original cartridges;
+8. `make check-content`: every content model, workspace and Studio check
+   against both cartridges;
+9. `make runtime-capture`: the twelve Japanese scenarios of
+   `config/runtime_scenarios.json`, replayed from three movies in the pinned
+   Gens build, with 78 named RAM expectations checked
+   ([runtime verification](runtime.md));
+10. `make check-region-runtime-eu`: the European cartridge boots from cold,
+    idles on the title screen and runs its attract demo, with the console
+    region flags set to Europe.
 
-The gate intentionally performs a clean build. `make clean` removes only the
-canonical assembler outputs, source inventory and the exact PNG/genstate pairs
-declared by the current runtime scenarios. It preserves unrelated research in
-`build/` and `runtime/captures/`, as well as the user-supplied ROM, all 589
-extracted segments, movies, traces, workflow files, source backups and emulator
-configuration. Each runtime scenario is replayed and its declared pair is
-captured anew.
+Steps 9 and 10 need the [gens_automation](https://github.com/oranguthang/gens_automation)
+emulator at the commit pinned in `config/toolchain.json`; point `GENS_DIR` at its
+checkout. Everything before them needs only Python, the vendored assembler and
+the two cartridge dumps.
 
-A passing gate does not create or move a release tag.
+`make clean` removes the assembler outputs, the source inventory and the exact
+PNG/state pairs of the runtime scenarios. It keeps the cartridge dumps, the
+extracted data, movies, traces, workflow files, research captures and the
+content workspace.
+
+The check does not create or move a tag. Tagging and publishing are separate
+steps.

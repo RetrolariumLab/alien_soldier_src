@@ -16,5 +16,7 @@ assembler is allowed to produce release evidence. The Windows files are
 byte-identical to those used by the sibling Flicky reconstruction; the Linux
 binaries came from the s1disasm toolchain import recorded in Git history.
 
-`p2bin` must receive `-p=FF`: the cartridge fills its four unused ROM ranges
-with `$FF`, while the tool's default is `$00`.
+For cartridge images, `p2bin` must receive `-p=FF`: the cartridge fills its four
+unused ROM ranges with `$FF`, while the tool's default is `$00`. The separately
+assembled Z80 loader image uses `-p=00` for its own zero-filled gap; it does not
+change the cartridge padding policy.

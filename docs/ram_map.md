@@ -1,8 +1,9 @@
 # RAM map
 
 `src/ram_addrs.inc` is the machine-consumed RAM inventory. It currently defines
-976 observed 68000 work-RAM addresses and 28 observed Z80-RAM addresses. Most
-still have neutral size/address names. The first reviewed semantic fields are
+976 observed 68000 work-RAM addresses and 28 observed Z80-RAM addresses.
+The symbolic aliases preserve observed access widths and shared overlays; none
+is a claim that one scene interpretation applies globally. Reviewed fields include
 `GameModeIndex`, `GameSubstateIndex`, `StageTableIndex`, `Entity_ObjectPool`,
 `DifficultyMode`, `MessageMode`, `SoundDisableFlags`, `StageTimeRemaining`,
 `ScoreValueBCD`, `ScoreAddendBCD`, `ScoreAddendPrefixByte`,
@@ -442,6 +443,7 @@ passes consume the resulting count.
 | `SoundUpdateBusy` | `$FFFFF745` | The VBlank event handler skips a nested sound update while this byte is nonzero and brackets `Sound_UpdateThunk` by setting and clearing it. |
 | `VBlankSoundRequestDelay` | `$FFFFF762` | While nonzero, the VBlank event handler decrements this word and defers processing the pending sound-request byte. |
 | `VBlankPendingSound` | `$FFFFF764` | When the delay is zero, VBlank passes this byte to `Sound_QueueRequest` and clears it only after the request is accepted. |
+| `PALSoundCompensationCounter` | `$FFFFFF68` | The European profile increments this word after each VBlank sound update. Every fifth PAL VBlank clears it and performs one additional update, preserving the sound driver's 60 Hz update cadence on 50 Hz hardware. The Japanese profile does not reference this word. |
 
 ## Reviewed sound-driver global state
 
@@ -1422,7 +1424,7 @@ exclusive game modes overlay different state on the same physical storage.
 | `SceneScratchLong0` | `$FFFF8128` | Weapon force index/vertical-scroll target, Xi-Tiger state/phase, ending completion/state, Game Over landscape index, stage-transition timer, and Epsilon 1 transition Y. |
 | `SceneScratchLong1` | `$FFFF812C` | Weapon controller-layout index, Xi-Tiger motion step, and Epsilon 1 parallax position. |
 | `SceneScratchLong2` | `$FFFF8130` | Weapon background phase, Xi-Tiger state counter/palette level, and Epsilon 1 parallax step. |
-| `SceneScratchLong3` | `$FFFF8134` | Weapon highlight phase, Xi-Tiger wave phase/sprite X offset, and Epsilon 1 V-scroll value. |
+| `SceneScratchLong3` | `$FFFF8134` | Weapon highlight phase, Xi-Tiger wave phase/sprite X offset, Epsilon 1 V-scroll value, and the European Stage 15 Sunset Sting asset delay in its low word. |
 
 ## Reviewed frame, input, and system-state boundaries
 
@@ -1609,6 +1611,10 @@ executable references use one of 33 contextual views.
   acceptable only while the expectation is explicitly marked `unknown` or
   `hypothesis`.
 
-The current file is therefore an address inventory, not yet a fully semantic
-RAM map. Source Reconstruction 1.0 work must promote the state variables used by its six
-runtime scenarios and document their evidence.
+This is a subsystem-organized RAM reference, not an append-only experiment log
+or a claim that every alias has one universal semantic role. Its size is
+intentional: comparing mutually exclusive scene overlays in one address-space
+reference is safer than splitting a single memory owner into unrelated pages.
+The exact definitions remain in `src/ram_addrs.inc`; semantic evidence remains
+in `config/name_audit.json`. The twelve inherited JP scenarios use named fields
+but do not exercise every overlay; see [runtime verification](runtime.md).

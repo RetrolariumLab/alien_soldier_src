@@ -25,11 +25,31 @@ when a live address-derived ROM or RAM definition receives an evidence-backed
 name; corrections to an already renamed symbol retain its existing imported
 IDA mapping and therefore do not inflate this count.
 
-A few definitions in the imported disassembly were already named by an
-extraction role rather than by address. The provenance grammar admits only
-the exact historical `JumpTable1`, `JumpTable2`, and `PCMPart1` through
-`PCMPart9` forms, plus the imported semantic `LoadPalette` and
-`CheckFlagsLoadObjData` labels, in addition to the generated suffix pattern.
-These spellings are continuity evidence, not reconstructed semantics; their
-replacement names still require records in `config/name_audit.json`, and the
-exceptions do not broaden the accepted address-derived source vocabulary.
+## Runtime toolchain selection
+
+The emulator source identity remains the exact `source_commit` in
+`config/toolchain.json`; selecting another checkout is not a repin. Verify an
+isolated build explicitly before using it for runtime evidence:
+
+```text
+python scripts/verify_toolchain.py --config config/toolchain.json --platform windows_i386 --require-emulator --emulator-dir build/runtime-emulator/pinned-e14b925
+```
+
+`--emulator-dir` resolves the manifest's declared runtime files relative to the
+selected checkout, including `Output/Gens.exe`. It does not inspect the default
+`../gens_automation` executable instead or change the manifest. The selected
+directory must be a Git checkout root, its HEAD must equal the recorded source
+commit, and staged or unstaged tracked changes cause a failure. Linked Git
+worktrees are supported. Ignored generated outputs do not make tracked source
+dirty. Git inspection failures, a missing checkout, and a missing explicit
+executable fail closed. An explicit override requires the runtime even without
+`--require-emulator`; absent default runtimes remain optional only when neither
+option is supplied, allowing preservation-only builds without an emulator.
+
+Executable size and SHA-256 are printed for the selected build. The emulator's
+`observed_only` entry remains an observation, not a universal binary hash gate:
+different supported compiler builds can produce different executable bytes.
+A clean source pin does not prove how an existing executable was compiled;
+keep the source, build recipe, executable hash and runtime result together.
+[Runtime verification](runtime.md#building-the-pinned-emulator) gives the MSVC
+recipe for the pinned commit.

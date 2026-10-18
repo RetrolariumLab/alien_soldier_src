@@ -1,8 +1,13 @@
 # Source Reconstruction 1.0 modularization plan
 
-This document is the working plan for turning the preservation-complete baseline
-source into a semantic Source Reconstruction 1.0 source tree. The machine-
-readable destination contract is `config/source_reconstruction_1_0.json`.
+This is the completed Source 1.0 migration record, not the current work queue.
+Its starting measurements and intended sequence are retained as history. For
+the present architecture use [source layout](source_layout.md) and the
+[subsystem map](source_map.md).
+
+The plan turned the preservation-complete baseline into a semantic source
+tree; its machine-readable destination contract was
+`config/source_reconstruction_1_0.json` at the `source-reconstruction-1.0` tag.
 
 The benchmark is the released `flicky_src` tree: an address-ordered include
 index, cohesive subsystem modules, evidence-backed names, a real formatter,

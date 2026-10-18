@@ -1,7 +1,7 @@
 # Tooling status
 
-The release interface is the list in `config/release_contract.json`. Those commands
-are module-aware and are covered by the release gate.
+The release commands are the ones `make release-check` runs
+([release verification](release_check.md)). They are module-aware.
 
 The exploratory commands `analyze`, `find-unanalyzed`, `prepare-batch`, and
 `rename` remain outside the release interface. The
@@ -55,8 +55,7 @@ share a valid format explanation.
 Reviewed groups live in `config/duplicate_basis_reviews.json`; their exact
 addresses, current names, and modules must still match. The ordinary duplicate
 listing omits accepted groups, while the summary reports both accepted and
-open counts. `make release-audit` rejects a drifted review and will refuse
-`tag-ready` while any group remains open.
+open counts.
 
 `make trace` passes an inert screenshot interval to the pinned emulator. This
 is required because that emulator currently evaluates its maximum-frame and

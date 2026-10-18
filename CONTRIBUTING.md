@@ -6,26 +6,28 @@ still reproduces the original cartridge byte for byte.
 ## From a fresh clone
 
 ```bash
-# Place the original Japanese cartridge dump in the project root:
+# Place the original cartridge dumps in the project root:
 #   Alien Soldier (J) [!].bin
-make init            # Validate the ROM, extract data, build and verify
-make release-check   # The full ordered gate, as the release runs it
+#   Alien Soldier (E) [!].bin
+make init PROFILE=jp   # Validate the ROM, extract data, build and verify
+make init PROFILE=eu
+make release-check     # The full ordered check, as a release runs it
 ```
 
-`make init` writes the 579 extracted segments into `data/`. Nothing derived from
-the cartridge is ever committed; `.gitignore` and the release audit both enforce
-that, the latter across the whole reachable history.
+`make init` writes the extracted segments into `data/`. Nothing derived from
+the cartridge is ever committed; `.gitignore` keeps it out.
+[Release verification](docs/release_check.md) lists what the full check runs.
 
 ## Before you commit
 
 ```bash
 make format   # Normalize assembly style; it must never move a byte
 make lint     # Source policy, naming, branch targets and text hygiene
-make test     # The Python tests behind the tooling
-make verify   # Byte identity against the cartridge dump
+make test     # Every test module
+make verify-all   # Byte identity against both cartridge dumps
 ```
 
-`make verify` is not optional after any change under `src/`, including a pure
+`make verify-all` is not optional after any change under `src/`, including a pure
 rename. Formatting and renaming are byte-neutral by definition, so a divergence
 means the change was not what it appeared to be.
 
@@ -43,7 +45,7 @@ Read [`docs/naming.md`](docs/naming.md) first. In short:
   its exact-address record in `config/name_audit.json`, with the evidence that
   justifies the new name.
 - Rename references atomically, with `scripts/rename_symbols.py`, and run
-  `make verify` afterwards.
+  `make verify-all` afterwards.
 
 A wrong semantic name is worse than an explicit unknown.
 
@@ -60,12 +62,10 @@ period. `Fix`, `Update` and `WIP` are not titles.
 After the title and a blank line, write two or three paragraphs:
 
 1. what changed and which subsystems it touched;
-2. why, and what evidence or contract the change adds or preserves;
-3. for a release commit, which gates passed and what the release scope includes
-   and excludes.
+2. why, and what it makes possible or what it fixes;
+3. how it was checked.
 
-The body describes the actual diff. Do not announce a release that the manifest,
-the documentation and the full gate have not yet earned.
+The body describes the actual diff.
 
 One commit is one architectural or release task. Empty commits are not used for
 any purpose, including release markers: the release is an annotated tag on a
@@ -80,3 +80,5 @@ commit that really changed something.
   the split into modules and mutate a single translation unit.
 - Do not let documentation claim more than the source, the tests and the runtime
   evidence support.
+- Do not edit `src/` or `data/` from a content tool; edits go through the
+  workspace in `content/workspace/` and are built into `build/content/`.
