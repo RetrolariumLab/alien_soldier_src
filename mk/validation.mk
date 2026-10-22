@@ -2,14 +2,20 @@
 
 .PHONY: lint format test source-inventory semantic-audit
 
+# The assembly has its own style tools; every other language goes through
+# Retrolarium Core's formatters (rltool format, Retrolarium Kit).
+RLTOOL ?= rltool
+
 lint:
 	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src
 	@$(PYTHON) $(SCRIPTS_DIR)/lint_source.py \
 		--policy config/source_policy.json
 	@$(PYTHON) $(SCRIPTS_DIR)/lint_project.py
+	@$(RLTOOL) format --check
 
 format:
 	@$(PYTHON) $(SCRIPTS_DIR)/asm_style.py src --fix
+	@$(RLTOOL) format
 	@$(MAKE) --no-print-directory lint
 
 # Every test module in its own process, TEST_JOBS at a time. Name a few with

@@ -1,0 +1,7 @@
+# Records the audit scripts write in their own compact layout
+config/name_audit.json
+config/name_addresses_eu.json
+config/duplicate_basis_reviews.json
+# Lua the tests read as text (they look for exact lines)
+scripts/authoring/level_playtest.lua
+scripts/authoring/sound_audition.lua
