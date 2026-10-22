@@ -10,10 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from authoring.joker_raster_model import (
-    copy_boss_transition_window, joker_perspective_rows)
-from authoring.stage5_6_boss_rendering import (
-    build_boss_display, draw_boss_rows)
+from authoring.joker_raster_model import copy_boss_transition_window, joker_perspective_rows
+from authoring.stage5_6_boss_rendering import build_boss_display, draw_boss_rows
 
 
 @dataclass(frozen=True)
@@ -35,17 +33,25 @@ def _signed_word(value: int) -> int:
 
 
 def draw_joker_raster_background(
-        root: Path, pose: JokerRasterPose, *,
-        top: int = 32, bottom: int = 224, width: int = 320,
+    root: Path,
+    pose: JokerRasterPose,
+    *,
+    top: int = 32,
+    bottom: int = 224,
+    width: int = 320,
 ) -> list[list[tuple[int, int, int]]]:
     """Render the supported boss background; row 2 uses raster word zero."""
     if pose.primary_vscroll != 0 or pose.initial_secondary_vscroll != 0:
         raise ValueError("Joker raster preview supports zero initial VScroll")
 
     displayed = build_boss_display(
-        root, "joker", pose.fade_phase, pose.shared_color54,
+        root,
+        "joker",
+        pose.fade_phase,
+        pose.shared_color54,
         frame_counter=pose.frame_counter,
-        secondary_frame_offset=pose.secondary_frame_offset)
+        secondary_frame_offset=pose.secondary_frame_offset,
+    )
     perspective = joker_perspective_rows(pose.body_y, pose.body_height)
     active = copy_boss_transition_window((0,) * 15, perspective)
 
@@ -58,5 +64,12 @@ def draw_joker_raster_background(
         return _signed_word(active[raster_index])
 
     return draw_boss_rows(
-        displayed, pose.primary_hscroll, pose.secondary_hscroll,
-        pose.primary_vscroll, secondary_vscroll_at, top, bottom, width)
+        displayed,
+        pose.primary_hscroll,
+        pose.secondary_hscroll,
+        pose.primary_vscroll,
+        secondary_vscroll_at,
+        top,
+        bottom,
+        width,
+    )

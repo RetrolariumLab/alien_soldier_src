@@ -18,9 +18,7 @@ class SourcePolicyTests(unittest.TestCase):
         policy = json.loads((ROOT / "config/source_policy.json").read_text(encoding="utf-8"))
         inventory = lint_source.scan(policy, ROOT)
         self.assertEqual([], inventory.errors)
-        self.assertGreaterEqual(
-            len(inventory.provenance), policy["provenance"]["minimum_unique_mappings"]
-        )
+        self.assertGreaterEqual(len(inventory.provenance), policy["provenance"]["minimum_unique_mappings"])
         self.assertEqual(0, len(inventory.address_derived))
 
     def test_style_violations_are_rejected(self) -> None:
@@ -28,9 +26,7 @@ class SourcePolicyTests(unittest.TestCase):
             root = Path(directory)
             (root / "src").mkdir()
             (root / "config").mkdir()
-            (root / "src" / "main.s").write_text(
-                '    include "src/bad_name.s"\n', encoding="utf-8"
-            )
+            (root / "src" / "main.s").write_text('    include "src/bad_name.s"\n', encoding="utf-8")
             (root / "src" / "bad_name.s").write_text(
                 " IndentedLabel:\n" + ";" * 21,
                 encoding="utf-8",
@@ -39,9 +35,7 @@ class SourcePolicyTests(unittest.TestCase):
                 "target": {"max_module_lines": 10},
                 "modules": [{"file": "src/bad_name.s"}],
             }
-            (root / "config" / "layout.json").write_text(
-                json.dumps(layout), encoding="utf-8"
-            )
+            (root / "config" / "layout.json").write_text(json.dumps(layout), encoding="utf-8")
             policy = {
                 "assembly_root": "src",
                 "entrypoint": "src/main.s",
@@ -73,7 +67,6 @@ class SourcePolicyTests(unittest.TestCase):
         self.assertTrue(any("missing final newline" in error for error in errors))
         self.assertTrue(any("limit is 20" in error for error in errors))
 
-
     def test_naming_vocabulary_is_enforced(self) -> None:
         cases = {
             "Sys_Boot": True,
@@ -90,21 +83,11 @@ class SourcePolicyTests(unittest.TestCase):
                 self.assertEqual(accepted, not offending, offending)
 
     def test_a_branch_into_an_undefined_name_is_rejected(self) -> None:
-        resolved = self._scan_module(
-            "Sys_Boot:\n"
-            "                bsr.w   Sys_Reset\n"
-            "Sys_Reset:\n"
-            "                rts\n"
-        )
+        resolved = self._scan_module("Sys_Boot:\n                bsr.w   Sys_Reset\nSys_Reset:\n                rts\n")
         self.assertEqual([], [e for e in resolved if "branch target" in e])
 
-        dangling = self._scan_module(
-            "Sys_Boot:\n"
-            "                jsr     (Sys_Missing).l\n"
-        )
-        self.assertTrue(
-            any("branch target Sys_Missing" in error for error in dangling), dangling
-        )
+        dangling = self._scan_module("Sys_Boot:\n                jsr     (Sys_Missing).l\n")
+        self.assertTrue(any("branch target Sys_Missing" in error for error in dangling), dangling)
 
     def test_a_register_indirect_jump_is_not_a_branch_target(self) -> None:
         errors = self._scan_module("Sys_Boot:\n                jmp     (a0)\n")
@@ -124,8 +107,7 @@ class SourcePolicyTests(unittest.TestCase):
 
     def test_xref_comments_cannot_reintroduce_retired_names(self) -> None:
         errors = self._scan_module(
-            "Sys_Boot: ; CODE XREF: Sys_Reset:sub_1234 p ; was: sub_5678\n"
-            "          ; ROM:sub_9ABC o\n"
+            "Sys_Boot: ; CODE XREF: Sys_Reset:sub_1234 p ; was: sub_5678\n          ; ROM:sub_9ABC o\n"
         )
         stale = [error for error in errors if "cross-reference comment" in error]
         self.assertEqual(2, len(stale), stale)
@@ -133,9 +115,7 @@ class SourcePolicyTests(unittest.TestCase):
         self.assertTrue(any("sub_9ABC" in error for error in stale), stale)
 
         provenance_only = self._scan_module("Sys_Boot: ; was: sub_5678\n")
-        self.assertEqual(
-            [], [error for error in provenance_only if "cross-reference comment" in error]
-        )
+        self.assertEqual([], [error for error in provenance_only if "cross-reference comment" in error])
 
     def _scan_one_definition(self, name: str) -> list[str]:
         body = "" if name == "Sys_Boot" else "Sys_Boot:\n"
@@ -146,17 +126,13 @@ class SourcePolicyTests(unittest.TestCase):
             root = Path(directory)
             (root / "src").mkdir()
             (root / "config").mkdir()
-            (root / "src" / "main.s").write_text(
-                '    include "src/module.s"\n', encoding="utf-8"
-            )
+            (root / "src" / "main.s").write_text('    include "src/module.s"\n', encoding="utf-8")
             (root / "src" / "module.s").write_text(module, encoding="utf-8")
             layout = {
                 "target": {"max_module_lines": 100},
                 "modules": [{"file": "src/module.s"}],
             }
-            (root / "config" / "rom_layout.json").write_text(
-                json.dumps(layout), encoding="utf-8"
-            )
+            (root / "config" / "rom_layout.json").write_text(json.dumps(layout), encoding="utf-8")
             policy = {
                 "schema_version": 1,
                 "assembly_root": "src",

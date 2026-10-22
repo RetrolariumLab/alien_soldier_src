@@ -36,7 +36,7 @@ def _source(root: Path) -> tuple[list[int], int]:
         raise ValueError("Japanese glyph stream is not complete words")
     if not art or len(art) % GLYPH_BYTES:
         raise ValueError("Japanese glyph art is not complete 128-byte glyphs")
-    codes = [int.from_bytes(data[index:index + 2], "big") for index in range(0, len(data), 2)]
+    codes = [int.from_bytes(data[index : index + 2], "big") for index in range(0, len(data), 2)]
     if codes[-1] != TERMINATOR or TERMINATOR in codes[:-1]:
         raise ValueError("Japanese glyph stream has a misplaced terminator")
     art_count = len(art) // GLYPH_BYTES
@@ -84,9 +84,17 @@ def atomic_write_json(path: Path, document: dict[str, Any]) -> None:
 def validate_document(document: dict[str, Any], root: Path, profile: str) -> None:
     baseline = export_document(root, profile)
     for field in (
-        "schema_version", "profile", "format", "source_path", "art_path",
-        "first_code", "terminator", "glyph_bytes", "art_glyph_count",
-        "entry_count", "encoded_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "source_path",
+        "art_path",
+        "first_code",
+        "terminator",
+        "glyph_bytes",
+        "art_glyph_count",
+        "entry_count",
+        "encoded_byte_count",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             raise ValueError("Japanese glyph %s differs from source ownership" % field)
@@ -94,34 +102,32 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
     if not isinstance(codes, list) or len(codes) != baseline["entry_count"]:
         raise ValueError("Japanese glyph entry count differs")
     end = FIRST_CODE + baseline["art_glyph_count"]
-    if any(
-        isinstance(code, bool) or not isinstance(code, int)
-        or not FIRST_CODE <= code < end
-        for code in codes
-    ):
+    if any(isinstance(code, bool) or not isinstance(code, int) or not FIRST_CODE <= code < end for code in codes):
         raise ValueError("Japanese glyph code indexes outside its art")
 
 
 def encode_document(document: dict[str, Any]) -> bytes:
-    return b"".join(
-        code.to_bytes(2, "big") for code in document["codes"] + [TERMINATOR]
-    )
+    return b"".join(code.to_bytes(2, "big") for code in document["codes"] + [TERMINATOR])
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     validate_document(document, validation_root or root, profile)
     path = root / SOURCE_PATH
     current = path.read_bytes()
     encoded = encode_document(document)
-    if len(current) != len(encoded) or current[-2:] != b"\xFF\xFF":
+    if len(current) != len(encoded) or current[-2:] != b"\xff\xff":
         raise ValueError("staged Japanese glyph stream structure differs")
     if current == encoded:
         return []
     if write:
         from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
         _write_bytes(path, encoded)
     return [SOURCE_PATH]
 
@@ -131,8 +137,10 @@ def glyph_pixels(root: Path, code: int) -> list[list[int]]:
     art = (root / ART_PATH).read_bytes()
     if not art or len(art) % GLYPH_BYTES:
         raise ValueError("Japanese glyph art is not complete 128-byte glyphs")
-    if isinstance(code, bool) or not isinstance(code, int) or not (
-        FIRST_CODE <= code < FIRST_CODE + len(art) // GLYPH_BYTES
+    if (
+        isinstance(code, bool)
+        or not isinstance(code, int)
+        or not (FIRST_CODE <= code < FIRST_CODE + len(art) // GLYPH_BYTES)
     ):
         raise ValueError("Japanese glyph code indexes outside its art")
     start = (code - FIRST_CODE) * GLYPH_BYTES
@@ -144,7 +152,7 @@ def glyph_pixels(root: Path, code: int) -> list[list[int]]:
         left = tiles[0 if y < 8 else 1]
         right = tiles[2 if y < 8 else 3]
         row = y % 8
-        rows.append(left[row * 8:row * 8 + 8] + right[row * 8:row * 8 + 8])
+        rows.append(left[row * 8 : row * 8 + 8] + right[row * 8 : row * 8 + 8])
     return rows
 
 
@@ -177,8 +185,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s Japanese glyph stream: %d entries, %d art glyphs" % (
-                args.profile, document["entry_count"], document["art_glyph_count"]))
+            print(
+                "[OK] %s Japanese glyph stream: %d entries, %d art glyphs"
+                % (args.profile, document["entry_count"], document["art_glyph_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

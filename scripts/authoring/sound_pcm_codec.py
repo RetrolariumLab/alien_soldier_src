@@ -25,15 +25,14 @@ CODE_SIGNATURES = {
 }
 TIMING_SIGNATURES = {
     0x107: bytes.fromhex("3A E0 1F 4F"),  # LD A,($1FE0); LD C,A
-    0x139: bytes.fromhex("41 10 FE"),     # LD B,C; DJNZ -2
-    0x177: bytes.fromhex("41 10 FE"),     # second nibble's delay
+    0x139: bytes.fromhex("41 10 FE"),  # LD B,C; DJNZ -2
+    0x177: bytes.fromhex("41 10 FE"),  # second nibble's delay
 }
 # Complete byte spans from the first YM2612 DAC write through the second and
 # back to the first on an uninterrupted ordinary PCM request. The branch
 # targets are checked as bytes, not inferred from nearby data.
 DAC_TIMING_SIGNATURES = {
-    0x120: bytes.fromhex(
-        "2A E2 1F 54 7D 3C 32 E2 1F 08 6E 25 D9 72 D9 86 D9 EB 73 EB"),
+    0x120: bytes.fromhex("2A E2 1F 54 7D 3C 32 E2 1F 08 6E 25 D9 72 D9 86 D9 EB 73 EB"),
     0x134: bytes.fromhex("32 01 40 73 00 41 10 FE D9 25 86 08 BB"),
     0x141: bytes.fromhex("28 13 FA 5F 01"),
     0x146: bytes.fromhex("FD 7E 00 FD 23 00 00 FD 23 FD 23 FD 23 C3 6B 01"),
@@ -41,9 +40,7 @@ DAC_TIMING_SIGNATURES = {
     0x15F: bytes.fromhex("3A FF 1F B7 20 E6"),
     0x165: bytes.fromhex("E1 ED A0 ED A0 E5"),
     0x16B: bytes.fromhex("D9 72 D9 08 D9 EB 73 EB"),
-    0x173: bytes.fromhex(
-        "32 01 40 73 41 10 FE D9 08 78 B7 FA 8F 01 "
-        "B1 CA 92 01 3A FE 1F B7 CA 20 01"),
+    0x173: bytes.fromhex("32 01 40 73 41 10 FE D9 08 78 B7 FA 8F 01 B1 CA 92 01 3A FE 1F B7 CA 20 01"),
 }
 MUSIC_REQUEST_SOURCE = "move.b  #1,(Z80DACRequestState).l"
 
@@ -62,10 +59,10 @@ def load_tables(root: Path) -> tuple[bytes, bytes]:
     if len(driver) != 0xC00:
         raise ValueError("Z80 sound driver is not $C00 bytes: %s" % path)
     for offset, signature in CODE_SIGNATURES.items():
-        if driver[offset:offset + len(signature)] != signature:
+        if driver[offset : offset + len(signature)] != signature:
             raise ValueError("Z80 DPCM decoder signature differs at $%03X" % offset)
-    low = driver[LOW_NIBBLE_TABLE_OFFSET:LOW_NIBBLE_TABLE_OFFSET + 0x100]
-    high = driver[HIGH_NIBBLE_TABLE_OFFSET:HIGH_NIBBLE_TABLE_OFFSET + 0x100]
+    low = driver[LOW_NIBBLE_TABLE_OFFSET : LOW_NIBBLE_TABLE_OFFSET + 0x100]
+    high = driver[HIGH_NIBBLE_TABLE_OFFSET : HIGH_NIBBLE_TABLE_OFFSET + 0x100]
     if low != expected_low_table():
         raise ValueError("Z80 low-nibble DPCM table differs")
     if high != expected_high_table():
@@ -105,11 +102,10 @@ def ordinary_delay_contract(root: Path) -> dict:
     if len(driver) != 0xC00:
         raise ValueError("Z80 sound driver is not $C00 bytes")
     for offset, signature in TIMING_SIGNATURES.items():
-        if driver[offset:offset + len(signature)] != signature:
+        if driver[offset : offset + len(signature)] != signature:
             raise ValueError("Z80 PCM delay signature differs at $%03X" % offset)
     music = (root / "src/sound/driver_core.s").read_text(encoding="utf-8")
-    if not any(line.lstrip().startswith(MUSIC_REQUEST_SOURCE)
-               for line in music.splitlines()):
+    if not any(line.lstrip().startswith(MUSIC_REQUEST_SOURCE) for line in music.splitlines()):
         raise ValueError("68000 music request no longer sets the Z80 delay byte to 1")
     return {
         "request_state_load": 0x107,
@@ -132,7 +128,7 @@ def ordinary_dac_timing_contract(root: Path) -> dict:
     if len(driver) != 0xC00:
         raise ValueError("Z80 sound driver is not $C00 bytes")
     for offset, signature in DAC_TIMING_SIGNATURES.items():
-        if driver[offset:offset + len(signature)] != signature:
+        if driver[offset : offset + len(signature)] != signature:
             raise ValueError("Z80 DAC timing path differs at $%03X" % offset)
     ordinary_delay_contract(root)
 
@@ -148,14 +144,12 @@ def ordinary_dac_timing_contract(root: Path) -> dict:
         raise ValueError("Z80 DAC branch timing is no longer balanced")
     delay = ordinary_delay_t_states(1)
     # $0134 write, $0137-$0140, branch, $016B-$0172.
-    first_to_second = (
-        (13 + 7 + 4) + delay + (4 + 4 + 7 + 4 + 4)
-        + 94 + (4 + 7 + 4 + 4 + 4 + 4 + 7 + 4))
+    first_to_second = (13 + 7 + 4) + delay + (4 + 4 + 7 + 4 + 4) + 94 + (4 + 7 + 4 + 4 + 4 + 4 + 7 + 4)
     # $0173 write through the live-sample / no-request route to $0120,
     # then $0120-$0133. Conditional JP instructions cost ten either way.
-    second_to_first = (
-        (13 + 7 + delay + 4 + 4 + 4 + 4 + 10 + 4 + 10 + 13 + 4 + 10)
-        + (16 + 4 + 4 + 4 + 13 + 4 + 7 + 4 + 4 + 7 + 4 + 7 + 4 + 4 + 7 + 4))
+    second_to_first = (13 + 7 + delay + 4 + 4 + 4 + 4 + 10 + 4 + 10 + 13 + 4 + 10) + (
+        16 + 4 + 4 + 4 + 13 + 4 + 7 + 4 + 4 + 7 + 4 + 7 + 4 + 4 + 7 + 4
+    )
     return {
         "first_write": 0x134,
         "second_write": 0x173,
@@ -229,8 +223,7 @@ def check_project(root: Path, profile: str) -> tuple[int, int]:
             encoded = bytes.fromhex(sample["data"])
             decoded = decode_dpcm(encoded, high, low)
             if encode_dpcm(decoded) != encoded:
-                raise ValueError("%s sample %d fails exact DPCM round trip" % (
-                    bank["name"], sample["index"]))
+                raise ValueError("%s sample %d fails exact DPCM round trip" % (bank["name"], sample["index"]))
             sample_count += 1
             decoded_count += len(decoded)
     return sample_count, decoded_count
@@ -245,8 +238,7 @@ def main() -> int:
     root = Path(args.root).resolve()
     try:
         sample_count, decoded_count = check_project(root, args.profile)
-        print("[OK] %s DPCM codec: %d samples, %d decoded values" % (
-            args.profile, sample_count, decoded_count))
+        print("[OK] %s DPCM codec: %d samples, %d decoded values" % (args.profile, sample_count, decoded_count))
         return 0
     except (OSError, ValueError) as error:
         print("[ERROR] %s" % error, file=sys.stderr)

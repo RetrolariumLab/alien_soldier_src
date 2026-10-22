@@ -1,4 +1,5 @@
 """Mandatory withdrawn-Tk action boundaries; not game/render/audio fidelity."""
+
 from __future__ import annotations
 
 from contextlib import ExitStack
@@ -16,12 +17,14 @@ class WorkstationActions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         # The dedicated gate (and this Windows host) must run real Tk.
         # Ordinary headless test discovery may skip only on other hosts.
         try:
             import tkinter as tk
             from tkinter import ttk
+
             probe = tk.Tk()
             probe.withdraw()
             probe.destroy()
@@ -34,7 +37,9 @@ class WorkstationActions(unittest.TestCase):
         expected_actions = {"save", "reload", "build", "dirty-close"}
         for studio in manifest["studios"]:
             actions = set(studio["workstation_actions"])
-            required = expected_actions | ({"plain-stage-route-edit", "raw-map-edit", "bounded-map-preview"} if studio["id"] == "level" else set())
+            required = expected_actions | (
+                {"plain-stage-route-edit", "raw-map-edit", "bounded-map-preview"} if studio["id"] == "level" else set()
+            )
             if actions != required or len(actions) != len(studio["workstation_actions"]):
                 raise AssertionError("declared action inventory changed; extend the real Tk matrix: " + studio["id"])
         cls.parent = ROOT / "build/content/workstation-smoke"
@@ -123,7 +128,9 @@ class WorkstationActions(unittest.TestCase):
         with self.fixture(studio, profile) as f:
             f.edit()
             expected = deepcopy(f.documents())
-            with mock.patch.object(f.module.subprocess, "run", return_value=mock.Mock(returncode=0, stdout="built", stderr="")) as process:
+            with mock.patch.object(
+                f.module.subprocess, "run", return_value=mock.Mock(returncode=0, stdout="built", stderr="")
+            ) as process:
                 f.invoke("Build ROM")
                 if studio in ("level", "graphics"):
                     process.assert_called_once()
@@ -142,7 +149,11 @@ class WorkstationActions(unittest.TestCase):
                 self.assertIn("CONTENT_PROFILE=" + profile, command)
                 self.assertEqual(f.project, process.call_args.kwargs["cwd"])
                 self.assertFalse(process.call_args.kwargs["check"])
-            with mock.patch.object(f.module.subprocess, "run", return_value=mock.Mock(returncode=3, stdout="", stderr="fixture compiler failed")):
+            with mock.patch.object(
+                f.module.subprocess,
+                "run",
+                return_value=mock.Mock(returncode=3, stdout="", stderr="fixture compiler failed"),
+            ):
                 f.invoke("Build ROM")
             f.messages.showerror.assert_called_once()
             f.callback_errors.assert_not_called()
@@ -194,13 +205,18 @@ class WorkstationActions(unittest.TestCase):
             f.window.window.update()
             f.edit()
             expected = deepcopy(f.documents())
+
             def after_save(*_args, **_kwargs):
                 self.assert_saved(f, expected)
                 return mock.Mock(returncode=0, stdout="owned adapter launched", stderr="")
+
             with mock.patch.object(f.module.subprocess, "run", side_effect=after_save) as process:
                 f.invoke("Playtest")
             command = process.call_args.args[0]
-            self.assertEqual(["make", "--no-print-directory", "playtest-level", "CONTENT_PROFILE=" + profile, "PLAYTEST_STAGE=2"], command)
+            self.assertEqual(
+                ["make", "--no-print-directory", "playtest-level", "CONTENT_PROFILE=" + profile, "PLAYTEST_STAGE=2"],
+                command,
+            )
             self.assertEqual(f.project, process.call_args.kwargs["cwd"])
             self.assertFalse(f.dirty())
             self.assertFalse(any(button.cget("text") == "Stop" for button in f.buttons()))
@@ -215,11 +231,15 @@ class WorkstationActions(unittest.TestCase):
             session.ready = None
             session.process.poll.return_value = None
             session.stop.side_effect = lambda: setattr(session.process.poll, "return_value", 0)
+
             def after_save(*_a, **_k):
                 self.assert_saved(f, expected)
                 return mock.Mock(returncode=0)
-            with (mock.patch.object(f.module.subprocess, "run", side_effect=after_save) as build,
-                  mock.patch.object(f.module, "launch_audition", return_value=session) as launch):
+
+            with (
+                mock.patch.object(f.module.subprocess, "run", side_effect=after_save) as build,
+                mock.patch.object(f.module, "launch_audition", return_value=session) as launch,
+            ):
                 f.invoke("Play")
             self.assertIn("CONTENT_PROFILE=" + profile, build.call_args.args[0])
             self.assertEqual(f.project, build.call_args.kwargs["cwd"])
@@ -260,13 +280,22 @@ def install_matrix():
     for studio in MODULES:
         for profile in ("jp", "eu"):
             for case in cases:
+
                 def test(self, studio=studio, profile=profile, case=case):
                     getattr(self, "check_" + case)(studio, profile)
+
                 setattr(WorkstationActions, "test_%s_%s_%s" % (studio, profile, case), test)
-    for case in ("level_route_map_selection", "level_playtest_boundary", "sound_play_stop_boundary", "sound_pcm_export_cancellation"):
+    for case in (
+        "level_route_map_selection",
+        "level_playtest_boundary",
+        "sound_play_stop_boundary",
+        "sound_pcm_export_cancellation",
+    ):
         for profile in ("jp", "eu"):
+
             def test(self, case=case, profile=profile):
                 getattr(self, "check_" + case)(profile)
+
             setattr(WorkstationActions, "test_%s_%s" % (case, profile), test)
 
 

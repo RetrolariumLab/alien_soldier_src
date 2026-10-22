@@ -25,9 +25,7 @@ class RenameSymbolsTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            replaced, annotated = rename_symbols.apply_renames(
-                [source], [("Old", "New")], provenance=True
-            )
+            replaced, annotated = rename_symbols.apply_renames([source], [("Old", "New")], provenance=True)
 
             self.assertEqual(3, replaced)
             self.assertEqual(0, annotated)
@@ -63,9 +61,7 @@ class RenameSymbolsTests(unittest.TestCase):
         mapping = {"SEGA": "Renamed"}
         pattern = re.compile(r"\b(SEGA)\b")
 
-        renamed, count = rename_symbols.substitute_unquoted(
-            "move.l #'SEGA',SEGA", pattern, mapping
-        )
+        renamed, count = rename_symbols.substitute_unquoted("move.l #'SEGA',SEGA", pattern, mapping)
 
         self.assertEqual("move.l #'SEGA',Renamed", renamed)
         self.assertEqual(1, count)

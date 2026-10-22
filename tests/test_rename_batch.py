@@ -22,9 +22,7 @@ class RenameBatchTests(unittest.TestCase):
             source = root / "src"
             source.mkdir()
             module = source / "module.s"
-            module.write_text(
-                "Old:  ; was: sub_1234\n                jsr Old\n", encoding="utf-8"
-            )
+            module.write_text("Old:  ; was: sub_1234\n                jsr Old\n", encoding="utf-8")
             workflow = root / "workflow"
             workflow.mkdir()
             (workflow / ".movie").write_text("tas\n", encoding="utf-8")
@@ -47,9 +45,7 @@ class RenameBatchTests(unittest.TestCase):
                 "New:  ; was: sub_1234\n                jsr New\n",
                 module.read_text(encoding="utf-8"),
             )
-            self.assertEqual(
-                "procedure,processed\nOld,true\n", report.read_text(encoding="utf-8")
-            )
+            self.assertEqual("procedure,processed\nOld,true\n", report.read_text(encoding="utf-8"))
 
     def test_rejects_unknown_movie_before_changing_source(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

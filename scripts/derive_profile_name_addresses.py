@@ -24,9 +24,13 @@ _LISTING_COLUMN = symbols.SOURCE_COLUMN
 
 def _listing_parser_policy():
     """Only the unchanged pure row grammar may supply scoped input facts."""
-    if (type(symbols.LISTING_ROW) is not re.Pattern or symbols.LISTING_ROW is not _LISTING_ROW
-            or type(symbols.SOURCE_COLUMN) is not int or symbols.SOURCE_COLUMN != _LISTING_COLUMN
-            or getattr(_parse_listing_rows, "__code__", None) is not _LISTING_PARSER_CODE):
+    if (
+        type(symbols.LISTING_ROW) is not re.Pattern
+        or symbols.LISTING_ROW is not _LISTING_ROW
+        or type(symbols.SOURCE_COLUMN) is not int
+        or symbols.SOURCE_COLUMN != _LISTING_COLUMN
+        or getattr(_parse_listing_rows, "__code__", None) is not _LISTING_PARSER_CODE
+    ):
         return None
     return (_LISTING_ROW.pattern, _LISTING_ROW.flags, _LISTING_COLUMN, _LISTING_PARSER_CODE)
 
@@ -40,7 +44,7 @@ def _parse_listing_rows(raw):
             row = symbols.LISTING_ROW.match(line)
             if row is None or len(line) <= symbols.SOURCE_COLUMN:
                 continue
-            field = line[line.index(":") + 1:symbols.SOURCE_COLUMN].strip()
+            field = line[line.index(":") + 1 : symbols.SOURCE_COLUMN].strip()
             if not re.fullmatch(r"(?:[0-9A-Fa-f]{2,8}\s*)+", field):
                 continue
             yield line_number, int(row[1], 16), bytes.fromhex(field)
@@ -68,9 +72,13 @@ def owned_path(root: Path, relative: str | Path) -> Path:
 
 def authenticated_image(path: Path, reference: dict) -> bytes:
     image = path.read_bytes()
-    actual = {"size": len(image), "sha256": hashlib.sha256(image).hexdigest(),
-              "sha1": hashlib.sha1(image).hexdigest(), "md5": hashlib.md5(image).hexdigest(),
-              "crc32": "%08X" % (zlib.crc32(image) & 0xFFFFFFFF)}
+    actual = {
+        "size": len(image),
+        "sha256": hashlib.sha256(image).hexdigest(),
+        "sha1": hashlib.sha1(image).hexdigest(),
+        "md5": hashlib.md5(image).hexdigest(),
+        "crc32": "%08X" % (zlib.crc32(image) & 0xFFFFFFFF),
+    }
     if any(actual[key] != reference[key] for key in actual):
         raise ValueError("ROM is not the authenticated original profile image: %s" % path)
     return image
@@ -83,6 +91,7 @@ def bind_listing_bytes(path: Path, image: bytes) -> int:
     Such rows are excluded explicitly, not expanded by a guessed parser.
     """
     from authoring.stage_tilemap_model import _listing_operation, _LISTING_MAX_FILE
+
     operation, policy = _listing_operation(path), _listing_parser_policy()
     if operation is not None and policy is not None and type(image) is bytes:
         # A generated listing may legitimately be replaced in this operation.
@@ -94,9 +103,10 @@ def bind_listing_bytes(path: Path, image: bytes) -> int:
         if rows is not None:
             checked = 0
             for line_number, address, encoded in rows:
-                if address + len(encoded) > len(image) or image[address:address + len(encoded)] != encoded:
-                    raise ValueError("listing bytes differ from original ROM: %s:%d at $%06X"
-                                     % (path, line_number, address))
+                if address + len(encoded) > len(image) or image[address : address + len(encoded)] != encoded:
+                    raise ValueError(
+                        "listing bytes differ from original ROM: %s:%d at $%06X" % (path, line_number, address)
+                    )
                 checked += 1
             if not checked:
                 raise ValueError("listing has no authenticated printed ROM byte fields: %s" % path)
@@ -107,22 +117,26 @@ def bind_listing_bytes(path: Path, image: bytes) -> int:
             row = symbols.LISTING_ROW.match(line)
             if row is None or len(line) <= symbols.SOURCE_COLUMN:
                 continue
-            field = line[line.index(":") + 1:symbols.SOURCE_COLUMN].strip()
+            field = line[line.index(":") + 1 : symbols.SOURCE_COLUMN].strip()
             if not re.fullmatch(r"(?:[0-9A-Fa-f]{2,8}\s*)+", field):
                 continue
             encoded = bytes.fromhex(field)
             address = int(row[1], 16)
-            if address + len(encoded) > len(image) or image[address:address + len(encoded)] != encoded:
-                raise ValueError("listing bytes differ from original ROM: %s:%d at $%06X"
-                                 % (path, line_number, address))
+            if address + len(encoded) > len(image) or image[address : address + len(encoded)] != encoded:
+                raise ValueError(
+                    "listing bytes differ from original ROM: %s:%d at $%06X" % (path, line_number, address)
+                )
             checked += 1
     if not checked:
         raise ValueError("listing has no authenticated printed ROM byte fields: %s" % path)
     return checked
 
 
-def derive(root: Path, profiles_path: str | Path = "config/rom_profiles.json",
-           audit_path: str | Path = "config/name_audit.json") -> dict:
+def derive(
+    root: Path,
+    profiles_path: str | Path = "config/rom_profiles.json",
+    audit_path: str | Path = "config/name_audit.json",
+) -> dict:
     """Use manifest-owned JP/EU listings/images, not alternate worktree inputs."""
     root = root.resolve()
     manifest_file, audit_file = owned_path(root, profiles_path), owned_path(root, audit_path)
@@ -130,9 +144,13 @@ def derive(root: Path, profiles_path: str | Path = "config/rom_profiles.json",
     profiles = load_profiles(manifest_file)
     records = json.loads(audit_file.read_text(encoding="utf-8"))["records"]
     origin = symbols.origin_identity(records)
-    files = {"profiles": manifest_file, "audit": audit_file,
-             "generator": Path(__file__).resolve(), "verifier": Path(symbols.__file__).resolve(),
-             "extractor": Path(extract_symbols.__file__).resolve()}
+    files = {
+        "profiles": manifest_file,
+        "audit": audit_file,
+        "generator": Path(__file__).resolve(),
+        "verifier": Path(symbols.__file__).resolve(),
+        "extractor": Path(extract_symbols.__file__).resolve(),
+    }
     if any(record["current_name"] == symbols.JP_ONLY_NAME for record in records):
         files["exclusion_source"] = owned_path(root, symbols.EXCLUSION_SOURCE)
     for profile in ("jp", "eu"):
@@ -167,38 +185,67 @@ def derive(root: Path, profiles_path: str | Path = "config/rom_profiles.json",
         if profile == "jp":
             errors.extend(symbols.validate_name_audit_addresses(records, names[profile]))
         if errors:
-            raise ValueError("; ".join(errors[:symbols.ERROR_LIMIT]) + " (%d errors)" % len(errors))
-        proof[profile] = {"listing": entry["listing"], "listing_sha256": before[profile + "_listing"],
-                          "resolved_flags": flags, "printed_byte_rows": bind_listing_bytes(listing, image),
-                          "build_rom": entry["output"], "build_rom_sha256": before[profile + "_rom"],
-                          "original_rom": entry["reference_rom"]["filename"],
-                          "original_rom_sha256": before[profile + "_original"]}
+            raise ValueError("; ".join(errors[: symbols.ERROR_LIMIT]) + " (%d errors)" % len(errors))
+        proof[profile] = {
+            "listing": entry["listing"],
+            "listing_sha256": before[profile + "_listing"],
+            "resolved_flags": flags,
+            "printed_byte_rows": bind_listing_bytes(listing, image),
+            "build_rom": entry["output"],
+            "build_rom_sha256": before[profile + "_rom"],
+            "original_rom": entry["reference_rom"]["filename"],
+            "original_rom_sha256": before[profile + "_original"],
+        }
     pairs = []
     for record in sorted(records, key=lambda item: item["current_name"]):
         name = record["current_name"]
         if name == symbols.JP_ONLY_NAME:
             if name in names["eu"]:
                 raise ValueError("JP-only checksum unexpectedly assembled in EU")
-            pairs.append({"current_name": name, "jp_address": "0x%06X" % names["jp"][name],
-                          "eu_address": None, "status": "not_assembled",
-                          "exclusion": symbols.checksum_exclusion_proof(root)})
+            pairs.append(
+                {
+                    "current_name": name,
+                    "jp_address": "0x%06X" % names["jp"][name],
+                    "eu_address": None,
+                    "status": "not_assembled",
+                    "exclusion": symbols.checksum_exclusion_proof(root),
+                }
+            )
             continue
         if name not in names["eu"]:
             raise ValueError("EU listing does not account for origin name: " + name)
-        pairs.append({"current_name": name, "jp_address": "0x%06X" % (symbols.number(record["address"]) & 0xFFFFFF),
-                      "eu_address": "0x%06X" % names["eu"][name], "status": "assembled"})
-    ledger = {"schema_version": 1, "profile": "eu", "origin_profile": "jp",
-              "origin_identity_fields": list(symbols.IDENTITY_FIELDS), "origin_identity_sha256": origin,
-              "original_roms": symbols.original_rom_identities(profiles), "record_count": len(records),
-              "records_sha256": symbols.canonical_sha256(pairs),
-              "generation": {"profiles_manifest_sha256": before["profiles"], "name_audit_sha256": before["audit"],
-                             "generator_sha256": before["generator"], "verifier_sha256": before["verifier"],
-                             "extractor_sha256": before["extractor"],
-                             "profiles": proof}, "records": pairs}
-    errors = symbols.validate_profile_address_map(records, names["eu"], ledger, profiles,
-                                                jp_listing_names=names["jp"], root=root)
+        pairs.append(
+            {
+                "current_name": name,
+                "jp_address": "0x%06X" % (symbols.number(record["address"]) & 0xFFFFFF),
+                "eu_address": "0x%06X" % names["eu"][name],
+                "status": "assembled",
+            }
+        )
+    ledger = {
+        "schema_version": 1,
+        "profile": "eu",
+        "origin_profile": "jp",
+        "origin_identity_fields": list(symbols.IDENTITY_FIELDS),
+        "origin_identity_sha256": origin,
+        "original_roms": symbols.original_rom_identities(profiles),
+        "record_count": len(records),
+        "records_sha256": symbols.canonical_sha256(pairs),
+        "generation": {
+            "profiles_manifest_sha256": before["profiles"],
+            "name_audit_sha256": before["audit"],
+            "generator_sha256": before["generator"],
+            "verifier_sha256": before["verifier"],
+            "extractor_sha256": before["extractor"],
+            "profiles": proof,
+        },
+        "records": pairs,
+    }
+    errors = symbols.validate_profile_address_map(
+        records, names["eu"], ledger, profiles, jp_listing_names=names["jp"], root=root
+    )
     if errors:
-        raise ValueError("; ".join(errors[:symbols.ERROR_LIMIT]) + " (%d errors)" % len(errors))
+        raise ValueError("; ".join(errors[: symbols.ERROR_LIMIT]) + " (%d errors)" % len(errors))
     if before != {key: digest(path) for key, path in files.items()}:
         raise ValueError("ledger derivation inputs changed before publication")
     return ledger
@@ -222,8 +269,9 @@ def publish_new(root: Path, relative: str | Path, ledger: dict) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(dir=path.parent, prefix="." + path.name + ".",
-                                         suffix=".tmp", delete=False) as stream:
+        with tempfile.NamedTemporaryFile(
+            dir=path.parent, prefix="." + path.name + ".", suffix=".tmp", delete=False
+        ) as stream:
             temporary = Path(stream.name)
             stream.write(payload)
         owned_path(root, relative)
@@ -249,8 +297,10 @@ def main() -> int:
             raise ValueError("refusing to overwrite existing regional ledger")
         ledger = derive(args.root, args.profiles, args.name_audit)
         output = publish_new(args.root, args.output, ledger)
-        print("[OK] frozen EU provenance: %d explicit pairs, origin %s; %s" % (
-            ledger["record_count"], ledger["origin_identity_sha256"], output))
+        print(
+            "[OK] frozen EU provenance: %d explicit pairs, origin %s; %s"
+            % (ledger["record_count"], ledger["origin_identity_sha256"], output)
+        )
         return 0
     except (OSError, ValueError, KeyError, TypeError) as error:
         symbols.print_errors([str(error)])

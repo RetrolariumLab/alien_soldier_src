@@ -11,8 +11,17 @@ sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "scripts" / "authoring"))
 
 from authoring.tile_codec import (  # noqa: E402
-    TILE_BYTES, TILE_PIXELS, Bits, BitWriter, compress, decode_tile,
-    decompress, pack_tile, report, unpack_tile)
+    TILE_BYTES,
+    TILE_PIXELS,
+    Bits,
+    BitWriter,
+    compress,
+    decode_tile,
+    decompress,
+    pack_tile,
+    report,
+    unpack_tile,
+)
 from authoring.lzss_codec import LABEL_BYTES, read_asset_records  # noqa: E402
 
 
@@ -71,9 +80,7 @@ class CartridgeTests(unittest.TestCase):
         """
         for name, relative in sorted(self.payloads.items()):
             facts = report((ROOT / relative).read_bytes())
-            self.assertIn(facts["slack"], (0, 1),
-                          "%s read %d of %d bytes"
-                          % (name, facts["read"], facts["size"]))
+            self.assertIn(facts["slack"], (0, 1), "%s read %d of %d bytes" % (name, facts["read"], facts["size"]))
 
 
 class FormatTests(unittest.TestCase):
@@ -107,7 +114,6 @@ class FormatTests(unittest.TestCase):
     def test_a_short_payload_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             decompress(b"\x00")
-
 
 
 class EncodeTests(unittest.TestCase):
@@ -164,6 +170,8 @@ class EncodeTests(unittest.TestCase):
     def test_packing_and_unpacking_are_inverse(self) -> None:
         slot = [(index * 7) % 16 for index in range(TILE_PIXELS)]
         self.assertEqual(slot, unpack_tile(pack_tile(slot)))
+
+
 class SpecTests(unittest.TestCase):
     """docs/tile_codec_spec.md carries its own code, so it has to still run.
 

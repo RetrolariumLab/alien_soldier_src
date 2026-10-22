@@ -18,18 +18,18 @@ from pathlib import Path
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Extract binary data from ROM')
-    parser.add_argument('-f', '--rom-file', required=True,
-                        help='Original ROM file')
-    parser.add_argument('-o', '--output', default='data',
-                        help='Output directory (default: data)')
-    parser.add_argument('-a', '--addrs', default='data/data_addrs.txt',
-                        help='Addresses file (default: data/data_addrs.txt)')
-    parser.add_argument('--manifest', default='assets/manifest.json',
-                        help='Canonical ROM manifest')
+    parser = argparse.ArgumentParser(description="Extract binary data from ROM")
+    parser.add_argument("-f", "--rom-file", required=True, help="Original ROM file")
+    parser.add_argument("-o", "--output", default="data", help="Output directory (default: data)")
     parser.add_argument(
-        '--preserve-manifest', action='append', default=[],
-        help='Additional asset manifest whose files must survive stale cleanup',
+        "-a", "--addrs", default="data/data_addrs.txt", help="Addresses file (default: data/data_addrs.txt)"
+    )
+    parser.add_argument("--manifest", default="assets/manifest.json", help="Canonical ROM manifest")
+    parser.add_argument(
+        "--preserve-manifest",
+        action="append",
+        default=[],
+        help="Additional asset manifest whose files must survive stale cleanup",
     )
 
     args = parser.parse_args()
@@ -45,42 +45,42 @@ def main():
         return 1
 
     # Load ROM data
-    print(f'Loading ROM: {args.rom_file}')
-    with open(args.rom_file, 'rb') as f:
+    print(f"Loading ROM: {args.rom_file}")
+    with open(args.rom_file, "rb") as f:
         rom_data = f.read()
-    print(f'ROM size: 0x{len(rom_data):X} ({len(rom_data)} bytes)')
+    print(f"ROM size: 0x{len(rom_data):X} ({len(rom_data)} bytes)")
 
-    with open(args.manifest, 'r', encoding='utf-8') as manifest_file:
-        reference = json.load(manifest_file)['reference_rom']
+    with open(args.manifest, "r", encoding="utf-8") as manifest_file:
+        reference = json.load(manifest_file)["reference_rom"]
     rom_sha1 = hashlib.sha1(rom_data).hexdigest()
-    if len(rom_data) != reference['size'] or rom_sha1 != reference['sha1']:
-        reference_name = reference.get('name', 'declared preservation')
+    if len(rom_data) != reference["size"] or rom_sha1 != reference["sha1"]:
+        reference_name = reference.get("name", "declared preservation")
         print(f'Error: "{args.rom_file}" is not the {reference_name} ROM')
         print(f"  Expected: {reference['size']} bytes, SHA1 {reference['sha1']}")
-        print(f'  Actual:   {len(rom_data)} bytes, SHA1 {rom_sha1}')
+        print(f"  Actual:   {len(rom_data)} bytes, SHA1 {rom_sha1}")
         return 1
 
     # Parse addresses file
-    print(f'Loading addresses from: {args.addrs}')
+    print(f"Loading addresses from: {args.addrs}")
     entries = []
-    with open(args.addrs, 'r') as f:
+    with open(args.addrs, "r") as f:
         for line in f:
             line = line.strip()
-            if not line or line.startswith('#'):
+            if not line or line.startswith("#"):
                 continue
-            parts = line.split(',')
+            parts = line.split(",")
             if len(parts) < 3:
-                print(f'Warning: invalid line: {line}')
+                print(f"Warning: invalid line: {line}")
                 continue
 
             name = parts[0].strip()
             start = int(parts[1].strip(), 16)
             end = int(parts[2].strip(), 16)
             # 4th column is subdir, default to root if not present
-            subdir = parts[3].strip() if len(parts) >= 4 else ''
+            subdir = parts[3].strip() if len(parts) >= 4 else ""
             entries.append((name, start, end, subdir))
 
-    print(f'Found {len(entries)} entries to extract\n')
+    print(f"Found {len(entries)} entries to extract\n")
 
     # Create subdirectories
     subdirs = set(e[3] for e in entries if e[3])
@@ -90,26 +90,19 @@ def main():
     # The extraction regions are a generated cache. Remove stale binary files
     # only inside regions owned by this range map; unrelated data/ files stay.
     output_root = Path(args.output)
-    expected_paths = {
-        Path(subdir) / f'{name}.bin'
-        for name, _start, _end, subdir in entries
-    }
+    expected_paths = {Path(subdir) / f"{name}.bin" for name, _start, _end, subdir in entries}
     for preserve_manifest in args.preserve_manifest:
-        preserve_document = json.loads(
-            Path(preserve_manifest).read_text(encoding='utf-8')
-        )
-        expected_paths.update(
-            Path(asset['path']) for asset in preserve_document.get('assets', [])
-        )
+        preserve_document = json.loads(Path(preserve_manifest).read_text(encoding="utf-8"))
+        expected_paths.update(Path(asset["path"]) for asset in preserve_document.get("assets", []))
     removed_stale = 0
     for subdir in subdirs:
-        for existing in (output_root / subdir).rglob('*.bin'):
+        for existing in (output_root / subdir).rglob("*.bin"):
             relative = existing.relative_to(output_root)
             if relative not in expected_paths:
                 existing.unlink()
                 removed_stale += 1
     if removed_stale:
-        print(f'Removed {removed_stale} stale extracted files')
+        print(f"Removed {removed_stale} stale extracted files")
 
     # Extract all segments
     success_count = 0
@@ -119,30 +112,30 @@ def main():
         size = end - start
 
         if subdir:
-            output_file = os.path.join(args.output, subdir, f'{name}.bin')
+            output_file = os.path.join(args.output, subdir, f"{name}.bin")
         else:
-            output_file = os.path.join(args.output, f'{name}.bin')
+            output_file = os.path.join(args.output, f"{name}.bin")
 
         if start >= len(rom_data) or end > len(rom_data):
-            print(f'Error: {name} address out of range (0x{start:X}-0x{end:X})')
+            print(f"Error: {name} address out of range (0x{start:X}-0x{end:X})")
             continue
 
         data = rom_data[start:end]
-        with open(output_file, 'wb') as f:
+        with open(output_file, "wb") as f:
             f.write(data)
 
-        counts_by_subdir[subdir or 'root'] = counts_by_subdir.get(subdir or 'root', 0) + 1
+        counts_by_subdir[subdir or "root"] = counts_by_subdir.get(subdir or "root", 0) + 1
         success_count += 1
 
     # Summary
-    print(f'Extracted {success_count}/{len(entries)} segments:')
+    print(f"Extracted {success_count}/{len(entries)} segments:")
     for subdir in sorted(counts_by_subdir.keys()):
         count = counts_by_subdir[subdir]
-        path = f'{args.output}/{subdir}/' if subdir != 'root' else f'{args.output}/'
-        print(f'  {path}: {count} files')
+        path = f"{args.output}/{subdir}/" if subdir != "root" else f"{args.output}/"
+        print(f"  {path}: {count} files")
 
     return 0 if success_count == len(entries) else 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

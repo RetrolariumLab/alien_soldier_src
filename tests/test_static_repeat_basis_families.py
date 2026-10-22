@@ -15,17 +15,10 @@ SHARED = ROOT / "src/data/shared_stage_object_sprite_mappings.s"
 LIGHTNING = ROOT / "src/data/indexed_object_and_stage_effect_mappings.s"
 
 ROW_BASIS = "Stage and weapon-setup paths fill this complete 64-word row."
-LIGHTNING_BASIS = (
-    "Midgame_LightningSpriteAnimation02 references this address-ordered "
-    "composite sprite mapping."
-)
-TEDDY_MAPPING_BASIS = (
-    "Stage12_TeddyBearRescueAnimation and "
-    "SharedTeddyHazardLoopAnimation reference this mapping."
-)
+LIGHTNING_BASIS = "Midgame_LightningSpriteAnimation02 references this address-ordered composite sprite mapping."
+TEDDY_MAPPING_BASIS = "Stage12_TeddyBearRescueAnimation and SharedTeddyHazardLoopAnimation reference this mapping."
 TEDDY_OWNER_BASIS = (
-    "The shared loop is installed by the Teddy Bear initializer and by "
-    "both Stage 15 hazard-wave initializers."
+    "The shared loop is installed by the Teddy Bear initializer and by both Stage 15 hazard-wave initializers."
 )
 
 
@@ -36,23 +29,15 @@ def section(source: str, start: str, end: str) -> str:
 def word_lines(source: str, label: str, next_label: str) -> list[list[str]]:
     return [
         [item.strip() for item in line.split(",")]
-        for line in re.findall(
-            r"\bdc\.w\s+([^;\r\n]+)", section(source, f"{label}:", f"{next_label}:")
-        )
+        for line in re.findall(r"\bdc\.w\s+([^;\r\n]+)", section(source, f"{label}:", f"{next_label}:"))
     ]
 
 
 class StaticRepeatBasisFamilyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        cls.reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
+        cls.audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        cls.reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
 
     def test_exact_review_members_and_sources(self) -> None:
         teddy_members = [
@@ -69,9 +54,7 @@ class StaticRepeatBasisFamilyTests(unittest.TestCase):
                 LIGHTNING_BASIS,
                 [
                     (address, f"Midgame_LightningSpriteMapping{number}")
-                    for address, number in zip(
-                        ("0x19C63A", "0x19C658", "0x19C670"), ("08", "09", "10")
-                    )
+                    for address, number in zip(("0x19C63A", "0x19C658", "0x19C670"), ("08", "09", "10"))
                 ],
                 "src/data/indexed_object_and_stage_effect_mappings.s",
             ),
@@ -92,12 +75,8 @@ class StaticRepeatBasisFamilyTests(unittest.TestCase):
     def test_three_shared_ram_rows_are_filled_for_64_words(self) -> None:
         ram = (ROOT / "src/ram_addrs.inc").read_text(encoding="utf-8")
         for index, address in enumerate(("$FFFF0D00", "$FFFF0D80", "$FFFF0E00")):
-            self.assertRegex(
-                ram, rf"(?m)^PlaneTilemapRow{26 + index}\s+equ\s+\{address}\b"
-            )
-        weapon = (ROOT / "src/stages/gameplay_initialization.s").read_text(
-            encoding="utf-8"
-        )
+            self.assertRegex(ram, rf"(?m)^PlaneTilemapRow{26 + index}\s+equ\s+\{address}\b")
+        weapon = (ROOT / "src/stages/gameplay_initialization.s").read_text(encoding="utf-8")
         weapon = section(
             weapon,
             "WeaponSetup_InitializeColorTables:",
@@ -141,13 +120,9 @@ class StaticRepeatBasisFamilyTests(unittest.TestCase):
         source = SHARED.read_text(encoding="utf-8")
         for suffix, following in (("A", "B"), ("B", "C"), ("C", "J")):
             next_label = (
-                "Stage12_TeddyBearSpriteMappingJ"
-                if following == "J"
-                else f"SharedTeddyHazardSpriteMapping{following}"
+                "Stage12_TeddyBearSpriteMappingJ" if following == "J" else f"SharedTeddyHazardSpriteMapping{following}"
             )
-            mapping = word_lines(
-                source, f"SharedTeddyHazardSpriteMapping{suffix}", next_label
-            )
+            mapping = word_lines(source, f"SharedTeddyHazardSpriteMapping{suffix}", next_label)
             self.assertEqual(4, len(mapping))
             self.assertTrue(int(mapping[-1][0].removeprefix("$"), 16) & 0x8000)
         for stream_name, after, durations in (
@@ -162,9 +137,7 @@ class StaticRepeatBasisFamilyTests(unittest.TestCase):
             ]
             self.assertEqual(expected, words[:8])
         stage12 = (ROOT / "src/stages/stage_12_yacht.s").read_text(encoding="utf-8")
-        stage15 = (ROOT / "src/stages/stage_15_fragment_hazards.s").read_text(
-            encoding="utf-8"
-        )
+        stage15 = (ROOT / "src/stages/stage_15_fragment_hazards.s").read_text(encoding="utf-8")
         self.assertEqual(1, stage12.count("#SharedTeddyHazardLoopAnimation,8(a5)"))
         self.assertEqual(1, stage12.count("#Stage12_TeddyBearRescueAnimation,8(a5)"))
         self.assertEqual(2, stage15.count("#SharedTeddyHazardLoopAnimation,8(a5)"))

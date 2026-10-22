@@ -88,7 +88,7 @@ class Workspace:
             raise ValueError("unit index is outside the selected payload")
         per_unit = self.payload["unit_width"] * self.payload["unit_height"]
         first = unit * per_unit
-        values = self.payload["values"][first:first + per_unit]
+        values = self.payload["values"][first : first + per_unit]
         return values + [None] * (per_unit - len(values))
 
     def select_cell(self, unit: int, x: int, y: int) -> None:
@@ -110,7 +110,11 @@ class Workspace:
         )
 
     def paint_pixel(
-        self, unit: int, x: int, y: int, value: int,
+        self,
+        unit: int,
+        x: int,
+        y: int,
+        value: int,
         validate: Callable[[dict], None],
     ) -> None:
         selection = (self.payload_index, self.value_index)

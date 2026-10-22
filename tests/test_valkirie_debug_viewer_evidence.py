@@ -36,17 +36,11 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.audit = {
             row["address"]: row
-            for row in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for row in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             row["basis"]: row
-            for row in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for row in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
         }
 
     def test_ten_reviewed_pairs_have_exact_members(self) -> None:
@@ -64,14 +58,10 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
         )
         for first, second in pairs:
             with self.subTest(first=first, second=second):
-                common = set(self.audit[first]["basis"]) & set(
-                    self.audit[second]["basis"]
-                )
+                common = set(self.audit[first]["basis"]) & set(self.audit[second]["basis"])
                 self.assertEqual(1, len(common))
                 review = self.reviews[common.pop()]
-                self.assertEqual(
-                    [first, second], [member["address"] for member in review["members"]]
-                )
+                self.assertEqual([first, second], [member["address"] for member in review["members"]])
                 self.assertEqual(
                     [self.audit[first]["current_name"], self.audit[second]["current_name"]],
                     [member["current_name"] for member in review["members"]],
@@ -100,9 +90,7 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
                 self.assertIn("btst    #2,(ControllerHeldState).w", update)
                 self.assertIn("btst    #3,(ControllerHeldState).w", update)
                 self.assertIn("andi.w  #$1FE,$56(a5)", update)
-                self.assertIn(
-                    f"lea     Debug_Valkirie{viewer}ViewerPoseScript(pc),a1", update
-                )
+                self.assertIn(f"lea     Debug_Valkirie{viewer}ViewerPoseScript(pc),a1", update)
                 reader = instructions(
                     source,
                     f"Debug_Valkirie{viewer}ViewerReadNextPoseCommand",
@@ -157,9 +145,7 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
                 self.assertIn("addq.w  #1,$29C(a5)", timed)
 
     def test_tick_uses_nineteen_channels_and_traversal_count_is_26(self) -> None:
-        advance = (ROOT / "src/rendering/boss_metasprites.s").read_text(
-            encoding="utf-8"
-        )
+        advance = (ROOT / "src/rendering/boss_metasprites.s").read_text(encoding="utf-8")
         self.assertIn("dbf     d7,Anim_AdvancePoseChannelInterpolationNextChannel", advance)
         self.assertIn("move.w  d7,(MetaspritePartCountM1).w", advance)
         self.assertIn("move.w  (MetaspritePartCountM1).w,d7", advance)
@@ -185,19 +171,13 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
                 )
                 self.assertIn("moveq   #$19,d7", traversal)
                 self.assertIn("jmp     Sprite_BeginMetaspritePartTraversal", traversal)
-                self.assertIn(
-                    "nineteen channels for linked-part angles", source
-                )
+                self.assertIn("nineteen channels for linked-part angles", source)
 
     def test_both_target_tables_are_two_18_byte_records(self) -> None:
         secondary = SECONDARY.read_text(encoding="utf-8")
         tertiary = TERTIARY.read_text(encoding="utf-8")
-        first = data_bytes(
-            secondary, "Debug_ValkirieSecondaryViewerPoseTargets", "dc.w"
-        )
-        second = data_bytes(
-            tertiary, "Debug_ValkirieTertiaryViewerPoseTargets", "dc.b"
-        )
+        first = data_bytes(secondary, "Debug_ValkirieSecondaryViewerPoseTargets", "dc.w")
+        second = data_bytes(tertiary, "Debug_ValkirieTertiaryViewerPoseTargets", "dc.b")
         self.assertEqual(36, 0x051842 - 0x05181E)
         self.assertEqual(36, 0x051AD6 - 0x051AB2)
         self.assertEqual(36, len(first))
@@ -209,19 +189,13 @@ class ValkirieDebugViewerEvidenceTests(unittest.TestCase):
         ):
             script = source.split(f"Debug_Valkirie{viewer}ViewerPoseScript:", 1)[1].splitlines()[0]
             self.assertIn("$20, $20, 0, 0, $20, $20, 0, $12, $FF, $FF", script)
-            target_basis = self.audit[
-                "0x05181E" if viewer == "Secondary" else "0x051AB2"
-            ]["basis"][0]
+            target_basis = self.audit["0x05181E" if viewer == "Secondary" else "0x051AB2"]["basis"][0]
             self.assertIn("18-byte target records", target_basis)
             self.assertIn("nineteen-byte delta-reader", target_basis)
-            self.assertIn(
-                f"addi.l  #Debug_Valkirie{viewer}ViewerPoseTargets,d0", source
-            )
+            self.assertIn(f"addi.l  #Debug_Valkirie{viewer}ViewerPoseTargets,d0", source)
             self.assertIn("movea.l d0,a0", source)
             self.assertIn("moveq   #$12,d7", source)
-        delta = (ROOT / "src/rendering/boss_metasprites.s").read_text(
-            encoding="utf-8"
-        )
+        delta = (ROOT / "src/rendering/boss_metasprites.s").read_text(encoding="utf-8")
         delta_reader = instructions(
             delta,
             "Anim_CalculatePoseChannelDeltas",

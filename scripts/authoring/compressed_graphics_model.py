@@ -41,19 +41,14 @@ PROFILES = ("jp", "eu")
 SHARED_TILE_SOURCES = "Stage_SharedTileSourceTable"
 DECOMPRESS_TO_VRAM = 7
 PIXELS = re.compile(r"^[0-9A-F]{64}$")
-BINCLUDE = re.compile(
-    r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"'
-)
+BINCLUDE = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 BYTE_LINE = re.compile(
     r"^(?P<prefix>(?:[A-Za-z_][A-Za-z0-9_]*:\s*)?\s*dc\.b\s+)"
     r"(?P<body>[^;]+?)(?P<suffix>\s*(?:;.*)?)$"
 )
 NON_TILE_VRAM_PAYLOADS = {
-    "Credits_SegaMappingData": (
-        "command 7 transfers 408 mapping bytes to VRAM, not a whole number "
-        "of 32-byte tiles"
-    ),
+    "Credits_SegaMappingData": ("command 7 transfers 408 mapping bytes to VRAM, not a whole number of 32-byte tiles"),
 }
 
 
@@ -81,12 +76,7 @@ def source_owners(root: Path) -> dict[str, str]:
 def vram_sources(root: Path, command_ids: tuple[int, ...] = (7,)) -> set[str]:
     _data, bodies = labelled_blocks(root)
     lists = read_asset_lists(root, bodies)
-    direct = {
-        command.source
-        for commands in lists.values()
-        for command in commands
-        if command.command in command_ids
-    }
+    direct = {command.source for commands in lists.values() for command in commands if command.command in command_ids}
     if DECOMPRESS_TO_VRAM not in command_ids:
         return direct
     lines, index = source_index(root)
@@ -97,7 +87,7 @@ def tile_text(data: bytes, offset: int) -> str:
     if (type(data) is bytes or type(data) is bytearray) and type(offset) is int:
         if offset + TILE_BYTES > len(data):
             raise ValueError("tile at %d runs past %d bytes" % (offset, len(data)))
-        return data[offset:offset + TILE_BYTES].hex().upper()
+        return data[offset : offset + TILE_BYTES].hex().upper()
     return "".join("%X" % pixel for pixel in decode_tile(data, offset))
 
 
@@ -123,24 +113,25 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         if len(plain) % TILE_BYTES:
             excluded[name] = NON_TILE_VRAM_PAYLOADS.get(name, "unclassified non-tile data")
             continue
-        tiles = [
-            tile_text(plain, offset)
-            for offset in range(0, len(plain), TILE_BYTES)
-        ]
-        records.append({
-            "name": name,
-            "codec": codec,
-            "path": path,
-            "storage": storage,
-            "compressed_capacity": len(raw),
-            "decoded_byte_count": len(plain),
-            "tile_count": len(tiles),
-            "blocks": [{
-                "declared_length": False,
+        tiles = [tile_text(plain, offset) for offset in range(0, len(plain), TILE_BYTES)]
+        records.append(
+            {
+                "name": name,
+                "codec": codec,
+                "path": path,
+                "storage": storage,
+                "compressed_capacity": len(raw),
+                "decoded_byte_count": len(plain),
                 "tile_count": len(tiles),
-                "tiles": tiles,
-            }],
-        })
+                "blocks": [
+                    {
+                        "declared_length": False,
+                        "tile_count": len(tiles),
+                        "tiles": tiles,
+                    }
+                ],
+            }
+        )
     if excluded != NON_TILE_VRAM_PAYLOADS:
         raise ValueError("compressed non-tile exclusions differ: %r" % excluded)
     return {
@@ -152,10 +143,8 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "bits_per_pixel": 4,
         "payload_count": len(records),
         "tile_count": sum(record["tile_count"] for record in records),
-        "decoded_byte_count": sum(
-            record["decoded_byte_count"] for record in records),
-        "compressed_capacity": sum(
-            record["compressed_capacity"] for record in records),
+        "decoded_byte_count": sum(record["decoded_byte_count"] for record in records),
+        "compressed_capacity": sum(record["compressed_capacity"] for record in records),
         "excluded": excluded,
         "payloads": records,
     }
@@ -165,8 +154,7 @@ def upgrade_legacy_document(document: dict[str, Any], root: Path, profile: str) 
     """Preserve validated schema-1 LZSS edits and add the source-owned tile art."""
     baseline = export_document(root, profile)
     legacy_records = [record for record in baseline["payloads"] if record["codec"] == "lzss"]
-    expected = {**baseline, "schema_version": 1, "format": LEGACY_FORMAT,
-                "payload_count": len(legacy_records)}
+    expected = {**baseline, "schema_version": 1, "format": LEGACY_FORMAT, "payload_count": len(legacy_records)}
     for field in ("tile_count", "decoded_byte_count", "compressed_capacity"):
         expected[field] = sum(record[field] for record in legacy_records)
     for field, value in expected.items():
@@ -174,15 +162,20 @@ def upgrade_legacy_document(document: dict[str, Any], root: Path, profile: str) 
             raise ValueError("legacy compressed graphics %s differs from source ownership" % field)
     candidate = deepcopy(document)
     records = candidate.get("payloads")
-    if not isinstance(records, list) or any(
-            not isinstance(record, dict) or "codec" in record for record in records):
+    if not isinstance(records, list) or any(not isinstance(record, dict) or "codec" in record for record in records):
         raise ValueError("legacy compressed graphics payload inventory differs")
     for record in records:
         record["codec"] = "lzss"
     records.extend(deepcopy(record) for record in baseline["payloads"] if record["codec"] == "tile-codec")
     records.sort(key=lambda record: record.get("name", "") if isinstance(record.get("name"), str) else "")
-    for field in ("schema_version", "format", "payload_count", "tile_count",
-                  "decoded_byte_count", "compressed_capacity"):
+    for field in (
+        "schema_version",
+        "format",
+        "payload_count",
+        "tile_count",
+        "decoded_byte_count",
+        "compressed_capacity",
+    ):
         candidate[field] = baseline[field]
     validate_document(candidate, root, profile)
     return candidate
@@ -192,9 +185,7 @@ def load_document(path: Path, root: Path | None = None, profile: str | None = No
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise ValueError(
-            "cannot load compressed graphics document %s: %s" % (path, error)
-        ) from error
+        raise ValueError("cannot load compressed graphics document %s: %s" % (path, error)) from error
     if not isinstance(document, dict):
         raise ValueError("compressed graphics document is not an object: %s" % path)
     if document.get("schema_version") == 1 and root is not None and profile is not None:
@@ -226,8 +217,7 @@ def encoded_slot(record: dict[str, Any], original: bytes | None = None) -> bytes
     capacity = record["compressed_capacity"]
     if len(encoded) > capacity:
         raise ValueError(
-            "%s: recompressed size %d exceeds fixed capacity %d"
-            % (record["name"], len(encoded), capacity)
+            "%s: recompressed size %d exceeds fixed capacity %d" % (record["name"], len(encoded), capacity)
         )
     return encoded + bytes([0xFF]) * (capacity - len(encoded))
 
@@ -255,9 +245,7 @@ def rewrite_byte_body(body: str, values: bytes) -> str:
     return ",".join(rendered)
 
 
-def rebuild_source(
-    root: Path, source_path: str, payloads: dict[str, bytes]
-) -> str:
+def rebuild_source(root: Path, source_path: str, payloads: dict[str, bytes]) -> str:
     path = root / source_path
     lines = path.read_text(encoding="utf-8").split("\n")
     locations: dict[str, list[tuple[int, re.Match[str]]]] = {}
@@ -271,26 +259,21 @@ def rebuild_source(
             locations.setdefault(current, []).append((index, match))
     missing = sorted(set(payloads) - set(locations))
     if missing:
-        raise ValueError(
-            "cannot locate compressed source blocks: %s" % ", ".join(missing)
-        )
+        raise ValueError("cannot locate compressed source blocks: %s" % ", ".join(missing))
     output = list(lines)
     for name, spans in locations.items():
         desired = payloads[name]
         cursor = 0
         for line_index, match in spans:
             count = len(match.group("body").split(","))
-            values = desired[cursor:cursor + count]
+            values = desired[cursor : cursor + count]
             if len(values) != count:
                 raise ValueError("%s source has more tokens than its fixed slot" % name)
             body = rewrite_byte_body(match.group("body"), values)
             output[line_index] = match.group("prefix") + body + match.group("suffix")
             cursor += count
         if cursor != len(desired):
-            raise ValueError(
-                "%s source holds %d bytes, document encodes %d"
-                % (name, cursor, len(desired))
-            )
+            raise ValueError("%s source holds %d bytes, document encodes %d" % (name, cursor, len(desired)))
     return "\n".join(output)
 
 
@@ -298,9 +281,17 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "tile_width", "tile_height",
-        "bits_per_pixel", "payload_count", "tile_count", "decoded_byte_count",
-        "compressed_capacity", "excluded",
+        "schema_version",
+        "profile",
+        "format",
+        "tile_width",
+        "tile_height",
+        "bits_per_pixel",
+        "payload_count",
+        "tile_count",
+        "decoded_byte_count",
+        "compressed_capacity",
+        "excluded",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -322,7 +313,11 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "path", "storage", "codec", "compressed_capacity", "decoded_byte_count",
+            "path",
+            "storage",
+            "codec",
+            "compressed_capacity",
+            "decoded_byte_count",
             "tile_count",
         ):
             if not source_value_matches(record.get(field), original[field]):
@@ -363,9 +358,7 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
         raise ValueError("; ".join(errors))
 
 
-def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True
-) -> list[str]:
+def apply_document(document: dict[str, Any], root: Path, profile: str, write: bool = True) -> list[str]:
     """Recompress edited tiles into their original fixed-size binary slots."""
     # Share only ORIGINAL parsed inputs during preparation; close before any
     # payload/source writer. A foreign active scope retains its fresh reader.
@@ -387,6 +380,7 @@ def apply_document(
         changed.append(record["path"])
         if write:
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     for source_path, payloads in sorted(source_changes.items()):
         path = root / source_path
@@ -395,6 +389,7 @@ def apply_document(
             changed.append(source_path)
             if write:
                 from authoring.atomic_output import atomic_write_text as _write_text
+
                 _write_text(path, rebuilt)
     return changed
 
@@ -431,8 +426,7 @@ def main() -> int:
             print(
                 "[OK] %s compressed graphics: %d payloads, %d tiles, "
                 "%d fixed bytes"
-                % (args.profile, document["payload_count"], document["tile_count"],
-                   document["compressed_capacity"])
+                % (args.profile, document["payload_count"], document["tile_count"], document["compressed_capacity"])
             )
         elif args.command == "export":
             if not args.output:

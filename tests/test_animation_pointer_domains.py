@@ -31,17 +31,26 @@ def fixture(root: Path) -> dict:
         "SecondSpriteMapping: dc.w $8000, $500, 1\n"
         "DynamicSpriteMapping: dc.w $8000\n"
         " dc.l FixtureArt+$05000000\n"
-        " dc.w 0\n", encoding="utf-8")
+        " dc.w 0\n",
+        encoding="utf-8",
+    )
     (root / "src/rendering/sprite_object_pipeline.s").write_text(
-        "Anim_ResolveTimedMappingFrame:\n" + "\n".join(model.TIMED_READER_OPERATIONS)
-        + "\n; End of function Anim_ResolveTimedMappingFrame\n", encoding="utf-8")
-    jp = {"FirstAnimation": 0x100, "SecondAnimation": 0x110,
-          "DynamicAnimation": 0x120, "FirstSpriteMapping": 0x180,
-          "SecondSpriteMapping": 0x190, "DynamicSpriteMapping": 0x1A0,
-          "FixtureArt": 0x300}
+        "Anim_ResolveTimedMappingFrame:\n"
+        + "\n".join(model.TIMED_READER_OPERATIONS)
+        + "\n; End of function Anim_ResolveTimedMappingFrame\n",
+        encoding="utf-8",
+    )
+    jp = {
+        "FirstAnimation": 0x100,
+        "SecondAnimation": 0x110,
+        "DynamicAnimation": 0x120,
+        "FirstSpriteMapping": 0x180,
+        "SecondSpriteMapping": 0x190,
+        "DynamicSpriteMapping": 0x1A0,
+        "FixtureArt": 0x300,
+    }
     # Prove the profiles independently, with genuinely different displacements.
-    eu = {name: address + (0x200 if "Animation" in name else 0x220)
-          for name, address in jp.items()}
+    eu = {name: address + (0x200 if "Animation" in name else 0x220) for name, address in jp.items()}
     addresses = {"jp": jp, "eu": eu}
     profiles = json.loads((ROOT / "config/rom_profiles.json").read_text(encoding="utf-8"))
     document = model.export_document(root, "jp")
@@ -54,39 +63,64 @@ def fixture(root: Path) -> dict:
             for frame in script["frames"]:
                 at = origin + frame["index"] * 4
                 delta = selected[frame["target"]] - at
-                image[at:at + 4] = ((delta & 0xFFFF).to_bytes(2, "big")
-                                    + frame["duration"].to_bytes(2, "big"))
+                image[at : at + 4] = (delta & 0xFFFF).to_bytes(2, "big") + frame["duration"].to_bytes(2, "big")
         for name, suffix in (("FirstSpriteMapping", 0), ("SecondSpriteMapping", 1)):
             at = selected[name]
-            image[at:at + 6] = bytes.fromhex("80000500") + suffix.to_bytes(2, "big")
+            image[at : at + 6] = bytes.fromhex("80000500") + suffix.to_bytes(2, "big")
         at = selected["DynamicSpriteMapping"]
-        image[at:at + 8] = (bytes.fromhex("8000")
-                            + (0x05000000 + selected["FixtureArt"]).to_bytes(4, "big")
-                            + bytes(2))
+        image[at : at + 8] = bytes.fromhex("8000") + (0x05000000 + selected["FixtureArt"]).to_bytes(4, "big") + bytes(2)
         record["reference_rom"]["filename"] = profile + "-synthetic.bin"
         record["reference_rom"]["sha256"] = hashlib.sha256(image).hexdigest()
         (root / record["reference_rom"]["filename"]).write_bytes(image)
-    audit = [{"current_name": name, "address": "0x%06X" % address,
-              "previous_name": "old_" + name, "legacy_name": "legacy_" + name}
-             for name, address in sorted(jp.items())]
-    rows = [{"current_name": name, "jp_address": "0x%06X" % jp[name],
-             "eu_address": "0x%06X" % eu[name], "status": "assembled"}
-            for name in sorted(jp)]
-    identities = {item["id"]: {key: item["reference_rom"][key] for key in ("size", "sha256")}
-                  for item in profiles["profiles"]}
-    ledger = {"schema_version": 1, "profile": "eu", "origin_profile": "jp",
-              "origin_identity_fields": list(verify_symbols.IDENTITY_FIELDS),
-              "origin_identity_sha256": verify_symbols.origin_identity(audit),
-              "original_roms": identities, "record_count": len(audit),
-              "records_sha256": verify_symbols.canonical_sha256(rows), "records": rows,
-              "generation": {"profiles": {
-                  profile: {"resolved_flags": verify_symbols.PROFILE_FLAGS[profile],
-                            "build_rom_sha256": identities[profile]["sha256"],
-                            "original_rom_sha256": identities[profile]["sha256"],
-                            "printed_byte_rows": 1, "listing_sha256": "0" * 64}
-                  for profile in ("jp", "eu")}}}
-    for name, value in (("rom_profiles.json", profiles), ("name_audit.json", {"records": audit}),
-                        ("name_addresses_eu.json", ledger)):
+    audit = [
+        {
+            "current_name": name,
+            "address": "0x%06X" % address,
+            "previous_name": "old_" + name,
+            "legacy_name": "legacy_" + name,
+        }
+        for name, address in sorted(jp.items())
+    ]
+    rows = [
+        {
+            "current_name": name,
+            "jp_address": "0x%06X" % jp[name],
+            "eu_address": "0x%06X" % eu[name],
+            "status": "assembled",
+        }
+        for name in sorted(jp)
+    ]
+    identities = {
+        item["id"]: {key: item["reference_rom"][key] for key in ("size", "sha256")} for item in profiles["profiles"]
+    }
+    ledger = {
+        "schema_version": 1,
+        "profile": "eu",
+        "origin_profile": "jp",
+        "origin_identity_fields": list(verify_symbols.IDENTITY_FIELDS),
+        "origin_identity_sha256": verify_symbols.origin_identity(audit),
+        "original_roms": identities,
+        "record_count": len(audit),
+        "records_sha256": verify_symbols.canonical_sha256(rows),
+        "records": rows,
+        "generation": {
+            "profiles": {
+                profile: {
+                    "resolved_flags": verify_symbols.PROFILE_FLAGS[profile],
+                    "build_rom_sha256": identities[profile]["sha256"],
+                    "original_rom_sha256": identities[profile]["sha256"],
+                    "printed_byte_rows": 1,
+                    "listing_sha256": "0" * 64,
+                }
+                for profile in ("jp", "eu")
+            }
+        },
+    }
+    for name, value in (
+        ("rom_profiles.json", profiles),
+        ("name_audit.json", {"records": audit}),
+        ("name_addresses_eu.json", ledger),
+    ):
         (root / "config" / name).write_text(json.dumps(value), encoding="utf-8")
     return addresses
 
@@ -104,8 +138,7 @@ class SignedWordTests(unittest.TestCase):
                 model.relative_pointer(0x10000, destination)
 
     def test_addresses_are_typed_aligned_and_rom_owned(self):
-        for origin, target in ((True, 0x100), (0x100, 1.0), (0x100, 0x17FFF),
-                               (-2, 0x100), (0x100, 0x200000)):
+        for origin, target in ((True, 0x100), (0x100, 1.0), (0x100, 0x17FFF), (-2, 0x100), (0x100, 0x200000)):
             with self.assertRaisesRegex(ValueError, "aligned proved ROM"):
                 model.relative_pointer(origin, target)
 
@@ -141,8 +174,10 @@ class PointerDomainTests(unittest.TestCase):
 
     def test_static_dynamic_consumer_domains_cannot_be_crossed(self):
         for profile in ("jp", "eu"):
-            for name, target in (("FirstAnimation", "DynamicSpriteMapping"),
-                                 ("DynamicAnimation", "FirstSpriteMapping")):
+            for name, target in (
+                ("FirstAnimation", "DynamicSpriteMapping"),
+                ("DynamicAnimation", "FirstSpriteMapping"),
+            ):
                 document = model.export_document(self.root, profile)
                 selected(document, name)["frames"][0]["target"] = target
                 with self.assertRaisesRegex(ValueError, "static/dynamic consumer"):
@@ -165,11 +200,12 @@ class PointerDomainTests(unittest.TestCase):
             originals = {record["name"]: record for record in document["scripts"]}
             addresses = dict(evidence[0])
             addresses["SecondAnimation"] += 0x10000
-            self.assertIn("signed16", model.pointer_domain_error(
-                caller, changed, originals, (addresses, evidence[1], evidence[2])))
+            self.assertIn(
+                "signed16",
+                model.pointer_domain_error(caller, changed, originals, (addresses, evidence[1], evidence[2])),
+            )
             selected(document, "SecondAnimation")["frames"][0]["duration"] = 5
-            self.assertIn("source caller encoding", model.pointer_domain_error(
-                caller, changed, originals, evidence))
+            self.assertIn("source caller encoding", model.pointer_domain_error(caller, changed, originals, evidence))
 
     def test_unknown_evidence_blocks_retarget_but_keeps_unmodified_references(self):
         document = model.export_document(self.root, "jp")
@@ -182,8 +218,10 @@ class PointerDomainTests(unittest.TestCase):
             model.validate_document(document, self.root, "jp")
 
     def test_source_caller_or_mapping_byte_changes_cannot_authenticate_an_edit(self):
-        for before, after in (("FirstSpriteMapping-*, 3", "FirstSpriteMapping-*, 7"),
-                              ("$8000, $500, 1", "$8000, $500, 2")):
+        for before, after in (
+            ("FirstSpriteMapping-*, 3", "FirstSpriteMapping-*, 7"),
+            ("$8000, $500, 1", "$8000, $500, 2"),
+        ):
             with self.subTest(after=after):
                 path = self.root / "src/data/animations.s"
                 original = path.read_text(encoding="utf-8")
@@ -210,14 +248,15 @@ class PointerDomainTests(unittest.TestCase):
         original = path.read_text(encoding="utf-8")
         document = model.export_document(self.root, "jp")
         selected(document, "FirstAnimation")["frames"][0]["target"] = "SecondSpriteMapping"
-        for mutation in (lambda value: value.update(records_sha256="0" * 64),
-                         lambda value: value.update(profile="jp")):
+        for mutation in (lambda value: value.update(records_sha256="0" * 64), lambda value: value.update(profile="jp")):
             value = json.loads(original)
             mutation(value)
             path.write_text(json.dumps(value), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "frozen regional address evidence"):
                 model.validate_document(document, self.root, "jp")
-        path.write_text(original.replace('"schema_version": 1', '"schema_version": 1, "schema_version": 1'), encoding="utf-8")
+        path.write_text(
+            original.replace('"schema_version": 1', '"schema_version": 1, "schema_version": 1'), encoding="utf-8"
+        )
         with self.assertRaisesRegex(ValueError, "duplicate animation"):
             model.validate_document(document, self.root, "jp")
 
@@ -236,7 +275,9 @@ class PointerDomainTests(unittest.TestCase):
                 value = json.loads(json.dumps(original))
                 value["generation"]["profiles"][region] = malformed
                 path.write_text(json.dumps(value), encoding="utf-8")
-                with self.assertRaisesRegex(ValueError, "unknown/non-writable.*profile proof must be an object: " + region):
+                with self.assertRaisesRegex(
+                    ValueError, "unknown/non-writable.*profile proof must be an object: " + region
+                ):
                     model.validate_document(document, self.root, "jp")
 
     def test_address_evidence_top_levels_and_record_lists_are_structural_objects(self):
@@ -253,7 +294,10 @@ class PointerDomainTests(unittest.TestCase):
                 malformed = json.loads(original)
                 malformed["records"] = value
                 path.write_text(json.dumps(malformed), encoding="utf-8")
-                with self.assertRaisesRegex(ValueError, "unknown/non-writable.*(records must be a list|frozen regional address evidence differs)"):
+                with self.assertRaisesRegex(
+                    ValueError,
+                    "unknown/non-writable.*(records must be a list|frozen regional address evidence differs)",
+                ):
                     model.validate_document(document, self.root, "jp")
             path.write_text(original, encoding="utf-8")
 
@@ -291,8 +335,9 @@ class PointerDomainTests(unittest.TestCase):
 
     def test_comments_cannot_supply_missing_reader_operations(self):
         path = self.root / "src/rendering/sprite_object_pipeline.s"
-        path.write_text(path.read_text(encoding="utf-8").replace(
-            "adda.w (a4),a4", "; adda.w (a4),a4"), encoding="utf-8")
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("adda.w (a4),a4", "; adda.w (a4),a4"), encoding="utf-8"
+        )
         document = model.export_document(self.root, "jp")
         selected(document, "FirstAnimation")["frames"][0]["target"] = "SecondSpriteMapping"
         with self.assertRaisesRegex(ValueError, "reader contract changed"):
@@ -300,8 +345,9 @@ class PointerDomainTests(unittest.TestCase):
 
     def test_unknown_dynamic_art_binding_is_not_an_editable_target(self):
         path = self.root / "src/data/animations.s"
-        path.write_text(path.read_text(encoding="utf-8").replace(
-            "FixtureArt+$05000000", "UnknownArt+$05000000"), encoding="utf-8")
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("FixtureArt+$05000000", "UnknownArt+$05000000"), encoding="utf-8"
+        )
         document = model.export_document(self.root, "jp")
         selected(document, "SecondAnimation")["frames"][0]["target"] = "DynamicSpriteMapping"
         with self.assertRaisesRegex(ValueError, "dynamic art address is unknown"):
@@ -318,8 +364,9 @@ class PointerDomainTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown/non-writable"):
             model.apply_document(document, destination, "eu")
         self.assertEqual(source.read_bytes(), target.read_bytes())
-        self.assertEqual(["src/data/animations.s"], model.apply_document(
-            document, destination, "eu", validation_root=self.root))
+        self.assertEqual(
+            ["src/data/animations.s"], model.apply_document(document, destination, "eu", validation_root=self.root)
+        )
         self.assertIn("SecondSpriteMapping-*", target.read_text(encoding="utf-8"))
         self.assertIn("FirstSpriteMapping-*", source.read_text(encoding="utf-8"))
 
@@ -341,15 +388,21 @@ class PointerDomainTests(unittest.TestCase):
 
     def test_equal_valued_animation_count_aliases_are_not_source_metadata(self):
         original = model.export_document(self.root, "jp")
-        changes = [(field, lambda doc, field=field: doc.update({field: float(doc[field])}))
-                   for field in ("schema_version", "script_count", "frame_count", "jump_count")]
-        changes.extend((
-            ("boolean schema", lambda doc: doc.update(schema_version=True)),
-            ("script frame count", lambda doc: doc["scripts"][0].update(
-                frame_count=float(doc["scripts"][0]["frame_count"]))),
-            ("floating frame index", lambda doc: doc["scripts"][0]["frames"][0].update(index=0.0)),
-            ("floating duration", lambda doc: doc["scripts"][0]["frames"][0].update(duration=3.0)),
-        ))
+        changes = [
+            (field, lambda doc, field=field: doc.update({field: float(doc[field])}))
+            for field in ("schema_version", "script_count", "frame_count", "jump_count")
+        ]
+        changes.extend(
+            (
+                ("boolean schema", lambda doc: doc.update(schema_version=True)),
+                (
+                    "script frame count",
+                    lambda doc: doc["scripts"][0].update(frame_count=float(doc["scripts"][0]["frame_count"])),
+                ),
+                ("floating frame index", lambda doc: doc["scripts"][0]["frames"][0].update(index=0.0)),
+                ("floating duration", lambda doc: doc["scripts"][0]["frames"][0].update(duration=3.0)),
+            )
+        )
         for description, change in changes:
             with self.subTest(field=description):
                 document = copy.deepcopy(original)
@@ -397,10 +450,15 @@ class CanonicalSourceTests(unittest.TestCase):
     def test_actual_far_selection_rejects_validation_and_apply_in_both_profiles(self):
         ledger = json.loads((ROOT / "config/name_addresses_eu.json").read_text(encoding="utf-8"))
         for profile in ("jp", "eu"):
-            addresses = {row["current_name"]: int(row[profile + "_address"], 16)
-                         for row in ledger["records"] if row["status"] == "assembled"}
+            addresses = {
+                row["current_name"]: int(row[profile + "_address"], 16)
+                for row in ledger["records"]
+                if row["status"] == "assembled"
+            }
             document = model.export_document(ROOT, profile)
-            selected(document, "SharedCombatSpriteAnimation00")["frames"][0]["target"] = "Stage12_TeddyBearSpriteMappingR"
+            selected(document, "SharedCombatSpriteAnimation00")["frames"][0]["target"] = (
+                "Stage12_TeddyBearSpriteMappingR"
+            )
             # A pointer-domain fixture proves the original far-pair failure
             # without requiring a private cartridge or pretending to capture it.
             with patch.object(model, "pointer_evidence", return_value=(addresses, b"", {})):

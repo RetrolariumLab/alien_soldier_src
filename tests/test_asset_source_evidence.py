@@ -14,18 +14,12 @@ class AssetSourceEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.records = {
             item["address"]: item
-            for item in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for item in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
 
     def test_debris_frame_variants_have_distinct_table_positions(self) -> None:
-        source = (ROOT / "src/cutscenes/ship_piece_and_debris.s").read_text(
-            encoding="utf-8"
-        )
-        table = source.split("ShipDebris_SpriteFrameTable:", 1)[1].split(
-            "ShipDebris_InitialXVelocities:", 1
-        )[0]
+        source = (ROOT / "src/cutscenes/ship_piece_and_debris.s").read_text(encoding="utf-8")
+        table = source.split("ShipDebris_SpriteFrameTable:", 1)[1].split("ShipDebris_InitialXVelocities:", 1)[0]
         frames = re.findall(r"dc\.l\s+(ShipDebris_SpriteFrame\d+)", table)
         self.assertEqual("ShipDebris_SpriteFrame2", frames[3])
         self.assertEqual("ShipDebris_SpriteFrame4", frames[6])
@@ -38,9 +32,7 @@ class AssetSourceEvidenceTests(unittest.TestCase):
 
     def test_treasure_sources_have_exact_descriptor_slots_and_forms(self) -> None:
         source = (ROOT / "src/credits/palette_data.s").read_text(encoding="utf-8")
-        section = source.split("Credits_TreasureAssetLoadList:", 1)[1].split(
-            "Credits_SegaPalette:", 1
-        )[0]
+        section = source.split("Credits_TreasureAssetLoadList:", 1)[1].split("Credits_SegaPalette:", 1)[0]
         descriptors = re.findall(
             r"dc\.l\s+(Credits_Treasure(?:TileArt|MappingData)\d)\s+"
             r"; field_2\s+dc\.w\s+(\$?[0-9A-F]+)",
@@ -55,21 +47,15 @@ class AssetSourceEvidenceTests(unittest.TestCase):
             ],
             descriptors,
         )
-        assets = (ROOT / "src/data/credits_scene_assets.s").read_text(
-            encoding="utf-8"
-        )
+        assets = (ROOT / "src/data/credits_scene_assets.s").read_text(encoding="utf-8")
         self.assertRegex(assets, r"Credits_TreasureTileArt0:\s+binclude")
         self.assertRegex(assets, r"Credits_TreasureTileArt1:\s+binclude")
         self.assertRegex(assets, r"Credits_TreasureMappingData0:\s+binclude")
         self.assertRegex(assets, r"Credits_TreasureMappingData1:\s+dc\.b")
 
     def test_boss_load_sources_do_not_claim_following_archives(self) -> None:
-        lists = (ROOT / "src/rendering/boss_asset_sets.s").read_text(
-            encoding="utf-8"
-        )
-        art = (ROOT / "src/data/xi_tiger_and_boss_art.s").read_text(
-            encoding="utf-8"
-        )
+        lists = (ROOT / "src/rendering/boss_asset_sets.s").read_text(encoding="utf-8")
+        art = (ROOT / "src/data/xi_tiger_and_boss_art.s").read_text(encoding="utf-8")
         cases = (
             ("WolfGaropa", ("$3C00", "$5100"), "UnreferencedWolfGaropaTileArt2"),
             ("ZLeo", ("$5000", "$7000"), "UnreferencedZLeoTileArt2"),

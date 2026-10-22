@@ -17,10 +17,14 @@ import split_data_from_listing  # noqa: E402
 class RetiredAssetSplitterTests(unittest.TestCase):
     def test_refuses_before_writing_source_or_payloads(self) -> None:
         output = StringIO()
-        with patch.object(
-            split_data_from_listing, "save_binary_files",
-            side_effect=AssertionError("must not extract"),
-        ), redirect_stdout(output):
+        with (
+            patch.object(
+                split_data_from_listing,
+                "save_binary_files",
+                side_effect=AssertionError("must not extract"),
+            ),
+            redirect_stdout(output),
+        ):
             self.assertEqual(1, split_data_from_listing.main())
         self.assertIn("make split", output.getvalue())
 

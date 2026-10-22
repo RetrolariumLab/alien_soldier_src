@@ -45,9 +45,7 @@ class CreditsTextTests(unittest.TestCase):
     def test_edit_targets_the_credits_payload(self) -> None:
         document = copy.deepcopy(self.document)
         document["records"][0]["upper_glyphs"][0] ^= 1
-        self.assertEqual(
-            [document["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([document["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_counts_and_terminator_are_read_only(self) -> None:
         document = copy.deepcopy(self.document)
@@ -72,8 +70,7 @@ class CreditsTextTests(unittest.TestCase):
         self.assertTrue(any("invalid glyph" in error for error in errors))
 
     def test_credits_glyph_preview_uses_two_tiles_after_blank_slot(self) -> None:
-        art = (bytes([0x00]) * 32 + bytes([0x00]) * 32
-               + bytes([0x11]) * 32 + bytes([0x22]) * 32)
+        art = bytes([0x00]) * 32 + bytes([0x00]) * 32 + bytes([0x11]) * 32 + bytes([0x22]) * 32
         self.assertIsNone(glyph_tiles_from_art(art, 0))
         first, second = glyph_tiles_from_art(art, 1)
         self.assertEqual([1] * 8, first[0])
@@ -90,17 +87,18 @@ class CreditsTextTests(unittest.TestCase):
         self.assertEqual(2, len(tiles))
         self.assertTrue(all(len(row) == 8 for tile in tiles for row in tile))
         first, second = glyph_tiles(ROOT, 23)
-        self.assertEqual({0, 1, 2}, {pixel for tile in (first, second)
-                                      for row in tile for pixel in row})
+        self.assertEqual({0, 1, 2}, {pixel for tile in (first, second) for row in tile for pixel in row})
 
     def test_legacy_workspace_migrates_without_losing_edits(self) -> None:
         legacy = copy.deepcopy(self.document)
-        legacy.update({
-            "schema_version": 1,
-            "tile_art_name": "CreditsAndEndingTileArt",
-            "tile_art_tile_count": 109,
-            "max_glyph_id": 53,
-        })
+        legacy.update(
+            {
+                "schema_version": 1,
+                "tile_art_name": "CreditsAndEndingTileArt",
+                "tile_art_tile_count": 109,
+                "max_glyph_id": 53,
+            }
+        )
         legacy["records"][0]["upper_glyphs"][0] ^= 1
         migrated = migrate_document(legacy, ROOT, "jp")
         self.assertEqual(legacy["records"], migrated["records"])
@@ -112,8 +110,7 @@ class CreditsTextTests(unittest.TestCase):
             atomic_write_json(path, legacy)
             original = path.read_bytes()
             self.assertTrue(migrate_path(path, ROOT, "jp"))
-            self.assertEqual(original, path.with_suffix(
-                ".json.pre-shared-font-v1").read_bytes())
+            self.assertEqual(original, path.with_suffix(".json.pre-shared-font-v1").read_bytes())
             self.assertFalse(migrate_path(path, ROOT, "jp"))
 
 

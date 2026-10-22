@@ -139,8 +139,7 @@ class ValidationTests(unittest.TestCase):
 
     def test_independent_block_order_and_ordered_piece_edits_remain_valid(self) -> None:
         self.document["blocks"].reverse()
-        block = next(item for item in self.document["blocks"]
-                     if item["name"] == "SharedCombatSpriteFrame34")
+        block = next(item for item in self.document["blocks"] if item["name"] == "SharedCombatSpriteFrame34")
         original_bytes = model._static_bytes(block)
         first_piece(block)["x"] = -3
         model.validate_document(self.document, ROOT, "jp")
@@ -150,23 +149,40 @@ class ValidationTests(unittest.TestCase):
 
     def test_equal_valued_numeric_metadata_aliases_are_rejected(self) -> None:
         original = copy.deepcopy(self.document)
-        top_fields = ("schema_version", "block_count", "mapping_count", "piece_count",
-                      "static_mapping_count", "dynamic_mapping_count", "payload_block_count", "excluded_count")
-        changes = [(field, lambda doc, field=field: doc.update({field: float(doc[field])}))
-                   for field in top_fields]
-        changes.extend((
-            ("boolean schema", lambda doc: doc.update(schema_version=True)),
-            ("block count", lambda doc: doc["blocks"][0].update(
-                mapping_count=float(doc["blocks"][0]["mapping_count"]))),
-            ("block pieces", lambda doc: doc["blocks"][0].update(
-                piece_count=float(doc["blocks"][0]["piece_count"]))),
-            ("mapping offset", lambda doc: doc["blocks"][0]["mappings"][0].update(offset=False)),
-            ("mapping count", lambda doc: doc["blocks"][0]["mappings"][0].update(
-                piece_count=float(doc["blocks"][0]["mappings"][0]["piece_count"]))),
-            ("dynamic role", lambda doc: doc["blocks"][0]["mappings"][0].update(dynamic=0)),
-            ("piece index", lambda doc: first_piece(doc["blocks"][0]).update(index=False)),
-            ("art addend", lambda doc: first_piece(doc["blocks"][0]).update(art_addend=False)),
-        ))
+        top_fields = (
+            "schema_version",
+            "block_count",
+            "mapping_count",
+            "piece_count",
+            "static_mapping_count",
+            "dynamic_mapping_count",
+            "payload_block_count",
+            "excluded_count",
+        )
+        changes = [(field, lambda doc, field=field: doc.update({field: float(doc[field])})) for field in top_fields]
+        changes.extend(
+            (
+                ("boolean schema", lambda doc: doc.update(schema_version=True)),
+                (
+                    "block count",
+                    lambda doc: doc["blocks"][0].update(mapping_count=float(doc["blocks"][0]["mapping_count"])),
+                ),
+                (
+                    "block pieces",
+                    lambda doc: doc["blocks"][0].update(piece_count=float(doc["blocks"][0]["piece_count"])),
+                ),
+                ("mapping offset", lambda doc: doc["blocks"][0]["mappings"][0].update(offset=False)),
+                (
+                    "mapping count",
+                    lambda doc: doc["blocks"][0]["mappings"][0].update(
+                        piece_count=float(doc["blocks"][0]["mappings"][0]["piece_count"])
+                    ),
+                ),
+                ("dynamic role", lambda doc: doc["blocks"][0]["mappings"][0].update(dynamic=0)),
+                ("piece index", lambda doc: first_piece(doc["blocks"][0]).update(index=False)),
+                ("art addend", lambda doc: first_piece(doc["blocks"][0]).update(art_addend=False)),
+            )
+        )
         for description, change in changes:
             with self.subTest(field=description):
                 edited = copy.deepcopy(original)

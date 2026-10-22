@@ -1,4 +1,5 @@
 """Reject caller-owned profile defines; PROFILE owns preservation selection."""
+
 from __future__ import annotations
 
 import argparse

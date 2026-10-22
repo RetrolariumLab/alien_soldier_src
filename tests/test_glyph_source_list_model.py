@@ -26,9 +26,7 @@ class GlyphSourceListTests(unittest.TestCase):
         self.assertEqual(57, self.document["glyph_count"])
         self.assertEqual(62, self.document["encoded_byte_count"])
         records = {item["name"]: item for item in self.document["lists"]}
-        self.assertEqual(
-            [0], records["Results_TimeBonusGlyphSourceList"]["padding"]
-        )
+        self.assertEqual([0], records["Results_TimeBonusGlyphSourceList"]["padding"])
 
     def test_both_profiles_round_trip_without_writes(self) -> None:
         for profile in ("jp", "eu"):
@@ -39,9 +37,7 @@ class GlyphSourceListTests(unittest.TestCase):
         document = copy.deepcopy(self.document)
         record = document["lists"][0]
         record["glyphs"][0] ^= 1
-        self.assertEqual(
-            [record["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([record["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_capacity_padding_and_font_bound_are_guarded(self) -> None:
         document = copy.deepcopy(self.document)

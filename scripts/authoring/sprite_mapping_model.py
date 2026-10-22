@@ -72,19 +72,16 @@ NAME_MARKERS = ("SpriteMapping", "SpriteFrame", "Mapping")
 # at -- so the exclusion only bites when Mapping is absent.
 EXCLUDED_MARKER = "Metasprite"
 EXCLUDED_BLOCKS = {
-    "Terrain_StampObjectSpriteMapping":
-        "four bytes, not a whole piece; Terrain_ObjectStampPattern reads it as "
-        "a stamp pattern rather than as a mapping",
-    "Stage24SceneObject_CompositeSpriteFrame":
-        "seventy bytes, which is eleven pieces and four bytes over, and only "
-        "its first piece sets the end-of-mapping bit; whatever the Stage 24 "
-        "scene object reads it as, it is not a chain of pieces",
+    "Terrain_StampObjectSpriteMapping": "four bytes, not a whole piece; Terrain_ObjectStampPattern reads it as "
+    "a stamp pattern rather than as a mapping",
+    "Stage24SceneObject_CompositeSpriteFrame": "seventy bytes, which is eleven pieces and four bytes over, and only "
+    "its first piece sets the end-of-mapping bit; whatever the Stage 24 "
+    "scene object reads it as, it is not a chain of pieces",
 }
 
 LABEL_LINE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):(?P<rest>.*)$")
 DIRECTIVE = re.compile(r"^\s*(?P<kind>dc\.[bwl]|binclude)\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
-ART_OPERAND = re.compile(
-    r"^(?P<symbol>[A-Za-z_][A-Za-z0-9_]*)(?:\+\$(?P<addend>[0-9A-Fa-f]+))?$")
+ART_OPERAND = re.compile(r"^(?P<symbol>[A-Za-z_][A-Za-z0-9_]*)(?:\+\$(?P<addend>[0-9A-Fa-f]+))?$")
 
 
 def parse_number(token):
@@ -106,11 +103,11 @@ class SpritePiece:
 
     attributes: int
     size: int
-    link: int                    # a placeholder; the renderer writes the index
-    y: int                       # signed, pixels from the object
-    x: int                       # signed, pixels from the object
-    art: str = ""                # the art symbol, for a dynamic piece
-    art_addend: int = 0          # what is left of the addend below the size
+    link: int  # a placeholder; the renderer writes the index
+    y: int  # signed, pixels from the object
+    x: int  # signed, pixels from the object
+    art: str = ""  # the art symbol, for a dynamic piece
+    art_addend: int = 0  # what is left of the addend below the size
 
     @property
     def last(self):
@@ -162,8 +159,7 @@ class SpritePiece:
     def encode(self):
         if self.dynamic:
             raise ValueError("a dynamic piece holds a symbol, not bytes")
-        return struct.pack(">HBBbb", self.attributes, self.size, self.link,
-                           self.y, self.x)
+        return struct.pack(">HBBbb", self.attributes, self.size, self.link, self.y, self.x)
 
 
 @dataclass
@@ -171,7 +167,7 @@ class SpriteMapping:
     """One run of pieces, ending at the piece with bit 15 set."""
 
     block: str
-    offset: int                  # byte offset within its block, or piece index
+    offset: int  # byte offset within its block, or piece index
     pieces: tuple
 
     @property
@@ -199,7 +195,7 @@ class MappingBlock:
 
     name: str
     source: str
-    storage: str                 # "words", "bytes", "payload" or "dynamic"
+    storage: str  # "words", "bytes", "payload" or "dynamic"
     payload: str
     data: bytes
     mappings: tuple
@@ -208,8 +204,7 @@ class MappingBlock:
 def read_static(data, block):
     """Walk bytes as six-byte pieces grouped into mappings."""
     if len(data) % STATIC_ENTRY_BYTES:
-        raise ValueError("%s: %d bytes is not a whole number of pieces"
-                         % (block, len(data)))
+        raise ValueError("%s: %d bytes is not a whole number of pieces" % (block, len(data)))
     mappings = []
     pieces = []
     start = 0
@@ -229,29 +224,33 @@ def read_static(data, block):
 def read_dynamic(tokens, block):
     """Walk (word, longword, word) triples as eight-byte pieces."""
     if len(tokens) % 3:
-        raise ValueError("%s: %d operands is not a whole number of pieces"
-                         % (block, len(tokens)))
+        raise ValueError("%s: %d operands is not a whole number of pieces" % (block, len(tokens)))
     mappings = []
     pieces = []
     start = 0
     for index in range(0, len(tokens), 3):
-        kinds = tuple(kind for kind, _ in tokens[index:index + 3])
+        kinds = tuple(kind for kind, _ in tokens[index : index + 3])
         if kinds != ("dc.w", "dc.l", "dc.w"):
-            raise ValueError("%s: piece %d is %s, not word/long/word"
-                             % (block, index // 3, "/".join(kinds)))
+            raise ValueError("%s: piece %d is %s, not word/long/word" % (block, index // 3, "/".join(kinds)))
         attributes = parse_number(tokens[index][1])
         operand = ART_OPERAND.match(tokens[index + 1][1].strip())
         if operand is None:
-            raise ValueError("%s: piece %d does not point at an art symbol"
-                             % (block, index // 3))
+            raise ValueError("%s: piece %d does not point at an art symbol" % (block, index // 3))
         addend = int(operand.group("addend") or "0", 16)
         position = parse_number(tokens[index + 2][1])
         if not pieces:
             start = (index // 3) * DYNAMIC_ENTRY_BYTES
-        pieces.append(SpritePiece(
-            attributes, (addend >> 24) & 0xFF, 0,
-            signed_byte((position >> 8) & 0xFF), signed_byte(position & 0xFF),
-            operand.group("symbol"), addend & 0x00FFFFFF))
+        pieces.append(
+            SpritePiece(
+                attributes,
+                (addend >> 24) & 0xFF,
+                0,
+                signed_byte((position >> 8) & 0xFF),
+                signed_byte(position & 0xFF),
+                operand.group("symbol"),
+                addend & 0x00FFFFFF,
+            )
+        )
         if attributes & LAST_PIECE:
             mappings.append(SpriteMapping(block, start, tuple(pieces)))
             pieces = []
@@ -263,9 +262,11 @@ def read_dynamic(tokens, block):
 def labelled_blocks(root, *, original=None):
     """Every labelled run of directives in the assembly, in file order."""
     blocks = []
-    sources = (((path, path.read_text(encoding="utf-8"))
-                for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
-               if original is None else original.texts())
+    sources = (
+        ((path, path.read_text(encoding="utf-8")) for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
+        if original is None
+        else original.texts()
+    )
     for path, text in sources:
         relative = path.relative_to(root).as_posix()
         name = None
@@ -290,6 +291,7 @@ def labelled_blocks(root, *, original=None):
 def read_blocks(root):
     """Every sprite mapping block, and every block deliberately left out."""
     from authoring.stage_tilemap_model import _read_operation
+
     active = _read_operation(root)
     if active is not None:
         return active.mapping_blocks()
@@ -299,6 +301,7 @@ def read_blocks(root):
 def _parse_read_blocks(root, *, original=None):
     """Unchanged source parser, optionally fed only captured ORIGINAL inputs."""
     from authoring.stage_tilemap_model import _OriginalSourceChanged, _UncachedInclude
+
     found = []
     skipped = {}
     blocks = labelled_blocks(root) if original is None else labelled_blocks(root, original=original)
@@ -327,29 +330,23 @@ def _parse_read_blocks(root, *, original=None):
 
 
 def read_one_block(root, found, name, source, tokens, kinds, skipped, *, original=None):
-        if kinds == {"dc.l"}:
-            skipped[name] = "a table of pointers to mappings, not mapping data"
-            return
-        if kinds == {"binclude"}:
-            payload = tokens[0][1].strip('"')
-            data = ((root / payload).read_bytes() if original is None
-                    else original._bytes(root / payload))
-            found.append(MappingBlock(name, source, "payload", payload, data,
-                                      tuple(read_static(data, name))))
-        elif kinds == {"dc.w"}:
-            data = b"".join(struct.pack(">H", parse_number(token))
-                            for _, token in tokens)
-            found.append(MappingBlock(name, source, "words", "", data,
-                                      tuple(read_static(data, name))))
-        elif kinds == {"dc.b"}:
-            data = bytes(parse_number(token) & 0xFF for _, token in tokens)
-            found.append(MappingBlock(name, source, "bytes", "", data,
-                                      tuple(read_static(data, name))))
-        elif kinds == {"dc.w", "dc.l"}:
-            found.append(MappingBlock(name, source, "dynamic", "", b"",
-                                      tuple(read_dynamic(list(tokens), name))))
-        else:
-            skipped[name] = "directives %s are not a mapping" % "/".join(sorted(kinds))
+    if kinds == {"dc.l"}:
+        skipped[name] = "a table of pointers to mappings, not mapping data"
+        return
+    if kinds == {"binclude"}:
+        payload = tokens[0][1].strip('"')
+        data = (root / payload).read_bytes() if original is None else original._bytes(root / payload)
+        found.append(MappingBlock(name, source, "payload", payload, data, tuple(read_static(data, name))))
+    elif kinds == {"dc.w"}:
+        data = b"".join(struct.pack(">H", parse_number(token)) for _, token in tokens)
+        found.append(MappingBlock(name, source, "words", "", data, tuple(read_static(data, name))))
+    elif kinds == {"dc.b"}:
+        data = bytes(parse_number(token) & 0xFF for _, token in tokens)
+        found.append(MappingBlock(name, source, "bytes", "", data, tuple(read_static(data, name))))
+    elif kinds == {"dc.w", "dc.l"}:
+        found.append(MappingBlock(name, source, "dynamic", "", b"", tuple(read_dynamic(list(tokens), name))))
+    else:
+        skipped[name] = "directives %s are not a mapping" % "/".join(sorted(kinds))
 
 
 def round_trip_errors(root):
@@ -361,11 +358,11 @@ def round_trip_errors(root):
             for mapping in block.mappings:
                 for piece in mapping.pieces:
                     if piece.art_addend:
-                        errors.append("%s: %s carries $%06X below its size byte"
-                                      % (mapping.label, piece.art, piece.art_addend))
+                        errors.append(
+                            "%s: %s carries $%06X below its size byte" % (mapping.label, piece.art, piece.art_addend)
+                        )
             continue
-        rebuilt = b"".join(piece.encode() for mapping in block.mappings
-                           for piece in mapping.pieces)
+        rebuilt = b"".join(piece.encode() for mapping in block.mappings for piece in mapping.pieces)
         if rebuilt != block.data:
             errors.append("%s: re-encoded pieces differ from the tree" % block.name)
     return errors
@@ -387,8 +384,7 @@ def survey(root):
     }
 
 
-BINCLUDE_LABEL = re.compile(
-    r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
+BINCLUDE_LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
 
 
 def art_payloads(root):
@@ -414,17 +410,18 @@ def mapping_tiles(root, mapping, payloads=None):
     from authoring.tile_graphics import decode_tile, read_sheet
 
     if not mapping.dynamic:
-        raise ValueError("%s is a static mapping: its tiles are whatever the "
-                         "object already had in VRAM" % mapping.label)
+        raise ValueError(
+            "%s is a static mapping: its tiles are whatever the object already had in VRAM" % mapping.label
+        )
     payloads = payloads if payloads is not None else art_payloads(root)
     tiles = []
     for piece in mapping.pieces:
         if piece.art not in payloads:
-            raise ValueError("%s: %s is not a binincluded payload"
-                             % (mapping.label, piece.art))
+            raise ValueError("%s: %s is not a binincluded payload" % (mapping.label, piece.art))
         if piece.tile != len(tiles):
-            raise ValueError("%s: %s starts at tile $%X but $%X are uploaded"
-                             % (mapping.label, piece.art, piece.tile, len(tiles)))
+            raise ValueError(
+                "%s: %s starts at tile $%X but $%X are uploaded" % (mapping.label, piece.art, piece.tile, len(tiles))
+            )
         sheet = read_sheet(root / payloads[piece.art])
         # A piece takes the payload's first block. Two payloads hold a second
         # block that no symbol names: the extraction cut on referenced
@@ -433,11 +430,11 @@ def mapping_tiles(root, mapping, payloads=None):
         block = sheet.blocks[0]
         available = block.tile_count
         if available != piece.tile_count:
-            raise ValueError("%s: %s gives %d tiles but the piece says %dx%d"
-                             % (mapping.label, piece.art, available,
-                                piece.tiles_wide, piece.tiles_high))
-        tiles.extend(decode_tile(sheet.data, block.offset + index * 32)
-                     for index in range(available))
+            raise ValueError(
+                "%s: %s gives %d tiles but the piece says %dx%d"
+                % (mapping.label, piece.art, available, piece.tiles_wide, piece.tiles_high)
+            )
+        tiles.extend(decode_tile(sheet.data, block.offset + index * 32) for index in range(available))
     return tiles
 
 
@@ -460,7 +457,7 @@ def compose_image(mapping, tiles, palette, line=0, background=None):
                     for x in range(TILE_SIZE):
                         index = pixels[y * TILE_SIZE + x]
                         if not index:
-                            continue          # colour 0 is transparent
+                            continue  # colour 0 is transparent
                         at_y = piece.y - top + row * TILE_SIZE + y
                         at_x = piece.x - left + column * TILE_SIZE + x
                         if 0 <= at_y < height and 0 <= at_x < width:

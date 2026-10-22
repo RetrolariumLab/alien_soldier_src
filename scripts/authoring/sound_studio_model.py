@@ -83,11 +83,11 @@ EXTENDED_COMMANDS = {
 
 
 def _word(data: bytes, offset: int) -> int:
-    return int.from_bytes(data[offset:offset + 2], "big")
+    return int.from_bytes(data[offset : offset + 2], "big")
 
 
 def _signed_word(data: bytes, offset: int) -> int:
-    return int.from_bytes(data[offset:offset + 2], "big", signed=True)
+    return int.from_bytes(data[offset : offset + 2], "big", signed=True)
 
 
 def decode_instruction(label: str, data: bytes, offset: int) -> dict[str, Any]:
@@ -106,10 +106,7 @@ def decode_instruction(label: str, data: bytes, offset: int) -> dict[str, Any]:
         extension = data[offset + 1]
         command = EXTENDED_COMMANDS.get(extension)
         if command is None:
-            raise ValueError(
-                "%s uses unknown extended command $FF $%02X at $%04X"
-                % (label, extension, offset)
-            )
+            raise ValueError("%s uses unknown extended command $FF $%02X at $%04X" % (label, extension, offset))
         size = 2 + command.operands
         if offset + size > len(data):
             raise ValueError("%s has truncated %s at $%04X" % (label, command.name, offset))
@@ -121,7 +118,7 @@ def decode_instruction(label: str, data: bytes, offset: int) -> dict[str, Any]:
             "extension": extension,
             "name": command.name,
             "flow": command.flow,
-            "operands": list(data[offset + 2:offset + size]),
+            "operands": list(data[offset + 2 : offset + size]),
         }
 
     command = COMMANDS[opcode]
@@ -140,7 +137,7 @@ def decode_instruction(label: str, data: bytes, offset: int) -> dict[str, Any]:
         "opcode": opcode,
         "name": command.name,
         "flow": command.flow,
-        "operands": list(data[offset + 1:offset + size]),
+        "operands": list(data[offset + 1 : offset + size]),
     }
     if opcode in (0xF6, 0xF8):
         instruction["target"] = offset + 2 + _signed_word(data, offset + 1)
@@ -150,7 +147,10 @@ def decode_instruction(label: str, data: bytes, offset: int) -> dict[str, Any]:
 
 
 def decode_reachable_sequence(
-    label: str, data: bytes, starts: list[int], instrument_offset: int,
+    label: str,
+    data: bytes,
+    starts: list[int],
+    instrument_offset: int,
     minimum_offset: int = 0,
 ) -> dict[str, Any]:
     """Walk reachable events, branches, calls, and returns without simulating time."""
@@ -164,9 +164,7 @@ def decode_reachable_sequence(
         cursor = pending.popleft()
         while cursor not in instructions:
             if cursor < minimum_offset:
-                raise ValueError(
-                    "%s control flow enters its header at $%04X" % (label, cursor)
-                )
+                raise ValueError("%s control flow enters its header at $%04X" % (label, cursor))
             if cursor in occupied:
                 raise ValueError(
                     "%s control flow enters the middle of instruction $%04X at $%04X"
@@ -176,10 +174,7 @@ def decode_reachable_sequence(
             for position in range(cursor, cursor + instruction["size"]):
                 owner = occupied.get(position)
                 if owner is not None and owner != cursor:
-                    raise ValueError(
-                        "%s instruction $%04X overlaps instruction $%04X"
-                        % (label, cursor, owner)
-                    )
+                    raise ValueError("%s instruction $%04X overlaps instruction $%04X" % (label, cursor, owner))
                 occupied[position] = cursor
             instructions[cursor] = instruction
             if instruction["kind"] == "command":
@@ -189,8 +184,7 @@ def decode_reachable_sequence(
                     end = instrument_offset + (instrument_id + 1) * FM_INSTRUMENT_BYTES
                     if end > len(data):
                         raise ValueError(
-                            "%s instrument %d ends at $%04X outside its payload"
-                            % (label, instrument_id, end)
+                            "%s instrument %d ends at $%04X outside its payload" % (label, instrument_id, end)
                         )
                     instrument_ids.add(instrument_id)
             else:
@@ -233,14 +227,16 @@ def sfx_label(request_id: int) -> str:
 
 
 def _checked_offset(
-    label: str, role: str, value: int, size: int, *, allow_end: bool = False,
+    label: str,
+    role: str,
+    value: int,
+    size: int,
+    *,
+    allow_end: bool = False,
 ) -> None:
     maximum = size if allow_end else size - 1
     if not 0 <= value <= maximum:
-        raise ValueError(
-            "%s %s offset $%04X is outside its $%04X-byte payload"
-            % (label, role, value, size)
-        )
+        raise ValueError("%s %s offset $%04X is outside its $%04X-byte payload" % (label, role, value, size))
 
 
 def decode_bgm_header(label: str, data: bytes) -> dict[str, Any]:
@@ -255,46 +251,46 @@ def decode_bgm_header(label: str, data: bytes) -> dict[str, Any]:
         raise ValueError("%s declares too many BGM PSG channels: %d" % (label, psg_count))
     header_size = 6 + fm_count * 4 + psg_count * 6
     if header_size > len(data):
-        raise ValueError(
-            "%s header needs $%X bytes but payload has $%X" % (label, header_size, len(data))
-        )
+        raise ValueError("%s header needs $%X bytes but payload has $%X" % (label, header_size, len(data)))
 
     instrument_offset = _word(data, 0)
     # The pointer is stored for a later $EF command. PSG-only payloads may
     # legally point one byte past the payload because they never dereference it.
-    _checked_offset(
-        label, "instrument", instrument_offset, len(data), allow_end=True)
+    _checked_offset(label, "instrument", instrument_offset, len(data), allow_end=True)
     channels = []
     cursor = 6
     for index in range(fm_count):
         sequence_offset = _word(data, cursor)
         _checked_offset(label, "FM/DAC sequence", sequence_offset, len(data))
-        channels.append({
-            "family": "fm_or_dac",
-            "index": index,
-            "runtime_channel_type": BGM_FM_CHANNEL_TYPES[index],
-            "sequence_offset": sequence_offset,
-            "initial_word": _word(data, cursor + 2),
-        })
+        channels.append(
+            {
+                "family": "fm_or_dac",
+                "index": index,
+                "runtime_channel_type": BGM_FM_CHANNEL_TYPES[index],
+                "sequence_offset": sequence_offset,
+                "initial_word": _word(data, cursor + 2),
+            }
+        )
         cursor += 4
     for index in range(psg_count):
         sequence_offset = _word(data, cursor)
         _checked_offset(label, "PSG sequence", sequence_offset, len(data))
-        channels.append({
-            "family": "psg",
-            "index": index,
-            "runtime_channel_type": BGM_PSG_CHANNEL_TYPES[index],
-            "sequence_offset": sequence_offset,
-            "initial_word": _word(data, cursor + 2),
-            "initial_envelope": data[cursor + 4],
-            "initial_modulation": data[cursor + 5],
-        })
+        channels.append(
+            {
+                "family": "psg",
+                "index": index,
+                "runtime_channel_type": BGM_PSG_CHANNEL_TYPES[index],
+                "sequence_offset": sequence_offset,
+                "initial_word": _word(data, cursor + 2),
+                "initial_envelope": data[cursor + 4],
+                "initial_modulation": data[cursor + 5],
+            }
+        )
         cursor += 6
     starts = [channel["sequence_offset"] for channel in channels]
     if any(value < header_size for value in starts):
         raise ValueError("%s has a sequence pointer inside its header" % label)
-    sequence = decode_reachable_sequence(
-        label, data, starts, instrument_offset, minimum_offset=header_size)
+    sequence = decode_reachable_sequence(label, data, starts, instrument_offset, minimum_offset=header_size)
     return {
         "label": label,
         "byte_count": len(data),
@@ -318,30 +314,28 @@ def decode_sfx_header(label: str, data: bytes) -> dict[str, Any]:
         raise ValueError("%s declares an invalid SFX channel count: %d" % (label, channel_count))
     header_size = 4 + channel_count * 6
     if header_size > len(data):
-        raise ValueError(
-            "%s header needs $%X bytes but payload has $%X" % (label, header_size, len(data))
-        )
+        raise ValueError("%s header needs $%X bytes but payload has $%X" % (label, header_size, len(data)))
     instrument_offset = _word(data, 0)
-    _checked_offset(
-        label, "instrument", instrument_offset, len(data), allow_end=True)
+    _checked_offset(label, "instrument", instrument_offset, len(data), allow_end=True)
     channels = []
     cursor = 4
     for index in range(channel_count):
         sequence_offset = _word(data, cursor + 2)
         _checked_offset(label, "sequence", sequence_offset, len(data))
-        channels.append({
-            "index": index,
-            "status_and_channel_word": _word(data, cursor),
-            "runtime_channel_type": data[cursor + 1],
-            "sequence_offset": sequence_offset,
-            "initial_word": _word(data, cursor + 4),
-        })
+        channels.append(
+            {
+                "index": index,
+                "status_and_channel_word": _word(data, cursor),
+                "runtime_channel_type": data[cursor + 1],
+                "sequence_offset": sequence_offset,
+                "initial_word": _word(data, cursor + 4),
+            }
+        )
         cursor += 6
     starts = [channel["sequence_offset"] for channel in channels]
     if any(value < header_size for value in starts):
         raise ValueError("%s has a sequence pointer inside its header" % label)
-    sequence = decode_reachable_sequence(
-        label, data, starts, instrument_offset, minimum_offset=header_size)
+    sequence = decode_reachable_sequence(label, data, starts, instrument_offset, minimum_offset=header_size)
     return {
         "label": label,
         "byte_count": len(data),
@@ -373,10 +367,7 @@ def export_inventory(root: Path, profile: str) -> dict[str, Any]:
             raise ValueError("SFX payload is missing: %s" % label)
         record = decode_sfx_header(label, payload)
         record["request_id"] = request_id
-        record["request_class"] = (
-            "low" if request_id < 0x80 else
-            "ordinary" if request_id < 0xF9 else "special"
-        )
+        record["request_class"] = "low" if request_id < 0x80 else "ordinary" if request_id < 0xF9 else "special"
         sfx.append(record)
     banks = []
     for index, expected_size in enumerate(PCM_BANK_LENGTHS, 1):
@@ -385,13 +376,9 @@ def export_inventory(root: Path, profile: str) -> dict[str, Any]:
         if not isinstance(payload, bytes):
             raise ValueError("PCM bank is missing: %s" % label)
         if len(payload) != expected_size:
-            raise ValueError(
-                "%s has $%X bytes instead of $%X" % (label, len(payload), expected_size)
-            )
+            raise ValueError("%s has $%X bytes instead of $%X" % (label, len(payload), expected_size))
         banks.append({"label": label, "byte_count": len(payload)})
-    sequence_records = [
-        item["sequence"] for item in [*bgm, *sfx]
-    ]
+    sequence_records = [item["sequence"] for item in [*bgm, *sfx]]
     aggregate_commands: Counter[str] = Counter()
     for sequence in sequence_records:
         aggregate_commands.update(sequence["command_counts"])
@@ -404,20 +391,13 @@ def export_inventory(root: Path, profile: str) -> dict[str, Any]:
         "sfx_request_count": len(sfx),
         "pcm_bank_count": len(banks),
         "pcm_byte_count": sum(item["byte_count"] for item in banks),
-        "sequence_entry_count": sum(
-            len(item["entry_offsets"]) for item in sequence_records),
-        "sequence_instruction_count": sum(
-            item["instruction_count"] for item in sequence_records),
+        "sequence_entry_count": sum(len(item["entry_offsets"]) for item in sequence_records),
+        "sequence_instruction_count": sum(item["instruction_count"] for item in sequence_records),
         "sequence_event_count": sum(item["event_count"] for item in sequence_records),
-        "sequence_command_count": sum(
-            item["command_count"] for item in sequence_records),
-        "sequence_reachable_byte_count": sum(
-            item["reachable_byte_count"] for item in sequence_records),
+        "sequence_command_count": sum(item["command_count"] for item in sequence_records),
+        "sequence_reachable_byte_count": sum(item["reachable_byte_count"] for item in sequence_records),
         "sequence_command_kinds": dict(sorted(aggregate_commands.items())),
-        "bgm_requests": [
-            {"request_id": value, "payload": bgm_label(value)}
-            for value in BGM_REQUEST_IDS
-        ],
+        "bgm_requests": [{"request_id": value, "payload": bgm_label(value)} for value in BGM_REQUEST_IDS],
         "bgm_payloads": bgm,
         "sfx_payloads": sfx,
         "pcm_banks": banks,

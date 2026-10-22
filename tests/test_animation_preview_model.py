@@ -16,25 +16,33 @@ VISIBLE = model.CallerState(0xE0)
 
 
 def geometry(name: str, x: int = -4, y: int = -8, dynamic: bool = False):
-    return model.FrameGeometry(name, (SpritePiece(0x8001, 5, 0, y, x,
-                                                "Art" if dynamic else ""),), "fixture.s")
+    return model.FrameGeometry(name, (SpritePiece(0x8001, 5, 0, y, x, "Art" if dynamic else ""),), "fixture.s")
 
 
 def looping():
-    return model.Catalog({"Loop": (model.Entry("A", 3), model.Entry("B", 2), model.Entry("Loop", 0))},
-                         {"A": geometry("A"), "B": geometry("B", 3, 2)}, {})
+    return model.Catalog(
+        {"Loop": (model.Entry("A", 3), model.Entry("B", 2), model.Entry("Loop", 0))},
+        {"A": geometry("A"), "B": geometry("B", 3, 2)},
+        {},
+    )
 
 
 def reader_fixture(root: Path):
     path = root / model.SOURCE
     path.parent.mkdir(parents=True)
-    caller_operations = model._operations((ROOT / model.SOURCE).read_text(encoding="utf-8"),
-                                          "Sprite_RenderObjectList", "; End of function Sprite_RenderObjectList")
-    caller = ("Sprite_RenderObjectList:\n" + "\n".join(caller_operations)
-              + "\n; End of function Sprite_RenderObjectList\n")
-    timed = ("Anim_ResolveTimedMappingFrame:\n"
-             + "\n".join(model.workspace.TIMED_READER_OPERATIONS)
-             + "\n; End of function Anim_ResolveTimedMappingFrame\n")
+    caller_operations = model._operations(
+        (ROOT / model.SOURCE).read_text(encoding="utf-8"),
+        "Sprite_RenderObjectList",
+        "; End of function Sprite_RenderObjectList",
+    )
+    caller = (
+        "Sprite_RenderObjectList:\n" + "\n".join(caller_operations) + "\n; End of function Sprite_RenderObjectList\n"
+    )
+    timed = (
+        "Anim_ResolveTimedMappingFrame:\n"
+        + "\n".join(model.workspace.TIMED_READER_OPERATIONS)
+        + "\n; End of function Anim_ResolveTimedMappingFrame\n"
+    )
     path.write_text(caller + timed, encoding="utf-8")
     return path
 
@@ -43,8 +51,7 @@ class TemporalTests(unittest.TestCase):
     def test_initial_load_countdown_transition_and_one_relative_loop(self):
         initial = model.PlaybackState(model.Cursor("Loop"))
         observed = model.simulate(looping(), initial, VISIBLE, 8)
-        self.assertEqual(["A", "A", "A", "B", "B", "A", "A", "A"],
-                         [item.geometry.symbol for item in observed])
+        self.assertEqual(["A", "A", "A", "B", "B", "A", "A", "A"], [item.geometry.symbol for item in observed])
         self.assertEqual([3, 2, 1, 2, 1, 3, 2, 1], [item.after.timer for item in observed])
         self.assertEqual("load-current-entry-timer", observed[0].event)
         self.assertEqual("next-timed-entry", observed[3].event)
@@ -57,8 +64,7 @@ class TemporalTests(unittest.TestCase):
         self.assertEqual((-4, -8, 16, 16), observed[0].geometry.bounds)
         self.assertEqual((3, 2, 16, 16), observed[3].geometry.bounds)
         piece = observed[3].document()["mapping"]["pieces"][0]
-        self.assertEqual((3, 2, 1, 16, 16),
-                         tuple(piece[key] for key in ("x", "y", "tile_offset", "width", "height")))
+        self.assertEqual((3, 2, 1, 16, 16), tuple(piece[key] for key in ("x", "y", "tile_offset", "width", "height")))
         self.assertFalse(observed[3].document()["native_run"])
         self.assertFalse(observed[3].document()["runtime_fidelity_verified"])
 
@@ -113,8 +119,11 @@ class TemporalTests(unittest.TestCase):
     def test_other_readers_are_not_selected_by_a_matching_numeric_flag_byte(self):
         for consumer in ("player-dynamic", "byte-offset-reader", "unknown", None):
             with self.assertRaisesRegex(model.UnsupportedPlayback, "unsupported animation reader"):
-                model.step(looping(), model.PlaybackState(model.Cursor("Loop")),
-                           model.CallerState(0xE0, consumer_path=consumer))
+                model.step(
+                    looping(),
+                    model.PlaybackState(model.Cursor("Loop")),
+                    model.CallerState(0xE0, consumer_path=consumer),
+                )
 
     def test_linear_end_is_not_an_invented_stop_or_loop(self):
         catalog = model.Catalog({"Linear": (model.Entry("A", 1),)}, {"A": geometry("A")}, {})
@@ -134,27 +143,29 @@ class TemporalTests(unittest.TestCase):
 
 class DomainTests(unittest.TestCase):
     def test_missing_mappings_and_jump_destinations_fail_before_playback(self):
-        for entries in ((model.Entry("MissingMapping", 1),),
-                        (model.Entry("A", 1), model.Entry("MissingScript", 0))):
+        for entries in ((model.Entry("MissingMapping", 1),), (model.Entry("A", 1), model.Entry("MissingScript", 0))):
             with self.assertRaisesRegex(ValueError, "missing"):
                 model.Catalog({"Script": entries}, {"A": geometry("A")}, {})
 
     def test_malformed_destination_entries_are_rejected_before_graph_inspection(self):
         with self.assertRaisesRegex(ValueError, "entry target is malformed"):
-            model.Catalog({"Script": (model.Entry("Destination", 0),),
-                           "Destination": ("not an entry",)}, {"A": geometry("A")}, {})
+            model.Catalog(
+                {"Script": (model.Entry("Destination", 0),), "Destination": ("not an entry",)}, {"A": geometry("A")}, {}
+            )
 
     def test_zero_duration_cycle_or_chain_is_not_recursively_resolved(self):
         for scripts in (
-                {"A": (model.Entry("B", 0),), "B": (model.Entry("A", 0),)},
-                {"A": (model.Entry("B", 0),), "B": (model.Entry("C", 0),),
-                 "C": (model.Entry("Frame", 1),)}):
+            {"A": (model.Entry("B", 0),), "B": (model.Entry("A", 0),)},
+            {"A": (model.Entry("B", 0),), "B": (model.Entry("C", 0),), "C": (model.Entry("Frame", 1),)},
+        ):
             with self.assertRaisesRegex(model.UnsupportedPlayback, "jump chain/cycle"):
                 model.Catalog(scripts, {"Frame": geometry("Frame")}, {})
 
     def test_normal_mapping_loops_are_finite_bounded_preview_inputs(self):
-        self.assertEqual(model.MAX_STEPS, len(model.simulate(
-            looping(), model.PlaybackState(model.Cursor("Loop")), VISIBLE, model.MAX_STEPS)))
+        self.assertEqual(
+            model.MAX_STEPS,
+            len(model.simulate(looping(), model.PlaybackState(model.Cursor("Loop")), VISIBLE, model.MAX_STEPS)),
+        )
         for steps in (-1, model.MAX_STEPS + 1, True, 1.0):
             with self.assertRaisesRegex(ValueError, "invocation count"):
                 model.simulate(looping(), model.PlaybackState(model.Cursor("Loop")), VISIBLE, steps)
@@ -167,11 +178,13 @@ class DomainTests(unittest.TestCase):
             model.simulate(looping(), model.PlaybackState(model.Cursor("Loop"), True), VISIBLE, 0)
 
     def test_typed_timer_cursor_and_flags_are_not_coerced(self):
-        for initial in (model.PlaybackState(model.Cursor("Loop"), True),
-                        model.PlaybackState(model.Cursor("Loop"), -1),
-                        model.PlaybackState(model.Cursor("Loop", False)),
-                        model.PlaybackState(model.Cursor("Missing")),
-                        model.PlaybackState(model.Cursor("Loop", 100))):
+        for initial in (
+            model.PlaybackState(model.Cursor("Loop"), True),
+            model.PlaybackState(model.Cursor("Loop"), -1),
+            model.PlaybackState(model.Cursor("Loop", False)),
+            model.PlaybackState(model.Cursor("Missing")),
+            model.PlaybackState(model.Cursor("Loop", 100)),
+        ):
             with self.assertRaises(ValueError):
                 model.step(looping(), initial, VISIBLE)
         for caller in (model.CallerState(True), model.CallerState(0xE0, 1.0), {}):
@@ -189,11 +202,9 @@ class DomainTests(unittest.TestCase):
             catalog.scripts["New"] = ()
 
     def test_mapping_pieces_keep_typed_source_terminators_and_bounds(self):
-        for piece in (SpritePiece(1, 5, 0, 0, 0), SpritePiece(0x8000, 5, 0, 0, 128),
-                      SpritePiece(True, 5, 0, 0, 0)):
+        for piece in (SpritePiece(1, 5, 0, 0, 0), SpritePiece(0x8000, 5, 0, 0, 128), SpritePiece(True, 5, 0, 0, 0)):
             with self.assertRaises(ValueError):
-                model.Catalog({"Script": (model.Entry("A", 1),)},
-                              {"A": model.FrameGeometry("A", (piece,))}, {})
+                model.Catalog({"Script": (model.Entry("A", 1),)}, {"A": model.FrameGeometry("A", (piece,))}, {})
 
 
 class ReaderProofTests(unittest.TestCase):
@@ -212,12 +223,14 @@ class ReaderProofTests(unittest.TestCase):
             path = reader_fixture(root)
             original = path.read_text(encoding="utf-8")
             model.prove_reader(root)
-            for before, after in (("tst.b d0", "tst.w d0"),
-                                  ("subq.w #1,d0", "; subq.w #1,d0"),
-                                  ("ror.l #8,d3", "ror.l #16,d3"),
-                                  ("ror.l #8,d3", "ror.l #8,d3\n move.l #0,d3"),
-                                  ("bsr.w Anim_ResolveTimedMappingFrame", "nop"),
-                                  ("pea Sprite_RenderObjectList_NextObject(pc)", "nop")):
+            for before, after in (
+                ("tst.b d0", "tst.w d0"),
+                ("subq.w #1,d0", "; subq.w #1,d0"),
+                ("ror.l #8,d3", "ror.l #16,d3"),
+                ("ror.l #8,d3", "ror.l #8,d3\n move.l #0,d3"),
+                ("bsr.w Anim_ResolveTimedMappingFrame", "nop"),
+                ("pea Sprite_RenderObjectList_NextObject(pc)", "nop"),
+            ):
                 path.write_text(original.replace(before, after), encoding="utf-8")
                 with self.assertRaisesRegex(ValueError, "operations changed"):
                     model.prove_reader(root)
@@ -239,8 +252,20 @@ class CanonicalTrajectoryTests(unittest.TestCase):
 
     def test_bird_cycle_has_independently_fixed_thirty_invocation_period(self):
         expected = []
-        for frame, duration in ((0, 4), (1, 3), (2, 2), (3, 1), (4, 2), (5, 3),
-                                (6, 4), (5, 3), (4, 2), (3, 1), (2, 2), (1, 3)):
+        for frame, duration in (
+            (0, 4),
+            (1, 3),
+            (2, 2),
+            (3, 1),
+            (4, 2),
+            (5, 3),
+            (6, 4),
+            (5, 3),
+            (4, 2),
+            (3, 1),
+            (2, 2),
+            (1, 3),
+        ):
             expected.extend(["Enemy_BirdSpriteMapping%02d" % frame] * duration)
         self.assertEqual(30, len(expected))
         for catalog in self.catalogs.values():
@@ -253,7 +278,9 @@ class CanonicalTrajectoryTests(unittest.TestCase):
 
     def test_shared_combat_script_reaches_its_real_ff_terminal_hold(self):
         for catalog in self.catalogs.values():
-            observed = model.simulate(catalog, model.PlaybackState(model.Cursor("SharedCombatSpriteAnimation00")), VISIBLE, 80)
+            observed = model.simulate(
+                catalog, model.PlaybackState(model.Cursor("SharedCombatSpriteAnimation00")), VISIBLE, 80
+            )
             self.assertEqual(8, observed[16].after.cursor.index)
             self.assertEqual("SharedCombatSpriteFrame05", observed[16].geometry.symbol)
             self.assertEqual(255, observed[16].after.timer)

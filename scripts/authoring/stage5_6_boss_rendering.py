@@ -14,8 +14,7 @@ from authoring.tile_graphics import cram_to_rgb
 
 
 BOSS_DISPLAY = {
-    "madam_barbar": (4, "Boss_MadamBarbarTileArt",
-                     "Boss_MadamBarbarPaletteCommand"),
+    "madam_barbar": (4, "Boss_MadamBarbarTileArt", "Boss_MadamBarbarPaletteCommand"),
     "joker": (5, "Boss_JokerTileArt", "Boss_JokerPaletteCommand"),
 }
 
@@ -32,10 +31,13 @@ class _NameTablePlane:
 
 
 def build_boss_display(
-        root: Path, boss: str, fade_phase: int,
-        shared_color54: int = 0, *,
-        frame_counter: int | None = None,
-        secondary_frame_offset: int | None = None,
+    root: Path,
+    boss: str,
+    fade_phase: int,
+    shared_color54: int = 0,
+    *,
+    frame_counter: int | None = None,
+    secondary_frame_offset: int | None = None,
 ):
     """Overlay the boss's source art, faded colors, and indexed B table."""
     if boss not in BOSS_DISPLAY:
@@ -43,8 +45,8 @@ def build_boss_display(
     index, art_name, palette_name = BOSS_DISPLAY[boss]
     base = scene(root, index)
     table = build_boss_secondary_table(
-        root, boss, frame_counter=frame_counter,
-        secondary_frame_offset=secondary_frame_offset)
+        root, boss, frame_counter=frame_counter, secondary_frame_offset=secondary_frame_offset
+    )
     data = read_once(root)["data"]
     compressed_art = data.get(art_name)
     if not isinstance(compressed_art, bytes):
@@ -53,29 +55,29 @@ def build_boss_display(
     if 0x6000 + len(art) > len(base.vram):
         raise ValueError("boss tile art exceeds VRAM")
     vram = bytearray(base.vram)
-    vram[0x6000:0x6000 + len(art)] = art
-    line3 = boss_faded_line_from_source(
-        data, palette_name, fade_phase, shared_color54)
+    vram[0x6000 : 0x6000 + len(art)] = art
+    line3 = boss_faded_line_from_source(data, palette_name, fade_phase, shared_color54)
     palette = list(base.palette)
     palette[49:64] = [cram_to_rgb(word) for word in line3]
-    return replace(
-        base, vram=bytes(vram), palette=palette,
-        plane_b=_NameTablePlane(table.rows))
+    return replace(base, vram=bytes(vram), palette=palette, plane_b=_NameTablePlane(table.rows))
 
 
 def draw_boss_rows(
-        displayed, primary_hscroll: int, secondary_hscroll: int,
-        primary_vscroll: int, secondary_vscroll_at: Callable[[int], int],
-        top: int, bottom: int, width: int,
+    displayed,
+    primary_hscroll: int,
+    secondary_hscroll: int,
+    primary_vscroll: int,
+    secondary_vscroll_at: Callable[[int], int],
+    top: int,
+    bottom: int,
+    width: int,
 ) -> list[list[tuple[int, int, int]]]:
     """Composite independent A/B scroll samples, excluding sprites/HUD."""
     if not 32 <= top < bottom <= 224:
         raise ValueError("boss background supports rows 32..223")
     if not 1 <= width <= 320:
         raise ValueError("boss viewport width must be 1..320")
-    if any(not -0x8000 <= scroll <= 0x7FFF
-           for scroll in (primary_hscroll, secondary_hscroll,
-                          primary_vscroll)):
+    if any(not -0x8000 <= scroll <= 0x7FFF for scroll in (primary_hscroll, secondary_hscroll, primary_vscroll)):
         raise ValueError("boss scroll must be a signed word")
     image = []
     cache = {}
@@ -84,11 +86,11 @@ def draw_boss_rows(
         if not -0x8000 <= back_vscroll <= 0x7FFF:
             raise ValueError("boss secondary VScroll must be a signed word")
         front = plane_scanline(
-            displayed, displayed.tilemap, -primary_hscroll,
-            screen_y + primary_vscroll, width, cache, False)
+            displayed, displayed.tilemap, -primary_hscroll, screen_y + primary_vscroll, width, cache, False
+        )
         back = plane_scanline(
-            displayed, displayed.plane_b, -secondary_hscroll,
-            screen_y + back_vscroll, width, cache, False, 512)
+            displayed, displayed.plane_b, -secondary_hscroll, screen_y + back_vscroll, width, cache, False, 512
+        )
         front_colors, front_indices, front_priorities = front
         back_colors, back_indices, back_priorities = back
         row = []

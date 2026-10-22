@@ -38,22 +38,17 @@ class SoundInstrumentDocumentTests(unittest.TestCase):
         document = copy.deepcopy(self.document)
         payload = next(item for item in document["payloads"] if item["instruments"])
         payload["instruments"].pop()
-        self.assertTrue(any("inventory differs" in error
-                            for error in document_errors(document, ROOT, "jp")))
+        self.assertTrue(any("inventory differs" in error for error in document_errors(document, ROOT, "jp")))
         document = copy.deepcopy(self.document)
         padded = next(item for item in document["payloads"] if item["trailing_padding"])
         padded["trailing_padding"][0] ^= 1
-        self.assertTrue(any("trailing_padding differs" in error
-                            for error in document_errors(document, ROOT, "jp")))
+        self.assertTrue(any("trailing_padding differs" in error for error in document_errors(document, ROOT, "jp")))
 
     def test_binary_and_inline_instruments_write_only_to_a_staged_tree(self) -> None:
         document = copy.deepcopy(self.document)
         edited = []
         for storage in ("binary", "source"):
-            payload = next(
-                item for item in document["payloads"]
-                if item["storage"] == storage and item["instruments"]
-            )
+            payload = next(item for item in document["payloads"] if item["storage"] == storage and item["instruments"])
             instrument = payload["instruments"][0]
             instrument["total_level"][0] ^= 1
             edited.append((payload, instrument))
@@ -61,20 +56,19 @@ class SoundInstrumentDocumentTests(unittest.TestCase):
             staged = Path(directory)
             shutil.copytree(ROOT / "src", staged / "src")
             shutil.copytree(ROOT / "data", staged / "data")
-            changed = apply_document(
-                document, staged, "jp", validation_root=ROOT)
-            self.assertEqual(
-                sorted(payload["path"] for payload, _instrument in edited), changed)
+            changed = apply_document(document, staged, "jp", validation_root=ROOT)
+            self.assertEqual(sorted(payload["path"] for payload, _instrument in edited), changed)
             stored, _bodies = labelled_blocks(staged)
             for payload, instrument in edited:
                 offset = payload["instrument_offset"] + 21
-                self.assertEqual(
-                    instrument["total_level"][0], stored[payload["name"]][offset])
+                self.assertEqual(instrument["total_level"][0], stored[payload["name"]][offset])
 
     def test_eu_document_has_the_same_instrument_contract(self) -> None:
         eu = export_document(ROOT, "eu")
         for field in (
-            "payload_count", "instrument_count", "parameter_byte_count",
+            "payload_count",
+            "instrument_count",
+            "parameter_byte_count",
             "padding_byte_count",
         ):
             self.assertEqual(self.document[field], eu[field])

@@ -23,8 +23,7 @@ from pathlib import Path
 # on Windows. Finding scripts/ from the file itself works under any shell.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from authoring.palette_model import (
-    PALETTE_COLOURS, named_sets, round_trip_errors, survey)
+from authoring.palette_model import PALETTE_COLOURS, named_sets, round_trip_errors, survey
 from authoring.tile_graphics import CRAM_LEVELS, CRAM_LEVELS_LINEAR, write_png
 
 
@@ -35,10 +34,11 @@ def validate(root):
             print("[ERROR] %s" % error, file=sys.stderr)
         return 1
     found = survey(root)
-    print("[OK] palettes: %d commands in %d blocks, %d full palettes, "
-          "%d offset lists all landing on command boundaries"
-          % (found["commands"], found["command_blocks"],
-             found["full_palettes"], found["offset_lists"]))
+    print(
+        "[OK] palettes: %d commands in %d blocks, %d full palettes, "
+        "%d offset lists all landing on command boundaries"
+        % (found["commands"], found["command_blocks"], found["full_palettes"], found["offset_lists"])
+    )
     return 0
 
 
@@ -50,8 +50,7 @@ def show_list(root, levels):
 
 def find(root, name, levels):
     sets = named_sets(root, levels)
-    match = next((item for item in sets if item["name"] == name
-                  or item["name"].lower().startswith(name.lower())), None)
+    match = next((item for item in sets if item["name"] == name or item["name"].lower().startswith(name.lower())), None)
     if match is None:
         print("[ERROR] no palette list named %s" % name, file=sys.stderr)
         print("known: %s" % ", ".join(item["name"] for item in sets), file=sys.stderr)
@@ -64,7 +63,7 @@ def show(root, name, levels):
         return 1
     print("%s <- %s" % (match["name"], ", ".join(match["commands"])))
     for line in range(PALETTE_COLOURS // 16):
-        words = match["words"][line * 16:(line + 1) * 16]
+        words = match["words"][line * 16 : (line + 1) * 16]
         print("  line %d  %s" % (line, " ".join("%03X" % word for word in words)))
     return 0
 
@@ -75,8 +74,7 @@ def strip(root, name, output, scale, levels):
         return 1
     image = []
     for line in range(PALETTE_COLOURS // 16):
-        row = [colour for colour in match["rgb"][line * 16:(line + 1) * 16]
-               for _ in range(scale)]
+        row = [colour for colour in match["rgb"][line * 16 : (line + 1) * 16] for _ in range(scale)]
         image.extend([list(row) for _ in range(scale)])
     write_png(root / output, image)
     print("[OK] wrote %s: %s" % (output, match["name"]))
@@ -89,8 +87,7 @@ def main():
     parser.add_argument("--set", dest="name", default="")
     parser.add_argument("--output", default="build/art/palette.png")
     parser.add_argument("--scale", type=int, default=16)
-    parser.add_argument("--linear-levels", action="store_true",
-                        help="use the evenly spaced colour ramp instead")
+    parser.add_argument("--linear-levels", action="store_true", help="use the evenly spaced colour ramp instead")
     args = parser.parse_args()
     root = Path.cwd()
     levels = CRAM_LEVELS_LINEAR if args.linear_levels else CRAM_LEVELS

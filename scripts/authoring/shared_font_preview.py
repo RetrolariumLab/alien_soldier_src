@@ -33,5 +33,5 @@ def glyph_tiles(root: Path, index: int) -> tuple[list[list[int]], list[list[int]
     tiles = []
     for offset in (0, TILE_BYTES):
         pixels = decode_tile(art, start + offset)
-        tiles.append([pixels[row * 8:row * 8 + 8] for row in range(8)])
+        tiles.append([pixels[row * 8 : row * 8 + 8] for row in range(8)])
     return tiles[0], tiles[1]

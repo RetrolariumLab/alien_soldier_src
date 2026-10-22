@@ -10,9 +10,7 @@ from pathlib import Path
 import re
 
 
-DEFINITION = re.compile(
-    r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+(?:equ|macro)\b)", re.IGNORECASE
-)
+DEFINITION = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+(?:equ|macro)\b)", re.IGNORECASE)
 PROVENANCE = re.compile(r";\s*was:\s*([A-Za-z_][A-Za-z0-9_]*)\s*$")
 ADDRESS_DERIVED = re.compile(
     r"^(?:loc|locret|nullsub|sub|off|unk|unknown|byte|word|dword|flt|stru|asc)_[0-9A-F]+$",
@@ -77,11 +75,7 @@ def inspect_module(root: Path, entry: dict, symbols: dict[str, int] | None = Non
                         "name": current["name"],
                         "line": current["line"],
                         "legacy_name": marker.group(1),
-                        **(
-                            {"address": current["address"]}
-                            if "address" in current
-                            else {}
-                        ),
+                        **({"address": current["address"]} if "address" in current else {}),
                     }
                 )
 
@@ -96,19 +90,14 @@ def inspect_module(root: Path, entry: dict, symbols: dict[str, int] | None = Non
         "address_derived_definitions": sum(item["address_derived"] for item in definitions),
         "provenance_procedures": len(procedures),
         "generic_container_name": bool(GENERIC_CONTAINER.search(path.stem)),
-        "dominant_categories": [
-            {"name": name, "definitions": count}
-            for name, count in categories.most_common(8)
-        ],
+        "dominant_categories": [{"name": name, "definitions": count} for name, count in categories.most_common(8)],
         "first_definition": definitions[0]["name"] if definitions else None,
         "last_definition": definitions[-1]["name"] if definitions else None,
         "procedure_anchors": procedures,
     }
 
 
-def build_inventory(
-    root: Path, layout: dict, symbols: dict[str, int] | None = None
-) -> dict:
+def build_inventory(root: Path, layout: dict, symbols: dict[str, int] | None = None) -> dict:
     modules = [inspect_module(root, entry, symbols) for entry in layout["modules"]]
     line_counts = sorted(item["lines"] for item in modules)
     total_lines = sum(line_counts)
@@ -125,9 +114,7 @@ def build_inventory(
             "modules_over_1000_lines": sum(value > 1000 for value in line_counts),
             "generic_container_names": sum(item["generic_container_name"] for item in modules),
             "definitions": sum(item["definitions"] for item in modules),
-            "address_derived_definitions": sum(
-                item["address_derived_definitions"] for item in modules
-            ),
+            "address_derived_definitions": sum(item["address_derived_definitions"] for item in modules),
             "provenance_procedures": sum(item["provenance_procedures"] for item in modules),
         },
     }

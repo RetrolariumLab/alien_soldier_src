@@ -8,31 +8,52 @@ from pathlib import Path
 
 from authoring.content_workspace import checked_path
 from authoring.sound_studio_model import (
-    BGM_REQUEST_IDS, SFX_REQUEST_IDS, bgm_label, decode_bgm_header,
-    decode_sfx_header, sfx_label,
+    BGM_REQUEST_IDS,
+    SFX_REQUEST_IDS,
+    bgm_label,
+    decode_bgm_header,
+    decode_sfx_header,
+    sfx_label,
 )
 from extract_symbols import EQU, LABEL, LISTING_ROW, SOURCE_COLUMN
 
 
 PAYLOAD_OWNERS = (
-    "src/sound/music_tracks.s", "src/sound/sfx_tracks_a0_to_ef.s",
+    "src/sound/music_tracks.s",
+    "src/sound/sfx_tracks_a0_to_ef.s",
     "src/sound/sfx_tracks_40_to_7f_and_f0_to_fc.s",
 )
 LOADER_SOURCE = "src/sound/playback_and_loading.s"
 RAM_NAMES = (
-    "GameModeIndex", "GameSubstateIndex", "SoundRequestQueue",
-    "SoundSelectedRequest", "SoundCurrentPriority", "SoundTempoReload",
-    "SoundBGMDataPtr", "SoundPCMChannelRecord", "SoundBGMPSGChannels",
-    "SoundSpecialSFXDataPtr", "SoundSpecialSFXFM", "SoundSpecialSFXPSG",
-    "PaletteFadeMaskStatus", "ScenePaletteFadeOffset", "DataLoaderControl",
+    "GameModeIndex",
+    "GameSubstateIndex",
+    "SoundRequestQueue",
+    "SoundSelectedRequest",
+    "SoundCurrentPriority",
+    "SoundTempoReload",
+    "SoundBGMDataPtr",
+    "SoundPCMChannelRecord",
+    "SoundBGMPSGChannels",
+    "SoundSpecialSFXDataPtr",
+    "SoundSpecialSFXFM",
+    "SoundSpecialSFXPSG",
+    "PaletteFadeMaskStatus",
+    "ScenePaletteFadeOffset",
+    "DataLoaderControl",
 )
 ROM_NAMES = (
-    "Sound_LoadBGMRequest", "Sound_StopSFXAndRestoreBGMChannels",
-    "Sound_FinishBGMInitialization", "Sound_LoadSFXReturn",
-    "Sound_LoadSpecialSFXReturn", "Sound_SFXChannelRecordPointers",
-    "Sound_BGMPointerTable", "Sound_OrdinarySFXPointerTableBase",
-    "Sound_SpecialSFXPointerTable", "Sound_SelectPendingRequest",
-    "Sound_ValidateVoiceDACRequest", "Sound_DispatchPendingRequest",
+    "Sound_LoadBGMRequest",
+    "Sound_StopSFXAndRestoreBGMChannels",
+    "Sound_FinishBGMInitialization",
+    "Sound_LoadSFXReturn",
+    "Sound_LoadSpecialSFXReturn",
+    "Sound_SFXChannelRecordPointers",
+    "Sound_BGMPointerTable",
+    "Sound_OrdinarySFXPointerTableBase",
+    "Sound_SpecialSFXPointerTable",
+    "Sound_SelectPendingRequest",
+    "Sound_ValidateVoiceDACRequest",
+    "Sound_DispatchPendingRequest",
 )
 
 
@@ -96,7 +117,7 @@ def payload_body(root: Path, label: str) -> bytes:
                 if active:
                     break
                 active = head[1] == label
-                source = source[head.end():].strip()
+                source = source[head.end() :].strip()
             if not active or not source:
                 continue
             include = re.fullmatch(r'binclude\s+"([^"]+)"', source)
@@ -125,46 +146,62 @@ def payload_body(root: Path, label: str) -> bytes:
 def source_contract(root: Path) -> None:
     loader = (root / LOADER_SOURCE).read_text(encoding="utf-8")
     signatures = (
-        "lea     (SoundPCMChannelRecord).w,a1", "moveq   #$30,d6",
-        "move.b  d3,(a1)", "move.b  (a2)+,1(a1)",
-        "move.b  d4,2(a1)", "move.l  d0,4(a1)",
-        "move.w  (a4)+,8(a1)", "move.b  d5,$E(a1)",
-        "move.b  (a4)+,$A(a1)", "move.b  (a4)+,$B(a1)",
-        "move.w  (a1)+,(a5)", "move.b  d5,2(a5)",
-        "move.l  d0,4(a5)", "move.w  (a1)+,8(a5)",
-        "move.b  #1,$E(a5)", "move.b  d6,$D(a5)",
-        "move.l  d1,$20(a5)", "move.l  d0,(SoundSpecialSFXDataPtr).w",
+        "lea     (SoundPCMChannelRecord).w,a1",
+        "moveq   #$30,d6",
+        "move.b  d3,(a1)",
+        "move.b  (a2)+,1(a1)",
+        "move.b  d4,2(a1)",
+        "move.l  d0,4(a1)",
+        "move.w  (a4)+,8(a1)",
+        "move.b  d5,$E(a1)",
+        "move.b  (a4)+,$A(a1)",
+        "move.b  (a4)+,$B(a1)",
+        "move.w  (a1)+,(a5)",
+        "move.b  d5,2(a5)",
+        "move.l  d0,4(a5)",
+        "move.w  (a1)+,8(a5)",
+        "move.b  #1,$E(a5)",
+        "move.b  d6,$D(a5)",
+        "move.l  d1,$20(a5)",
+        "move.l  d0,(SoundSpecialSFXDataPtr).w",
     )
     for signature in signatures:
         if signature not in loader:
             raise ValueError("sound audition loader contract changed: %s" % signature)
     title = (root / "src/ui/title_screen.s").read_text(encoding="utf-8")
     options = (root / "src/ui/options_menu_controllers.s").read_text(encoding="utf-8")
-    if ("move.w  #$1C,(GameModeIndex).w" not in title
-            or "move.w  #$20,(GameModeIndex).w" not in options):
+    if "move.w  #$1C,(GameModeIndex).w" not in title or "move.w  #$20,(GameModeIndex).w" not in options:
         raise ValueError("sound audition options route changed")
     story = (root / "src/cutscenes/story_screen_and_title_transition.s").read_text(encoding="utf-8")
     if "StoryScreen_MainLoop:" not in story or "StoryScreen_RunFrame:" not in story:
         raise ValueError("sound audition story Start reader is missing")
     reader = story.split("StoryScreen_MainLoop:", 1)[1].split("StoryScreen_RunFrame:", 1)[0]
     for signature in (
-            "btst    #0,(PaletteFadeMaskStatus).w",
-            "tst.w   (ScenePaletteFadeOffset).l", "tst.w   (DataLoaderControl).w",
-            "btst    #7,(ControllerPressedState).w", "bne.w   StoryScreen_StartExitFade"):
+        "btst    #0,(PaletteFadeMaskStatus).w",
+        "tst.w   (ScenePaletteFadeOffset).l",
+        "tst.w   (DataLoaderControl).w",
+        "btst    #7,(ControllerPressedState).w",
+        "bne.w   StoryScreen_StartExitFade",
+    ):
         if signature not in reader:
             raise ValueError("sound audition story Start gate changed: %s" % signature)
     table = (root / "src/system/vblank.s").read_text(encoding="utf-8").split("Sys_GameStateHandlers:", 1)
     if len(table) != 2:
         raise ValueError("sound audition mode dispatch table is missing")
     handlers = re.findall(r"\bdc\.l\s+([A-Za-z_][A-Za-z_0-9]*)", table[1])
-    for name, mode in (("TitleScreen_Update", 0x18), ("UI_InitOptionsScreen", 0x1C),
-                       ("UI_UpdateOptionsScreen", 0x20), ("StoryScreen_MainLoop", 0x28)):
+    for name, mode in (
+        ("TitleScreen_Update", 0x18),
+        ("UI_InitOptionsScreen", 0x1C),
+        ("UI_UpdateOptionsScreen", 0x20),
+        ("StoryScreen_MainLoop", 0x28),
+    ):
         if name not in handlers or handlers.index(name) * 4 != mode:
             raise ValueError("sound audition dispatch mode changed: %s" % name)
 
 
-def loader_expectations(request: int, body: bytes, base: int,
-                        symbols: dict[str, int], sfx_pointers: list[int]) -> tuple[str, list[dict]]:
+def loader_expectations(
+    request: int, body: bytes, base: int, symbols: dict[str, int], sfx_pointers: list[int]
+) -> tuple[str, list[dict]]:
     """Capture exact initialization before any sequence event advances its cursor."""
     label = payload_for_request(request)
     music = request in BGM_REQUEST_IDS
@@ -172,8 +209,7 @@ def loader_expectations(request: int, body: bytes, base: int,
     checks = []
 
     def add(name, address, size, value):
-        checks.append({"name": name, "address": address & 0xFFFFFF,
-                       "size": size, "value": value})
+        checks.append({"name": name, "address": address & 0xFFFFFF, "size": size, "value": value})
 
     add("options_mode", symbols["GameModeIndex"], 2, 0x20)
 
@@ -182,20 +218,19 @@ def loader_expectations(request: int, body: bytes, base: int,
             # The source's FM-count-zero branch skips register initialization.
             raise ValueError("FM-count-zero BGM requires a separate loader-state proof")
         hook = "Sound_FinishBGMInitialization"
-        add("bgm_instrument_pointer", symbols["SoundBGMDataPtr"], 4,
-            base + header["instrument_offset"])
+        add("bgm_instrument_pointer", symbols["SoundBGMDataPtr"], 4, base + header["instrument_offset"])
         add("bgm_tempo", symbols["SoundTempoReload"], 1, header["tempo"])
     else:
         hook = "Sound_LoadSpecialSFXReturn" if request >= 0xF9 else "Sound_LoadSFXReturn"
         if request >= 0xF9:
-            add("special_instrument_pointer", symbols["SoundSpecialSFXDataPtr"], 4,
-                base + header["instrument_offset"])
+            add("special_instrument_pointer", symbols["SoundSpecialSFXDataPtr"], 4, base + header["instrument_offset"])
     occupied = set()
     for index, channel in enumerate(header["channels"]):
         kind = channel["runtime_channel_type"]
         if music:
-            start = symbols["SoundPCMChannelRecord"] if channel["family"] == "fm_or_dac" \
-                else symbols["SoundBGMPSGChannels"]
+            start = (
+                symbols["SoundPCMChannelRecord"] if channel["family"] == "fm_or_dac" else symbols["SoundBGMPSGChannels"]
+            )
             at = start + channel["index"] * 0x30
             flags = 0x80
             multiplier = header["initial_tick_multiplier"]
@@ -214,23 +249,26 @@ def loader_expectations(request: int, body: bytes, base: int,
         occupied.add(at)
         prefix = "channel_%d_" % index
         for name, offset, size, value in (
-                ("status", 0, 1, flags), ("type", 1, 1, kind),
-                ("tick_multiplier", 2, 1, multiplier),
-                ("sequence_pointer", 4, 4, base + channel["sequence_offset"]),
-                ("initial_word", 8, 2, channel["initial_word"]),
-                ("record_stride", 0xD, 1, 0x30), ("event_counter", 0xE, 1, 1)):
+            ("status", 0, 1, flags),
+            ("type", 1, 1, kind),
+            ("tick_multiplier", 2, 1, multiplier),
+            ("sequence_pointer", 4, 4, base + channel["sequence_offset"]),
+            ("initial_word", 8, 2, channel["initial_word"]),
+            ("record_stride", 0xD, 1, 0x30),
+            ("event_counter", 0xE, 1, 1),
+        ):
             add(prefix + name, at + offset, size, value)
         if music and channel["family"] == "psg":
             add(prefix + "pitch_selector", at + 0xA, 1, channel["initial_envelope"])
             add(prefix + "volume_selector", at + 0xB, 1, channel["initial_modulation"])
         if not music and request < 0xF9:
-            add(prefix + "instrument_pointer", at + 0x20, 4,
-                base + header["instrument_offset"])
+            add(prefix + "instrument_pointer", at + 0x20, 4, base + header["instrument_offset"])
     return hook, checks
 
 
-def build_contract(root: Path, tree: Path, profile: str, request: int,
-                   image: bytes, original: bytes, listing: Path) -> dict:
+def build_contract(
+    root: Path, tree: Path, profile: str, request: int, image: bytes, original: bytes, listing: Path
+) -> dict:
     """Bind selected staged payload, pointer tables and unchanged loaders to ROM."""
     if profile not in ("jp", "eu"):
         raise ValueError("sound audition profile must be jp or eu")
@@ -245,10 +283,12 @@ def build_contract(root: Path, tree: Path, profile: str, request: int,
             raise ValueError("audition ROM symbol is outside the image: %s" % name)
     body = payload_body(tree, label)
     base = symbols[label]
-    if image[base:base + len(body)] != body:
+    if image[base : base + len(body)] != body:
         raise ValueError("listing/ROM do not identify the selected staged sound payload")
-    for first, last in (("Sound_LoadBGMRequest", "Sound_StopSFXAndRestoreBGMChannels"),
-                        ("Sound_SelectPendingRequest", "Sound_ValidateVoiceDACRequest")):
+    for first, last in (
+        ("Sound_LoadBGMRequest", "Sound_StopSFXAndRestoreBGMChannels"),
+        ("Sound_SelectPendingRequest", "Sound_ValidateVoiceDACRequest"),
+    ):
         begin, end = symbols[first], symbols[last]
         if not begin < end or image[begin:end] != original[begin:end]:
             raise ValueError("sound loader/dispatcher differs from preservation ROM")
@@ -259,24 +299,30 @@ def build_contract(root: Path, tree: Path, profile: str, request: int,
     else:
         slot = request + 0x1D if request < 0x80 else request - 0xA0
         table = symbols["Sound_OrdinarySFXPointerTableBase"] + slot * 4
-    if int.from_bytes(image[table:table + 4], "big") != base:
+    if int.from_bytes(image[table : table + 4], "big") != base:
         raise ValueError("selected request pointer does not address its listed payload")
     pointer_base = symbols["Sound_SFXChannelRecordPointers"]
-    pointers = [int.from_bytes(image[pointer_base + offset:pointer_base + offset + 4], "big")
-                for offset in range(0, 32, 4)]
+    pointers = [
+        int.from_bytes(image[pointer_base + offset : pointer_base + offset + 4], "big") for offset in range(0, 32, 4)
+    ]
     hook, checks = loader_expectations(request, body, base, symbols, pointers)
     opcode = b"\x58\x4f\x4e\x75" if request in BGM_REQUEST_IDS else b"\x4e\x75"
-    if image[symbols[hook]:symbols[hook] + len(opcode)] != opcode:
+    if image[symbols[hook] : symbols[hook] + len(opcode)] != opcode:
         raise ValueError("audition loader return opcode does not match its symbol")
     dispatch = symbols["Sound_DispatchPendingRequest"]
-    if image[dispatch:dispatch + 2] != b"\x7e\x00":
+    if image[dispatch : dispatch + 2] != b"\x7e\x00":
         raise ValueError("audition dispatcher opcode does not match its symbol")
     return {
-        "schema_version": 1, "profile": profile, "request_id": request,
-        "payload": label, "rom_sha256": hashlib.sha256(image).hexdigest(),
-        "listing_sha256": digest_file(listing), "hook_address": symbols[hook],
+        "schema_version": 1,
+        "profile": profile,
+        "request_id": request,
+        "payload": label,
+        "rom_sha256": hashlib.sha256(image).hexdigest(),
+        "listing_sha256": digest_file(listing),
+        "hook_address": symbols[hook],
         "dispatch_hook_address": symbols["Sound_DispatchPendingRequest"],
-        "hook_symbol": hook, "ram": {name: symbols[name] for name in RAM_NAMES},
+        "hook_symbol": hook,
+        "ram": {name: symbols[name] for name in RAM_NAMES},
         "checks": checks,
     }
 

@@ -88,10 +88,21 @@ class VerifySymbolsTests(unittest.TestCase):
 class RegionalProvenanceTests(unittest.TestCase):
     def fixture(self, root):
         profiles = json.loads((ROOT / "config/rom_profiles.json").read_text())
-        records = [{"current_name": "Reset", "address": "0x000002",
-                    "previous_name": "sub_2", "legacy_name": "sub_2", "basis": ["not duplicated"]},
-                   {"current_name": "StageTimeRemaining", "address": "0xFFA270",
-                    "previous_name": "word_FFA270", "legacy_name": "word_FFA270"}]
+        records = [
+            {
+                "current_name": "Reset",
+                "address": "0x000002",
+                "previous_name": "sub_2",
+                "legacy_name": "sub_2",
+                "basis": ["not duplicated"],
+            },
+            {
+                "current_name": "StageTimeRemaining",
+                "address": "0xFFA270",
+                "previous_name": "word_FFA270",
+                "legacy_name": "word_FFA270",
+            },
+        ]
 
         def row(address, field, source):
             return ("(1)  1/ %7X : %s" % (address, field)).ljust(40) + source + "\n"
@@ -101,22 +112,29 @@ class RegionalProvenanceTests(unittest.TestCase):
             entry = next(item for item in profiles["profiles"] if item["id"] == profile)
             image = bytes(address) + bytes.fromhex("4E75") + bytes(8 - address - 2)
             reference = entry["reference_rom"]
-            reference.update(filename="original_%s.bin" % profile, size=len(image),
-                             sha256=hashlib.sha256(image).hexdigest(), sha1=hashlib.sha1(image).hexdigest(),
-                             md5=hashlib.md5(image).hexdigest(), crc32="%08X" % (zlib.crc32(image) & 0xFFFFFFFF))
+            reference.update(
+                filename="original_%s.bin" % profile,
+                size=len(image),
+                sha256=hashlib.sha256(image).hexdigest(),
+                sha1=hashlib.sha1(image).hexdigest(),
+                md5=hashlib.md5(image).hexdigest(),
+                crc32="%08X" % (zlib.crc32(image) & 0xFFFFFFFF),
+            )
             for name in (entry["output"], reference["filename"]):
                 (root / name).write_bytes(image)
             listing = root / entry["listing"]
             listing.parent.mkdir(parents=True, exist_ok=True)
             flags = verify_symbols.PROFILE_FLAGS[profile]
-            listing.write_text(row(address, "4E75", "Reset: rts")
-                               + row(0, "=$FFFFA270", "StageTimeRemaining equ $FFFFA270")
-                               + row(0, "=$0", "BuildProfileEU equ $0")
-                               + "Symbol Table (* = unused):\n"
-                               + " BUILDPROFILEEU : %X - | BUILDPROFILEJP : %X - |\n"
-                               % (flags["BuildProfileEU"], flags["BuildProfileJP"])
-                               + " RESET : %X C | STAGETIMEREMAINING : FFFFA270 I |\n" % address,
-                               encoding="latin-1")
+            listing.write_text(
+                row(address, "4E75", "Reset: rts")
+                + row(0, "=$FFFFA270", "StageTimeRemaining equ $FFFFA270")
+                + row(0, "=$0", "BuildProfileEU equ $0")
+                + "Symbol Table (* = unused):\n"
+                + " BUILDPROFILEEU : %X - | BUILDPROFILEJP : %X - |\n"
+                % (flags["BuildProfileEU"], flags["BuildProfileJP"])
+                + " RESET : %X C | STAGETIMEREMAINING : FFFFA270 I |\n" % address,
+                encoding="latin-1",
+            )
             listings[profile] = listing
         (root / "config").mkdir()
         (root / "config/rom_profiles.json").write_text(json.dumps(profiles), encoding="utf-8")
@@ -129,38 +147,70 @@ class RegionalProvenanceTests(unittest.TestCase):
             records, listings = self.fixture(root)
             ledger = derive.derive(root)
             self.assertEqual(2, ledger["record_count"])
-            self.assertEqual({"current_name": "Reset", "jp_address": "0x000002", "eu_address": "0x000004", "status": "assembled"},
-                             ledger["records"][0])
+            self.assertEqual(
+                {"current_name": "Reset", "jp_address": "0x000002", "eu_address": "0x000004", "status": "assembled"},
+                ledger["records"][0],
+            )
             self.assertEqual("0xFFA270", ledger["records"][1]["eu_address"])
             self.assertNotIn("basis", json.dumps(ledger))
             names, errors = verify_symbols.load_all_listing_names(listings["eu"])
             self.assertEqual([], errors)
             profiles = verify_symbols.load_profiles(root / "config/rom_profiles.json")
             self.assertEqual([], verify_symbols.validate_profile_address_map(records, names, ledger, profiles))
-            self.assertEqual({"BuildProfileEU": 1, "BuildProfileJP": 0}, verify_symbols.load_profile_flags(listings["eu"]))
+            self.assertEqual(
+                {"BuildProfileEU": 1, "BuildProfileJP": 0}, verify_symbols.load_profile_flags(listings["eu"])
+            )
 
     def test_runtime_ledger_rejects_missing_extra_renamed_origin_profile_and_address_drift(self):
-        for mutation in ("missing", "extra", "duplicate", "rename", "JP_address", "EU_address", "RAM_address",
-                         "legacy", "previous", "origin_address", "profile", "ROM_hash", "proof", "null"):
+        for mutation in (
+            "missing",
+            "extra",
+            "duplicate",
+            "rename",
+            "JP_address",
+            "EU_address",
+            "RAM_address",
+            "legacy",
+            "previous",
+            "origin_address",
+            "profile",
+            "ROM_hash",
+            "proof",
+            "null",
+        ):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 records, listings = self.fixture(root)
                 ledger = derive.derive(root)
                 names, _errors = verify_symbols.load_all_listing_names(listings["eu"])
-                if mutation == "missing": ledger["records"].pop()
-                elif mutation == "extra": ledger["records"].append(dict(ledger["records"][0], current_name="NonAudited"))
-                elif mutation == "duplicate": ledger["records"][1] = copy.deepcopy(ledger["records"][0])
-                elif mutation == "rename": ledger["records"][0]["current_name"] = "Renamed"
-                elif mutation == "JP_address": ledger["records"][0]["jp_address"] = "0x000003"
-                elif mutation == "EU_address": ledger["records"][0]["eu_address"] = "0x000005"
-                elif mutation == "RAM_address": ledger["records"][1]["eu_address"] = "0xFFA272"
-                elif mutation == "legacy": records[0]["legacy_name"] = "different_legacy"
-                elif mutation == "previous": records[0]["previous_name"] = "different_origin"
-                elif mutation == "origin_address": records[0]["address"] = "0x000003"
-                elif mutation == "profile": ledger["profile"] = "jp"
-                elif mutation == "ROM_hash": ledger["original_roms"]["eu"]["sha256"] = "0" * 64
-                elif mutation == "proof": ledger.pop("generation")
-                elif mutation == "null": ledger["records"][0]["eu_address"] = None
+                if mutation == "missing":
+                    ledger["records"].pop()
+                elif mutation == "extra":
+                    ledger["records"].append(dict(ledger["records"][0], current_name="NonAudited"))
+                elif mutation == "duplicate":
+                    ledger["records"][1] = copy.deepcopy(ledger["records"][0])
+                elif mutation == "rename":
+                    ledger["records"][0]["current_name"] = "Renamed"
+                elif mutation == "JP_address":
+                    ledger["records"][0]["jp_address"] = "0x000003"
+                elif mutation == "EU_address":
+                    ledger["records"][0]["eu_address"] = "0x000005"
+                elif mutation == "RAM_address":
+                    ledger["records"][1]["eu_address"] = "0xFFA272"
+                elif mutation == "legacy":
+                    records[0]["legacy_name"] = "different_legacy"
+                elif mutation == "previous":
+                    records[0]["previous_name"] = "different_origin"
+                elif mutation == "origin_address":
+                    records[0]["address"] = "0x000003"
+                elif mutation == "profile":
+                    ledger["profile"] = "jp"
+                elif mutation == "ROM_hash":
+                    ledger["original_roms"]["eu"]["sha256"] = "0" * 64
+                elif mutation == "proof":
+                    ledger.pop("generation")
+                elif mutation == "null":
+                    ledger["records"][0]["eu_address"] = None
                 # Semantic checks must reject drift even with a recomputed inventory hash.
                 ledger["records_sha256"] = verify_symbols.canonical_sha256(ledger["records"])
                 profiles = verify_symbols.load_profiles(root / "config/rom_profiles.json")
@@ -174,7 +224,8 @@ class RegionalProvenanceTests(unittest.TestCase):
             names, _errors = verify_symbols.load_all_listing_names(listings["eu"])
             names["Reset"] = 6
             errors = verify_symbols.validate_profile_address_map(
-                records, names, ledger, verify_symbols.load_profiles(root / "config/rom_profiles.json"))
+                records, names, ledger, verify_symbols.load_profiles(root / "config/rom_profiles.json")
+            )
             self.assertTrue(any("says 0x000004; listing has 0x000006" in error for error in errors))
             self.assertEqual("0x000004", ledger["records"][0]["eu_address"])
 
@@ -183,14 +234,24 @@ class RegionalProvenanceTests(unittest.TestCase):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 _records, listings = self.fixture(root)
-                if mutation == "ROM": (root / "asbuilt_eu.bin").write_bytes(b"changed ROM")
-                elif mutation == "JP_address": listings["jp"].write_text(listings["jp"].read_text().replace("      2 :", "      4 :", 1))
-                elif mutation == "byte_field": listings["eu"].write_text(listings["eu"].read_text().replace("4E75", "4E71", 1))
-                elif mutation == "profile_flags": listings["eu"].write_text(listings["jp"].read_text())
-                elif mutation == "missing_flags": listings["eu"].write_text("\n".join(
-                    line for line in listings["eu"].read_text().splitlines() if " BUILDPROFILEEU :" not in line))
-                elif mutation == "missing_EU_name": listings["eu"].write_text(listings["eu"].read_text().replace("Reset:", "Renamed:"))
-                with self.assertRaises(ValueError): derive.derive(root)
+                if mutation == "ROM":
+                    (root / "asbuilt_eu.bin").write_bytes(b"changed ROM")
+                elif mutation == "JP_address":
+                    listings["jp"].write_text(listings["jp"].read_text().replace("      2 :", "      4 :", 1))
+                elif mutation == "byte_field":
+                    listings["eu"].write_text(listings["eu"].read_text().replace("4E75", "4E71", 1))
+                elif mutation == "profile_flags":
+                    listings["eu"].write_text(listings["jp"].read_text())
+                elif mutation == "missing_flags":
+                    listings["eu"].write_text(
+                        "\n".join(
+                            line for line in listings["eu"].read_text().splitlines() if " BUILDPROFILEEU :" not in line
+                        )
+                    )
+                elif mutation == "missing_EU_name":
+                    listings["eu"].write_text(listings["eu"].read_text().replace("Reset:", "Renamed:"))
+                with self.assertRaises(ValueError):
+                    derive.derive(root)
 
     def test_publication_is_new_atomic_and_root_scoped(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -205,7 +266,8 @@ class RegionalProvenanceTests(unittest.TestCase):
             self.assertEqual(before, output.read_bytes())
             self.assertFalse(list(output.parent.glob("*.tmp")))
             for name in ("../name.json", "src/name.json", "build/name.txt"):
-                with self.subTest(name=name), self.assertRaises(ValueError): derive.publish_new(root, name, ledger)
+                with self.subTest(name=name), self.assertRaises(ValueError):
+                    derive.publish_new(root, name, ledger)
 
     def test_duplicate_json_keys_and_unresolved_flags_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -230,8 +292,12 @@ class RegionalProvenanceTests(unittest.TestCase):
 
     def exception_fixture(self, root):
         records, listings = self.fixture(root)
-        record = {"current_name": verify_symbols.JP_ONLY_NAME, "address": "0x000006",
-                  "previous_name": "loc_35E", "legacy_name": "loc_35E"}
+        record = {
+            "current_name": verify_symbols.JP_ONLY_NAME,
+            "address": "0x000006",
+            "previous_name": "loc_35E",
+            "legacy_name": "loc_35E",
+        }
         records.append(record)
         (root / "config/name_audit.json").write_text(json.dumps({"records": records}))
         source = root / verify_symbols.EXCLUSION_SOURCE
@@ -250,22 +316,40 @@ class RegionalProvenanceTests(unittest.TestCase):
                 root = Path(directory)
                 records, listings = self.exception_fixture(root)
                 ledger = derive.derive(root)
-                eu = verify_symbols.load_resolved_listing_names(listings["eu"], {item["current_name"] for item in records})
-                jp = verify_symbols.load_resolved_listing_names(listings["jp"], {item["current_name"] for item in records})
+                eu = verify_symbols.load_resolved_listing_names(
+                    listings["eu"], {item["current_name"] for item in records}
+                )
+                jp = verify_symbols.load_resolved_listing_names(
+                    listings["jp"], {item["current_name"] for item in records}
+                )
                 excluded = next(row for row in ledger["records"] if row["status"] == "not_assembled")
                 self.assertEqual(verify_symbols.JP_ONLY_NAME, excluded["current_name"])
                 self.assertIsNone(excluded["eu_address"])
-                if mutation == "EU_present": eu[verify_symbols.JP_ONLY_NAME] = 6
-                elif mutation == "JP_missing": jp.pop(verify_symbols.JP_ONLY_NAME)
-                elif mutation == "JP_moved": jp[verify_symbols.JP_ONLY_NAME] = 4
-                elif mutation == "source": (root / verify_symbols.EXCLUSION_SOURCE).write_text("wrong source conditional")
-                elif mutation == "proof": excluded["exclusion"]["branch"] = "if"
-                elif mutation == "other_name": ledger["records"][0].update(status="not_assembled", eu_address=None, exclusion=excluded["exclusion"])
-                elif mutation == "null_address": ledger["records"][0]["eu_address"] = None
+                if mutation == "EU_present":
+                    eu[verify_symbols.JP_ONLY_NAME] = 6
+                elif mutation == "JP_missing":
+                    jp.pop(verify_symbols.JP_ONLY_NAME)
+                elif mutation == "JP_moved":
+                    jp[verify_symbols.JP_ONLY_NAME] = 4
+                elif mutation == "source":
+                    (root / verify_symbols.EXCLUSION_SOURCE).write_text("wrong source conditional")
+                elif mutation == "proof":
+                    excluded["exclusion"]["branch"] = "if"
+                elif mutation == "other_name":
+                    ledger["records"][0].update(
+                        status="not_assembled", eu_address=None, exclusion=excluded["exclusion"]
+                    )
+                elif mutation == "null_address":
+                    ledger["records"][0]["eu_address"] = None
                 ledger["records_sha256"] = verify_symbols.canonical_sha256(ledger["records"])
                 errors = verify_symbols.validate_profile_address_map(
-                    records, eu, ledger, verify_symbols.load_profiles(root / "config/rom_profiles.json"),
-                    jp_listing_names=jp, root=root)
+                    records,
+                    eu,
+                    ledger,
+                    verify_symbols.load_profiles(root / "config/rom_profiles.json"),
+                    jp_listing_names=jp,
+                    root=root,
+                )
                 self.assertEqual(mutation is None, not errors, errors)
 
     def test_JP_resolved_export_checks_profile_flags_and_each_export_address(self):
@@ -276,9 +360,22 @@ class RegionalProvenanceTests(unittest.TestCase):
             layout, runtime = root / "layout.json", root / "runtime.json"
             layout.write_text(json.dumps({"rom_image": {"landmarks": [{"symbol": "Reset", "address": "0x2"}]}}))
             runtime.write_text(json.dumps({"scenarios": []}))
-            args = ["verify_symbols", "--symbols", str(symbol_file), "--layout", str(layout),
-                    "--runtime", str(runtime), "--listing", str(listings["jp"]), "--name-audit",
-                    str(root / "config/name_audit.json"), "--minimum", "2", "--resolved-exports"]
+            args = [
+                "verify_symbols",
+                "--symbols",
+                str(symbol_file),
+                "--layout",
+                str(layout),
+                "--runtime",
+                str(runtime),
+                "--listing",
+                str(listings["jp"]),
+                "--name-audit",
+                str(root / "config/name_audit.json"),
+                "--minimum",
+                "2",
+                "--resolved-exports",
+            ]
             symbol_file.write_text("00000002 Reset\n00FFA270 StageTimeRemaining\n")
             with mock.patch.object(sys, "argv", args), contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(0, verify_symbols.main())
@@ -305,8 +402,10 @@ class RegionalProvenanceTests(unittest.TestCase):
     def test_profile_flags_ignore_source_spoofs_and_do_not_mask_non_boolean_values(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "main.lst"
-            path.write_text(" BUILDPROFILEEU : 1 - | BUILDPROFILEJP : 0 - |\n"
-                            + "Symbol Table (* = unused):\n BUILDPROFILEEU : 0 - | BUILDPROFILEJP : 1 - |\n")
+            path.write_text(
+                " BUILDPROFILEEU : 1 - | BUILDPROFILEJP : 0 - |\n"
+                + "Symbol Table (* = unused):\n BUILDPROFILEEU : 0 - | BUILDPROFILEJP : 1 - |\n"
+            )
             self.assertEqual(verify_symbols.PROFILE_FLAGS["jp"], verify_symbols.load_profile_flags(path))
             path.write_text("Symbol Table (* = unused):\n BUILDPROFILEEU : 1000001 - | BUILDPROFILEJP : 0 - |\n")
             self.assertTrue(verify_symbols.validate_profile_flags("eu", verify_symbols.load_profile_flags(path)))

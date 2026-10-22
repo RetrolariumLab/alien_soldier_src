@@ -76,28 +76,28 @@ class GlyphPicker:
         self.window.protocol("WM_DELETE_WINDOW", self.close)
         bar = owner.ttk.Frame(self.window, padding=8)
         bar.pack(fill="x")
-        self.previous = owner.ttk.Button(
-            bar, text="Previous page", command=lambda: self.step_page(-1))
+        self.previous = owner.ttk.Button(bar, text="Previous page", command=lambda: self.step_page(-1))
         self.previous.pack(side="left")
-        self.next = owner.ttk.Button(
-            bar, text="Next page", command=lambda: self.step_page(1))
+        self.next = owner.ttk.Button(bar, text="Next page", command=lambda: self.step_page(1))
         self.next.pack(side="left", padx=6)
         self.caption = owner.ttk.Label(bar, text="")
         self.caption.pack(side="left", padx=8)
         self.canvas = owner.tk.Canvas(
-            self.window, width=COLUMNS * CELL_WIDTH, height=ROWS * CELL_HEIGHT,
-            highlightthickness=0, background="#202020")
+            self.window,
+            width=COLUMNS * CELL_WIDTH,
+            height=ROWS * CELL_HEIGHT,
+            highlightthickness=0,
+            background="#202020",
+        )
         self.canvas.pack(padx=8)
         self.canvas.bind("<Button-1>", self.choose)
-        self.hint = owner.ttk.Label(
-            self.window, text="Click a glyph to replace the selected slot.", padding=8)
+        self.hint = owner.ttk.Label(self.window, text="Click a glyph to replace the selected slot.", padding=8)
         self.hint.pack(fill="x")
         self.sync()
 
     def sync(self):
         self.font_range = self.owner.state.glyph_range
-        self.page = (self.font_range.page_for(self.owner.state.value)
-                     if self.font_range is not None else 0)
+        self.page = self.font_range.page_for(self.owner.state.value) if self.font_range is not None else 0
         self.draw()
 
     def step_page(self, delta):
@@ -116,26 +116,27 @@ class GlyphPicker:
             self.hint.configure(text="Timing values and protected boundaries have no glyph palette.")
             return
         self.previous.configure(state="normal" if self.page else "disabled")
-        self.next.configure(state=(
-            "normal" if self.page + 1 < self.font_range.page_count else "disabled"))
+        self.next.configure(state=("normal" if self.page + 1 < self.font_range.page_count else "disabled"))
         values = self.font_range.values(self.page)
-        self.caption.configure(text="%s  $%02X..$%02X  (%d/%d)" % (
-            self.font_range.family, values[0], values[-1],
-            self.page + 1, self.font_range.page_count))
-        self.hint.configure(text=(
-            "Source palette indices; shared tiles shown separately. "
-            "Credits $00 is a blank slot." if self.font_range.family == "credits" else
-            "Source palette indices; click replaces one slot. No character transcription."))
-        self.photo = self.owner.tk.PhotoImage(
-            master=self.window, width=COLUMNS * CELL_WIDTH, height=ROWS * CELL_HEIGHT)
+        self.caption.configure(
+            text="%s  $%02X..$%02X  (%d/%d)"
+            % (self.font_range.family, values[0], values[-1], self.page + 1, self.font_range.page_count)
+        )
+        self.hint.configure(
+            text=(
+                "Source palette indices; shared tiles shown separately. Credits $00 is a blank slot."
+                if self.font_range.family == "credits"
+                else "Source palette indices; click replaces one slot. No character transcription."
+            )
+        )
+        self.photo = self.owner.tk.PhotoImage(master=self.window, width=COLUMNS * CELL_WIDTH, height=ROWS * CELL_HEIGHT)
         self.photo.put("#202020", to=(0, 0, COLUMNS * CELL_WIDTH, ROWS * CELL_HEIGHT))
         for index, value in enumerate(values):
             left = (index % COLUMNS) * CELL_WIDTH
             top = (index // COLUMNS) * CELL_HEIGHT
             pixels = source_pixels(self.owner.project, self.font_range.family, value)
             for y, row in enumerate(pixels):
-                colours = ["#%02x%02x%02x" % ((32 + pixel * 14,) * 3)
-                           for pixel in row for _ in range(2)]
+                colours = ["#%02x%02x%02x" % ((32 + pixel * 14,) * 3) for pixel in row for _ in range(2)]
                 line = "{" + " ".join(colours) + "}"
                 self.photo.put(line, to=(left + 3, top + y * 2 + 3))
                 self.photo.put(line, to=(left + 3, top + y * 2 + 4))
@@ -144,12 +145,12 @@ class GlyphPicker:
             left = (index % COLUMNS) * CELL_WIDTH
             top = (index // COLUMNS) * CELL_HEIGHT
             self.canvas.create_text(
-                left + CELL_WIDTH // 2, top + 44, text="$%02X" % value,
-                fill="#eeeeee", font=("TkFixedFont", 9))
+                left + CELL_WIDTH // 2, top + 44, text="$%02X" % value, fill="#eeeeee", font=("TkFixedFont", 9)
+            )
             if value == self.owner.state.value:
                 self.canvas.create_rectangle(
-                    left + 1, top + 1, left + CELL_WIDTH - 1, top + CELL_HEIGHT - 1,
-                    outline="#ff40ff", width=2)
+                    left + 1, top + 1, left + CELL_WIDTH - 1, top + CELL_HEIGHT - 1, outline="#ff40ff", width=2
+                )
 
     def choose(self, event):
         if self.font_range is None:

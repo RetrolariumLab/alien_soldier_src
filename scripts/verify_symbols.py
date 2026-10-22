@@ -14,8 +14,7 @@ from rom_profiles import load_profiles
 
 
 SYMBOL_ROW = re.compile(r"^([0-9A-Fa-f]{8})\s+([A-Za-z_][A-Za-z0-9_]*)$")
-PROFILE_FLAGS = {"jp": {"BuildProfileJP": 1, "BuildProfileEU": 0},
-                 "eu": {"BuildProfileJP": 0, "BuildProfileEU": 1}}
+PROFILE_FLAGS = {"jp": {"BuildProfileJP": 1, "BuildProfileEU": 0}, "eu": {"BuildProfileJP": 0, "BuildProfileEU": 1}}
 IDENTITY_FIELDS = ("current_name", "address", "previous_name", "legacy_name")
 ERROR_LIMIT = 20
 JP_ONLY_NAME = "Reset_ChecksumLoop"
@@ -24,26 +23,49 @@ EXCLUSION_SOURCE = "src/system/boot.s"
 
 def checksum_exclusion_proof(root: Path) -> dict:
     """One explicit exclusion: scalar JP checksum is the EU condition's else."""
-    lines = tuple(" ".join(line.split(";", 1)[0].split())
-                  for line in (root / EXCLUSION_SOURCE).read_text(encoding="utf-8").splitlines())
+    lines = tuple(
+        " ".join(line.split(";", 1)[0].split())
+        for line in (root / EXCLUSION_SOURCE).read_text(encoding="utf-8").splitlines()
+    )
     first, following = "ChecksumCheck:", "movea.l #Checksum,a1"
     if lines.count(first) != 1 or lines.count(following) != 1:
         raise ValueError("JP-only checksum source has no unique conditional bounds")
-    block = tuple(line for line in lines[lines.index(first) + 1:lines.index(following)] if line)
-    expected = ("movea.l #Reset,a0", "if BuildProfileEU", "move.w #$1FFD,d0", "moveq #0,d1",
-                "Reset_ChecksumUnrolledLoop:", ".words := $80", "while .words > 0",
-                "add.w (a0)+,d1", ".words := .words-1", "endm", "dbf d0,Reset_ChecksumUnrolledLoop",
-                "else", "move.l #$60000,d0", "moveq #0,d1", "Reset_ChecksumLoop:",
-                "add.w (a0)+,d1", "cmp.l a0,d0", "bcc.s Reset_ChecksumLoop", "endif")
+    block = tuple(line for line in lines[lines.index(first) + 1 : lines.index(following)] if line)
+    expected = (
+        "movea.l #Reset,a0",
+        "if BuildProfileEU",
+        "move.w #$1FFD,d0",
+        "moveq #0,d1",
+        "Reset_ChecksumUnrolledLoop:",
+        ".words := $80",
+        "while .words > 0",
+        "add.w (a0)+,d1",
+        ".words := .words-1",
+        "endm",
+        "dbf d0,Reset_ChecksumUnrolledLoop",
+        "else",
+        "move.l #$60000,d0",
+        "moveq #0,d1",
+        "Reset_ChecksumLoop:",
+        "add.w (a0)+,d1",
+        "cmp.l a0,d0",
+        "bcc.s Reset_ChecksumLoop",
+        "endif",
+    )
     if block != expected:
         raise ValueError("JP-only checksum conditional source differs from its proved branch")
-    return {"source": EXCLUSION_SOURCE, "condition": "BuildProfileEU", "branch": "else",
-            "normalized_block_sha256": canonical_sha256(block)}
+    return {
+        "source": EXCLUSION_SOURCE,
+        "condition": "BuildProfileEU",
+        "branch": "else",
+        "normalized_block_sha256": canonical_sha256(block),
+    }
 
 
 def canonical_sha256(value) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
-                                    ensure_ascii=True).encode("ascii")).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")
+    ).hexdigest()
 
 
 def origin_identity(records: list[dict]) -> str:
@@ -64,8 +86,10 @@ def origin_identity(records: list[dict]) -> str:
 
 
 def original_rom_identities(profiles: dict) -> dict:
-    return {profile: {key: profiles["profiles_by_id"][profile]["reference_rom"][key]
-                      for key in ("size", "sha256")} for profile in ("jp", "eu")}
+    return {
+        profile: {key: profiles["profiles_by_id"][profile]["reference_rom"][key] for key in ("size", "sha256")}
+        for profile in ("jp", "eu")
+    }
 
 
 def load_profile_flags(path: Path) -> dict[str, int]:
@@ -85,7 +109,9 @@ def load_resolved_listing_names(path: Path, wanted: set[str]) -> dict[str, int]:
     canonical = {name.upper(): name for name in wanted}
     if len(canonical) != len(wanted):
         raise ValueError("regional origin names collide in the assembler's case-insensitive table")
-    return {canonical[name]: value & 0xFFFFFF for name, value in load_resolved_symbols(path).items() if name in canonical}
+    return {
+        canonical[name]: value & 0xFFFFFF for name, value in load_resolved_symbols(path).items() if name in canonical
+    }
 
 
 def _unique_object(pairs):
@@ -104,15 +130,23 @@ def load_profile_address_map(path: Path) -> dict:
     return value
 
 
-def validate_profile_address_map(records: list[dict], listing_names: dict[str, int],
-                                 ledger: dict, profiles: dict, *,
-                                 jp_listing_names: dict[str, int] | None = None,
-                                 root: Path | None = None) -> list[str]:
+def validate_profile_address_map(
+    records: list[dict],
+    listing_names: dict[str, int],
+    ledger: dict,
+    profiles: dict,
+    *,
+    jp_listing_names: dict[str, int] | None = None,
+    root: Path | None = None,
+) -> list[str]:
     """Compare against frozen explicit EU pairs, never infer from this listing."""
     errors = []
-    if (ledger.get("schema_version") != 1 or ledger.get("profile") != "eu"
-            or ledger.get("origin_profile") != "jp"
-            or ledger.get("origin_identity_fields") != list(IDENTITY_FIELDS)):
+    if (
+        ledger.get("schema_version") != 1
+        or ledger.get("profile") != "eu"
+        or ledger.get("origin_profile") != "jp"
+        or ledger.get("origin_identity_fields") != list(IDENTITY_FIELDS)
+    ):
         errors.append("regional address ledger schema/profile/origin contract differs")
     if ledger.get("origin_identity_sha256") != origin_identity(records):
         errors.append("regional address ledger origin naming identity changed")
@@ -122,18 +156,28 @@ def validate_profile_address_map(records: list[dict], listing_names: dict[str, i
     if not isinstance(generation, dict):
         errors.append("regional address ledger lacks generation provenance")
     else:
-        for key in ("profiles_manifest_sha256", "name_audit_sha256", "generator_sha256", "verifier_sha256", "extractor_sha256"):
+        for key in (
+            "profiles_manifest_sha256",
+            "name_audit_sha256",
+            "generator_sha256",
+            "verifier_sha256",
+            "extractor_sha256",
+        ):
             if not isinstance(generation.get(key), str) or not re.fullmatch(r"[0-9a-f]{64}", generation[key]):
                 errors.append("invalid regional generation digest: " + key)
         proof = generation.get("profiles", {})
         for profile in ("jp", "eu"):
             item = proof.get(profile) if isinstance(proof, dict) else None
-            if (not isinstance(item, dict) or item.get("resolved_flags") != PROFILE_FLAGS[profile]
-                    or item.get("build_rom_sha256") != original_rom_identities(profiles)[profile]["sha256"]
-                    or item.get("original_rom_sha256") != original_rom_identities(profiles)[profile]["sha256"]
-                    or type(item.get("printed_byte_rows")) is not int or item["printed_byte_rows"] < 1
-                    or not isinstance(item.get("listing_sha256"), str)
-                    or not re.fullmatch(r"[0-9a-f]{64}", item["listing_sha256"])):
+            if (
+                not isinstance(item, dict)
+                or item.get("resolved_flags") != PROFILE_FLAGS[profile]
+                or item.get("build_rom_sha256") != original_rom_identities(profiles)[profile]["sha256"]
+                or item.get("original_rom_sha256") != original_rom_identities(profiles)[profile]["sha256"]
+                or type(item.get("printed_byte_rows")) is not int
+                or item["printed_byte_rows"] < 1
+                or not isinstance(item.get("listing_sha256"), str)
+                or not re.fullmatch(r"[0-9a-f]{64}", item["listing_sha256"])
+            ):
                 errors.append("invalid authenticated generation proof for " + profile)
     rows = ledger.get("records")
     if not isinstance(rows, list):
@@ -158,8 +202,12 @@ def validate_profile_address_map(records: list[dict], listing_names: dict[str, i
             errors.append("duplicate regional address ledger name: " + name)
         seen.add(name)
         if row.get("status") == "not_assembled":
-            if (name != JP_ONLY_NAME or row.get("eu_address") is not None or "exclusion" not in row
-                    or row.get("jp_address") != "0x%06X" % origins[name]):
+            if (
+                name != JP_ONLY_NAME
+                or row.get("eu_address") is not None
+                or "exclusion" not in row
+                or row.get("jp_address") != "0x%06X" % origins[name]
+            ):
                 errors.append("invalid not-assembled regional exception for " + name)
                 continue
             if name in listing_names:
@@ -178,9 +226,12 @@ def validate_profile_address_map(records: list[dict], listing_names: dict[str, i
         if row.get("status") != "assembled" or "exclusion" in row or name == JP_ONLY_NAME:
             errors.append("invalid assembled regional availability for " + name)
             continue
-        if (not isinstance(row["jp_address"], str) or not isinstance(row["eu_address"], str)
-                or not re.fullmatch(r"0x[0-9A-F]{6}", row["jp_address"])
-                or not re.fullmatch(r"0x[0-9A-F]{6}", row["eu_address"])):
+        if (
+            not isinstance(row["jp_address"], str)
+            or not isinstance(row["eu_address"], str)
+            or not re.fullmatch(r"0x[0-9A-F]{6}", row["jp_address"])
+            or not re.fullmatch(r"0x[0-9A-F]{6}", row["eu_address"])
+        ):
             errors.append("invalid regional address pair for " + name)
             continue
         original, expected = number(row["jp_address"]), number(row["eu_address"])
@@ -258,15 +309,12 @@ def load_all_listing_names(path: Path) -> tuple[dict[str, int], list[str]]:
             previous = by_name.setdefault(name, address)
             if previous != address:
                 errors.append(
-                    f"{path}:{line_number}: {name} has listing addresses "
-                    f"0x{previous:06X} and 0x{address:06X}"
+                    f"{path}:{line_number}: {name} has listing addresses 0x{previous:06X} and 0x{address:06X}"
                 )
     return by_name, errors
 
 
-def validate_name_audit_addresses(
-    records: list[dict], listing_names: dict[str, int]
-) -> list[str]:
+def validate_name_audit_addresses(records: list[dict], listing_names: dict[str, int]) -> list[str]:
     """Compare every provenance record to its assembled, 24-bit bus address."""
     errors: list[str] = []
     seen: set[str] = set()
@@ -281,18 +329,12 @@ def validate_name_audit_addresses(
         expected = number(record["address"]) & 0xFFFFFF
         actual = listing_names[name]
         if expected != actual:
-            errors.append(
-                f"name-audit {name} says 0x{expected:06X}; "
-                f"listing has 0x{actual:06X}"
-            )
+            errors.append(f"name-audit {name} says 0x{expected:06X}; listing has 0x{actual:06X}")
     return errors
 
 
 def required_symbols(layout: dict, runtime: dict) -> dict[str, int]:
-    required = {
-        item["symbol"]: number(item["address"])
-        for item in layout["rom_image"]["landmarks"]
-    }
+    required = {item["symbol"]: number(item["address"]) for item in layout["rom_image"]["landmarks"]}
     for scenario in runtime["scenarios"]:
         for expectation in scenario["expectations"]:
             symbol = expectation["symbol"]
@@ -316,9 +358,7 @@ def validate(
         if name not in by_name:
             errors.append(f"required symbol missing: {name}")
         elif by_name[name] != address:
-            errors.append(
-                f"{name} is 0x{by_name[name]:06X}; expected 0x{address:06X}"
-            )
+            errors.append(f"{name} is 0x{by_name[name]:06X}; expected 0x{address:06X}")
         elif by_address.get(address) != name:
             errors.append(f"{name} is not canonical at 0x{address:06X}")
     return errors
@@ -356,7 +396,8 @@ def main() -> int:
         if args.profile == "eu" or args.resolved_exports:
             errors.extend(validate_profile_flags(args.profile, load_profile_flags(Path(args.listing))))
             resolved_names = load_resolved_listing_names(
-                Path(args.listing), set(by_name) | {record["current_name"] for record in name_records})
+                Path(args.listing), set(by_name) | {record["current_name"] for record in name_records}
+            )
             for name, address in by_name.items():
                 if resolved_names.get(name) != address:
                     errors.append("exported regional symbol differs from its resolved listing: " + name)
@@ -364,13 +405,22 @@ def main() -> int:
             origin_listing = Path(args.origin_listing)
             errors.extend(validate_profile_flags("jp", load_profile_flags(origin_listing)))
             regional_ledger = load_profile_address_map(Path(args.profile_address_map))
-            errors.extend(validate_profile_address_map(
-                name_records, resolved_names, regional_ledger,
-                load_profiles(Path(args.profiles)), jp_listing_names=load_resolved_listing_names(
-                    origin_listing, {record["current_name"] for record in name_records}), root=args.root.resolve()))
+            errors.extend(
+                validate_profile_address_map(
+                    name_records,
+                    resolved_names,
+                    regional_ledger,
+                    load_profiles(Path(args.profiles)),
+                    jp_listing_names=load_resolved_listing_names(
+                        origin_listing, {record["current_name"] for record in name_records}
+                    ),
+                    root=args.root.resolve(),
+                )
+            )
         else:
-            errors.extend(validate_name_audit_addresses(
-                name_records, resolved_names if args.resolved_exports else listing_names))
+            errors.extend(
+                validate_name_audit_addresses(name_records, resolved_names if args.resolved_exports else listing_names)
+            )
     except (OSError, ValueError, KeyError, TypeError) as error:
         print_errors([str(error)])
         return 1
@@ -385,8 +435,10 @@ def main() -> int:
     )
     if args.profile == "eu":
         excluded = sum(row["status"] == "not_assembled" for row in regional_ledger["records"])
-        print(f"[OK] name provenance: {len(name_records)} accounted records "
-              f"({len(name_records) - excluded} exact addresses, {excluded} source-proved JP-only exclusion) match EU/JP listings")
+        print(
+            f"[OK] name provenance: {len(name_records)} accounted records "
+            f"({len(name_records) - excluded} exact addresses, {excluded} source-proved JP-only exclusion) match EU/JP listings"
+        )
     else:
         print(f"[OK] name provenance: {len(name_records)} exact-address records match the jp assembler listing")
     return 0

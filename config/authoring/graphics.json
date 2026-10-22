@@ -13,16 +13,7 @@
     "lines": 4,
     "colours_per_line": 16,
     "word_layout": "0000 BBB0 GGG0 RRR0",
-    "levels": [
-      0,
-      52,
-      87,
-      116,
-      144,
-      172,
-      206,
-      255
-    ],
+    "levels": [0, 52, 87, 116, 144, 172, 206, 255],
     "levels_why": "Three bits per channel give eight steps, and the hardware does not space them evenly. This is the eight-step ramp emulators use for normal intensity; `CRAM_LEVELS_LINEAR` in tile_graphics.py holds the even one for comparison. Either way index 0 is black and index 7 is full, so the choice changes how a preview looks and never what is written back.",
     "index_0_is_transparent_for_sprites": true
   },
@@ -235,15 +226,9 @@
       "Projectile_FragmentSpriteFrames": "a table of pointers to mappings, not mapping data",
       "Stage21_AsteroidAmbientMappingTable": "a table of pointers to mappings, not mapping data"
     },
-    "unnamed_trailing_blocks": [
-      "data/artunc/sprite_F8D86.bin",
-      "data/artunc/sprite_FC7AA.bin"
-    ],
+    "unnamed_trailing_blocks": ["data/artunc/sprite_F8D86.bin", "data/artunc/sprite_FC7AA.bin"],
     "unnamed_trailing_blocks_why": "Each holds a second length-prefixed block that no symbol names. The piece pointing at the payload asks for exactly the first block, so the extraction, which cut on referenced addresses, swallowed a following piece nothing points at. The piece's own size byte is the authority on how much it draws.",
-    "name_markers": [
-      "SpriteMapping",
-      "SpriteFrame"
-    ]
+    "name_markers": ["SpriteMapping", "SpriteFrame"]
   },
   "stage_tilemaps": {
     "streamer": "src/rendering/tilemap_column_streaming.s",
@@ -273,13 +258,7 @@
     "name_word_layout": "bit 15 priority, bits 13-14 palette line, bit 12 vertical flip, bit 11 horizontal flip, bits 0-10 tile",
     "stage_table_entries": 26,
     "configuration_records": 30,
-    "indices_that_draw_nothing": [
-      17,
-      18,
-      20,
-      21,
-      22
-    ],
+    "indices_that_draw_nothing": [17, 18, 20, 21, 22],
     "payloads_needing_the_bit_codec": [],
     "why": "A name-table word is a VDP word and absolute, unlike a sprite piece's attribute word, which is exclusive-ored against its object. VRAM comes from the same asset lists as the maps: command 7, LoadCompressedToVRAM, is plain LZSS and carries every stage's background art. Nine transfers in the tree use command 3 and the independently verified bit-token codec in src/rendering/tile_processing.s; no stage table index reaches them, but the renderer decodes them for frontend consumers. Five indices draw nothing: 20, 21 and 22 load only the shared asset list and bring no tilemap of their own, and 17 and 18 are the two whose planes the entry path cannot be replayed for, listed with their reasons under two_planes.planes_not_reproduced.",
     "two_planes": {

@@ -33,18 +33,22 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from authoring.lzss_codec import (                                        # noqa: E402
-    cartridge_payloads, compress, decompress, decompress_as_vram)
+from authoring.lzss_codec import (  # noqa: E402
+    cartridge_payloads,
+    compress,
+    decompress,
+    decompress_as_vram,
+)
 
 
 MIRROR = Path("build/repack")
-DMA_BLOCK = 0x20000              # the VDP latches the bits above this
-TRANSFERRED = "data/artunc/"     # the region config/rom_layout.json declares
+DMA_BLOCK = 0x20000  # the VDP latches the bits above this
+TRANSFERRED = "data/artunc/"  # the region config/rom_layout.json declares
 ALIGN_ROUNDS = 8
-CHECKSUM_AT = 0x18E              # the word ChecksumCheck compares against
-CHECKSUM_FROM = 0x200            # Reset
-CHECKSUM_TO = 0x60000            # the hardcoded limit in the loop
-BINCLUDE = "binclude \""
+CHECKSUM_AT = 0x18E  # the word ChecksumCheck compares against
+CHECKSUM_FROM = 0x200  # Reset
+CHECKSUM_TO = 0x60000  # the hardcoded limit in the loop
+BINCLUDE = 'binclude "'
 
 
 def payload_files(root):
@@ -88,7 +92,7 @@ def split_archives(raw):
         if header == 0 or at + 2 + header > len(raw):
             break
         size = 2 + header + (header % 2)
-        found.append(raw[at:at + size])
+        found.append(raw[at : at + size])
         at += size
     return found, raw[at:]
 
@@ -113,8 +117,7 @@ def repack(root, output, payloads):
             # against those accepts a stream the hardware will read wrong.
             try:
                 if decompress_as_vram(fresh) != plain:
-                    errors.append("%s: archive %d decodes back to something else"
-                                  % (name, index))
+                    errors.append("%s: archive %d decodes back to something else" % (name, index))
                     failed = True
                     break
             except ValueError as error:
@@ -142,8 +145,18 @@ def repack(root, output, payloads):
 def assemble(root, mirrored, as_bin, p2bin, rom, defines=()):
     listing = mirrored / "main.lst"
     obj = mirrored / "main.p"
-    command = [str(as_bin.resolve()), "-i", str(mirrored.resolve()), "-L",
-               "-olist", str(listing), "-o", str(obj), "-maxerrors", "2"]
+    command = [
+        str(as_bin.resolve()),
+        "-i",
+        str(mirrored.resolve()),
+        "-L",
+        "-olist",
+        str(listing),
+        "-o",
+        str(obj),
+        "-maxerrors",
+        "2",
+    ]
     for define in defines:
         command += ["-D", define]
     command.append(str((mirrored / "src/main.s").resolve()))
@@ -154,21 +167,25 @@ def assemble(root, mirrored, as_bin, p2bin, rom, defines=()):
     import re as _re
 
     counts = dict(_re.findall(r"(\d+)\s+(errors?|warnings?)", result.stdout))
-    tally = {kind.rstrip("s"): int(number)
-             for number, kind in _re.findall(r"(\d+)\s+(errors?|warnings?)",
-                                             result.stdout)}
+    tally = {
+        kind.rstrip("s"): int(number) for number, kind in _re.findall(r"(\d+)\s+(errors?|warnings?)", result.stdout)
+    }
     if result.returncode != 0 or tally.get("error", 0) or tally.get("warning", 0):
-        print("[ERROR] the assembler reported %d error(s) and %d warning(s)"
-              % (tally.get("error", 0), tally.get("warning", 0)), file=sys.stderr)
+        print(
+            "[ERROR] the assembler reported %d error(s) and %d warning(s)"
+            % (tally.get("error", 0), tally.get("warning", 0)),
+            file=sys.stderr,
+        )
         for line in result.stdout.splitlines():
-            if _re.search(r"error|warning|overlap|already", line, _re.I)                     and not _re.match(r"\s*\d+\s+(errors?|warnings?)", line):
+            if _re.search(r"error|warning|overlap|already", line, _re.I) and not _re.match(
+                r"\s*\d+\s+(errors?|warnings?)", line
+            ):
                 print("[ERROR] assembler: %s" % line.strip()[:160], file=sys.stderr)
         return None
     if not obj.is_file():
         print(result.stdout[-2000:], file=sys.stderr)
         return None
-    subprocess.run([str(p2bin.resolve()), str(obj), str(rom), "-p=FF"],
-                   cwd=root, capture_output=True, text=True)
+    subprocess.run([str(p2bin.resolve()), str(obj), str(rom), "-p=FF"], cwd=root, capture_output=True, text=True)
     return rom if rom.is_file() else None
 
 
@@ -194,7 +211,7 @@ def misplaced(listing, rom, root):
             continue
         start = int(address.group(1), 16)
         want = (root / name.group(1)).read_bytes()
-        if image[start:start + len(want)] != want:
+        if image[start : start + len(want)] != want:
             wrong.append((name.group(1), start))
     return wrong
 
@@ -231,8 +248,7 @@ def pad_before(mirrored, payload, count):
         for index, line in enumerate(text):
             if BINCLUDE + payload + '"' not in line:
                 continue
-            filler = ["                dc.b    [$%X]$FF" % chunk
-                      for chunk in split_filler(count)]
+            filler = ["                dc.b    [$%X]$FF" % chunk for chunk in split_filler(count)]
             text[index:index] = filler
             path.write_text(chr(10).join(text), encoding="utf-8", newline="")
             return True
@@ -267,8 +283,7 @@ def main():
     parser.add_argument("--as-bin", required=True)
     parser.add_argument("--p2bin", required=True)
     parser.add_argument("--rom", default="alien_soldier_repacked.bin")
-    parser.add_argument("--define", action="append", default=[],
-                        help="a symbol for the assembler, such as GOD_MODE=1")
+    parser.add_argument("--define", action="append", default=[], help="a symbol for the assembler, such as GOD_MODE=1")
     args = parser.parse_args()
     root = Path.cwd()
 
@@ -280,8 +295,7 @@ def main():
             print("[ERROR] %s" % error, file=sys.stderr)
         return 1
 
-    rom = assemble(root, output, Path(args.as_bin), Path(args.p2bin),
-                   root / args.rom, args.define)
+    rom = assemble(root, output, Path(args.as_bin), Path(args.p2bin), root / args.rom, args.define)
     if rom is None:
         print("[ERROR] the repacked tree did not assemble", file=sys.stderr)
         return 1
@@ -297,26 +311,26 @@ def main():
             print("[ERROR] could not find %s to pad before" % name, file=sys.stderr)
             return 1
         padded += count
-        rom = assemble(root, output, Path(args.as_bin), Path(args.p2bin),
-                       root / args.rom, args.define)
+        rom = assemble(root, output, Path(args.as_bin), Path(args.p2bin), root / args.rom, args.define)
         if rom is None:
             print("[ERROR] the padded tree did not assemble", file=sys.stderr)
             return 1
     straddling = crossings(output / "main.lst", root)
     if straddling:
         for name, start, size in straddling:
-            print("[ERROR] %s at $%06X still crosses a DMA block" % (name, start),
-                  file=sys.stderr)
+            print("[ERROR] %s at $%06X still crosses a DMA block" % (name, start), file=sys.stderr)
         return 1
     was, now = fix_checksum(rom)
-    print("[OK] repacked %d payloads: %d -> %d bytes (%.1f%% of the original)"
-          % (len(payloads), before, after, 100.0 * after / before))
-    print("[OK] %s is %d bytes, checksum $%04X rewritten to $%04X"
-          % (args.rom, rom.stat().st_size, was, now))
-    print("[OK] %d bytes of alignment kept every transferred payload inside "
-          "its $20000 block" % padded)
-    print("     every payload decodes back to what went in; the original "
-          "encoder cannot be matched byte for byte and this does not try")
+    print(
+        "[OK] repacked %d payloads: %d -> %d bytes (%.1f%% of the original)"
+        % (len(payloads), before, after, 100.0 * after / before)
+    )
+    print("[OK] %s is %d bytes, checksum $%04X rewritten to $%04X" % (args.rom, rom.stat().st_size, was, now))
+    print("[OK] %d bytes of alignment kept every transferred payload inside its $20000 block" % padded)
+    print(
+        "     every payload decodes back to what went in; the original "
+        "encoder cannot be matched byte for byte and this does not try"
+    )
     return 0
 
 

@@ -20,7 +20,9 @@ class UnreferencedStaticEvidenceTests(unittest.TestCase):
         }
         cls.reviews = {
             review["basis"]: review
-            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
         cls.source = {
             path.relative_to(ROOT).as_posix(): path.read_text(encoding="utf-8")
@@ -50,32 +52,40 @@ class UnreferencedStaticEvidenceTests(unittest.TestCase):
                 if definition_re.fullmatch(executable):
                     definitions += 1
                     continue
-                self.assertIsNone(
-                    name_re.search(executable), f"{path}:{lineno} references {name}"
-                )
-                self.assertIsNone(
-                    literal_re.search(executable), f"{path}:{lineno} uses ROM address {address}"
-                )
+                self.assertIsNone(name_re.search(executable), f"{path}:{lineno} references {name}")
+                self.assertIsNone(literal_re.search(executable), f"{path}:{lineno} uses ROM address {address}")
         self.assertEqual(1, definitions, f"expected one definition of {name}")
 
     def test_four_unreferenced_entrypoint_pairs_have_no_direct_source_refs(self) -> None:
         groups = (
             (
                 "No reconstructed call or table refers to this entrypoint.",
-                (("0x0548EE", "UnreferencedInitializeNineAuxiliarySprites"),
-                 ("0x05491C", "UnreferencedUpdateNineAuxiliarySpritePositions"))),
+                (
+                    ("0x0548EE", "UnreferencedInitializeNineAuxiliarySprites"),
+                    ("0x05491C", "UnreferencedUpdateNineAuxiliarySpritePositions"),
+                ),
+            ),
             (
                 "No reconstructed code or data reference reaches this routine.",
-                (("0x01CB32", "UnreferencedToggleFrameTimingMarkers"),
-                 ("0x01CC98", "UnreferencedAppendFixedOAMEntries"))),
+                (
+                    ("0x01CB32", "UnreferencedToggleFrameTimingMarkers"),
+                    ("0x01CC98", "UnreferencedAppendFixedOAMEntries"),
+                ),
+            ),
             (
                 "No reconstructed source call or table reference reaches this helper.",
-                (("0x003A9C", "UnreferencedAdjustAndMirrorPaletteRange"),
-                 ("0x003B72", "UnreferencedAddWrappingColorAdjustmentToPairedEntry"))),
+                (
+                    ("0x003A9C", "UnreferencedAdjustAndMirrorPaletteRange"),
+                    ("0x003B72", "UnreferencedAddWrappingColorAdjustmentToPairedEntry"),
+                ),
+            ),
             (
                 "No reconstructed static caller reaches the alternate entry.",
-                (("0x0102AC", "UnreferencedAdvanceTrainScrollWithNop"),
-                 ("0x0102DE", "UnreferencedUpdateQuarterScrollWithNop"))),
+                (
+                    ("0x0102AC", "UnreferencedAdvanceTrainScrollWithNop"),
+                    ("0x0102DE", "UnreferencedUpdateQuarterScrollWithNop"),
+                ),
+            ),
         )
         for basis, members in groups:
             with self.subTest(basis=basis):
@@ -96,7 +106,9 @@ class UnreferencedStaticEvidenceTests(unittest.TestCase):
             ("UnreferencedAdvanceTrainScrollWithNop", "Scroll_AdvanceTrainHorizontalAndRenderTilemap"),
             ("UnreferencedUpdateQuarterScrollWithNop", "Scroll_UpdateQuarterHorizontalPosition"),
         ):
-            self.assertRegex(scroll, rf"(?m)^{name}:\s*\n\s+nop[^\n]*\n; End of function {name}\n;[^\n]*\n^{successor}:")
+            self.assertRegex(
+                scroll, rf"(?m)^{name}:\s*\n\s+nop[^\n]*\n; End of function {name}\n;[^\n]*\n^{successor}:"
+            )
 
     def test_two_unreferenced_asset_lists_have_exact_loader_relationship(self) -> None:
         path = "src/stages/phase_loading.s"
@@ -121,8 +133,10 @@ class UnreferencedStaticEvidenceTests(unittest.TestCase):
                 self.assertIn(f"dc.l    {stem}TileArt0000", list_body)
         self.assert_review(
             "The adjacent unreferenced loader passes this five-record terminated graphics and mappings list to Stage_DispatchAssetListLoaderByGameMode; no reachable owner is proven.",
-            (("0x011B72", "UnreferencedStage2Phase2AssetLoadList"),
-             ("0x011D0A", "UnreferencedStage3Phase5AssetLoadList")),
+            (
+                ("0x011B72", "UnreferencedStage2Phase2AssetLoadList"),
+                ("0x011D0A", "UnreferencedStage3Phase5AssetLoadList"),
+            ),
         )
 
     def test_bugmax_single_return_slots_have_no_direct_source_refs(self) -> None:
@@ -130,20 +144,14 @@ class UnreferencedStaticEvidenceTests(unittest.TestCase):
             ("0x04D85C", "Projectile_BugmaxSineInactiveState"),
             ("0x04D8F8", "Boss_BugmaxOpeningHitFragmentUnusedStub"),
         )
-        self.assert_review(
-            "This unreferenced single-return slot performs no update.", members
-        )
+        self.assert_review("This unreferenced single-return slot performs no update.", members)
         source = self.source["src/projectiles/bugmax.s"]
         for address, name in members:
             with self.subTest(address=address):
                 self.assert_no_direct_reference(name, address)
-                body = source.split(name + ":", 1)[1].split(
-                    "; End of function " + name, 1
-                )[0]
+                body = source.split(name + ":", 1)[1].split("; End of function " + name, 1)[0]
                 instructions = [
-                    line.partition(";")[0].strip()
-                    for line in body.splitlines()
-                    if line.partition(";")[0].strip()
+                    line.partition(";")[0].strip() for line in body.splitlines() if line.partition(";")[0].strip()
                 ]
                 self.assertEqual(["rts"], instructions)
 

@@ -1,4 +1,5 @@
 """Physical smoke read lifetimes with real tiny Workspaces and explicit model seams."""
+
 from contextlib import ExitStack
 import os
 from pathlib import Path
@@ -25,6 +26,7 @@ class StudioEditReadScopeTests(unittest.TestCase):
         source = root / "src/main.s"
         source.write_bytes(b"Value: dc.b 1\n")
         calls, operations, staged_values = [], [], []
+
         def original():
             operation = parsed._PARSED_OPERATION.get()
             self.assertIsNotNone(operation)
@@ -32,7 +34,9 @@ class StudioEditReadScopeTests(unittest.TestCase):
             operations.append(operation)
             self.assertEqual(b"\x01", parsed.labelled_blocks(root)[0]["Value"])
             self.assertEqual({}, operation._readonly_records)
+
         context = {}
+
         def validate(identifier, document, authority, profile):
             self.assertIs(documents[identifier], document)
             self.assertEqual((root, "jp"), (authority, profile))
@@ -42,6 +46,7 @@ class StudioEditReadScopeTests(unittest.TestCase):
                 before = source.stat()
                 source.write_bytes(b"Value: dc.b 2\n")
                 os.utime(source, ns=(before.st_atime_ns, before.st_mtime_ns))
+
         def apply(identifier, document, destination, profile, validation_root):
             self.assertIs(documents[identifier], document)
             self.assertEqual((root, "jp"), (validation_root, profile))
@@ -53,24 +58,32 @@ class StudioEditReadScopeTests(unittest.TestCase):
             staged_values.append((before, after))
             self.assertEqual(before + 1, after)
             return [] if empty_apply else ["src/main.s"]
+
         for identifier, document in documents.items():
-            context[identifier] = {"document": document,
-                "validate": lambda doc, authority, profile, identifier=identifier:
-                    validate(identifier, doc, authority, profile),
-                "apply": lambda doc, destination, profile, validation_root, identifier=identifier:
-                    apply(identifier, doc, destination, profile, validation_root)}
+            context[identifier] = {
+                "document": document,
+                "validate": lambda doc, authority, profile, identifier=identifier: validate(
+                    identifier, doc, authority, profile
+                ),
+                "apply": lambda doc, destination, profile, validation_root, identifier=identifier: apply(
+                    identifier, doc, destination, profile, validation_root
+                ),
+            }
+
         def load(project, profile):
             self.assertEqual((root, "jp"), (project, profile))
             # Retain the real load_context's existing nested primary lifetime.
             with parsed.parsed_operation(project):
                 original()
             return context
+
         def stage(project, destination):
             self.assertEqual(root, project)
             self.assertTrue(destination.is_relative_to(root / "build/content"))
             (destination / "src").mkdir(parents=True)
             (destination / "data").mkdir()
             atomic_write_bytes(destination / "src/main.s", b"Value: dc.b 2\n")
+
         stack.enter_context(mock.patch.object(module, "load_context", side_effect=load))
         stack.enter_context(mock.patch.object(module, "stage_tree", side_effect=stage))
         return root, source, calls, operations, staged_values
@@ -81,8 +94,9 @@ class StudioEditReadScopeTests(unittest.TestCase):
                 documents = factory()
                 root, source, calls, operations, values = self.fixture(stack, module, documents)
                 module.check(project=root, profile="jp")
-                expected = [(identifier, role) for identifier in sorted(documents)
-                            for role in ("validate", "apply", "validate")]
+                expected = [
+                    (identifier, role) for identifier in sorted(documents) for role in ("validate", "apply", "validate")
+                ]
                 self.assertEqual(expected, calls)
                 self.assertEqual([(n, n + 1) for n in range(2, 2 + len(documents))], values)
                 self.assertTrue(all(operation is operations[0] for operation in operations))

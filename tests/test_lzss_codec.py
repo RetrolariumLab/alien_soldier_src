@@ -10,17 +10,31 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.lzss_codec import (  # noqa: E402
-    ALTERNATE_CONTROL, BLOCK, LITERAL_CONTROL, MATCH_CONTROL, MAX_DISTANCE,
-    MAX_LITERAL, MAX_MATCH, MAX_REPEAT, PAIR_CONTROL, RUN_CONTROL,
-    cartridge_payloads, compress, decompress, decompress_as_vram, emit, parse)
+    ALTERNATE_CONTROL,
+    BLOCK,
+    LITERAL_CONTROL,
+    MATCH_CONTROL,
+    MAX_DISTANCE,
+    MAX_LITERAL,
+    MAX_MATCH,
+    MAX_REPEAT,
+    PAIR_CONTROL,
+    RUN_CONTROL,
+    cartridge_payloads,
+    compress,
+    decompress,
+    decompress_as_vram,
+    emit,
+    parse,
+)
 
 
 SAMPLES = [
     b"\x00",
     b"ab",
     bytes(300),
-    b"\xAA" * 40,
-    b"\xAA\xBB" * 40,
+    b"\xaa" * 40,
+    b"\xaa\xbb" * 40,
     bytes(range(256)),
     bytes(range(64)) * 8,
     b"the quick brown fox jumps over the quick brown fox",
@@ -45,21 +59,20 @@ class TokenTests(unittest.TestCase):
         up to 33 bytes of whatever follows. All 122 originals end exactly on
         this boundary, and obey the parity law asserted below along with it.
         """
-        payload = compress(b"\xAA" * 40)
+        payload = compress(b"\xaa" * 40)
         size = struct.unpack_from(">H", payload, 0)[0]
         self.assertIn(len(payload) - size, (2, 3), "the header counts the body")
-        self.assertEqual(size % 2, len(payload) - size - 2,
-                         "a pad byte appears exactly when the header is odd")
-        self.assertEqual(b"\xAA" * 40, decompress(payload))
+        self.assertEqual(size % 2, len(payload) - size - 2, "a pad byte appears exactly when the header is odd")
+        self.assertEqual(b"\xaa" * 40, decompress(payload))
 
     def test_nothing_to_compress_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             compress(b"")
 
     def test_a_run_is_cheaper_than_the_literals_it_replaces(self) -> None:
-        tokens = parse(b"\xAA" * 33)
+        tokens = parse(b"\xaa" * 33)
         self.assertEqual([("run", 33, 0xAA)], tokens)
-        self.assertEqual(2, len(emit(b"\xAA" * 33, tokens)))
+        self.assertEqual(2, len(emit(b"\xaa" * 33, tokens)))
 
     def test_a_pair_run_is_used_where_two_bytes_repeat(self) -> None:
         data = b"\x12\x34" * 20
@@ -119,8 +132,7 @@ class BlockTests(unittest.TestCase):
         data = bytes(range(251)) * 30
         at = 0
         for _, length, _ in parse(data):
-            self.assertEqual(at // BLOCK, (at + length - 1) // BLOCK,
-                             "a token spanning %d" % at)
+            self.assertEqual(at // BLOCK, (at + length - 1) // BLOCK, "a token spanning %d" % at)
             at += length
 
     def test_no_match_reaches_into_an_earlier_block(self) -> None:
@@ -128,8 +140,7 @@ class BlockTests(unittest.TestCase):
         at = 0
         for kind, length, detail in parse(data):
             if kind == "match":
-                self.assertLessEqual(detail, at - (at // BLOCK) * BLOCK,
-                                     "a match at %d reaching past its block" % at)
+                self.assertLessEqual(detail, at - (at // BLOCK) * BLOCK, "a match at %d reaching past its block" % at)
             at += length
 
     def test_the_strict_decoder_rejects_what_the_loose_one_accepts(self) -> None:
@@ -209,8 +220,7 @@ class HeaderLawTests(unittest.TestCase):
             slack = (len(raw) - 2) - header
             if slack not in (0, 1):
                 continue
-            self.assertEqual(header % 2, slack,
-                             "%s breaks the parity law" % path.name)
+            self.assertEqual(header % 2, slack, "%s breaks the parity law" % path.name)
             even_unpadded += slack == 0
             odd_padded += slack == 1
         self.assertGreater(even_unpadded, 40)
@@ -240,8 +250,10 @@ class OneArchivePerFileTests(unittest.TestCase):
 
     def setUp(self) -> None:
         import sys as _sys
+
         _sys.path.insert(0, str(ROOT / "scripts"))
         from verify_repack import split_archives, payload_files
+
         self.split = split_archives
         self.payloads = payload_files(ROOT)
         if not self.payloads:
@@ -268,8 +280,7 @@ class OneArchivePerFileTests(unittest.TestCase):
                     payload_symbols.add(match.group(1))
                     payload_symbols.add(match.group(1) + "_End")
 
-        reference = _re.compile(
-            r"dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)\+\$([0-9A-Fa-f]+)")
+        reference = _re.compile(r"dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)\+\$([0-9A-Fa-f]+)")
         found = set()
         for path in sorted((ROOT / "src").rglob("*.s")):
             relative = path.relative_to(ROOT).as_posix()

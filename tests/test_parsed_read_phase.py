@@ -37,8 +37,10 @@ class ParsedReadPhaseTests(unittest.TestCase):
 
     def test_admitted_originals_never_fall_back_when_the_owner_disappears(self):
         (self.root / "data").mkdir()
-        with self.assertRaisesRegex(ValueError, "missing"), mock.patch.object(
-                model, "_parse_labelled_blocks", wraps=model._parse_labelled_blocks) as parse:
+        with (
+            self.assertRaisesRegex(ValueError, "missing"),
+            mock.patch.object(model, "_parse_labelled_blocks", wraps=model._parse_labelled_blocks) as parse,
+        ):
             with model.parsed_read_phase(self.root):
                 model.labelled_blocks(self.root)
                 (self.root / "data").rmdir()
@@ -54,12 +56,14 @@ class ParsedReadPhaseTests(unittest.TestCase):
         self.assertIsNone(model._PARSED_OPERATION.get())
         (self.root / "data").unlink()
         actual = model.guarded_inventory._checked_stat
+
         def unsafe_after_missing(path):
             if path == self.root / "src":
                 raise FileNotFoundError(str(path))
             if path == self.root / "data":
                 raise ValueError("source/owner path crosses a link/reparse point")
             return actual(path)
+
         with mock.patch.object(model.guarded_inventory, "_checked_stat", side_effect=unsafe_after_missing):
             with self.assertRaisesRegex(ValueError, "link/reparse"):
                 with model.parsed_read_phase(self.root):
@@ -100,8 +104,10 @@ class ParsedReadPhaseTests(unittest.TestCase):
                 else:
                     active.pid += 1
                 try:
-                    with self.assertRaisesRegex(ValueError, "closed or outside"), mock.patch.object(
-                            model, "_parse_labelled_blocks") as parse:
+                    with (
+                        self.assertRaisesRegex(ValueError, "closed or outside"),
+                        mock.patch.object(model, "_parse_labelled_blocks") as parse,
+                    ):
                         model.labelled_blocks(self.root)
                     parse.assert_not_called()
                 finally:

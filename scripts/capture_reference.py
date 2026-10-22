@@ -26,10 +26,28 @@ SCRIPT = Path(__file__).resolve()
 MOVIES = {"tas", "longplay", "menus"}
 FRAME_LIMIT = 100000  # Immutable neutral Lua permits stop_frame up to 100001.
 DEFAULT_BOUNDS = {"tas": 90000, "menus": 90860}
-NATIVE_FILES = ("src/movie.cpp", "src/state_dump.cpp", "src/state_dump.h", "src/automation.cpp",
-                "src/luascript.cpp", "src/G_ddraw.cpp", "src/scrshot.cpp", "src/psg.h")
-STATE_LAYOUT = ((0x01, 65536), (0x02, 72), (0x10, 65536), (0x11, 128), (0x12, 80),
-                (0x13, 24), (0x20, 8192), (0x30, 5328), (0x31, 96), (0x40, 65536))
+NATIVE_FILES = (
+    "src/movie.cpp",
+    "src/state_dump.cpp",
+    "src/state_dump.h",
+    "src/automation.cpp",
+    "src/luascript.cpp",
+    "src/G_ddraw.cpp",
+    "src/scrshot.cpp",
+    "src/psg.h",
+)
+STATE_LAYOUT = (
+    (0x01, 65536),
+    (0x02, 72),
+    (0x10, 65536),
+    (0x11, 128),
+    (0x12, 80),
+    (0x13, 24),
+    (0x20, 8192),
+    (0x30, 5328),
+    (0x31, 96),
+    (0x40, 65536),
+)
 STATE_TABLE_END = 64 + 16 * (len(STATE_LAYOUT) + 1)
 STATE_LENGTH = STATE_TABLE_END + sum(size for _kind, size in STATE_LAYOUT)
 MAX_PNG_BYTES = 4 * 1024 * 1024
@@ -40,16 +58,24 @@ def native_capture_contract(checkout: Path) -> dict:
     """Pin source evidence for known regular GMV streams and every-frame hooks."""
     sources = {name: (checkout / name).read_text(encoding="utf-8", errors="replace") for name in NATIVE_FILES}
     requirements = {
-        "src/movie.cpp": ('aMovie->LastFrame=(ftell(test)-64)/3;',
-                          'fseek(MainMovie.File,64+FrameCount*3,SEEK_SET);',
-                          'aMovie->StateRequired=((t&64)>>6);', 'aMovie->TriplePlayerHack=((t&32)>>5);'),
-        "src/luascript.cpp": ('case SPEEDMODE_NOTHROTTLE:',
-                              'if(!TurboMode)gens_emulateframefastnoskipping(L);'),
-        "src/G_ddraw.cpp": ('if(TurboMode)Temp_Frame_Skip=8;', 'Automation_OnFrame(FrameCount,'),
-        "src/automation.cpp": ('StateDump_OnFrame(frameCount);',
-                               'if(frameCount%ScreenshotInterval!=0)return;', '%06d.png'),
-        "src/state_dump.cpp": ('const int NUM_SECTIONS = 10;', 'Write_LE_U32(f, frameNumber);',
-                               'StateDump_DumpState(frameCount);'),
+        "src/movie.cpp": (
+            "aMovie->LastFrame=(ftell(test)-64)/3;",
+            "fseek(MainMovie.File,64+FrameCount*3,SEEK_SET);",
+            "aMovie->StateRequired=((t&64)>>6);",
+            "aMovie->TriplePlayerHack=((t&32)>>5);",
+        ),
+        "src/luascript.cpp": ("case SPEEDMODE_NOTHROTTLE:", "if(!TurboMode)gens_emulateframefastnoskipping(L);"),
+        "src/G_ddraw.cpp": ("if(TurboMode)Temp_Frame_Skip=8;", "Automation_OnFrame(FrameCount,"),
+        "src/automation.cpp": (
+            "StateDump_OnFrame(frameCount);",
+            "if(frameCount%ScreenshotInterval!=0)return;",
+            "%06d.png",
+        ),
+        "src/state_dump.cpp": (
+            "const int NUM_SECTIONS = 10;",
+            "Write_LE_U32(f, frameNumber);",
+            "StateDump_DumpState(frameCount);",
+        ),
     }
     for name, fragments in requirements.items():
         compact = re.sub(r"\s+", "", sources[name])
@@ -57,10 +83,16 @@ def native_capture_contract(checkout: Path) -> dict:
             raise ValueError("native exact-frame capture proof changed: %s" % name)
     block = sources["src/state_dump.cpp"].split("int StateDump_DumpState(int frameNumber)", 1)[1]
     block = block.split("int StateDump_DumpStateToFile", 1)[0]
-    sections = re.findall(r"sections\[(\d+)\]\.section_id\s*=\s*(\w+);.*?"
-                          r"sections\[\1\]\.size\s*=\s*([^;]+);", block, re.DOTALL)
-    constants = dict((name, int(value, 16)) for name, value in re.findall(
-        r"#define\s+(SECTION_\w+)\s+0x([0-9A-Fa-f]+)", sources["src/state_dump.h"]))
+    sections = re.findall(
+        r"sections\[(\d+)\]\.section_id\s*=\s*(\w+);.*?"
+        r"sections\[\1\]\.size\s*=\s*([^;]+);",
+        block,
+        re.DOTALL,
+    )
+    constants = dict(
+        (name, int(value, 16))
+        for name, value in re.findall(r"#define\s+(SECTION_\w+)\s+0x([0-9A-Fa-f]+)", sources["src/state_dump.h"])
+    )
     psg = sources["src/psg.h"].split("struct _psg", 1)[1].split("{", 1)[1].split("}", 1)[0]
     fields = [line.strip() for line in psg.splitlines() if line.strip()]
     psg_words = 0
@@ -88,10 +120,14 @@ def native_capture_contract(checkout: Path) -> dict:
         actual.append((constants[name], size))
     if tuple(actual) != STATE_LAYOUT:
         raise ValueError("native complete GENSTATE layout changed")
-    return {"regular_gmv_header_bytes": 64, "regular_gmv_bytes_per_frame": 3,
-            "genstate_version": 1, "genstate_bytes": STATE_LENGTH,
-            "section_layout": [list(item) for item in STATE_LAYOUT],
-            "source_sha256": {name: sha256(checkout / name) for name in NATIVE_FILES}}
+    return {
+        "regular_gmv_header_bytes": 64,
+        "regular_gmv_bytes_per_frame": 3,
+        "genstate_version": 1,
+        "genstate_bytes": STATE_LENGTH,
+        "section_layout": [list(item) for item in STATE_LAYOUT],
+        "source_sha256": {name: sha256(checkout / name) for name in NATIVE_FILES},
+    }
 
 
 def authenticate_rom(payload: bytes, profiles: dict) -> dict:
@@ -99,25 +135,42 @@ def authenticate_rom(payload: bytes, profiles: dict) -> dict:
     digest = hashlib.sha256(payload).hexdigest()
     if len(jp) != 1 or len(payload) != jp[0]["reference_rom"]["size"] or digest != jp[0]["reference_rom"]["sha256"]:
         raise ValueError("reference capture requires the exact canonical Japanese ROM")
-    if (len(payload) < 0x200 or payload[0x100:0x110] != b"SEGA MEGA DRIVE "
-            or struct.unpack_from(">II", payload, 0x1A0) != (0, len(payload) - 1)):
+    if (
+        len(payload) < 0x200
+        or payload[0x100:0x110] != b"SEGA MEGA DRIVE "
+        or struct.unpack_from(">II", payload, 0x1A0) != (0, len(payload) - 1)
+    ):
         raise ValueError("canonical Japanese cartridge header has an unsupported layout")
-    return {"profile": "jp", "sha256": digest, "size": len(payload),
-            "cartridge_header_sha256": hashlib.sha256(payload[0x100:0x200]).hexdigest(),
-            "region_header_hex": payload[0x1F0:0x200].hex(),
-            "stored_checksum": struct.unpack_from(">H", payload, 0x18E)[0]}
+    return {
+        "profile": "jp",
+        "sha256": digest,
+        "size": len(payload),
+        "cartridge_header_sha256": hashlib.sha256(payload[0x100:0x200]).hexdigest(),
+        "region_header_hex": payload[0x1F0:0x200].hex(),
+        "stored_checksum": struct.unpack_from(">H", payload, 0x18E)[0],
+    }
 
 
 def known_movie_info(payload: bytes, expected: str) -> dict:
     """Not a generic GMV parser: only the three hash-pinned Source 1 JP movies."""
     if hashlib.sha256(payload).hexdigest() != expected:
         raise ValueError("selected Japanese movie SHA-256 differs from its contract")
-    if (len(payload) < 64 or (len(payload) - 64) % 3 or payload[:16] != b"Gens Movie TESTA"
-            or payload[22] & 0xE0 or any(value not in b"36" for value in payload[20:22])):
+    if (
+        len(payload) < 64
+        or (len(payload) - 64) % 3
+        or payload[:16] != b"Gens Movie TESTA"
+        or payload[22] & 0xE0
+        or any(value not in b"36" for value in payload[20:22])
+    ):
         raise ValueError("known JP movie is not a regular NTSC cold-boot GMV stream")
-    return {"sha256": expected, "frames": (len(payload) - 64) // 3,
-            "header_hex": payload[:64].hex(), "state_required": False,
-            "triple_player_hack": False, "pal": False}
+    return {
+        "sha256": expected,
+        "frames": (len(payload) - 64) // 3,
+        "header_hex": payload[:64].hex(),
+        "state_required": False,
+        "triple_player_hack": False,
+        "pal": False,
+    }
 
 
 def archive_parent(root: Path, requested: Path, protected: set[Path]) -> Path:
@@ -133,9 +186,13 @@ def archive_parent(root: Path, requested: Path, protected: set[Path]) -> Path:
 def full_state_header(path: Path, frame: int, checksum: int) -> None:
     with path.open("rb") as stream:
         table = stream.read(STATE_TABLE_END)
-    if (len(table) != STATE_TABLE_END or table[:8] != b"GENSTATE" or path.stat().st_size != STATE_LENGTH
-            or struct.unpack_from("<II", table, 8) != (1, frame)
-            or struct.unpack_from("<I", table, 24)[0] != checksum):
+    if (
+        len(table) != STATE_TABLE_END
+        or table[:8] != b"GENSTATE"
+        or path.stat().st_size != STATE_LENGTH
+        or struct.unpack_from("<II", table, 8) != (1, frame)
+        or struct.unpack_from("<I", table, 24)[0] != checksum
+    ):
         raise ValueError("frame %d: native GENSTATE header/length differs" % frame)
     offset = STATE_TABLE_END
     for index, (kind, size) in enumerate(STATE_LAYOUT):
@@ -203,8 +260,9 @@ def png_header(path: Path, frame: int) -> None:
         raise ValueError("frame %d: native PNG integrity/decode failed: %s" % (frame, error)) from error
 
 
-def verify_inventory(root: Path, session: Path, maximum: int, interval: int,
-                     checksum: int, protected: set[Path], receipt: dict) -> Path:
+def verify_inventory(
+    root: Path, session: Path, maximum: int, interval: int, checksum: int, protected: set[Path], receipt: dict
+) -> Path:
     frames = session / "frames"
     temporary = session / ".frame_inventory.tmp"
     inventory = session / "frame_inventory.jsonl"
@@ -223,18 +281,28 @@ def verify_inventory(root: Path, session: Path, maximum: int, interval: int,
                 # Rename only the just-produced native file inside this fresh
                 # session. No prior archive or manual file is a target.
                 native.rename(state)
-            manifest.write(json.dumps({"frame": frame, "native_header_frame": frame,
-                "state": "frames/" + state.name, "png": "frames/" + png.name,
-                "state_sha256": sha256(state), "png_sha256": sha256(png),
-                "state_bytes": state.stat().st_size, "png_bytes": png.stat().st_size},
-                separators=(",", ":")) + "\n")
+            manifest.write(
+                json.dumps(
+                    {
+                        "frame": frame,
+                        "native_header_frame": frame,
+                        "state": "frames/" + state.name,
+                        "png": "frames/" + png.name,
+                        "state_sha256": sha256(state),
+                        "png_sha256": sha256(png),
+                        "state_bytes": state.stat().st_size,
+                        "png_bytes": png.stat().st_size,
+                    },
+                    separators=(",", ":"),
+                )
+                + "\n"
+            )
             receipt["verified_frames"] += 1
     count = 0
     for entry in frames.iterdir():
         safe_output(root, entry, protected)
         match = re.fullmatch(r"(\d{6})\.(png|genstate)", entry.name)
-        if (not entry.is_file() or not match or not interval <= int(match[1]) <= maximum
-                or int(match[1]) % interval):
+        if not entry.is_file() or not match or not interval <= int(match[1]) <= maximum or int(match[1]) % interval:
             raise ValueError("new archive contains an unexpected frame artifact: %s" % entry.name)
         count += 1
     if count != 2 * (maximum // interval) or receipt["verified_frames"] != maximum // interval:
@@ -248,8 +316,13 @@ def capture(root: Path, args: argparse.Namespace) -> Path:
     maximum = args.max_frames if args.max_frames is not None else DEFAULT_BOUNDS.get(args.movie)
     if maximum is None:
         raise ValueError("longplay contains 206611 frames; request an explicit --max-frames<=100000 prefix/clip")
-    if (args.movie not in MOVIES or type(maximum) is not int or not 1 <= maximum <= FRAME_LIMIT
-            or type(args.interval) is not int or not 1 <= args.interval <= maximum):
+    if (
+        args.movie not in MOVIES
+        or type(maximum) is not int
+        or not 1 <= maximum <= FRAME_LIMIT
+        or type(args.interval) is not int
+        or not 1 <= args.interval <= maximum
+    ):
         raise ValueError("reference maximum must be in 1..100000 and interval in 1..maximum")
     timeout = args.timeout if args.timeout is not None else max(60, maximum * 20 // 1000)
     if type(timeout) is not int or timeout < 1:
@@ -268,9 +341,19 @@ def capture(root: Path, args: argparse.Namespace) -> Path:
         raise ValueError("the pinned menus movie duration changed; choose an explicit frame bound")
     native = runtime_environment.environment_identity(root, gens)
     proof = native_capture_contract(gens.parent.parent)
-    paths = (rom, movie, gens, SCRIPT, CAPTURE_SCRIPT, root / "scripts/run_runtime_scenarios.py",
-             Path(runtime_environment.__file__).resolve(), Path(runtime_isolation.__file__).resolve(),
-             config_path, profiles_path, root / "config/toolchain.json")
+    paths = (
+        rom,
+        movie,
+        gens,
+        SCRIPT,
+        CAPTURE_SCRIPT,
+        root / "scripts/run_runtime_scenarios.py",
+        Path(runtime_environment.__file__).resolve(),
+        Path(runtime_isolation.__file__).resolve(),
+        config_path,
+        profiles_path,
+        root / "config/toolchain.json",
+    )
     pins = {path: sha256(path) for path in paths}
     pins[rom], pins[movie] = rom_auth["sha256"], movie_auth["sha256"]
     pins[config_path] = hashlib.sha256(config_bytes).hexdigest()
@@ -281,21 +364,35 @@ def capture(root: Path, args: argparse.Namespace) -> Path:
     frames = session / "frames"
     frames.mkdir()
     receipt_path = session / "receipt.json"
-    receipt = {"schema_version": 1, "status": "running", "profile": "jp", "movie_id": args.movie,
-               "movie": movie_auth, "rom": rom_auth, "native_runtime": native, "native_capture_proof": proof,
-               "input_sha256": {str(path): value for path, value in pins.items()},
-               "max_frame_inclusive": maximum, "interval": args.interval,
-               "expected_frames": maximum // args.interval, "verified_frames": 0,
-               "first_frame": args.interval, "last_frame": maximum // args.interval * args.interval,
-               "png_integrity": "complete_chunk_crc_structure_and_pillow_verify_load",
-               "png_max_bytes": MAX_PNG_BYTES,
-               "scope": "exact_frame_native_capture_not_renderer_or_game_semantic_fidelity"}
+    receipt = {
+        "schema_version": 1,
+        "status": "running",
+        "profile": "jp",
+        "movie_id": args.movie,
+        "movie": movie_auth,
+        "rom": rom_auth,
+        "native_runtime": native,
+        "native_capture_proof": proof,
+        "input_sha256": {str(path): value for path, value in pins.items()},
+        "max_frame_inclusive": maximum,
+        "interval": args.interval,
+        "expected_frames": maximum // args.interval,
+        "verified_frames": 0,
+        "first_frame": args.interval,
+        "last_frame": maximum // args.interval * args.interval,
+        "png_integrity": "complete_chunk_crc_structure_and_pillow_verify_load",
+        "png_max_bytes": MAX_PNG_BYTES,
+        "scope": "exact_frame_native_capture_not_renderer_or_game_semantic_fidelity",
+    }
     receipt_write(receipt_path, receipt)
 
     def recheck() -> None:
         if any(sha256(path) != value for path, value in pins.items()):
             raise ValueError("reference input/harness changed after authentication")
-        if runtime_environment.environment_identity(root, gens) != native or native_capture_contract(gens.parent.parent) != proof:
+        if (
+            runtime_environment.environment_identity(root, gens) != native
+            or native_capture_contract(gens.parent.parent) != proof
+        ):
             raise ValueError("reference native runtime/proof changed after authentication")
 
     try:
@@ -312,19 +409,50 @@ def capture(root: Path, args: argparse.Namespace) -> Path:
             runtime_isolation.validate_private_config(isolation, private_config)
             if sha256(rom_snapshot) != pins[rom] or sha256(movie_snapshot) != pins[movie]:
                 raise ValueError("reference snapshot differs from authenticated input")
-            command = [str(gens), "-cfg", str(private_config), "-rom", str(rom_snapshot),
-                       "-play", str(movie_snapshot), "-lua", str(CAPTURE_SCRIPT),
-                       "-screenshot-interval", str(args.interval), "-screenshot-dir", str(frames),
-                       "-dump-state-dir", str(frames), "-dump-state-interval", str(args.interval),
-                       "-dump-state-start", "1", "-dump-state-end", str(maximum),
-                       "-max-frames", str(maximum + 1), "-frameskip", "0", "-nosound"]
-            receipt.update({"isolation": isolation, "private_config_sha256": hashlib.sha256(config_seed).hexdigest(),
-                            "command": command, "native_stop_frame": maximum + 1})
+            command = [
+                str(gens),
+                "-cfg",
+                str(private_config),
+                "-rom",
+                str(rom_snapshot),
+                "-play",
+                str(movie_snapshot),
+                "-lua",
+                str(CAPTURE_SCRIPT),
+                "-screenshot-interval",
+                str(args.interval),
+                "-screenshot-dir",
+                str(frames),
+                "-dump-state-dir",
+                str(frames),
+                "-dump-state-interval",
+                str(args.interval),
+                "-dump-state-start",
+                "1",
+                "-dump-state-end",
+                str(maximum),
+                "-max-frames",
+                str(maximum + 1),
+                "-frameskip",
+                "0",
+                "-nosound",
+            ]
+            receipt.update(
+                {
+                    "isolation": isolation,
+                    "private_config_sha256": hashlib.sha256(config_seed).hexdigest(),
+                    "command": command,
+                    "native_stop_frame": maximum + 1,
+                }
+            )
             receipt_write(receipt_path, receipt)
             environment = os.environ.copy()
             environment["ALIEN_RUNTIME_CAPTURE_STOP_FRAME"] = str(maximum + 1)
-            print("[RUN] %s: interval %d, inclusive frame %d, expected %d frame pairs" % (
-                args.movie, args.interval, maximum, receipt["expected_frames"]), flush=True)
+            print(
+                "[RUN] %s: interval %d, inclusive frame %d, expected %d frame pairs"
+                % (args.movie, args.interval, maximum, receipt["expected_frames"]),
+                flush=True,
+            )
             result = run_hidden(command, Path(isolation["startup_directories"]["runtime"]), timeout, environment)
             runtime_isolation.validate_isolation(isolation, startup="runtime", finished=True)
             runtime_isolation.validate_private_config(isolation, private_config)
@@ -333,12 +461,21 @@ def capture(root: Path, args: argparse.Namespace) -> Path:
             if sha256(rom_snapshot) != pins[rom] or sha256(movie_snapshot) != pins[movie]:
                 raise ValueError("reference private ROM/movie snapshot changed during replay")
             recheck()
-            inventory = verify_inventory(root, session, maximum, args.interval, int(config["rom_checksum"], 0), set(pins), receipt)
+            inventory = verify_inventory(
+                root, session, maximum, args.interval, int(config["rom_checksum"], 0), set(pins), receipt
+            )
         recheck()
-        receipt.update({"status": "captured", "inventory": inventory.name,
-                        "inventory_sha256": sha256(inventory)})
+        receipt.update({"status": "captured", "inventory": inventory.name, "inventory_sha256": sha256(inventory)})
         receipt_write(receipt_path, receipt)
-    except (OSError, ValueError, RuntimeError, KeyError, TypeError, subprocess.SubprocessError, KeyboardInterrupt) as error:
+    except (
+        OSError,
+        ValueError,
+        RuntimeError,
+        KeyError,
+        TypeError,
+        subprocess.SubprocessError,
+        KeyboardInterrupt,
+    ) as error:
         receipt.update({"status": "failed", "error": str(error)})
         receipt_write(receipt_path, receipt)
         raise
@@ -352,8 +489,9 @@ def main() -> int:
     parser.add_argument("--rom", type=Path, default=Path("asbuilt.bin"))
     parser.add_argument("--gens", type=Path, required=True)
     parser.add_argument("--interval", type=int, default=1)
-    parser.add_argument("--max-frames", type=int,
-                        help="inclusive last replay frame (<=100000); required for longplay prefixes")
+    parser.add_argument(
+        "--max-frames", type=int, help="inclusive last replay frame (<=100000); required for longplay prefixes"
+    )
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--timeout", type=int)
     args = parser.parse_args()

@@ -57,14 +57,15 @@ PALETTE_COLOURS = 64
 PALETTE_BYTES = PALETTE_COLOURS * 2
 ACTIVE_BUFFER = 0xFFFFE300
 SHADOW_BUFFER = 0xFFFFE380
-DESTINATION_BIAS = 0x1D00           # dest - $1D00 sign-extends to the buffer
+DESTINATION_BIAS = 0x1D00  # dest - $1D00 sign-extends to the buffer
 
 LABEL_LINE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):(?P<rest>.*)$")
 DIRECTIVE = re.compile(r"^\s*(?P<kind>dc\.[bwl]|binclude)\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
 # (Symbol+$disp)-Loader, Symbol-Loader, or a bare terminator.
 OFFSET_TERM = re.compile(
     r"^\(?(?P<symbol>[A-Za-z_][A-Za-z0-9_]*)"
-    r"(?:\+\$(?P<displacement>[0-9A-Fa-f]+))?\)?-" + LOADER_SYMBOL + r"$")
+    r"(?:\+\$(?P<displacement>[0-9A-Fa-f]+))?\)?-" + LOADER_SYMBOL + r"$"
+)
 
 
 def parse_number(token):
@@ -81,9 +82,9 @@ class PaletteCommand:
     """One run of colours, and where in the buffer it lands."""
 
     block: str
-    offset: int                  # byte offset within its block
-    destination: int             # byte offset into the palette buffer
-    colours: tuple               # CRAM words, in order
+    offset: int  # byte offset within its block
+    destination: int  # byte offset into the palette buffer
+    colours: tuple  # CRAM words, in order
 
     @property
     def count(self):
@@ -114,8 +115,7 @@ class PaletteCommand:
         return self.block if self.offset == 0 else "%s+$%X" % (self.block, self.offset)
 
     def encode(self):
-        return (bytes((self.destination, self.count - 1))
-                + struct.pack(">%dH" % self.count, *self.colours))
+        return bytes((self.destination, self.count - 1)) + struct.pack(">%dH" % self.count, *self.colours)
 
 
 def read_commands(data, block):
@@ -129,8 +129,9 @@ def read_commands(data, block):
         count = encoded + 1
         size = 2 + 2 * count
         if destination % 2 or destination + 2 * count > PALETTE_BYTES:
-            raise ValueError("%s+$%X: destination $%X and %d colours leave the buffer"
-                             % (block, at, destination, count))
+            raise ValueError(
+                "%s+$%X: destination $%X and %d colours leave the buffer" % (block, at, destination, count)
+            )
         if at + size > len(data):
             raise ValueError("%s+$%X: %d colours run past the block" % (block, at, count))
         colours = struct.unpack_from(">%dH" % count, data, at + 2)
@@ -144,7 +145,7 @@ class Block:
     """A labelled run of bytes in the palette source."""
 
     name: str
-    storage: str                 # "source" or "payload"
+    storage: str  # "source" or "payload"
     payload: str
     data: bytes
 
@@ -154,8 +155,8 @@ class OffsetList:
     """A named list of commands, played in order onto the buffer."""
 
     name: str
-    index: int                   # which run, for a label holding several lists
-    entries: tuple               # (symbol, displacement) pairs
+    index: int  # which run, for a label holding several lists
+    entries: tuple  # (symbol, displacement) pairs
 
     @property
     def label(self):
@@ -178,18 +179,15 @@ def read_source(root):
             payload = tokens[0].strip().strip('"')
             blocks[name] = Block(name, "payload", payload, (root / payload).read_bytes())
         elif kind == "dc.b":
-            blocks[name] = Block(name, "source", "",
-                                 bytes(parse_number(token) for token in tokens))
-        elif kind == "dc.w" and all(OFFSET_TERM.match(token.strip())
-                                    or parse_number(token) == 0 for token in tokens):
+            blocks[name] = Block(name, "source", "", bytes(parse_number(token) for token in tokens))
+        elif kind == "dc.w" and all(OFFSET_TERM.match(token.strip()) or parse_number(token) == 0 for token in tokens):
             runs = [[]]
             for token in tokens:
                 match = OFFSET_TERM.match(token.strip())
                 if match is None:
                     runs.append([])
                     continue
-                runs[-1].append((match.group("symbol"),
-                                 int(match.group("displacement") or "0", 16)))
+                runs[-1].append((match.group("symbol"), int(match.group("displacement") or "0", 16)))
             for index, run in enumerate(run for run in runs if run):
                 lists.append(OffsetList(name, index, tuple(run)))
 
@@ -241,8 +239,7 @@ def resolve(offset_list, commands):
     for symbol, displacement in offset_list.entries:
         key = (symbol, displacement)
         if key not in commands:
-            raise ValueError("%s: %s+$%X is not the start of a command"
-                             % (offset_list.label, symbol, displacement))
+            raise ValueError("%s: %s+$%X is not the start of a command" % (offset_list.label, symbol, displacement))
         found.append(commands[key])
     return found
 
@@ -256,12 +253,14 @@ def named_sets(root, levels=CRAM_LEVELS):
     for offset_list in lists:
         played = resolve(offset_list, commands)
         words = apply_commands(played, prelude)
-        sets.append({
-            "name": offset_list.label,
-            "commands": [command.label for command in played],
-            "words": words,
-            "rgb": [cram_to_rgb(word, levels) for word in words],
-        })
+        sets.append(
+            {
+                "name": offset_list.label,
+                "commands": [command.label for command in played],
+                "words": words,
+                "rgb": [cram_to_rgb(word, levels) for word in words],
+            }
+        )
     return sets
 
 
@@ -273,8 +272,7 @@ def round_trip_errors(root):
     for name, block in sorted(blocks.items()):
         if name in other:
             continue
-        rebuilt = b"".join(command.encode() for key, command in sorted(commands.items())
-                           if key[0] == name)
+        rebuilt = b"".join(command.encode() for key, command in sorted(commands.items()) if key[0] == name)
         if rebuilt != block.data:
             errors.append("%s: re-encoded commands differ from the tree" % name)
     for offset_list in lists:

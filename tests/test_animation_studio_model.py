@@ -55,19 +55,13 @@ class ValidationTests(unittest.TestCase):
         errors = model.document_errors(self.document, ROOT, "jp")
         self.assertTrue(any("fixed capacity" in error for error in errors))
         self.document = model.export_document(ROOT, "jp")
-        jump = next(
-            frame for record in self.document["scripts"] for frame in record["frames"]
-            if frame["jump"]
-        )
+        jump = next(frame for record in self.document["scripts"] for frame in record["frames"] if frame["jump"])
         jump["duration"] = 1
         errors = model.document_errors(self.document, ROOT, "jp")
         self.assertTrue(any("zero-duration jump role" in error for error in errors))
 
     def test_targets_must_keep_their_proved_runtime_role(self) -> None:
-        frame = next(
-            frame for record in self.document["scripts"] for frame in record["frames"]
-            if not frame["jump"]
-        )
+        frame = next(frame for record in self.document["scripts"] for frame in record["frames"] if not frame["jump"])
         frame["target"] = "InventedMapping"
         errors = model.document_errors(self.document, ROOT, "jp")
         self.assertTrue(any("proved frame mapping" in error for error in errors))
@@ -83,18 +77,13 @@ class StagedApplicationTests(unittest.TestCase):
     def test_duration_edit_changes_only_the_owning_source(self) -> None:
         document = model.export_document(self.tree, "jp")
         record = next(
-            item for item in document["scripts"]
-            if any(not frame["jump"] and frame["duration"] < 0xFFFF
-                   for frame in item["frames"])
+            item
+            for item in document["scripts"]
+            if any(not frame["jump"] and frame["duration"] < 0xFFFF for frame in item["frames"])
         )
-        frame = next(
-            frame for frame in record["frames"]
-            if not frame["jump"] and frame["duration"] < 0xFFFF
-        )
+        frame = next(frame for frame in record["frames"] if not frame["jump"] and frame["duration"] < 0xFFFF)
         frame["duration"] += 1
-        self.assertEqual(
-            [record["source_path"]], model.apply_document(document, self.tree, "jp")
-        )
+        self.assertEqual([record["source_path"]], model.apply_document(document, self.tree, "jp"))
         reread = model.export_document(self.tree, "jp")
         changed = next(item for item in reread["scripts"] if item["name"] == record["name"])
         self.assertEqual(frame["duration"], changed["frames"][frame["index"]]["duration"])

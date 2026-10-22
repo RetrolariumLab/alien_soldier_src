@@ -1,8 +1,8 @@
 # Text Studio
 
 Text Studio edits eight text formats, each through a model of the reader that
-consumes it. Values are glyph indices: no Unicode character is guessed from
-the artwork. A reviewed character map can be added (see below), and without one
+consumes it. Values are glyph indices: no Unicode character is guessed from the
+artwork. A reviewed character map can be added (see below), and without one
 every field is still editable by ID, with the source art of the selected glyph
 shown beside it.
 
@@ -16,19 +16,19 @@ make text-studio CONTENT_PROFILE=jp
 primary and accent streams together by `$22` bytes, so the document keeps them
 as paired 34-byte rows; every row keeps its final `$FF` and each stream its
 final `$FE`. The Japanese cartridge has 99 pairs, the European one 123. Both
-rows go through `Text_QueueDoubleHeightStringWrapped`, which turns a glyph
-byte into two tiles of the shared font (not the separate Japanese story font).
-Accent rows contain internal `$FF` run boundaries (the Japanese path queues one
-run, the European path can queue a second); their positions are protected.
-Glyph IDs are limited to the 228 complete records of the shared font.
+rows go through `Text_QueueDoubleHeightStringWrapped`, which turns a glyph byte
+into two tiles of the shared font (not the separate Japanese story font). Accent
+rows contain internal `$FF` run boundaries (the Japanese path queues one run,
+the European path can queue a second); their positions are protected. Glyph IDs
+are limited to the 228 complete records of the shared font.
 
 **Frontend strings** (`text/frontend_strings.json`). 37 named `Text_*` strings
-of the title, options, continue, retry and results screens: 429 glyph indices
-in 466 bytes, each string with its fixed `$FF`. Two adjacent numeric
-placeholder aliases without terminators of their own are left out. Edits
-rewrite only the staged `src/rendering/text_and_numbers.s` and cannot move a
-terminator or resize a string. The double-height reader multiplies each glyph
-by two to select a tile pair, so IDs above 227 are refused.
+of the title, options, continue, retry and results screens: 429 glyph indices in
+466 bytes, each string with its fixed `$FF`. Two adjacent numeric placeholder
+aliases without terminators of their own are left out. Edits rewrite only the
+staged `src/rendering/text_and_numbers.s` and cannot move a terminator or resize
+a string. The double-height reader multiplies each glyph by two to select a tile
+pair, so IDs above 227 are refused.
 
 **Stage messages** (`text/stage_messages.json`). Four payloads holding five
 `$FD`-terminated sequences of 38 row-prefixed, `$FF`-terminated records in 808
@@ -47,9 +47,9 @@ bytes are not addressed by any command; they may look like text but are kept
 only as a protected layout hash. No ordinary route into these scripts is known
 ([unknowns](unknowns.md)).
 
-**Credits** (`text/credits_sequence.json`). 874 bytes, 37 records, each an
-upper and a lower row of delay, count and glyphs; the first negative delay ends
-the stream and one extra `$FF` is padding. 724 glyph slots and the delays are
+**Credits** (`text/credits_sequence.json`). 874 bytes, 37 records, each an upper
+and a lower row of delay, count and glyphs; the first negative delay ends the
+stream and one extra `$FF` is padding. 724 glyph slots and the delays are
 editable. `Credits_InitXiTiger` queues `Gfx_QueueLargeFontDMACommand81`, which
 loads the shared font to VRAM `$6000`, so IDs up to 227 fit; ID zero is the
 reader's blank slot, and every other ID is doubled to select a sprite tile.
@@ -66,9 +66,9 @@ bonus padding byte fixed.
 **Japanese story font** (`text/japanese_glyph_sequence.json`).
 `StoryFont_StreamNextGlyph` takes each big-endian word of
 `data/mappings/font_japanese.bin`, subtracts `$20` and multiplies by `$80` to
-index `data/artunc/font_japanese.bin`. 987 words are editable, the final
-`$FFFF` is not; the art has 295 glyphs, so codes `$20..$146` are valid. Each
-glyph is four 8x8 tiles: top-left, bottom-left, top-right, bottom-right.
+index `data/artunc/font_japanese.bin`. 987 words are editable, the final `$FFFF`
+is not; the art has 295 glyphs, so codes `$20..$146` are valid. Each glyph is
+four 8x8 tiles: top-left, bottom-left, top-right, bottom-right.
 
 **Results** (`text/results_details.json`). The results detail table: 31 rows of
 22 bytes (651 glyph bytes, one `$FF` per row), shared by both cartridges; rows
@@ -95,23 +95,24 @@ where clicking a cell selects its byte. Japanese story-font codes show their
 the selected slot through the same validation as typing a number. Delays and
 protected boundaries cannot be picked.
 
-Save, Reload, Build and Close follow [the common Studio actions](workstation_actions.md).
+Save, Reload, Build and Close follow
+[the common Studio actions](workstation_actions.md).
 
 ## Character maps
 
 `python scripts/authoring/text_glyph_review.py` writes an offline worksheet,
 `reference/text_glyph_review_shared_font.html`, showing all 228 shared-font
 records, the 295 Japanese story-font records and the credits IDs. A reviewer
-marks each glyph with a transcription and its evidence (visual, in-game,
-source, or unknown/unused) and downloads a JSON answer file;
-`--validate-answers PATH` checks it against the current art.
+marks each glyph with a transcription and its evidence (visual, in-game, source,
+or unknown/unused) and downloads a JSON answer file; `--validate-answers PATH`
+checks it against the current art.
 
-**Import glyph answers** (or `text_character_map.py import --profile jp --answers
-PATH`) turns those answers into `content/workspace/<profile>/text/character_map.json`,
-bound to the profile and to each font's hash. Unknown and empty entries do not
-become characters. Each profile is imported separately, an existing map is
-replaced only when asked, and a map that no longer matches the art is refused
-on load.
+**Import glyph answers** (or
+`text_character_map.py import --profile jp --answers PATH`) turns those answers
+into `content/workspace/<profile>/text/character_map.json`, bound to the profile
+and to each font's hash. Unknown and empty entries do not become characters.
+Each profile is imported separately, an existing map is replaced only when
+asked, and a map that no longer matches the art is refused on load.
 
 With a map, the **Fixed-field text** entry edits the selected field as text:
 reviewed characters, plus explicit tokens such as `[[$023]]` for everything

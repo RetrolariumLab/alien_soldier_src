@@ -78,12 +78,19 @@ def assignment(body: list[str], name: str) -> int:
 
 def initial_domains(root: Path, slots: list[dict]) -> list[dict]:
     source = blocks(root)
-    expected_loader = ["bsr.w Stage_LoadSharedMappings", "move.w (StageTableIndex).w,d0",
-                       "movea.w Stage_AssetLoaderOffsets(pc,d0.w),a0",
-                       "adda.l #Stage_LoadSharedMappings,a0", "jmp (a0)"]
-    expected_initializer = ["move.w (StageTableIndex).w,d0",
-                            "movea.w Stage_InitializerOffsets(pc,d0.w),a0",
-                            "adda.l #Weapon_ClearAmmoRegenTimers,a0", "jmp (a0)"]
+    expected_loader = [
+        "bsr.w Stage_LoadSharedMappings",
+        "move.w (StageTableIndex).w,d0",
+        "movea.w Stage_AssetLoaderOffsets(pc,d0.w),a0",
+        "adda.l #Stage_LoadSharedMappings,a0",
+        "jmp (a0)",
+    ]
+    expected_initializer = [
+        "move.w (StageTableIndex).w,d0",
+        "movea.w Stage_InitializerOffsets(pc,d0.w),a0",
+        "adda.l #Weapon_ClearAmmoRegenTimers,a0",
+        "jmp (a0)",
+    ]
     if source.get("Stage_LoadAssetsForCurrentTableIndex") != expected_loader:
         raise ValueError("stage asset-loader indexed reader differs")
     if source.get("Stage_DispatchInitializer") != expected_initializer:
@@ -91,8 +98,12 @@ def initial_domains(root: Path, slots: list[dict]) -> list[dict]:
     if source.get("Stage_ApplyConfigurationRecord", [])[:1] != ["move.w (a0)+,(StageStateOffset).w"]:
         raise ValueError("stage record no longer seeds the state word at offset zero")
     dispatch = source.get("Stage_RunSelectedProcess", ())
-    required = ["move.w (StageStateOffset).w,d0", "move.w (StageProcessTableOffset).w,d1",
-                "movea.l Stage_ProcessHandlerTable(pc,d1.w),a0", "jmp (a0)"]
+    required = [
+        "move.w (StageStateOffset).w,d0",
+        "move.w (StageProcessTableOffset).w,d1",
+        "movea.l Stage_ProcessHandlerTable(pc,d1.w),a0",
+        "jmp (a0)",
+    ]
     if list(dispatch[-4:]) != required:
         raise ValueError("stage process indexed reader differs from the proved instructions")
     processes = table(source, "Stage_ProcessHandlerTable", "l")
@@ -128,10 +139,17 @@ def initial_domains(root: Path, slots: list[dict]) -> list[dict]:
         if offset % 4 or not 0 <= offset // 4 < len(processes):
             raise ValueError("stage loader process offset escapes its pointer table")
         family = processes[offset // 4]
-        results.append({"index": index, "loader": loader, "process_offset": offset,
-                        "process": family, "table": FAMILIES[family][0],
-                        "entry_count": capacities[family],
-                        "allowed": frozenset(range(0, capacities[family] * 2, 2))})
+        results.append(
+            {
+                "index": index,
+                "loader": loader,
+                "process_offset": offset,
+                "process": family,
+                "table": FAMILIES[family][0],
+                "entry_count": capacities[family],
+                "allowed": frozenset(range(0, capacities[family] * 2, 2)),
+            }
+        )
     return results
 
 
@@ -144,8 +162,11 @@ def state_errors(root: Path, document: dict, baseline: dict) -> list[str]:
     if len(slots) != len(baseline["stage_slots"]):
         return []
     domains = initial_domains(root, baseline["stage_slots"])
-    candidates = {record.get("name"): record for record in records if isinstance(record, dict)
-                  and isinstance(record.get("name"), str)}
+    candidates = {
+        record.get("name"): record
+        for record in records
+        if isinstance(record, dict) and isinstance(record.get("name"), str)
+    }
     constraints = {name: [] for name in originals}
     for slot, domain in zip(slots, domains, strict=True):
         if isinstance(slot, dict) and isinstance(slot.get("configuration"), str):
@@ -163,6 +184,8 @@ def state_errors(root: Path, document: dict, baseline: dict) -> list[str]:
                 errors.append("%s: state_offset has no selected initial reader; preserve its source value" % name)
         for domain in constraints[name]:
             if value not in domain["allowed"]:
-                errors.append("%s: state_offset is outside the aligned %s domain for stage slot %d" % (
-                    name, domain["table"], domain["index"]))
+                errors.append(
+                    "%s: state_offset is outside the aligned %s domain for stage slot %d"
+                    % (name, domain["table"], domain["index"])
+                )
     return errors

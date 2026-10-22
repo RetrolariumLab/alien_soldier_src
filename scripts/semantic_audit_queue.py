@@ -12,9 +12,7 @@ import re
 import sys
 
 
-DEFINITION = re.compile(
-    r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+(?:equ|macro)\b)", re.IGNORECASE
-)
+DEFINITION = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+(?:equ|macro)\b)", re.IGNORECASE)
 PROVENANCE = re.compile(r";\s*was:\s*([A-Za-z_][A-Za-z0-9_]*)\s*$")
 
 
@@ -58,16 +56,12 @@ def scan_provenance(source_root: Path) -> list[ProvenanceName]:
     for path in source_files(source_root):
         current_name: str | None = None
         previous_statement = ""
-        for line_number, line in enumerate(
-            path.read_text(encoding="utf-8").splitlines(), 1
-        ):
+        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if definition := DEFINITION.match(line):
                 current_name = definition.group(1)
             if marker := PROVENANCE.search(line):
                 if current_name is None:
-                    raise ValueError(
-                        f"{path.as_posix()}:{line_number}: provenance has no definition"
-                    )
+                    raise ValueError(f"{path.as_posix()}:{line_number}: provenance has no definition")
                 records.append(
                     ProvenanceName(
                         current_name=current_name,
@@ -95,17 +89,13 @@ def audited_names(audit_path: Path) -> set[str]:
     return names
 
 
-def pending_records(
-    source_root: Path, audit_path: Path
-) -> tuple[list[ProvenanceName], list[ProvenanceName]]:
+def pending_records(source_root: Path, audit_path: Path) -> tuple[list[ProvenanceName], list[ProvenanceName]]:
     provenance = scan_provenance(source_root)
     audited = audited_names(audit_path)
     return provenance, [item for item in provenance if item.current_name not in audited]
 
 
-def duplicate_basis_groups(
-    audit_path: Path, source_root: Path
-) -> list[DuplicateBasis]:
+def duplicate_basis_groups(audit_path: Path, source_root: Path) -> list[DuplicateBasis]:
     """Join exact duplicate sentences to their addresses and source modules.
 
     A duplicate is a review candidate, not automatically a false claim: ROM-
@@ -168,9 +158,7 @@ def unreviewed_duplicate_bases(
             errors.append(f"{reviews_path}: {basis!r} has no review reason")
         group = by_basis.get(basis)
         if group is None:
-            errors.append(
-                f"{reviews_path}: reviewed basis no longer forms a duplicate: {basis!r}"
-            )
+            errors.append(f"{reviews_path}: reviewed basis no longer forms a duplicate: {basis!r}")
             continue
         if any(reference.file is None for reference in group.references):
             errors.append(f"{reviews_path}: {basis!r} has unmapped source members")
@@ -186,18 +174,12 @@ def unreviewed_duplicate_bases(
         members = review.get("members")
         if not isinstance(members, list) or not all(
             isinstance(member, dict)
-            and all(
-                isinstance(member.get(key), str)
-                for key in ("address", "current_name", "file")
-            )
+            and all(isinstance(member.get(key), str) for key in ("address", "current_name", "file"))
             for member in members
         ):
             errors.append(f"{reviews_path}: {basis!r} has invalid members")
             continue
-        expected = sorted(
-            (member["address"], member["current_name"], member["file"])
-            for member in members
-        )
+        expected = sorted((member["address"], member["current_name"], member["file"]) for member in members)
         if actual != expected:
             errors.append(f"{reviews_path}: reviewed members drifted for {basis!r}")
     return [group for group in groups if group.basis not in reviewed], errors
@@ -211,9 +193,7 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=25)
     parser.add_argument("--json", action="store_true", dest="as_json")
     parser.add_argument("--duplicate-bases", action="store_true")
-    parser.add_argument(
-        "--basis-contains", help="show duplicate sentences containing this text"
-    )
+    parser.add_argument("--basis-contains", help="show duplicate sentences containing this text")
     args = parser.parse_args()
     if args.basis_contains and not args.duplicate_bases:
         parser.error("--basis-contains requires --duplicate-bases")
@@ -222,29 +202,19 @@ def main() -> int:
     source_root = Path(args.source_root)
     provenance, pending = pending_records(source_root, audit_path)
     duplicates = duplicate_basis_groups(audit_path, source_root)
-    unreviewed, review_errors = unreviewed_duplicate_bases(
-        duplicates, Path(args.reviews), source_root.parent
-    )
+    unreviewed, review_errors = unreviewed_duplicate_bases(duplicates, Path(args.reviews), source_root.parent)
     if review_errors:
         for error in review_errors:
             print(f"[ERROR] {error}", file=sys.stderr)
         return 1
     duplicate_occurrences = sum(len(group.references) for group in duplicates)
-    unmapped_basis_uses = sum(
-        reference.file is None
-        for group in duplicates
-        for reference in group.references
-    )
+    unmapped_basis_uses = sum(reference.file is None for group in duplicates for reference in group.references)
     selected = unreviewed
     if args.basis_contains:
         needle = args.basis_contains.casefold()
         selected = [group for group in unreviewed if needle in group.basis.casefold()]
     binary_end_aliases = [item for item in pending if item.binary_backed_end]
-    other_end_names = [
-        item
-        for item in pending
-        if item.current_name.endswith("_End") and not item.binary_backed_end
-    ]
+    other_end_names = [item for item in pending if item.current_name.endswith("_End") and not item.binary_backed_end]
     actionable = [item for item in pending if not item.binary_backed_end]
     by_file = Counter(item.file for item in actionable)
 
@@ -259,19 +229,11 @@ def main() -> int:
                     "actionable_upper_bound": len(actionable),
                     "duplicate_basis_groups": len(duplicates),
                     "duplicate_basis_occurrences": duplicate_occurrences,
-                    "reviewed_duplicate_basis_groups": (
-                        len(duplicates) - len(unreviewed)
-                    ),
+                    "reviewed_duplicate_basis_groups": (len(duplicates) - len(unreviewed)),
                     "unreviewed_duplicate_basis_groups": len(unreviewed),
                     "unmapped_basis_uses": unmapped_basis_uses,
-                    "duplicate_bases": (
-                        [asdict(group) for group in selected]
-                        if args.duplicate_bases else []
-                    ),
-                    "modules": [
-                        {"file": file, "pending": count}
-                        for file, count in by_file.most_common()
-                    ],
+                    "duplicate_bases": ([asdict(group) for group in selected] if args.duplicate_bases else []),
+                    "modules": [{"file": file, "pending": count} for file, count in by_file.most_common()],
                     "records": [asdict(item) for item in actionable],
                 },
                 indent=2,
@@ -279,10 +241,7 @@ def main() -> int:
         )
         return 0
 
-    print(
-        f"[OK] semantic audit queue: {len(provenance)} provenance mappings, "
-        f"{len(pending)} pending current names"
-    )
+    print(f"[OK] semantic audit queue: {len(provenance)} provenance mappings, {len(pending)} pending current names")
     print(
         f"[INFO] {len(binary_end_aliases)} binary-backed _End aliases, "
         f"{len(other_end_names)} other _End names; actionable upper bound "
@@ -300,14 +259,9 @@ def main() -> int:
     if args.duplicate_bases:
         for group in selected[: max(args.limit, 0)]:
             print(f"{len(group.references):4}  {group.basis}")
-            references = (
-                group.references if args.basis_contains else group.references[:3]
-            )
+            references = group.references if args.basis_contains else group.references[:3]
             for reference in references:
-                print(
-                    f"      {reference.address} {reference.current_name} "
-                    f"({reference.file or 'unmapped'})"
-                )
+                print(f"      {reference.address} {reference.current_name} ({reference.file or 'unmapped'})")
             if len(references) < len(group.references):
                 print(f"      ... {len(group.references) - len(references)} more")
     return 0

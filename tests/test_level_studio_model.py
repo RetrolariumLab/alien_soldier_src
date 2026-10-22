@@ -61,9 +61,7 @@ class BaselineTests(unittest.TestCase):
         self.assertEqual(295, len(document["object_handlers"]))
         self.assertEqual(30, len(document["configurations"]))
         self.assertEqual(26, len(document["stage_slots"]))
-        self.assertEqual(
-            "Stage1ConfigRecord", document["stage_slots"][0]["configuration"]
-        )
+        self.assertEqual("Stage1ConfigRecord", document["stage_slots"][0]["configuration"])
         self.assertEqual(
             [0, 1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 23, 24, 25],
             sorted(model.editable_stage_slot_locations(ROOT)),
@@ -85,8 +83,7 @@ class ValidationTests(unittest.TestCase):
         self.document = model.export_document(ROOT, "jp")
 
     def test_spawn_bounds_follow_the_source_reader_and_pool_limit(self) -> None:
-        source = (ROOT / "src/gameplay/object_spawner.s").read_text(
-            encoding="utf-8")
+        source = (ROOT / "src/gameplay/object_spawner.s").read_text(encoding="utf-8")
         self.assertIn("addi.w  #$140,d7", source)
         self.assertIn("cmp.w   (a4),d7", source)
         self.assertIn("blt.s   Sys_ProcessSpawnList_SaveCursor", source)
@@ -103,19 +100,13 @@ class ValidationTests(unittest.TestCase):
         self.assertIn("spawn-list inventory differs from the source", errors)
 
     def test_fixed_capacity_rejects_added_or_removed_placements(self) -> None:
-        item = next(
-            record for record in self.document["spawn_lists"] if record["entries"]
-        )
+        item = next(record for record in self.document["spawn_lists"] if record["entries"])
         item["entries"].append(dict(item["entries"][0]))
         errors = model.document_errors(self.document, ROOT, "jp")
         self.assertTrue(any("entry count" in error for error in errors))
 
     def test_object_types_and_pool_boundaries_must_be_real(self) -> None:
-        entry = next(
-            record["entries"][0]
-            for record in self.document["spawn_lists"]
-            if record["entries"]
-        )
+        entry = next(record["entries"][0] for record in self.document["spawn_lists"] if record["entries"])
         entry["object_type"] = 0xFFFC
         entry["slot_first"] = 1
         errors = model.document_errors(self.document, ROOT, "jp")
@@ -123,30 +114,23 @@ class ValidationTests(unittest.TestCase):
         self.assertTrue(any("object-pool boundary" in error for error in errors))
 
     def test_spawn_stop_word_and_out_of_pool_starts_are_not_editable_rows(self) -> None:
-        entry = next(record["entries"][0] for record in self.document["spawn_lists"]
-                     if record["entries"])
+        entry = next(record["entries"][0] for record in self.document["spawn_lists"] if record["entries"])
         entry["slot_first"] = 0xDCA0
         entry["slot_limit"] = 0xDCA0
         for x in (0x7FFF, 0x8000, 0xFFFF):
             with self.subTest(x=x):
                 entry["x"] = x
                 errors = model.document_errors(self.document, ROOT, "jp")
-                self.assertTrue(any("x must precede the $7FFF stop word" in error
-                                    for error in errors))
-                self.assertTrue(any("slot_first is beyond the object pool" in error
-                                    for error in errors))
+                self.assertTrue(any("x must precede the $7FFF stop word" in error for error in errors))
+                self.assertTrue(any("slot_first is beyond the object pool" in error for error in errors))
 
     def test_slot_range_order_is_checked_without_rejecting_equal_bounds(self) -> None:
-        record = next(record for record in self.document["spawn_lists"]
-                      if record["name"] == "Stage10_ObjectSpawnList")
-        self.assertEqual((0xDB20, 0xDB20),
-                         (record["entries"][7]["slot_first"],
-                          record["entries"][7]["slot_limit"]))
+        record = next(record for record in self.document["spawn_lists"] if record["name"] == "Stage10_ObjectSpawnList")
+        self.assertEqual((0xDB20, 0xDB20), (record["entries"][7]["slot_first"], record["entries"][7]["slot_limit"]))
         self.assertEqual([], model.document_errors(self.document, ROOT, "jp"))
         record["entries"][7]["slot_first"] = 0xDB80
         errors = model.document_errors(self.document, ROOT, "jp")
-        self.assertTrue(any("slot_first exceeds slot_limit" in error
-                            for error in errors))
+        self.assertTrue(any("slot_first exceeds slot_limit" in error for error in errors))
 
     def test_configuration_widths_and_pointer_symbols_are_checked(self) -> None:
         configuration = self.document["configurations"][0]
@@ -161,9 +145,11 @@ class ValidationTests(unittest.TestCase):
     def test_configuration_table_domains_follow_the_readers_not_current_values(self) -> None:
         entry = (ROOT / "src/stages/gameplay_entry_states.s").read_text(encoding="utf-8")
         primary = entry.split("Stage_StreamGameplayEntryPrimaryPlane_Rows:", 1)[1].split(
-            "; End of function Stage_UpdateGameplayEntry", 1)[0]
+            "; End of function Stage_UpdateGameplayEntry", 1
+        )[0]
         secondary = entry.split("Stage_StreamGameplayEntrySecondaryPlane_Rows:", 1)[1].split(
-            "Stage_FinishGameplayEntry:", 1)[0]
+            "Stage_FinishGameplayEntry:", 1
+        )[0]
         self.assertIn("andi.w  #$7FFF,d0", primary)
         self.assertNotIn("andi.w", secondary)
         self.assertIn("move.l  -4(a0,d0.w)", primary)
@@ -171,13 +157,16 @@ class ValidationTests(unittest.TestCase):
         director = (ROOT / model.SPAWN_DIRECTOR_SOURCE).read_text(encoding="utf-8")
         self.assertIn("move.w  (EnemySpawnDirectorState).w,d0", director)
         self.assertIn("movea.w EnemySpawn_DirectorHandlers(pc,d0.w),a0", director)
-        self.assertEqual({
-            "plane_a_mode": frozenset((0, 4, 8, 0x8004, 0x8008)),
-            "plane_b_mode": frozenset((0, 4, 8)),
-            "spawn_director": frozenset((0, 2, 4)),
-            "palette_primary": frozenset(range(0, 20, 2)),
-            "palette_secondary": frozenset(range(0, 8, 2)),
-        }, model.configuration_index_domains(ROOT))
+        self.assertEqual(
+            {
+                "plane_a_mode": frozenset((0, 4, 8, 0x8004, 0x8008)),
+                "plane_b_mode": frozenset((0, 4, 8)),
+                "spawn_director": frozenset((0, 2, 4)),
+                "palette_primary": frozenset(range(0, 20, 2)),
+                "palette_secondary": frozenset(range(0, 8, 2)),
+            },
+            model.configuration_index_domains(ROOT),
+        )
         fields = self.document["configurations"][0]["fields"]
         fields["spawn_director"] = 4  # Valid table entry, unused by baseline records.
         fields["plane_a_mode"] = 0x8004
@@ -195,27 +184,29 @@ class ValidationTests(unittest.TestCase):
                     changed["configurations"][0]["fields"][field] = value
                     self.assertIn(
                         f"Stage1ConfigRecord: {field} is not a reader-owned aligned table offset",
-                        model.document_errors(changed, ROOT, "jp"))
+                        model.document_errors(changed, ROOT, "jp"),
+                    )
 
     def test_xi_tiger_unmasked_reader_keeps_its_separate_fixed_configuration(self) -> None:
         source = (ROOT / "src/stages/visual_asset_loading.s").read_text(encoding="utf-8")
-        table = source.split("Stage_XiTigerConfigurationOffsets:", 1)[1].split(
-            "Stage_ApplyXiTigerConfiguration:", 1)[0]
+        table = source.split("Stage_XiTigerConfigurationOffsets:", 1)[1].split("Stage_ApplyXiTigerConfiguration:", 1)[0]
         self.assertEqual(1, table.count("dc.w"))
         self.assertIn("Stage_ApplyXiTigerConfiguration-Stage_ApplyXiTigerConfiguration", table)
         initializer = source.split("Stage_ApplyXiTigerConfiguration:", 1)[1].split(
-            "; End of function Stage_ApplyXiTigerConfiguration", 1)[0]
+            "; End of function Stage_ApplyXiTigerConfiguration", 1
+        )[0]
         self.assertIn("lea     XiTigerStageConfigRecord(pc),a0", initializer)
         entry = (ROOT / "src/stages/gameplay_entry_states.s").read_text(encoding="utf-8")
         self.assertIn("jsr     (Stage_InitializeXiTigerState).l", entry)
         xi_reader = entry.split("XiTigerStage_StreamPrimaryPlane_Rows:", 1)[1].split(
-            "XiTigerStage_AdvanceToSecondaryPlane:", 1)[0]
+            "XiTigerStage_AdvanceToSecondaryPlane:", 1
+        )[0]
         self.assertNotIn("andi.w", xi_reader)
         self.assertIn("(a0,d0.w),(TilemapTransferBase).w", xi_reader)
-        self.assertNotIn("XiTigerStageConfigRecord", {
-            item["name"] for item in self.document["configurations"]})
-        self.assertNotIn("Stage_ApplyXiTigerConfiguration", {
-            slot["initializer"] for slot in self.document["stage_slots"]})
+        self.assertNotIn("XiTigerStageConfigRecord", {item["name"] for item in self.document["configurations"]})
+        self.assertNotIn(
+            "Stage_ApplyXiTigerConfiguration", {slot["initializer"] for slot in self.document["stage_slots"]}
+        )
 
         self.document["stage_slots"][0]["configuration"] = "XiTigerStageConfigRecord"
         self.document["stage_slots"][0]["initializer"] = "Stage_ApplyXiTigerConfiguration"
@@ -250,10 +241,8 @@ class StagedApplicationTests(unittest.TestCase):
             with self.subTest(profile=profile):
                 document = model.export_document(self.tree, profile)
                 document["configurations"][0]["fields"]["plane_b_mode"] = 0x8004
-                next(item for item in document["spawn_lists"] if item["entries"])[
-                    "entries"][0]["x"] += 1
-                before = {path: path.read_bytes() for path in self.tree.rglob("*")
-                          if path.is_file()}
+                next(item for item in document["spawn_lists"] if item["entries"])["entries"][0]["x"] += 1
+                before = {path: path.read_bytes() for path in self.tree.rglob("*") if path.is_file()}
                 with self.assertRaisesRegex(ValueError, "plane_b_mode.*aligned table offset"):
                     model.apply_document(document, self.tree, profile)
                 self.assertEqual(before, {path: path.read_bytes() for path in before})
@@ -261,38 +250,34 @@ class StagedApplicationTests(unittest.TestCase):
     def test_table_capacity_is_read_from_the_staged_source(self) -> None:
         path = self.tree / "src/stages/gameplay_entry_states.s"
         text = path.read_text(encoding="utf-8")
-        path.write_text(text.replace(
-            "                dc.l    Gfx_ScrollVRAMTransferParameters\n",
-            "                dc.l    Gfx_ScrollVRAMTransferParameters\n"
-            "                dc.l    Gfx_DefaultVRAMTransferParameters\n", 1), encoding="utf-8")
-        self.assertEqual(frozenset((0, 4, 8, 12)),
-                         model.configuration_index_domains(self.tree)["plane_b_mode"])
+        path.write_text(
+            text.replace(
+                "                dc.l    Gfx_ScrollVRAMTransferParameters\n",
+                "                dc.l    Gfx_ScrollVRAMTransferParameters\n"
+                "                dc.l    Gfx_DefaultVRAMTransferParameters\n",
+                1,
+            ),
+            encoding="utf-8",
+        )
+        self.assertEqual(frozenset((0, 4, 8, 12)), model.configuration_index_domains(self.tree)["plane_b_mode"])
         document = model.export_document(self.tree, "jp")
         document["configurations"][0]["fields"]["plane_b_mode"] = 12
         self.assertEqual([], model.document_errors(document, self.tree, "jp"))
 
     def test_one_source_placement_edit_changes_only_the_spawn_source(self) -> None:
         document = model.export_document(self.tree, "jp")
-        item = next(
-            record
-            for record in document["spawn_lists"]
-            if record["storage"] == "source" and record["entries"]
-        )
+        item = next(record for record in document["spawn_lists"] if record["storage"] == "source" and record["entries"])
         item["entries"][0]["x"] += 1
         changed = model.apply_document(document, self.tree, "jp")
         self.assertEqual([model.SPAWN_SOURCE.as_posix()], changed)
         reread = model.export_document(self.tree, "jp")
-        again = next(
-            record for record in reread["spawn_lists"] if record["name"] == item["name"]
-        )
+        again = next(record for record in reread["spawn_lists"] if record["name"] == item["name"])
         self.assertEqual(item["entries"][0]["x"], again["entries"][0]["x"])
 
     def test_one_payload_edit_changes_only_its_staged_payload(self) -> None:
         document = model.export_document(self.tree, "jp")
         item = next(
-            record
-            for record in document["spawn_lists"]
-            if record["storage"] == "payload" and record["entries"]
+            record for record in document["spawn_lists"] if record["storage"] == "payload" and record["entries"]
         )
         item["entries"][0]["y"] += 1
         changed = model.apply_document(document, self.tree, "jp")
@@ -307,11 +292,7 @@ class StagedApplicationTests(unittest.TestCase):
         changed = model.apply_document(document, self.tree, "jp")
         self.assertEqual([model.CONFIG_SOURCE.as_posix()], changed)
         after = (self.tree / model.CONFIG_SOURCE).read_text(encoding="utf-8")
-        differing = [
-            (left, right)
-            for left, right in zip(before.split("\n"), after.split("\n"))
-            if left != right
-        ]
+        differing = [(left, right) for left, right in zip(before.split("\n"), after.split("\n")) if left != right]
         self.assertEqual(1, len(differing))
         self.assertEqual(differing[0][0].replace("dc.w    0", "dc.w    $180", 1), differing[0][1])
         reread = model.export_document(self.tree, "jp")
@@ -325,11 +306,11 @@ class StagedApplicationTests(unittest.TestCase):
         self.assertEqual([model.INITIALIZER_SOURCE.as_posix()], changed)
         after = (self.tree / model.INITIALIZER_SOURCE).read_text(encoding="utf-8")
         self.assertEqual(
-            before.replace("lea     Stage1ConfigRecord(pc),a0",
-                           "lea     Stage2ConfigRecord(pc),a0", 1), after)
-        self.assertEqual("Stage2ConfigRecord",
-                         model.export_document(self.tree, "jp")["stage_slots"][0]
-                         ["configuration"])
+            before.replace("lea     Stage1ConfigRecord(pc),a0", "lea     Stage2ConfigRecord(pc),a0", 1), after
+        )
+        self.assertEqual(
+            "Stage2ConfigRecord", model.export_document(self.tree, "jp")["stage_slots"][0]["configuration"]
+        )
         self.assertEqual([], model.round_trip_errors(self.tree, "jp"))
 
     def test_all_sixteen_plain_routes_round_trip_together(self) -> None:
@@ -338,14 +319,14 @@ class StagedApplicationTests(unittest.TestCase):
         for index in editable:
             slot = document["stage_slots"][index]
             slot["configuration"] = (
-                "Stage2ConfigRecord" if slot["configuration"] == "Stage1ConfigRecord"
-                else "Stage1ConfigRecord")
-        self.assertEqual([model.INITIALIZER_SOURCE.as_posix()],
-                         model.apply_document(document, self.tree, "eu"))
+                "Stage2ConfigRecord" if slot["configuration"] == "Stage1ConfigRecord" else "Stage1ConfigRecord"
+            )
+        self.assertEqual([model.INITIALIZER_SOURCE.as_posix()], model.apply_document(document, self.tree, "eu"))
         reread = model.export_document(self.tree, "eu")
         for index in editable:
-            self.assertEqual(document["stage_slots"][index]["configuration"],
-                             reread["stage_slots"][index]["configuration"])
+            self.assertEqual(
+                document["stage_slots"][index]["configuration"], reread["stage_slots"][index]["configuration"]
+            )
         self.assertEqual([], model.round_trip_errors(self.tree, "eu"))
 
 

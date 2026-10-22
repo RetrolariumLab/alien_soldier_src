@@ -18,7 +18,7 @@ valid labels and record-specific evidence. Leave uncertain roles neutral and
 report unresolved cases. Applying make rename, recording exact-address evidence
 and rebuilding both profiles follow the workflow only when authorized.
 
-Summarize the proposal, evidence limits and exact validation performed. Use
-make verify-all for current regional identity, not obsolete single-source
-filenames or a report's processed flag. Never stage a ROM, private trace,
-generated report, unrelated changes or a broad source backup.
+Summarize the proposal, evidence limits and exact validation performed. Use make
+verify-all for current regional identity, not obsolete single-source filenames
+or a report's processed flag. Never stage a ROM, private trace, generated
+report, unrelated changes or a broad source backup.

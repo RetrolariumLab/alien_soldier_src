@@ -29,12 +29,24 @@ from scripts.rom_profiles import select_profile
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = "config/runtime_region_smoke.json"
 OBSERVATIONS = (
-    ("GameModeIndex", 2), ("GameSubstateIndex", 2), ("DifficultyMode", 2),
-    ("ConsoleVersionFlags", 1), ("PaletteFadeMode", 2), ("PaletteFadeColorOffset", 2),
-    ("TitleMenuSelection", 2), ("DemoPlaybackActive", 2), ("DemoPlaybackState", 2),
-    ("DemoRecordingMode", 2), ("DemoFramesRemaining", 2), ("StageTableIndex", 2),
-    ("DemoStageTableIndex", 2), ("PlayerObjectType", 2), ("VBlankFrameCounter", 2),
-    ("PaletteFadeMaskStatus", 1), ("ScenePaletteFadeOffset", 2), ("DataLoaderControl", 2),
+    ("GameModeIndex", 2),
+    ("GameSubstateIndex", 2),
+    ("DifficultyMode", 2),
+    ("ConsoleVersionFlags", 1),
+    ("PaletteFadeMode", 2),
+    ("PaletteFadeColorOffset", 2),
+    ("TitleMenuSelection", 2),
+    ("DemoPlaybackActive", 2),
+    ("DemoPlaybackState", 2),
+    ("DemoRecordingMode", 2),
+    ("DemoFramesRemaining", 2),
+    ("StageTableIndex", 2),
+    ("DemoStageTableIndex", 2),
+    ("PlayerObjectType", 2),
+    ("VBlankFrameCounter", 2),
+    ("PaletteFadeMaskStatus", 1),
+    ("ScenePaletteFadeOffset", 2),
+    ("DataLoaderControl", 2),
 )
 
 
@@ -57,7 +69,11 @@ def lua_contract(ram: dict[str, int], config: dict) -> str:
     cells = ",".join("%s=%d" % item for item in ram.items())
     observations = ",".join("{%d,%d}" % (ram[name], width) for name, width in OBSERVATIONS)
     return "return {ram={%s},observations={%s},max_frames=%d,demo_stable_frames=%d}\n" % (
-        cells, observations, config["max_frames"], config["demo_stable_frames"])
+        cells,
+        observations,
+        config["max_frames"],
+        config["demo_stable_frames"],
+    )
 
 
 def read_trace(path: Path) -> list[dict]:
@@ -87,32 +103,53 @@ def check_trace(config: dict, rows: list[dict], result: dict) -> dict:
         raise ValueError("the run did not reach the attract demo within %d frames" % config["max_frames"])
     expected = config["expectations"]
     flags = expected["console_flags"]
-    booted = [row for row in rows if matches(row, expected["boot"]) and row["GameModeIndex"] > 0
-              and row["ConsoleVersionFlags"] & flags["mask"] == flags["equals"]]
+    booted = [
+        row
+        for row in rows
+        if matches(row, expected["boot"])
+        and row["GameModeIndex"] > 0
+        and row["ConsoleVersionFlags"] & flags["mask"] == flags["equals"]
+    ]
     if not booted:
         raise ValueError("the console flags never said Europe")
     title = [row for row in booted if matches(row, expected["title"])]
-    demo = [row for row in booted if matches(row, expected["attract_demo"])
-            and row["StageTableIndex"] == row["DemoStageTableIndex"]
-            and 0 < row["DemoFramesRemaining"] <= 4096]
+    demo = [
+        row
+        for row in booted
+        if matches(row, expected["attract_demo"])
+        and row["StageTableIndex"] == row["DemoStageTableIndex"]
+        and 0 < row["DemoFramesRemaining"] <= 4096
+    ]
     if not title or not demo:
         raise ValueError("the title screen or the attract demo never appeared")
     if not title[-1]["frame"] < demo[0]["frame"]:
         raise ValueError("the title screen came back after the demo started")
-    window = demo[-config["demo_stable_frames"]:]
-    if (len(window) < config["demo_stable_frames"] or window[-1]["frame"] != rows[-1]["frame"]
-            or any(b["frame"] != a["frame"] + 1 for a, b in zip(window, window[1:]))):
+    window = demo[-config["demo_stable_frames"] :]
+    if (
+        len(window) < config["demo_stable_frames"]
+        or window[-1]["frame"] != rows[-1]["frame"]
+        or any(b["frame"] != a["frame"] + 1 for a, b in zip(window, window[1:]))
+    ):
         raise ValueError("the demo did not run for %d frames in a row" % config["demo_stable_frames"])
     if not window[-1]["DemoFramesRemaining"] < window[0]["DemoFramesRemaining"]:
         raise ValueError("the demo countdown did not go down")
     skip = result.get("story_start_frame", 0)
     if skip:
         row = rows[skip - 1]
-        if (row["GameModeIndex"] != 40 or not row["PaletteFadeMaskStatus"] & 1
-                or row["ScenePaletteFadeOffset"] or row["DataLoaderControl"] >= 0x8000):
+        if (
+            row["GameModeIndex"] != 40
+            or not row["PaletteFadeMaskStatus"] & 1
+            or row["ScenePaletteFadeOffset"]
+            or row["DataLoaderControl"] >= 0x8000
+        ):
             raise ValueError("Start was pressed outside the story skip")
-    return {"booted": booted[0]["frame"], "title": title[0]["frame"], "demo": demo[0]["frame"],
-            "final": rows[-1]["frame"], "story_start": skip}
+    return {
+        "booted": booted[0]["frame"],
+        "title": title[0]["frame"],
+        "demo": demo[0]["frame"],
+        "final": rows[-1]["frame"],
+        "story_start": skip,
+    }
 
 
 def run(root: Path, gens: Path) -> dict:
@@ -133,16 +170,32 @@ def run(root: Path, gens: Path) -> dict:
     environment = os.environ.copy()
     environment["ALIEN_REGION_SMOKE_CONTRACT"] = str(directory / "contract.lua")
     environment["ALIEN_REGION_SMOKE_TRACE"] = str(directory / "trace.csv")
-    command = [str(gens), "-cfg", str(directory / "gens.cfg"), "-rom", str(directory / "cartridge.bin"),
-               "-lua", str(root / config["capture_script"]), "-frameskip", "0", "-nosound"]
+    command = [
+        str(gens),
+        "-cfg",
+        str(directory / "gens.cfg"),
+        "-rom",
+        str(directory / "cartridge.bin"),
+        "-lua",
+        str(root / config["capture_script"]),
+        "-frameskip",
+        "0",
+        "-nosound",
+    ]
     startup = None
     if os.name == "nt":
         startup = subprocess.STARTUPINFO()
         startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         startup.wShowWindow = 0
     with (directory / "gens.log").open("wb") as output:
-        process = subprocess.Popen(command, cwd=isolation["startup_directories"]["runtime"],
-                                   env=environment, stdout=output, stderr=output, startupinfo=startup)
+        process = subprocess.Popen(
+            command,
+            cwd=isolation["startup_directories"]["runtime"],
+            env=environment,
+            stdout=output,
+            stderr=output,
+            startupinfo=startup,
+        )
         try:
             process.wait(timeout=config["timeout_seconds"])
         finally:

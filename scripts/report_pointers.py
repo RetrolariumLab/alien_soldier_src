@@ -16,7 +16,7 @@ from collections import defaultdict
 
 def extract_address_from_label(label):
     """Extract hex address from label name like byte_121932 -> 0x121932"""
-    match = re.match(r'(byte|word|dword|off|unk)_([0-9A-Fa-f]+)', label, re.IGNORECASE)
+    match = re.match(r"(byte|word|dword|off|unk)_([0-9A-Fa-f]+)", label, re.IGNORECASE)
     if match:
         try:
             return int(match.group(2), 16)
@@ -30,7 +30,7 @@ def get_diff_frame_range(folder_path):
 
     Returns: (min_frame, max_frame) or None if no diffs found
     """
-    diff_files = [f for f in os.listdir(folder_path) if f.endswith('_diff.png')]
+    diff_files = [f for f in os.listdir(folder_path) if f.endswith("_diff.png")]
 
     if not diff_files:
         return None
@@ -38,7 +38,7 @@ def get_diff_frame_range(folder_path):
     frames = []
     for f in diff_files:
         # Extract frame number from filename like "014220_diff.png"
-        match = re.match(r'(\d+)_diff\.png', f)
+        match = re.match(r"(\d+)_diff\.png", f)
         if match:
             frames.append(int(match.group(1)))
 
@@ -63,7 +63,7 @@ def cleanup_empty_dirs(pointers_dir):
             continue
 
         # Check if directory has *_diff.png files
-        diff_files = [f for f in os.listdir(label_path) if f.endswith('_diff.png')]
+        diff_files = [f for f in os.listdir(label_path) if f.endswith("_diff.png")]
 
         if not diff_files:
             # Remove directory without visual diffs
@@ -128,19 +128,21 @@ def generate_report(frame_ranges):
         addresses.sort(key=lambda x: x[0], reverse=True)
         max_addr, max_label = addresses[0]
 
-        all_entries.append({
-            'frame_range': (min_frame, max_frame),
-            'max_address': max_addr,
-            'max_label': max_label,
-            'all_addresses': addresses
-        })
+        all_entries.append(
+            {
+                "frame_range": (min_frame, max_frame),
+                "max_address": max_addr,
+                "max_label": max_label,
+                "all_addresses": addresses,
+            }
+        )
 
     # Print summary (compact format for easy parsing)
     print("SUMMARY (frame_range -> max_problematic_address):")
     print("-" * 80)
 
     for entry in all_entries:
-        min_f, max_f = entry['frame_range']
+        min_f, max_f = entry["frame_range"]
         print(f"broken at {min_f:06d}-{max_f:06d}: max address ${entry['max_address']:06X} ({entry['max_label']})")
 
     print()
@@ -149,24 +151,24 @@ def generate_report(frame_ranges):
     print("=" * 80)
 
     for entry in all_entries:
-        min_f, max_f = entry['frame_range']
+        min_f, max_f = entry["frame_range"]
         print()
         print(f"Frame range {min_f:06d}-{max_f:06d}:")
         print(f"  Max problematic address: ${entry['max_address']:06X} ({entry['max_label']})")
         print(f"  All addresses causing breaks in this range ({len(entry['all_addresses'])} total):")
 
         # Show top 10 addresses
-        for i, (addr, label) in enumerate(entry['all_addresses'][:10]):
+        for i, (addr, label) in enumerate(entry["all_addresses"][:10]):
             print(f"    ${addr:06X} - {label}")
 
-        if len(entry['all_addresses']) > 10:
+        if len(entry["all_addresses"]) > 10:
             print(f"    ... and {len(entry['all_addresses']) - 10} more")
 
     print()
     print("=" * 80)
 
     # Find overall max address
-    overall_max = max(all_entries, key=lambda x: x['max_address'])
+    overall_max = max(all_entries, key=lambda x: x["max_address"])
     print()
     print("OVERALL HIGHEST PROBLEMATIC ADDRESS:")
     print(f"  ${overall_max['max_address']:06X} ({overall_max['max_label']})")
@@ -185,18 +187,14 @@ def main():
     )
     return 1
 
-    parser = argparse.ArgumentParser(
-        description='Analyze pointer debug results'
-    )
-    parser.add_argument('--diffs-dir', required=True,
-                        help='Diffs directory (e.g., diffs/tas)')
-    parser.add_argument('--no-cleanup', action='store_true',
-                        help='Do not remove empty directories')
+    parser = argparse.ArgumentParser(description="Analyze pointer debug results")
+    parser.add_argument("--diffs-dir", required=True, help="Diffs directory (e.g., diffs/tas)")
+    parser.add_argument("--no-cleanup", action="store_true", help="Do not remove empty directories")
 
     args = parser.parse_args()
 
     diffs_dir = Path(args.diffs_dir)
-    pointers_dir = diffs_dir / 'pointers'
+    pointers_dir = diffs_dir / "pointers"
 
     if not pointers_dir.exists():
         print(f"ERROR: Pointers directory not found: {pointers_dir}")
@@ -223,5 +221,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

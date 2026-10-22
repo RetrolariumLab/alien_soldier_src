@@ -5,8 +5,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from authoring.tile_codec import (
-    FAR_LONG, FAR_SHORT, NEAR_OFFSETS, TILE_BYTES, TILE_PIXELS,
-    Bits, BitWriter, decompress, encode_tile, pack_tile, unpack_tile,
+    FAR_LONG,
+    FAR_SHORT,
+    NEAR_OFFSETS,
+    TILE_BYTES,
+    TILE_PIXELS,
+    Bits,
+    BitWriter,
+    decompress,
+    encode_tile,
+    pack_tile,
+    unpack_tile,
 )
 
 
@@ -89,12 +98,17 @@ def template_colours(plan: TilePlan, pixels: list[int]) -> tuple[int, ...] | Non
         if previous is not None and previous != pixel:
             return None
         replacements[owner] = pixel
-    return tuple(original if replacement is None else replacement
-                 for (_bit, original), replacement in zip(plan.colours, replacements))
+    return tuple(
+        original if replacement is None else replacement
+        for (_bit, original), replacement in zip(plan.colours, replacements)
+    )
 
 
 def write_template(
-    out: BitWriter, original: bytes, plan: TilePlan, colours: tuple[int, ...],
+    out: BitWriter,
+    original: bytes,
+    plan: TilePlan,
+    colours: tuple[int, ...],
 ) -> None:
     cursor = plan.start
     for (position, _original), replacement in zip(plan.colours, colours):
@@ -122,9 +136,9 @@ def compress_edited(original: bytes, data: bytes) -> bytes:
     bits = Bits(original, 1)
     for offset in range(0, len(data), TILE_BYTES):
         plan = read_plan(bits)
-        tile = data[offset:offset + TILE_BYTES]
+        tile = data[offset : offset + TILE_BYTES]
         source_tile = pack_tile([plan.colours[owner][1] for owner in plan.owners])
-        if source_tile != baseline[offset:offset + TILE_BYTES]:
+        if source_tile != baseline[offset : offset + TILE_BYTES]:
             raise ValueError("source token ownership differs from the tile decoder")
         if tile == source_tile:
             copy_bits(out, original, plan.start, plan.end)

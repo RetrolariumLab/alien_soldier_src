@@ -15,17 +15,11 @@ class ResultsSunsetTransitionEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.audit = {
             row["address"]: row
-            for row in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for row in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             row["basis"]: row
-            for row in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for row in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
         }
 
     def test_summary_labels_are_distinct_and_followed_by_matching_totals(self) -> None:
@@ -64,17 +58,9 @@ class ResultsSunsetTransitionEvidenceTests(unittest.TestCase):
         self.assertEqual(3, len(set(bases)))
 
     def test_sunset_commands_are_selected_through_four_pointer_slots(self) -> None:
-        source = (ROOT / "src/bosses/sunset_sting_main.s").read_text(
-            encoding="utf-8"
-        )
-        table = source.split("Boss_SunsetStingTileLoadCommands:", 1)[1].split(
-            "Boss_SunsetStingTileLoadCommandA:", 1
-        )[0]
-        slots = [
-            line.split("dc.l", 1)[1].split(";", 1)[0].strip()
-            for line in table.splitlines()
-            if "dc.l" in line
-        ]
+        source = (ROOT / "src/bosses/sunset_sting_main.s").read_text(encoding="utf-8")
+        table = source.split("Boss_SunsetStingTileLoadCommands:", 1)[1].split("Boss_SunsetStingTileLoadCommandA:", 1)[0]
+        slots = [line.split("dc.l", 1)[1].split(";", 1)[0].strip() for line in table.splitlines() if "dc.l" in line]
         self.assertEqual(
             [
                 "Boss_SunsetStingTileLoadCommandA",
@@ -92,25 +78,16 @@ class ResultsSunsetTransitionEvidenceTests(unittest.TestCase):
             with self.subTest(label=label):
                 self.assertEqual(label, self.audit[address]["current_name"])
                 self.assertIn(last_word, self.audit[address]["basis"][0])
-                command_line = next(
-                    line
-                    for line in source.split(label + ":", 1)[1].splitlines()
-                    if "dc.w" in line
-                )
+                command_line = next(line for line in source.split(label + ":", 1)[1].splitlines() if "dc.w" in line)
                 self.assertIn(
                     f"dc.w    $625C, $2000, 0, {last_word}",
                     command_line,
                 )
-        self.assertIn(
-            "movea.l Boss_SunsetStingTileLoadCommands(pc,d0.w),a0", source
-        )
+        self.assertIn("movea.l Boss_SunsetStingTileLoadCommands(pc,d0.w),a0", source)
         self.assertIn("jsr     (Tilemap_QueueIndexedRows).l", source)
 
     def test_transition_descriptors_share_exact_loader_contract(self) -> None:
-        basis = (
-            "This terminated LoadObjData descriptor loads the shared "
-            "transition asset at VRAM $E000."
-        )
+        basis = "This terminated LoadObjData descriptor loads the shared transition asset at VRAM $E000."
         review = self.reviews[basis]
         expected = (
             (
@@ -138,9 +115,7 @@ class ResultsSunsetTransitionEvidenceTests(unittest.TestCase):
                 self.assertEqual([basis], self.audit[address]["basis"])
                 self.assertEqual(descriptor, self.audit[address]["current_name"])
                 source = (ROOT / filename).read_text(encoding="utf-8")
-                entry = source.split(loader + ":", 1)[1].split(
-                    "; End of function " + loader, 1
-                )[0]
+                entry = source.split(loader + ":", 1)[1].split("; End of function " + loader, 1)[0]
                 self.assertIn(f"lea     {descriptor}(pc),a0", entry)
                 self.assertIn("jsr     (LoadObjData).l", entry)
                 block = source.split(descriptor + ":", 1)[1].splitlines()

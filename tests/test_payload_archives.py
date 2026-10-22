@@ -36,9 +36,7 @@ class PayloadArchiveTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.assets = {
             item["path"]: item
-            for item in json.loads(
-                (ROOT / "assets/manifest.json").read_text(encoding="utf-8")
-            )["assets"]
+            for item in json.loads((ROOT / "assets/manifest.json").read_text(encoding="utf-8"))["assets"]
         }
 
     def test_eight_second_archives_have_exact_ranges_and_tile_counts(self) -> None:
@@ -47,9 +45,7 @@ class PayloadArchiveTests(unittest.TestCase):
                 start = self.assets[first]
                 end = self.assets[second]
                 self.assertEqual(int(start["end"], 16), int(end["address"], 16))
-                self.assertEqual(
-                    int(end["end"], 16) - int(end["address"], 16), end["size"]
-                )
+                self.assertEqual(int(end["end"], 16) - int(end["address"], 16), end["size"])
                 for path in (first, second):
                     data_path = ROOT / "data" / path
                     if not data_path.is_file():
@@ -86,44 +82,34 @@ class PayloadArchiveTests(unittest.TestCase):
                 self.assertGreater(int.from_bytes(raw[:2], "big"), size - 2)
                 if size == 18:
                     self.assertEqual(3, len(raw) // 6)
-                    self.assertEqual([False, False, True], [
-                        bool(int.from_bytes(raw[index:index + 2], "big") & 0x8000)
-                        for index in (0, 6, 12)
-                    ])
+                    self.assertEqual(
+                        [False, False, True],
+                        [bool(int.from_bytes(raw[index : index + 2], "big") & 0x8000) for index in (0, 6, 12)],
+                    )
 
     def test_no_small_symbol_offset_reaches_inside_an_archive(self) -> None:
         sources = sorted((ROOT / "src").rglob("*.s"))
-        binclude = re.compile(
-            r'^([A-Za-z_]\w*):\s+binclude\s+"data/([^\"]+)"'
-        )
-        archive_paths = {
-            path for first, second, _ in PAIRS for path in (first, second)
-        }
+        binclude = re.compile(r'^([A-Za-z_]\w*):\s+binclude\s+"data/([^\"]+)"')
+        archive_paths = {path for first, second, _ in PAIRS for path in (first, second)}
         payload_symbols = set()
         for path in sources:
             for line in path.read_text(encoding="utf-8").splitlines():
                 if (match := binclude.match(line)) and (
-                    match.group(2).startswith("artcomp/")
-                    or match.group(2) in archive_paths
+                    match.group(2).startswith("artcomp/") or match.group(2) in archive_paths
                 ):
                     payload_symbols.add(match.group(1))
                     payload_symbols.add(match.group(1) + "_End")
         reference = re.compile(r"\b([A-Za-z_]\w*)\+\$([0-9A-Fa-f]+)\b")
         interior = []
         for path in sources:
-            for line_number, line in enumerate(
-                path.read_text(encoding="utf-8").splitlines(), 1
-            ):
+            for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
                 for match in reference.finditer(line.split(";", 1)[0]):
-                    if (match.group(1) in payload_symbols
-                            and int(match.group(2), 16) < 0x10000):
+                    if match.group(1) in payload_symbols and int(match.group(2), 16) < 0x10000:
                         interior.append((path.relative_to(ROOT).as_posix(), line_number))
         self.assertEqual([], interior)
 
     def test_three_former_interior_pointers_name_second_archives(self) -> None:
-        source = (ROOT / "src/stages/visual_asset_loading.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/stages/visual_asset_loading.s").read_text(encoding="utf-8")
         for command, symbol in (
             ("Stage7TileAssetCommands", "Stage15TileArt2"),
             ("Stage16TileAssetCommands", "Boss_BackStringerTileArt2"),

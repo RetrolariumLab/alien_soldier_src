@@ -21,8 +21,7 @@ class AnalyzeProceduresTests(unittest.TestCase):
             source = root / "src"
             source.mkdir()
             (source / "main.s").write_text(
-                '                include "src/first.s"\n'
-                '                include "src/second.s"\n',
+                '                include "src/first.s"\n                include "src/second.s"\n',
                 encoding="utf-8",
             )
             (source / "first.s").write_text(
@@ -36,9 +35,7 @@ class AnalyzeProceduresTests(unittest.TestCase):
             queue = root / "queue.txt"
             queue.write_text("Second\nFirst\n", encoding="utf-8")
 
-            procedures = analyze_procedures.load_procedures_from_file(
-                queue, source / "main.s"
-            )
+            procedures = analyze_procedures.load_procedures_from_file(queue, source / "main.s")
 
             self.assertEqual(["First", "Second"], [item["name"] for item in procedures])
             self.assertEqual(["src/first.s", "src/second.s"], [item["module"] for item in procedures])
@@ -83,13 +80,13 @@ class AnalyzeProceduresTests(unittest.TestCase):
     def test_failed_emulator_is_not_reported_as_no_change(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             with patch.object(
-                analyze_procedures.subprocess, "run",
+                analyze_procedures.subprocess,
+                "run",
                 return_value=SimpleNamespace(returncode=7, stderr=b"replay failed"),
             ):
                 with self.assertRaisesRegex(RuntimeError, "replay failed"):
                     analyze_procedures.run_comparison(
-                        "gens.exe", "rom.bin", "movie.gmv", "reference",
-                        directory, "Target"
+                        "gens.exe", "rom.bin", "movie.gmv", "reference", directory, "Target"
                     )
 
 

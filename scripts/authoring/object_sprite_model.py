@@ -52,19 +52,25 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from authoring.stage_tilemap_model import (                          # noqa: E402
-    AssetCommand, SHARED_LOADER, SOURCE_ROOT, labelled_blocks,
-    loader_lists, parse_number, source_texts)
+from authoring.stage_tilemap_model import (  # noqa: E402
+    AssetCommand,
+    SHARED_LOADER,
+    SOURCE_ROOT,
+    labelled_blocks,
+    loader_lists,
+    parse_number,
+    source_texts,
+)
 
 
 VISUAL_SOURCE = Path("src/stages/visual_asset_loading.s")
 VISUAL_TABLE = "Stage_VisualAssetLoaderOffsets"
 VISUAL_ANCHOR = "Stage_ExpandAndSubmitTileAssetCommands"
 SHARED_TILE_SOURCES = "Stage_SharedTileSourceTable"
-DECOMPRESS_TO_VRAM = 7           # what the expansion writes for an indexed command
-TILE_ATTRIBUTE_BIT = 0x0800      # ori.w #$800 on every SpawnedEnemyTileAttr entry
-TILE_SHIFT = 5                   # lsr.w #5: a VRAM address to a tile number
-FULL_COMMAND_BIT = 1             # btst #0: an odd word is a whole record
+DECOMPRESS_TO_VRAM = 7  # what the expansion writes for an indexed command
+TILE_ATTRIBUTE_BIT = 0x0800  # ori.w #$800 on every SpawnedEnemyTileAttr entry
+TILE_SHIFT = 5  # lsr.w #5: a VRAM address to a tile number
+FULL_COMMAND_BIT = 1  # btst #0: an odd word is a whole record
 WEAPON_SELECTION_HANDLER = "UI_WeaponSelectionObject"
 WEAPON_SELECTION_ART_SOURCE = "SharedMenuType3DataF680"
 WEAPON_SELECTION_ART_START = 0xF680
@@ -72,17 +78,15 @@ WEAPON_SELECTION_ART_END = 0x10000
 
 LABEL_LINE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):(?P<rest>.*)$")
 DIRECTIVE = re.compile(r"^\s*(?P<kind>dc\.[bwl])\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
-VISUAL_ENTRY = re.compile(
-    r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + VISUAL_ANCHOR + r"\s*(?:;.*)?$")
+VISUAL_ENTRY = re.compile(r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + VISUAL_ANCHOR + r"\s*(?:;.*)?$")
 LEA_COMMANDS = re.compile(r"^\s+lea\s+([A-Za-z_][A-Za-z0-9_]*)\(pc\),a0\s*(?:;.*)?$")
 LEA_PALETTE = re.compile(r"^\s+lea\s+\(([A-Za-z_][A-Za-z0-9_]*)\)\.l,a0\s*(?:;.*)?$")
 RELATIVE_FRAME = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)-\*$")
 SET_ANIMATION = re.compile(r"^\s+move\.l\s+#([A-Za-z_][A-Za-z0-9_]*),8\(a5\)")
-SET_FROM_TABLE = re.compile(
-    r"^\s+move\.l\s+([A-Za-z_][A-Za-z0-9_]*)\(pc,\w+\.w\),8\(a5\)")
+SET_FROM_TABLE = re.compile(r"^\s+move\.l\s+([A-Za-z_][A-Za-z0-9_]*)\(pc,\w+\.w\),8\(a5\)")
 CALLS = re.compile(r"^\s+(?:bsr|jsr|bra|jmp)\S*\s+\(?([A-Za-z_][A-Za-z0-9_]*)")
 POINTER_ENTRY = re.compile(r"^\s*dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)")
-ROUTINE_LIMIT = 200              # lines to read before giving up on an end marker
+ROUTINE_LIMIT = 200  # lines to read before giving up on an end marker
 
 
 @dataclass(frozen=True)
@@ -118,7 +122,7 @@ def routine(lines, index, name, limit=ROUTINE_LIMIT):
         return []
     path, at = index[name]
     body = []
-    for line in lines[path][at:at + limit]:
+    for line in lines[path][at : at + limit]:
         body.append(line)
         if line.startswith("; End of function "):
             break
@@ -132,6 +136,7 @@ def read_animation_scripts(root):
     is the symbol it names, so this reads the tokens instead.
     """
     from authoring.stage_tilemap_model import _read_operation
+
     active = _read_operation(root)
     if active is not None:
         return active.animation_scripts()
@@ -141,9 +146,11 @@ def read_animation_scripts(root):
 def _parse_animation_scripts(root, *, original=None):
     """The unchanged symbolic dc.w parser over fresh or ORIGINAL source texts."""
     scripts = {}
-    sources = (original.texts() if original is not None else
-               ((path, path.read_text(encoding="utf-8"))
-                for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s"))))
+    sources = (
+        original.texts()
+        if original is not None
+        else ((path, path.read_text(encoding="utf-8")) for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
+    )
     for _path, source in sources:
         name = None
         kind = None
@@ -341,8 +348,7 @@ def expand_tile_commands(blocks, lines, index, name):
 
 
 def _source_code(lines, index, name):
-    return "\n".join(line.split(";", 1)[0]
-                     for line in routine(lines, index, name))
+    return "\n".join(line.split(";", 1)[0] for line in routine(lines, index, name))
 
 
 def weapon_selection_initial_attribute(lines, index, priority):
@@ -351,11 +357,9 @@ def weapon_selection_initial_attribute(lines, index, priority):
         return None
     initialized = _source_code(lines, index, "UI_InitWeaponSelectionObject")
     configured = _source_code(lines, index, "Stage_ApplyConfigurationRecord")
-    if not re.search(
-            r"\bmove\.w\s+\(GlobalSpritePriorityBit\)\.w,\$E\(a5\)", initialized):
+    if not re.search(r"\bmove\.w\s+\(GlobalSpritePriorityBit\)\.w,\$E\(a5\)", initialized):
         return None
-    if not re.search(
-            r"\bmove\.w\s+\(a0\)\+,\(GlobalSpritePriorityBit\)\.w", configured):
+    if not re.search(r"\bmove\.w\s+\(a0\)\+,\(GlobalSpritePriorityBit\)\.w", configured):
         return None
     return priority
 
@@ -370,17 +374,17 @@ def weapon_selection_carried_art(root, stage_index):
     lines, index = read["source_index"]
     ready = _source_code(lines, index, "StageReady_Initialize")
     reset = _source_code(lines, index, "Gfx_ClearStagingAndFirst48KiBVRAM")
-    if (not re.search(r"\bmovea\.l\s+#StageEntryAssetLoadList,a0", ready)
-            or not re.search(r"\bjsr\s+\(LoadObjData\)\.l", ready)
-            or not re.search(r"\bbsr\.w\s+Gfx_ClearVRAMFirst48KiB", reset)):
+    if (
+        not re.search(r"\bmovea\.l\s+#StageEntryAssetLoadList,a0", ready)
+        or not re.search(r"\bjsr\s+\(LoadObjData\)\.l", ready)
+        or not re.search(r"\bbsr\.w\s+Gfx_ClearVRAMFirst48KiB", reset)
+    ):
         return None
 
     data, lists = read["data"], read["lists"]
     entry_list = lists.get("StageEntryAssetLoadList", ())
-    entry = [(at, command) for at, command in enumerate(entry_list)
-             if command.source == WEAPON_SELECTION_ART_SOURCE]
-    if (len(entry) != 1 or entry[0][1].command != 3
-            or entry[0][1].destination != WEAPON_SELECTION_ART_START):
+    entry = [(at, command) for at, command in enumerate(entry_list) if command.source == WEAPON_SELECTION_ART_SOURCE]
+    if len(entry) != 1 or entry[0][1].command != 3 or entry[0][1].destination != WEAPON_SELECTION_ART_START:
         return None
     raw = data.get(WEAPON_SELECTION_ART_SOURCE)
     if not isinstance(raw, bytes):
@@ -391,9 +395,10 @@ def weapon_selection_carried_art(root, stage_index):
 
     if not 0 <= stage_index < len(read["loaders"]):
         return None
-    names = (loader_lists(root, read["bodies"], lists, SHARED_LOADER)
-             + loader_lists(root, read["bodies"], lists, read["loaders"][stage_index]))
-    commands = list(entry_list[entry[0][0] + 1:])
+    names = loader_lists(root, read["bodies"], lists, SHARED_LOADER) + loader_lists(
+        root, read["bodies"], lists, read["loaders"][stage_index]
+    )
+    commands = list(entry_list[entry[0][0] + 1 :])
     commands.extend(command for name in names for command in lists[name])
     visual, _palette = read["visual_loaders"][stage_index]
     if visual:
@@ -419,8 +424,7 @@ def weapon_selection_carried_art(root, stage_index):
             if not 0 < size < 0x8000 or size % 4 or size + 2 > len(raw):
                 return None
         else:
-            size = len(decode_tiles(raw) if command.command == 3 else
-                       decode_lzss(raw))
+            size = len(decode_tiles(raw) if command.command == 3 else decode_lzss(raw))
         if not 0 <= command.destination < WEAPON_SELECTION_ART_END:
             return None
         if command.destination + size > WEAPON_SELECTION_ART_START:
@@ -429,7 +433,7 @@ def weapon_selection_carried_art(root, stage_index):
 
 
 OBJECT_TILE_MASK = 0x07FF
-OBJECT_ATTRIBUTE_MASK = 0xF800   # what Sprite_RenderMapping exclusive-ors
+OBJECT_ATTRIBUTE_MASK = 0xF800  # what Sprite_RenderMapping exclusive-ors
 
 
 def resolve_mapping(symbol, scripts, mappings):
@@ -476,10 +480,8 @@ def compose_static(mapping, vram, palette, attribute, background=None):
         return [], 0, 0
     left = min(at_x for _, at_x, _ in placed)
     top = min(at_y for _, _, at_y in placed)
-    width = max(at_x + piece.tiles_wide * TILE_SIZE
-                for piece, at_x, _ in placed) - left
-    height = max(at_y + piece.tiles_high * TILE_SIZE
-                 for piece, _, at_y in placed) - top
+    width = max(at_x + piece.tiles_wide * TILE_SIZE for piece, at_x, _ in placed) - left
+    height = max(at_y + piece.tiles_high * TILE_SIZE for piece, _, at_y in placed) - top
     image = [[background] * width for _ in range(height)]
     for piece, piece_x, piece_y in reversed(placed):
         combined = (piece.attributes & OBJECT_ATTRIBUTE_MASK) ^ high
@@ -496,8 +498,9 @@ def compose_static(mapping, vram, palette, attribute, background=None):
                 at_row = piece.tiles_high - 1 - row if flip_y else row
                 for y in range(TILE_SIZE):
                     for x in range(TILE_SIZE):
-                        value = pixels[(TILE_SIZE - 1 - y if flip_y else y) * TILE_SIZE
-                                       + (TILE_SIZE - 1 - x if flip_x else x)]
+                        value = pixels[
+                            (TILE_SIZE - 1 - y if flip_y else y) * TILE_SIZE + (TILE_SIZE - 1 - x if flip_x else x)
+                        ]
                         if not value:
                             continue
                         at_y = piece_y - top + at_row * TILE_SIZE + y
@@ -509,29 +512,54 @@ def compose_static(mapping, vram, palette, attribute, background=None):
 
 SET_ATTRIBUTE = re.compile(r"^\s+move\.w\s+#\$([0-9A-Fa-f]+),\$E\(a[05]\)")
 OFFSET_DISPATCH = re.compile(r"^\s+movea\.w\s+([A-Za-z_][A-Za-z0-9_]*)\(pc,\w+\.w\),a\d")
-OFFSET_ENTRY = re.compile(
-    r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-(?:\*|[A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$")
+OFFSET_ENTRY = re.compile(r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-(?:\*|[A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$")
 BEHAVIOUR_SETUP = "Enemy_SetupBehaviorSprite"
 FAMILY_TILE_READERS = {
     "Enemy_BirdController": (
-        "Enemy_DispatchBirdState", "Enemy_BirdStateOffsets",
-        "Enemy_BirdInit", "Enemy_InitBirdSprite", "BirdEnemyTileAttr", "d1", "relative"),
+        "Enemy_DispatchBirdState",
+        "Enemy_BirdStateOffsets",
+        "Enemy_BirdInit",
+        "Enemy_InitBirdSprite",
+        "BirdEnemyTileAttr",
+        "d1",
+        "relative",
+    ),
     "Enemy_CirclingController": (
-        "Enemy_DispatchCirclingState", "Enemy_CirclingStateOffsets",
-        "Enemy_CirclingApproachState", "Enemy_InitCirclingSprite",
-        "CirclingEnemyTileAttr", "d1", "relative"),
+        "Enemy_DispatchCirclingState",
+        "Enemy_CirclingStateOffsets",
+        "Enemy_CirclingApproachState",
+        "Enemy_InitCirclingSprite",
+        "CirclingEnemyTileAttr",
+        "d1",
+        "relative",
+    ),
     "Enemy_HomingAttackController": (
-        "Enemy_DispatchHomingAttackState", "Enemy_HomingAttackStateOffsets",
-        "Enemy_HomingAttackInit", "Sprite_InitializeProjectileSprite",
-        "EnemyProjectileTileAttr", "d0", "absolute_base"),
+        "Enemy_DispatchHomingAttackState",
+        "Enemy_HomingAttackStateOffsets",
+        "Enemy_HomingAttackInit",
+        "Sprite_InitializeProjectileSprite",
+        "EnemyProjectileTileAttr",
+        "d0",
+        "absolute_base",
+    ),
     "Enemy_PhasePatternController": (
-        "Enemy_DispatchPhasePatternState", "Enemy_PhasePatternStateOffsets",
-        "Enemy_PhasePatternInit", "Enemy_SetupPhasePatternSprite",
-        "PhaseEnemyTileAttr", "d1", "relative"),
+        "Enemy_DispatchPhasePatternState",
+        "Enemy_PhasePatternStateOffsets",
+        "Enemy_PhasePatternInit",
+        "Enemy_SetupPhasePatternSprite",
+        "PhaseEnemyTileAttr",
+        "d1",
+        "relative",
+    ),
     "Enemy_Stage10WaspController": (
-        "Enemy_DispatchStage10WaspState", "Enemy_Stage10WaspStateOffsets",
-        "Enemy_Stage10WaspInitState", "Enemy_Stage10WaspInit",
-        "Stage10WaspTileAttr", "d1", "relative"),
+        "Enemy_DispatchStage10WaspState",
+        "Enemy_Stage10WaspStateOffsets",
+        "Enemy_Stage10WaspInitState",
+        "Enemy_Stage10WaspInit",
+        "Stage10WaspTileAttr",
+        "d1",
+        "relative",
+    ),
 }
 INDEXED_SPRITE_HANDLER = "Object_InitIndexedSpriteGraphics"
 STAGE18_PLATFORM_HANDLER = "Stage18_MovingPlatform"
@@ -542,40 +570,45 @@ def stage12_teddy_resting_symbol(lines, index):
     """Follow only the teddy bear's state-zero dispatch and paired sprite setup."""
     controller = "\n".join(routine(lines, index, STAGE12_TEDDY_HANDLER))
     if not re.search(
-            r"\bmove\.w\s+4\(a5\),d0\s*\n"
-            r"\s*movea\.w\s+Stage12_TeddyBearStateTable\(pc,d0\.w\),a0\s*\n"
-            r"\s*adda\.l\s+#Stage12_TeddyBearInit,a0\s*\n"
-            r"\s*jmp\s+\(a0\)", controller):
+        r"\bmove\.w\s+4\(a5\),d0\s*\n"
+        r"\s*movea\.w\s+Stage12_TeddyBearStateTable\(pc,d0\.w\),a0\s*\n"
+        r"\s*adda\.l\s+#Stage12_TeddyBearInit,a0\s*\n"
+        r"\s*jmp\s+\(a0\)",
+        controller,
+    ):
         return ""
-    if read_offset_table(lines, index, "Stage12_TeddyBearStateTable")[:1] != [
-            "Stage12_TeddyBearInit"]:
+    if read_offset_table(lines, index, "Stage12_TeddyBearStateTable")[:1] != ["Stage12_TeddyBearInit"]:
         return ""
     initializer = "\n".join(routine(lines, index, "Stage12_TeddyBearInit"))
     match = re.search(
         r"\bmove\.w\s+#\$8000,\$E\(a5\)\s*\n"
         r"\s*move\.l\s+#([A-Za-z_][A-Za-z0-9_]*),8\(a5\)",
-        initializer)
+        initializer,
+    )
     return match.group(1) if match else ""
 
 
 def stage18_platform_variant(lines, index, stage_index):
     """Select the platform mapping and base from its guarded stage-index branch."""
-    if (isinstance(stage_index, bool) or not isinstance(stage_index, int)
-            or not 0 <= stage_index < 26):
+    if isinstance(stage_index, bool) or not isinstance(stage_index, int) or not 0 <= stage_index < 26:
         return None
     body = "\n".join(routine(lines, index, STAGE18_PLATFORM_HANDLER))
     if not re.search(
-            r"\btst\.w\s+4\(a5\)\s*\n"
-            r"\s*bne\.w\s+Stage18_MovingPlatform_Update\s*\n"
-            r"\s*addq\.w\s+#2,4\(a5\)", body):
+        r"\btst\.w\s+4\(a5\)\s*\n"
+        r"\s*bne\.w\s+Stage18_MovingPlatform_Update\s*\n"
+        r"\s*addq\.w\s+#2,4\(a5\)",
+        body,
+    ):
         return None
     if not re.search(
-            r"\bmove\.l\s+#Stage18MovingPlatformSpriteMapping,8\(a5\)\s*\n"
-            r"\s*move\.w\s+#\$4470,\$E\(a5\)\s*\n"
-            r"\s*cmpi\.w\s+#\$18,\(StageTableIndex\)\.w\s*\n"
-            r"\s*bcc\.s\s+Stage18_MovingPlatform_FinishInit\s*\n"
-            r"\s*move\.l\s+#Stage18_MovingPlatformSpriteMapping,8\(a5\)\s*\n"
-            r"\s*move\.w\s+#\$4000,\$E\(a5\)", body):
+        r"\bmove\.l\s+#Stage18MovingPlatformSpriteMapping,8\(a5\)\s*\n"
+        r"\s*move\.w\s+#\$4470,\$E\(a5\)\s*\n"
+        r"\s*cmpi\.w\s+#\$18,\(StageTableIndex\)\.w\s*\n"
+        r"\s*bcc\.s\s+Stage18_MovingPlatform_FinishInit\s*\n"
+        r"\s*move\.l\s+#Stage18_MovingPlatformSpriteMapping,8\(a5\)\s*\n"
+        r"\s*move\.w\s+#\$4000,\$E\(a5\)",
+        body,
+    ):
         return None
     if stage_index < 0x18:
         return "Stage18_MovingPlatformSpriteMapping", 0x4000
@@ -592,8 +625,9 @@ def indexed_sprite_entries(lines, index):
         r"\bmove\.l\s+Object_IndexedSpriteAnimationPointers\(pc,d0\.w\),8\(a5\)",
         r"\bmove\.w\s+Object_IndexedSpriteAttributes\(pc,d0\.w\),\$E\(a5\)",
     )
-    if (not re.search(r"\bmove\.w\s+6\(a4\),\$5E\(a5\)", spawner)
-            or any(not re.search(pattern, body) for pattern in required)):
+    if not re.search(r"\bmove\.w\s+6\(a4\),\$5E\(a5\)", spawner) or any(
+        not re.search(pattern, body) for pattern in required
+    ):
         raise ValueError("indexed sprite selector source route differs")
     name = "Object_IndexedSpriteAnimationPointers"
     attr_name = "Object_IndexedSpriteAttributes"
@@ -636,8 +670,7 @@ def indexed_sprite_entries(lines, index):
 
 def selected_indexed_sprite_entry(entries, parameter):
     """Bit 15 changes graphics mode; remaining bits index eight-byte records."""
-    if (isinstance(parameter, bool) or not isinstance(parameter, int)
-            or not 0 <= parameter <= 0xFFFF):
+    if isinstance(parameter, bool) or not isinstance(parameter, int) or not 0 <= parameter <= 0xFFFF:
         return None
     offset = parameter & 0x7FFF
     if offset % 8 or offset // 8 >= len(entries):
@@ -649,18 +682,21 @@ def tile_attribute_slots(root):
     """Byte offsets from the expander's first RAM destination, not guessed slots."""
     text = (root / "src/ram_addrs.inc").read_text(encoding="utf-8")
     values = {}
-    for symbol in ("SpawnedEnemyTileAttr", "EnemyProjectileTileAttr",
-                   "BirdEnemyTileAttr", "PhaseEnemyTileAttr",
-                   "Stage10WaspTileAttr", "CirclingEnemyTileAttr"):
-        match = re.search(r"^" + symbol + r"\s+equ\s+\$([0-9A-Fa-f]+)\b",
-                          text, re.MULTILINE)
+    for symbol in (
+        "SpawnedEnemyTileAttr",
+        "EnemyProjectileTileAttr",
+        "BirdEnemyTileAttr",
+        "PhaseEnemyTileAttr",
+        "Stage10WaspTileAttr",
+        "CirclingEnemyTileAttr",
+    ):
+        match = re.search(r"^" + symbol + r"\s+equ\s+\$([0-9A-Fa-f]+)\b", text, re.MULTILINE)
         if match is None:
             raise ValueError("missing RAM tile attribute symbol: " + symbol)
         values[symbol] = int(match.group(1), 16)
     base = values.pop("SpawnedEnemyTileAttr")
     offsets = {name: address - base for name, address in values.items()}
-    if any(offset < 0 or offset % 2 or offset >= 16
-           for offset in offsets.values()):
+    if any(offset < 0 or offset % 2 or offset >= 16 for offset in offsets.values()):
         raise ValueError("enemy family tile attributes are outside the command slots")
     return offsets
 
@@ -719,44 +755,42 @@ def reachable(lines, index, handler, limit=5):
     return seen
 
 
-def _family_attribute(lines, index, handler, attributes, priority, slots,
-                      parameter):
+def _family_attribute(lines, index, handler, attributes, priority, slots, parameter):
     """Prove the state-zero initializer and its stage-owned RAM tile slot."""
     route = FAMILY_TILE_READERS.get(handler)
     if route is None or not attributes:
         return None
     dispatch, table, first_state, initializer, symbol, register, style = route
-    if (symbol == "PhaseEnemyTileAttr" and
-            (parameter is None or parameter & 0x80)):
+    if symbol == "PhaseEnemyTileAttr" and (parameter is None or parameter & 0x80):
         return None
-    if not any((match := CALLS.match(line)) and match.group(1) == dispatch
-               for line in routine(lines, index, handler)):
+    if not any((match := CALLS.match(line)) and match.group(1) == dispatch for line in routine(lines, index, handler)):
         return None
     dispatch_body = "\n".join(routine(lines, index, dispatch))
     if style == "relative":
         if not re.search(r"\blea\s+" + table + r"\(pc,d0\.w\),a0", dispatch_body):
             return None
-        if not re.search(r"\badda\.w\s+\(a0\),a0\s*\n\s*jmp\s+\(a0\)",
-                         dispatch_body):
+        if not re.search(r"\badda\.w\s+\(a0\),a0\s*\n\s*jmp\s+\(a0\)", dispatch_body):
             return None
     else:
-        if not re.search(r"\bmovea\.w\s+" + table +
-                         r"\(pc,d0\.w\),a0\s*\n\s*adda\.l\s+#" +
-                         first_state + r",a0\s*\n\s*jmp\s+\(a0\)",
-                         dispatch_body):
+        if not re.search(
+            r"\bmovea\.w\s+" + table + r"\(pc,d0\.w\),a0\s*\n\s*adda\.l\s+#" + first_state + r",a0\s*\n\s*jmp\s+\(a0\)",
+            dispatch_body,
+        ):
             return None
     targets = read_offset_table(lines, index, table)
     if not targets or targets[0] != first_state:
         return None
     if initializer != first_state and not any(
-            (match := CALLS.match(line)) and match.group(1) == initializer
-            for line in routine(lines, index, first_state)):
+        (match := CALLS.match(line)) and match.group(1) == initializer for line in routine(lines, index, first_state)
+    ):
         return None
     init_body = "\n".join(routine(lines, index, initializer))
     if not re.search(
-            r"\bmove\.w\s+\(" + symbol + r"\)\.w," + register + r"\s*\n"
-            r"\s*or\.w\s+\(GlobalSpritePriorityBit\)\.w," + register + r"\s*\n"
-            r"\s*move\.w\s+" + register + r",\$E\(a5\)", init_body):
+        r"\bmove\.w\s+\(" + symbol + r"\)\.w," + register + r"\s*\n"
+        r"\s*or\.w\s+\(GlobalSpritePriorityBit\)\.w," + register + r"\s*\n"
+        r"\s*move\.w\s+" + register + r",\$E\(a5\)",
+        init_body,
+    ):
         return None
     slot = slots.get(symbol)
     if slot not in attributes:
@@ -767,8 +801,8 @@ def _family_attribute(lines, index, handler, attributes, priority, slots,
 def _spawn_parameter_attribute(lines, index, handler, parameter):
     """Follow the type-$48 initializer's bit-1 choice from the spawn word."""
     if handler != "Object_UpdateProximityPickupEmitterType48" or (
-            isinstance(parameter, bool) or not isinstance(parameter, int)
-            or not 0 <= parameter <= 0xFFFF):
+        isinstance(parameter, bool) or not isinstance(parameter, int) or not 0 <= parameter <= 0xFFFF
+    ):
         return None
     spawner = "\n".join(routine(lines, index, "Sys_SpawnObject"))
     if not re.search(r"\bmove\.w\s+6\(a4\),\$5E\(a5\)", spawner):
@@ -779,11 +813,12 @@ def _spawn_parameter_attribute(lines, index, handler, parameter):
         r"\s*btst\s+#([0-7]),\$5F\(a5\)\s*\n"
         r"\s*beq\.s\s+([A-Za-z_][A-Za-z0-9_]*)\s*\n"
         r"\s*bset\s+#\$([0-9A-Fa-f]+),d0\s*\n"
-        r"\3:[^\n]*\n\s*move\.w\s+d0,\$E\(a5\)", body)
+        r"\3:[^\n]*\n\s*move\.w\s+d0,\$E\(a5\)",
+        body,
+    )
     if match is None:
         return None
-    base, input_bit, attribute_bit = (
-        int(match.group(1), 16), int(match.group(2)), int(match.group(4), 16))
+    base, input_bit, attribute_bit = (int(match.group(1), 16), int(match.group(2)), int(match.group(4), 16))
     value = base | ((1 << attribute_bit) if parameter & (1 << input_bit) else 0)
     return value & 0xFFFF, "spawn parameter bit %d" % input_bit
 
@@ -800,27 +835,39 @@ def _stage12_floater_attribute(lines, index, handler):
     if not re.search(r"\bbsr\.s\s+" + dispatch, controller):
         return None
     dispatch_body = "\n".join(routine(lines, index, dispatch))
-    if not re.search(r"\blea\s+" + table + r"\(pc,d0\.w\),a0\s*\n"
-                     r"\s*adda\.w\s+\(a0\),a0\s*\n\s*jmp\s+\(a0\)",
-                     dispatch_body):
+    if not re.search(
+        r"\blea\s+" + table + r"\(pc,d0\.w\),a0\s*\n"
+        r"\s*adda\.w\s+\(a0\),a0\s*\n\s*jmp\s+\(a0\)",
+        dispatch_body,
+    ):
         return None
     if read_offset_table(lines, index, table)[:1] != [first_state]:
         return None
     state = "\n".join(routine(lines, index, first_state))
-    if not re.search(r"\bmoveq\s+#0,d0\s*\n\s*bsr\.w\s+" + initializer,
-                     state):
+    if not re.search(r"\bmoveq\s+#0,d0\s*\n\s*bsr\.w\s+" + initializer, state):
         return None
     body = "\n".join(routine(lines, index, initializer))
-    if not re.search(r"\bmoveq\s+#0,d1\s*\n"
-                     r"\s*ori\.w\s+#\$8000,d1\s*\n"
-                     r"\s*move\.w\s+d1,\$E\(a5\)", body):
+    if not re.search(
+        r"\bmoveq\s+#0,d1\s*\n"
+        r"\s*ori\.w\s+#\$8000,d1\s*\n"
+        r"\s*move\.w\s+d1,\$E\(a5\)",
+        body,
+    ):
         return None
     return 0x8000, "stage 12 floater initializer"
 
 
-def resting_attribute(lines, index, handler, stage_default,
-                      stage_attributes=None, priority=0, slots=None,
-                      parameter=None, stage_index=None):
+def resting_attribute(
+    lines,
+    index,
+    handler,
+    stage_default,
+    stage_attributes=None,
+    priority=0,
+    slots=None,
+    parameter=None,
+    stage_index=None,
+):
     """The tile attribute a handler gives its object, and how it was found.
 
     Enemy_MainStateMachine enters Enemy_SetupBehaviorSprite with d0 zero, so
@@ -831,8 +878,7 @@ def resting_attribute(lines, index, handler, stage_default,
     """
     if handler == STAGE18_PLATFORM_HANDLER:
         variant = stage18_platform_variant(lines, index, stage_index)
-        return ((variant[1], "stage-index platform branch") if variant is not None
-                else (None, ""))
+        return (variant[1], "stage-index platform branch") if variant is not None else (None, "")
     for name in reachable(lines, index, handler):
         for line in routine(lines, index, name):
             found = SET_ATTRIBUTE.match(line)
@@ -841,9 +887,7 @@ def resting_attribute(lines, index, handler, stage_default,
     parameter_attribute = _spawn_parameter_attribute(lines, index, handler, parameter)
     if parameter_attribute is not None:
         return parameter_attribute
-    family = _family_attribute(lines, index, handler,
-                               stage_attributes or {}, priority, slots or {},
-                               parameter)
+    family = _family_attribute(lines, index, handler, stage_attributes or {}, priority, slots or {}, parameter)
     if family is not None:
         return family
     floater = _stage12_floater_attribute(lines, index, handler)

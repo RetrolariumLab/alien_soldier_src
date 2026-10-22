@@ -18,22 +18,24 @@ from datetime import datetime
 
 class SectionID(IntEnum):
     """Section identifiers for state dump."""
-    M68K_RAM = 0x01      # 68000 RAM (64KB)
-    M68K_REGS = 0x02     # 68000 Registers (72 bytes)
-    VDP_VRAM = 0x10      # VDP Video RAM (64KB)
-    VDP_CRAM = 0x11      # VDP Color RAM (128 bytes)
-    VDP_VSRAM = 0x12     # VDP Vertical Scroll RAM (80 bytes)
-    VDP_REGS = 0x13      # VDP Registers (24 bytes)
-    Z80_RAM = 0x20       # Z80 RAM (8KB)
-    Z80_REGS = 0x21      # Z80 Registers (~20 bytes)
-    YM2612 = 0x30        # YM2612 FM chip state (5328 bytes)
-    PSG = 0x31           # PSG state (~64 bytes)
-    SRAM = 0x40          # Battery-backed SRAM (64KB)
+
+    M68K_RAM = 0x01  # 68000 RAM (64KB)
+    M68K_REGS = 0x02  # 68000 Registers (72 bytes)
+    VDP_VRAM = 0x10  # VDP Video RAM (64KB)
+    VDP_CRAM = 0x11  # VDP Color RAM (128 bytes)
+    VDP_VSRAM = 0x12  # VDP Vertical Scroll RAM (80 bytes)
+    VDP_REGS = 0x13  # VDP Registers (24 bytes)
+    Z80_RAM = 0x20  # Z80 RAM (8KB)
+    Z80_REGS = 0x21  # Z80 Registers (~20 bytes)
+    YM2612 = 0x30  # YM2612 FM chip state (5328 bytes)
+    PSG = 0x31  # PSG state (~64 bytes)
+    SRAM = 0x40  # Battery-backed SRAM (64KB)
 
 
 @dataclass
 class SectionEntry:
     """Section table entry."""
+
     section_id: int
     offset: int
     size: int
@@ -43,6 +45,7 @@ class SectionEntry:
 @dataclass
 class StateHeader:
     """State dump header."""
+
     magic: bytes
     version: int
     frame: int
@@ -50,16 +53,16 @@ class StateHeader:
     rom_checksum: int
 
     @classmethod
-    def from_bytes(cls, data: bytes) -> 'StateHeader':
+    def from_bytes(cls, data: bytes) -> "StateHeader":
         """Parse header from bytes."""
         if len(data) < 64:
             raise ValueError("Header too short")
 
         magic = data[0:8]
-        if magic != b'GENSTATE':
+        if magic != b"GENSTATE":
             raise ValueError(f"Invalid magic: {magic}")
 
-        version, frame, timestamp, rom_checksum = struct.unpack('<IIQI', data[8:28])
+        version, frame, timestamp, rom_checksum = struct.unpack("<IIQI", data[8:28])
 
         return cls(magic, version, frame, timestamp, rom_checksum)
 
@@ -75,7 +78,7 @@ class GenstateReader:
 
     def _load(self):
         """Load state dump from file."""
-        with open(self.filepath, 'rb') as f:
+        with open(self.filepath, "rb") as f:
             # Read header
             header_data = f.read(64)
             self.header = StateHeader.from_bytes(header_data)
@@ -87,7 +90,7 @@ class GenstateReader:
                 if len(entry_data) < 16:
                     break
 
-                section_id, offset, size, flags = struct.unpack('<IIII', entry_data)
+                section_id, offset, size, flags = struct.unpack("<IIII", entry_data)
 
                 # End of section table marker
                 if section_id == 0 and offset == 0:
@@ -152,13 +155,14 @@ class GenstateReader:
 
 def format_hex_dump(data: bytes, offset: int, length: int = 16) -> str:
     """Format hex dump line."""
-    hex_part = ' '.join(f'{b:02X}' for b in data[offset:offset+length])
-    ascii_part = ''.join(chr(b) if 32 <= b < 127 else '.' for b in data[offset:offset+length])
+    hex_part = " ".join(f"{b:02X}" for b in data[offset : offset + length])
+    ascii_part = "".join(chr(b) if 32 <= b < 127 else "." for b in data[offset : offset + length])
     return f"{offset:08X}  {hex_part:<48}  {ascii_part}"
 
 
-def find_memory_differences(original: bytes, modified: bytes, section_name: str,
-                           base_addr: int = 0, max_diffs: int = 1000) -> List[Tuple[int, int, int]]:
+def find_memory_differences(
+    original: bytes, modified: bytes, section_name: str, base_addr: int = 0, max_diffs: int = 1000
+) -> List[Tuple[int, int, int]]:
     """Find differences between two memory regions."""
     if len(original) != len(modified):
         print(f"WARNING: {section_name} size mismatch: {len(original)} vs {len(modified)}")
@@ -188,20 +192,20 @@ def parse_m68k_registers(reg_data: bytes) -> Dict[str, int]:
     # D0-D7 (8 × 4 bytes, LE)
     for i in range(8):
         offset = i * 4
-        value = struct.unpack('<I', reg_data[offset:offset+4])[0]
-        regs[f'D{i}'] = value
+        value = struct.unpack("<I", reg_data[offset : offset + 4])[0]
+        regs[f"D{i}"] = value
 
     # A0-A7 (8 × 4 bytes, LE)
     for i in range(8):
         offset = 32 + i * 4
-        value = struct.unpack('<I', reg_data[offset:offset+4])[0]
-        regs[f'A{i}'] = value
+        value = struct.unpack("<I", reg_data[offset : offset + 4])[0]
+        regs[f"A{i}"] = value
 
     # PC
-    regs['PC'] = struct.unpack('<I', reg_data[64:68])[0]
+    regs["PC"] = struct.unpack("<I", reg_data[64:68])[0]
 
     # SR
-    regs['SR'] = struct.unpack('<I', reg_data[68:72])[0]
+    regs["SR"] = struct.unpack("<I", reg_data[68:72])[0]
 
     return regs
 
@@ -224,12 +228,12 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
 
     # Extract frame number from filename
-    frame_num = Path(cur_file).stem.replace('_current', '')
+    frame_num = Path(cur_file).stem.replace("_current", "")
     report_file = os.path.join(output_dir, f"diff_frame_{frame_num}.md")
 
     print(f"Generating report: {report_file}")
 
-    with open(report_file, 'w', encoding='utf-8') as f:
+    with open(report_file, "w", encoding="utf-8") as f:
         # Header
         f.write(f"# Memory State Difference Report\n\n")
         f.write(f"**Frame:** {frame_num}\n")
@@ -328,13 +332,13 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
 
                     # Show first few bytes
                     f.write("**Reference:** ")
-                    f.write(' '.join(f'{b:02X}' for b in ref_vram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in ref_vram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
 
                     f.write("**Current:** ")
-                    f.write(' '.join(f'{b:02X}' for b in cur_vram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in cur_vram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
@@ -354,8 +358,8 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
 
             # Parse as 16-bit LE colors
             for i in range(0, min(len(ref_cram), len(cur_cram)), 2):
-                ref_color = struct.unpack('<H', ref_cram[i:i+2])[0]
-                cur_color = struct.unpack('<H', cur_cram[i:i+2])[0]
+                ref_color = struct.unpack("<H", ref_cram[i : i + 2])[0]
+                cur_color = struct.unpack("<H", cur_cram[i : i + 2])[0]
 
                 if ref_color != cur_color:
                     # Extract RGB components (Genesis format: 0000 BBB0 GGG0 RRR0)
@@ -366,7 +370,7 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
                     cur_g = (cur_color & 0x00E0) >> 5
                     cur_b = (cur_color & 0x0E00) >> 9
 
-                    f.write(f"- **Color {i//2}**: ")
+                    f.write(f"- **Color {i // 2}**: ")
                     f.write(f"0x{ref_color:04X} (R:{ref_r} G:{ref_g} B:{ref_b}) → ")
                     f.write(f"0x{cur_color:04X} (R:{cur_r} G:{cur_g} B:{cur_b})\n")
             f.write("\n")
@@ -451,13 +455,13 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
                     f.write(f"### Z80 RAM Difference: 0x{addr_start:04X} - 0x{addr_end:04X} ({size} bytes)\n\n")
 
                     f.write("**Reference:** ")
-                    f.write(' '.join(f'{b:02X}' for b in ref_z80_ram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in ref_z80_ram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
 
                     f.write("**Current:** ")
-                    f.write(' '.join(f'{b:02X}' for b in cur_z80_ram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in cur_z80_ram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
@@ -534,13 +538,13 @@ def generate_llm_report(ref_file: str, cur_file: str, output_dir: str):
                     f.write(f"### SRAM Difference: 0x{addr_start:04X} - 0x{addr_end:04X} ({size} bytes)\n\n")
 
                     f.write("**Reference:** ")
-                    f.write(' '.join(f'{b:02X}' for b in ref_sram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in ref_sram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
 
                     f.write("**Current:** ")
-                    f.write(' '.join(f'{b:02X}' for b in cur_sram[addr_start:min(addr_end, addr_start+32)]))
+                    f.write(" ".join(f"{b:02X}" for b in cur_sram[addr_start : min(addr_end, addr_start + 32)]))
                     if addr_end - addr_start > 32:
                         f.write(f" ... (+{addr_end - addr_start - 32} more bytes)")
                     f.write("\n\n")
@@ -586,7 +590,7 @@ def find_and_compare_states(diffs_dir: str, reference_dir: str, output_dir: str)
     import glob
 
     # Find all .genstate files in diffs directory (not ending with _diff)
-    pattern = os.path.join(diffs_dir, '*.genstate')
+    pattern = os.path.join(diffs_dir, "*.genstate")
     diff_files = sorted(glob.glob(pattern))
 
     if not diff_files:
@@ -620,21 +624,18 @@ def find_and_compare_states(diffs_dir: str, reference_dir: str, output_dir: str)
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description='Compare Genesis state dumps and generate LLM-friendly reports'
-    )
+    parser = argparse.ArgumentParser(description="Compare Genesis state dumps and generate LLM-friendly reports")
 
     # Mode 1: Compare two specific files
-    parser.add_argument('reference', nargs='?', help='Reference state file')
-    parser.add_argument('current', nargs='?', help='Current state file')
+    parser.add_argument("reference", nargs="?", help="Reference state file")
+    parser.add_argument("current", nargs="?", help="Current state file")
 
     # Mode 2: Compare all files in directories
-    parser.add_argument('--diffs-dir', help='Directory with current state files')
-    parser.add_argument('--reference-dir', help='Directory with reference state files')
+    parser.add_argument("--diffs-dir", help="Directory with current state files")
+    parser.add_argument("--reference-dir", help="Directory with reference state files")
 
     # Common options
-    parser.add_argument('--output-dir', '-o', default='reports',
-                       help='Output directory for reports (default: reports)')
+    parser.add_argument("--output-dir", "-o", default="reports", help="Output directory for reports (default: reports)")
 
     args = parser.parse_args()
 
@@ -686,6 +687,7 @@ def main():
         except Exception as e:
             print(f"Error: {e}")
             import traceback
+
             traceback.print_exc()
             return 1
 
@@ -701,5 +703,5 @@ def main():
     return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -17,13 +17,22 @@ from authoring import level_studio  # noqa: E402
 
 
 def tiny_maps() -> dict:
-    return {"payloads": [{
-        "name": "fixture_map", "role": "chunks", "value_bits": 8,
-        "values": [0] * 64, "value_count": 64,
-        "unit_width": 8, "unit_height": 8,
-        "decoded_byte_count": 64, "compressed_capacity": 64,
-        "uses": [{"stage_table_index": 0}],
-    }]}
+    return {
+        "payloads": [
+            {
+                "name": "fixture_map",
+                "role": "chunks",
+                "value_bits": 8,
+                "values": [0] * 64,
+                "value_count": 64,
+                "unit_width": 8,
+                "unit_height": 8,
+                "decoded_byte_count": 64,
+                "compressed_capacity": 64,
+                "uses": [{"stage_table_index": 0}],
+            }
+        ]
+    }
 
 
 class TinyStudio:
@@ -34,15 +43,20 @@ class TinyStudio:
         self.scene = object()
         self.source_scene = object()
         self.selection = 0
-        entry = SimpleNamespace(
-            x=100, y=100, object_type=1, parameter=0,
-            slot_first=0, slot_limit=0)
-        self.placements = [SimpleNamespace(
-            index=0, map_x=100, map_y=100, handler="FixtureHandler",
-            entry=entry, describe=lambda: "FixtureHandler fixture placement")]
-        self.configuration = SimpleNamespace(name="Stage1ConfigRecord", fields={
-            field: 0 for field, _size in level_studio.CONFIG_FIELDS
-        })
+        entry = SimpleNamespace(x=100, y=100, object_type=1, parameter=0, slot_first=0, slot_limit=0)
+        self.placements = [
+            SimpleNamespace(
+                index=0,
+                map_x=100,
+                map_y=100,
+                handler="FixtureHandler",
+                entry=entry,
+                describe=lambda: "FixtureHandler fixture placement",
+            )
+        ]
+        self.configuration = SimpleNamespace(
+            name="Stage1ConfigRecord", fields={field: 0 for field, _size in level_studio.CONFIG_FIELDS}
+        )
 
     @property
     def route_editable(self):
@@ -52,7 +66,7 @@ class TinyStudio:
         return self.placements[self.selection]
 
     def spawn_trigger_x(self, index):
-        return max(placement.entry.x for placement in self.placements[:index + 1])
+        return max(placement.entry.x for placement in self.placements[: index + 1])
 
     def select_at(self, _x, _y):
         self.selection = 0
@@ -77,6 +91,7 @@ class LevelStudioWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
@@ -92,10 +107,15 @@ class LevelStudioWidgetTests(unittest.TestCase):
             raise unittest.SkipTest("Tk display is unavailable") from error
 
     def test_both_profiles_wire_placement_configuration_and_map_controls(self) -> None:
-        rows = [{
-            "index": index, "record": "fixture", "placements": 1,
-            "palette": "fixture",
-        } for index in range(8)]
+        rows = [
+            {
+                "index": index,
+                "record": "fixture",
+                "placements": 1,
+                "palette": "fixture",
+            }
+            for index in range(8)
+        ]
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
                 messages = mock.Mock()
@@ -111,42 +131,60 @@ class LevelStudioWidgetTests(unittest.TestCase):
                 def tiny_photo(*_args, **_kwargs):
                     return actual_photo(width=1, height=1)
 
-                with (mock.patch.object(self.tk, "Tk", new=hidden_tk),
-                      mock.patch.object(self.tk, "PhotoImage", new=tiny_photo),
-                      mock.patch.object(level_studio, "sprite_library", return_value={}),
-                      mock.patch.object(level_studio, "stage_rows", return_value=rows),
-                      mock.patch.object(level_studio, "open_stage",
-                                        side_effect=lambda _root, index, **_k:
-                                        TinyStudio(index)),
-                      mock.patch.object(level_studio, "render_view",
-                                        return_value=(ROOT / "build/unused.png", {0},
-                                                      level_studio.VIEW_WIDTH)) as renderer,
-                      mock.patch.object(level_studio, "validate_maps"),
-                      mock.patch.object(
-                          level_studio, "validate_stage_scene_references") as guard):
+                with (
+                    mock.patch.object(self.tk, "Tk", new=hidden_tk),
+                    mock.patch.object(self.tk, "PhotoImage", new=tiny_photo),
+                    mock.patch.object(level_studio, "sprite_library", return_value={}),
+                    mock.patch.object(level_studio, "stage_rows", return_value=rows),
+                    mock.patch.object(
+                        level_studio, "open_stage", side_effect=lambda _root, index, **_k: TinyStudio(index)
+                    ),
+                    mock.patch.object(
+                        level_studio,
+                        "render_view",
+                        return_value=(ROOT / "build/unused.png", {0}, level_studio.VIEW_WIDTH),
+                    ) as renderer,
+                    mock.patch.object(level_studio, "validate_maps"),
+                    mock.patch.object(level_studio, "validate_stage_scene_references") as guard,
+                ):
                     window = level_studio.Window(
-                        ROOT, profile, ROOT / "build/unused_levels.json", {},
-                        ROOT / "build/unused_maps.json", tiny_maps(), tiny_maps(),
-                        ROOT / "build/unused_screen_maps.json", {}, {}, 0,
-                        self.tk, self.ttk, messages)
+                        ROOT,
+                        profile,
+                        ROOT / "build/unused_levels.json",
+                        {},
+                        ROOT / "build/unused_maps.json",
+                        tiny_maps(),
+                        tiny_maps(),
+                        ROOT / "build/unused_screen_maps.json",
+                        {},
+                        {},
+                        0,
+                        self.tk,
+                        self.ttk,
+                        messages,
+                    )
                     try:
                         self.assertEqual(3, len(window.canvas.find_withtag("all")))
                         self.assertEqual(1, len(window.map_choices))
-                        self.assertTrue(
-                            window.boss_reference_button.instate(["disabled"]))
+                        self.assertTrue(window.boss_reference_button.instate(["disabled"]))
                         self.assertTrue(window.route_button.instate(["!disabled"]))
                         self.assertIn("FixtureHandler", window.handler.cget("text"))
                         previous = window.studio.selected()
-                        window.studio.placements.append(SimpleNamespace(
-                            index=1, map_x=80, map_y=100, handler="LaterHandler",
-                            entry=SimpleNamespace(x=80, y=100, object_type=1,
-                                                  parameter=0, slot_first=0,
-                                                  slot_limit=0),
-                            describe=lambda: "LaterHandler fixture placement"))
+                        window.studio.placements.append(
+                            SimpleNamespace(
+                                index=1,
+                                map_x=80,
+                                map_y=100,
+                                handler="LaterHandler",
+                                entry=SimpleNamespace(
+                                    x=80, y=100, object_type=1, parameter=0, slot_first=0, slot_limit=0
+                                ),
+                                describe=lambda: "LaterHandler fixture placement",
+                            )
+                        )
                         window.studio.selection = 1
                         window.show_selection()
-                        self.assertIn("spawn gate X=$64",
-                                      window.handler.cget("text"))
+                        self.assertIn("spawn gate X=$64", window.handler.cget("text"))
                         window.studio.placements.pop()
                         window.studio.selection = previous.index
                         window.show_selection()
@@ -160,13 +198,9 @@ class LevelStudioWidgetTests(unittest.TestCase):
                         self.assertEqual(0, window.studio.index)
                         self.assertEqual(0, window.map_state.payload_index)
                         window.load(3)
-                        self.assertEqual(
-                            profile == "jp",
-                            window.boss_reference_button.instate(["!disabled"]))
+                        self.assertEqual(profile == "jp", window.boss_reference_button.instate(["!disabled"]))
                         window.load(4)
-                        self.assertEqual(
-                            profile == "jp",
-                            window.boss_reference_button.instate(["!disabled"]))
+                        self.assertEqual(profile == "jp", window.boss_reference_button.instate(["!disabled"]))
                         self.assertTrue(window.route_button.instate(["!disabled"]))
                         window.load(7)
                         self.assertTrue(window.route_button.instate(["disabled"]))
@@ -189,8 +223,7 @@ class LevelStudioWidgetTests(unittest.TestCase):
                         with mock.patch.object(window, "load") as load:
                             window.apply_stage_route()
                             load.assert_called_once_with(0, fold_current=False)
-                        self.assertEqual(
-                            "Stage2ConfigRecord", window.studio.configuration.name)
+                        self.assertEqual("Stage2ConfigRecord", window.studio.configuration.name)
 
                         window.map_value_text.set("$100")
                         window.apply_map_value()
@@ -206,32 +239,32 @@ class LevelStudioWidgetTests(unittest.TestCase):
 
                         if profile == "jp":
                             window.studio.index = 4
-                            with (mock.patch.object(
-                                    level_studio, "render_boss_reference",
-                                    return_value=[[(0, 0, 0)]]) as boss_render,
-                                  mock.patch.object(level_studio, "write_png"),
-                                  mock.patch.object(Path, "mkdir")):
+                            with (
+                                mock.patch.object(
+                                    level_studio, "render_boss_reference", return_value=[[(0, 0, 0)]]
+                                ) as boss_render,
+                                mock.patch.object(level_studio, "write_png"),
+                                mock.patch.object(Path, "mkdir"),
+                            ):
                                 popup = window.show_boss_reference()
                                 try:
-                                    self.assertIn(
-                                        "read-only", popup.title())
-                                    boss_render.assert_called_once_with(
-                                        ROOT, "jp", 4, 7500)
+                                    self.assertIn("read-only", popup.title())
+                                    boss_render.assert_called_once_with(ROOT, "jp", 4, 7500)
                                     window.studio.index = 0
                                     chooser = next(
-                                        child for child in popup.winfo_children()
-                                        if isinstance(child, self.ttk.Combobox))
+                                        child
+                                        for child in popup.winfo_children()
+                                        if isinstance(child, self.ttk.Combobox)
+                                    )
                                     chooser.current(1)
                                     chooser.event_generate("<<ComboboxSelected>>")
                                     window.window.update()
-                                    boss_render.assert_called_with(
-                                        ROOT, "jp", 4, int(chooser.get()))
+                                    boss_render.assert_called_with(ROOT, "jp", 4, int(chooser.get()))
                                 finally:
                                     popup.destroy()
                             window.studio.index = 0
                         else:
-                            with self.assertRaisesRegex(
-                                    ValueError, "no JP boss reference"):
+                            with self.assertRaisesRegex(ValueError, "no JP boss reference"):
                                 window.show_boss_reference()
 
                         with mock.patch.object(window.window, "destroy") as destroy:

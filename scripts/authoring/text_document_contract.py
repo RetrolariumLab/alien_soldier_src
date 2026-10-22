@@ -11,15 +11,15 @@ def source_value_matches(value: Any, source: Any) -> bool:
         return False
     if isinstance(source, dict):
         return value.keys() == source.keys() and all(
-            source_value_matches(value[key], item) for key, item in source.items())
+            source_value_matches(value[key], item) for key, item in source.items()
+        )
     if isinstance(source, list):
         return len(value) == len(source) and all(
-            source_value_matches(item, original)
-            for item, original in zip(value, source))
+            source_value_matches(item, original) for item, original in zip(value, source)
+        )
     return value == source
 
 
 def record_names(records: list[Any]) -> list[str]:
     """Only strings participate in a named inventory; malformed records stay out."""
-    return [record["name"] for record in records
-            if isinstance(record, dict) and isinstance(record.get("name"), str)]
+    return [record["name"] for record in records if isinstance(record, dict) and isinstance(record.get("name"), str)]

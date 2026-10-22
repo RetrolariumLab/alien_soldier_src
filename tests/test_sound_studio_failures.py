@@ -15,8 +15,9 @@ from authoring import sound_studio  # noqa: E402
 
 
 def window():
-    document = {"payloads": [{"family": "sfx", "name": "Sound_SFX_A5",
-                              "instructions": [{"kind": "duration", "data": [1]}]}]}
+    document = {
+        "payloads": [{"family": "sfx", "name": "Sound_SFX_A5", "instructions": [{"kind": "duration", "data": [1]}]}]
+    }
     item = sound_studio.Window.__new__(sound_studio.Window)
     item.project, item.profile = ROOT, "jp"
     item.state = sound_studio.Workspace({"sound_sequences": document})
@@ -39,8 +40,13 @@ def session(*, live=False, error=None):
 
 class RawRollbackTests(unittest.TestCase):
     def test_all_expected_validation_failures_restore_value_and_all_dirty_flags(self):
-        for error in (OSError("source unavailable"), RuntimeError("source reader failed"), ValueError("invalid event"),
-                      TypeError("damaged source inventory"), KeyError("missing source label")):
+        for error in (
+            OSError("source unavailable"),
+            RuntimeError("source reader failed"),
+            ValueError("invalid event"),
+            TypeError("damaged source inventory"),
+            KeyError("missing source label"),
+        ):
             with self.subTest(error=error):
                 item = window()
                 item.state.dirty = {"sound_instruments", "sound_envelopes"}
@@ -148,7 +154,8 @@ class OwnedStopTests(unittest.TestCase):
         item._poll_audition()
         self.assertIsNone(item.audition)
         item.messagebox.showerror.assert_called_once_with(
-            "Sound Studio", "bad loader state\nStop also failed: cleanup validation changed")
+            "Sound Studio", "bad loader state\nStop also failed: cleanup validation changed"
+        )
 
     def test_poll_equal_error_does_not_duplicate_message_or_lose_live_owner(self):
         item = window()
@@ -173,16 +180,20 @@ class OwnedStopTests(unittest.TestCase):
     def test_real_session_reaps_before_environment_error_reaches_gui(self):
         # Actual Session.stop, not a fictional finally-already-reaped contract.
         from authoring.sound_audition import Session
+
         process = mock.Mock()
         process.poll.side_effect = [None, 0]
         process.wait.return_value = 0
-        owned = Session(process=process, contract={}, result=Path("unused.json"),
-                        stop_file=Path("unused-stop.txt"), directory=ROOT)
+        owned = Session(
+            process=process, contract={}, result=Path("unused.json"), stop_file=Path("unused-stop.txt"), directory=ROOT
+        )
         error = RuntimeError("native identity changed")
         item = window()
         item.audition = owned
-        with (mock.patch("authoring.sound_audition.atomic_write_bytes"),
-              mock.patch.object(owned, "validate_environment", side_effect=error) as validate):
+        with (
+            mock.patch("authoring.sound_audition.atomic_write_bytes"),
+            mock.patch.object(owned, "validate_environment", side_effect=error) as validate,
+        ):
             self.assertIs(error, item.stop_audition())
         process.wait.assert_called_once_with(timeout=1)
         validate.assert_called_once()

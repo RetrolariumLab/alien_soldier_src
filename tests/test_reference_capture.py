@@ -51,8 +51,11 @@ class ReferenceCaptureTests(unittest.TestCase):
         struct.pack_into(">II", image, 0x1A0, 0, len(image) - 1)
         image[0x1F0:0x200] = b"B               "
         (root / "rom.bin").write_bytes(image)
-        profiles = {"profiles": [{"id": "jp", "reference_rom": {
-            "size": len(image), "sha256": hashlib.sha256(image).hexdigest()}}]}
+        profiles = {
+            "profiles": [
+                {"id": "jp", "reference_rom": {"size": len(image), "sha256": hashlib.sha256(image).hexdigest()}}
+            ]
+        }
         (root / "config/rom_profiles.json").write_text(json.dumps(profiles), encoding="utf-8")
         header = bytearray(64)
         header[:16] = b"Gens Movie TESTA"
@@ -61,17 +64,24 @@ class ReferenceCaptureTests(unittest.TestCase):
         config = {"rom_checksum": "0x55555558", "movies": {}}
         for name in capture.MOVIES:
             (root / "movies" / (name + ".gmv")).write_bytes(movie)
-            config["movies"][name] = {"path": "movies/" + name + ".gmv",
-                                      "sha256": hashlib.sha256(movie).hexdigest()}
+            config["movies"][name] = {"path": "movies/" + name + ".gmv", "sha256": hashlib.sha256(movie).hexdigest()}
         (root / "config/runtime_scenarios.json").write_text(json.dumps(config), encoding="utf-8")
         (root / "config/toolchain.json").write_text("{}", encoding="utf-8")
         (root / "scripts").mkdir()
         (root / "scripts/run_runtime_scenarios.py").write_bytes(b"immutable runner fixture")
-        return argparse.Namespace(movie="tas", rom=Path("rom.bin"), gens=Path("gens/Output/Gens.exe"),
-                                  interval=1, max_frames=4, output_dir=Path("reference/tas"), timeout=5)
+        return argparse.Namespace(
+            movie="tas",
+            rom=Path("rom.bin"),
+            gens=Path("gens/Output/Gens.exe"),
+            interval=1,
+            max_frames=4,
+            output_dir=Path("reference/tas"),
+            timeout=5,
+        )
 
-    def fake_replay(self, command: list[str], cwd: Path, timeout: int,
-                    environment: dict[str, str]) -> subprocess.CompletedProcess:
+    def fake_replay(
+        self, command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+    ) -> subprocess.CompletedProcess:
         self.assertEqual([], list(cwd.iterdir()))
         self.assertNotIn("-turbo", command)
         self.assertNotIn("-save-state-dumps", command)
@@ -91,10 +101,14 @@ class ReferenceCaptureTests(unittest.TestCase):
         return subprocess.CompletedProcess(command, 0)
 
     def run_capture(self, root: Path, args: argparse.Namespace, replay: object | None = None) -> Path:
-        with mock.patch.object(capture.runtime_environment, "environment_identity", return_value={"source_commit": "a" * 40}), \
-                mock.patch.object(capture, "native_capture_contract", return_value={"native": "fixture"}), \
-                mock.patch.object(capture, "run_hidden", side_effect=replay or self.fake_replay), \
-                redirect_stdout(StringIO()):
+        with (
+            mock.patch.object(
+                capture.runtime_environment, "environment_identity", return_value={"source_commit": "a" * 40}
+            ),
+            mock.patch.object(capture, "native_capture_contract", return_value={"native": "fixture"}),
+            mock.patch.object(capture, "run_hidden", side_effect=replay or self.fake_replay),
+            redirect_stdout(StringIO()),
+        ):
             return capture.capture(root, args)
 
     def receipt(self, session: Path) -> dict:
@@ -141,9 +155,18 @@ class ReferenceCaptureTests(unittest.TestCase):
             self.assertEqual(b"do not alter completed archive", marker.read_bytes())
 
     def test_invalid_bounds_or_longplay_default_create_no_output(self) -> None:
-        for maximum, interval, movie in ((0, 1, "tas"), (100001, 1, "tas"), (True, 1, "tas"),
-                                         (4, 0, "tas"), (4, 5, "tas"), (None, 1, "longplay")):
-            with self.subTest(maximum=maximum, interval=interval, movie=movie), tempfile.TemporaryDirectory() as directory:
+        for maximum, interval, movie in (
+            (0, 1, "tas"),
+            (100001, 1, "tas"),
+            (True, 1, "tas"),
+            (4, 0, "tas"),
+            (4, 5, "tas"),
+            (None, 1, "longplay"),
+        ):
+            with (
+                self.subTest(maximum=maximum, interval=interval, movie=movie),
+                tempfile.TemporaryDirectory() as directory,
+            ):
                 root = Path(directory)
                 args = self.inputs(root)
                 args.max_frames, args.interval, args.movie = maximum, interval, movie
@@ -184,7 +207,9 @@ class ReferenceCaptureTests(unittest.TestCase):
                 root = Path(directory)
                 args = self.inputs(root)
 
-                def fake(command: list[str], cwd: Path, timeout: int, env: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake(
+                    command: list[str], cwd: Path, timeout: int, env: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     result = self.fake_replay(command, cwd, timeout, env)
                     frames = Path(command[command.index("-screenshot-dir") + 1])
                     if failure == "missing":
@@ -209,12 +234,21 @@ class ReferenceCaptureTests(unittest.TestCase):
                 self.assertFalse((sessions[0] / "frame_inventory.jsonl").exists())
 
     def test_original_or_private_input_mutation_is_not_silently_adopted(self) -> None:
-        for name in ("rom.bin", "movies/tas.gmv", "config/runtime_scenarios.json", "private_rom", "private_movie", "private_cfg"):
+        for name in (
+            "rom.bin",
+            "movies/tas.gmv",
+            "config/runtime_scenarios.json",
+            "private_rom",
+            "private_movie",
+            "private_cfg",
+        ):
             with self.subTest(input=name), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 args = self.inputs(root)
 
-                def fake(command: list[str], cwd: Path, timeout: int, env: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake(
+                    command: list[str], cwd: Path, timeout: int, env: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     result = self.fake_replay(command, cwd, timeout, env)
                     flag = {"private_rom": "-rom", "private_movie": "-play", "private_cfg": "-cfg"}.get(name)
                     path = Path(command[command.index(flag) + 1]) if flag else root / name
@@ -232,7 +266,9 @@ class ReferenceCaptureTests(unittest.TestCase):
                 root = Path(directory)
                 args = self.inputs(root)
 
-                def fake(command: list[str], cwd: Path, timeout: int, env: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake(
+                    command: list[str], cwd: Path, timeout: int, env: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     if failure == "timeout":
                         raise subprocess.TimeoutExpired(command, timeout)
                     result = self.fake_replay(command, cwd, timeout, env)
@@ -253,7 +289,9 @@ class ReferenceCaptureTests(unittest.TestCase):
                 script = root / "capture_fixture.py"
                 script.write_bytes(capture.SCRIPT.read_bytes())
 
-                def fake(command: list[str], cwd: Path, timeout: int, env: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake(
+                    command: list[str], cwd: Path, timeout: int, env: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     result = self.fake_replay(command, cwd, timeout, env)
                     if changed == "script":
                         script.write_bytes(b"changed harness")
@@ -293,14 +331,21 @@ class ReferenceCaptureTests(unittest.TestCase):
     def test_png_full_crc_chunk_structure_and_decoded_payload_are_required(self) -> None:
         def chunk(kind: bytes, data: bytes) -> bytes:
             import zlib
+
             return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF)
 
         valid = png()
         ihdr = chunk(b"IHDR", struct.pack(">IIBBBBB", 320, 224, 8, 2, 0, 0, 0))
         iend = chunk(b"IEND", b"")
-        cases = (valid[:24], valid[:-1], valid + b"trailing", valid[:40] + bytes([valid[40] ^ 1]) + valid[41:],
-                 valid[:8] + ihdr + iend, valid[:8] + ihdr + chunk(b"IDAT", b"not zlib pixels") + iend,
-                 valid[:8] + ihdr + ihdr + chunk(b"IDAT", b"bad") + iend)
+        cases = (
+            valid[:24],
+            valid[:-1],
+            valid + b"trailing",
+            valid[:40] + bytes([valid[40] ^ 1]) + valid[41:],
+            valid[:8] + ihdr + iend,
+            valid[:8] + ihdr + chunk(b"IDAT", b"not zlib pixels") + iend,
+            valid[:8] + ihdr + ihdr + chunk(b"IDAT", b"bad") + iend,
+        )
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "capture.png"
             path.write_bytes(valid)

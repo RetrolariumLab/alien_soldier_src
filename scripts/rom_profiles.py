@@ -106,9 +106,7 @@ def select_profile(path: Path, profile_id: str, require_supported: bool = False)
         known = ", ".join(document["profiles_by_id"])
         raise ProfileError(f"unknown ROM profile {profile_id!r}; expected one of: {known}") from error
     if require_supported and profile["status"] != "supported":
-        raise ProfileError(
-            f"ROM profile {profile_id!r} is {profile['status']}, not supported"
-        )
+        raise ProfileError(f"ROM profile {profile_id!r} is {profile['status']}, not supported")
     return profile
 
 
@@ -138,9 +136,7 @@ def main() -> int:
                 print(f"{profile['id']}\t{profile['status']}\t{profile['name']}")
             return 0
         profile_id = args.profile or document["default_profile"]
-        profile = select_profile(
-            Path(args.config), profile_id, require_supported=args.require_supported
-        )
+        profile = select_profile(Path(args.config), profile_id, require_supported=args.require_supported)
         if args.field:
             print(nested_value(profile, args.field))
         else:

@@ -24,17 +24,13 @@ class RotationMetaspriteDescriptorTests(unittest.TestCase):
         cls.source = DATA.read_text(encoding="utf-8")
         cls.audit = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             review["basis"]: review
-            for review in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
 
     def test_exact_eight_pointer_tables_and_review_members(self) -> None:
@@ -55,15 +51,11 @@ class RotationMetaspriteDescriptorTests(unittest.TestCase):
         for basis, prefix, start, after in families:
             with self.subTest(family=prefix):
                 expected = [
-                    (f"0x{start + 0x20 * index:06X}", f"{prefix}{suffix}")
-                    for index, suffix in enumerate("ABC")
+                    (f"0x{start + 0x20 * index:06X}", f"{prefix}{suffix}") for index, suffix in enumerate("ABC")
                 ]
                 self.assertEqual(
                     expected,
-                    [
-                        (member["address"], member["current_name"])
-                        for member in self.reviews[basis]["members"]
-                    ],
+                    [(member["address"], member["current_name"]) for member in self.reviews[basis]["members"]],
                 )
                 self.assertEqual(
                     {SOURCE_PATH},
@@ -74,10 +66,7 @@ class RotationMetaspriteDescriptorTests(unittest.TestCase):
                     pointers = longwords(self.source, label, following)
                     self.assertEqual(8, len(pointers), label)
                     self.assertTrue(
-                        all(
-                            pointer.startswith(prefix.removesuffix("RotationFrames"))
-                            for pointer in pointers
-                        ),
+                        all(pointer.startswith(prefix.removesuffix("RotationFrames")) for pointer in pointers),
                         label,
                     )
                     self.assertIn(basis, self.audit[address]["basis"])
@@ -112,18 +101,12 @@ class RotationMetaspriteDescriptorTests(unittest.TestCase):
                 for suffix in "AB":
                     self.assertIn(f"{prefix}{suffix}+$18000000", entries)
                 c_entry = f"{prefix}C"
-                self.assertIn(
-                    f"{c_entry}+$18000000" if c_flagged else c_entry, entries
-                )
+                self.assertIn(f"{c_entry}+$18000000" if c_flagged else c_entry, entries)
                 setup = (ROOT / setup_path).read_text(encoding="utf-8")
                 self.assertIn(f"movea.l #{table},a0", setup)
-                self.assertIn(
-                    "jsr     (Sprite_InitializeLinkedMetaspriteParts).l", setup
-                )
+                self.assertIn("jsr     (Sprite_InitializeLinkedMetaspriteParts).l", setup)
 
-        initializer = (ROOT / "src/rendering/boss_metasprites.s").read_text(
-            encoding="utf-8"
-        )
+        initializer = (ROOT / "src/rendering/boss_metasprites.s").read_text(encoding="utf-8")
         self.assertIn("bclr    #0,d4", initializer)
         self.assertIn("bclr    #$16,d4", initializer)
         self.assertIn(

@@ -45,8 +45,7 @@ DIRECTIVE = re.compile(r"\bdc\.w\s+([^;\r\n]+)")
 
 def validate_playtest_rom(root: Path, rom: Path, profile: str) -> str:
     """Bind the selected header and boot checksum to a known regional dump."""
-    record = select_profile(root / "config/rom_profiles.json", profile,
-                            require_supported=True)
+    record = select_profile(root / "config/rom_profiles.json", profile, require_supported=True)
     reference = record["reference_rom"]
     if rom.stat().st_size != reference["size"]:
         raise ValueError("content ROM length differs from the %s profile" % profile)
@@ -55,11 +54,13 @@ def validate_playtest_rom(root: Path, rom: Path, profile: str) -> str:
     if len(image) != len(original):
         raise ValueError("content ROM length changed while reading")
     # Studios edit content, not the cartridge header. Its checksum alone changes.
-    if (image[0x100:CHECKSUM_HEADER] != original[0x100:CHECKSUM_HEADER]
-            or image[CHECKSUM_HEADER + 2:0x200] != original[CHECKSUM_HEADER + 2:0x200]):
+    if (
+        image[0x100:CHECKSUM_HEADER] != original[0x100:CHECKSUM_HEADER]
+        or image[CHECKSUM_HEADER + 2 : 0x200] != original[CHECKSUM_HEADER + 2 : 0x200]
+    ):
         raise ValueError("content ROM header does not match the %s profile" % profile)
     digest = hashlib.sha256(image).hexdigest()
-    stored = int.from_bytes(image[CHECKSUM_HEADER:CHECKSUM_HEADER + 2], "big")
+    stored = int.from_bytes(image[CHECKSUM_HEADER : CHECKSUM_HEADER + 2], "big")
     if stored != update_boot_checksum(image, profile):
         raise ValueError("content ROM boot checksum is invalid for %s; rebuild content" % profile)
     return digest
@@ -85,11 +86,7 @@ def password_codes(root: Path) -> list[dict[str, int]]:
     """Decode the two four-byte password records for every selectable stage."""
     text = (root / PASSWORD_SOURCE).read_text(encoding="utf-8")
     block = source_range(text, PASSWORD_TABLE, PASSWORD_END)
-    words = [
-        parse_word(token)
-        for match in DIRECTIVE.finditer(block)
-        for token in match.group(1).split(",")
-    ]
+    words = [parse_word(token) for match in DIRECTIVE.finditer(block) for token in match.group(1).split(",")]
     if words[-2:] != [0xFFFF, 0xFFFF]:
         raise ValueError("password table does not end in its two-word sentinel")
     words = words[:-2]
@@ -126,12 +123,14 @@ def playtest_environment(
 ) -> dict[str, str]:
     code = password_code(root, stage, difficulty)
     environment = os.environ.copy()
-    environment.update({
-        "ALIEN_PLAYTEST_PROFILE": profile,
-        "ALIEN_PLAYTEST_STAGE": str(stage),
-        "ALIEN_PLAYTEST_DIFFICULTY": str(DIFFICULTIES[difficulty]),
-        "ALIEN_PLAYTEST_PASSWORD": "%08X" % code,
-    })
+    environment.update(
+        {
+            "ALIEN_PLAYTEST_PROFILE": profile,
+            "ALIEN_PLAYTEST_STAGE": str(stage),
+            "ALIEN_PLAYTEST_DIFFICULTY": str(DIFFICULTIES[difficulty]),
+            "ALIEN_PLAYTEST_PASSWORD": "%08X" % code,
+        }
+    )
     if result is None:
         environment.pop("ALIEN_PLAYTEST_RESULT", None)
     else:
@@ -143,26 +142,31 @@ def playtest_environment(
     return environment
 
 
-def playtest_command(gens: Path, rom: Path, *, automated: bool = False,
-                     config: Path | None = None) -> list[str]:
+def playtest_command(gens: Path, rom: Path, *, automated: bool = False, config: Path | None = None) -> list[str]:
     command = [
         str(gens.resolve()),
-        "-rom", str(rom.resolve()),
-        "-lua", str(SCRIPT.resolve()),
+        "-rom",
+        str(rom.resolve()),
+        "-lua",
+        str(SCRIPT.resolve()),
     ]
     if config is not None:
         command.extend(["-cfg", str(config.resolve())])
     if automated:
-        command.extend([
-            "-max-frames", str(MAX_PLAYTEST_FRAMES),
-            "-turbo", "-frameskip", "8", "-nosound",
-        ])
+        command.extend(
+            [
+                "-max-frames",
+                str(MAX_PLAYTEST_FRAMES),
+                "-turbo",
+                "-frameskip",
+                "8",
+                "-nosound",
+            ]
+        )
     return command
 
 
-def parse_result(
-    path: Path, profile: str, stage: int, difficulty: str
-) -> dict[str, str]:
+def parse_result(path: Path, profile: str, stage: int, difficulty: str) -> dict[str, str]:
     try:
         lines = path.read_text(encoding="utf-8").strip().splitlines()
         if len(lines) != 1:
@@ -183,11 +187,13 @@ def parse_result(
         "mode": "0010",
         "player_type": "0008",
     }
-    if (set(fields) != set(expected) | {"route", "frame"}
-            or any(fields.get(key) != value for key, value in expected.items())
-            or not re.fullmatch(r"[0-9A-F]{2}", fields["route"])
-            or not fields["frame"].isdecimal()
-            or not 1 <= int(fields["frame"]) <= MAX_PLAYTEST_FRAMES):
+    if (
+        set(fields) != set(expected) | {"route", "frame"}
+        or any(fields.get(key) != value for key, value in expected.items())
+        or not re.fullmatch(r"[0-9A-F]{2}", fields["route"])
+        or not fields["frame"].isdecimal()
+        or not 1 <= int(fields["frame"]) <= MAX_PLAYTEST_FRAMES
+    ):
         raise RuntimeError("selected-stage playtest failed: %s" % line)
     return fields
 
@@ -240,20 +246,33 @@ def diagnostic_summary(result: Path) -> str:
         if path.stat().st_size > 16384:
             raise ValueError("diagnostic exceeds its size bound")
         record = json.loads(path.read_text(encoding="utf-8"))
-        if (not isinstance(record, dict)
-                or record.get("phase") not in {"title", "password", "release", "gameplay"}
-                or any(type(record.get(key)) is not int or record[key] < 0
-                       for key in ("frame", "mode", "substate"))):
+        if (
+            not isinstance(record, dict)
+            or record.get("phase") not in {"title", "password", "release", "gameplay"}
+            or any(type(record.get(key)) is not int or record[key] < 0 for key in ("frame", "mode", "substate"))
+        ):
             raise ValueError("malformed diagnostic")
         return "phase=%s frame=%d mode=$%04X substate=$%04X; diagnostic %s" % (
-            record["phase"], record["frame"], record["mode"], record["substate"], path)
+            record["phase"],
+            record["frame"],
+            record["mode"],
+            record["substate"],
+            path,
+        )
     except (OSError, ValueError, OverflowError):
         return "unreadable runtime diagnostic %s" % path
 
 
 def run_stage(
-    root: Path, gens: Path, rom: Path, profile: str, stage: int, difficulty: str,
-    result: Path, *, automated: bool,
+    root: Path,
+    gens: Path,
+    rom: Path,
+    profile: str,
+    stage: int,
+    difficulty: str,
+    result: Path,
+    *,
+    automated: bool,
 ) -> dict[str, str] | None:
     """Own one emulator and reap it on every automated terminal path."""
     if automated:
@@ -270,11 +289,18 @@ def run_stage(
     config_bytes, isolation = isolated_config(directory, sound=not automated)
     atomic_write_bytes(snapshot, image)
     atomic_write_bytes(config, config_bytes)
-    contract = {"schema_version": 1, "profile": profile, "stage": stage,
-                "difficulty": difficulty, "rom_sha256": validated,
-                "runtime_environment": native, "native_isolation": isolation,
-                "runner_sha256": file_sha256(Path(__file__)), "lua_sha256": file_sha256(SCRIPT),
-                "scope": "private_launch_not_renderer_or_audio_fidelity"}
+    contract = {
+        "schema_version": 1,
+        "profile": profile,
+        "stage": stage,
+        "difficulty": difficulty,
+        "rom_sha256": validated,
+        "runtime_environment": native,
+        "native_isolation": isolation,
+        "runner_sha256": file_sha256(Path(__file__)),
+        "lua_sha256": file_sha256(SCRIPT),
+        "scope": "private_launch_not_renderer_or_audio_fidelity",
+    }
     atomic_write_json(directory / "launch_contract.json", contract)
     validate_isolation(isolation, startup="runtime")
     validate_private_config(isolation, config)
@@ -283,22 +309,36 @@ def run_stage(
         for previous in (result, Path(str(result) + ".diagnostic.json")):
             if previous.exists():
                 previous.unlink()
-        atomic_write_json(Path(str(result) + ".runtime.json"), {
-            "schema_version": 1, "status": "running", "contract": contract,
-        })
+        atomic_write_json(
+            Path(str(result) + ".runtime.json"),
+            {
+                "schema_version": 1,
+                "status": "running",
+                "contract": contract,
+            },
+        )
+
     def failed_receipt(error):
         if automated:
-            atomic_write_json(Path(str(result) + ".runtime.json"), {
-                "schema_version": 1, "status": "failed", "contract": contract, "error": str(error),
-            })
+            atomic_write_json(
+                Path(str(result) + ".runtime.json"),
+                {
+                    "schema_version": 1,
+                    "status": "failed",
+                    "contract": contract,
+                    "error": str(error),
+                },
+            )
 
     try:
         process = subprocess.Popen(
             playtest_command(gens, snapshot, automated=automated, config=config),
             cwd=Path(isolation["startup_directories"]["runtime"]),
-            env=playtest_environment(root, profile, stage, difficulty,
-                                     result if automated else None, exit_when_ready=automated),
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            env=playtest_environment(
+                root, profile, stage, difficulty, result if automated else None, exit_when_ready=automated
+            ),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
             startupinfo=check_startup_info(automated),
         )
     except (OSError, ValueError, KeyboardInterrupt) as error:
@@ -317,12 +357,10 @@ def run_stage(
                 break
             return_code = process.poll()
             if return_code is not None:
-                raise RuntimeError(
-                    "Gens playtest exited with code %d before reporting" % return_code)
+                raise RuntimeError("Gens playtest exited with code %d before reporting" % return_code)
             time.sleep(0.05)
         if fields is None:
-            raise RuntimeError("playtest did not report readiness within %d seconds" %
-                               MAX_CHECK_SECONDS)
+            raise RuntimeError("playtest did not report readiness within %d seconds" % MAX_CHECK_SECONDS)
     except (OSError, RuntimeError, ValueError, KeyboardInterrupt) as error:
         failed_receipt(error)
         if isinstance(error, KeyboardInterrupt):
@@ -331,29 +369,37 @@ def run_stage(
     finally:
         stop(process)
     try:
-        if (environment_identity(root, gens) != native or file_sha256(snapshot) != validated
-                or file_sha256(Path(__file__)) != contract["runner_sha256"]
-                or file_sha256(SCRIPT) != contract["lua_sha256"]):
+        if (
+            environment_identity(root, gens) != native
+            or file_sha256(snapshot) != validated
+            or file_sha256(Path(__file__)) != contract["runner_sha256"]
+            or file_sha256(SCRIPT) != contract["lua_sha256"]
+        ):
             raise RuntimeError("playtest native environment, private ROM, or harness changed")
         validate_isolation(isolation, startup="runtime", finished=True)
         validate_private_config(isolation, config)
     except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
         failed_receipt(error)
         raise
-    atomic_write_json(Path(str(result) + ".runtime.json"), {
-        "schema_version": 1, "status": "stage_ram_ready", "contract": contract,
-        "launch_contract": (directory / "launch_contract.json").relative_to(root).as_posix(),
-        "launch_contract_sha256": file_sha256(directory / "launch_contract.json"),
-        "fields": fields, "report_sha256": file_sha256(result),
-    })
+    atomic_write_json(
+        Path(str(result) + ".runtime.json"),
+        {
+            "schema_version": 1,
+            "status": "stage_ram_ready",
+            "contract": contract,
+            "launch_contract": (directory / "launch_contract.json").relative_to(root).as_posix(),
+            "launch_contract_sha256": file_sha256(directory / "launch_contract.json"),
+            "fields": fields,
+            "report_sha256": file_sha256(result),
+        },
+    )
     return fields
 
 
 def reachable_stages(root: Path) -> list[int]:
     records = password_codes(root)
     stages = [record.get("stage") for record in records]
-    if (any(type(stage) is not int for stage in stages)
-            or stages != list(range(1, STAGE_COUNT + 1))):
+    if any(type(stage) is not int for stage in stages) or stages != list(range(1, STAGE_COUNT + 1)):
         raise ValueError("password inventory must identify all 25 stages exactly once in ROM order")
     return stages
 
@@ -369,15 +415,21 @@ def batch_runtime_identity(root: Path, gens: Path) -> dict:
 
 
 def run_all_stages(
-    root: Path, gens: Path, rom: Path, profile: str, difficulty: str,
-    result: Path, digest: str,
+    root: Path,
+    gens: Path,
+    rom: Path,
+    profile: str,
+    difficulty: str,
+    result: Path,
+    digest: str,
 ) -> Path:
     """Cold boot every password entry sequentially; publish no partial pass."""
     stages = reachable_stages(root)
     result = checked_result_path(root, result, rom, gens)
-    outputs = [checked_result_path(
-        root, result.with_name("%s_stage_%02d.txt" % (result.stem, stage)), rom, gens)
-        for stage in stages]
+    outputs = [
+        checked_result_path(root, result.with_name("%s_stage_%02d.txt" % (result.stem, stage)), rom, gens)
+        for stage in stages
+    ]
     receipt_path = result.with_name(result.stem + "_all.json")
     receipt_path = checked_path(root, receipt_path.relative_to(root), Path("build"))
     if receipt_path.resolve() in {rom.resolve(), gens.resolve()}:
@@ -389,13 +441,18 @@ def run_all_stages(
     result.parent.mkdir(parents=True, exist_ok=True)
     records: list[dict] = []
     receipt = {
-        "schema_version": 1, "status": "running", "profile": profile,
-        "difficulty": difficulty, "rom_sha256": digest,
+        "schema_version": 1,
+        "status": "running",
+        "profile": profile,
+        "difficulty": difficulty,
+        "rom_sha256": digest,
         "gens_sha256": hashlib.sha256(gens.read_bytes()).hexdigest(),
         "lua_sha256": hashlib.sha256(SCRIPT.read_bytes()).hexdigest(),
         "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "batch_runtime_identity": identity,
-        "expected_stages": stages, "completed_count": 0, "stages": records,
+        "expected_stages": stages,
+        "completed_count": 0,
+        "stages": records,
         "scope": "cold_boot_selected_stage_ram_readiness_not_renderer_or_audio_fidelity",
     }
     # Invalidate previous pass evidence before a new run can fail halfway.
@@ -407,51 +464,63 @@ def run_all_stages(
             for stage, destination in zip(stages, outputs, strict=True):
                 if batch_runtime_identity(root, gens) != identity:
                     raise RuntimeError("native or harness inputs changed during the stage batch")
-                run_stage(root, gens, snapshot, profile, stage, difficulty,
-                          destination, automated=True)
+                run_stage(root, gens, snapshot, profile, stage, difficulty, destination, automated=True)
                 fields = parse_result(destination, profile, stage, difficulty)
                 diagnostic = Path(str(destination) + ".diagnostic.json")
                 if diagnostic.stat().st_size > 16384:
                     raise RuntimeError("stage diagnostic exceeds its size bound")
                 observed = json.loads(diagnostic.read_text(encoding="utf-8"))
-                expected = {"status": "ready", "profile": profile, "stage": stage,
-                            "frame": int(fields["frame"]), "difficulty": DIFFICULTIES[difficulty],
-                            "mode": 0x10, "stage_index": (stage - 1) * 2, "player_type": 8,
-                            "route": int(fields["route"], 16)}
-                if (not isinstance(observed, dict)
-                        or any(type(observed.get(key)) is not type(value)
-                               or observed[key] != value for key, value in expected.items())):
+                expected = {
+                    "status": "ready",
+                    "profile": profile,
+                    "stage": stage,
+                    "frame": int(fields["frame"]),
+                    "difficulty": DIFFICULTIES[difficulty],
+                    "mode": 0x10,
+                    "stage_index": (stage - 1) * 2,
+                    "player_type": 8,
+                    "route": int(fields["route"], 16),
+                }
+                if not isinstance(observed, dict) or any(
+                    type(observed.get(key)) is not type(value) or observed[key] != value
+                    for key, value in expected.items()
+                ):
                     raise RuntimeError("stage diagnostic disagrees with its readiness report")
                 native_report = Path(str(destination) + ".runtime.json")
                 proof = json.loads(native_report.read_text(encoding="utf-8"))
                 if proof.get("status") != "stage_ram_ready" or proof.get("fields") != fields:
                     raise RuntimeError("stage native isolation receipt disagrees with readiness")
                 contract = proof.get("contract", {})
-                if any(contract.get(key) != identity[key] for key in (
-                        "runtime_environment", "runner_sha256", "lua_sha256")):
+                if any(
+                    contract.get(key) != identity[key] for key in ("runtime_environment", "runner_sha256", "lua_sha256")
+                ):
                     raise RuntimeError("stage native isolation receipt disagrees with batch inputs")
-                records.append({
-                    "stage": stage, "fields": fields,
-                    "result": destination.relative_to(root).as_posix(),
-                    "result_sha256": hashlib.sha256(destination.read_bytes()).hexdigest(),
-                    "diagnostic": diagnostic.relative_to(root).as_posix(),
-                    "diagnostic_sha256": hashlib.sha256(diagnostic.read_bytes()).hexdigest(),
-                    "native_receipt": native_report.relative_to(root).as_posix(),
-                    "native_receipt_sha256": file_sha256(native_report),
-                })
+                records.append(
+                    {
+                        "stage": stage,
+                        "fields": fields,
+                        "result": destination.relative_to(root).as_posix(),
+                        "result_sha256": hashlib.sha256(destination.read_bytes()).hexdigest(),
+                        "diagnostic": diagnostic.relative_to(root).as_posix(),
+                        "diagnostic_sha256": hashlib.sha256(diagnostic.read_bytes()).hexdigest(),
+                        "native_receipt": native_report.relative_to(root).as_posix(),
+                        "native_receipt_sha256": file_sha256(native_report),
+                    }
+                )
                 receipt["completed_count"] = len(records)
                 if batch_runtime_identity(root, gens) != identity:
                     raise RuntimeError("native or harness inputs changed during the stage batch")
                 atomic_write_json(receipt_path, receipt)
-                print("[OK] %s stage %d reached gameplay at frame %s" % (
-                    profile, stage, fields["frame"]), flush=True)
+                print("[OK] %s stage %d reached gameplay at frame %s" % (profile, stage, fields["frame"]), flush=True)
         if [record["stage"] for record in records] != stages:
             raise RuntimeError("batch did not cover the complete password inventory")
         if batch_runtime_identity(root, gens) != identity:
             raise RuntimeError("native or harness inputs changed during the stage batch")
-        for name, key, source in (("Gens executable", "gens_sha256", gens),
-                                  ("Lua script", "lua_sha256", SCRIPT),
-                                  ("Python runner", "runner_sha256", Path(__file__))):
+        for name, key, source in (
+            ("Gens executable", "gens_sha256", gens),
+            ("Lua script", "lua_sha256", SCRIPT),
+            ("Python runner", "runner_sha256", Path(__file__)),
+        ):
             if hashlib.sha256(source.read_bytes()).hexdigest() != receipt[key]:
                 raise RuntimeError("%s changed during the stage batch" % name)
         receipt["status"] = "passed"
@@ -489,19 +558,20 @@ def main() -> int:
             raise ValueError("content ROM not found: %s" % rom)
         digest = validate_playtest_rom(root, rom, args.profile)
         if args.check_all:
-            receipt = run_all_stages(root, gens, rom, args.profile,
-                                     args.difficulty, result, digest)
-            print("[OK] %s all 25 password stages passed; ROM SHA256 %s; receipt %s" % (
-                args.profile, digest, receipt))
+            receipt = run_all_stages(root, gens, rom, args.profile, args.difficulty, result, digest)
+            print("[OK] %s all 25 password stages passed; ROM SHA256 %s; receipt %s" % (args.profile, digest, receipt))
             return 0
-        fields = run_stage(root, gens, rom, args.profile, args.stage, args.difficulty,
-                           result, automated=args.check)
+        fields = run_stage(root, gens, rom, args.profile, args.stage, args.difficulty, result, automated=args.check)
         if not args.check:
-            print("[OK] launched %s stage %d (%s) playtest in Gens; ROM SHA256 %s" % (
-                args.profile, args.stage, args.difficulty, digest))
+            print(
+                "[OK] launched %s stage %d (%s) playtest in Gens; ROM SHA256 %s"
+                % (args.profile, args.stage, args.difficulty, digest)
+            )
             return 0
-        print("[OK] %s stage %d reached gameplay at frame %s; ROM SHA256 %s" % (
-            args.profile, args.stage, fields["frame"], digest))
+        print(
+            "[OK] %s stage %d reached gameplay at frame %s; ROM SHA256 %s"
+            % (args.profile, args.stage, fields["frame"], digest)
+        )
         return 0
     except (OSError, RuntimeError, ValueError) as error:
         print("[ERROR] %s" % error)

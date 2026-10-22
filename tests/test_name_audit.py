@@ -10,17 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT / "config" / "name_audit.json"
 SOURCE_POLICY = ROOT / "config" / "source_policy.json"
 EVIDENCE_LEVELS = {"unknown", "hypothesis", "static", "runtime", "confirmed"}
-DEFINITION = re.compile(
-    r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+equ\b)", re.IGNORECASE | re.MULTILINE
-)
+DEFINITION = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)(?::|\s+equ\b)", re.IGNORECASE | re.MULTILINE)
 
 
 class NameAuditTests(unittest.TestCase):
     def test_weapon_ammo_clamps_keep_distinct_costs(self) -> None:
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         source = (ROOT / "src/weapons/firing.s").read_text(encoding="utf-8")
         cases = (
             ("0x0182EC", "Weapon_FireFourShotSpread", "$14", "$12", 8, "SetupLoop"),
@@ -30,12 +25,8 @@ class NameAuditTests(unittest.TestCase):
         for address, prefix, normal, zero, surcharge, next_label in cases:
             with self.subTest(address=address):
                 subtract_label = prefix + "_SubtractAmmo"
-                before = source.split(prefix + ":", 1)[1].split(
-                    subtract_label + ":", 1
-                )[0]
-                clamp = source.split(subtract_label + ":", 1)[1].split(
-                    prefix + "_" + next_label + ":", 1
-                )[0]
+                before = source.split(prefix + ":", 1)[1].split(subtract_label + ":", 1)[0]
+                clamp = source.split(subtract_label + ":", 1)[1].split(prefix + "_" + next_label + ":", 1)[0]
                 self.assertIn("tst.w   (ShootingMode).w", before)
                 self.assertIn(f"subq.w  #{surcharge},$10(a4)", before)
                 self.assertIn(f"move.w  #{normal},d0", before)
@@ -50,22 +41,13 @@ class NameAuditTests(unittest.TestCase):
         self.assertIn("; No known static caller: a bare return", source)
 
     def test_valkirie_part_command_entry_loop_and_exit_roles(self) -> None:
-        audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        source = (ROOT / "src/bosses/valkirie_battle.s").read_text(
-            encoding="utf-8"
-        )
+        audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        source = (ROOT / "src/bosses/valkirie_battle.s").read_text(encoding="utf-8")
         motion = source.split("Entity_ApplyValkiriePartMotionCommands:", 1)[1].split(
             "; End of function Entity_ApplyValkiriePartMotionCommands", 1
         )[0]
-        motion_entry, motion_loop = motion.split(
-            "Entity_ApplyValkiriePartMotionCommandLoop:", 1
-        )
-        motion_loop, motion_exit = motion_loop.split(
-            "Entity_ApplyValkiriePartMotionCommandsReturn:", 1
-        )
+        motion_entry, motion_loop = motion.split("Entity_ApplyValkiriePartMotionCommandLoop:", 1)
+        motion_loop, motion_exit = motion_loop.split("Entity_ApplyValkiriePartMotionCommandsReturn:", 1)
         self.assertIn("move.w  (a0)+,d1", motion_entry)
         self.assertIn("asr.l   #4,d2", motion_entry)
         self.assertIn("neg.l   d2", motion_entry)
@@ -81,12 +63,8 @@ class NameAuditTests(unittest.TestCase):
         hide = source.split("Entity_ApplyValkiriePartHideCommands:", 1)[1].split(
             "; End of function Entity_ApplyValkiriePartHideCommands", 1
         )[0]
-        hide_entry, hide_loop = hide.split(
-            "Entity_ApplyValkiriePartHideCommandLoop:", 1
-        )
-        hide_loop, hide_exit = hide_loop.split(
-            "Entity_ApplyValkiriePartHideCommandsReturn:", 1
-        )
+        hide_entry, hide_loop = hide.split("Entity_ApplyValkiriePartHideCommandLoop:", 1)
+        hide_loop, hide_exit = hide_loop.split("Entity_ApplyValkiriePartHideCommandsReturn:", 1)
         self.assertIn("move.b  (a0)+,d1", hide_entry)
         self.assertIn("move.b  (a0)+,d2", hide_entry)
         self.assertNotRegex(hide_loop, r"\bd2\b")
@@ -111,17 +89,12 @@ class NameAuditTests(unittest.TestCase):
         self.assertIn("only an RTS", bases[5])
 
     def test_valkirie_pose_controls_and_orphaned_director_longs(self) -> None:
-        audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         reviews = {
             review["basis"]: review
-            for review in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
         control_basis = "Control words $FFFE and $FFFF select termination or looping."
         viewers = (
@@ -155,9 +128,7 @@ class NameAuditTests(unittest.TestCase):
                 self.assertIn("clr.w   $58(a5)", handler)
                 self.assertIn("clr.w   $29C(a5)", handler)
                 script = source.split(prefix + "PoseScript:", 1)[1]
-                script = re.split(
-                    r"(?m)^[A-Za-z_][A-Za-z_0-9]*:", script, maxsplit=1
-                )[0]
+                script = re.split(r"(?m)^[A-Za-z_][A-Za-z_0-9]*:", script, maxsplit=1)[0]
                 self.assertEqual(has_stop_command, "$FF, $FE" in script)
                 self.assertIn("$FF, $FF", script)
                 self.assertIn(control_basis, audit[address]["basis"])
@@ -176,9 +147,7 @@ class NameAuditTests(unittest.TestCase):
             [address for address, _ in fields],
             [member["address"] for member in reviews[field_basis]["members"]],
         )
-        source = (ROOT / "src/enemies/spawn_and_movement.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/enemies/spawn_and_movement.s").read_text(encoding="utf-8")
         routine = source.split("Orphaned_EnemySpawnClearDirectorData:", 1)[1].split(
             "; End of function Orphaned_EnemySpawnClearDirectorData", 1
         )[0]
@@ -190,13 +159,8 @@ class NameAuditTests(unittest.TestCase):
                 self.assertIn(field_basis, audit[address]["basis"])
 
     def test_raster_palette_and_shooting_mode_evidence(self) -> None:
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        raster = (ROOT / "src/rendering/vblank_effects.s").read_text(
-            encoding="utf-8"
-        )
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        raster = (ROOT / "src/rendering/vblank_effects.s").read_text(encoding="utf-8")
         dispatcher, table = raster.split("VBlankRasterEffectHandlerTable:", 1)
         table = table.split("; End of function VBlank_DispatchRasterEffect", 1)[0]
         self.assertIn("move.w  (RasterEffectIndex).w,d0", dispatcher)
@@ -204,12 +168,8 @@ class NameAuditTests(unittest.TestCase):
         self.assertEqual(23, len(re.findall(r"\bdc\.l\s+VBlank_", table)))
         self.assertIn("byte offset", records["0xFFF74A"]["basis"][0])
 
-        memory = (ROOT / "src/system/memory_initialization.s").read_text(
-            encoding="utf-8"
-        )
-        palette = memory.split("Palette_ClearBuffers:", 1)[1].split(
-            "; End of function Palette_ClearBuffers", 1
-        )[0]
+        memory = (ROOT / "src/system/memory_initialization.s").read_text(encoding="utf-8")
+        palette = memory.split("Palette_ClearBuffers:", 1)[1].split("; End of function Palette_ClearBuffers", 1)[0]
         self.assertIn("move.w  #$F,d1", palette)
         self.assertEqual(4, len(re.findall(r"\bmove\.l\s+d0,\(a0\)\+", palette)))
         self.assertIn("dbf     d1,Palette_ClearBuffers_Loop", palette)
@@ -226,9 +186,7 @@ class NameAuditTests(unittest.TestCase):
         for address, filename, label, masks_input in cases:
             with self.subTest(address=address):
                 source = (ROOT / "src/player" / filename).read_text(encoding="utf-8")
-                routine = source.split(label + ":", 1)[1].split(
-                    "; End of function " + label, 1
-                )[0]
+                routine = source.split(label + ":", 1)[1].split("; End of function " + label, 1)[0]
                 self.assertEqual(
                     masks_input,
                     "move.b  #$7F,(PlayerInputMask).w" in routine,
@@ -238,17 +196,12 @@ class NameAuditTests(unittest.TestCase):
                 self.assertEqual(address, records[address]["address"])
 
     def test_muzzle_offset_tables_and_bit_three_mirroring(self) -> None:
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         reviews = {
             review["basis"]: review
-            for review in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
         cases = (
             (
@@ -262,13 +215,8 @@ class NameAuditTests(unittest.TestCase):
                 ((0x0198C2, 1), (0x0198F2, 2), (0x019902, 3)),
             ),
         )
-        data = (ROOT / "src/weapons/targeting_and_projectile_runtime.s").read_text(
-            encoding="utf-8"
-        )
-        consumers = "\n".join(
-            path.read_text(encoding="utf-8")
-            for path in (ROOT / "src/player").glob("*.s")
-        )
+        data = (ROOT / "src/weapons/targeting_and_projectile_runtime.s").read_text(encoding="utf-8")
+        consumers = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "src/player").glob("*.s"))
         for layout, basis, members in cases:
             with self.subTest(layout=layout):
                 expected = [
@@ -277,16 +225,11 @@ class NameAuditTests(unittest.TestCase):
                 ]
                 self.assertEqual(
                     expected,
-                    [
-                        (member["address"], member["current_name"])
-                        for member in reviews[basis]["members"]
-                    ],
+                    [(member["address"], member["current_name"]) for member in reviews[basis]["members"]],
                 )
                 for address, name in expected:
                     self.assertIn(basis, records[address]["basis"])
-                    match = re.search(
-                        rf"(?m)^{name}:\s+dc\.w\s+([^;\r\n]+)", data
-                    )
+                    match = re.search(rf"(?m)^{name}:\s+dc\.w\s+([^;\r\n]+)", data)
                     self.assertIsNotNone(match)
                     self.assertEqual(8, len(match.group(1).split(",")))
                     self.assertIn(f"lea     ({name}).l,a4", consumers)
@@ -301,10 +244,7 @@ class NameAuditTests(unittest.TestCase):
         self.assertIn("only when bit 3 is set", records["0x017EF4"]["basis"][0])
 
     def test_shared_explosion_entries_have_distinct_evidence(self) -> None:
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         names = (
             ("0x02A2A2", "Effect_InitSharedExplosionFromCurrent"),
             ("0x02A2A4", "Effect_InitSharedExplosion"),
@@ -320,18 +260,12 @@ class NameAuditTests(unittest.TestCase):
         self.assertIn("type $C4", bases[1])
         self.assertIn("SFX $BC", bases[2])
 
-        source = (ROOT / "src/projectiles/shared_boss_projectiles.s").read_text(
-            encoding="utf-8"
-        )
-        adapter = source.split("Effect_InitSharedExplosionFromCurrent:", 1)[1].split(
-            "Effect_InitSharedExplosion:", 1
-        )[0]
-        initializer = source.split("Effect_InitSharedExplosion:", 1)[1].split(
-            "Effect_ConfigureSharedExplosion:", 1
-        )[0]
-        finisher = source.split("Effect_ConfigureSharedExplosion:", 1)[1].split(
-            "; End of function", 1
-        )[0]
+        source = (ROOT / "src/projectiles/shared_boss_projectiles.s").read_text(encoding="utf-8")
+        adapter = source.split("Effect_InitSharedExplosionFromCurrent:", 1)[1].split("Effect_InitSharedExplosion:", 1)[
+            0
+        ]
+        initializer = source.split("Effect_InitSharedExplosion:", 1)[1].split("Effect_ConfigureSharedExplosion:", 1)[0]
+        finisher = source.split("Effect_ConfigureSharedExplosion:", 1)[1].split("; End of function", 1)[0]
         self.assertIn("movea.w a5,a0", adapter)
         self.assertIn("move.w  #$C4,(a0)", initializer)
         self.assertIn("move.l  #$FFFDC000,$1C(a0)", initializer)
@@ -343,14 +277,8 @@ class NameAuditTests(unittest.TestCase):
     def test_death_sequence_mappings_are_separate_from_particle_oam(self) -> None:
         records = json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
         by_address = {record["address"]: record for record in records}
-        reviews = json.loads(
-            (ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8")
-        )["reviews"]
-        review = next(
-            item
-            for item in reviews
-            if item["basis"].startswith("After appending particle OAM")
-        )
+        reviews = json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
+        review = next(item for item in reviews if item["basis"].startswith("After appending particle OAM"))
         expected = [f"Player_DeathSequenceSpriteMapping{index:02}" for index in range(8)]
         self.assertEqual(expected, [member["current_name"] for member in review["members"]])
         for index, member in enumerate(review["members"]):
@@ -366,20 +294,14 @@ class NameAuditTests(unittest.TestCase):
         self.assertEqual("Player_DeathParticleAnimationFrames", table_record["previous_name"])
         self.assertIn("first appends particle OAM", " ".join(table_record["basis"]))
         self.assertIn("only after particle OAM", by_address["0x01721E"]["basis"][0])
-        player = (ROOT / "src/player/rendering_and_defeat.s").read_text(
-            encoding="utf-8"
-        )
-        mappings = (ROOT / "src/data/player_special_and_death_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
+        player = (ROOT / "src/player/rendering_and_defeat.s").read_text(encoding="utf-8")
+        mappings = (ROOT / "src/data/player_special_and_death_sprite_mappings.s").read_text(encoding="utf-8")
         art = (ROOT / "src/data/player_sprite_art.s").read_text(encoding="utf-8")
         self.assertNotRegex(
             player + mappings + art,
             r"\bPlayer_DeathParticle(?:AnimationFrames|SpriteMapping|SpriteArt)",
         )
-        routine = player.split("Player_RenderDeathParticles:", 1)[1].split(
-            "Player_DeathSequenceAnimationFrames:", 1
-        )[0]
+        routine = player.split("Player_RenderDeathParticles:", 1)[1].split("Player_DeathSequenceAnimationFrames:", 1)[0]
         self.assertLess(
             routine.index("bsr.w   Player_WriteDeathParticleSprite"),
             routine.index("Sprite_AppendOAMEntries"),
@@ -389,17 +311,15 @@ class NameAuditTests(unittest.TestCase):
             routine.index("Player_DeathSequenceAnimationFrames(pc,d0.w),8(a5)"),
         )
         self.assertIn("andi.w  #$1C,d0", routine)
-        table = player.split("Player_DeathSequenceAnimationFrames:", 1)[1].split(
-            "Player_WriteDeathParticleSprite:", 1
-        )[0]
+        table = player.split("Player_DeathSequenceAnimationFrames:", 1)[1].split("Player_WriteDeathParticleSprite:", 1)[
+            0
+        ]
         self.assertEqual(
             expected,
             re.findall(r"\bdc\.l\s+(Player_DeathSequenceSpriteMapping\d\d)", table),
         )
         art_records = [
-            record
-            for record in records
-            if (record["previous_name"] or "").startswith("Player_DeathParticleSpriteArt")
+            record for record in records if (record["previous_name"] or "").startswith("Player_DeathParticleSpriteArt")
         ]
         self.assertEqual(6, len(art_records))
         for record in art_records:
@@ -427,15 +347,9 @@ class NameAuditTests(unittest.TestCase):
             "Boss_DestroyerProtoIntroPartFrame",
         }
         self.assertEqual(expected, {record["current_name"] for record in reviewed})
-        mappings = (ROOT / "src/data/destroyer_proto_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
-        core = (ROOT / "src/bosses/destroyer_proto_core.s").read_text(
-            encoding="utf-8"
-        )
-        projectiles = (
-            ROOT / "src/projectiles/destroyer_proto_and_victor_projectiles.s"
-        ).read_text(encoding="utf-8")
+        mappings = (ROOT / "src/data/destroyer_proto_sprite_mappings.s").read_text(encoding="utf-8")
+        core = (ROOT / "src/bosses/destroyer_proto_core.s").read_text(encoding="utf-8")
+        projectiles = (ROOT / "src/projectiles/destroyer_proto_and_victor_projectiles.s").read_text(encoding="utf-8")
         self.assertNotRegex(
             mappings + core + projectiles,
             r"\bBoss_DestroyerProtoSpriteFrame(?:0\d|10)\b",
@@ -453,12 +367,12 @@ class NameAuditTests(unittest.TestCase):
         intro_table = core.split("Boss_DestroyerProtoPartMappingTable:", 1)[1].split(
             "Boss_DestroyerProtoGraphicsLoadDescriptor:", 1
         )[0]
-        part_table = projectiles.split(
-            "Boss_DestroyerProtoPartMappingFrameTable:", 1
-        )[1].split("Boss_DestroyerProtoLaunchTwinProjectiles:", 1)[0]
-        projectile_table = projectiles.split(
-            "Projectile_DestroyerProtoMappingFrameTable:", 1
-        )[1].split("Projectile_DestroyerProtoCheckHorizontalReflection:", 1)[0]
+        part_table = projectiles.split("Boss_DestroyerProtoPartMappingFrameTable:", 1)[1].split(
+            "Boss_DestroyerProtoLaunchTwinProjectiles:", 1
+        )[0]
+        projectile_table = projectiles.split("Projectile_DestroyerProtoMappingFrameTable:", 1)[1].split(
+            "Projectile_DestroyerProtoCheckHorizontalReflection:", 1
+        )[0]
         self.assertEqual(
             ["Boss_DestroyerProtoIntroPartFrame", "Boss_DestroyerProtoPartFrame01"],
             re.findall(r"\bdc\.l\s+(Boss_DestroyerProto\w+Frame\w*)", intro_table),
@@ -479,32 +393,26 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_TerobusterSpriteMapping\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_TerobusterSpriteMapping\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(16, len(reviewed))
         self.assertEqual(16, len({record["basis"][0] for record in reviewed}))
-        mappings = (ROOT / "src/data/terobuster_sprite_mappings.s").read_text(
+        mappings = (ROOT / "src/data/terobuster_sprite_mappings.s").read_text(encoding="utf-8")
+        descriptors = (ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s").read_text(
             encoding="utf-8"
         )
-        descriptors = (
-            ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s"
-        ).read_text(encoding="utf-8")
         core = (ROOT / "src/bosses/terobuster_core.s").read_text(encoding="utf-8")
-        self.assertNotRegex(
-            mappings + descriptors + core, r"\bBoss_TerobusterSpriteMapping\d\d\b"
-        )
+        self.assertNotRegex(mappings + descriptors + core, r"\bBoss_TerobusterSpriteMapping\d\d\b")
         self.assertEqual(
             {record["current_name"] for record in reviewed},
             set(re.findall(r"(?m)^(Boss_Terobuster\w+Frame\d\d):", mappings)),
         )
-        primary = descriptors.split("Boss_TerobusterPrimaryRotationFrames:", 1)[
-            1
-        ].split("Boss_TerobusterSecondaryRotationFrames:", 1)[0]
-        secondary = descriptors.split("Boss_TerobusterSecondaryRotationFrames:", 1)[
-            1
-        ].split("Boss_TerobusterInlineSpriteDescriptor:", 1)[0]
+        primary = descriptors.split("Boss_TerobusterPrimaryRotationFrames:", 1)[1].split(
+            "Boss_TerobusterSecondaryRotationFrames:", 1
+        )[0]
+        secondary = descriptors.split("Boss_TerobusterSecondaryRotationFrames:", 1)[1].split(
+            "Boss_TerobusterInlineSpriteDescriptor:", 1
+        )[0]
         self.assertEqual(
             [f"{index:02}" for index in reversed(range(8))],
             re.findall(
@@ -530,28 +438,18 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_MadamBarbarSpriteMapping\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_MadamBarbarSpriteMapping\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(16, len(reviewed))
         self.assertEqual(16, len({record["basis"][0] for record in reviewed}))
-        mappings = (ROOT / "src/data/madam_barbar_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
+        mappings = (ROOT / "src/data/madam_barbar_sprite_mappings.s").read_text(encoding="utf-8")
         descriptors = (
             ROOT / "src/data/madam_barbar_flying_neo_joker_back_stringer_sharpssteel_metasprites.s"
         ).read_text(encoding="utf-8")
-        self.assertNotRegex(
-            mappings + descriptors, r"\bBoss_MadamBarbarSpriteMapping\d\d\b"
-        )
+        self.assertNotRegex(mappings + descriptors, r"\bBoss_MadamBarbarSpriteMapping\d\d\b")
         self.assertEqual(
             {record["current_name"] for record in reviewed},
-            set(
-                re.findall(
-                    r"(?m)^(Boss_MadamBarbarRotationSet[AB]Frame\d\d):", mappings
-                )
-            ),
+            set(re.findall(r"(?m)^(Boss_MadamBarbarRotationSet[AB]Frame\d\d):", mappings)),
         )
         expected = {
             "A": ("A", ["07", "06", "04", "01", "02", "00", "03", "05"]),
@@ -560,9 +458,7 @@ class NameAuditTests(unittest.TestCase):
             "D": ("B", [f"{index:02}" for index in reversed(range(8))]),
         }
         for table, (family, suffixes) in expected.items():
-            section = descriptors.split(f"Boss_MadamBarbarRotationFrames{table}:", 1)[1].split(
-                "\nBoss_", 1
-            )[0]
+            section = descriptors.split(f"Boss_MadamBarbarRotationFrames{table}:", 1)[1].split("\nBoss_", 1)[0]
             self.assertEqual(
                 suffixes,
                 re.findall(
@@ -576,21 +472,15 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_XiTigerSpriteMapping\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_XiTigerSpriteMapping\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(18, len(reviewed))
         self.assertEqual(18, len({record["basis"][0] for record in reviewed}))
-        mappings = (ROOT / "src/data/xi_tiger_sprite_mappings.s").read_text(
+        mappings = (ROOT / "src/data/xi_tiger_sprite_mappings.s").read_text(encoding="utf-8")
+        descriptors = (ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s").read_text(
             encoding="utf-8"
         )
-        descriptors = (
-            ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s"
-        ).read_text(encoding="utf-8")
-        self.assertNotRegex(
-            mappings + descriptors, r"\bBoss_XiTigerSpriteMapping\d\d\b"
-        )
+        self.assertNotRegex(mappings + descriptors, r"\bBoss_XiTigerSpriteMapping\d\d\b")
         self.assertEqual(
             {record["current_name"] for record in reviewed},
             set(
@@ -617,35 +507,22 @@ class NameAuditTests(unittest.TestCase):
                         section,
                     ),
                 )
-        descriptor_table = descriptors.split(
-            "Boss_XiTigerMetaspriteDescriptors:", 1
-        )[1].split("Boss_XiTigerPartRadii:", 1)[0]
-        descriptor_entries = [
-            entry.strip()
-            for entry in re.findall(r"\bdc\.l\s+([^;\r\n]+)", descriptor_table)
-        ]
-        self.assertEqual(
-            "Boss_XiTigerDirectDescriptorFrame00+$400000", descriptor_entries[2]
-        )
-        self.assertEqual(
-            "Boss_XiTigerDirectDescriptorFrame00-$7C00000", descriptor_entries[7]
-        )
-        self.assertEqual(
-            "Boss_XiTigerDirectDescriptorFrame01+$400000", descriptor_entries[12]
-        )
-        self.assertEqual(
-            2, descriptor_table.count("Boss_XiTigerDirectDescriptorFrame00")
-        )
-        self.assertEqual(
-            1, descriptor_table.count("Boss_XiTigerDirectDescriptorFrame01")
-        )
+        descriptor_table = descriptors.split("Boss_XiTigerMetaspriteDescriptors:", 1)[1].split(
+            "Boss_XiTigerPartRadii:", 1
+        )[0]
+        descriptor_entries = [entry.strip() for entry in re.findall(r"\bdc\.l\s+([^;\r\n]+)", descriptor_table)]
+        self.assertEqual("Boss_XiTigerDirectDescriptorFrame00+$400000", descriptor_entries[2])
+        self.assertEqual("Boss_XiTigerDirectDescriptorFrame00-$7C00000", descriptor_entries[7])
+        self.assertEqual("Boss_XiTigerDirectDescriptorFrame01+$400000", descriptor_entries[12])
+        self.assertEqual(2, descriptor_table.count("Boss_XiTigerDirectDescriptorFrame00"))
+        self.assertEqual(1, descriptor_table.count("Boss_XiTigerDirectDescriptorFrame01"))
         for name in (
             "Boss_XiTigerDirectDescriptorFrame00",
             "Boss_XiTigerDirectDescriptorFrame01",
         ):
-            rotation_tables = descriptors.split("Boss_XiTigerRotationFramesA:", 1)[
-                1
-            ].split("Boss_XiTigerInlineSpriteDescriptorA:", 1)[0]
+            rotation_tables = descriptors.split("Boss_XiTigerRotationFramesA:", 1)[1].split(
+                "Boss_XiTigerInlineSpriteDescriptorA:", 1
+            )[0]
             self.assertNotIn(name, rotation_tables)
 
     def test_jetsripper_mapping_names_follow_segment_tables(self) -> None:
@@ -653,22 +530,14 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_JetsripperSpriteMapping\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_JetsripperSpriteMapping\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(18, len(reviewed))
         self.assertEqual(18, len({record["basis"][0] for record in reviewed}))
-        mappings = (ROOT / "src/data/jetsripper_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
-        segments = (ROOT / "src/bosses/jetsripper_segments.s").read_text(
-            encoding="utf-8"
-        )
+        mappings = (ROOT / "src/data/jetsripper_sprite_mappings.s").read_text(encoding="utf-8")
+        segments = (ROOT / "src/bosses/jetsripper_segments.s").read_text(encoding="utf-8")
         core = (ROOT / "src/bosses/jetsripper_core.s").read_text(encoding="utf-8")
-        self.assertNotRegex(
-            mappings + segments + core, r"\bBoss_JetsripperSpriteMapping\d\d\b"
-        )
+        self.assertNotRegex(mappings + segments + core, r"\bBoss_JetsripperSpriteMapping\d\d\b")
         self.assertEqual(
             {record["current_name"] for record in reviewed},
             set(re.findall(r"(?m)^(Boss_Jetsripper\w+):", mappings)),
@@ -692,8 +561,22 @@ class NameAuditTests(unittest.TestCase):
             ),
         )
         body_suffixes = [
-            "00", "05", "06", "07", "08", "07", "06", "05",
-            "00", "03", "01", "04", "02", "04", "01", "03",
+            "00",
+            "05",
+            "06",
+            "07",
+            "08",
+            "07",
+            "06",
+            "05",
+            "00",
+            "03",
+            "01",
+            "04",
+            "02",
+            "04",
+            "01",
+            "03",
         ]
         self.assertEqual(
             [f"Boss_JetsripperBodyDirectionFrame{suffix}" for suffix in body_suffixes],
@@ -704,10 +587,7 @@ class NameAuditTests(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            [
-                f"Boss_JetsripperTailFrame{suffix}"
-                for suffix in ("00", "01", "02", "01")
-            ],
+            [f"Boss_JetsripperTailFrame{suffix}" for suffix in ("00", "01", "02", "01")],
             pointers(segments, "Boss_JetsripperTailFrames", "; Fills angle buffer"),
         )
         self.assertEqual(
@@ -722,29 +602,19 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_AntroidSpriteMapping\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_AntroidSpriteMapping\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(18, len(reviewed))
         self.assertEqual(18, len({record["basis"][0] for record in reviewed}))
-        mappings = (ROOT / "src/data/antroid_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
-        tables = (
-            ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s"
-        ).read_text(encoding="utf-8")
-        rendering = (ROOT / "src/bosses/antroid_rendering.s").read_text(
-            encoding="utf-8"
-        )
+        mappings = (ROOT / "src/data/antroid_sprite_mappings.s").read_text(encoding="utf-8")
+        tables = (ROOT / "src/data/antroid_terobuster_shellshogun_xi_tiger_metasprites.s").read_text(encoding="utf-8")
+        rendering = (ROOT / "src/bosses/antroid_rendering.s").read_text(encoding="utf-8")
         core = (ROOT / "src/bosses/antroid_core.s").read_text(encoding="utf-8")
         self.assertNotRegex(
             mappings + tables + rendering + core,
             r"\bBoss_AntroidSpriteMapping\d\d\b",
         )
-        definitions = set(
-            re.findall(r"(?m)^(Boss_Antroid\w+(?:Mapping|Frame\d\d)):", mappings)
-        )
+        definitions = set(re.findall(r"(?m)^(Boss_Antroid\w+(?:Mapping|Frame\d\d)):", mappings))
         self.assertEqual({record["current_name"] for record in reviewed}, definitions)
 
         primary = tables.split("Boss_AntroidPrimaryRotationFrames:", 1)[1].split(
@@ -755,9 +625,7 @@ class NameAuditTests(unittest.TestCase):
         )[0]
         self.assertEqual(
             [f"{index:02}" for index in reversed(range(8))],
-            re.findall(
-                r"\bdc\.l\s+Boss_AntroidPrimaryRotationFrame(\d\d)\b", primary
-            ),
+            re.findall(r"\bdc\.l\s+Boss_AntroidPrimaryRotationFrame(\d\d)\b", primary),
         )
         self.assertEqual(
             [f"{index:02}" for index in range(8)],
@@ -778,9 +646,7 @@ class NameAuditTests(unittest.TestCase):
         reviewed = [
             record
             for record in records
-            if re.fullmatch(
-                r"Boss_ShieldViperSpriteFrame\d\d", record["previous_name"] or ""
-            )
+            if re.fullmatch(r"Boss_ShieldViperSpriteFrame\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(19, len(reviewed))
         self.assertEqual(19, len({record["basis"][0] for record in reviewed}))
@@ -788,9 +654,7 @@ class NameAuditTests(unittest.TestCase):
         core = (ROOT / "src/bosses/shield_viper_core.s").read_text(encoding="utf-8")
         defeat = (ROOT / "src/bosses/shield_viper_defeat.s").read_text(encoding="utf-8")
         projectile = (ROOT / "src/projectiles/shield_viper.s").read_text(encoding="utf-8")
-        mappings = (ROOT / "src/data/shield_viper_and_missiray_mappings.s").read_text(
-            encoding="utf-8"
-        )
+        mappings = (ROOT / "src/data/shield_viper_and_missiray_mappings.s").read_text(encoding="utf-8")
         source = core + defeat + projectile + mappings
         self.assertNotRegex(source, r"\bBoss_ShieldViperSpriteFrame\d\d\b")
         self.assertEqual(
@@ -855,17 +719,12 @@ class NameAuditTests(unittest.TestCase):
         self.assertIn("move.l  #Projectile_ShieldViperOrbitShotFrame01,8(a0)", core)
 
     def test_weapon_setup_text_handlers_are_audited_as_code(self) -> None:
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         self.assertEqual(
             "WeaponSetup_RenderControlTestRowsAndLoadPalette",
             records["0x01F3E6"]["current_name"],
         )
-        self.assertEqual(
-            "WeaponSetup_RenderExitText", records["0x01F70C"]["current_name"]
-        )
+        self.assertEqual("WeaponSetup_RenderExitText", records["0x01F70C"]["current_name"])
         for address in ("0x01F3E6", "0x01F70C"):
             self.assertNotIn("encoded glyph bytes", " ".join(records[address]["basis"]))
         source = (ROOT / "src/ui/weapon_setup_screen.s").read_text(encoding="utf-8")
@@ -879,31 +738,20 @@ class NameAuditTests(unittest.TestCase):
             "; End of function WeaponSetup_RenderExitText", 1
         )[0]
         self.assertRegex(exit_text, r"lea\s+WeaponSetup_ExitText\(pc\),a0")
-        self.assertRegex(
-            exit_text, r"jmp\s+\(Text_QueueDoubleHeightStringWrapped\)\.l"
-        )
+        self.assertRegex(exit_text, r"jmp\s+\(Text_QueueDoubleHeightStringWrapped\)\.l")
 
     def test_bugmax_frame_names_match_their_static_consumers(self) -> None:
         records = json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
         reviewed = [
-            record for record in records
-            if re.fullmatch(r"Boss_BugmaxSpriteFrame\d\d", record["previous_name"] or "")
+            record for record in records if re.fullmatch(r"Boss_BugmaxSpriteFrame\d\d", record["previous_name"] or "")
         ]
         self.assertEqual(23, len(reviewed))
         names = {record["current_name"] for record in reviewed}
         projectile = (ROOT / "src/projectiles/bugmax.s").read_text(encoding="utf-8")
-        opening = (ROOT / "src/bosses/bugmax_opening_states.s").read_text(
-            encoding="utf-8"
-        )
-        battle = (ROOT / "src/bosses/bugmax_battle_and_final_sequence.s").read_text(
-            encoding="utf-8"
-        )
-        movement = (ROOT / "src/bosses/bugmax_movement.s").read_text(
-            encoding="utf-8"
-        )
-        data = (ROOT / "src/data/bugmax_sprite_mappings.s").read_text(
-            encoding="utf-8"
-        )
+        opening = (ROOT / "src/bosses/bugmax_opening_states.s").read_text(encoding="utf-8")
+        battle = (ROOT / "src/bosses/bugmax_battle_and_final_sequence.s").read_text(encoding="utf-8")
+        movement = (ROOT / "src/bosses/bugmax_movement.s").read_text(encoding="utf-8")
+        data = (ROOT / "src/data/bugmax_sprite_mappings.s").read_text(encoding="utf-8")
         all_source = projectile + opening + battle + movement + data
         self.assertNotRegex(all_source, r"\bBoss_BugmaxSpriteFrame\d\d\b")
         selected = set(
@@ -921,22 +769,28 @@ class NameAuditTests(unittest.TestCase):
         self.assertEqual(
             ["00", "01"],
             pointer_suffixes(
-                projectile, "Boss_BugmaxStandardHitFragmentMappings",
-                "Gfx_BugmaxApplyWavePaletteOffset", "Projectile_BugmaxHitFragmentFrame",
+                projectile,
+                "Boss_BugmaxStandardHitFragmentMappings",
+                "Gfx_BugmaxApplyWavePaletteOffset",
+                "Projectile_BugmaxHitFragmentFrame",
             ),
         )
         self.assertEqual(
             ["00", "01", "01", "02", "02"],
             pointer_suffixes(
-                opening, "Boss_BugmaxLinkedPartDescriptors",
-                "Gfx_BugmaxLoadInitialTiles", "Boss_BugmaxOpeningLinkFrame",
+                opening,
+                "Boss_BugmaxLinkedPartDescriptors",
+                "Gfx_BugmaxLoadInitialTiles",
+                "Boss_BugmaxOpeningLinkFrame",
             ),
         )
         self.assertEqual(
             ["00", "01", "01", "02", "02"],
             pointer_suffixes(
-                battle, "Boss_BugmaxPrimaryLinkedPartDescriptors",
-                "Boss_BugmaxSecondaryLinkedPartMappings", "Boss_BugmaxPrimaryLinkFrame",
+                battle,
+                "Boss_BugmaxPrimaryLinkedPartDescriptors",
+                "Boss_BugmaxSecondaryLinkedPartMappings",
+                "Boss_BugmaxPrimaryLinkFrame",
             ),
         )
         secondary = battle.split("Boss_BugmaxSecondaryLinkedPartMappings:", 1)[1].split(
@@ -977,9 +831,7 @@ class NameAuditTests(unittest.TestCase):
         self.assertEqual(len(aliases), len(set(aliases)))
         self.assertEqual(set(), set(names) & set(aliases))
         for record in records:
-            self.assertRegex(
-                record["address"], r"^0x(?:[0-9A-F]{6}|FFFF[0-9A-F]{4})$"
-            )
+            self.assertRegex(record["address"], r"^0x(?:[0-9A-F]{6}|FFFF[0-9A-F]{4})$")
             # A null legacy name means the import carried no symbol at all for
             # that address, which is different from carrying a generated one.
             if record["legacy_name"] is not None:
@@ -993,9 +845,7 @@ class NameAuditTests(unittest.TestCase):
         source_names: set[str] = set()
         for path in (ROOT / "src").rglob("*"):
             if path.suffix in {".s", ".inc"}:
-                source_names.update(
-                    DEFINITION.findall(path.read_text(encoding="utf-8"))
-                )
+                source_names.update(DEFINITION.findall(path.read_text(encoding="utf-8")))
 
         missing = sorted(
             name

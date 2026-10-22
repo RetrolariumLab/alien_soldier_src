@@ -1,4 +1,5 @@
 """Tiny physical apply-read boundaries; codec/model semantics are explicit seams."""
+
 from contextlib import ExitStack
 import os
 from pathlib import Path
@@ -22,8 +23,7 @@ class CompressedApplyScopeTests(unittest.TestCase):
         self.root = self.base / "staged"
         self.make_tree(self.root, b"one")
         self.payload = self.root / "data/blob.bin"
-        self.document = {"payloads": [{"name": "Blob", "path": "data/blob.bin",
-                         "codec": "lzss", "storage": "payload"}]}
+        self.document = {"payloads": [{"name": "Blob", "path": "data/blob.bin", "codec": "lzss", "storage": "payload"}]}
 
     @staticmethod
     def make_tree(root, body):
@@ -34,6 +34,7 @@ class CompressedApplyScopeTests(unittest.TestCase):
 
     def semantics(self, stack, *, after_read=None, before_write=None):
         operations, observed = [], []
+
         def validate(document, root, profile):
             self.assertIs(document, self.document)
             self.assertEqual((self.root, "jp"), (root, profile))
@@ -43,12 +44,15 @@ class CompressedApplyScopeTests(unittest.TestCase):
             observed.append(first)
             if after_read:
                 after_read()
+
         actual = atomic_output.atomic_write_bytes
+
         def write(path, body):
             self.assertEqual((self.payload, b"two"), (path, body))
             if before_write:
                 before_write(operations[-1])
             return actual(path, body)
+
         validator = stack.enter_context(mock.patch.object(model, "validate_document", side_effect=validate))
         stack.enter_context(mock.patch.object(model, "decompress_as_vram", side_effect=lambda raw: raw))
         stack.enter_context(mock.patch.object(model, "payload_plain", return_value=b"two"))
@@ -60,10 +64,12 @@ class CompressedApplyScopeTests(unittest.TestCase):
         def closed(operation):
             self.assertTrue(operation.closed)
             self.assertIsNone(parsed._PARSED_OPERATION.get())
+
         with ExitStack() as stack:
             operations, observed, validate, encode, writer = self.semantics(stack, before_write=closed)
-            parse = stack.enter_context(mock.patch.object(
-                parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks))
+            parse = stack.enter_context(
+                mock.patch.object(parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks)
+            )
             self.assertEqual(["data/blob.bin"], model.apply_document(self.document, self.root, "jp"))
             self.assertEqual(1, parse.call_count)
             self.assertEqual([b"one"], observed)
@@ -77,6 +83,7 @@ class CompressedApplyScopeTests(unittest.TestCase):
             before = self.payload.stat()
             self.payload.write_bytes(b"bad")
             os.utime(self.payload, ns=(before.st_atime_ns, before.st_mtime_ns))
+
         with ExitStack() as stack:
             operations, _, validate, encode, writer = self.semantics(stack, after_read=late)
             with self.assertRaisesRegex(ValueError, "raw file changed"):
@@ -92,8 +99,9 @@ class CompressedApplyScopeTests(unittest.TestCase):
             operations, observed, validate, encode, writer = self.semantics(stack)
             with parsed.parsed_operation(self.root) as outer:
                 for _ in range(2):
-                    self.assertEqual(["data/blob.bin"], model.apply_document(
-                        self.document, self.root, "jp", write=False))
+                    self.assertEqual(
+                        ["data/blob.bin"], model.apply_document(self.document, self.root, "jp", write=False)
+                    )
                     self.assertIs(outer, parsed._PARSED_OPERATION.get())
                     self.assertFalse(outer.closed)
                 self.assertTrue(all(operation is outer for operation in operations))

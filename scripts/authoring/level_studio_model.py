@@ -68,9 +68,7 @@ DIRECTIVE_VALUE = re.compile(
 )
 INITIALIZER_TABLE = "Stage_InitializerOffsets"
 INITIALIZER_ANCHOR = "Weapon_ClearAmmoRegenTimers"
-INITIALIZER_ENTRY = re.compile(
-    r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + INITIALIZER_ANCHOR + r"\s*(?:;.*)?$"
-)
+INITIALIZER_ENTRY = re.compile(r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + INITIALIZER_ANCHOR + r"\s*(?:;.*)?$")
 CONFIG_LEA = re.compile(
     r"^\s+lea\s+(?P<name>[A-Za-z_][A-Za-z0-9_]*ConfigRecord)"
     r"\(pc\),a0\s*(?:;.*)?$"
@@ -167,22 +165,17 @@ def group_entries(words: list[int], name: str) -> tuple[list[SpawnEntry], bool]:
     if len(words) % 6:
         raise ValueError(f"{name}: {len(words)} words is not a whole number of entries")
     return (
-        [SpawnEntry.from_words(words[index:index + 6]) for index in range(0, len(words), 6)],
+        [SpawnEntry.from_words(words[index : index + 6]) for index in range(0, len(words), 6)],
         terminated,
     )
 
 
 def decode_payload(data: bytes) -> tuple[list[SpawnEntry], bool]:
-    terminated = (
-        len(data) % SPAWN_ENTRY_BYTES == 2
-        and struct.unpack_from(">H", data, len(data) - 2)[0] == TERMINATOR
-    )
+    terminated = len(data) % SPAWN_ENTRY_BYTES == 2 and struct.unpack_from(">H", data, len(data) - 2)[0] == TERMINATOR
     if terminated:
         data = data[:-2]
     if len(data) % SPAWN_ENTRY_BYTES:
-        raise ValueError(
-            f"payload of {len(data)} bytes is not a whole number of entries"
-        )
+        raise ValueError(f"payload of {len(data)} bytes is not a whole number of entries")
     return (
         [
             SpawnEntry.from_words(list(struct.unpack_from(">6H", data, index)))
@@ -274,10 +267,7 @@ def read_configurations(
                 if directive is None:
                     continue
                 if directive.group("size") != expected_size:
-                    raise ValueError(
-                        f"{name}: {field} uses dc.{directive.group('size')}, "
-                        f"expected dc.{expected_size}"
-                    )
+                    raise ValueError(f"{name}: {field} uses dc.{directive.group('size')}, expected dc.{expected_size}")
                 values[field] = parse_config_value(directive.group("value"))
                 locations.append((scan - 1, directive))
                 break
@@ -295,10 +285,7 @@ def read_configurations(
 
 def read_configuration_records(root: Path) -> dict[str, StageConfiguration]:
     """Compatibility view keyed by record name for renderers and tests."""
-    return {
-        item["name"]: StageConfiguration(item["name"], item["fields"])
-        for item in read_configurations(root)[0]
-    }
+    return {item["name"]: StageConfiguration(item["name"], item["fields"]) for item in read_configurations(root)[0]}
 
 
 def stage_slots(root: Path) -> list[dict[str, Any]]:
@@ -309,9 +296,7 @@ def stage_slots(root: Path) -> list[dict[str, Any]]:
         if not line.startswith(INITIALIZER_TABLE + ":"):
             continue
         for follow in lines[index:]:
-            match = INITIALIZER_ENTRY.match(
-                follow.replace(INITIALIZER_TABLE + ":", " " * 8)
-            )
+            match = INITIALIZER_ENTRY.match(follow.replace(INITIALIZER_TABLE + ":", " " * 8))
             if match is not None:
                 routines.append(match.group(1))
             elif follow.strip() and not follow.strip().startswith(";") and routines:
@@ -334,9 +319,7 @@ def stage_slots(root: Path) -> list[dict[str, Any]]:
             if match is not None:
                 configuration = match.group("name")
                 break
-        slots.append(
-            {"index": index, "initializer": routine, "configuration": configuration}
-        )
+        slots.append({"index": index, "initializer": routine, "configuration": configuration})
     return slots
 
 
@@ -381,10 +364,11 @@ def editable_stage_slot_locations(
         if len(instructions) != 3:
             continue
         first = CONFIG_LEA.match(lines[instructions[0][0]])
-        if (first is not None and instructions[1][1] == "nop"
-                and re.fullmatch(
-                    r"bra\.w\s+Stage_ApplyConfigurationRecord",
-                    instructions[2][1])):
+        if (
+            first is not None
+            and instructions[1][1] == "nop"
+            and re.fullmatch(r"bra\.w\s+Stage_ApplyConfigurationRecord", instructions[2][1])
+        ):
             locations[slot["index"]] = (instructions[0][0], first)
     return locations
 
@@ -398,30 +382,17 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "profile": profile,
         "entry_bytes": SPAWN_ENTRY_BYTES,
         "field_order": list(FIELD_ORDER),
-        "object_handlers": {
-            f"0x{key:03X}": value for key, value in sorted(handlers.items())
-        },
+        "object_handlers": {f"0x{key:03X}": value for key, value in sorted(handlers.items())},
         "slot_boundaries": sorted(
-            {
-                value
-                for item in lists
-                for entry in item.entries
-                for value in (entry.slot_first, entry.slot_limit)
-            }
+            {value for item in lists for entry in item.entries for value in (entry.slot_first, entry.slot_limit)}
         ),
         "configuration_record_bytes": CONFIG_RECORD_BYTES,
-        "configuration_fields": [
-            {"name": name, "size": size} for name, size in CONFIG_FIELDS
-        ],
+        "configuration_fields": [{"name": name, "size": size} for name, size in CONFIG_FIELDS],
         "stage_slots": stage_slots(root),
         "configurations": configurations,
         "spawn_lists": [item.to_document() for item in lists],
     }
-    for entry in (
-        entry
-        for item in document["spawn_lists"]
-        for entry in item["entries"]
-    ):
+    for entry in (entry for item in document["spawn_lists"] for entry in item["entries"]):
         entry["handler"] = handlers.get(entry["object_type"] & ~3, "")
     return document
 
@@ -436,13 +407,14 @@ def configuration_index_domains(root: Path) -> dict[str, frozenset[int]]:
     relative word tables directly. Palette bytes are offsets, not color IDs.
     """
     from authoring.stage_tilemap_model import (
-        PLANE_A_TABLE, PLANE_B_TABLE, read_plane_tables,
+        PLANE_A_TABLE,
+        PLANE_B_TABLE,
+        read_plane_tables,
     )
 
     tables = read_plane_tables(root)
     domains = {}
-    for field, table in (("plane_a_mode", PLANE_A_TABLE),
-                         ("plane_b_mode", PLANE_B_TABLE)):
+    for field, table in (("plane_a_mode", PLANE_A_TABLE), ("plane_b_mode", PLANE_B_TABLE)):
         entries = tables.get(table)
         if not entries:
             raise ValueError("configuration reader table is missing: " + table)
@@ -451,9 +423,7 @@ def configuration_index_domains(root: Path) -> dict[str, frozenset[int]]:
             offsets |= {0x8000 | offset for offset in offsets}
         domains[field] = frozenset({0, *offsets})
 
-    entry = re.compile(
-        r"^\s*dc\.w\s+[A-Za-z_][A-Za-z0-9_]*-"
-        + re.escape(SPAWN_DIRECTOR_ANCHOR) + r"\s*$")
+    entry = re.compile(r"^\s*dc\.w\s+[A-Za-z_][A-Za-z0-9_]*-" + re.escape(SPAWN_DIRECTOR_ANCHOR) + r"\s*$")
     active = False
     count = 0
     for line in (root / SPAWN_DIRECTOR_SOURCE).read_text(encoding="utf-8").splitlines():
@@ -466,8 +436,7 @@ def configuration_index_domains(root: Path) -> dict[str, frozenset[int]]:
         if not active or not code.strip():
             continue
         if not entry.fullmatch(code):
-            raise ValueError("configuration reader table has an unsupported entry: "
-                             + SPAWN_DIRECTOR_TABLE)
+            raise ValueError("configuration reader table has an unsupported entry: " + SPAWN_DIRECTOR_TABLE)
         count += 1
     if not count:
         raise ValueError("configuration reader table is missing: " + SPAWN_DIRECTOR_TABLE)
@@ -478,6 +447,7 @@ def configuration_index_domains(root: Path) -> dict[str, frozenset[int]]:
 
 def palette_effect_index_domains(root: Path) -> dict[str, frozenset[int]]:
     """Prove the byte field writers and exact unmasked word-table readers."""
+
     def blocks(path):
         found, current = {}, None
         for line in path.read_text(encoding="utf-8").splitlines():
@@ -493,22 +463,38 @@ def palette_effect_index_domains(root: Path) -> dict[str, frozenset[int]]:
         return found
 
     writer = blocks(root / CONFIG_SOURCE).get("Stage_ApplyConfigurationRecord", ())
-    if list(writer[:5]) != ["move.w (a0)+,(StageStateOffset).w",
-                           "move.l (a0)+,(StageObjectSpawnCursor).w",
-                           "move.w (a0)+,(EnemySpawnDirectorState).w",
-                           "move.b (a0)+,(PalettePrimaryIndex+1).w",
-                           "move.b (a0)+,(PaletteSecondaryIndex+1).w"]:
+    if list(writer[:5]) != [
+        "move.w (a0)+,(StageStateOffset).w",
+        "move.l (a0)+,(StageObjectSpawnCursor).w",
+        "move.w (a0)+,(EnemySpawnDirectorState).w",
+        "move.b (a0)+,(PalettePrimaryIndex+1).w",
+        "move.b (a0)+,(PaletteSecondaryIndex+1).w",
+    ]:
         raise ValueError("stage configuration palette-byte writers changed")
     source = blocks(root / PALETTE_EFFECT_SOURCE)
     found = {}
     for field, slot, reader, table, anchor in (
-        ("palette_primary", "PalettePrimaryIndex", "Palette_UpdatePrimaryEffect_Dispatch",
-         "Palette_PrimaryEffectOffsets", "Palette_UpdateSharedAnimatedColors"),
-        ("palette_secondary", "PaletteSecondaryIndex", "Palette_UpdateSecondaryEffect_Dispatch",
-         "Palette_SecondaryEffectOffsets", "Palette_UpdatePairedEntryLists"),
+        (
+            "palette_primary",
+            "PalettePrimaryIndex",
+            "Palette_UpdatePrimaryEffect_Dispatch",
+            "Palette_PrimaryEffectOffsets",
+            "Palette_UpdateSharedAnimatedColors",
+        ),
+        (
+            "palette_secondary",
+            "PaletteSecondaryIndex",
+            "Palette_UpdateSecondaryEffect_Dispatch",
+            "Palette_SecondaryEffectOffsets",
+            "Palette_UpdatePairedEntryLists",
+        ),
     ):
-        if source.get(reader) != [f"move.w ({slot}).w,d0", f"movea.w {table}(pc,d0.w),a0",
-                                  f"adda.l #{anchor},a0", "jmp (a0)"]:
+        if source.get(reader) != [
+            f"move.w ({slot}).w,d0",
+            f"movea.w {table}(pc,d0.w),a0",
+            f"adda.l #{anchor},a0",
+            "jmp (a0)",
+        ]:
             raise ValueError("palette-effect indexed reader changed: " + reader)
         entries = source.get(table, ())
         if not entries or any(re.fullmatch(r"dc\.w \w+-" + re.escape(anchor), line) is None for line in entries):
@@ -569,10 +555,12 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             if not isinstance(slot, dict):
                 errors.append(f"stage slot {index} is not an object")
                 continue
-            if (set(slot) != set(original)
-                    or type(slot.get("index")) is not int
-                    or slot["index"] != original["index"]
-                    or slot.get("initializer") != original["initializer"]):
+            if (
+                set(slot) != set(original)
+                or type(slot.get("index")) is not int
+                or slot["index"] != original["index"]
+                or slot.get("initializer") != original["initializer"]
+            ):
                 errors.append(f"stage slot {index} identity differs from the source")
             target = slot.get("configuration")
             if not isinstance(target, str) or target not in configuration_names:
@@ -603,9 +591,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             if original is None:
                 continue
             fields = configuration.get("fields")
-            if not isinstance(fields, dict) or set(fields) != {
-                field for field, _ in CONFIG_FIELDS
-            }:
+            if not isinstance(fields, dict) or set(fields) != {field for field, _ in CONFIG_FIELDS}:
                 errors.append(f"{name}: configuration fields differ")
                 continue
             for field, size in CONFIG_FIELDS:
@@ -624,8 +610,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 if not 0 <= value <= SIZE_LIMIT[size]:
                     errors.append(f"{name}: {field} does not fit dc.{size}")
                 if field in index_domains and value not in index_domains[field]:
-                    errors.append(
-                        f"{name}: {field} is not a reader-owned aligned table offset")
+                    errors.append(f"{name}: {field} is not a reader-owned aligned table offset")
                 if field in {"spawn_list", "palette_list"} and value != original["fields"][field]:
                     errors.append(f"{name}: numeric {field} pointer may only be preserved")
     records = document.get("spawn_lists")
@@ -665,9 +650,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                     errors.append(f"{name} entry {index}: {field} is not an unsigned word")
             x = entry.get("x")
             if type(x) is int and x >= TERMINATOR:
-                errors.append(
-                    f"{name} entry {index}: x must precede the $7FFF stop word"
-                )
+                errors.append(f"{name} entry {index}: x must precede the $7FFF stop word")
             object_type = entry.get("object_type")
             if isinstance(object_type, int) and object_type & ~3 not in handlers:
                 errors.append(f"{name} entry {index}: object_type has no dispatch handler")
@@ -678,13 +661,9 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             first, limit = entry.get("slot_first"), entry.get("slot_limit")
             if type(first) is int and type(limit) is int:
                 if first >= max(boundaries):
-                    errors.append(
-                        f"{name} entry {index}: slot_first is beyond the object pool"
-                    )
+                    errors.append(f"{name} entry {index}: slot_first is beyond the object pool")
                 if first > limit:
-                    errors.append(
-                        f"{name} entry {index}: slot_first exceeds slot_limit"
-                    )
+                    errors.append(f"{name} entry {index}: slot_first exceeds slot_limit")
     return errors
 
 
@@ -694,18 +673,13 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
         raise ValueError("; ".join(errors))
 
 
-def lists_from_document(
-    document: dict[str, Any], root: Path, profile: str
-) -> list[SpawnList]:
+def lists_from_document(document: dict[str, Any], root: Path, profile: str) -> list[SpawnList]:
     validate_document(document, root, profile)
     originals = {item.name: item for item in read_source_lists(root)[0]}
     lists = []
     for record in document["spawn_lists"]:
         original = originals[record["name"]]
-        entries = [
-            SpawnEntry(*(entry[field] for field in FIELD_ORDER))
-            for entry in record["entries"]
-        ]
+        entries = [SpawnEntry(*(entry[field] for field in FIELD_ORDER)) for entry in record["entries"]]
         lists.append(
             SpawnList(
                 original.name,
@@ -738,15 +712,13 @@ def rewrite_in_place(block: list[str], words: list[int]) -> list[str]:
             rebuilt.append(line)
             continue
         count = len(match.group("body").split(","))
-        body = format_words(words[offset:offset + count])
+        body = format_words(words[offset : offset + count])
         offset += count
-        rebuilt.append(line[:match.start("body")] + body + line[match.end("body"):])
+        rebuilt.append(line[: match.start("body")] + body + line[match.end("body") :])
     return rebuilt
 
 
-def rebuild_source_text(
-    lists: list[SpawnList], spans: dict[str, tuple[int, int]], lines: list[str]
-) -> list[str]:
+def rebuild_source_text(lists: list[SpawnList], spans: dict[str, tuple[int, int]], lines: list[str]) -> list[str]:
     """Rewrite value tokens without changing comments, whitespace, or length."""
     output = list(lines)
     by_name = {item.name: item for item in lists if item.storage == "source"}
@@ -757,17 +729,17 @@ def rebuild_source_text(
 
 def atomic_write_text(path: Path, text: str) -> None:
     from authoring.atomic_output import atomic_write_text as _write_text
+
     _write_text(path, text)
 
 
 def atomic_write_bytes(path: Path, data: bytes) -> None:
     from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
     _write_bytes(path, data)
 
 
-def rebuild_configuration_text(
-    document: dict[str, Any], root: Path, lines: list[str]
-) -> list[str]:
+def rebuild_configuration_text(document: dict[str, Any], root: Path, lines: list[str]) -> list[str]:
     """Substitute only fixed-width configuration value tokens."""
     _, spans = read_configurations(root)
     output = list(lines)
@@ -778,30 +750,21 @@ def rebuild_configuration_text(
             value = fields[field]
             token = value if isinstance(value, str) else format_word(value)
             output[line_index] = (
-                lines[line_index][:match.start("value")]
-                + token
-                + lines[line_index][match.end("value"):]
+                lines[line_index][: match.start("value")] + token + lines[line_index][match.end("value") :]
             )
     return output
 
 
-def rebuild_initializer_text(
-    document: dict[str, Any], root: Path, lines: list[str]
-) -> list[str]:
+def rebuild_initializer_text(document: dict[str, Any], root: Path, lines: list[str]) -> list[str]:
     """Replace only the LEA symbol of a proven plain stage wrapper."""
     output = list(lines)
     for index, (line_index, match) in editable_stage_slot_locations(root).items():
         target = document["stage_slots"][index]["configuration"]
-        output[line_index] = (
-            lines[line_index][:match.start("name")]
-            + target + lines[line_index][match.end("name") :]
-        )
+        output[line_index] = lines[line_index][: match.start("name")] + target + lines[line_index][match.end("name") :]
     return output
 
 
-def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True
-) -> list[str]:
+def apply_document(document: dict[str, Any], root: Path, profile: str, write: bool = True) -> list[str]:
     """Apply validated placements to a staged tree and return changed paths."""
     lists = lists_from_document(document, root, profile)
     _, spans = read_source_lists(root)
@@ -831,8 +794,7 @@ def apply_document(
             atomic_write_text(config_path, "\n".join(config_updated))
     initializer_path = root / INITIALIZER_SOURCE
     initializer_lines = initializer_path.read_text(encoding="utf-8").split("\n")
-    initializer_updated = rebuild_initializer_text(
-        document, root, initializer_lines)
+    initializer_updated = rebuild_initializer_text(document, root, initializer_lines)
     if initializer_updated != initializer_lines:
         changed.append(INITIALIZER_SOURCE.as_posix())
         if write:
@@ -869,10 +831,7 @@ def main() -> int:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
             count = sum(len(item["entries"]) for item in document["spawn_lists"])
-            print(
-                f"[OK] {args.profile} level model: "
-                f"{len(document['spawn_lists'])} spawn lists, {count} placements"
-            )
+            print(f"[OK] {args.profile} level model: {len(document['spawn_lists'])} spawn lists, {count} placements")
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

@@ -16,20 +16,13 @@ REVIEWS = ROOT / "config/duplicate_basis_reviews.json"
 class ScrollAndBossHelperReviewTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        cls.reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
+        cls.audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        cls.reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
 
     def assert_review(self, basis: str, members: tuple[tuple[str, str], ...]) -> None:
         self.assertEqual(
             list(members),
-            [(member["address"], member["current_name"])
-             for member in self.reviews[basis]["members"]],
+            [(member["address"], member["current_name"]) for member in self.reviews[basis]["members"]],
         )
         for address, name in members:
             self.assertEqual(name, self.audit[address]["current_name"])
@@ -40,21 +33,25 @@ class ScrollAndBossHelperReviewTests(unittest.TestCase):
         ram = (ROOT / "src/ram_addrs.inc").read_text(encoding="utf-8")
         for prefix, address, count, size, basis, members in (
             (
-                "HScroll", "$FFFFE400", "$7F", 2048,
-                 "The loop clears 128 groups of four longwords beginning at HScrollBuffer, exactly the 2,048-byte horizontal-scroll workspace.",
-                 (("0x0030EC", "Gfx_ClearHScrollBuffer"),
-                  ("0x0030F6", "Gfx_ClearHScrollBuffer_Loop"))),
+                "HScroll",
+                "$FFFFE400",
+                "$7F",
+                2048,
+                "The loop clears 128 groups of four longwords beginning at HScrollBuffer, exactly the 2,048-byte horizontal-scroll workspace.",
+                (("0x0030EC", "Gfx_ClearHScrollBuffer"), ("0x0030F6", "Gfx_ClearHScrollBuffer_Loop")),
+            ),
             (
-                "VScroll", "$FFFFEC00", "9", 160,
-                 "The loop clears ten groups of four longwords beginning at VScrollBuffer, exactly the 160-byte vertical-scroll workspace; it does not traverse entity slots.",
-                 (("0x003104", "Gfx_ClearVScrollBuffer"),
-                  ("0x00310E", "Gfx_ClearVScrollBuffer_Loop"))),
+                "VScroll",
+                "$FFFFEC00",
+                "9",
+                160,
+                "The loop clears ten groups of four longwords beginning at VScrollBuffer, exactly the 160-byte vertical-scroll workspace; it does not traverse entity slots.",
+                (("0x003104", "Gfx_ClearVScrollBuffer"), ("0x00310E", "Gfx_ClearVScrollBuffer_Loop")),
+            ),
         ):
             with self.subTest(buffer=prefix):
                 name = f"Gfx_Clear{prefix}Buffer"
-                body = re.search(
-                    rf"(?s)^{name}:.*?; End of function {name}", source, re.MULTILINE
-                )
+                body = re.search(rf"(?s)^{name}:.*?; End of function {name}", source, re.MULTILINE)
                 self.assertIsNotNone(body)
                 block = body.group()
                 self.assertIn(f"lea     ({prefix}Buffer).w,a0", block)
@@ -80,21 +77,27 @@ class ScrollAndBossHelperReviewTests(unittest.TestCase):
         body = re.search(
             r"(?s)^Entity_SelectValkirieActivePartPair:.*?"
             r"; End of function Entity_SelectValkirieActivePartPair",
-            source, re.MULTILINE,
+            source,
+            re.MULTILINE,
         )
         self.assertIsNotNone(body)
         for instruction in (
-            "movea.w $48(a5),a0", "movea.w $4A(a5),a0",
-            "move.w  d0,$48(a5)", "move.w  d1,$4A(a5)",
-            "movea.w d0,a0", "movea.w d1,a0",
+            "movea.w $48(a5),a0",
+            "movea.w $4A(a5),a0",
+            "move.w  d0,$48(a5)",
+            "move.w  d1,$4A(a5)",
+            "movea.w d0,a0",
+            "movea.w d1,a0",
         ):
             self.assertIn(instruction, body.group())
         self.assertEqual(2, body.group().count("bclr    d2,2(a0)"))
         self.assertEqual(2, body.group().count("bset    d2,2(a0)"))
         self.assert_review(
             "The helper disables the pair stored at offsets $48/$4A, stores d0/d1 as the new pair, and enables both selected part objects.",
-            (("0x055FE6", "Entity_SelectValkirieActivePartPairAtY140"),
-             ("0x055FF2", "Entity_SelectValkirieActivePartPair")),
+            (
+                ("0x055FE6", "Entity_SelectValkirieActivePartPairAtY140"),
+                ("0x055FF2", "Entity_SelectValkirieActivePartPair"),
+            ),
         )
 
     def test_bugmax_animations_have_distinct_frames_and_durations(self) -> None:
@@ -108,18 +111,23 @@ class ScrollAndBossHelperReviewTests(unittest.TestCase):
                 self.assertIsNotNone(match)
                 words = [word.strip() for word in re.findall(r"\bdc\.w\s+([^;\r\n]+)", match.group(1))]
                 self.assertEqual(
-                    [word for index in range(count) for word in
-                     (f"Projectile_Bugmax{variant}Frame{index:02d}-*", str(duration))]
+                    [
+                        word
+                        for index in range(count)
+                        for word in (f"Projectile_Bugmax{variant}Frame{index:02d}-*", str(duration))
+                    ]
                     + [f"{label}-*", "0"],
-                    words[:count * 2 + 2],
+                    words[: count * 2 + 2],
                 )
                 self.assertIn(f"move.l  #{label},8(a0)", projectile)
         self.assertIn("move.w  2(a4),d0", resolver)
         self.assertIn("adda.w  (a4),a4", resolver)
         self.assert_review(
             "The named Bugmax projectile initializer stores this relative-offset sprite animation in object field 8, and Anim_ResolveTimedMappingFrame consumes its frame-offset and duration pairs.",
-            (("0x0ECBD0", "Projectile_BugmaxSpreadSpriteAnimation"),
-             ("0x0ECBDC", "Projectile_BugmaxSineSpriteAnimation")),
+            (
+                ("0x0ECBD0", "Projectile_BugmaxSpreadSpriteAnimation"),
+                ("0x0ECBDC", "Projectile_BugmaxSineSpriteAnimation"),
+            ),
         )
 
 

@@ -42,14 +42,18 @@ class LevelStateDomainTests(unittest.TestCase):
                 self.assertEqual([], domains.state_errors(ROOT, document, self.baseline))
                 for bad in (last + 2, last + 1, 0x8000, 0xFFFF):
                     fields["state_offset"] = bad
-                    self.assertTrue(any("state_offset" in value for value in domains.state_errors(ROOT, document, self.baseline)))
+                    self.assertTrue(
+                        any("state_offset" in value for value in domains.state_errors(ROOT, document, self.baseline))
+                    )
 
     def test_route_switch_uses_destination_slot_reader_not_record_name(self):
         document = deepcopy(self.baseline)
         document["stage_slots"][0]["configuration"] = "Stage26ConfigRecord"
         errors = model.document_errors(document, ROOT, "jp")
         self.assertTrue(any("EarlyStage_StateHandlerOffsets" in error and "slot 0" in error for error in errors))
-        next(item for item in document["configurations"] if item["name"] == "Stage26ConfigRecord")["fields"]["state_offset"] = 0
+        next(item for item in document["configurations"] if item["name"] == "Stage26ConfigRecord")["fields"][
+            "state_offset"
+        ] = 0
         self.assertEqual([], domains.state_errors(ROOT, document, self.baseline))
 
     def test_shared_configuration_must_fit_every_current_consumer(self):
@@ -62,19 +66,34 @@ class LevelStateDomainTests(unittest.TestCase):
 
     def test_unselected_record_preserved_but_unknown_initial_reader_locks_state_edit(self):
         document = deepcopy(self.baseline)
-        record = next(item for item in document["configurations"] if item["name"] == "UnreferencedStage20Variant1ConfigRecord")
+        record = next(
+            item for item in document["configurations"] if item["name"] == "UnreferencedStage20Variant1ConfigRecord"
+        )
         self.assertEqual([], domains.state_errors(ROOT, document, self.baseline))
         record["fields"]["state_offset"] += 2
-        self.assertTrue(any("no selected initial reader" in error for error in domains.state_errors(ROOT, document, self.baseline)))
+        self.assertTrue(
+            any("no selected initial reader" in error for error in domains.state_errors(ROOT, document, self.baseline))
+        )
 
     def test_changed_reader_initial_assignment_and_unknown_process_fail_closed(self):
         for path, old, new in (
-            ("src/stages/stage_process_dispatch.s", "move.w  (StageStateOffset).w,d0", "move.w  (StageTableIndex).w,d0"),
+            (
+                "src/stages/stage_process_dispatch.s",
+                "move.w  (StageStateOffset).w,d0",
+                "move.w  (StageTableIndex).w,d0",
+            ),
             ("src/stages/object_loading.s", "clr.w   (StageProcessTableOffset).w", "clr.w   (StageStateOffset).w"),
             ("src/stages/stage_process_dispatch.s", "dc.l    Stage_DispatchEarlyStageState", "dc.l    UnknownProcess"),
-            ("src/stages/configuration_records.s", "move.w  (a0)+,(StageStateOffset).w", "move.w  (a0),(StageStateOffset).w"),
-            ("src/stages/configuration.s", "                move.w  #4,(StageProcessTableOffset).w",
-             "                bra.s   UnknownPath\n                move.w  #4,(StageProcessTableOffset).w"),
+            (
+                "src/stages/configuration_records.s",
+                "move.w  (a0)+,(StageStateOffset).w",
+                "move.w  (a0),(StageStateOffset).w",
+            ),
+            (
+                "src/stages/configuration.s",
+                "                move.w  #4,(StageProcessTableOffset).w",
+                "                bra.s   UnknownPath\n                move.w  #4,(StageProcessTableOffset).w",
+            ),
         ):
             with self.subTest(path=path, old=old), tempfile.TemporaryDirectory() as directory:
                 tree = Path(directory)
@@ -104,9 +123,10 @@ class PaletteEffectDomainTests(unittest.TestCase):
         cls.baseline = model.export_document(ROOT, "jp")
 
     def test_direct_palette_tables_define_offsets_not_palette_colors(self):
-        self.assertEqual({"palette_primary": frozenset(range(0, 20, 2)),
-                          "palette_secondary": frozenset(range(0, 8, 2))},
-                         model.palette_effect_index_domains(ROOT))
+        self.assertEqual(
+            {"palette_primary": frozenset(range(0, 20, 2)), "palette_secondary": frozenset(range(0, 8, 2))},
+            model.palette_effect_index_domains(ROOT),
+        )
         for field, last in (("palette_primary", 18), ("palette_secondary", 6)):
             for value in (0, 2, last):
                 document = deepcopy(self.baseline)
@@ -122,30 +142,42 @@ class PaletteEffectDomainTests(unittest.TestCase):
 
     def test_width_valid_odd_and_out_of_table_offsets_are_rejected(self):
         for profile in ("jp", "eu"):
-            for field, values in (("palette_primary", (1, 3, 19, 20, 255)),
-                                  ("palette_secondary", (1, 3, 7, 8, 255))):
+            for field, values in (("palette_primary", (1, 3, 19, 20, 255)), ("palette_secondary", (1, 3, 7, 8, 255))):
                 for value in values:
                     with self.subTest(profile=profile, field=field, value=value):
                         document = model.export_document(ROOT, profile)
                         document["configurations"][0]["fields"][field] = value
                         with mock.patch.object(model, "rebuild_configuration_text") as rebuild:
-                            with self.assertRaisesRegex(ValueError, field + " is not a reader-owned aligned table offset"):
+                            with self.assertRaisesRegex(
+                                ValueError, field + " is not a reader-owned aligned table offset"
+                            ):
                                 model.apply_document(document, ROOT, profile, write=False)
                             rebuild.assert_not_called()
 
     def test_reader_writer_and_table_width_drift_fail_closed(self):
         mutations = (
             (model.PALETTE_EFFECT_SOURCE, "move.w  (PalettePrimaryIndex).w,d0", "move.w  (FrameCounter).w,d0"),
-            (model.PALETTE_EFFECT_SOURCE, "movea.w Palette_SecondaryEffectOffsets(pc,d0.w),a0",
-             "movea.l Palette_SecondaryEffectOffsets(pc,d0.w),a0"),
-            (model.PALETTE_EFFECT_SOURCE, "movea.w Palette_PrimaryEffectOffsets(pc,d0.w),a0",
-             "andi.w #$FE,d0\n                movea.w Palette_PrimaryEffectOffsets(pc,d0.w),a0"),
-            (model.PALETTE_EFFECT_SOURCE, "dc.w    Palette_EffectReturn-Palette_UpdateSharedAnimatedColors",
-             "dc.l    Palette_EffectReturn-Palette_UpdateSharedAnimatedColors"),
-            (model.CONFIG_SOURCE, "move.b  (a0)+,(PalettePrimaryIndex+1).w",
-             "move.w  (a0)+,(PalettePrimaryIndex+1).w"),
-            (model.CONFIG_SOURCE, "move.b  (a0)+,(PaletteSecondaryIndex+1).w",
-             "move.b  (a0)+,(PalettePrimaryIndex+1).w"),
+            (
+                model.PALETTE_EFFECT_SOURCE,
+                "movea.w Palette_SecondaryEffectOffsets(pc,d0.w),a0",
+                "movea.l Palette_SecondaryEffectOffsets(pc,d0.w),a0",
+            ),
+            (
+                model.PALETTE_EFFECT_SOURCE,
+                "movea.w Palette_PrimaryEffectOffsets(pc,d0.w),a0",
+                "andi.w #$FE,d0\n                movea.w Palette_PrimaryEffectOffsets(pc,d0.w),a0",
+            ),
+            (
+                model.PALETTE_EFFECT_SOURCE,
+                "dc.w    Palette_EffectReturn-Palette_UpdateSharedAnimatedColors",
+                "dc.l    Palette_EffectReturn-Palette_UpdateSharedAnimatedColors",
+            ),
+            (model.CONFIG_SOURCE, "move.b  (a0)+,(PalettePrimaryIndex+1).w", "move.w  (a0)+,(PalettePrimaryIndex+1).w"),
+            (
+                model.CONFIG_SOURCE,
+                "move.b  (a0)+,(PaletteSecondaryIndex+1).w",
+                "move.b  (a0)+,(PalettePrimaryIndex+1).w",
+            ),
         )
         for path, old, new in mutations:
             with self.subTest(path=path, old=old), tempfile.TemporaryDirectory() as directory:
@@ -170,8 +202,11 @@ class PaletteEffectDomainTests(unittest.TestCase):
                 shutil.copyfile(ROOT / relative, destination)
             path = tree / model.PALETTE_EFFECT_SOURCE
             text = path.read_text(encoding="utf-8")
-            text = text.replace("Palette_UpdateSharedAnimatedColors:",
-                                "                dc.w Palette_EffectReturn-Palette_UpdateSharedAnimatedColors\nPalette_UpdateSharedAnimatedColors:", 1)
+            text = text.replace(
+                "Palette_UpdateSharedAnimatedColors:",
+                "                dc.w Palette_EffectReturn-Palette_UpdateSharedAnimatedColors\nPalette_UpdateSharedAnimatedColors:",
+                1,
+            )
             path.write_text(text, encoding="utf-8")
             self.assertEqual(frozenset(range(0, 22, 2)), model.palette_effect_index_domains(tree)["palette_primary"])
 
@@ -179,13 +214,18 @@ class PaletteEffectDomainTests(unittest.TestCase):
         from authoring import level_studio, level_studio_state
 
         for profile in ("jp", "eu"):
-            studio = level_studio_state.open_stage(ROOT, 0, profile=profile, document=model.export_document(ROOT, profile))
+            studio = level_studio_state.open_stage(
+                ROOT, 0, profile=profile, document=model.export_document(ROOT, profile)
+            )
             before, scene, selection = studio.document(), studio.scene, studio.selection
             for field, value in (("palette_primary", 1), ("palette_secondary", 8)):
                 values = dict(studio.configuration.fields)
                 values["camera_x"] += 8
                 values[field] = value
-                with self.subTest(profile=profile, field=field), mock.patch.object(level_studio_state, "open_stage") as reopened:
+                with (
+                    self.subTest(profile=profile, field=field),
+                    mock.patch.object(level_studio_state, "open_stage") as reopened,
+                ):
                     with self.assertRaisesRegex(ValueError, field + ".*aligned table offset"):
                         studio.set_configuration_fields(values)
                     window = object.__new__(level_studio.Window)

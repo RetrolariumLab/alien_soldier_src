@@ -43,9 +43,7 @@ class ProjectPolicyTests(unittest.TestCase):
                 errors: list[str] = []
                 lint_project.check_text_hygiene(root, path, errors)
                 for fragment in wanted:
-                    self.assertTrue(
-                        any(fragment in error for error in errors), (name, errors)
-                    )
+                    self.assertTrue(any(fragment in error for error in errors), (name, errors))
                 if not wanted:
                     self.assertEqual([], errors, name)
 
@@ -55,16 +53,19 @@ class ProjectPolicyTests(unittest.TestCase):
             (root / "config").mkdir()
             (root / "docs").mkdir()
             (root / "config/rom_layout.json").write_text(
-                json.dumps({"modules": [
-                    {"start": "0x0000", "end": "0x0003"},
-                    {"start": "0x0004", "end": "0x0007"},
-                ]}),
+                json.dumps(
+                    {
+                        "modules": [
+                            {"start": "0x0000", "end": "0x0003"},
+                            {"start": "0x0004", "end": "0x0007"},
+                        ]
+                    }
+                ),
                 encoding="utf-8",
             )
             source_map = root / "docs/source_map.md"
             source_map.write_text(
-                "| `0x0000-0x0003` | first | 1 | static |\n"
-                "| `0x0004-0x0007` | second | 1 | static |\n",
+                "| `0x0000-0x0003` | first | 1 | static |\n| `0x0004-0x0007` | second | 1 | static |\n",
                 encoding="utf-8",
             )
             errors: list[str] = []
@@ -72,24 +73,17 @@ class ProjectPolicyTests(unittest.TestCase):
             self.assertEqual([], errors)
 
             source_map.write_text(
-                "| `0x0000-0x0002` | first | 2 | static |\n"
-                "| `0x0003-0x0007` | second | 1 | static |\n",
+                "| `0x0000-0x0002` | first | 2 | static |\n| `0x0003-0x0007` | second | 1 | static |\n",
                 encoding="utf-8",
             )
             lint_project.check_source_map(root, errors)
-            self.assertTrue(
-                any("files count 2, layout has 0" in error for error in errors)
-            )
-            self.assertTrue(
-                any("not owned by exactly one range" in error for error in errors)
-            )
+            self.assertTrue(any("files count 2, layout has 0" in error for error in errors))
+            self.assertTrue(any("not owned by exactly one range" in error for error in errors))
 
             (root / "config/rom_layout.json").write_text("{", encoding="utf-8")
             errors = []
             lint_project.check_source_map(root, errors)
-            self.assertTrue(
-                any("cannot compare with ROM layout" in error for error in errors)
-            )
+            self.assertTrue(any("cannot compare with ROM layout" in error for error in errors))
 
 
 if __name__ == "__main__":

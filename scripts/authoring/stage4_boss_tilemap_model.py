@@ -37,13 +37,10 @@ def build_sniper_honeyviper_name_tables(root: Path) -> BossStage4NameTables:
     if plane is None:
         raise ValueError("Stage 4 source secondary plane is unavailable")
     primary = tuple(
-        tuple(plane.name_word(column * 8, row * 8)
-              for column in range(PLANE_COLUMNS))
-        for row in range(PRIMARY_TRANSFER_ROWS))
-    secondary = [
-        [plane.name_word(column * 8, row * 8)
-         for column in range(PLANE_COLUMNS)]
-        for row in range(PLANE_ROWS)]
+        tuple(plane.name_word(column * 8, row * 8) for column in range(PLANE_COLUMNS))
+        for row in range(PRIMARY_TRANSFER_ROWS)
+    )
+    secondary = [[plane.name_word(column * 8, row * 8) for column in range(PLANE_COLUMNS)] for row in range(PLANE_ROWS)]
 
     data = read_once(root)["data"]
     source = data.get("SharedBossMappingData2020")
@@ -60,5 +57,4 @@ def build_sniper_honeyviper_name_tables(root: Path) -> BossStage4NameTables:
     if descriptor[:6] != bytes.fromhex("610020000204"):
         raise ValueError("unsupported Sniper Honeyviper indexed-column layout")
     secondary = apply_indexed_rows(secondary, ram, descriptor)
-    return BossStage4NameTables(
-        primary, secondary, len(mapping))
+    return BossStage4NameTables(primary, secondary, len(mapping))

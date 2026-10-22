@@ -147,7 +147,9 @@ class PSGReferenceTests(unittest.TestCase):
         self.assertEqual(64, len(contract["table_sha256"]))
         different_table = dict(stored)
         different_table[periods.TABLE] = (*stored[periods.TABLE][:-1], 1)
-        self.assertNotEqual(contract["table_sha256"], periods.period_contract(ROOT, different_table, bodies)["table_sha256"])
+        self.assertNotEqual(
+            contract["table_sha256"], periods.period_contract(ROOT, different_table, bodies)["table_sha256"]
+        )
         altered = dict(bodies)
         altered["Sound_DecodePSGSequenceNote"] = (*altered["Sound_DecodePSGSequenceNote"], " move.b #0,8(a5)")
         with self.assertRaisesRegex(ValueError, "proved instructions"):
@@ -155,40 +157,71 @@ class PSGReferenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "word tuple"):
             periods.period_contract(ROOT, {periods.TABLE: bytes(140)}, bodies)
         altered = dict(bodies)
-        altered["Sound_ResolveSFXHeader"] = tuple(line.replace("#$30,d6", "#$2C,d6") for line in bodies["Sound_ResolveSFXHeader"])
+        altered["Sound_ResolveSFXHeader"] = tuple(
+            line.replace("#$30,d6", "#$2C,d6") for line in bodies["Sound_ResolveSFXHeader"]
+        )
         with self.assertRaisesRegex(ValueError, "Sound_ResolveSFXHeader"):
             periods.period_contract(ROOT, stored, altered)
 
     def test_outside_context_is_bound_to_actual_source_contract_not_only_its_offset(self):
         header, body = sfx(bytes.fromhex("C701 F2"))
-        first = periods.analyse_payload("sfx", header, body, 70, (periods.TABLE, 70, "table-a", "reader-a"))[0]["outside"]
-        other = periods.analyse_payload("sfx", header, body, 70, (periods.TABLE, 70, "table-b", "reader-a"))[0]["outside"]
+        first = periods.analyse_payload("sfx", header, body, 70, (periods.TABLE, 70, "table-a", "reader-a"))[0][
+            "outside"
+        ]
+        other = periods.analyse_payload("sfx", header, body, 70, (periods.TABLE, 70, "table-b", "reader-a"))[0][
+            "outside"
+        ]
         self.assertTrue(first)
         self.assertFalse(first & other)
 
 
 class SequencePeriodIntegrationTests(unittest.TestCase):
     def document(self, header, body):
-        instructions = [{**item, "data": list(body[item["offset"]:item["offset"] + item["size"]])}
-                        for item in header["sequence"]["instructions"]]
+        instructions = [
+            {**item, "data": list(body[item["offset"] : item["offset"] + item["size"]])}
+            for item in header["sequence"]["instructions"]
+        ]
         sequence = header["sequence"]
-        record = {"name": header["label"], "family": "sfx", "path": "fixture.bin", "storage": "binary",
-                  "capacity": len(body), "header_byte_count": header["header_byte_count"],
-                  "instrument_offset": header["instrument_offset"], "entry_offsets": sequence["entry_offsets"],
-                  "instruction_count": sequence["instruction_count"], "reachable_byte_count": sequence["reachable_byte_count"],
-                  "instructions": instructions}
-        return {"schema_version": 1, "profile": "jp", "format": FORMAT, "payload_count": 1,
-                "instruction_count": sequence["instruction_count"], "reachable_byte_count": sequence["reachable_byte_count"],
-                "payloads": [record]}
+        record = {
+            "name": header["label"],
+            "family": "sfx",
+            "path": "fixture.bin",
+            "storage": "binary",
+            "capacity": len(body),
+            "header_byte_count": header["header_byte_count"],
+            "instrument_offset": header["instrument_offset"],
+            "entry_offsets": sequence["entry_offsets"],
+            "instruction_count": sequence["instruction_count"],
+            "reachable_byte_count": sequence["reachable_byte_count"],
+            "instructions": instructions,
+        }
+        return {
+            "schema_version": 1,
+            "profile": "jp",
+            "format": FORMAT,
+            "payload_count": 1,
+            "instruction_count": sequence["instruction_count"],
+            "reachable_byte_count": sequence["reachable_byte_count"],
+            "payloads": [record],
+        }
 
     def setup_source(self, original):
         header, body = original
         document = self.document(header, body)
         for name, result in (
-            ("export_document", document), ("labelled_blocks", ({header["label"]: body}, {})),
+            ("export_document", document),
+            ("labelled_blocks", ({header["label"]: body}, {})),
             ("envelope_selector_limits", {"pitch": 8, "psg_volume": 10}),
             ("music_sample_ids", frozenset(range(0x81, 0x97))),
-            ("period_contract", {"table": periods.TABLE, "word_count": 70, "table_sha256": "fixture-table", "reader_sha256": "fixture-readers"}),
+            (
+                "period_contract",
+                {
+                    "table": periods.TABLE,
+                    "word_count": 70,
+                    "table_sha256": "fixture-table",
+                    "reader_sha256": "fixture-readers",
+                },
+            ),
         ):
             patcher = mock.patch("authoring.sound_sequence_model." + name, return_value=result)
             patcher.start()

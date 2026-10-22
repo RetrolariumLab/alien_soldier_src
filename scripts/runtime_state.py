@@ -32,7 +32,7 @@ class Genstate:
                 break
             if offset + size > len(data):
                 raise ValueError(f"section {section_id:#x} exceeds {path}")
-            sections[section_id] = data[offset:offset + size]
+            sections[section_id] = data[offset : offset + size]
         return cls(frame=frame, rom_checksum=checksum, sections=sections)
 
     def m68k_u8(self, address: int) -> int:

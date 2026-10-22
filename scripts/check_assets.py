@@ -20,7 +20,9 @@ def main() -> int:
     parser.add_argument("--manifest", default="assets/manifest.json")
     parser.add_argument("--asset-dir", default="data")
     parser.add_argument(
-        "--preserve-manifest", action="append", default=[],
+        "--preserve-manifest",
+        action="append",
+        default=[],
         help="Additional manifest whose paths are allowed during stale-file checks",
     )
     args = parser.parse_args()
@@ -40,13 +42,8 @@ def main() -> int:
     problems: list[str] = []
     expected_paths = {Path(asset["path"]) for asset in assets}
     for preserve_manifest in args.preserve_manifest:
-        preserve_document = json.loads(
-            Path(preserve_manifest).read_text(encoding="utf-8")
-        )
-        expected_paths.update(
-            Path(asset["path"])
-            for asset in preserve_document.get("assets", [])
-        )
+        preserve_document = json.loads(Path(preserve_manifest).read_text(encoding="utf-8"))
+        expected_paths.update(Path(asset["path"]) for asset in preserve_document.get("assets", []))
     managed_regions = {asset["region"] for asset in assets}
     for asset in assets:
         path = asset_dir / asset["path"]

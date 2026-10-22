@@ -45,9 +45,12 @@ class ParsedSourceOperationTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix="owner-", dir=base)
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.source = self.write("src/first.s", b'Bytes: dc.b $01,-$1,3\n'
+        self.source = self.write(
+            "src/first.s",
+            b"Bytes: dc.b $01,-$1,3\n"
             b'Words: dc.w $1234,-2\nBlob: binclude "data/blob.bin"\n'
-            b'Unsupported: dc.b symbol\nMissing: binclude "data/absent.bin"\n')
+            b'Unsupported: dc.b symbol\nMissing: binclude "data/absent.bin"\n',
+        )
         self.payload = self.write("data/blob.bin", b"\x12\x34\x56")
         self.write("src/nested/last.s", b"Bytes: dc.b 9\nCode: move.w d0,d1\n")
         (self.root / "src/empty").mkdir()
@@ -99,6 +102,7 @@ class ParsedSourceOperationTests(unittest.TestCase):
         @model.with_parsed_operation
         def refuse(root, profile):
             raise TypeError("original profile refusal")
+
         with mock.patch.object(model.guarded_inventory, "capture", wraps=model.guarded_inventory.capture) as capture:
             with model.parsed_operation(object()):
                 pass
@@ -180,8 +184,10 @@ class ParsedSourceOperationTests(unittest.TestCase):
     def test_outside_include_falls_back_without_reusing_its_bytes(self):
         outside = self.write("external/blob.bin", b"one")
         self.write("src/external.s", b'Outside: binclude "external/blob.bin"\n')
-        with model.parsed_operation(self.root), mock.patch.object(
-                model, "_parse_labelled_blocks", wraps=model._parse_labelled_blocks) as parse:
+        with (
+            model.parsed_operation(self.root),
+            mock.patch.object(model, "_parse_labelled_blocks", wraps=model._parse_labelled_blocks) as parse,
+        ):
             first = model.labelled_blocks(self.root)
             outside.write_bytes(b"two")
             second = model.labelled_blocks(self.root)
@@ -200,12 +206,14 @@ class ParsedSourceOperationTests(unittest.TestCase):
 
     def test_bytes_used_for_parse_must_match_original_capture(self):
         actual, calls = model.guarded_inventory.capture, []
+
         def mutate_after_capture(owner, **kwargs):
             record = actual(owner, **kwargs)
             calls.append(owner)
             if owner == self.root / "data":
                 self.change_same_size(self.payload)
             return record
+
         with mock.patch.object(model.guarded_inventory, "capture", side_effect=mutate_after_capture):
             with self.assertRaises(ValueError):
                 with model.parsed_operation(self.root):
@@ -233,18 +241,20 @@ class ParsedSourceOperationTests(unittest.TestCase):
             if callback:
                 callback()
             return result
+
         self.assertEqual(operation(self.root), operation(root=self.root))
         with self.assertRaisesRegex(ValueError, "raw file changed"):
             operation(self.root, lambda: self.change_same_size(self.payload))
         self.assertIsNone(model._PARSED_OPERATION.get())
 
-
     def test_shared_corpus_preserves_old_index_wire_newlines_and_duplicate_rules(self):
-        text = ('Duplicate: binclude "data/blob.bin"\n'
-                'Duplicate: binclude "data/other.bin"\n'
-                'Separate:\n    binclude "data/blob.bin"\n'
-                'BeforeVT: dc.b 1\vSplitOnly: dc.b 2\n'
-                'BeforeUnicode: dc.b 3\u2028UnicodeSplitOnly: dc.b 4\n')
+        text = (
+            'Duplicate: binclude "data/blob.bin"\n'
+            'Duplicate: binclude "data/other.bin"\n'
+            'Separate:\n    binclude "data/blob.bin"\n'
+            "BeforeVT: dc.b 1\vSplitOnly: dc.b 2\n"
+            "BeforeUnicode: dc.b 3\u2028UnicodeSplitOnly: dc.b 4\n"
+        )
         self.write("data/other.bin", b"other")
         self.write("src/nested/last.s", b'Duplicate: binclude "data/other.bin"\n')
         for newline in ("\n", "\r\n", "\r"):
@@ -253,11 +263,9 @@ class ParsedSourceOperationTests(unittest.TestCase):
                 with self.subTest(newline=newline, root=root):
                     expected = legacy_source_indices(root)
                     with model.parsed_operation(root):
-                        actual = (graphics.source_paths(root), graphics.source_owners(root),
-                                  sprites.source_index(root))
+                        actual = (graphics.source_paths(root), graphics.source_owners(root), sprites.source_index(root))
                         self.assertEqual(expected, actual)
-                        self.assertEqual([list(item) for item in expected[:2]],
-                                         [list(item) for item in actual[:2]])
+                        self.assertEqual([list(item) for item in expected[:2]], [list(item) for item in actual[:2]])
                         self.assertEqual(list(expected[2][0]), list(actual[2][0]))
                         self.assertEqual(list(expected[2][1]), list(actual[2][1]))
                         self.assertEqual("data/other.bin", actual[0]["Duplicate"])
@@ -272,15 +280,20 @@ class ParsedSourceOperationTests(unittest.TestCase):
     def test_all_consumers_read_one_original_corpus_and_return_mutable_copies_only(self):
         actual_bytes, actual_open = model._ParsedSourceOperation._bytes, Path.open
         reads, opened = [], []
+
         def corpus_read(operation, path):
             reads.append(path)
             return actual_bytes(operation, path)
+
         def physical_open(path, *args, **kwargs):
             opened.append(path)
             return actual_open(path, *args, **kwargs)
+
         sources = sorted((self.root / "src").rglob("*.s"))
-        with mock.patch.object(model._ParsedSourceOperation, "_bytes", corpus_read), \
-                mock.patch.object(Path, "open", physical_open):
+        with (
+            mock.patch.object(model._ParsedSourceOperation, "_bytes", corpus_read),
+            mock.patch.object(Path, "open", physical_open),
+        ):
             with model.parsed_operation(self.root):
                 text = tuple(model.source_texts(self.root))
                 graphics.source_paths(self.root)

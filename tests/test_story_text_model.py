@@ -25,11 +25,13 @@ class StoryTextTests(unittest.TestCase):
         self.assertEqual((99, 123), (jp["row_count"], eu["row_count"]))
         for document in (jp, eu):
             self.assertEqual(34, document["row_bytes"])
-            self.assertTrue(all(
-                len(row[field]) == 34 and row[field][-1] == 0xFF
-                for row in document["rows"]
-                for field in ("primary", "accent")
-            ))
+            self.assertTrue(
+                all(
+                    len(row[field]) == 34 and row[field][-1] == 0xFF
+                    for row in document["rows"]
+                    for field in ("primary", "accent")
+                )
+            )
 
     def test_both_profiles_have_a_zero_edit_round_trip(self) -> None:
         self.assertEqual([], round_trip_errors(ROOT, "jp"))
@@ -51,63 +53,46 @@ class StoryTextTests(unittest.TestCase):
 
         document = copy.deepcopy(baseline)
         document["rows"][0]["primary"].pop()
-        self.assertTrue(any(
-            "not 34 bytes" in error
-            for error in document_errors(document, ROOT, "eu")
-        ))
+        self.assertTrue(any("not 34 bytes" in error for error in document_errors(document, ROOT, "eu")))
 
         document = copy.deepcopy(baseline)
         document["rows"][0]["primary"][-1] = 0
-        self.assertTrue(any(
-            "does not end in $FF" in error
-            for error in document_errors(document, ROOT, "eu")
-        ))
+        self.assertTrue(any("does not end in $FF" in error for error in document_errors(document, ROOT, "eu")))
 
         document = copy.deepcopy(baseline)
         document["rows"][0]["accent"][0] = 256
-        self.assertTrue(any(
-            "is not unsigned" in error
-            for error in document_errors(document, ROOT, "eu")
-        ))
+        self.assertTrue(any("is not unsigned" in error for error in document_errors(document, ROOT, "eu")))
 
     def test_primary_cannot_hide_an_early_row_terminator(self) -> None:
         document = export_document(ROOT, "jp")
         document["rows"][0]["primary"][0] = 0xFF
-        self.assertTrue(any(
-            "contains an early $FF" in error
-            for error in document_errors(document, ROOT, "jp")
-        ))
+        self.assertTrue(any("contains an early $FF" in error for error in document_errors(document, ROOT, "jp")))
 
     def test_accent_run_boundaries_and_shared_font_capacity_are_protected(self) -> None:
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
                 baseline = export_document(ROOT, profile)
-                row = next(item for item in baseline["rows"]
-                           if 0xFF in item["accent"][:-1])
+                row = next(item for item in baseline["rows"] if 0xFF in item["accent"][:-1])
                 boundary = row["accent"].index(0xFF)
                 document = copy.deepcopy(baseline)
                 document["rows"][row["index"]]["accent"][boundary] = 0
-                self.assertTrue(any(
-                    "changes fixed $FF boundaries" in error
-                    for error in document_errors(document, ROOT, profile)))
+                self.assertTrue(
+                    any("changes fixed $FF boundaries" in error for error in document_errors(document, ROOT, profile))
+                )
 
                 for field in ("primary", "accent"):
                     document = copy.deepcopy(baseline)
                     document["rows"][0][field][0] = 228
-                    self.assertTrue(any(
-                        "exceeds the shared font" in error
-                        for error in document_errors(document, ROOT, profile)))
+                    self.assertTrue(
+                        any("exceeds the shared font" in error for error in document_errors(document, ROOT, profile))
+                    )
 
         eu = export_document(ROOT, "eu")
-        two_run = next(item for item in eu["rows"]
-                       if item["accent"][:-1].count(0xFF) == 2)
-        second_boundary = [offset for offset, value in
-                           enumerate(two_run["accent"][:-1]) if value == 0xFF][1]
+        two_run = next(item for item in eu["rows"] if item["accent"][:-1].count(0xFF) == 2)
+        second_boundary = [offset for offset, value in enumerate(two_run["accent"][:-1]) if value == 0xFF][1]
         document = copy.deepcopy(eu)
         document["rows"][two_run["index"]]["accent"][second_boundary] = 0
-        self.assertTrue(any(
-            "changes fixed $FF boundaries" in error
-            for error in document_errors(document, ROOT, "eu")))
+        self.assertTrue(any("changes fixed $FF boundaries" in error for error in document_errors(document, ROOT, "eu")))
 
 
 if __name__ == "__main__":

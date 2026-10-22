@@ -50,11 +50,7 @@ def resting_targets(animation_document: dict) -> dict[str, str]:
 
 
 def mapping_names(mapping_document: dict) -> set[str]:
-    return {
-        mapping["label"]
-        for block in mapping_document["blocks"]
-        for mapping in block["mappings"]
-    }
+    return {mapping["label"] for block in mapping_document["blocks"] for mapping in block["mappings"]}
 
 
 def catalogue(
@@ -63,10 +59,7 @@ def catalogue(
     animation_document: dict,
 ) -> list[dict]:
     """Return every fixed placement with its statically proved preview status."""
-    handlers = {
-        int(offset, 16): name
-        for offset, name in level_document["object_handlers"].items()
-    }
+    handlers = {int(offset, 16): name for offset, name in level_document["object_handlers"].items()}
     stages = spawn_stages(level_document)
     mappings = mapping_names(mapping_document)
     animation_targets = resting_targets(animation_document)
@@ -78,20 +71,22 @@ def catalogue(
             # The exact handler-to-resting-symbol chain remains code-owned.
             # These fields are filled by render_preview from the staged tree;
             # the document inventories here only prove the available targets.
-            records.append({
-                "id": "%s:%d" % (spawn["name"], index),
-                "spawn_list": spawn["name"],
-                "placement_index": index,
-                "stage_indices": stage_indices,
-                "sample_stage": stage_indices[0] if stage_indices else None,
-                "handler": handler,
-                "object_type": entry["object_type"],
-                "known_mapping_count": len(mappings),
-                "known_animation_count": len(animation_targets),
-                "status": "previewable" if handler and stage_indices else (
-                    "no-stage-binding" if not stage_indices else "no-handler"
-                ),
-            })
+            records.append(
+                {
+                    "id": "%s:%d" % (spawn["name"], index),
+                    "spawn_list": spawn["name"],
+                    "placement_index": index,
+                    "stage_indices": stage_indices,
+                    "sample_stage": stage_indices[0] if stage_indices else None,
+                    "handler": handler,
+                    "object_type": entry["object_type"],
+                    "known_mapping_count": len(mappings),
+                    "known_animation_count": len(animation_targets),
+                    "status": "previewable"
+                    if handler and stage_indices
+                    else ("no-stage-binding" if not stage_indices else "no-handler"),
+                }
+            )
     return records
 
 
@@ -106,15 +101,18 @@ def render_preview(root: Path, profile: str, record: dict):
         raise ValueError("gallery placement is outside its staged spawn list")
     placement = studio.placements[index]
     library = sprite_library(root)
-    symbol, mapping = resting_mapping(
-        library, placement.handler, placement.entry.parameter, stage_index)
+    symbol, mapping = resting_mapping(library, placement.handler, placement.entry.parameter, stage_index)
     sprite = placement_sprite(studio, library, placement)
     if sprite is None:
         attribute, how = object_attribute(
-            library, placement.handler, studio.scene.object_attribute,
+            library,
+            placement.handler,
+            studio.scene.object_attribute,
             stage_attributes=studio.scene.object_attributes,
             priority=studio.scene.configuration.sprite_priority,
-            parameter=placement.entry.parameter, stage_index=stage_index)
+            parameter=placement.entry.parameter,
+            stage_index=stage_index,
+        )
         reason = "no proved resting mapping" if mapping is None else "no proved tile base"
         return {
             "pixels": None,
@@ -126,10 +124,14 @@ def render_preview(root: Path, profile: str, record: dict):
         }
     pixels, _left, _top = sprite
     attribute, how = object_attribute(
-        library, placement.handler, studio.scene.object_attribute,
+        library,
+        placement.handler,
+        studio.scene.object_attribute,
         stage_attributes=studio.scene.object_attributes,
         priority=studio.scene.configuration.sprite_priority,
-        parameter=placement.entry.parameter, stage_index=stage_index)
+        parameter=placement.entry.parameter,
+        stage_index=stage_index,
+    )
     return {
         "pixels": pixels,
         "handler": placement.handler,
@@ -182,11 +184,7 @@ def stage_preview(
 def survey(records: list[dict]) -> dict[str, int]:
     return {
         "placements": len(records),
-        "previewable_candidates": sum(
-            record["status"] == "previewable" for record in records
-        ),
-        "without_stage": sum(
-            record["status"] == "no-stage-binding" for record in records
-        ),
+        "previewable_candidates": sum(record["status"] == "previewable" for record in records),
+        "without_stage": sum(record["status"] == "no-stage-binding" for record in records),
         "without_handler": sum(record["status"] == "no-handler" for record in records),
     }

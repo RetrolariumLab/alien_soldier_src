@@ -28,31 +28,47 @@ class TileWorkspaceTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.paths = {"FixtureLZSS": "lzss.bin", "FixtureTile": "tile.bin",
-                      "Credits_SegaMappingData": "mapping.bin"}
-        originals = {"FixtureLZSS": encode_lzss(bytes(32)),
-                     "FixtureTile": marker_fixture(),
-                     "Credits_SegaMappingData": encode_lzss(bytes(408))}
+        self.paths = {"FixtureLZSS": "lzss.bin", "FixtureTile": "tile.bin", "Credits_SegaMappingData": "mapping.bin"}
+        originals = {
+            "FixtureLZSS": encode_lzss(bytes(32)),
+            "FixtureTile": marker_fixture(),
+            "Credits_SegaMappingData": encode_lzss(bytes(408)),
+        }
         for name, path in self.paths.items():
             (self.root / path).write_bytes(originals[name])
         stack = ExitStack()
         self.addCleanup(stack.close)
         stack.enter_context(mock.patch.object(model, "source_paths", return_value=self.paths))
         stack.enter_context(mock.patch.object(model, "source_owners", return_value={}))
-        stack.enter_context(mock.patch.object(model, "vram_sources", side_effect=
-            lambda _root, command_ids=(7,): {"FixtureTile"} if command_ids == (2, 3)
-            else {"FixtureLZSS", "Credits_SegaMappingData"}))
-        stack.enter_context(mock.patch.object(model, "labelled_blocks", side_effect=
-            lambda root: ({name: (root / path).read_bytes()
-                           for name, path in self.paths.items()}, {})))
+        stack.enter_context(
+            mock.patch.object(
+                model,
+                "vram_sources",
+                side_effect=lambda _root, command_ids=(7,): (
+                    {"FixtureTile"} if command_ids == (2, 3) else {"FixtureLZSS", "Credits_SegaMappingData"}
+                ),
+            )
+        )
+        stack.enter_context(
+            mock.patch.object(
+                model,
+                "labelled_blocks",
+                side_effect=lambda root: ({name: (root / path).read_bytes() for name, path in self.paths.items()}, {}),
+            )
+        )
 
     def legacy(self, profile):
         baseline = model.export_document(self.root, profile)
         records = [deepcopy(record) for record in baseline["payloads"] if record["codec"] == "lzss"]
         for record in records:
             del record["codec"]
-        result = {**baseline, "schema_version": 1, "format": model.LEGACY_FORMAT,
-                  "payloads": records, "payload_count": len(records)}
+        result = {
+            **baseline,
+            "schema_version": 1,
+            "format": model.LEGACY_FORMAT,
+            "payloads": records,
+            "payload_count": len(records),
+        }
         for field in ("tile_count", "decoded_byte_count", "compressed_capacity"):
             result[field] = sum(record[field] for record in records)
         return result
@@ -79,8 +95,10 @@ class TileWorkspaceTests(unittest.TestCase):
                 self.assertEqual(pack_tile([7] + [4] * 7 + [7] * 56), decode_tiles(body))
                 self.assertEqual(before_lzss, (self.root / "lzss.bin").read_bytes())
                 reopened = model.export_document(self.root, profile)
-                self.assertEqual(record["blocks"], next(item for item in reopened["payloads"]
-                                                       if item["codec"] == "tile-codec")["blocks"])
+                self.assertEqual(
+                    record["blocks"],
+                    next(item for item in reopened["payloads"] if item["codec"] == "tile-codec")["blocks"],
+                )
 
     def test_unfitting_edit_is_rejected_before_any_slot_is_written(self):
         document = model.export_document(self.root, "jp")
@@ -101,8 +119,12 @@ class TileWorkspaceTests(unittest.TestCase):
                 self.assertEqual(before, document)
                 self.assertEqual(2, migrated["schema_version"])
                 self.assertEqual(2, migrated["payload_count"])
-                self.assertEqual("1" * 64, next(record for record in migrated["payloads"]
-                                               if record["codec"] == "lzss")["blocks"][0]["tiles"][0])
+                self.assertEqual(
+                    "1" * 64,
+                    next(record for record in migrated["payloads"] if record["codec"] == "lzss")["blocks"][0]["tiles"][
+                        0
+                    ],
+                )
                 model.validate_document(migrated, self.root, profile)
                 path = self.root / "legacy.json"
                 path.write_text(json.dumps(document), encoding="utf-8")
@@ -128,11 +150,21 @@ class TileWorkspaceTests(unittest.TestCase):
                     model.upgrade_legacy_document(document, self.root, "jp")
 
     def test_nonforcing_initialization_persists_migration_without_losing_edits(self):
-        manifest = {"workspace": "content/workspace", "workspace_document": "workspace.json",
-                    "profile_records": {"jp": {"status": "supported", "reference_rom": {
-                        "size": 8, "sha1": "1" * 40, "sha256": "2" * 64}}},
-                    "artifacts": [{"id": "compressed_tile_art", "kind": "compressed_tile_document",
-                                   "profiles": ["jp"], "workspace": "graphics/compressed.json"}]}
+        manifest = {
+            "workspace": "content/workspace",
+            "workspace_document": "workspace.json",
+            "profile_records": {
+                "jp": {"status": "supported", "reference_rom": {"size": 8, "sha1": "1" * 40, "sha256": "2" * 64}}
+            },
+            "artifacts": [
+                {
+                    "id": "compressed_tile_art",
+                    "kind": "compressed_tile_document",
+                    "profiles": ["jp"],
+                    "workspace": "graphics/compressed.json",
+                }
+            ],
+        }
         path = self.root / "content/workspace/jp/graphics/compressed.json"
         path.parent.mkdir(parents=True)
         document = self.legacy("jp")
@@ -141,8 +173,10 @@ class TileWorkspaceTests(unittest.TestCase):
         self.assertTrue(initialize(self.root, manifest, "jp"))
         migrated = model.load_document(path)
         self.assertEqual(2, migrated["schema_version"])
-        self.assertEqual("1" * 64, next(record for record in migrated["payloads"]
-                                       if record["codec"] == "lzss")["blocks"][0]["tiles"][0])
+        self.assertEqual(
+            "1" * 64,
+            next(record for record in migrated["payloads"] if record["codec"] == "lzss")["blocks"][0]["tiles"][0],
+        )
         previous = path.read_bytes()
         self.assertFalse(initialize(self.root, manifest, "jp"))
         self.assertEqual(previous, path.read_bytes())
@@ -157,14 +191,15 @@ class CartridgeStagingTests(unittest.TestCase):
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
                 document = model.export_document(ROOT, profile)
-                record = next(item for item in document["payloads"]
-                              if item["name"] == "SharedTitleAndOptionsType3DataA")
+                record = next(
+                    item for item in document["payloads"] if item["name"] == "SharedTitleAndOptionsType3DataA"
+                )
                 canonical = ROOT / record["path"]
                 original = canonical.read_bytes()
                 original_image = render(ROOT, profile, "title_background")
                 record["blocks"][0]["tiles"] = [
-                    "".join("%X" % (int(pixel, 16) ^ 1) for pixel in tile)
-                    for tile in record["blocks"][0]["tiles"]]
+                    "".join("%X" % (int(pixel, 16) ^ 1) for pixel in tile) for tile in record["blocks"][0]["tiles"]
+                ]
                 with tempfile.TemporaryDirectory(prefix="tilecodec-smoke-", dir=base) as directory:
                     tree = Path(directory) / profile / "tree"
                     stage_tree(ROOT, tree)
@@ -173,8 +208,9 @@ class CartridgeStagingTests(unittest.TestCase):
                     self.assertEqual(len(original), len(staged))
                     self.assertEqual(model.payload_plain(record), decode_tiles(staged))
                     edited_image = render(tree, profile, "title_background", config_root=ROOT)
-                    changed = sum(a != b for row_a, row_b in zip(original_image, edited_image)
-                                  for a, b in zip(row_a, row_b))
+                    changed = sum(
+                        a != b for row_a, row_b in zip(original_image, edited_image) for a, b in zip(row_a, row_b)
+                    )
                     self.assertGreater(changed, 0)
                     print("[OK] %s tile-codec staged title: %d changed RGB pixels" % (profile, changed))
                 self.assertEqual(original, canonical.read_bytes())

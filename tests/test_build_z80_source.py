@@ -1,4 +1,5 @@
 """Compile the recovered driver without a ROM, emulator, or extracted assets."""
+
 from __future__ import annotations
 
 import hashlib
@@ -31,11 +32,12 @@ class Z80SourceTests(unittest.TestCase):
     def test_source_reproduces_the_complete_independently_pinned_driver(self):
         body = self.build().read_bytes()
         self.assertEqual(3072, len(body))
-        self.assertEqual("42ed1d2c4133d88d36c4024ff535a710f064dcb5d791b892eb3a07f6ded6ef27",
-                         hashlib.sha256(body).hexdigest())
+        self.assertEqual(
+            "42ed1d2c4133d88d36c4024ff535a710f064dcb5d791b892eb3a07f6ded6ef27", hashlib.sha256(body).hexdigest()
+        )
         sources = "\n".join(path.read_text() for path in (self.root / "src/sound/z80").glob("*.asm"))
         self.assertNotIn("binclude", sources.lower())
-        self.assertNotIn('    jp 93', sources)
+        self.assertNotIn("    jp 93", sources)
 
     def test_source_instruction_edits_change_the_image_without_private_inputs(self):
         original = self.build().read_bytes()

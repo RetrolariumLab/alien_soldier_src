@@ -17,20 +17,12 @@ FUNCTION_END = re.compile(r"^; End of function\s+([A-Za-z_][A-Za-z0-9_]*)(?:\s|$
 
 def review_candidates(source: Path, audit: Path) -> tuple[list[str], list[str]]:
     records = json.loads(audit.read_text(encoding="utf-8"))["records"]
-    hypotheses = {
-        record["current_name"]
-        for record in records
-        if record.get("evidence") == "hypothesis"
-    }
+    hypotheses = {record["current_name"] for record in records if record.get("evidence") == "hypothesis"}
     selected: list[str] = []
     defined: set[str] = set()
     for module in source_modules(source):
         lines = module.read_text(encoding="utf-8").splitlines()
-        functions = {
-            match.group(1)
-            for line in lines
-            if (match := FUNCTION_END.match(line))
-        }
+        functions = {match.group(1) for line in lines if (match := FUNCTION_END.match(line))}
         for line in lines:
             match = LABEL.match(line)
             if not match or match.group(1) not in hypotheses:

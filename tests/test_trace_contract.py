@@ -11,9 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class TraceContractTests(unittest.TestCase):
     def test_breakpoint_trace_retains_emulator_termination_workaround(self) -> None:
         makefile = make_text(ROOT)
-        trace_recipe = makefile.split("# Binary trace CPU execution", 1)[0].rsplit(
-            ".PHONY: trace", 1
-        )[1]
+        trace_recipe = makefile.split("# Binary trace CPU execution", 1)[0].rsplit(".PHONY: trace", 1)[1]
 
         self.assertIn("-screenshot-interval 2147483647", trace_recipe)
         self.assertIn("-screenshot-dir build", trace_recipe)

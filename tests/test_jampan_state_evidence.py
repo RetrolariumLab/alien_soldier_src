@@ -12,13 +12,9 @@ class JampanStateEvidenceTests(unittest.TestCase):
     def test_three_transition_labels_have_distinct_evidence(self) -> None:
         records = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
-        source = (ROOT / "src/bosses/jampan_attacks.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/bosses/jampan_attacks.s").read_text(encoding="utf-8")
         cases = (
             (
                 "0x049AA2",

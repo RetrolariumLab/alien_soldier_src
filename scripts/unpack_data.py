@@ -30,8 +30,8 @@ def unpack_data(data):
     if len(data) < 3:
         return None, f"file too small ({len(data)} bytes)"
 
-    arr = array('B', data)
-    res = array('B')
+    arr = array("B", data)
+    res = array("B")
     idx = 2
     idx_res = 0
     size = arr[0] * 0x100 + arr[1]
@@ -104,7 +104,7 @@ def unpack_data(data):
                             res.append(s2)
                             idx_res += 2
                     else:  # Literal run
-                        cnt = (byte_read & 0x1F)
+                        cnt = byte_read & 0x1F
                         for _ in range(cnt + 1):
                             idx += 1
                             if idx >= len(arr):
@@ -129,7 +129,7 @@ def process_directory(dir_path, verbose=False):
     Process all .bin files in a directory.
     Returns (success_count, total_count, results_list)
     """
-    bin_files = list(dir_path.glob('*.bin'))
+    bin_files = list(dir_path.glob("*.bin"))
     if not bin_files:
         return 0, 0, []
 
@@ -137,7 +137,7 @@ def process_directory(dir_path, verbose=False):
     success = 0
 
     for bin_file in sorted(bin_files):
-        with open(bin_file, 'rb') as f:
+        with open(bin_file, "rb") as f:
             data = f.read()
 
         result, error = unpack_data(data)
@@ -146,35 +146,32 @@ def process_directory(dir_path, verbose=False):
             results.append((bin_file.name, None, len(data), error))
         else:
             ratio = len(result) / len(data) if len(data) > 0 else 0
-            results.append((bin_file.name, result, len(data), f'{ratio:.1f}x'))
+            results.append((bin_file.name, result, len(data), f"{ratio:.1f}x"))
             success += 1
 
     return success, len(bin_files), results
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Unpack LZSS-compressed data from extracted .bin files')
-    parser.add_argument('--data-dir', default='data',
-                        help='Data directory (default: data)')
-    parser.add_argument('--verbose', '-v', action='store_true',
-                        help='Show all files, not just successful ones')
+    parser = argparse.ArgumentParser(description="Unpack LZSS-compressed data from extracted .bin files")
+    parser.add_argument("--data-dir", default="data", help="Data directory (default: data)")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show all files, not just successful ones")
 
     args = parser.parse_args()
     data_dir = Path(args.data_dir)
 
     if not data_dir.exists():
-        print(f'Error: Data directory not found: {data_dir}')
+        print(f"Error: Data directory not found: {data_dir}")
         return 1
 
     # Find all subdirectories
-    subdirs = [d for d in data_dir.iterdir() if d.is_dir() and d.name != 'uncompressed']
+    subdirs = [d for d in data_dir.iterdir() if d.is_dir() and d.name != "uncompressed"]
 
     if not subdirs:
-        print(f'No subdirectories found in {data_dir}')
+        print(f"No subdirectories found in {data_dir}")
         return 0
 
-    print(f'Scanning {len(subdirs)} subdirectories in {data_dir}/\n')
+    print(f"Scanning {len(subdirs)} subdirectories in {data_dir}/\n")
 
     total_success = 0
     total_files = 0
@@ -187,37 +184,37 @@ def main():
         if total == 0:
             continue
 
-        print(f'{subdir.name}/: {success}/{total} files decompressed')
+        print(f"{subdir.name}/: {success}/{total} files decompressed")
 
         # Create uncompressed subfolder if we have successes
         if success > 0:
-            output_dir = subdir / 'uncompressed'
+            output_dir = subdir / "uncompressed"
             output_dir.mkdir(exist_ok=True)
 
             for name, result, orig_size, info in results:
                 if result is not None:
                     output_file = output_dir / name
-                    with open(output_file, 'wb') as f:
+                    with open(output_file, "wb") as f:
                         f.write(result)
                     if args.verbose:
-                        print(f'  {name}: {orig_size} -> {len(result)} bytes ({info})')
+                        print(f"  {name}: {orig_size} -> {len(result)} bytes ({info})")
 
-            print(f'  -> saved to {subdir.name}/uncompressed/')
+            print(f"  -> saved to {subdir.name}/uncompressed/")
 
         # Show failures in verbose mode
         if args.verbose:
             for name, result, orig_size, info in results:
                 if result is None:
-                    print(f'  {name}: SKIP ({info})')
+                    print(f"  {name}: SKIP ({info})")
 
         print()
 
     # Summary
-    print('=' * 50)
-    print(f'Total: {total_success}/{total_files} files decompressed')
+    print("=" * 50)
+    print(f"Total: {total_success}/{total_files} files decompressed")
 
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

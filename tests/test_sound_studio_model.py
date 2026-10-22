@@ -42,10 +42,8 @@ class SoundHeaderTests(unittest.TestCase):
 
     def test_variable_and_extended_commands_follow_the_runtime_readers(self) -> None:
         self.assertEqual(2, decode_instruction("x", bytes.fromhex("e400"), 0)["size"])
-        self.assertEqual(
-            6, decode_instruction("x", bytes.fromhex("e40102030405"), 0)["size"])
-        self.assertEqual(
-            6, decode_instruction("x", bytes.fromhex("ff0001020304"), 0)["size"])
+        self.assertEqual(6, decode_instruction("x", bytes.fromhex("e40102030405"), 0)["size"])
+        self.assertEqual(6, decode_instruction("x", bytes.fromhex("ff0001020304"), 0)["size"])
         with self.assertRaisesRegex(ValueError, "unknown extended"):
             decode_instruction("x", bytes.fromhex("ff05"), 0)
 
@@ -59,8 +57,7 @@ class SoundHeaderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "middle of instruction"):
             decode_reachable_sequence("bad", bytes.fromhex("e001f2"), [0, 1], 3)
         with self.assertRaisesRegex(ValueError, "enters its header"):
-            decode_reachable_sequence(
-                "bad", bytes.fromhex("0000f6fffc"), [2], 5, minimum_offset=2)
+            decode_reachable_sequence("bad", bytes.fromhex("0000f6fffc"), [2], 5, minimum_offset=2)
 
     def test_out_of_range_relative_pointer_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "outside"):
@@ -96,8 +93,11 @@ class ProjectSoundInventoryTests(unittest.TestCase):
     def test_european_profile_has_the_same_sound_payload_contract(self) -> None:
         eu = export_inventory(ROOT, "eu")
         for field in (
-            "bgm_request_count", "bgm_payload_count", "sfx_request_count",
-            "pcm_bank_count", "pcm_byte_count",
+            "bgm_request_count",
+            "bgm_payload_count",
+            "sfx_request_count",
+            "pcm_bank_count",
+            "pcm_byte_count",
         ):
             self.assertEqual(self.document[field], eu[field])
         self.assertEqual(self.document["bgm_payloads"], eu["bgm_payloads"])

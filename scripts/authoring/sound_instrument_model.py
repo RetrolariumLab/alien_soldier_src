@@ -48,7 +48,7 @@ def decode_instrument(index: int, body: bytes) -> dict[str, Any]:
         "algorithm_feedback": body[0],
     }
     for field in PARAMETER_FIELDS:
-        record[field] = list(body[cursor:cursor + 4])
+        record[field] = list(body[cursor : cursor + 4])
         cursor += 4
     return record
 
@@ -79,37 +79,32 @@ def _payload_records(root: Path, profile: str) -> list[dict[str, Any]]:
             overlaps = [
                 instruction["offset"]
                 for instruction in payload["sequence"]["instructions"]
-                if instruction["offset"] < end
-                and instruction["offset"] + instruction["size"] > start
+                if instruction["offset"] < end and instruction["offset"] + instruction["size"] > start
             ]
             if overlaps:
-                raise ValueError(
-                    "%s reachable sequence overlaps its instrument table at $%04X"
-                    % (name, overlaps[0])
-                )
+                raise ValueError("%s reachable sequence overlaps its instrument table at $%04X" % (name, overlaps[0]))
             path = includes.get(name, owners.get(name))
             if path is None:
                 raise ValueError("sound payload has no source owner: %s" % name)
-            records.append({
-                "name": name,
-                "family": family,
-                "path": path,
-                "storage": "binary" if name in includes else "source",
-                "capacity": len(body),
-                "instrument_offset": start,
-                "instrument_count": count,
-                "trailing_padding": list(body[end:]),
-                "instruments": [
-                    decode_instrument(
-                        index,
-                        body[
-                            start + index * FM_INSTRUMENT_BYTES:
-                            start + (index + 1) * FM_INSTRUMENT_BYTES
-                        ],
-                    )
-                    for index in range(count)
-                ],
-            })
+            records.append(
+                {
+                    "name": name,
+                    "family": family,
+                    "path": path,
+                    "storage": "binary" if name in includes else "source",
+                    "capacity": len(body),
+                    "instrument_offset": start,
+                    "instrument_count": count,
+                    "trailing_padding": list(body[end:]),
+                    "instruments": [
+                        decode_instrument(
+                            index,
+                            body[start + index * FM_INSTRUMENT_BYTES : start + (index + 1) * FM_INSTRUMENT_BYTES],
+                        )
+                        for index in range(count)
+                    ],
+                }
+            )
     return records
 
 
@@ -123,8 +118,7 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "format": FORMAT,
         "payload_count": len(payloads),
         "instrument_count": sum(item["instrument_count"] for item in payloads),
-        "parameter_byte_count": sum(
-            item["instrument_count"] * FM_INSTRUMENT_BYTES for item in payloads),
+        "parameter_byte_count": sum(item["instrument_count"] * FM_INSTRUMENT_BYTES for item in payloads),
         "padding_byte_count": sum(len(item["trailing_padding"]) for item in payloads),
         "payloads": payloads,
     }
@@ -158,19 +152,20 @@ def _record_bytes(record: dict[str, Any], original: dict[str, Any], body: bytes)
             raise ValueError("%s instrument %d changes identity" % (original["name"], index))
         algorithm = instrument.get("algorithm_feedback")
         if not isinstance(algorithm, int) or isinstance(algorithm, bool) or not 0 <= algorithm <= 0xFF:
-            raise ValueError("%s instrument %d has invalid algorithm/feedback" % (
-                original["name"], index))
+            raise ValueError("%s instrument %d has invalid algorithm/feedback" % (original["name"], index))
         for field in PARAMETER_FIELDS:
             values = instrument.get(field)
-            if not isinstance(values, list) or len(values) != 4 or any(
-                not isinstance(value, int) or isinstance(value, bool)
-                or not 0 <= value <= 0xFF for value in values
+            if (
+                not isinstance(values, list)
+                or len(values) != 4
+                or any(
+                    not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= 0xFF for value in values
+                )
             ):
-                raise ValueError("%s instrument %d has invalid %s" % (
-                    original["name"], index, field))
+                raise ValueError("%s instrument %d has invalid %s" % (original["name"], index, field))
         encoded = encode_instrument(instrument)
         offset = start + index * FM_INSTRUMENT_BYTES
-        result[offset:offset + FM_INSTRUMENT_BYTES] = encoded
+        result[offset : offset + FM_INSTRUMENT_BYTES] = encoded
     return bytes(result)
 
 
@@ -178,8 +173,13 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "payload_count", "instrument_count",
-        "parameter_byte_count", "padding_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "payload_count",
+        "instrument_count",
+        "parameter_byte_count",
+        "padding_byte_count",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -201,8 +201,13 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "family", "path", "storage", "capacity", "instrument_offset",
-            "instrument_count", "trailing_padding",
+            "family",
+            "path",
+            "storage",
+            "capacity",
+            "instrument_offset",
+            "instrument_count",
+            "trailing_padding",
         ):
             if record.get(field) != original[field]:
                 errors.append("%s: %s differs from the source-owned value" % (name, field))
@@ -220,7 +225,10 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     authority = validation_root or root
@@ -241,6 +249,7 @@ def apply_document(
         if write:
             path = root / record["path"]
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     for relative, replacements in sorted(source_changes.items()):
         path = root / relative
@@ -250,6 +259,7 @@ def apply_document(
         changed.append(relative)
         if write:
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, rebuilt)
     return sorted(changed)
 
@@ -283,9 +293,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s FM instruments: %d records, %d parameter bytes" % (
-                args.profile, document["instrument_count"],
-                document["parameter_byte_count"]))
+            print(
+                "[OK] %s FM instruments: %d records, %d parameter bytes"
+                % (args.profile, document["instrument_count"], document["parameter_byte_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

@@ -15,17 +15,27 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring import (  # noqa: E402
-    credits_text_model, frontend_text_model, glyph_source_list_model,
-    japanese_glyph_model, results_text_model, scripted_message_model,
-    stage_message_model, story_text_model,
+    credits_text_model,
+    frontend_text_model,
+    glyph_source_list_model,
+    japanese_glyph_model,
+    results_text_model,
+    scripted_message_model,
+    stage_message_model,
+    story_text_model,
 )
 from authoring.text_studio import Window  # noqa: E402
 
 
 MODELS = (
-    credits_text_model, frontend_text_model, glyph_source_list_model,
-    japanese_glyph_model, results_text_model, scripted_message_model,
-    stage_message_model, story_text_model,
+    credits_text_model,
+    frontend_text_model,
+    glyph_source_list_model,
+    japanese_glyph_model,
+    results_text_model,
+    scripted_message_model,
+    stage_message_model,
+    story_text_model,
 )
 NAMED = (
     (frontend_text_model, "strings"),
@@ -34,8 +44,14 @@ NAMED = (
     (stage_message_model, "streams"),
 )
 EDITABLE_KEYS = {
-    "glyphs", "upper_delay", "lower_delay", "upper_glyphs", "lower_glyphs",
-    "primary", "accent", "codes",
+    "glyphs",
+    "upper_delay",
+    "lower_delay",
+    "upper_glyphs",
+    "lower_glyphs",
+    "primary",
+    "accent",
+    "codes",
 }
 
 
@@ -132,17 +148,18 @@ class TextDocumentContractTests(unittest.TestCase):
     def test_save_keeps_dirty_edits_and_writes_nothing_for_invalid_metadata(self):
         baseline = self.source_baseline(credits_text_model)
         document = copy.deepcopy(baseline)
-        document["records"][0]["upper_count"] = float(
-            document["records"][0]["upper_count"])
+        document["records"][0]["upper_count"] = float(document["records"][0]["upper_count"])
         writer = mock.Mock()
         window = Window.__new__(Window)
         window.project, window.profile = ROOT, "jp"
-        window.context = {"credits_text_sequence": {
-            "document": document,
-            "validate": credits_text_model.validate_document,
-            "write": writer,
-            "path": ROOT / "unused-test-destination.json",
-        }}
+        window.context = {
+            "credits_text_sequence": {
+                "document": document,
+                "validate": credits_text_model.validate_document,
+                "write": writer,
+                "path": ROOT / "unused-test-destination.json",
+            }
+        }
         window.state = SimpleNamespace(dirty={"credits_text_sequence"})
         window.messagebox, window.status = mock.Mock(), mock.Mock()
         window.save()

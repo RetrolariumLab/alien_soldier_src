@@ -13,10 +13,7 @@ AUDIT = ROOT / "config/name_audit.json"
 class DistinctRamFieldEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        cls.records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
 
     def test_dormant_type_1c0_ram_ownership_stays_distinct(self) -> None:
         overlays = {
@@ -29,9 +26,7 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
         }
         ram = (ROOT / "src/ram_addrs.inc").read_text(encoding="utf-8")
         source = "\n".join(
-            (ROOT / f"src/bosses/entity_type_1c0_{module}.s").read_text(
-                encoding="utf-8"
-            )
+            (ROOT / f"src/bosses/entity_type_1c0_{module}.s").read_text(encoding="utf-8")
             for module in ("core", "attacks", "transition_and_defeat")
         )
         for structural, overlay in overlays.items():
@@ -58,12 +53,7 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
             "0xFFC7FD",
         ):
             with self.subTest(address=address):
-                self.assertFalse(
-                    any(
-                        "Sunset Sting" in basis
-                        for basis in self.records[address]["basis"]
-                    )
-                )
+                self.assertFalse(any("Sunset Sting" in basis for basis in self.records[address]["basis"]))
 
     def test_active_and_shadow_palette_roles_are_distinct(self) -> None:
         active = self.records["0xFFE300"]["basis"]
@@ -86,9 +76,7 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
         self.assertNotEqual(x_basis, y_basis)
         self.assertIn("X accumulator d5", x_basis)
         self.assertIn("Y accumulator d6", y_basis)
-        source = (ROOT / "src/weapons/special_firing_and_feedback.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/weapons/special_firing_and_feedback.s").read_text(encoding="utf-8")
         self.assertIn("add.w   (WeaponMenuSpawnXOffset).w,d5", source)
         self.assertIn("add.w   (WeaponMenuSpawnYOffset).w,d6", source)
 
@@ -106,9 +94,7 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
         self.assertIn("move.b  #$10,(VDPReg7Shadow+1).w", demo)
 
     def test_shared_pattern_rows_have_exact_physical_range_review(self) -> None:
-        reviews = json.loads(
-            (ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8")
-        )["reviews"]
+        reviews = json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
         basis = (
             "Many mutually exclusive scene and boss users overlap this range, so the "
             "physical row name does not claim one subsystem owner."
@@ -118,9 +104,7 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
             ["0xFFFF9400", "0xFFFF9420"],
             [member["address"] for member in review["members"]],
         )
-        source = (ROOT / "src/effects/transition_scroll.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/effects/transition_scroll.s").read_text(encoding="utf-8")
         self.assertIn("movea.w #(TransitionPatternRow0-M68K_RAM),a0", source)
         self.assertIn("movea.w #(TransitionPatternRow1-M68K_RAM),a1", source)
         self.assertIn("dbf     d7,Effect_ApplyTransitionMask_Loop", source)
@@ -128,22 +112,24 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
     def test_epsilon_tables_are_physical_overlays_not_independent_allocations(self) -> None:
         reviews = {
             item["basis"]: item
-            for item in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for item in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
         cases = (
             (
                 "The table is accessed from its base by indexed or sequential word operations; Results independently overlaps the same storage.",
-                ("0xFFFF946A", "0xFFFF946E"), "Epsilon1RowOffsetTable",
-                "SharedPatternStateLong3", "$FFFF9466",
+                ("0xFFFF946A", "0xFFFF946E"),
+                "Epsilon1RowOffsetTable",
+                "SharedPatternStateLong3",
+                "$FFFF9466",
             ),
             (
                 "This longword supplies the next four bytes of Epsilon1RingPhaseTable and is cleared with that table's first half.",
-                ("0xFFFF9452", "0xFFFF9456"), "Epsilon1RingPhaseTable",
-                "SharedPatternStateLong0", "$FFFF944E",
+                ("0xFFFF9452", "0xFFFF9456"),
+                "Epsilon1RingPhaseTable",
+                "SharedPatternStateLong0",
+                "$FFFF944E",
             ),
         )
         ram = (ROOT / "src/ram_addrs.inc").read_text(encoding="utf-8")
@@ -154,25 +140,15 @@ class DistinctRamFieldEvidenceTests(unittest.TestCase):
                     list(addresses),
                     [member["address"] for member in reviews[basis]["members"]],
                 )
-                self.assertRegex(
-                    ram, rf"(?m)^{re.escape(alias)}[ \t]+equ[ \t]+{re.escape(first)}$"
-                )
-                self.assertRegex(
-                    ram, rf"(?m)^{re.escape(first)}[ \t]+equ[ \t]+{re.escape(location)}(?:[ \t]|$)"
-                )
+                self.assertRegex(ram, rf"(?m)^{re.escape(alias)}[ \t]+equ[ \t]+{re.escape(first)}$")
+                self.assertRegex(ram, rf"(?m)^{re.escape(first)}[ \t]+equ[ \t]+{re.escape(location)}(?:[ \t]|$)")
                 for offset in ("", "+4", "+8"):
                     self.assertIn(f"clr.l   ({alias}{offset}).w", core)
                 for address in addresses:
                     self.assertIn(basis, self.records[address]["basis"])
-        scroll = (ROOT / "src/bosses/epsilon_1_shared_support.s").read_text(
-            encoding="utf-8"
-        )
-        projectiles = (ROOT / "src/projectiles/epsilon_1_projectiles.s").read_text(
-            encoding="utf-8"
-        )
-        results = (ROOT / "src/ui/results_scrolling.s").read_text(
-            encoding="utf-8"
-        )
+        scroll = (ROOT / "src/bosses/epsilon_1_shared_support.s").read_text(encoding="utf-8")
+        projectiles = (ROOT / "src/projectiles/epsilon_1_projectiles.s").read_text(encoding="utf-8")
+        results = (ROOT / "src/ui/results_scrolling.s").read_text(encoding="utf-8")
         self.assertIn("lea     (Epsilon1RowOffsetTable).w,a4", scroll)
         self.assertIn("add.w   (a4)+,d3", scroll)
         self.assertIn("lea     (Epsilon1RowOffsetTable).w,a1", projectiles)

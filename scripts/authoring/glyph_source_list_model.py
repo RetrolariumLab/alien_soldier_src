@@ -55,8 +55,7 @@ def words_to_bytes(words: tuple[int, ...]) -> bytes:
 def bytes_to_words(body: bytes) -> tuple[int, ...]:
     if len(body) % 2:
         raise ValueError("word-packed glyph list has an odd byte count")
-    return tuple(int.from_bytes(body[offset:offset + 2], "big")
-                 for offset in range(0, len(body), 2))
+    return tuple(int.from_bytes(body[offset : offset + 2], "big") for offset in range(0, len(body), 2))
 
 
 def parse_list(words: tuple[int, ...], name: str, glyph_limit: int) -> dict[str, Any]:
@@ -72,7 +71,7 @@ def parse_list(words: tuple[int, ...], name: str, glyph_limit: int) -> dict[str,
         "word_capacity": len(words),
         "encoded_byte_count": len(body),
         "glyph_count": len(glyphs),
-        "padding": list(body[end + 1:]),
+        "padding": list(body[end + 1 :]),
         "glyphs": glyphs,
     }
 
@@ -169,7 +168,7 @@ def rebuild_source(root: Path, source_path: str, payloads: dict[str, tuple[int, 
         cursor = 0
         for line_index, match in spans:
             count = len(match.group("body").split(","))
-            values = desired[cursor:cursor + count]
+            values = desired[cursor : cursor + count]
             if len(values) != count:
                 raise ValueError("%s source exceeds its fixed word slot" % name)
             body = rewrite_word_body(match.group("body"), values)
@@ -184,8 +183,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "font_path", "font_glyph_count",
-        "list_count", "glyph_count", "encoded_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "font_path",
+        "font_glyph_count",
+        "list_count",
+        "glyph_count",
+        "encoded_byte_count",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -206,8 +211,12 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "path", "storage", "word_capacity", "encoded_byte_count",
-            "glyph_count", "padding",
+            "path",
+            "storage",
+            "word_capacity",
+            "encoded_byte_count",
+            "glyph_count",
+            "padding",
         ):
             if not source_value_matches(record.get(field), original[field]):
                 errors.append("%s: %s differs" % (name, field))
@@ -216,8 +225,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             errors.append("%s: glyph capacity differs" % name)
             continue
         if any(
-            not isinstance(value, int) or isinstance(value, bool)
-            or not 0 <= value < baseline["font_glyph_count"]
+            not isinstance(value, int) or isinstance(value, bool) or not 0 <= value < baseline["font_glyph_count"]
             for value in glyphs
         ):
             errors.append("%s: invalid glyph index" % name)
@@ -254,6 +262,7 @@ def apply_document(
             path = root / relative
             rebuilt = rebuild_source(root, relative, payloads)
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, rebuilt)
     return sorted(changes)
 

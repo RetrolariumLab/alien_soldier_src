@@ -19,9 +19,7 @@ class DistinctEntrypointEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.audit = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
 
     def test_entry_and_loop_bases_do_not_conflate_work(self) -> None:
@@ -44,27 +42,19 @@ class DistinctEntrypointEvidenceTests(unittest.TestCase):
             "VBlank_InitStage10Effect_RefreshScrollAndBuffer",
             vblank["current_name"],
         )
-        self.assertEqual(
-            "VBlank_InitStage10Effect_UpdateRegisters", vblank["previous_name"]
-        )
+        self.assertEqual("VBlank_InitStage10Effect_UpdateRegisters", vblank["previous_name"])
         self.assertEqual("loc_17B6", vblank["legacy_name"])
 
     def test_clear_loops_have_different_scope_from_entrypoints(self) -> None:
-        oam = (ROOT / "src/system/memory_initialization.s").read_text(
-            encoding="utf-8"
-        )
-        oam = between(
-            oam, "Sprite_ClearOAMBuildState:", "; End of function Sprite_ClearOAMBuildState"
-        )
+        oam = (ROOT / "src/system/memory_initialization.s").read_text(encoding="utf-8")
+        oam = between(oam, "Sprite_ClearOAMBuildState:", "; End of function Sprite_ClearOAMBuildState")
         self.assertIn("lea     (SpriteOAMEntryCount).w,a0", oam)
         self.assertIn("move.w  #$1B,d1", oam)
         loop = oam.split("Sprite_ClearOAMBuildState_Loop:", 1)[1]
         self.assertEqual(4, loop.count("move.l  d0,(a0)+"))
         self.assertIn("dbf     d1,Sprite_ClearOAMBuildState_Loop", loop)
 
-        valkirie = (ROOT / "src/bosses/valkirie_rendering.s").read_text(
-            encoding="utf-8"
-        )
+        valkirie = (ROOT / "src/bosses/valkirie_rendering.s").read_text(encoding="utf-8")
         valkirie = between(
             valkirie,
             "Entity_InitValkirieAuxiliaryGroup:",
@@ -77,22 +67,16 @@ class DistinctEntrypointEvidenceTests(unittest.TestCase):
         self.assertIn("jsr     (Sprite_InitializeLinkedMetaspriteParts).l", loop)
 
     def test_vblank_prepares_buffers_and_hblank_consumes_them(self) -> None:
-        source = (ROOT / "src/rendering/vblank_effects.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/rendering/vblank_effects.s").read_text(encoding="utf-8")
         stage10 = between(
             source,
             "VBlank_InitStage10Effect:",
             "; End of function VBlank_InitStage10Effect",
         )
-        self.assertIn(
-            "bne.w   VBlank_InitStage10Effect_RefreshScrollAndBuffer", stage10
-        )
+        self.assertIn("bne.w   VBlank_InitStage10Effect_RefreshScrollAndBuffer", stage10)
         self.assertIn("(Stage10HBlankScrollData-M68K_RAM),a0", stage10)
         self.assertIn("(Stage10HBlankScrollData-M68K_RAM),a6", stage10)
-        hblank = between(
-            source, "HBlank_UpdateStage10Display:", "; End of function HBlank_UpdateStage10Display"
-        )
+        hblank = between(source, "HBlank_UpdateStage10Display:", "; End of function HBlank_UpdateStage10Display")
         self.assertIn("move.w  (a6)+,(VDP_DATA).l", hblank)
 
         cram_setup = between(
@@ -103,9 +87,7 @@ class DistinctEntrypointEvidenceTests(unittest.TestCase):
         self.assertIn("HBlank_WriteCRAMColor5_InstallList(pc),a0", cram_setup)
         self.assertIn("jsr     (LoadObjData).l", cram_setup)
         self.assertIn("(CRAMWriteEffectBuffer).w,a6", cram_setup)
-        cram_hblank = between(
-            source, "HBlank_WriteCRAMColor5:", "; End of function HBlank_WriteCRAMColor5"
-        )
+        cram_hblank = between(source, "HBlank_WriteCRAMColor5:", "; End of function HBlank_WriteCRAMColor5")
         self.assertIn("move.l  #$C00A0000,(VDP_CTRL).l", cram_hblank)
         self.assertIn("move.w  (a6)+,(VDP_DATA).l", cram_hblank)
         self.assertIn("rte", cram_hblank)

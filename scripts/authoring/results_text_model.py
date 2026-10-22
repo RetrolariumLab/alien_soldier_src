@@ -14,7 +14,10 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from authoring.glyph_source_list_model import (  # noqa: E402
-    bytes_to_words, rebuild_source, words_to_bytes)
+    bytes_to_words,
+    rebuild_source,
+    words_to_bytes,
+)
 from authoring.stage_tilemap_model import labelled_blocks, parsed_read_phase, with_parsed_operation  # noqa: E402
 from authoring.text_document_contract import source_value_matches  # noqa: E402
 
@@ -50,8 +53,7 @@ def source_contract(root: Path) -> None:
             raise ValueError("results detail reader/source owner changed: %s" % signature)
     if "Results_BuildSummaryRows:" not in source:
         raise ValueError("results summary row builder is missing")
-    builder = source.split("Results_BuildSummaryRows:", 1)[1].split(
-        "; End of function Results_BuildSummaryRows", 1)[0]
+    builder = source.split("Results_BuildSummaryRows:", 1)[1].split("; End of function Results_BuildSummaryRows", 1)[0]
     if builder.count("move.w  #$15,d7") != len(SUMMARY_LABELS):
         raise ValueError("results summary label copy width changed")
     for name, _terminal_storage in SUMMARY_LABELS:
@@ -59,11 +61,11 @@ def source_contract(root: Path) -> None:
             raise ValueError("results summary copy source changed: %s" % name)
         if ("lea     " + name + "(pc),a0") not in source:
             raise ValueError("results summary display reader changed: %s" % name)
-    if "jmp     Gfx_QueueLargeFontDMACommand81" not in (
-            root / "src/ui/results_screen.s").read_text(encoding="utf-8"):
+    if "jmp     Gfx_QueueLargeFontDMACommand81" not in (root / "src/ui/results_screen.s").read_text(encoding="utf-8"):
         raise ValueError("final results no longer queues the large font")
-    if "jmp     Gfx_QueueLargeFontDMACommand81" not in (
-            root / "src/ui/post_stage_results_flow.s").read_text(encoding="utf-8"):
+    if "jmp     Gfx_QueueLargeFontDMACommand81" not in (root / "src/ui/post_stage_results_flow.s").read_text(
+        encoding="utf-8"
+    ):
         raise ValueError("post-stage results no longer queue the large font")
     font_size = (root / FONT_ART).stat().st_size
     if not font_size or font_size % GLYPH_BYTES:
@@ -87,13 +89,15 @@ def summary_records(root: Path, maximum: int) -> list[dict[str, Any]]:
         glyphs = list(words_to_bytes(words[:11]))
         if any(value > maximum for value in glyphs):
             raise ValueError("results summary glyph exceeds loaded shared font: %s" % name)
-        records.append({
-            "name": name,
-            "path": SOURCE,
-            "word_capacity": expected,
-            "terminator_storage": terminal_storage,
-            "glyphs": glyphs,
-        })
+        records.append(
+            {
+                "name": name,
+                "path": SOURCE,
+                "word_capacity": expected,
+                "terminator_storage": terminal_storage,
+                "glyphs": glyphs,
+            }
+        )
     return records
 
 
@@ -104,8 +108,7 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
     body = (root / TABLE).read_bytes()
     if not body or len(body) % ROW_BYTES:
         raise ValueError("results detail table is not whole 22-byte rows")
-    rows = [body[offset:offset + ROW_BYTES]
-            for offset in range(0, len(body), ROW_BYTES)]
+    rows = [body[offset : offset + ROW_BYTES] for offset in range(0, len(body), ROW_BYTES)]
     if any(row[-1] != TERMINATOR for row in rows):
         raise ValueError("results detail row has no final $FF")
     maximum = (root / FONT_ART).stat().st_size // GLYPH_BYTES - 1
@@ -125,11 +128,10 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "summary_label_count": len(summaries),
         "summary_glyph_count": sum(len(item["glyphs"]) for item in summaries),
         "summary_encoded_byte_count": sum(
-            len(item["glyphs"]) + (1 if item["terminator_storage"] == "byte" else 2)
-            for item in summaries),
+            len(item["glyphs"]) + (1 if item["terminator_storage"] == "byte" else 2) for item in summaries
+        ),
         "rows": [
-            {"index": index, "glyphs": list(row[:-1]), "terminator": TERMINATOR}
-            for index, row in enumerate(rows)
+            {"index": index, "glyphs": list(row[:-1]), "terminator": TERMINATOR} for index, row in enumerate(rows)
         ],
         "summary_labels": summaries,
     }
@@ -139,8 +141,7 @@ def load_document(path: Path) -> dict[str, Any]:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise ValueError("cannot load results text document %s: %s" % (
-            path, error)) from error
+        raise ValueError("cannot load results text document %s: %s" % (path, error)) from error
     if not isinstance(document, dict):
         raise ValueError("results text document is not an object")
     return document
@@ -153,8 +154,7 @@ def atomic_write_json(path: Path, document: dict[str, Any]) -> None:
 
 
 def encoded(document: dict[str, Any]) -> bytes:
-    return b"".join(bytes(row["glyphs"] + [TERMINATOR])
-                    for row in document["rows"])
+    return b"".join(bytes(row["glyphs"] + [TERMINATOR]) for row in document["rows"])
 
 
 def encoded_summary_words(record: dict[str, Any]) -> tuple[int, ...]:
@@ -166,9 +166,18 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "path", "row_bytes",
-        "row_count", "glyph_count", "encoded_byte_count", "max_glyph_id",
-        "summary_label_count", "summary_glyph_count", "summary_encoded_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "path",
+        "row_bytes",
+        "row_count",
+        "glyph_count",
+        "encoded_byte_count",
+        "max_glyph_id",
+        "summary_label_count",
+        "summary_glyph_count",
+        "summary_encoded_byte_count",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -185,14 +194,12 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if not isinstance(glyphs, list) or len(glyphs) != ROW_GLYPHS:
             errors.append("results detail row %d capacity differs" % index)
             continue
-        if any(type(value) is not int or not 0 <= value <= baseline["max_glyph_id"]
-               for value in glyphs):
+        if any(type(value) is not int or not 0 <= value <= baseline["max_glyph_id"] for value in glyphs):
             errors.append("results detail row %d has an invalid glyph" % index)
     summaries = document.get("summary_labels")
     if not isinstance(summaries, list) or len(summaries) != len(SUMMARY_LABELS):
         return errors + ["results summary label inventory differs"]
-    for index, (record, original) in enumerate(zip(
-            summaries, baseline["summary_labels"])):
+    for index, (record, original) in enumerate(zip(summaries, baseline["summary_labels"])):
         if not isinstance(record, dict):
             errors.append("results summary label %d is not an object" % index)
             continue
@@ -202,8 +209,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         glyphs = record.get("glyphs")
         if not isinstance(glyphs, list) or len(glyphs) != 22:
             errors.append("results summary label %d capacity differs" % index)
-        elif any(type(value) is not int or not 0 <= value <= baseline["max_glyph_id"]
-                 for value in glyphs):
+        elif any(type(value) is not int or not 0 <= value <= baseline["max_glyph_id"] for value in glyphs):
             errors.append("results summary label %d has an invalid glyph" % index)
     return errors
 
@@ -214,8 +220,9 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
         raise ValueError("; ".join(errors))
 
 
-def apply_document(document: dict[str, Any], root: Path, profile: str,
-                   write: bool = True, validation_root: Path | None = None) -> list[str]:
+def apply_document(
+    document: dict[str, Any], root: Path, profile: str, write: bool = True, validation_root: Path | None = None
+) -> list[str]:
     validate_document(document, validation_root or root, profile)
     output = encoded(document)
     path = root / TABLE
@@ -223,11 +230,11 @@ def apply_document(document: dict[str, Any], root: Path, profile: str,
     if path.read_bytes() != output:
         changes.append(TABLE)
     originals = {
-        record["name"]: record
-        for record in export_document(validation_root or root, profile)["summary_labels"]
+        record["name"]: record for record in export_document(validation_root or root, profile)["summary_labels"]
     }
-    edited = [record for record in document["summary_labels"]
-              if record["glyphs"] != originals[record["name"]]["glyphs"]]
+    edited = [
+        record for record in document["summary_labels"] if record["glyphs"] != originals[record["name"]]["glyphs"]
+    ]
     word_changes = {}
     if edited:
         data, _bodies = labelled_blocks(root)
@@ -241,10 +248,12 @@ def apply_document(document: dict[str, Any], root: Path, profile: str,
         changes.append(SOURCE)
     if write and TABLE in changes:
         from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
         _write_bytes(path, output)
     if write and rebuilt is not None:
         source_path = root / SOURCE
         from authoring.atomic_output import atomic_write_text as _write_text
+
         _write_text(source_path, rebuilt)
     return sorted(changes)
 
@@ -253,8 +262,10 @@ def apply_document(document: dict[str, Any], root: Path, profile: str,
 def round_trip_errors(root: Path, profile: str) -> list[str]:
     document = export_document(root, profile)
     validate_document(document, root, profile)
-    return ["zero-edit results detail would change %s" % path
-            for path in apply_document(document, root, profile, write=False)]
+    return [
+        "zero-edit results detail would change %s" % path
+        for path in apply_document(document, root, profile, write=False)
+    ]
 
 
 def main() -> int:
@@ -273,8 +284,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s results text: %d detail rows, %d summary labels" % (
-                args.profile, document["row_count"], document["summary_label_count"]))
+            print(
+                "[OK] %s results text: %d detail rows, %d summary labels"
+                % (args.profile, document["row_count"], document["summary_label_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

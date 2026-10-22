@@ -42,8 +42,7 @@ def split_rows(data: bytes, name: str) -> list[list[int]]:
     body = data[:-1]
     if len(body) % ROW_BYTES:
         raise ValueError("%s is not a sequence of 34-byte rows" % name)
-    rows = [list(body[offset:offset + ROW_BYTES])
-            for offset in range(0, len(body), ROW_BYTES)]
+    rows = [list(body[offset : offset + ROW_BYTES]) for offset in range(0, len(body), ROW_BYTES)]
     if any(row[-1] != ROW_TERMINATOR for row in rows):
         raise ValueError("%s has a row without a final $FF" % name)
     return rows
@@ -102,8 +101,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     maximum_glyph = glyph_count(root) - 1
     errors = []
     for field in (
-        "schema_version", "profile", "format", "row_bytes", "row_terminator",
-        "stream_terminator", "row_count", "paths",
+        "schema_version",
+        "profile",
+        "format",
+        "row_bytes",
+        "row_terminator",
+        "stream_terminator",
+        "row_count",
+        "paths",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -125,32 +130,33 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 errors.append("row %d %s is not 34 bytes" % (index, field))
                 continue
             invalid = next(
-                (offset for offset, value in enumerate(values)
-                 if not isinstance(value, int) or isinstance(value, bool)
-                 or not 0 <= value <= 0xFF),
+                (
+                    offset
+                    for offset, value in enumerate(values)
+                    if not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= 0xFF
+                ),
                 None,
             )
             if invalid is not None:
-                errors.append("row %d %s byte %d is not unsigned" % (
-                    index, field, invalid))
+                errors.append("row %d %s byte %d is not unsigned" % (index, field, invalid))
                 continue
             if values[-1] != ROW_TERMINATOR:
                 errors.append("row %d %s does not end in $FF" % (index, field))
             source_values = baseline["rows"][index][field]
-            source_boundaries = [offset for offset, value in enumerate(source_values[:-1])
-                                 if value == ROW_TERMINATOR]
-            boundaries = [offset for offset, value in enumerate(values[:-1])
-                          if value == ROW_TERMINATOR]
+            source_boundaries = [offset for offset, value in enumerate(source_values[:-1]) if value == ROW_TERMINATOR]
+            boundaries = [offset for offset, value in enumerate(values[:-1]) if value == ROW_TERMINATOR]
             if boundaries != source_boundaries:
                 errors.append("row %d %s changes fixed $FF boundaries" % (index, field))
             invalid_glyph = next(
-                (offset for offset, value in enumerate(values[:-1])
-                 if value != ROW_TERMINATOR and value > maximum_glyph),
+                (
+                    offset
+                    for offset, value in enumerate(values[:-1])
+                    if value != ROW_TERMINATOR and value > maximum_glyph
+                ),
                 None,
             )
             if invalid_glyph is not None:
-                errors.append("row %d %s glyph %d exceeds the shared font" % (
-                    index, field, invalid_glyph))
+                errors.append("row %d %s glyph %d exceeds the shared font" % (index, field, invalid_glyph))
         primary = row.get("primary")
         if isinstance(primary, list) and ROW_TERMINATOR in primary[:-1]:
             errors.append("row %d primary contains an early $FF" % index)
@@ -164,7 +170,10 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     validate_document(document, validation_root or root, profile)
@@ -177,6 +186,7 @@ def apply_document(
         changed.append(relative)
         if write:
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     return changed
 
@@ -210,8 +220,7 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s story text: %d paired fixed rows" % (
-                args.profile, document["row_count"]))
+            print("[OK] %s story text: %d paired fixed rows" % (args.profile, document["row_count"]))
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

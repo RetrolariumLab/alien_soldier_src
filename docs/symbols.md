@@ -8,8 +8,8 @@ The exporter understands AS include rows, which carry a `(1)` prefix in this
 single-translation-unit build. When labels alias the same address, a reviewed
 semantic name is preferred over an address-derived or local name. Small EQU
 values are flags or enum members and are deliberately excluded so they cannot
-collide with ROM addresses. Sign-extended work-RAM EQU values are normalized
-to the Mega Drive's 24-bit address bus.
+collide with ROM addresses. Sign-extended work-RAM EQU values are normalized to
+the Mega Drive's 24-bit address bus.
 
 `make verify-symbols` guards against parser regressions. It currently requires
 at least 15,000 addressed symbols, all ROM landmarks declared in

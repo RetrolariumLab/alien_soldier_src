@@ -24,9 +24,7 @@ BEETLE_BASIS = (
 
 
 def stream_words(source: str, label: str) -> list[str]:
-    match = re.search(
-        rf"(?ms)^{re.escape(label)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source
-    )
+    match = re.search(rf"(?ms)^{re.escape(label)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source)
     if match is None:
         raise AssertionError(f"missing stream {label}")
     return [word.strip() for word in re.findall(r"\bdc\.w\s+([^;\r\n]+)", match.group(1))]
@@ -36,14 +34,8 @@ class SharedStageObjectMappingReviewTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.source = DATA.read_text(encoding="utf-8")
-        cls.records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        cls.reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
+        cls.records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        cls.reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
 
     def test_floater_and_beetle_reviews_pin_exact_mapping_members(self) -> None:
         cases = (
@@ -96,19 +88,13 @@ class SharedStageObjectMappingReviewTests(unittest.TestCase):
                     f"dc.l    SharedFloaterDebrisProjectileAlternating{suffix}Animation",
                     body,
                 )
-        sharpssteel = (ROOT / "src/projectiles/sharpssteel.s").read_text(
-            encoding="utf-8"
-        )
+        sharpssteel = (ROOT / "src/projectiles/sharpssteel.s").read_text(encoding="utf-8")
         self.assertIn(
             "#SharedFloaterDebrisProjectileAlternating5And4Animation,8(a0)",
             sharpssteel,
         )
-        beetles = (ROOT / "src/enemies/stage_10_beetles.s").read_text(
-            encoding="utf-8"
-        )
-        self.assertEqual(
-            2, beetles.count("#Enemy_Stage10BeetleLoopAnimation,8(a5)")
-        )
+        beetles = (ROOT / "src/enemies/stage_10_beetles.s").read_text(encoding="utf-8")
+        self.assertEqual(2, beetles.count("#Enemy_Stage10BeetleLoopAnimation,8(a5)"))
 
     def test_duration_stream_consumer_evidence_is_specific(self) -> None:
         addresses = ("0x1A0E86", "0x1A0E96", "0x1A0EA6")
@@ -130,15 +116,22 @@ class SharedStageObjectMappingReviewTests(unittest.TestCase):
         )
         stage = (ROOT / "src/stages/stage_12_yacht.s").read_text(encoding="utf-8")
         for address, stream, mapping, owner in (
-            ("0x1A0FD2", "Stage12_TeddyBearInitialPoseAnimation",
-             "Stage12_TeddyBearSpriteMappingP", "Stage12_TeddyBearDisableCollision"),
-            ("0x1A0FD6", "Stage12_TeddyBearPilotReleasePoseAnimation",
-             "Stage12_TeddyBearSpriteMappingI", "Stage12_TeddyBearPilotRelease"),
+            (
+                "0x1A0FD2",
+                "Stage12_TeddyBearInitialPoseAnimation",
+                "Stage12_TeddyBearSpriteMappingP",
+                "Stage12_TeddyBearDisableCollision",
+            ),
+            (
+                "0x1A0FD6",
+                "Stage12_TeddyBearPilotReleasePoseAnimation",
+                "Stage12_TeddyBearSpriteMappingI",
+                "Stage12_TeddyBearPilotRelease",
+            ),
         ):
             with self.subTest(stream=stream):
                 self.assertIn(basis, self.records[address]["basis"])
-                self.assertEqual([f"{mapping}-*", "$FF"],
-                                 stream_words(self.source, stream))
+                self.assertEqual([f"{mapping}-*", "$FF"], stream_words(self.source, stream))
                 block = stage.split(owner + ":", 1)[1].split("rts", 1)[0]
                 self.assertIn(f"move.l  #{stream},8(a5)", block)
 

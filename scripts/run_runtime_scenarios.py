@@ -31,8 +31,7 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def run_hidden(command: list[str], cwd: Path, timeout: int,
-               environment: dict[str, str]) -> subprocess.CompletedProcess:
+def run_hidden(command: list[str], cwd: Path, timeout: int, environment: dict[str, str]) -> subprocess.CompletedProcess:
     startupinfo = None
     if os.name == "nt":
         startupinfo = subprocess.STARTUPINFO()
@@ -74,8 +73,9 @@ def safe_output(root: Path, path: Path, inputs: set[Path]) -> Path:
 def atomic_bytes(path: Path, data: bytes) -> None:
     temporary = None
     try:
-        with tempfile.NamedTemporaryFile(prefix="." + path.name + ".", suffix=".tmp",
-                                         dir=path.parent, delete=False) as stream:
+        with tempfile.NamedTemporaryFile(
+            prefix="." + path.name + ".", suffix=".tmp", dir=path.parent, delete=False
+        ) as stream:
             temporary = Path(stream.name)
             stream.write(data)
         os.replace(temporary, path)
@@ -119,9 +119,18 @@ def replay(root: Path, args: argparse.Namespace) -> int:
     movies = resolve_movies(root, config)
     if movies is None:
         return 1
-    bound_inputs = {path: sha256(path) for path in (
-        gens, rom, RUNNER_SCRIPT, CAPTURE_SCRIPT, Path(runtime_isolation.__file__).resolve(),
-        config_path, *movies.values())}
+    bound_inputs = {
+        path: sha256(path)
+        for path in (
+            gens,
+            rom,
+            RUNNER_SCRIPT,
+            CAPTURE_SCRIPT,
+            Path(runtime_isolation.__file__).resolve(),
+            config_path,
+            *movies.values(),
+        )
+    }
     # Bind the bytes actually parsed/authenticated, not a second disk read which
     # could silently adopt an edit between authentication and receipt creation.
     bound_inputs[config_path] = hashlib.sha256(config_bytes).hexdigest()
@@ -135,8 +144,11 @@ def replay(root: Path, args: argparse.Namespace) -> int:
     identifiers = set()
     for scenario in config["scenarios"]:
         identifier = scenario["id"]
-        if (not isinstance(identifier, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", identifier)
-                or identifier in identifiers):
+        if (
+            not isinstance(identifier, str)
+            or not re.fullmatch(r"[a-z][a-z0-9_]*", identifier)
+            or identifier in identifiers
+        ):
             raise ValueError("unsafe runtime scenario id: %r" % identifier)
         identifiers.add(identifier)
         frame = scenario["frame"]
@@ -162,17 +174,23 @@ def replay(root: Path, args: argparse.Namespace) -> int:
     output_root.mkdir(parents=True, exist_ok=True)
     if receipt_path.exists() and not receipt_path.is_file():
         raise ValueError("unsafe runtime receipt path")
-    receipt = {"schema_version": 1, "status": "running", "scenarios": [],
-               "rom_sha256": bound_inputs[rom], "gens_sha256": bound_inputs[gens],
-               "capture_lua_sha256": bound_inputs[CAPTURE_SCRIPT],
-               "capture_runner_sha256": bound_inputs[RUNNER_SCRIPT],
-               "runtime_isolation_sha256": bound_inputs[Path(runtime_isolation.__file__).resolve()],
-               "native_config_contract": native_contract,
-               "scenario_config_sha256": bound_inputs[config_path],
-               "movies": {key: bound_inputs[path] for key, path in movies.items()},
-               "expected_scenarios": [{"id": item[0]["id"], "movie": item[0]["movie"],
-                                       "frame": item[0]["frame"]} for item in destinations],
-               "scope": "named_ram_scenario_replay_not_renderer_or_audio_fidelity"}
+    receipt = {
+        "schema_version": 1,
+        "status": "running",
+        "scenarios": [],
+        "rom_sha256": bound_inputs[rom],
+        "gens_sha256": bound_inputs[gens],
+        "capture_lua_sha256": bound_inputs[CAPTURE_SCRIPT],
+        "capture_runner_sha256": bound_inputs[RUNNER_SCRIPT],
+        "runtime_isolation_sha256": bound_inputs[Path(runtime_isolation.__file__).resolve()],
+        "native_config_contract": native_contract,
+        "scenario_config_sha256": bound_inputs[config_path],
+        "movies": {key: bound_inputs[path] for key, path in movies.items()},
+        "expected_scenarios": [
+            {"id": item[0]["id"], "movie": item[0]["movie"], "frame": item[0]["frame"]} for item in destinations
+        ],
+        "scope": "named_ram_scenario_replay_not_renderer_or_audio_fidelity",
+    }
     receipt_write(receipt_path, receipt)
     try:
         with tempfile.TemporaryDirectory(prefix=".runtime-inputs-", dir=output_root) as directory:
@@ -210,26 +228,49 @@ def replay(root: Path, args: argparse.Namespace) -> int:
                 runtime_isolation.validate_private_config(isolation, config_snapshot)
                 frame = scenario["frame"]
                 timeout = max(args.minimum_timeout, frame * args.seconds_per_1000_frames // 1000)
-                command = [str(gens), "-cfg", str(config_snapshot), "-rom", str(rom_snapshot),
-                           "-play", str(movie_snapshots[scenario["movie"]]),
-                           "-lua", str(CAPTURE_SCRIPT), "-screenshot-interval", str(frame),
-                           "-screenshot-dir", str(shots), "-dump-state-dir", str(states),
-                           "-dump-state-interval", "1", "-dump-state-start", str(frame),
-                           "-dump-state-end", str(frame), "-max-frames", str(frame + 1),
-                           "-frameskip", "0", "-nosound"]
+                command = [
+                    str(gens),
+                    "-cfg",
+                    str(config_snapshot),
+                    "-rom",
+                    str(rom_snapshot),
+                    "-play",
+                    str(movie_snapshots[scenario["movie"]]),
+                    "-lua",
+                    str(CAPTURE_SCRIPT),
+                    "-screenshot-interval",
+                    str(frame),
+                    "-screenshot-dir",
+                    str(shots),
+                    "-dump-state-dir",
+                    str(states),
+                    "-dump-state-interval",
+                    "1",
+                    "-dump-state-start",
+                    str(frame),
+                    "-dump-state-end",
+                    str(frame),
+                    "-max-frames",
+                    str(frame + 1),
+                    "-frameskip",
+                    "0",
+                    "-nosound",
+                ]
                 environment = os.environ.copy()
                 environment["ALIEN_RUNTIME_CAPTURE_STOP_FRAME"] = str(frame + 1)
                 print("[RUN] %s: %s frame %d" % (scenario["id"], scenario["movie"], frame), flush=True)
-                result = run_hidden(command, Path(isolation["startup_directories"]["runtime"]),
-                                    timeout, environment)
+                result = run_hidden(command, Path(isolation["startup_directories"]["runtime"]), timeout, environment)
                 runtime_isolation.validate_isolation(isolation, startup="runtime", finished=True)
                 runtime_isolation.validate_private_config(isolation, config_snapshot)
                 native_state, native_png = states / ("%d.genstate" % frame), shots / screenshot.name
                 if result.returncode != 0 or not native_state.is_file() or not native_png.is_file():
                     raise RuntimeError("%s: capture failed (exit %d)" % (scenario["id"], result.returncode))
                 captured = Genstate.read(native_state)
-                if (struct.unpack_from("<I", native_state.read_bytes(), 8)[0] != 1
-                        or captured.frame != frame or len(captured.sections.get(1, b"")) != 65536):
+                if (
+                    struct.unpack_from("<I", native_state.read_bytes(), 8)[0] != 1
+                    or captured.frame != frame
+                    or len(captured.sections.get(1, b"")) != 65536
+                ):
                     raise RuntimeError("%s: native capture frame/RAM dimensions differ" % scenario["id"])
                 if "rom_checksum" in config and captured.rom_checksum != int(config["rom_checksum"], 0):
                     raise RuntimeError("%s: native capture ROM checksum differs" % scenario["id"])
@@ -239,15 +280,23 @@ def replay(root: Path, args: argparse.Namespace) -> int:
                 if runtime_isolation.native_config_contract(gens.parent.parent) != native_contract:
                     raise ValueError("native runtime config contract changed during replay")
                 if sha256(rom_snapshot) != bound_inputs[rom] or any(
-                        sha256(path) != receipt["movies"][key] for key, path in movie_snapshots.items()):
+                    sha256(path) != receipt["movies"][key] for key, path in movie_snapshots.items()
+                ):
                     raise ValueError("private runtime snapshot changed during replay")
                 atomic_bytes(state, native_state.read_bytes())
                 atomic_bytes(screenshot, native_png.read_bytes())
-                receipt["scenarios"].append({"id": scenario["id"], "movie": scenario["movie"],
-                    "frame": frame, "native_header_frame": captured.frame,
-                    "isolated_config_sha256": hashlib.sha256(config_bytes).hexdigest(),
-                    "isolation": isolation,
-                    "state_sha256": sha256(state), "screenshot_sha256": sha256(screenshot)})
+                receipt["scenarios"].append(
+                    {
+                        "id": scenario["id"],
+                        "movie": scenario["movie"],
+                        "frame": frame,
+                        "native_header_frame": captured.frame,
+                        "isolated_config_sha256": hashlib.sha256(config_bytes).hexdigest(),
+                        "isolation": isolation,
+                        "state_sha256": sha256(state),
+                        "screenshot_sha256": sha256(screenshot),
+                    }
+                )
                 total_frames += frame
                 receipt["requested_frames"] = total_frames
                 receipt_write(receipt_path, receipt)
@@ -262,8 +311,10 @@ def replay(root: Path, args: argparse.Namespace) -> int:
         receipt.update({"status": "failed", "error": str(error)})
         receipt_write(receipt_path, receipt)
         raise
-    print("[OK] captured %d runtime scenarios from %d movies, %d requested checkpoint frames" % (
-        len(destinations), len(movies), total_frames))
+    print(
+        "[OK] captured %d runtime scenarios from %d movies, %d requested checkpoint frames"
+        % (len(destinations), len(movies), total_frames)
+    )
     return 0
 
 

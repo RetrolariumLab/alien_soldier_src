@@ -11,8 +11,13 @@ from typing import Any
 from authoring.compressed_graphics_model import rebuild_source
 from authoring.lzss_codec import compress, decompress
 from authoring.stage_tilemap_model import (
-    CHUNK_BYTES, COARSE_COLUMNS, PATTERN_BYTES, RAM_BASE,
-    TERRAIN_COLLISION_BUFFER, labelled_blocks)
+    CHUNK_BYTES,
+    COARSE_COLUMNS,
+    PATTERN_BYTES,
+    RAM_BASE,
+    TERRAIN_COLLISION_BUFFER,
+    labelled_blocks,
+)
 
 
 ROLE_SHAPES = {
@@ -21,9 +26,17 @@ ROLE_SHAPES = {
     "coarse": {"value_bits": 8, "unit_width": 32, "unit_height": 32},
 }
 RECORD_METADATA = (
-    "path", "storage", "role", "value_bits", "unit_width", "unit_height",
-    "decoded_byte_count", "compressed_capacity", "value_count",
-    "consuming_asset_lists", "uses",
+    "path",
+    "storage",
+    "role",
+    "value_bits",
+    "unit_width",
+    "unit_height",
+    "decoded_byte_count",
+    "compressed_capacity",
+    "value_count",
+    "consuming_asset_lists",
+    "uses",
 )
 
 
@@ -40,8 +53,7 @@ class MapHit:
     world_y: int
 
 
-def resolve_map_cell(plane, document: dict[str, Any], x: int, y: int,
-                     role: str) -> MapHit:
+def resolve_map_cell(plane, document: dict[str, Any], x: int, y: int, role: str) -> MapHit:
     """Trace a plane pixel through its descriptor to the last RAM writer."""
     if role not in ROLE_SHAPES:
         raise ValueError("unsupported stage-map role: %s" % role)
@@ -51,20 +63,16 @@ def resolve_map_cell(plane, document: dict[str, Any], x: int, y: int,
         raise ValueError("plane has no defined map cell at this point")
     map_y = y + plane.y_offset
     if role == "coarse":
-        offset = (((map_y >> 8) & 31) * COARSE_COLUMNS
-                  + ((x >> 8) & 31))
+        offset = ((map_y >> 8) & 31) * COARSE_COLUMNS + ((x >> 8) & 31)
         base, size = plane.descriptor.coarse, 1
     elif role == "chunks":
-        offset = (plane.coarse_index(x, y) * CHUNK_BYTES
-                  + ((map_y >> 5) & 7) * 8 + ((x >> 5) & 7))
+        offset = plane.coarse_index(x, y) * CHUNK_BYTES + ((map_y >> 5) & 7) * 8 + ((x >> 5) & 7)
         base, size = plane.descriptor.chunks, 1
     else:
-        offset = (plane.chunk_index(x, y) * PATTERN_BYTES
-                  + ((map_y >> 3) & 3) * 8 + ((x >> 3) & 3) * 2)
+        offset = plane.chunk_index(x, y) * PATTERN_BYTES + ((map_y >> 3) & 3) * 8 + ((x >> 3) & 3) * 2
         base, size = plane.descriptor.patterns, 2
     address = base - RAM_BASE + offset
-    records = {record["name"]: (index, record)
-               for index, record in enumerate(document["payloads"])}
+    records = {record["name"]: (index, record) for index, record in enumerate(document["payloads"])}
     for _list, source, start, length in reversed(plane.written):
         if start < address + size and address < start + length:
             if not start <= address or address + size > start + length:
@@ -79,8 +87,7 @@ def resolve_map_cell(plane, document: dict[str, Any], x: int, y: int,
             value_index = within // size
             if value_index >= record["value_count"]:
                 raise ValueError("map value index is outside its source payload")
-            return MapHit(payload_index, value_index, source, role,
-                          RAM_BASE + address, x, y)
+            return MapHit(payload_index, value_index, source, role, RAM_BASE + address, x, y)
     raise ValueError("no source RAM transfer owns this map value")
 
 
@@ -135,8 +142,7 @@ def encoded_slot(record: dict[str, Any]) -> bytes:
     capacity = record["compressed_capacity"]
     if len(encoded) > capacity:
         raise ValueError(
-            "%s: recompressed size %d exceeds fixed capacity %d"
-            % (record["name"], len(encoded), capacity)
+            "%s: recompressed size %d exceeds fixed capacity %d" % (record["name"], len(encoded), capacity)
         )
     return encoded + bytes([0xFF]) * (capacity - len(encoded))
 
@@ -173,8 +179,13 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
     """Reject changed topology or metadata; only bounded values are editable."""
     errors = []
     for field in (
-        "schema_version", "profile", "format", "payload_count", "value_count",
-        "decoded_byte_count", "compressed_capacity",
+        "schema_version",
+        "profile",
+        "format",
+        "payload_count",
+        "value_count",
+        "decoded_byte_count",
+        "compressed_capacity",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -183,9 +194,7 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
         return errors + ["payloads is not a list"]
     originals = {record["name"]: record for record in baseline["payloads"]}
     names = [record.get("name") for record in records if isinstance(record, dict)]
-    if (len(names) != len(records)
-            or any(not isinstance(name, str) for name in names)
-            or len(set(names)) != len(names)):
+    if len(names) != len(records) or any(not isinstance(name, str) for name in names) or len(set(names)) != len(names):
         errors.append("payload names are missing or not unique")
         return errors
     if set(names) != set(originals):
@@ -209,16 +218,15 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
             continue
         maximum = (1 << original["value_bits"]) - 1
         invalid = next(
-            (index for index, value in enumerate(values)
-             if not isinstance(value, int) or isinstance(value, bool)
-             or not 0 <= value <= maximum),
+            (
+                index
+                for index, value in enumerate(values)
+                if not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= maximum
+            ),
             None,
         )
         if invalid is not None:
-            errors.append(
-                "%s value %d is not an unsigned %d-bit integer"
-                % (name, invalid, original["value_bits"])
-            )
+            errors.append("%s value %d is not an unsigned %d-bit integer" % (name, invalid, original["value_bits"]))
             continue
         if values != original["values"]:
             try:
@@ -229,7 +237,9 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
 
 
 def apply_fixed_map_document(
-    document: dict[str, Any], root: Path, baseline: dict[str, Any],
+    document: dict[str, Any],
+    root: Path,
+    baseline: dict[str, Any],
     write: bool = True,
 ) -> list[str]:
     """Apply only explicit edits, rejecting conflicting changes by another Studio."""
@@ -268,5 +278,6 @@ def apply_fixed_map_document(
         for relative, body in sorted(replacements.items()):
             path = root / relative
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     return sorted(replacements)

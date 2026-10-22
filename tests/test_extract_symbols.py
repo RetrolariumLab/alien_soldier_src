@@ -62,35 +62,49 @@ class ExtractSymbolsTests(unittest.TestCase):
         )
 
     def test_resolved_filter_runs_before_canonical_alias_selection(self):
-        listing = ("(1)    1/     200 :".ljust(40) + "InactiveReviewedAlias:\n"
-                   + "(1)    2/     200 :".ljust(40) + "sub_200:\n"
-                   + "(1)    3/     200 :".ljust(40) + "Reset:\n"
-                   + "Symbol Table (* = unused):\n SUB_200 : 200 C | RESET : 200 C |\n")
+        listing = (
+            "(1)    1/     200 :".ljust(40)
+            + "InactiveReviewedAlias:\n"
+            + "(1)    2/     200 :".ljust(40)
+            + "sub_200:\n"
+            + "(1)    3/     200 :".ljust(40)
+            + "Reset:\n"
+            + "Symbol Table (* = unused):\n SUB_200 : 200 C | RESET : 200 C |\n"
+        )
         self.assertEqual({0x200: "InactiveReviewedAlias"}, self.extract(listing))
         self.assertEqual({0x200: "Reset"}, self.extract(listing, resolved_only=True))
 
     def test_strict_export_rejects_missing_table_conflicts_and_wrong_row_address(self):
         label = "(1)    1/     200 :".ljust(40) + "Reset:\n"
-        for table in ("", "Symbol Table (* = unused):\n RESET : 202 C |\n",
-                      "Symbol Table (* = unused):\n RESET : 200 C | RESET : 202 C |\n"):
+        for table in (
+            "",
+            "Symbol Table (* = unused):\n RESET : 202 C |\n",
+            "Symbol Table (* = unused):\n RESET : 200 C | RESET : 202 C |\n",
+        ):
             with self.subTest(table=table), self.assertRaises(ValueError):
                 self.extract(label + table, resolved_only=True)
 
     def test_strict_aliases_keep_actual_RAM_bus_addresses(self):
-        listing = ("(1)    1/       0 : =$FFFFA284".ljust(40) + "GameModeIndex equ $FFFFA284\n"
-                   + "Symbol Table (* = unused):\n GAMEMODEINDEX : FFFFA284 I |\n")
+        listing = (
+            "(1)    1/       0 : =$FFFFA284".ljust(40)
+            + "GameModeIndex equ $FFFFA284\n"
+            + "Symbol Table (* = unused):\n GAMEMODEINDEX : FFFFA284 I |\n"
+        )
         self.assertEqual({0xFFA284: "GameModeIndex"}, self.extract(listing, resolved_only=True))
 
     def test_source_or_comment_symbol_table_spoof_is_ignored_before_real_boundary(self):
-        listing = ("(1)    1/     200 :".ljust(40) + "Reset:\n"
-                   + "(1)    2/     200 :".ljust(40) + "; RESET : 202 C |\n"
-                   + " RESET : 202 C |\n"
-                   + "Symbol Table (* = unused):\n RESET : 200 C |\n")
+        listing = (
+            "(1)    1/     200 :".ljust(40)
+            + "Reset:\n"
+            + "(1)    2/     200 :".ljust(40)
+            + "; RESET : 202 C |\n"
+            + " RESET : 202 C |\n"
+            + "Symbol Table (* = unused):\n RESET : 200 C |\n"
+        )
         self.assertEqual({0x200: "Reset"}, self.extract(listing, resolved_only=True))
 
     def test_combined_strict_views_read_one_body_without_reopening(self):
-        listing = ("(1)    1/     200 :".ljust(40) + "Reset:\n"
-                   + "Symbol Table (* = unused):\n RESET : 200 C |\n")
+        listing = "(1)    1/     200 :".ljust(40) + "Reset:\n" + "Symbol Table (* = unused):\n RESET : 200 C |\n"
         with patch.object(Path, "read_text", autospec=True, return_value=listing) as read:
             resolved, addressed = extract_symbols.read_listing_symbols(Path("fresh.lst"))
         self.assertEqual({"RESET": 0x200}, resolved)

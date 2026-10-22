@@ -24,19 +24,24 @@ from authoring.sound_studio_model import BGM_REQUEST_IDS, SFX_REQUEST_IDS  # noq
 
 
 RAM = {
-    "GameModeIndex": 0xFFA284, "GameSubstateIndex": 0xFFA286,
-    "SoundRequestQueue": 0xFFF80A, "SoundSelectedRequest": 0xFFF809,
-    "SoundCurrentPriority": 0xFFF800, "SoundTempoReload": 0xFFF802,
-    "SoundBGMDataPtr": 0xFFF820, "SoundPCMChannelRecord": 0xFFF840,
-    "SoundBGMPSGChannels": 0xFFF990, "SoundSpecialSFXDataPtr": 0xFFF824,
-    "SoundSpecialSFXFM": 0xFFFB40, "SoundSpecialSFXPSG": 0xFFFB70,
-    "PaletteFadeMaskStatus": 0xFF80F4, "ScenePaletteFadeOffset": 0xFF0176,
+    "GameModeIndex": 0xFFA284,
+    "GameSubstateIndex": 0xFFA286,
+    "SoundRequestQueue": 0xFFF80A,
+    "SoundSelectedRequest": 0xFFF809,
+    "SoundCurrentPriority": 0xFFF800,
+    "SoundTempoReload": 0xFFF802,
+    "SoundBGMDataPtr": 0xFFF820,
+    "SoundPCMChannelRecord": 0xFFF840,
+    "SoundBGMPSGChannels": 0xFFF990,
+    "SoundSpecialSFXDataPtr": 0xFFF824,
+    "SoundSpecialSFXFM": 0xFFFB40,
+    "SoundSpecialSFXPSG": 0xFFFB70,
+    "PaletteFadeMaskStatus": 0xFF80F4,
+    "ScenePaletteFadeOffset": 0xFF0176,
     "DataLoaderControl": 0xFFF720,
 }
-SFX_POINTERS = [0xFFFFFA20, 0, 0xFFFFFA50, 0xFFFFFA80,
-                0xFFFFFAB0, 0xFFFFFAE0, 0xFFFFFB10, 0xFFFFFB10]
-BGM = bytes([0, 20, 1, 1, 2, 7, 0, 16, 0x12, 0x34,
-             0, 18, 0x56, 0x78, 2, 3, 0x80, 1, 0xF2, 0])
+SFX_POINTERS = [0xFFFFFA20, 0, 0xFFFFFA50, 0xFFFFFA80, 0xFFFFFAB0, 0xFFFFFAE0, 0xFFFFFB10, 0xFFFFFB10]
+BGM = bytes([0, 20, 1, 1, 2, 7, 0, 16, 0x12, 0x34, 0, 18, 0x56, 0x78, 2, 3, 0x80, 1, 0xF2, 0])
 SFX = bytes([0, 14, 1, 1, 0x80, 4, 0, 10, 0, 5, 0x80, 1, 0xF2, 0])
 
 
@@ -65,8 +70,10 @@ class RequestAndLoaderTests(unittest.TestCase):
         self.assertEqual(3, values["channel_1_volume_selector"]["value"])
 
     def test_ordinary_and_special_sfx_use_their_actual_distinct_records(self):
-        for request, record, hook in ((0xA0, 0xFFFA50, "Sound_LoadSFXReturn"),
-                                      (0xF9, 0xFFFB40, "Sound_LoadSpecialSFXReturn")):
+        for request, record, hook in (
+            (0xA0, 0xFFFA50, "Sound_LoadSFXReturn"),
+            (0xF9, 0xFFFB40, "Sound_LoadSpecialSFXReturn"),
+        ):
             with self.subTest(request=request):
                 actual_hook, checks = model.loader_expectations(request, SFX, 0x1000, RAM, SFX_POINTERS)
                 values = {item["name"]: item for item in checks}
@@ -91,18 +98,25 @@ class ContractBindingTests(unittest.TestCase):
     def fixture(self, root: Path):
         symbols = {name: 0x700 + index * 0x40 for index, name in enumerate(model.ROM_NAMES)}
         symbols.update(RAM)
-        symbols.update({"Sound_LoadBGMRequest": 0x100, "Sound_StopSFXAndRestoreBGMChannels": 0x300,
-                        "Sound_SelectPendingRequest": 0x400, "Sound_ValidateVoiceDACRequest": 0x500,
-                        "Sound_DispatchPendingRequest": 0x420,
-                        "Sound_FinishBGMInitialization": 0x120, "Sound_BGM_81": 0x1600})
+        symbols.update(
+            {
+                "Sound_LoadBGMRequest": 0x100,
+                "Sound_StopSFXAndRestoreBGMChannels": 0x300,
+                "Sound_SelectPendingRequest": 0x400,
+                "Sound_ValidateVoiceDACRequest": 0x500,
+                "Sound_DispatchPendingRequest": 0x420,
+                "Sound_FinishBGMInitialization": 0x120,
+                "Sound_BGM_81": 0x1600,
+            }
+        )
         image = bytearray(0x2000)
         image[0x120:0x124] = b"\x58\x4f\x4e\x75"
         image[0x420:0x422] = b"\x7e\x00"
-        image[0x1600:0x1600 + len(BGM)] = BGM
-        image[symbols["Sound_BGMPointerTable"]:symbols["Sound_BGMPointerTable"] + 4] = (0x1600).to_bytes(4, "big")
+        image[0x1600 : 0x1600 + len(BGM)] = BGM
+        image[symbols["Sound_BGMPointerTable"] : symbols["Sound_BGMPointerTable"] + 4] = (0x1600).to_bytes(4, "big")
         at = symbols["Sound_SFXChannelRecordPointers"]
         for index, value in enumerate(SFX_POINTERS):
-            image[at + index * 4:at + index * 4 + 4] = value.to_bytes(4, "big")
+            image[at + index * 4 : at + index * 4 + 4] = value.to_bytes(4, "big")
         listing = root / "sound.lst"
         lines = []
         for name, address in symbols.items():
@@ -116,15 +130,23 @@ class ContractBindingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             image, _symbols, listing = self.fixture(root)
-            with (mock.patch.object(model, "source_contract"),
-                  mock.patch.object(model, "payload_body", return_value=BGM)):
+            with (
+                mock.patch.object(model, "source_contract"),
+                mock.patch.object(model, "payload_body", return_value=BGM),
+            ):
                 contract = model.build_contract(root, root, "jp", 0x81, image, image, listing)
                 self.assertEqual(0x120, contract["hook_address"])
-                for mutation, expected in (("payload", "selected staged"), ("pointer", "request pointer"),
-                                           ("loader", "loader/dispatcher")):
+                for mutation, expected in (
+                    ("payload", "selected staged"),
+                    ("pointer", "request pointer"),
+                    ("loader", "loader/dispatcher"),
+                ):
                     changed = bytearray(image)
-                    position = 0x1600 if mutation == "payload" else (
-                        _symbols["Sound_BGMPointerTable"] if mutation == "pointer" else 0x110)
+                    position = (
+                        0x1600
+                        if mutation == "payload"
+                        else (_symbols["Sound_BGMPointerTable"] if mutation == "pointer" else 0x110)
+                    )
                     changed[position] ^= 1
                     with self.subTest(mutation=mutation), self.assertRaisesRegex(ValueError, expected):
                         model.build_contract(root, root, "jp", 0x81, changed, image, listing)
@@ -143,13 +165,22 @@ class ContractBindingTests(unittest.TestCase):
 
 class ReportAndLifecycleTests(unittest.TestCase):
     def contract(self):
-        return {"profile": "eu", "request_id": 0xF9, "rom_sha256": "a" * 64,
-                "checks": [{"name": "channel_0_sequence_pointer", "address": 0xFFFB44,
-                            "size": 4, "value": 0x123456}]}
+        return {
+            "profile": "eu",
+            "request_id": 0xF9,
+            "rom_sha256": "a" * 64,
+            "checks": [{"name": "channel_0_sequence_pointer", "address": 0xFFFB44, "size": 4, "value": 0x123456}],
+        }
 
     def report(self):
-        return {"status": "loaded", "profile": "eu", "request_id": 0xF9,
-                "rom_sha256": "a" * 64, "frame": 123, "observations": [0x123456]}
+        return {
+            "status": "loaded",
+            "profile": "eu",
+            "request_id": 0xF9,
+            "rom_sha256": "a" * 64,
+            "frame": 123,
+            "observations": [0x123456],
+        }
 
     def test_report_requires_exact_request_rom_and_each_observed_ram_value(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -157,9 +188,14 @@ class ReportAndLifecycleTests(unittest.TestCase):
             report = self.report()
             path.write_text(json.dumps(report), encoding="utf-8")
             self.assertEqual(report, audition.parse_result(path, self.contract()))
-            for key, value in (("profile", "jp"), ("request_id", 0xFA),
-                               ("rom_sha256", "b" * 64), ("frame", True),
-                               ("observations", [0x123457]), ("observations", [True])):
+            for key, value in (
+                ("profile", "jp"),
+                ("request_id", 0xFA),
+                ("rom_sha256", "b" * 64),
+                ("frame", True),
+                ("observations", [0x123457]),
+                ("observations", [True]),
+            ):
                 changed = copy.deepcopy(report)
                 changed[key] = value
                 path.write_text(json.dumps(changed), encoding="utf-8")
@@ -174,23 +210,31 @@ class ReportAndLifecycleTests(unittest.TestCase):
         self.assertEqual(str(audition.MAX_BOOT_FRAMES + 124), command[-1])
 
     def test_lua_story_start_pulse_uses_all_guard_symbols_and_releases_before_title(self):
-        rendered = audition.lua_contract({
-            "hook_address": 0x200, "dispatch_hook_address": 0x180,
-            "ram": RAM, "checks": [],
-        }).decode("ascii")
+        rendered = audition.lua_contract(
+            {
+                "hook_address": 0x200,
+                "dispatch_hook_address": 0x180,
+                "ram": RAM,
+                "checks": [],
+            }
+        ).decode("ascii")
         script = audition.SCRIPT.read_text(encoding="utf-8")
         for name in ("PaletteFadeMaskStatus", "ScenePaletteFadeOffset", "DataLoaderControl"):
             self.assertIn("%s = %d" % (name, RAM[name]), rendered)
         pulse = script.split('if phase == "title" and mode == 0x0028', 1)[1].split(
-            'elseif phase == "title" and mode == 0x0018', 1)[0]
-        for gate in ("not story_skip_sent", "ram.PaletteFadeMaskStatus) % 2 == 1",
-                     "ram.ScenePaletteFadeOffset) == 0", "ram.DataLoaderControl) < 0x8000"):
+            'elseif phase == "title" and mode == 0x0018', 1
+        )[0]
+        for gate in (
+            "not story_skip_sent",
+            "ram.PaletteFadeMaskStatus) % 2 == 1",
+            "ram.ScenePaletteFadeOffset) == 0",
+            "ram.DataLoaderControl) < 0x8000",
+        ):
             self.assertIn(gate, pulse)
         self.assertIn("joypad.set(1, {start=true})", pulse)
         self.assertEqual(1, script.count("joypad.set(1, {start=true})"))
         frame_loop = script.split("for frame = 1, 1800 do", 1)[1]
-        self.assertLess(frame_loop.index("joypad.set(1, {start=false})"),
-                        frame_loop.index('mode == 0x0018'))
+        self.assertLess(frame_loop.index("joypad.set(1, {start=false})"), frame_loop.index("mode == 0x0018"))
         self.assertNotIn("{Start=true}", script)
 
     def test_invalid_rom_fails_before_creating_outputs_or_launching(self):
@@ -198,8 +242,10 @@ class ReportAndLifecycleTests(unittest.TestCase):
             root = Path(directory)
             gens = root / "Gens.exe"
             gens.touch()
-            with (mock.patch.object(audition, "validate_playtest_rom", side_effect=ValueError("wrong profile")),
-                  mock.patch.object(audition.subprocess, "Popen") as spawn):
+            with (
+                mock.patch.object(audition, "validate_playtest_rom", side_effect=ValueError("wrong profile")),
+                mock.patch.object(audition.subprocess, "Popen") as spawn,
+            ):
                 with self.assertRaisesRegex(ValueError, "wrong profile"):
                     audition.launch(root, "eu", 0x81, root / "rom.bin", root / "sound.lst", gens)
                 spawn.assert_not_called()
@@ -211,23 +257,28 @@ class ReportAndLifecycleTests(unittest.TestCase):
             gens = root / "Gens.exe"
             gens.write_bytes(b"not launched")
             contract = self.contract() | {
-                "schema_version": 1, "payload": "Sound_SFX_F9", "ram": RAM,
-                "hook_address": 0x200, "dispatch_hook_address": 0x180,
-                "hook_symbol": "Sound_LoadSpecialSFXReturn", "listing_sha256": "b" * 64,
+                "schema_version": 1,
+                "payload": "Sound_SFX_F9",
+                "ram": RAM,
+                "hook_address": 0x200,
+                "dispatch_hook_address": 0x180,
+                "hook_symbol": "Sound_LoadSpecialSFXReturn",
+                "listing_sha256": "b" * 64,
                 "rom_sha256": hashlib.sha256(b"rom").hexdigest(),
             }
-            with (mock.patch.object(audition, "validate_playtest_rom",
-                                    return_value=contract["rom_sha256"]),
-                  mock.patch.object(audition, "validate_reference", return_value=b"original"),
-                  mock.patch.object(audition, "select_profile",
-                                    return_value={"reference_rom": {"filename": "original.bin"}}),
-                  mock.patch.object(audition, "build_contract", return_value=contract),
-                  mock.patch.object(audition, "environment_identity", return_value={"executable_path": str(gens)}),
-                  mock.patch.object(audition.sound_startup, "native_contract", return_value={"scope": "source-fixture"}),
-                  mock.patch.object(audition.subprocess, "Popen") as spawn):
+            with (
+                mock.patch.object(audition, "validate_playtest_rom", return_value=contract["rom_sha256"]),
+                mock.patch.object(audition, "validate_reference", return_value=b"original"),
+                mock.patch.object(
+                    audition, "select_profile", return_value={"reference_rom": {"filename": "original.bin"}}
+                ),
+                mock.patch.object(audition, "build_contract", return_value=contract),
+                mock.patch.object(audition, "environment_identity", return_value={"executable_path": str(gens)}),
+                mock.patch.object(audition.sound_startup, "native_contract", return_value={"scope": "source-fixture"}),
+                mock.patch.object(audition.subprocess, "Popen") as spawn,
+            ):
                 (root / "rom.bin").write_bytes(b"rom")
-                session = audition.launch(root, "eu", 0xF9, root / "rom.bin",
-                                          root / "sound.lst", gens, check=True)
+                session = audition.launch(root, "eu", 0xF9, root / "rom.bin", root / "sound.lst", gens, check=True)
             environment = spawn.call_args.kwargs["env"]
             lua = Path(environment["ALIEN_SOUND_CONTRACT"]).read_text(encoding="ascii")
             consumer = audition.SCRIPT.read_text(encoding="utf-8")
@@ -239,15 +290,20 @@ class ReportAndLifecycleTests(unittest.TestCase):
             self.assertIn("PSG State=1", config)
             self.assertIn("Master Volume=0", config)
             self.assertIn("[General]", config)
-            self.assertEqual(Path(session.contract["native_isolation"]["startup_directories"]["runtime"]),
-                             spawn.call_args.kwargs["cwd"])
+            self.assertEqual(
+                Path(session.contract["native_isolation"]["startup_directories"]["runtime"]),
+                spawn.call_args.kwargs["cwd"],
+            )
             self.assertNotEqual(gens.parent, spawn.call_args.kwargs["cwd"])
             startup = spawn.call_args.kwargs["cwd"] / "gens.cfg"
             self.assertIn(b"[Sound]\nState=0\n", startup.read_bytes())
-            self.assertEqual(startup.read_bytes(),
-                             (session.directory / "sound-startup-seed.ini").read_bytes())
-            audition.sound_startup.validate(session.contract["sound_startup"],
-                session.contract["native_isolation"], session.directory / "gens.cfg", launched=False)
+            self.assertEqual(startup.read_bytes(), (session.directory / "sound-startup-seed.ini").read_bytes())
+            audition.sound_startup.validate(
+                session.contract["sound_startup"],
+                session.contract["native_isolation"],
+                session.directory / "gens.cfg",
+                launched=False,
+            )
             self.assertEqual("1", environment["ALIEN_SOUND_CHECK"])
             command = spawn.call_args.args[0]
             launched_rom = Path(command[command.index("-rom") + 1])
@@ -262,6 +318,7 @@ class ReportAndLifecycleTests(unittest.TestCase):
 
     def test_native_contract_change_private_config_or_sidecar_refuses_completion(self):
         from runtime_isolation import isolated_config
+
         for mutation in ("native", "config", "sidecar", "rom"):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
@@ -269,12 +326,16 @@ class ReportAndLifecycleTests(unittest.TestCase):
                 (root / "gens.cfg").write_bytes(config)
                 (root / "audition.bin").write_bytes(b"rom")
                 native = {"executable_path": str(root / "Gens.exe"), "identity": "original"}
-                contract = self.contract() | {"runtime_environment": native, "native_isolation": record,
-                                              "rom_sha256": hashlib.sha256(b"rom").hexdigest()}
+                contract = self.contract() | {
+                    "runtime_environment": native,
+                    "native_isolation": record,
+                    "rom_sha256": hashlib.sha256(b"rom").hexdigest(),
+                }
                 process = mock.Mock()
                 process.poll.return_value = 0
-                session = audition.Session(process, contract, root / "result.json", root / "stop.txt", root,
-                                           ready=self.report(), root=root)
+                session = audition.Session(
+                    process, contract, root / "result.json", root / "stop.txt", root, ready=self.report(), root=root
+                )
                 current = native.copy()
                 if mutation == "native":
                     current["identity"] = "changed"
@@ -302,6 +363,7 @@ class ReportAndLifecycleTests(unittest.TestCase):
 
     def test_seed_source_or_helper_change_refuses_native_session_completion(self):
         from runtime_isolation import isolated_config
+
         for mutation in ("snapshot", "source", "helper"):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
@@ -314,8 +376,10 @@ class ReportAndLifecycleTests(unittest.TestCase):
                 native = {"executable_path": str(root / "Gens.exe"), "identity": "fixed fixture"}
                 source = {"scope": "source fixture"}
                 contract = self.contract() | {
-                    "runtime_environment": native, "native_isolation": isolation,
-                    "sound_startup": seed, "sound_startup_source": source,
+                    "runtime_environment": native,
+                    "native_isolation": isolation,
+                    "sound_startup": seed,
+                    "sound_startup_source": source,
                     "sound_startup_module_sha256": audition.digest_file(Path(audition.sound_startup.__file__)),
                     "rom_sha256": hashlib.sha256(b"rom").hexdigest(),
                     "runner_sha256": audition.digest_file(Path(audition.__file__)),
@@ -331,19 +395,27 @@ class ReportAndLifecycleTests(unittest.TestCase):
                     contract["sound_startup_module_sha256"] = "0" * 64
                 process = mock.Mock()
                 process.poll.return_value = 0
-                session = audition.Session(process, contract, root / "result.json", root / "stop.txt", root,
-                    ready=self.report() | {"rom_sha256": contract["rom_sha256"]}, root=root)
-                with (mock.patch.object(audition, "environment_identity", return_value=native),
-                      mock.patch.object(audition.sound_startup, "native_contract", return_value=current),
-                      self.assertRaises((RuntimeError, ValueError))):
+                session = audition.Session(
+                    process,
+                    contract,
+                    root / "result.json",
+                    root / "stop.txt",
+                    root,
+                    ready=self.report() | {"rom_sha256": contract["rom_sha256"]},
+                    root=root,
+                )
+                with (
+                    mock.patch.object(audition, "environment_identity", return_value=native),
+                    mock.patch.object(audition.sound_startup, "native_contract", return_value=current),
+                    self.assertRaises((RuntimeError, ValueError)),
+                ):
                     session.poll()
 
     def test_failed_report_surfaces_the_separate_diagnostic_without_accepting_it(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             result = root / "result.json"
-            result.write_text(json.dumps(self.report() | {"status": "timeout", "observations": []}),
-                              encoding="utf-8")
+            result.write_text(json.dumps(self.report() | {"status": "timeout", "observations": []}), encoding="utf-8")
             diagnostic = result.with_name(result.name + ".diagnostic.json")
             evidence = b'{"phase":"stopping","queue":[0,0,0,0],"loader_hook_count":0}\n'
             diagnostic.write_bytes(evidence)

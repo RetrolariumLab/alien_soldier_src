@@ -54,33 +54,33 @@ class SoundEnvelopeDocumentTests(unittest.TestCase):
             envelope_six = family["envelopes"][5]
             block_five = family["blocks"][5]
             block_five_start = sum(block["capacity"] for block in family["blocks"][:5])
-            self.assertEqual(family["blocks"][4]["capacity"] + block_five["capacity"],
-                             len(envelope_six["reachable_offsets"]))
+            self.assertEqual(
+                family["blocks"][4]["capacity"] + block_five["capacity"], len(envelope_six["reachable_offsets"])
+            )
             self.assertIn(block_five_start, envelope_six["reachable_offsets"])
 
     def test_commands_and_unreachable_padding_are_immutable(self) -> None:
         document = copy.deepcopy(self.document)
         pitch = self.family(document, "pitch")
         pitch["blocks"][0]["commands"][0]["opcode"] ^= 1
-        self.assertTrue(any("commands differs" in error
-                            for error in document_errors(document, ROOT, "jp")))
+        self.assertTrue(any("commands differs" in error for error in document_errors(document, ROOT, "jp")))
         document = copy.deepcopy(self.document)
         psg = self.family(document, "psg_volume")
         psg["blocks"][-1]["protected_bytes"][0]["byte"] ^= 1
-        self.assertTrue(any("protected_bytes differs" in error
-                            for error in document_errors(document, ROOT, "jp")))
+        self.assertTrue(any("protected_bytes differs" in error for error in document_errors(document, ROOT, "jp")))
 
     def test_value_may_not_become_a_reader_command(self) -> None:
         document = copy.deepcopy(self.document)
         pitch = self.family(document, "pitch")
         pitch["blocks"][0]["values"][0]["value"] = -128
-        self.assertTrue(any("becomes a control command" in error
-                            for error in document_errors(document, ROOT, "jp")))
+        self.assertTrue(any("becomes a control command" in error for error in document_errors(document, ROOT, "jp")))
 
     def test_reader_control_flow_widths_are_explicit(self) -> None:
         values, commands, operands = _walk(
-            bytes((0x84, 1, 2, 0x82, 6, 99, 0x83)), 0,
-            frozenset(range(0x80, 0x85)), "pitch",
+            bytes((0x84, 1, 2, 0x82, 6, 99, 0x83)),
+            0,
+            frozenset(range(0x80, 0x85)),
+            "pitch",
         )
         self.assertEqual({2}, values)
         self.assertEqual({0, 3, 6}, set(commands))
@@ -112,8 +112,12 @@ class SoundEnvelopeDocumentTests(unittest.TestCase):
     def test_eu_document_has_the_same_envelope_contract(self) -> None:
         eu = export_document(ROOT, "eu")
         for field in (
-            "family_count", "envelope_count", "capacity", "value_count",
-            "command_count", "protected_byte_count",
+            "family_count",
+            "envelope_count",
+            "capacity",
+            "value_count",
+            "command_count",
+            "protected_byte_count",
         ):
             self.assertEqual(self.document[field], eu[field])
 

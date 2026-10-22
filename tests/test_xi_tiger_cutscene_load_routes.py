@@ -18,10 +18,7 @@ from unpack_data import unpack_data  # noqa: E402
 
 def directives(source: str, start: str, end: str) -> list[str]:
     body = source.split(start, 1)[1].split(end, 1)[0]
-    return [
-        value.strip()
-        for value in re.findall(r"\bdc\.[wl]\s+([^;\r\n]+)", body)
-    ]
+    return [value.strip() for value in re.findall(r"\bdc\.[wl]\s+([^;\r\n]+)", body)]
 
 
 class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
@@ -54,12 +51,8 @@ class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
         handlers = directives(loader, "LoadObjDataHandlers:", "; The source word")
         self.assertEqual("LoadCompressedToRAM", handlers[6])
         self.assertEqual("LoadCompressedToVRAM", handlers[7])
-        ram = loader.split("LoadCompressedToRAM:", 1)[1].split(
-            "; End of function LoadCompressedToRAM", 1
-        )[0]
-        vram = loader.split("LoadCompressedToVRAM:", 1)[1].split(
-            "; End of function LoadCompressedToVRAM", 1
-        )[0]
+        ram = loader.split("LoadCompressedToRAM:", 1)[1].split("; End of function LoadCompressedToRAM", 1)[0]
+        vram = loader.split("LoadCompressedToVRAM:", 1)[1].split("; End of function LoadCompressedToVRAM", 1)[0]
         self.assertIn("moveq   #$FFFFFFFF,d0", ram)
         self.assertIn("move.w  (a0)+,d0", ram)
         self.assertIn("movea.l d0,a2", ram)
@@ -70,22 +63,13 @@ class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
         self.assertIn("lea     (VDP_DATA).l,a5", vram)
 
     def test_decoded_sources_and_direct_tilemap_reader(self) -> None:
-        source = (ROOT / "src/data/xi_tiger_and_boss_art.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/data/xi_tiger_and_boss_art.s").read_text(encoding="utf-8")
         inline = source.split("XiTigerCutsceneTilemapBlockIndices:", 1)[1].split(
             "XiTigerCutsceneTilemapWordSource:", 1
         )[0]
-        parts = [
-            line.split("dc.b", 1)[1].split(";", 1)[0]
-            for line in inline.splitlines()
-            if "dc.b" in line
-        ]
+        parts = [line.split("dc.b", 1)[1].split(";", 1)[0] for line in inline.splitlines() if "dc.b" in line]
         tokens = [token.strip() for part in parts for token in part.split(",")]
-        block_indices = bytes(
-            int(token[1:], 16) if token.startswith("$") else int(token)
-            for token in tokens
-        )
+        block_indices = bytes(int(token[1:], 16) if token.startswith("$") else int(token) for token in tokens)
         word_source = (ROOT / "data/mappings/byte_11A644.bin").read_bytes()
         self.assertEqual(42, len(block_indices))
         self.assertEqual(696, len(word_source))
@@ -109,15 +93,11 @@ class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
         cutscene = (ROOT / "src/cutscenes/xi_tiger.s").read_text(encoding="utf-8")
         self.assertIn("jsr     (Tilemap_DirectTransferFromPrimaryCamera).l", cutscene)
         self.assertIn("jmp     Tilemap_DirectTransferFromSecondaryCamera", cutscene)
-        transfer = (ROOT / "src/rendering/tilemap_row_streaming.s").read_text(
-            encoding="utf-8"
-        )
+        transfer = (ROOT / "src/rendering/tilemap_row_streaming.s").read_text(encoding="utf-8")
         self.assertIn("lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0", transfer)
         self.assertIn("move.b  (a1,d2.w),d4", transfer)
         self.assertIn("move.w  (a1,d3.w),(a2)+", transfer)
-        parameters = (ROOT / "src/rendering/boss_asset_sets.s").read_text(
-            encoding="utf-8"
-        )
+        parameters = (ROOT / "src/rendering/boss_asset_sets.s").read_text(encoding="utf-8")
         self.assertRegex(
             parameters,
             r"Gfx_TitleAndZLeoVRAMTransferParameters:\s+dc\.l\s+\$FFFF7000, \$FFFF6000, \$FFFF4000, \$14000",
@@ -126,9 +106,7 @@ class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
     def test_name_evidence_distinguishes_all_three_sources(self) -> None:
         records = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         expected = (
             ("0x1198E4", "XiTigerCutsceneTileArt", "type 7", "VRAM $6000"),
@@ -143,13 +121,9 @@ class XiTigerCutsceneLoadRouteTests(unittest.TestCase):
                 self.assertEqual(1, len(record["basis"]))
                 self.assertIn(loader_type, record["basis"][0])
                 self.assertIn(destination, record["basis"][0])
-        self.assertEqual(
-            "XiTigerCutsceneMappingDataB", records["0x11A61A"]["previous_name"]
-        )
+        self.assertEqual("XiTigerCutsceneMappingDataB", records["0x11A61A"]["previous_name"])
         self.assertEqual("byte_11A61A", records["0x11A61A"]["legacy_name"])
-        self.assertEqual(
-            "XiTigerCutsceneMappingDataA", records["0x11A644"]["previous_name"]
-        )
+        self.assertEqual("XiTigerCutsceneMappingDataA", records["0x11A644"]["previous_name"])
         self.assertEqual("byte_11A644", records["0x11A644"]["legacy_name"])
 
 

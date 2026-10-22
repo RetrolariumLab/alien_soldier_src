@@ -23,11 +23,7 @@ class MappingWorkspace:
     dirty: bool = False
 
     def __post_init__(self) -> None:
-        self.entries = [
-            (block, mapping)
-            for block in self.document["blocks"]
-            for mapping in block["mappings"]
-        ]
+        self.entries = [(block, mapping) for block in self.document["blocks"] for mapping in block["mappings"]]
 
     @property
     def block(self) -> dict:
@@ -56,12 +52,17 @@ class MappingWorkspace:
             raise ValueError("piece index is outside the mapping")
         self.piece_index = index
 
-    def set_piece(
-        self, *, x: int, y: int, attributes: int, size: int, link: int
-    ) -> None:
-        if any(isinstance(value, bool) or not isinstance(value, int) for value in (
-            x, y, attributes, size, link,
-        )):
+    def set_piece(self, *, x: int, y: int, attributes: int, size: int, link: int) -> None:
+        if any(
+            isinstance(value, bool) or not isinstance(value, int)
+            for value in (
+                x,
+                y,
+                attributes,
+                size,
+                link,
+            )
+        ):
             raise ValueError("piece fields must be integers")
         if not -128 <= x <= 127 or not -128 <= y <= 127:
             raise ValueError("piece coordinates must be signed bytes")
@@ -90,7 +91,4 @@ class MappingWorkspace:
         self.dirty = True
 
     def geometry(self) -> list[tuple[int, int, int, int]]:
-        return [
-            (piece["x"], piece["y"], *piece_dimensions(piece))
-            for piece in self.pieces
-        ]
+        return [(piece["x"], piece["y"], *piece_dimensions(piece)) for piece in self.pieces]

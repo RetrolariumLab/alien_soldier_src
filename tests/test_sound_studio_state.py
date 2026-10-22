@@ -27,7 +27,7 @@ def tiny_documents() -> dict:
     instructions, cursor = [], 0
     while cursor < len(body):
         instruction = decode_instruction("fixture", body, cursor)
-        instruction["data"] = list(body[cursor:cursor + instruction["size"]])
+        instruction["data"] = list(body[cursor : cursor + instruction["size"]])
         # Place the independently decoded event examples after a ten-byte
         # header. This fixture tests exposed fields, not reachable execution.
         instruction["offset"] += 10
@@ -36,21 +36,63 @@ def tiny_documents() -> dict:
         instructions.append(instruction)
         cursor += instruction["size"]
     return {
-        "sound_envelopes": {"families": [{"id": "pitch", "blocks": [{
-            "name": "fixture", "values": [{"offset": 0, "value": 0},
-                {"offset": 1, "value": -1}, {"offset": 2, "value": 2}],
-            "commands": [{"offset": 3, "opcode": 0x81}],
-        }]}]},
-        "sound_instruments": {"payloads": [{"name": "fixture",
-            "header_byte_count": 10, "instrument_offset": 40,
-            "instruments": [decode_instrument(0, bytes(25))]}]},
-        "sound_pcm_samples": {"banks": [{"name": "fixture", "samples": [{
-            "index": 0, "header_offset": 8, "start_offset": 16,
-            "byte_count": 2, "data": "A3B3", "header_words": [16, 2, 0],
-        }]}]},
-        "sound_sequences": {"payloads": [{"name": "fixture", "family": "bgm",
-            "header_byte_count": 10, "instrument_offset": 40,
-            "entry_offsets": [10], "instructions": instructions}]},
+        "sound_envelopes": {
+            "families": [
+                {
+                    "id": "pitch",
+                    "blocks": [
+                        {
+                            "name": "fixture",
+                            "values": [
+                                {"offset": 0, "value": 0},
+                                {"offset": 1, "value": -1},
+                                {"offset": 2, "value": 2},
+                            ],
+                            "commands": [{"offset": 3, "opcode": 0x81}],
+                        }
+                    ],
+                }
+            ]
+        },
+        "sound_instruments": {
+            "payloads": [
+                {
+                    "name": "fixture",
+                    "header_byte_count": 10,
+                    "instrument_offset": 40,
+                    "instruments": [decode_instrument(0, bytes(25))],
+                }
+            ]
+        },
+        "sound_pcm_samples": {
+            "banks": [
+                {
+                    "name": "fixture",
+                    "samples": [
+                        {
+                            "index": 0,
+                            "header_offset": 8,
+                            "start_offset": 16,
+                            "byte_count": 2,
+                            "data": "A3B3",
+                            "header_words": [16, 2, 0],
+                        }
+                    ],
+                }
+            ]
+        },
+        "sound_sequences": {
+            "payloads": [
+                {
+                    "name": "fixture",
+                    "family": "bgm",
+                    "header_byte_count": 10,
+                    "instrument_offset": 40,
+                    "entry_offsets": [10],
+                    "instructions": instructions,
+                }
+            ]
+        },
     }
 
 
@@ -64,15 +106,15 @@ class SoundStudioStateTests(unittest.TestCase):
         if self._state is None:
             context = load_context(ROOT, "jp")
             self.context_loads += 1
-            self._state = Workspace({
-                identifier: record["document"] for identifier, record in context.items()
-            })
+            self._state = Workspace({identifier: record["document"] for identifier, record in context.items()})
         return self._state
 
     def test_every_manifest_artifact_has_editable_fields(self) -> None:
         self.assertEqual(
             {
-                "sound_envelopes", "sound_instruments", "sound_pcm_samples",
+                "sound_envelopes",
+                "sound_instruments",
+                "sound_pcm_samples",
                 "sound_sequences",
             },
             set(self.state.artifact_ids),
@@ -101,10 +143,13 @@ class SoundStudioStateTests(unittest.TestCase):
         probe.select_artifact("sound_sequences")
         payload = probe.documents["sound_sequences"]["payloads"][0]
         before = deepcopy(payload)
-        exposed = {(value.container["offset"], value.index)
-                   for field in probe.artifact_fields for value in field.values}
-        self.assertEqual({item["opcode"] for item in payload["instructions"]
-                          if item["kind"] == "command"}, {0xE1, 0xE4, 0xFF, 0xF6, 0xF7, 0xF8})
+        exposed = {
+            (value.container["offset"], value.index) for field in probe.artifact_fields for value in field.values
+        }
+        self.assertEqual(
+            {item["opcode"] for item in payload["instructions"] if item["kind"] == "command"},
+            {0xE1, 0xE4, 0xFF, 0xF6, 0xF7, 0xF8},
+        )
         for item in payload["instructions"]:
             if item["kind"] != "command":
                 continue
@@ -150,10 +195,13 @@ class SoundStudioStateTests(unittest.TestCase):
 
     def test_envelope_commands_and_pcm_structure_are_not_exposed(self) -> None:
         self.state.select_artifact("sound_envelopes")
-        self.assertTrue(all(
-            set(value.container) == {"offset", "value"}
-            for field in self.state.artifact_fields for value in field.values
-        ))
+        self.assertTrue(
+            all(
+                set(value.container) == {"offset", "value"}
+                for field in self.state.artifact_fields
+                for value in field.values
+            )
+        )
 
         self.state.select_artifact("sound_pcm_samples")
         sample = self.state.field.values[0].container
@@ -184,9 +232,7 @@ class SoundStudioStateTests(unittest.TestCase):
         self.assertEqual(self.context_loads, 0)
 
     def test_manifest_publishes_the_workstation_contract(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
         studio = next(item for item in document["studios"] if item["id"] == "sound")
         self.assertEqual("check-sound-workspace", studio["workspace_gate"])
         self.assertEqual("check-sound-studio", studio["workstation_gate"])

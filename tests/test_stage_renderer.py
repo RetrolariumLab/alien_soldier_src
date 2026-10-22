@@ -11,15 +11,36 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.level_studio_model import (  # noqa: E402
-    CONFIG_FIELDS, PLAYER_POSITION_BIAS, read_configuration_records,
-    stage_configurations, stage_initializers)
+    CONFIG_FIELDS,
+    PLAYER_POSITION_BIAS,
+    read_configuration_records,
+    stage_configurations,
+    stage_initializers,
+)
 from authoring.stage_renderer import (  # noqa: E402
-    COPY_TO_VRAM, DECODE_TO_VRAM, DECOMPRESS_TO_VRAM, HFLIP, PALETTE_SHIFT,
-    PARALLAX_SHIFT, PRIORITY, Scene, TILE_MASK, VFLIP, build_vram, compose, draw,
-    not_reproduced, scene)
+    COPY_TO_VRAM,
+    DECODE_TO_VRAM,
+    DECOMPRESS_TO_VRAM,
+    HFLIP,
+    PALETTE_SHIFT,
+    PARALLAX_SHIFT,
+    PRIORITY,
+    Scene,
+    TILE_MASK,
+    VFLIP,
+    build_vram,
+    compose,
+    draw,
+    not_reproduced,
+    scene,
+)
 from authoring import map_reference_guard  # noqa: E402
 from authoring.stage_tilemap_model import (  # noqa: E402
-    PLANE_A_TABLE, PLANE_B_TABLE, plane_descriptor, read_plane_tables)
+    PLANE_A_TABLE,
+    PLANE_B_TABLE,
+    plane_descriptor,
+    read_plane_tables,
+)
 from authoring.stage_tilemap_model import AssetCommand  # noqa: E402
 from authoring.tile_graphics import GRAPHICS_CONFIG  # noqa: E402
 
@@ -36,13 +57,13 @@ class VramTests(unittest.TestCase):
 
         pixels = bytes(range(16)) * 2
         lists = {"fixture": (AssetCommand(DECODE_TO_VRAM, "art", 0x0100),)}
-        vram, missing = build_vram(
-            ROOT, ["fixture"], lists, {"art": compress(pixels)})
+        vram, missing = build_vram(ROOT, ["fixture"], lists, {"art": compress(pixels)})
         self.assertEqual(pixels, vram[0x100:0x120])
         self.assertEqual((), missing)
 
     def test_the_command_numbers_are_the_handlers_they_name(self) -> None:
         from authoring.stage_tilemap_model import LOAD_HANDLERS
+
         self.assertEqual("Gfx_LoadDataToVRAM", LOAD_HANDLERS[COPY_TO_VRAM])
         self.assertEqual("Gfx_LoadCompressedGfx", LOAD_HANDLERS[DECODE_TO_VRAM])
         self.assertEqual("LoadCompressedToVRAM", LOAD_HANDLERS[DECOMPRESS_TO_VRAM])
@@ -70,8 +91,7 @@ class ConfigurationRecordTests(unittest.TestCase):
         record = read_configuration_records(ROOT)["Stage1ConfigRecord"]
         self.assertEqual("Stage1_ObjectSpawnList", record.spawn_list)
         self.assertEqual("EarlyStagePaletteOffsetList", record.palette_list)
-        self.assertEqual((0x40 + PLAYER_POSITION_BIAS, 0xB0 + PLAYER_POSITION_BIAS),
-                         record.player_start)
+        self.assertEqual((0x40 + PLAYER_POSITION_BIAS, 0xB0 + PLAYER_POSITION_BIAS), record.player_start)
 
     def test_a_spawn_cursor_that_is_a_sentinel_stays_a_number(self) -> None:
         # Stage20ConfigRecord has dc.l $80000000 where the others have a label.
@@ -131,10 +151,14 @@ class TwoPlaneTests(unittest.TestCase):
                 return 1 + (x // 8) % 2
 
         built = Scene(
-            index=0, tilemap=None, plane_b=AlternatingPlane(),
+            index=0,
+            tilemap=None,
+            plane_b=AlternatingPlane(),
             vram=bytes(32) + bytes([0x11]) * 32 + bytes([0x22]) * 32,
             palette=[(value, value, value) for value in range(64)],
-            palette_name="fixture", configuration=None, missing_codecs=(),
+            palette_name="fixture",
+            configuration=None,
+            missing_codecs=(),
         )
         self.assertEqual(
             [(1, 1, 1)] * 8 + [(2, 2, 2)] * 8,
@@ -154,10 +178,14 @@ class TwoPlaneTests(unittest.TestCase):
                 return 1 + (x // 8) % 2
 
         built = Scene(
-            index=0, tilemap=AlternatingPlane(), plane_b=None,
+            index=0,
+            tilemap=AlternatingPlane(),
+            plane_b=None,
             vram=bytes(32) + bytes([0x11]) * 32 + bytes([0x22]) * 32,
             palette=[(value, value, value) for value in range(64)],
-            palette_name="fixture", configuration=None, missing_codecs=(),
+            palette_name="fixture",
+            configuration=None,
+            missing_codecs=(),
         )
         self.assertEqual(
             [(1, 1, 1)] * 5 + [(2, 2, 2)] * 5,
@@ -173,11 +201,16 @@ class TwoPlaneTests(unittest.TestCase):
                 return 1 if x < 256 else 2
 
         built = Scene(
-            index=1, tilemap=None, plane_b=RingPlane(),
+            index=1,
+            tilemap=None,
+            plane_b=RingPlane(),
             vram=bytes(32) + bytes([0x11]) * 32 + bytes([0x22]) * 32,
             palette=[(value, value, value) for value in range(64)],
-            palette_name="fixture", configuration=None, missing_codecs=(),
-            absolute_quarter_scroll=True, plane_b_wrap_pixels=512,
+            palette_name="fixture",
+            configuration=None,
+            missing_codecs=(),
+            absolute_quarter_scroll=True,
+            plane_b_wrap_pixels=512,
         )
         self.assertEqual(511, built.parallax_x(2044))
         self.assertEqual(0, built.plane_b_source_x(512))
@@ -204,28 +237,29 @@ class TwoPlaneTests(unittest.TestCase):
     def test_visible_map_guard_checks_wrapped_secondary_cells(self) -> None:
         built = scene(ROOT, 1)
         record = {
-            "id": "stage2_ring", "camera_a_x": 0x700,
-            "camera_a_y": {"jp": 96}, "width": 80, "height": 8,
+            "id": "stage2_ring",
+            "camera_a_x": 0x700,
+            "camera_a_y": {"jp": 96},
+            "width": 80,
+            "height": 8,
         }
-        with mock.patch.object(
-                map_reference_guard, "reference_issue",
-                return_value=None) as checked:
-            self.assertEqual([], map_reference_guard.visible_reference_errors(
-                built, built, record, "jp"))
-        back_x = [call.args[1] for call in checked.call_args_list
-                  if call.args[0] is built.plane_b]
+        with mock.patch.object(map_reference_guard, "reference_issue", return_value=None) as checked:
+            self.assertEqual([], map_reference_guard.visible_reference_errors(built, built, record, "jp"))
+        back_x = [call.args[1] for call in checked.call_args_list if call.args[0] is built.plane_b]
         self.assertIn(0, back_x)
         self.assertNotIn(512, back_x)
 
     def test_visible_map_guard_explicit_lookup_preserves_default_level_camera(self):
         built = scene(ROOT, 1)
-        record = {"id": "stage2_ring", "camera_a_x": 0x700,
-                  "camera_a_y": {"jp": 96}, "width": 16, "height": 8}
+        record = {"id": "stage2_ring", "camera_a_x": 0x700, "camera_a_y": {"jp": 96}, "width": 16, "height": 8}
         for override, expected in ((None, 96), (16, 16), (-16, -16)):
-            with self.subTest(viewport_y=override), mock.patch.object(
-                    map_reference_guard, "reference_issue", return_value=None) as checked:
-                self.assertEqual([], map_reference_guard.visible_reference_errors(
-                    built, built, record, "jp", viewport_y=override))
+            with (
+                self.subTest(viewport_y=override),
+                mock.patch.object(map_reference_guard, "reference_issue", return_value=None) as checked,
+            ):
+                self.assertEqual(
+                    [], map_reference_guard.visible_reference_errors(built, built, record, "jp", viewport_y=override)
+                )
                 self.assertTrue(checked.call_args_list)
                 self.assertEqual({expected}, {call.args[2] for call in checked.call_args_list})
         self.assertEqual(96, record["camera_a_y"]["jp"])
@@ -253,8 +287,7 @@ class TwoPlaneTests(unittest.TestCase):
         for mode in (0x8004, 0x8008):
             with self.subTest(mode=mode), self.assertRaises(ValueError):
                 plane_descriptor(mode, ["First", "Second"], offset_variant=False)
-        self.assertEqual(("Second", 0), plane_descriptor(
-            8, ["First", "Second"], offset_variant=False))
+        self.assertEqual(("Second", 0), plane_descriptor(8, ["First", "Second"], offset_variant=False))
 
     def test_renderer_does_not_mask_a_secondary_mode_when_validator_is_bypassed(self) -> None:
         record = read_configuration_records(ROOT)["Stage1ConfigRecord"]
@@ -264,10 +297,12 @@ class TwoPlaneTests(unittest.TestCase):
 
     def test_the_tables_name_the_descriptors_the_source_names(self) -> None:
         tables = read_plane_tables(ROOT)
-        self.assertEqual(["Gfx_TitleAndZLeoVRAMTransferParameters",
-                          "Gfx_DefaultVRAMTransferParameters"], tables[PLANE_A_TABLE])
-        self.assertEqual(["Gfx_FrontendAlternateVRAMTransferParameters",
-                          "Gfx_ScrollVRAMTransferParameters"], tables[PLANE_B_TABLE])
+        self.assertEqual(
+            ["Gfx_TitleAndZLeoVRAMTransferParameters", "Gfx_DefaultVRAMTransferParameters"], tables[PLANE_A_TABLE]
+        )
+        self.assertEqual(
+            ["Gfx_FrontendAlternateVRAMTransferParameters", "Gfx_ScrollVRAMTransferParameters"], tables[PLANE_B_TABLE]
+        )
 
     def test_every_stage_resolves_both_of_its_planes(self) -> None:
         for index in range(len(stage_configurations(ROOT))):

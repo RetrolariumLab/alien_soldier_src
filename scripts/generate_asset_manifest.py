@@ -61,9 +61,7 @@ def main() -> int:
     rom = Path(args.rom).read_bytes()
     rom_sha1 = hashlib.sha1(rom).hexdigest()
     if len(rom) != reference["size"] or rom_sha1 != reference["sha1"]:
-        fail(
-            f"Input is not the canonical ROM: {len(rom)} bytes, SHA1 {rom_sha1}"
-        )
+        fail(f"Input is not the canonical ROM: {len(rom)} bytes, SHA1 {rom_sha1}")
 
     assets = parse_ranges(Path(args.ranges))
     asset_dir = Path(args.asset_dir)

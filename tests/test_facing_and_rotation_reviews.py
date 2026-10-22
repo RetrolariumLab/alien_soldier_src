@@ -15,9 +15,7 @@ ROTATION = ROOT / "src/rendering/seven_forces_metasprites.s"
 
 
 def table_pointers(source: str, name: str) -> list[str]:
-    match = re.search(
-        rf"(?ms)^{re.escape(name)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source
-    )
+    match = re.search(rf"(?ms)^{re.escape(name)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source)
     if match is None:
         raise AssertionError(f"missing table {name}")
     return re.findall(r"\bdc\.l\s+(SevenForcesRotationSpriteFrame\d+)", match.group(1))
@@ -26,14 +24,8 @@ def table_pointers(source: str, name: str) -> list[str]:
 class FacingAndRotationReviewTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
-        cls.reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
+        cls.audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
+        cls.reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
 
     def assert_review(self, basis: str, members: tuple[tuple[str, str], ...]) -> None:
         review = self.reviews[basis]
@@ -65,8 +57,7 @@ class FacingAndRotationReviewTests(unittest.TestCase):
         )
         self.assert_review(
             "Neither direction held leaves the facing unchanged.",
-            (("0x016926", "Player_UpdateAimDirection_Return"),
-             ("0x016C60", "Player_UpdateHorizontalFacing_Return")),
+            (("0x016926", "Player_UpdateAimDirection_Return"), ("0x016C60", "Player_UpdateHorizontalFacing_Return")),
         )
 
     def test_eight_pointer_runs_and_descriptor_consumers(self) -> None:
@@ -90,18 +81,15 @@ class FacingAndRotationReviewTests(unittest.TestCase):
         for basis, members in (
             (
                 "Multiple Seven Forces form descriptors reference this eight-entry frame-pointer table for directional part rendering.",
-                (("0x059DC2", "SevenForcesRotationFrameTable3"),
-                 ("0x059E02", "SevenForcesRotationFrameTable5")),
+                (("0x059DC2", "SevenForcesRotationFrameTable3"), ("0x059E02", "SevenForcesRotationFrameTable5")),
             ),
             (
                 "Multiple Seven Forces form descriptors reference this reverse-ordered frame-pointer table for directional part rendering.",
-                (("0x059DE2", "SevenForcesRotationFrameTable4"),
-                 ("0x059E22", "SevenForcesRotationFrameTable6")),
+                (("0x059DE2", "SevenForcesRotationFrameTable4"), ("0x059E22", "SevenForcesRotationFrameTable6")),
             ),
             (
                 "Seven Forces form descriptors reference this reverse-ordered frame-pointer table for directional part rendering.",
-                (("0x059DA2", "SevenForcesRotationFrameTable2"),
-                 ("0x059E62", "SevenForcesRotationFrameTable8")),
+                (("0x059DA2", "SevenForcesRotationFrameTable2"), ("0x059E62", "SevenForcesRotationFrameTable8")),
             ),
         ):
             with self.subTest(basis=basis):

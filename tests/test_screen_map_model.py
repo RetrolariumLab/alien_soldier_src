@@ -26,9 +26,7 @@ class ScreenMapTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.enterClassContext(parsed_operation(ROOT))
         cls.document = export_document(ROOT, "jp")
-        cls.records = {
-            record["name"]: record for record in cls.document["payloads"]
-        }
+        cls.records = {record["name"]: record for record in cls.document["payloads"]}
 
     def test_inventory_and_roles_are_fixed(self) -> None:
         self.assertEqual(8, self.document["payload_count"])
@@ -45,10 +43,7 @@ class ScreenMapTests(unittest.TestCase):
         self.assertEqual(
             {"payload": 4, "source": 4},
             {
-                storage: sum(
-                    record["storage"] == storage
-                    for record in self.document["payloads"]
-                )
+                storage: sum(record["storage"] == storage for record in self.document["payloads"])
                 for storage in ("payload", "source")
             },
         )
@@ -65,33 +60,20 @@ class ScreenMapTests(unittest.TestCase):
         self.assertEqual(encode_values(record), decompress(slot))
 
         document = copy.deepcopy(self.document)
-        edited = next(
-            item for item in document["payloads"]
-            if item["name"] == record["name"]
-        )
+        edited = next(item for item in document["payloads"] if item["name"] == record["name"])
         edited["values"] = record["values"]
-        self.assertEqual(
-            [record["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([record["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_inline_value_targets_its_assembly_owner(self) -> None:
         document = copy.deepcopy(self.document)
-        record = next(
-            item for item in document["payloads"]
-            if item["name"] == "FrontendTitleMappingData6000"
-        )
+        record = next(item for item in document["payloads"] if item["name"] == "FrontendTitleMappingData6000")
         record["values"][0] ^= 1
-        self.assertEqual(
-            [record["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([record["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_incompressible_edit_is_rejected_by_fixed_capacity(self) -> None:
         record = copy.deepcopy(self.records["FrontendTitleMappingData6000"])
         maximum = (1 << record["value_bits"]) - 1
-        record["values"] = [
-            ((index * 1103515245 + 12345) >> 8) & maximum
-            for index in range(len(record["values"]))
-        ]
+        record["values"] = [((index * 1103515245 + 12345) >> 8) & maximum for index in range(len(record["values"]))]
         with self.assertRaisesRegex(ValueError, "exceeds fixed capacity"):
             encoded_slot(record)
 

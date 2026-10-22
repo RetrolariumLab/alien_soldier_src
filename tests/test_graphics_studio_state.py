@@ -10,7 +10,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring import graphics_studio, graphics_studio_model  # noqa: E402
 from authoring.graphics_studio_state import (  # noqa: E402
-    Workspace, payload_tile_count, tile_location)
+    Workspace,
+    payload_tile_count,
+    tile_location,
+)
 
 
 class WorkspaceStateTests(unittest.TestCase):
@@ -19,10 +22,7 @@ class WorkspaceStateTests(unittest.TestCase):
         self.state = Workspace(self.document)
 
     def test_payload_and_tile_navigation_respects_block_boundaries(self) -> None:
-        chained = next(
-            (index, item) for index, item in enumerate(self.state.payloads)
-            if len(item["blocks"]) == 2
-        )
+        chained = next((index, item) for index, item in enumerate(self.state.payloads) if len(item["blocks"]) == 2)
         self.state.select_payload(chained[0])
         first_count = len(chained[1]["blocks"][0]["tiles"])
         self.assertEqual((0, first_count - 1), tile_location(chained[1], first_count - 1))

@@ -25,16 +25,23 @@ from authoring.map_reference_guard import periodic_reference_error, writer_ids  
 from authoring.screen_studio_model import build_scene, load_config  # noqa: E402
 from authoring.stage_renderer import forget, read_once, scene, signed_word  # noqa: E402
 from authoring.stage_tilemap_model import (  # noqa: E402
-    CHUNK_BYTES, COARSE_COLUMNS, DIRECTIVE, PATTERN_BYTES, PLANE_A_TABLE, PLANE_B_TABLE,
-    RAM_BASE, RAM_SIZE, plane_descriptor, read_asset_list,
+    CHUNK_BYTES,
+    COARSE_COLUMNS,
+    DIRECTIVE,
+    PATTERN_BYTES,
+    PLANE_A_TABLE,
+    PLANE_B_TABLE,
+    RAM_BASE,
+    RAM_SIZE,
+    plane_descriptor,
+    read_asset_list,
 )
 
 
 PROFILES = ("jp", "eu")
-COUNTS = ("valid", "unowned_coarse", "unloaded_chunk", "unowned_chunk",
-          "unloaded_pattern", "unowned_pattern")
+COUNTS = ("valid", "unowned_coarse", "unloaded_chunk", "unowned_chunk", "unloaded_pattern", "unowned_pattern")
 WORDS_PER_PATTERN = PATTERN_BYTES // 2
-LINKS_PER_PLANE = COARSE_COLUMNS ** 2 * CHUNK_BYTES
+LINKS_PER_PLANE = COARSE_COLUMNS**2 * CHUNK_BYTES
 TILES_PER_PLANE = LINKS_PER_PLANE * WORDS_PER_PATTERN
 
 
@@ -43,8 +50,12 @@ def empty_counts():
 
 
 def owned(owners, address, width):
-    return (0 <= address and address + width <= RAM_SIZE and owners[address] != 0
-            and owners[address] == owners[address + width - 1])
+    return (
+        0 <= address
+        and address + width <= RAM_SIZE
+        and owners[address] != 0
+        and owners[address] == owners[address + width - 1]
+    )
 
 
 def plane_facts(plane):
@@ -78,9 +89,15 @@ def plane_facts(plane):
                 mask |= 1 << word
             counts[status] += 1
             in_ram = 0 <= address and address + 2 <= RAM_SIZE
-            digest.update(struct.pack(">BHHH", COUNTS.index(status), owners[address] if in_ram else 0,
-                                      owners[address + 1] if in_ram else 0,
-                                      int.from_bytes(plane.ram[address:address + 2], "big") if in_ram else 0))
+            digest.update(
+                struct.pack(
+                    ">BHHH",
+                    COUNTS.index(status),
+                    owners[address] if in_ram else 0,
+                    owners[address + 1] if in_ram else 0,
+                    int.from_bytes(plane.ram[address : address + 2], "big") if in_ram else 0,
+                )
+            )
         pattern_facts.append((counts, mask, digest.digest()))
     chunk_facts = []
     for coarse in range(256):
@@ -107,9 +124,10 @@ def plane_facts(plane):
                 witness = (position, (mask & -mask).bit_length() - 1)
         chunk_facts.append((counts, witness, digest.digest()))
     counts, witness = empty_counts(), None
-    digest = hashlib.sha256(json.dumps({"descriptor": asdict(plane.descriptor), "y_offset": plane.y_offset},
-                                       sort_keys=True).encode("utf-8"))
-    for cell in range(COARSE_COLUMNS ** 2):
+    digest = hashlib.sha256(
+        json.dumps({"descriptor": asdict(plane.descriptor), "y_offset": plane.y_offset}, sort_keys=True).encode("utf-8")
+    )
+    for cell in range(COARSE_COLUMNS**2):
         address = coarse_base + cell
         if not 0 <= address < RAM_SIZE:
             raise ValueError("coarse map period escapes RAM")
@@ -129,15 +147,23 @@ def plane_facts(plane):
         raise ValueError("map inventory did not account for the complete period")
     ownership = Counter(owners)
     writer_ranges = [
-        {"id": index, "asset_list": item[0], "source": item[1],
-         "start": "0x%08X" % (RAM_BASE + item[2]), "length": item[3],
-         "final_owned_bytes": ownership[index]}
+        {
+            "id": index,
+            "asset_list": item[0],
+            "source": item[1],
+            "start": "0x%08X" % (RAM_BASE + item[2]),
+            "length": item[3],
+            "final_owned_bytes": ownership[index],
+        }
         for index, item in enumerate(plane.written, 1)
     ]
     report = {
-        "descriptor": asdict(plane.descriptor), "y_offset": plane.y_offset,
-        "loaded_chunk_bytes": chunks, "loaded_pattern_bytes": patterns,
-        "counts": counts, "unloaded": counts["unloaded_chunk"] + counts["unloaded_pattern"],
+        "descriptor": asdict(plane.descriptor),
+        "y_offset": plane.y_offset,
+        "loaded_chunk_bytes": chunks,
+        "loaded_pattern_bytes": patterns,
+        "counts": counts,
+        "unloaded": counts["unloaded_chunk"] + counts["unloaded_pattern"],
         "unowned": counts["unowned_coarse"] + counts["unowned_chunk"] + counts["unowned_pattern"],
         "ram_sha256": hashlib.sha256(plane.ram).hexdigest(),
         "writer_ranges": writer_ranges,
@@ -150,33 +176,46 @@ def plane_facts(plane):
 def mutation_probes(plane, plane_name, context, witness, pattern_facts):
     """Change one RAM byte at a time; canonical source and ownership stay intact."""
     if witness is None:
-        return [{"role": role, "status": "not_applicable", "why": "no source-valid read"}
-                for role in ("coarse", "chunk")]
+        return [
+            {"role": role, "status": "not_applicable", "why": "no source-valid read"} for role in ("coarse", "chunk")
+        ]
     cell, coarse, position, word = witness
-    original = SimpleNamespace(tilemap=plane if plane_name == "plane_a" else None,
-                               plane_b=plane if plane_name == "plane_b" else None)
+    original = SimpleNamespace(
+        tilemap=plane if plane_name == "plane_a" else None, plane_b=plane if plane_name == "plane_b" else None
+    )
     chunks = plane.region(plane.descriptor.chunks)
     bad_coarse = next((value for value in reversed(range(256)) if value * CHUNK_BYTES >= chunks), None)
-    bad_chunk = next((value for value in reversed(range(256))
-                      if not pattern_facts[value][1] & (1 << word)), None)
+    bad_chunk = next((value for value in reversed(range(256)) if not pattern_facts[value][1] & (1 << word)), None)
     probes = []
     for role, address, bad in (
         ("coarse", plane.descriptor.coarse - RAM_BASE + cell, bad_coarse),
         ("chunk", plane.descriptor.chunks - RAM_BASE + coarse * CHUNK_BYTES + position, bad_chunk),
     ):
         if bad is None:
-            probes.append({"role": role, "status": "not_applicable", "why": "all 8-bit targets retain this source-valid read"})
+            probes.append(
+                {"role": role, "status": "not_applicable", "why": "all 8-bit targets retain this source-valid read"}
+            )
             continue
         mutated = bytearray(plane.ram)
         mutated[address] = bad
         changed_plane = replace(plane, ram=mutated)
-        changed = SimpleNamespace(tilemap=changed_plane if plane_name == "plane_a" else None,
-                                  plane_b=changed_plane if plane_name == "plane_b" else None)
+        changed = SimpleNamespace(
+            tilemap=changed_plane if plane_name == "plane_a" else None,
+            plane_b=changed_plane if plane_name == "plane_b" else None,
+        )
         error = periodic_reference_error(original, changed, context)
         if error is None:
             raise ValueError("periodic guard accepted a new invalid %s reference: %s %s" % (role, context, plane_name))
-        probes.append({"role": role, "status": "rejected", "address": "0x%08X" % (RAM_BASE + address),
-                       "old": plane.ram[address], "new": bad, "guard_error": error})
+        probes.append(
+            {
+                "role": role,
+                "status": "rejected",
+                "address": "0x%08X" % (RAM_BASE + address),
+                "old": plane.ram[address],
+                "new": bad,
+                "guard_error": error,
+            }
+        )
         del changed, changed_plane, mutated
     return probes
 
@@ -191,8 +230,16 @@ def stage_planes(root, read, graphics):
             raise ValueError("static stage %d has no configuration" % index)
         if index in read["not_reproduced"]:
             for plane_name in ("plane_a", "plane_b"):
-                yield {"kind": "stage", "id": str(index), "plane": plane_name,
-                       "status": "excluded", "why": read["not_reproduced"][index]}, None
+                yield (
+                    {
+                        "kind": "stage",
+                        "id": str(index),
+                        "plane": plane_name,
+                        "status": "excluded",
+                        "why": read["not_reproduced"][index],
+                    },
+                    None,
+                )
             continue
         built = scene(root, index)
         if built.missing_codecs:
@@ -201,8 +248,13 @@ def stage_planes(root, read, graphics):
             ("plane_a", configuration.plane_a_mode, PLANE_A_TABLE),
             ("plane_b", configuration.plane_b_mode, PLANE_B_TABLE),
         ):
-            record = {"kind": "stage", "id": str(index), "plane": plane_name,
-                      "configuration": configuration.name, "entry_mode": mode}
+            record = {
+                "kind": "stage",
+                "id": str(index),
+                "plane": plane_name,
+                "configuration": configuration.name,
+                "entry_mode": mode,
+            }
             name, offset = plane_descriptor(mode, read["plane_tables"][table], offset_variant=table == PLANE_A_TABLE)
             if name is None:
                 yield {**record, "status": "constant_fill", "why": "source entry mode is zero; no map reads"}, None
@@ -214,9 +266,17 @@ def stage_planes(root, read, graphics):
             plane = replace(read["tilemaps"][index], descriptor=read["descriptors"][name], y_offset=offset)
             drawable = built.tilemap if plane_name == "plane_a" else built.plane_b
             loaded = bool(plane.region(plane.descriptor.chunks) and plane.region(plane.descriptor.patterns))
-            yield {**record, "status": "audited", "loaded": loaded, "renderer_drawable": drawable is not None,
-                   "renderer_route": built.planes[0 if plane_name == "plane_a" else 1],
-                   "asset_lists": list(plane.lists)}, plane
+            yield (
+                {
+                    **record,
+                    "status": "audited",
+                    "loaded": loaded,
+                    "renderer_drawable": drawable is not None,
+                    "renderer_route": built.planes[0 if plane_name == "plane_a" else 1],
+                    "asset_lists": list(plane.lists),
+                },
+                plane,
+            )
 
 
 def check_inputs(root, profile, sources, data, paths, owners, manifest):
@@ -228,8 +288,12 @@ def check_inputs(root, profile, sources, data, paths, owners, manifest):
         raw = data.get(source)
         if not isinstance(raw, bytes) or source not in owners:
             raise ValueError("map source is unavailable: %s" % source)
-        item = {"source": source, "source_file": owners[source],
-                "compressed_size": len(raw), "compressed_sha256": hashlib.sha256(raw).hexdigest()}
+        item = {
+            "source": source,
+            "source_file": owners[source],
+            "compressed_size": len(raw),
+            "compressed_sha256": hashlib.sha256(raw).hexdigest(),
+        }
         path = paths.get(source)
         if path is not None:
             try:
@@ -247,8 +311,12 @@ def check_inputs(root, profile, sources, data, paths, owners, manifest):
 
 def require_scene_sources(read, screens):
     """Do not mistake the permissive reader's missing payload for a source gap."""
-    list_names = {name for index, plane in enumerate(read["tilemaps"])
-                  if index not in read["not_reproduced"] for name in plane.lists}
+    list_names = {
+        name
+        for index, plane in enumerate(read["tilemaps"])
+        if index not in read["not_reproduced"]
+        for name in plane.lists
+    }
     commands = {name: read["lists"][name] for name in list_names}
     for record in screens["supported"]:
         name = record["asset_list"]
@@ -277,15 +345,25 @@ def audit(root: Path, profiles=PROFILES):
     graphics = json.loads((root / "config/authoring/graphics.json").read_text(encoding="utf-8"))
     screens = load_config(root)
     if tuple(item["id"] for item in screens["supported"]) != (
-            "title_background", "options_background", "story_background"):
+        "title_background",
+        "options_background",
+        "story_background",
+    ):
         raise ValueError("static screen audit requires all three declared supported screens")
     forget(root)
     read = read_once(root)
     require_scene_sources(read, screens)
     paths, owners = source_paths(root), source_owners(root)
-    report = {"schema_version": 1, "status": "passed_static_inventory", "scope": "canonical source; no workspace/staged edits",
-              "runtime_reachability": "not established", "period_pixels": [8192, 8192],
-              "chunk_links_per_plane": LINKS_PER_PLANE, "tile_reads_per_plane": TILES_PER_PLANE, "profiles": {}}
+    report = {
+        "schema_version": 1,
+        "status": "passed_static_inventory",
+        "scope": "canonical source; no workspace/staged edits",
+        "runtime_reachability": "not established",
+        "period_pixels": [8192, 8192],
+        "chunk_links_per_plane": LINKS_PER_PLANE,
+        "tile_reads_per_plane": TILES_PER_PLANE,
+        "profiles": {},
+    }
     for profile in profiles:
         if profile not in PROFILES:
             raise ValueError("unknown map audit profile: %s" % profile)
@@ -296,24 +374,49 @@ def audit(root: Path, profiles=PROFILES):
             for plane_name, plane in (("plane_a", built.tilemap), ("plane_b", built.plane_b)):
                 record = {"kind": "screen", "id": screen["id"], "plane": plane_name, "scope": screen["scope"]}
                 if plane is None:
-                    entries.append(({**record, "status": "constant_fill", "why": "declared static screen has no map on this plane"}, None))
+                    entries.append(
+                        (
+                            {
+                                **record,
+                                "status": "constant_fill",
+                                "why": "declared static screen has no map on this plane",
+                            },
+                            None,
+                        )
+                    )
                 else:
-                    entries.append(({**record, "status": "audited", "loaded": True, "renderer_drawable": True,
-                                     "asset_lists": list(plane.lists)}, plane))
+                    entries.append(
+                        (
+                            {
+                                **record,
+                                "status": "audited",
+                                "loaded": True,
+                                "renderer_drawable": True,
+                                "asset_lists": list(plane.lists),
+                            },
+                            plane,
+                        )
+                    )
         for record, plane in entries:
             if plane is not None:
                 facts, witness, patterns = plane_facts(plane)
                 record.update(facts)
-                record["mutation_probes"] = mutation_probes(plane, record["plane"], record["kind"] + " " + record["id"], witness, patterns)
+                record["mutation_probes"] = mutation_probes(
+                    plane, record["plane"], record["kind"] + " " + record["id"], witness, patterns
+                )
                 for key in COUNTS:
                     totals[key] += facts["counts"][key]
                 sources.update(item[1] for item in plane.written)
             records.append(record)
-        excluded_screens = [{"kind": "screen", "id": item["id"], "status": "excluded", "why": item["reason"]}
-                            for item in screens["unsupported"]]
+        excluded_screens = [
+            {"kind": "screen", "id": item["id"], "status": "excluded", "why": item["reason"]}
+            for item in screens["unsupported"]
+        ]
         report["profiles"][profile] = {
-            "assembler_defines": manifest["assembler_defines"][profile], "planes": records,
-            "unsupported_screen_routes": excluded_screens, "counts": totals,
+            "assembler_defines": manifest["assembler_defines"][profile],
+            "planes": records,
+            "unsupported_screen_routes": excluded_screens,
+            "counts": totals,
             "audited_planes": sum(item["status"] == "audited" for item in records),
             "map_inputs": check_inputs(root, profile, sources, read["data"], paths, owners, manifest),
         }
@@ -336,11 +439,19 @@ def main(argv=None):
         atomic_write_json(output, report)
         for profile, result in report["profiles"].items():
             counts = result["counts"]
-            print("[OK] %s %d static descriptor planes: %d valid, %d unloaded, %d unowned tile reads" % (
-                profile, result["audited_planes"], counts["valid"],
-                counts["unloaded_chunk"] + counts["unloaded_pattern"],
-                counts["unowned_coarse"] + counts["unowned_chunk"] + counts["unowned_pattern"]))
-        print("[OK] static inventory %s: %s; runtime reachability not established" % (report["inventory_sha256"], output))
+            print(
+                "[OK] %s %d static descriptor planes: %d valid, %d unloaded, %d unowned tile reads"
+                % (
+                    profile,
+                    result["audited_planes"],
+                    counts["valid"],
+                    counts["unloaded_chunk"] + counts["unloaded_pattern"],
+                    counts["unowned_coarse"] + counts["unowned_chunk"] + counts["unowned_pattern"],
+                )
+            )
+        print(
+            "[OK] static inventory %s: %s; runtime reachability not established" % (report["inventory_sha256"], output)
+        )
         return 0
     except (OSError, ValueError, KeyError, ContentError) as error:
         print("[ERROR] %s" % error, file=sys.stderr)

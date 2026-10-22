@@ -1,4 +1,5 @@
 """Test-only terminal command logger; never assembles or writes a ROM/listing."""
+
 import json
 import os
 from pathlib import Path

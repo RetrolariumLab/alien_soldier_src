@@ -41,10 +41,10 @@ import sys
 from pathlib import Path
 
 
-TILE_PIXELS = 64                 # an 8x8 tile, one slot per pixel
-TILE_BYTES = 32                  # the same tile packed, two pixels to a byte
-SEEDED = 0x8000                  # the bit a marker leaves on a slot
-NEAR_OFFSETS = (0, 7, 8, 9)      # what a two-bit marker means, zero excepted
+TILE_PIXELS = 64  # an 8x8 tile, one slot per pixel
+TILE_BYTES = 32  # the same tile packed, two pixels to a byte
+SEEDED = 0x8000  # the bit a marker leaves on a slot
+NEAR_OFFSETS = (0, 7, 8, 9)  # what a two-bit marker means, zero excepted
 FAR_SHORT = 6
 FAR_LONG = 10
 
@@ -189,9 +189,9 @@ def encode_tile(out: BitWriter, slot: list) -> None:
         end = at + 1
         while end < TILE_PIXELS and slot[end] == colour:
             end += 1
-        out.write((colour & 0xF) << 1, 5)          # low bit clear: no markers
+        out.write((colour & 0xF) << 1, 5)  # low bit clear: no markers
         run = end - at - 1
-        length = (run + 2).bit_length() - 1        # the largest k that fits
+        length = (run + 2).bit_length() - 1  # the largest k that fits
         for _ in range(length - 1):
             out.write(1, 1)
         out.write(0, 1)
@@ -208,7 +208,7 @@ def compress(data: bytes) -> bytes:
         raise ValueError("the count byte holds 256 tiles at most, not %d" % count)
     out = BitWriter()
     for index in range(count):
-        encode_tile(out, unpack_tile(data[index * TILE_BYTES:(index + 1) * TILE_BYTES]))
+        encode_tile(out, unpack_tile(data[index * TILE_BYTES : (index + 1) * TILE_BYTES]))
     payload = bytes([count - 1]) + out.finish()
     # The decoder fetches words, and every original payload is an even length
     return payload if len(payload) % 2 == 0 else payload + bytes(1)
@@ -221,14 +221,18 @@ def report(payload: bytes) -> dict:
     out = bytearray()
     for _ in range(count):
         out += pack_tile(decode_tile(bits))
-    return {"tiles": count, "bytes": len(out), "read": bits.spent(),
-            "size": len(payload), "slack": len(payload) - bits.spent()}
+    return {
+        "tiles": count,
+        "bytes": len(out),
+        "read": bits.spent(),
+        "size": len(payload),
+        "slack": len(payload) - bits.spent(),
+    }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--out-dir", default="tile_codec",
-                        help="where to write the decoded tiles")
+    parser.add_argument("--out-dir", default="tile_codec", help="where to write the decoded tiles")
     args = parser.parse_args()
     root = Path.cwd()
     sys.path.insert(0, str(root / "scripts" / "authoring"))
@@ -237,6 +241,7 @@ def main() -> int:
     wanted = {}
     binclude = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
     from lzss_codec import read_asset_records, LABEL_BYTES
+
     names = {}
     for path in sorted((root / "src").rglob("*.s")):
         for line in path.read_text(encoding="utf-8").splitlines():
@@ -272,12 +277,9 @@ def main() -> int:
             bad += 1
             continue
         (out_dir / ("%s.bin" % name)).write_bytes(decompress(raw))
-        print("%-38s %5d %6d %7d %6d"
-              % (name, facts["tiles"], facts["bytes"], facts["read"],
-                 facts["slack"]))
+        print("%-38s %5d %6d %7d %6d" % (name, facts["tiles"], facts["bytes"], facts["read"], facts["slack"]))
     print()
-    print("%d payload(s) written to %s/, %d failed"
-          % (len(wanted) - bad, args.out_dir, bad))
+    print("%d payload(s) written to %s/, %d failed" % (len(wanted) - bad, args.out_dir, bad))
     return 1 if bad else 0
 
 

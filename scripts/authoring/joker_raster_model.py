@@ -31,21 +31,18 @@ def joker_perspective_rows(body_y: int, body_height: int) -> tuple[int, ...]:
     if not 1 <= body_height <= 0x7FFF:
         raise ValueError("Joker body height must be a positive signed word")
 
-    rows = [(0x80 - 2 * index) & 0xFFFF
-            for index in range(PERSPECTIVE_WORDS)]
+    rows = [(0x80 - 2 * index) & 0xFFFF for index in range(PERSPECTIVE_WORDS)]
     difference = _signed16((body_height - 0x40) & 0xFFFF)
     dividend = difference << 8
     # 68k DIVS truncates toward zero; Python's // rounds negatives down.
-    quotient = ((abs(dividend) // body_height)
-                * (-1 if dividend < 0 else 1))
+    quotient = (abs(dividend) // body_height) * (-1 if dividend < 0 else 1)
     step = (quotient << 9) & 0xFFFFFFFF
     left = right = (0x1B0 - body_y) & 0xFFFFFFFF
     center = (body_y - 0x6B78) & 0xFFFE
 
     def store(address: int, word: int) -> None:
         offset = ((address & 0xFFFF) - PERSPECTIVE_BASE) // 2
-        if (PERSPECTIVE_BASE <= (address & 0xFFFF)
-                < PERSPECTIVE_BASE + 2 * PERSPECTIVE_WORDS):
+        if PERSPECTIVE_BASE <= (address & 0xFFFF) < PERSPECTIVE_BASE + 2 * PERSPECTIVE_WORDS:
             rows[offset] = word & 0xFFFF
 
     for pair in range(BODY_PAIRS):
@@ -57,15 +54,14 @@ def joker_perspective_rows(body_y: int, body_height: int) -> tuple[int, ...]:
 
 
 def copy_boss_transition_window(
-        active_prefix: tuple[int, ...],
-        perspective: tuple[int, ...],
+    active_prefix: tuple[int, ...],
+    perspective: tuple[int, ...],
 ) -> tuple[int, ...]:
     """Replay the 192-byte VBlank copy into active raster words 15..110."""
     if len(active_prefix) != ACTIVE_PREFIX_WORDS:
         raise ValueError("Joker active raster prefix must contain 15 words")
     if len(perspective) != PERSPECTIVE_WORDS:
         raise ValueError("Joker perspective source must contain 96 words")
-    if any(not 0 <= word <= 0xFFFF
-           for word in active_prefix + perspective):
+    if any(not 0 <= word <= 0xFFFF for word in active_prefix + perspective):
         raise ValueError("Joker raster values must be words")
     return active_prefix + perspective

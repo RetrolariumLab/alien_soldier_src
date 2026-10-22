@@ -20,8 +20,7 @@ class FindReviewProceduresTests(unittest.TestCase):
             source = root / "src"
             source.mkdir()
             (source / "main.s").write_text(
-                '                include "src/second.s"\n'
-                '                include "src/first.s"\n',
+                '                include "src/second.s"\n                include "src/first.s"\n',
                 encoding="utf-8",
             )
             (source / "second.s").write_text(
@@ -30,33 +29,34 @@ class FindReviewProceduresTests(unittest.TestCase):
                 encoding="utf-8",
             )
             (source / "first.s").write_text(
-                "First:\n                rts\n; End of function First\n"
-                "Data: dc.l $1234\n",
+                "First:\n                rts\n; End of function First\nData: dc.l $1234\n",
                 encoding="utf-8",
             )
             audit = root / "audit.json"
             audit.write_text(
-                json.dumps({"records": [
-                    {"current_name": name, "evidence": evidence}
-                    for name, evidence in (
-                        ("First", "hypothesis"), ("Second", "hypothesis"),
-                        ("Static", "static"), ("Data", "hypothesis"),
-                    )
-                ]}),
+                json.dumps(
+                    {
+                        "records": [
+                            {"current_name": name, "evidence": evidence}
+                            for name, evidence in (
+                                ("First", "hypothesis"),
+                                ("Second", "hypothesis"),
+                                ("Static", "static"),
+                                ("Data", "hypothesis"),
+                            )
+                        ]
+                    }
+                ),
                 encoding="utf-8",
             )
 
-            selected, missing = find_review_procedures.review_candidates(
-                source / "main.s", audit
-            )
+            selected, missing = find_review_procedures.review_candidates(source / "main.s", audit)
 
             self.assertEqual(["Second", "First"], selected)
             self.assertEqual(["Data"], missing)
 
             payload = json.loads(audit.read_text(encoding="utf-8"))
-            payload["records"].append(
-                {"current_name": "Ghost", "evidence": "hypothesis"}
-            )
+            payload["records"].append({"current_name": "Ghost", "evidence": "hypothesis"})
             audit.write_text(json.dumps(payload), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Ghost"):
                 find_review_procedures.review_candidates(source / "main.s", audit)

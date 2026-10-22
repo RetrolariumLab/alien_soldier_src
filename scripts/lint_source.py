@@ -13,9 +13,7 @@ from pathlib import Path
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 EQUATE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s+equ\b", re.IGNORECASE)
-INDENTED_DEFINITION = re.compile(
-    r"^\s+([A-Za-z_][A-Za-z0-9_]*(?::|\s+equ\b))", re.IGNORECASE
-)
+INDENTED_DEFINITION = re.compile(r"^\s+([A-Za-z_][A-Za-z0-9_]*(?::|\s+equ\b))", re.IGNORECASE)
 BRANCH_MNEMONIC = (
     r"jsr|jmp|bsr|bra|dbf|dbra|dbeq|dbne"
     r"|b(?:hi|ls|cc|cs|ne|eq|vc|vs|pl|mi|ge|lt|gt|le)"
@@ -93,25 +91,15 @@ def scan(policy: dict, project_root: Path) -> Inventory:
             if line.rstrip(" \t") != line:
                 errors.append(f"{where}: trailing whitespace")
             if len(line) > style["maximum_line_length"]:
-                errors.append(
-                    f"{where}: line has {len(line)} characters; "
-                    f"limit is {style['maximum_line_length']}"
-                )
+                errors.append(f"{where}: line has {len(line)} characters; limit is {style['maximum_line_length']}")
             xref = XREF_COMMENT.search(line)
             if xref:
                 for token in IDENTIFIER.findall(xref.group(1)):
                     if address_name.fullmatch(token):
-                        errors.append(
-                            f"{where}: cross-reference comment uses retired "
-                            f"address-derived name {token}"
-                        )
+                        errors.append(f"{where}: cross-reference comment uses retired address-derived name {token}")
             if style["definitions_column_zero"] and INDENTED_DEFINITION.match(line):
                 errors.append(f"{where}: global definition must start in column zero")
-            if (
-                style["includes_only_in_entrypoint"]
-                and path != entrypoint
-                and INCLUDE.match(line)
-            ):
+            if style["includes_only_in_entrypoint"] and path != entrypoint and INCLUDE.match(line):
                 errors.append(f"{where}: include is only allowed in {policy['entrypoint']}")
 
             match = LABEL.match(line) or EQUATE.match(line)
@@ -127,8 +115,7 @@ def scan(policy: dict, project_root: Path) -> Inventory:
 
             if RAW_RAM_ADDRESS.match(line.split(";")[0]):
                 errors.append(
-                    f"{where}: work RAM address written as a raw literal; "
-                    "use the name from src/ram_addrs.inc"
+                    f"{where}: work RAM address written as a raw literal; use the name from src/ram_addrs.inc"
                 )
 
             call = CALL_TARGET.match(line)
@@ -183,9 +170,7 @@ def scan(policy: dict, project_root: Path) -> Inventory:
         errors.append(f"provenance has {len(provenance)} mappings; policy requires at least {minimum}")
     maximum = policy["unknowns"]["maximum_address_derived_definitions"]
     if len(address_derived) > maximum:
-        errors.append(
-            f"source has {len(address_derived)} address-derived definitions; ceiling is {maximum}"
-        )
+        errors.append(f"source has {len(address_derived)} address-derived definitions; ceiling is {maximum}")
 
     main_text = entrypoint.read_text(encoding="utf-8")
     for number, line in enumerate(main_text.splitlines(), 1):
@@ -199,11 +184,7 @@ def scan(policy: dict, project_root: Path) -> Inventory:
     expected_modules = [entry["file"] for entry in layout["modules"]]
     if actual_modules != expected_modules:
         errors.append("entrypoint module order differs from config/rom_layout.json")
-    for included in [
-        match.group(1)
-        for line in main_text.splitlines()
-        if (match := INCLUDE.match(line))
-    ]:
+    for included in [match.group(1) for line in main_text.splitlines() if (match := INCLUDE.match(line))]:
         if not (project_root / included).is_file():
             errors.append(f"{policy['entrypoint']}: missing include {included}")
 

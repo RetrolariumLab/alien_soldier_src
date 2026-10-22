@@ -19,18 +19,14 @@ class DistinctControlEffectEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.audit = {
             row["address"]: row
-            for row in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for row in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
 
     def assert_distinct_bases(self, first: str, second: str) -> None:
         self.assertFalse(set(self.audit[first]["basis"]) & set(self.audit[second]["basis"]))
 
     def test_control_test_loop_is_not_its_eight_record_layout(self) -> None:
-        source = (ROOT / "src/ui/weapon_setup_screen.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/ui/weapon_setup_screen.s").read_text(encoding="utf-8")
         loop = section(
             source,
             "WeaponSetup_RenderControlTestTextLoop:",
@@ -55,12 +51,8 @@ class DistinctControlEffectEvidenceTests(unittest.TestCase):
         self.assert_distinct_bases("0x01F3EE", "0x01F424")
 
     def test_stage_4_and_5_loaders_have_distinct_command_streams(self) -> None:
-        source = (ROOT / "src/stages/visual_asset_loading.s").read_text(
-            encoding="utf-8"
-        )
-        table = section(
-            source, "Stage_VisualAssetLoaderOffsets:", "Stage_LoadStage1VisualAssets:"
-        )
+        source = (ROOT / "src/stages/visual_asset_loading.s").read_text(encoding="utf-8")
+        table = section(source, "Stage_VisualAssetLoaderOffsets:", "Stage_LoadStage1VisualAssets:")
         self.assertLess(
             table.index("Stage_LoadStage4VisualAssets-"),
             table.index("Stage_LoadStage5VisualAssets-"),
@@ -89,9 +81,7 @@ class DistinctControlEffectEvidenceTests(unittest.TestCase):
         self.assert_distinct_bases("0x011EEE", "0x011F0E")
 
     def test_valkirie_and_sirene_returns_do_not_claim_entire_helper(self) -> None:
-        valkirie = (ROOT / "src/bosses/valkirie_battle.s").read_text(
-            encoding="utf-8"
-        )
+        valkirie = (ROOT / "src/bosses/valkirie_battle.s").read_text(encoding="utf-8")
         damage = section(
             valkirie,
             "Entity_TestValkirieDamageFlash:",
@@ -121,12 +111,8 @@ class DistinctControlEffectEvidenceTests(unittest.TestCase):
         self.assert_distinct_bases("0x057D88", "0x057DF2")
 
     def test_two_non_palette_effects_have_positive_distinct_evidence(self) -> None:
-        zleo = (ROOT / "src/credits/z_leo_sequence.s").read_text(
-            encoding="utf-8"
-        )
-        particle = section(
-            zleo, "Boss_ZLeoSpawnParticles:", "; End of function Boss_ZLeoSpawnParticles"
-        )
+        zleo = (ROOT / "src/credits/z_leo_sequence.s").read_text(encoding="utf-8")
+        particle = section(zleo, "Boss_ZLeoSpawnParticles:", "; End of function Boss_ZLeoSpawnParticles")
         for operation in (
             "move.w  d0,$10(a0)",
             "move.w  d0,$14(a0)",
@@ -135,9 +121,7 @@ class DistinctControlEffectEvidenceTests(unittest.TestCase):
             "jsr     (Sound_QueueSFXRequest).l",
         ):
             self.assertIn(operation, particle)
-        shield = (ROOT / "src/bosses/shield_viper_debug_and_effects.s").read_text(
-            encoding="utf-8"
-        )
+        shield = (ROOT / "src/bosses/shield_viper_debug_and_effects.s").read_text(encoding="utf-8")
         phase = section(
             shield,
             "Boss_ShieldViperUpdatePatternPhaseB:",

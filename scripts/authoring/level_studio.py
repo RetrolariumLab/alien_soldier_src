@@ -16,20 +16,42 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from authoring.content_workspace import (  # noqa: E402
-    ContentError, artifact_path, checked_path, load_manifest)
+    ContentError,
+    artifact_path,
+    checked_path,
+    load_manifest,
+)
 from authoring.level_studio_model import (  # noqa: E402
-    CONFIG_FIELDS, atomic_write_json, load_document, read_configurations,
-    validate_document)
+    CONFIG_FIELDS,
+    atomic_write_json,
+    load_document,
+    read_configurations,
+    validate_document,
+)
 from authoring.level_studio_state import (  # noqa: E402
-    EDITABLE_FIELDS, MAP_PAGE_STEP, MAP_VIEW_HEIGHT, MAP_VIEW_WIDTH,
-    locate_stage_map_cell, open_stage, overlay_placements,
-    sprite_library, stage_rows, validate_stage_scene_references)
+    EDITABLE_FIELDS,
+    MAP_PAGE_STEP,
+    MAP_VIEW_HEIGHT,
+    MAP_VIEW_WIDTH,
+    locate_stage_map_cell,
+    open_stage,
+    overlay_placements,
+    sprite_library,
+    stage_rows,
+    validate_stage_scene_references,
+)
 from authoring.stage4_boss_renderer import (  # noqa: E402
-    SniperHoneyviperPose, draw_sniper_honeyviper_background)
+    SniperHoneyviperPose,
+    draw_sniper_honeyviper_background,
+)
 from authoring.joker_boss_renderer import (  # noqa: E402
-    JokerRasterPose, draw_joker_raster_background)
+    JokerRasterPose,
+    draw_joker_raster_background,
+)
 from authoring.madam_barbar_boss_renderer import (  # noqa: E402
-    MadamBarbarPose, draw_madam_barbar_background)
+    MadamBarbarPose,
+    draw_madam_barbar_background,
+)
 from authoring.ram_map_state import Workspace as MapWorkspace, parse_value  # noqa: E402
 from authoring.screen_map_model import (  # noqa: E402
     export_document as export_screen_maps,
@@ -82,16 +104,24 @@ def _load_context(project: Path, profile: str):
     manifest = load_manifest(checked_path(project, MANIFEST), project)
     path = artifact_path(project, manifest, profile, level_artifact(manifest))
     map_path = artifact_path(project, manifest, profile, map_artifact(manifest))
-    screen_path = artifact_path(
-        project, manifest, profile, screen_map_artifact(manifest))
+    screen_path = artifact_path(project, manifest, profile, screen_map_artifact(manifest))
     document = load_document(path)
     maps = load_maps(map_path)
     screen_maps = load_screen_maps(screen_path)
     validate_document(document, project, profile)
     validate_maps(maps, project, profile)
     validate_screen_maps(screen_maps, project, profile)
-    return (manifest, path, document, map_path, maps, export_maps(project, profile),
-            screen_path, screen_maps, export_screen_maps(project, profile))
+    return (
+        manifest,
+        path,
+        document,
+        map_path,
+        maps,
+        export_maps(project, profile),
+        screen_path,
+        screen_maps,
+        export_screen_maps(project, profile),
+    )
 
 
 def render_view(studio, directory: Path, start_x=0, width=VIEW_WIDTH, library=None):
@@ -116,31 +146,30 @@ def boss_reference_captures(project: Path, profile: str, stage_index: int) -> tu
 
 
 def render_boss_reference(
-        project: Path, profile: str, stage_index: int,
-        displayed_frame: int,
+    project: Path,
+    profile: str,
+    stage_index: int,
+    displayed_frame: int,
 ) -> list[list[tuple[int, int, int]]]:
     """Render a pinned JP preservation pose; never read workspace edits."""
     captures = boss_reference_captures(project, profile, stage_index)
-    capture = next(
-        (item for item in captures
-         if item["displayed_frame"] == displayed_frame), None)
+    capture = next((item for item in captures if item["displayed_frame"] == displayed_frame), None)
     if capture is None:
         raise ValueError("no supported JP boss reference for this frame")
     if stage_index == 3:
-        return draw_sniper_honeyviper_background(
-            project, SniperHoneyviperPose(**capture["pose"]))
+        return draw_sniper_honeyviper_background(project, SniperHoneyviperPose(**capture["pose"]))
     if stage_index == 4:
-        return draw_madam_barbar_background(
-            project, MadamBarbarPose(**capture["pose"]))
-    return draw_joker_raster_background(
-        project, JokerRasterPose(**capture["pose"]))
+        return draw_madam_barbar_background(project, MadamBarbarPose(**capture["pose"]))
+    return draw_joker_raster_background(project, JokerRasterPose(**capture["pose"]))
 
 
 def playtest_make_command(profile: str, stage_index: int) -> list[str]:
     if not 0 <= stage_index < 25:
         raise ValueError("only password-selectable stage slots 0..24 can be playtested")
     return [
-        "make", "--no-print-directory", "playtest-level",
+        "make",
+        "--no-print-directory",
+        "playtest-level",
         "CONTENT_PROFILE=%s" % profile,
         "PLAYTEST_STAGE=%d" % (stage_index + 1),
     ]
@@ -149,9 +178,23 @@ def playtest_make_command(profile: str, stage_index: int) -> list[str]:
 class Window:
     """Thin Tk shell over the tested workspace and renderer models."""
 
-    def __init__(self, project, profile, path, document, map_path, maps,
-                 map_baseline, screen_path, screen_maps, screen_baseline,
-                 stage, tk, ttk, messagebox):
+    def __init__(
+        self,
+        project,
+        profile,
+        path,
+        document,
+        map_path,
+        maps,
+        map_baseline,
+        screen_path,
+        screen_maps,
+        screen_baseline,
+        stage,
+        tk,
+        ttk,
+        messagebox,
+    ):
         self.project = project
         self.profile = profile
         self.path = path
@@ -191,21 +234,15 @@ class Window:
         bar.pack(side="top", fill="x")
         self.ttk.Label(bar, text="Stage").pack(side="left")
         self.choice = self.tk.StringVar()
-        self.chooser = self.ttk.Combobox(
-            bar, textvariable=self.choice, state="readonly", width=70)
+        self.chooser = self.ttk.Combobox(bar, textvariable=self.choice, state="readonly", width=70)
         self.chooser.pack(side="left", padx=8)
-        self.chooser.bind("<<ComboboxSelected>>",
-                          lambda _: self.load(self.chooser.current()))
+        self.chooser.bind("<<ComboboxSelected>>", lambda _: self.load(self.chooser.current()))
         self.ttk.Button(bar, text="Save", command=self.save).pack(side="left", padx=2)
         self.ttk.Button(bar, text="Reload", command=self.reload).pack(side="left", padx=2)
-        self.ttk.Button(bar, text="Refresh other maps",
-                        command=self.refresh_peer_maps).pack(side="left", padx=2)
-        self.ttk.Button(bar, text="Build ROM", command=self.build_rom).pack(
-            side="left", padx=2)
-        self.ttk.Button(bar, text="Playtest", command=self.playtest).pack(
-            side="left", padx=2)
-        self.boss_reference_button = self.ttk.Button(
-            bar, text="JP boss reference", command=self.show_boss_reference)
+        self.ttk.Button(bar, text="Refresh other maps", command=self.refresh_peer_maps).pack(side="left", padx=2)
+        self.ttk.Button(bar, text="Build ROM", command=self.build_rom).pack(side="left", padx=2)
+        self.ttk.Button(bar, text="Playtest", command=self.playtest).pack(side="left", padx=2)
+        self.boss_reference_button = self.ttk.Button(bar, text="JP boss reference", command=self.show_boss_reference)
         self.boss_reference_button.pack(side="left", padx=2)
         self.status = self.ttk.Label(bar, text="")
         self.status.pack(side="left", padx=10)
@@ -215,15 +252,13 @@ class Window:
         holder.pack(side="left", fill="both", expand=True)
         pager = self.ttk.Frame(holder, padding=(8, 4))
         pager.pack(side="top", fill="x")
-        self.ttk.Button(pager, text="Previous screen", command=lambda: self.page(-1)).pack(
-            side="left")
+        self.ttk.Button(pager, text="Previous screen", command=lambda: self.page(-1)).pack(side="left")
         self.page_label = self.ttk.Label(pager, text="")
         self.page_label.pack(side="left", padx=12)
-        self.ttk.Button(pager, text="Next screen", command=lambda: self.page(1)).pack(
-            side="left")
+        self.ttk.Button(pager, text="Next screen", command=lambda: self.page(1)).pack(side="left")
         self.canvas = self.tk.Canvas(
-            holder, width=VIEW_WIDTH, height=VIEW_HEIGHT, background="#101014",
-            highlightthickness=0)
+            holder, width=VIEW_WIDTH, height=VIEW_HEIGHT, background="#101014", highlightthickness=0
+        )
         self.canvas.pack(side="top", fill="both", expand=True)
         self.canvas.bind("<Button-1>", self.on_click)
         self.window.bind("<Left>", lambda _: self.nudge("x", -8))
@@ -252,30 +287,23 @@ class Window:
             entry.bind("<Return>", lambda _, name=field: self.apply_placement(name))
             self.placement_fields[field] = entry
         self.ttk.Button(placements, text="Apply all", command=self.apply_all).grid(
-            row=len(EDITABLE_FIELDS) + 1, column=0, columnspan=2,
-            sticky="we", pady=(10, 0))
+            row=len(EDITABLE_FIELDS) + 1, column=0, columnspan=2, sticky="we", pady=(10, 0)
+        )
 
         for row, (field, size) in enumerate(CONFIG_FIELDS):
-            self.ttk.Label(configuration, text="%s (dc.%s)" % (field, size)).grid(
-                row=row, column=0, sticky="w")
+            self.ttk.Label(configuration, text="%s (dc.%s)" % (field, size)).grid(row=row, column=0, sticky="w")
             entry = self.ttk.Entry(configuration, width=28)
             entry.grid(row=row, column=1, sticky="w", pady=1)
             self.configuration_fields[field] = entry
-        self.ttk.Button(
-            configuration, text="Apply shared configuration",
-            command=self.apply_configuration).grid(
-                row=len(CONFIG_FIELDS), column=0, columnspan=2,
-                sticky="we", pady=(10, 0))
+        self.ttk.Button(configuration, text="Apply shared configuration", command=self.apply_configuration).grid(
+            row=len(CONFIG_FIELDS), column=0, columnspan=2, sticky="we", pady=(10, 0)
+        )
         route_row = len(CONFIG_FIELDS) + 1
-        self.ttk.Label(configuration, text="Plain stage route").grid(
-            row=route_row, column=0, sticky="w", pady=(12, 0))
-        self.route_box = self.ttk.Combobox(
-            configuration, values=self.route_names, state="disabled", width=38)
+        self.ttk.Label(configuration, text="Plain stage route").grid(row=route_row, column=0, sticky="w", pady=(12, 0))
+        self.route_box = self.ttk.Combobox(configuration, values=self.route_names, state="disabled", width=38)
         self.route_box.grid(row=route_row, column=1, sticky="w", pady=(12, 0))
-        self.route_button = self.ttk.Button(
-            configuration, text="Apply route", command=self.apply_stage_route)
-        self.route_button.grid(
-            row=route_row + 1, column=0, columnspan=2, sticky="we")
+        self.route_button = self.ttk.Button(configuration, text="Apply route", command=self.apply_stage_route)
+        self.route_button.grid(row=route_row + 1, column=0, columnspan=2, sticky="we")
         self._build_map_panel(maps)
         self.note = self.ttk.Label(panel, wraplength=300, foreground="#806000", text="")
         self.note.pack(fill="x", pady=(8, 0))
@@ -283,8 +311,7 @@ class Window:
     def _build_map_panel(self, panel):
         self.map_box = self.ttk.Combobox(panel, state="readonly", width=38)
         self.map_box.pack(fill="x")
-        self.map_box.bind("<<ComboboxSelected>>",
-                          lambda _: self.select_map(self.map_box.current()))
+        self.map_box.bind("<<ComboboxSelected>>", lambda _: self.select_map(self.map_box.current()))
         self.map_details = self.ttk.Label(panel, text="", wraplength=275)
         self.map_details.pack(fill="x", pady=(5, 6))
         controls = self.ttk.Frame(panel)
@@ -294,59 +321,62 @@ class Window:
         index = self.ttk.Entry(controls, textvariable=self.map_index_text, width=10)
         index.grid(row=0, column=1, sticky="w")
         index.bind("<Return>", lambda _: self.select_map_value())
-        self.ttk.Button(controls, text="Go", command=self.select_map_value).grid(
-            row=0, column=2, padx=3)
+        self.ttk.Button(controls, text="Go", command=self.select_map_value).grid(row=0, column=2, padx=3)
         self.ttk.Label(controls, text="Value").grid(row=1, column=0, sticky="w")
         self.map_value_text = self.tk.StringVar()
         value = self.ttk.Entry(controls, textvariable=self.map_value_text, width=10)
         value.grid(row=1, column=1, sticky="w")
         value.bind("<Return>", lambda _: self.apply_map_value())
-        self.ttk.Button(controls, text="Apply", command=self.apply_map_value).grid(
-            row=1, column=2, padx=3)
+        self.ttk.Button(controls, text="Apply", command=self.apply_map_value).grid(row=1, column=2, padx=3)
         self.map_location = self.ttk.Label(panel, text="")
         self.map_location.pack(anchor="w", pady=(5, 0))
         navigation = self.ttk.Frame(panel)
         navigation.pack(fill="x", pady=(4, 0))
-        self.ttk.Button(navigation, text="Previous unit",
-                        command=lambda: self.step_map_unit(-1)).pack(side="left")
-        self.ttk.Button(navigation, text="Next unit",
-                        command=lambda: self.step_map_unit(1)).pack(side="left", padx=4)
+        self.ttk.Button(navigation, text="Previous unit", command=lambda: self.step_map_unit(-1)).pack(side="left")
+        self.ttk.Button(navigation, text="Next unit", command=lambda: self.step_map_unit(1)).pack(side="left", padx=4)
         self.map_paint = self.tk.BooleanVar(value=False)
-        self.ttk.Checkbutton(panel, text="Paint with value above (both views)",
-                             variable=self.map_paint).pack(anchor="w")
+        self.ttk.Checkbutton(panel, text="Paint with value above (both views)", variable=self.map_paint).pack(
+            anchor="w"
+        )
         self.viewport_map_enabled = self.tk.BooleanVar(value=False)
-        self.ttk.Checkbutton(panel, text="Pick selected plane map from stage preview",
-                             variable=self.viewport_map_enabled).pack(anchor="w")
+        self.ttk.Checkbutton(
+            panel, text="Pick selected plane map from stage preview", variable=self.viewport_map_enabled
+        ).pack(anchor="w")
         self.viewport_map_plane = self.tk.StringVar(value="plane_a")
         self.ttk.Combobox(
-            panel, textvariable=self.viewport_map_plane, state="readonly",
-            values=("plane_a", "plane_b"), width=14).pack(anchor="w")
+            panel, textvariable=self.viewport_map_plane, state="readonly", values=("plane_a", "plane_b"), width=14
+        ).pack(anchor="w")
         self.viewport_map_role = self.tk.StringVar(value="chunks")
         self.ttk.Combobox(
-            panel, textvariable=self.viewport_map_role, state="readonly",
-            values=("patterns", "chunks", "coarse"), width=14).pack(anchor="w")
+            panel,
+            textvariable=self.viewport_map_role,
+            state="readonly",
+            values=("patterns", "chunks", "coarse"),
+            width=14,
+        ).pack(anchor="w")
         self.ttk.Label(panel, text="Raw map values, not screen colours").pack(anchor="w")
-        self.map_canvas = self.tk.Canvas(
-            panel, width=256, height=256, background="#101014", highlightthickness=0)
+        self.map_canvas = self.tk.Canvas(panel, width=256, height=256, background="#101014", highlightthickness=0)
         self.map_canvas.pack(anchor="w", pady=(4, 0))
         self.map_canvas.bind("<Button-1>", self.click_map_cell)
 
     def refresh_map_choices(self):
         self.map_choices = [
-            index for index, record in enumerate(self.map_state.payloads)
-            if any(use["stage_table_index"] == self.studio.index
-                   for use in record["uses"])
+            index
+            for index, record in enumerate(self.map_state.payloads)
+            if any(use["stage_table_index"] == self.studio.index for use in record["uses"])
         ]
-        names = [self.map_state.payloads[index]["name"]
-                 for index in self.map_choices]
+        names = [self.map_state.payloads[index]["name"] for index in self.map_choices]
         self.map_box.configure(values=names)
         if not names:
             self.map_box.set("")
             self.map_details.configure(text="No default-descriptor maps in this stage")
             self.map_canvas.delete("all")
             return
-        selected = (self.map_choices.index(self.map_state.payload_index)
-                    if self.map_state.payload_index in self.map_choices else 0)
+        selected = (
+            self.map_choices.index(self.map_state.payload_index)
+            if self.map_state.payload_index in self.map_choices
+            else 0
+        )
         self.select_map(selected)
 
     def select_map(self, local_index):
@@ -355,13 +385,20 @@ class Window:
         self.map_state.select_payload(self.map_choices[local_index])
         self.map_box.current(local_index)
         record = self.map_state.payload
-        self.map_details.configure(text=(
-            "%s; %d-bit values; %d entries\n%d decoded / %d compressed bytes\n"
-            "Shared by %d stage slot(s)"
-            % (record["role"], record["value_bits"], record["value_count"],
-               record["decoded_byte_count"], record["compressed_capacity"],
-               len({use["stage_table_index"] for use in record["uses"]}))
-        ))
+        self.map_details.configure(
+            text=(
+                "%s; %d-bit values; %d entries\n%d decoded / %d compressed bytes\n"
+                "Shared by %d stage slot(s)"
+                % (
+                    record["role"],
+                    record["value_bits"],
+                    record["value_count"],
+                    record["decoded_byte_count"],
+                    record["compressed_capacity"],
+                    len({use["stage_table_index"] for use in record["uses"]}),
+                )
+            )
+        )
         self.map_index_text.set("0")
         self.show_map_value()
 
@@ -382,8 +419,7 @@ class Window:
         digits = self.map_state.payload["value_bits"] // 4
         self.map_value_text.set("$%0*X" % (digits, self.map_state.value))
         self.map_index_text.set(str(self.map_state.value_index))
-        self.map_location.configure(
-            text="Unit {unit}; x {x}; y {y}".format(**place))
+        self.map_location.configure(text="Unit {unit}; x {x}; y {y}".format(**place))
         self.draw_map_unit()
 
     def draw_map_unit(self):
@@ -396,23 +432,25 @@ class Window:
             x, y = index % width, index // width
             shade = 32 + (value & 0xFF) * 3 // 4 if value is not None else 16
             self.map_canvas.create_rectangle(
-                x * cell_width, y * cell_height,
-                (x + 1) * cell_width, (y + 1) * cell_height,
+                x * cell_width,
+                y * cell_height,
+                (x + 1) * cell_width,
+                (y + 1) * cell_height,
                 fill="#%02x%02x%02x" % (shade, shade, shade),
-                outline="#ffdf64" if (x, y) == (place["x"], place["y"])
-                else "#505058")
+                outline="#ffdf64" if (x, y) == (place["x"], place["y"]) else "#505058",
+            )
             if value is not None and width <= 8:
                 self.map_canvas.create_text(
                     x * cell_width + cell_width // 2,
                     y * cell_height + cell_height // 2,
                     text="%0*X" % (payload["value_bits"] // 4, value),
-                    fill="#ffffff" if shade < 128 else "#101014")
+                    fill="#ffffff" if shade < 128 else "#101014",
+                )
 
     def step_map_unit(self, delta):
         if not self.map_choices:
             return
-        unit = max(0, min(self.map_state.unit_count - 1,
-                          self.map_state.location()["unit"] + delta))
+        unit = max(0, min(self.map_state.unit_count - 1, self.map_state.location()["unit"] + delta))
         self.map_state.select_cell(unit, 0, 0)
         self.show_map_value()
 
@@ -423,18 +461,15 @@ class Window:
             validate_maps(document, self.project, self.profile)
             prior_scene = self.studio.scene
             try:
-                self.studio.refresh_map_preview(
-                    document, self.map_baseline,
-                    self.screen_maps, self.screen_baseline)
+                self.studio.refresh_map_preview(document, self.map_baseline, self.screen_maps, self.screen_baseline)
                 validate_stage_scene_references(
-                    self.studio.source_scene, self.studio.scene,
-                    self.studio.width, self.studio.index, self.profile)
+                    self.studio.source_scene, self.studio.scene, self.studio.width, self.studio.index, self.profile
+                )
             except ValueError:
                 self.studio.scene = prior_scene
                 raise
 
-        self.map_state.replace_value(
-            value, validate_and_preview)
+        self.map_state.replace_value(value, validate_and_preview)
         if value != previous:
             self._changed("Map edit is not saved yet; preview uses workspace values.")
             self.render()
@@ -445,8 +480,7 @@ class Window:
             return
         try:
             self.map_state.select_value(int(self.map_index_text.get(), 0))
-            value = parse_value(self.map_value_text.get(),
-                                self.map_state.payload["value_bits"])
+            value = parse_value(self.map_value_text.get(), self.map_state.payload["value_bits"])
             self._commit_map_edit(value)
         except ValueError as error:
             self.messagebox.showerror("Level map", str(error))
@@ -457,8 +491,7 @@ class Window:
             return
         brush = self.map_value_text.get()
         try:
-            self.map_state.select_pixel(self.map_state.location()["unit"],
-                                        event.x, event.y)
+            self.map_state.select_pixel(self.map_state.location()["unit"], event.x, event.y)
             if self.map_paint.get():
                 value = parse_value(brush, self.map_state.payload["value_bits"])
                 self._commit_map_edit(value)
@@ -472,9 +505,10 @@ class Window:
         return stage_rows(self.project, self.document)
 
     def _chooser_values(self):
-        return ["%2d  %-22s %3d objects  %s" % (
-            row["index"], row["record"], row["placements"], row["palette"])
-                for row in self._rows()]
+        return [
+            "%2d  %-22s %3d objects  %s" % (row["index"], row["record"], row["placements"], row["palette"])
+            for row in self._rows()
+        ]
 
     def _fold_current(self):
         if self.studio is not None:
@@ -486,14 +520,20 @@ class Window:
         values = self._chooser_values()
         self.chooser.configure(values=values)
         self.studio = open_stage(
-            self.project, index, profile=self.profile, document=self.document,
-            map_document=self.map_state.document, map_baseline=self.map_baseline,
-            screen_document=self.screen_maps, screen_baseline=self.screen_baseline)
+            self.project,
+            index,
+            profile=self.profile,
+            document=self.document,
+            map_document=self.map_state.document,
+            map_baseline=self.map_baseline,
+            screen_document=self.screen_maps,
+            screen_baseline=self.screen_baseline,
+        )
         self.viewport_cell = None
         self.choice.set(values[index])
         self.boss_reference_button.configure(
-            state=("normal" if boss_reference_captures(
-                self.project, self.profile, index) else "disabled"))
+            state=("normal" if boss_reference_captures(self.project, self.profile, index) else "disabled")
+        )
         self.page_x = min(self.page_x, max(0, self.studio.width - VIEW_WIDTH))
         self.refresh_map_choices()
         self.render()
@@ -504,20 +544,18 @@ class Window:
     def show_boss_reference(self):
         """Show a bounded preservation-source pose outside the edit viewport."""
         stage_index = self.studio.index
-        captures = boss_reference_captures(
-            self.project, self.profile, stage_index)
+        captures = boss_reference_captures(self.project, self.profile, stage_index)
         if not captures:
             raise ValueError("no JP boss reference for this stage")
         popup = self.tk.Toplevel(self.window)
         popup.title("JP preservation boss reference (read-only)")
         self.ttk.Label(
-            popup, text="Canonical JP source; workspace edits are not shown. "
-                        "HUD and sprites are excluded."
+            popup, text="Canonical JP source; workspace edits are not shown. HUD and sprites are excluded."
         ).pack(padx=8, pady=8)
         selected = self.tk.StringVar(value=str(captures[0]["displayed_frame"]))
         chooser = self.ttk.Combobox(
-            popup, textvariable=selected, state="readonly",
-            values=[str(item["displayed_frame"]) for item in captures])
+            popup, textvariable=selected, state="readonly", values=[str(item["displayed_frame"]) for item in captures]
+        )
         chooser.pack(padx=8, pady=4)
         picture = self.ttk.Label(popup)
         picture.pack(padx=8, pady=8)
@@ -525,10 +563,8 @@ class Window:
         def refresh(_event=None):
             try:
                 frame = int(selected.get())
-                image = render_boss_reference(
-                    self.project, self.profile, stage_index, frame)
-                output = (self.project / "build/studio" / self.profile
-                          / "boss_reference.png")
+                image = render_boss_reference(self.project, self.profile, stage_index, frame)
+                output = self.project / "build/studio" / self.profile / "boss_reference.png"
                 output.parent.mkdir(parents=True, exist_ok=True)
                 write_png(output, image, compression=1)
                 photo = self.tk.PhotoImage(file=str(output))
@@ -543,8 +579,8 @@ class Window:
 
     def render(self):
         path, self.drawn, width = render_view(
-            self.studio, self.project / "build/studio" / self.profile,
-            self.page_x, VIEW_WIDTH, self.library)
+            self.studio, self.project / "build/studio" / self.profile, self.page_x, VIEW_WIDTH, self.library
+        )
         self.photo = self.tk.PhotoImage(file=str(path))
         self.canvas.delete("all")
         self.canvas.create_image(0, 0, anchor="nw", image=self.photo)
@@ -554,30 +590,29 @@ class Window:
         for placement in self.studio.placements:
             if self.page_x - 24 <= placement.map_x < self.page_x + width + 24:
                 self.draw_marker(placement)
-        self.page_label.configure(
-            text="$%X-$%X of $%X" % (
-                self.page_x, self.page_x + width - 1, self.studio.width - 1))
-        self.status.configure(text="%s: %d objects, %d px" % (
-            self.studio.spawn_list_name or "no spawn list",
-            len(self.studio.placements), self.studio.width))
+        self.page_label.configure(text="$%X-$%X of $%X" % (self.page_x, self.page_x + width - 1, self.studio.width - 1))
+        self.status.configure(
+            text="%s: %d objects, %d px"
+            % (self.studio.spawn_list_name or "no spawn list", len(self.studio.placements), self.studio.width)
+        )
 
     def page(self, direction):
-        self.page_x = max(0, min(
-            self.page_x + direction * PAGE_STEP,
-            max(0, self.studio.width - VIEW_WIDTH)))
+        self.page_x = max(0, min(self.page_x + direction * PAGE_STEP, max(0, self.studio.width - VIEW_WIDTH)))
         self.render()
         self.show_selection()
 
     def draw_marker(self, placement):
         x, y = placement.map_x - self.page_x, placement.map_y
         radius = MARKER_RADIUS if placement.index in self.drawn else MARKER_RADIUS * 2
-        oval = self.canvas.create_oval(
-            x - radius, y - radius, x + radius, y + radius,
-            outline=UNSELECTED, width=2)
+        oval = self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, outline=UNSELECTED, width=2)
         text = self.canvas.create_text(
-            x + 8, y - 10, anchor="w", fill=LABEL_COLOUR,
+            x + 8,
+            y - 10,
+            anchor="w",
+            fill=LABEL_COLOUR,
             font=("TkFixedFont", 7),
-            text=placement.handler or "type $%X" % placement.entry.object_type)
+            text=placement.handler or "type $%X" % placement.entry.object_type,
+        )
         self.markers[placement.index] = (oval, text)
 
     def on_click(self, event):
@@ -593,18 +628,14 @@ class Window:
             return
         cell = self.viewport_cell
         plane_name = getattr(self, "viewport_cell_plane", "plane_a")
-        plane = (self.studio.scene.tilemap if plane_name == "plane_a"
-                 else self.studio.scene.plane_b)
+        plane = self.studio.scene.tilemap if plane_name == "plane_a" else self.studio.scene.plane_b
         if plane is None:
             return
-        camera_x = (self.page_x if plane_name == "plane_a"
-                    else self.studio.scene.parallax_x(self.page_x))
+        camera_x = self.page_x if plane_name == "plane_a" else self.studio.scene.parallax_x(self.page_x)
         size = {"patterns": 8, "chunks": 32, "coarse": 256}[cell.role]
         x = cell.world_x // size * size - camera_x
-        y = ((cell.world_y + plane.y_offset) // size * size
-             - plane.y_offset)
-        wrap = (self.studio.scene.plane_b_wrap_pixels
-                if plane_name == "plane_b" else 0)
+        y = (cell.world_y + plane.y_offset) // size * size - plane.y_offset
+        wrap = self.studio.scene.plane_b_wrap_pixels if plane_name == "plane_b" else 0
         if wrap:
             x %= wrap
             visible_width = min(VIEW_WIDTH, self.studio.width - self.page_x)
@@ -614,9 +645,7 @@ class Window:
         for left in positions:
             if wrap and left + size <= 0:
                 continue
-            self.canvas.create_rectangle(
-                left, y, left + size, y + size, outline="#ffdf64", width=2,
-                tags="map-hit")
+            self.canvas.create_rectangle(left, y, left + size, y + size, outline="#ffdf64", width=2, tags="map-hit")
 
     def click_viewport_map(self, event):
         brush = self.map_value_text.get()
@@ -624,15 +653,18 @@ class Window:
         previous_plane = getattr(self, "viewport_cell_plane", "plane_a")
         try:
             local_x, y = int(event.x), int(event.y)
-            if (not 0 <= local_x < min(VIEW_WIDTH, self.studio.width - self.page_x)
-                    or not 0 <= y < VIEW_HEIGHT):
+            if not 0 <= local_x < min(VIEW_WIDTH, self.studio.width - self.page_x) or not 0 <= y < VIEW_HEIGHT:
                 raise ValueError("point is outside the rendered stage viewport")
-            plane_name = (self.viewport_map_plane.get()
-                          if hasattr(self, "viewport_map_plane") else "plane_a")
+            plane_name = self.viewport_map_plane.get() if hasattr(self, "viewport_map_plane") else "plane_a"
             hit = locate_stage_map_cell(
-                self.studio, self.map_state.document,
-                local_x + self.page_x, y, self.viewport_map_role.get(),
-                plane_name, self.page_x)
+                self.studio,
+                self.map_state.document,
+                local_x + self.page_x,
+                y,
+                self.viewport_map_role.get(),
+                plane_name,
+                self.page_x,
+            )
             if hit.payload_index not in self.map_choices:
                 raise ValueError("source map is not offered for this stage")
             self.select_map(self.map_choices.index(hit.payload_index))
@@ -654,9 +686,7 @@ class Window:
     def show_selection(self):
         for index, (oval, _) in self.markers.items():
             selected = index == self.studio.selection
-            self.canvas.itemconfigure(
-                oval, outline=SELECTED if selected else UNSELECTED,
-                width=3 if selected else 2)
+            self.canvas.itemconfigure(oval, outline=SELECTED if selected else UNSELECTED, width=3 if selected else 2)
         placement = self.studio.selected()
         description = "nothing selected"
         if placement:
@@ -664,8 +694,7 @@ class Window:
             trigger_x = self.studio.spawn_trigger_x(placement.index)
             if trigger_x != placement.entry.x:
                 description += "  (spawn gate X=$%X)" % trigger_x
-        self.handler.configure(
-            text=description)
+        self.handler.configure(text=description)
         for field, entry in self.placement_fields.items():
             entry.delete(0, "end")
             if placement:
@@ -694,8 +723,7 @@ class Window:
         if placement is None:
             return False
         try:
-            self.studio.set_field(
-                placement.index, field, self.placement_fields[field].get())
+            self.studio.set_field(placement.index, field, self.placement_fields[field].get())
         except ValueError as error:
             self.status.configure(text=str(error))
             return False
@@ -710,8 +738,7 @@ class Window:
         placement = self.studio.selected()
         if placement is None:
             return
-        values = {field: self.placement_fields[field].get()
-                  for field in EDITABLE_FIELDS}
+        values = {field: self.placement_fields[field].get() for field in EDITABLE_FIELDS}
         try:
             self.studio.set_fields(placement.index, values)
         except ValueError as error:
@@ -732,8 +759,7 @@ class Window:
         self.apply_placement(field)
 
     def apply_configuration(self):
-        values = {field: entry.get()
-                  for field, entry in self.configuration_fields.items()}
+        values = {field: entry.get() for field, entry in self.configuration_fields.items()}
         try:
             self.studio.set_configuration_fields(values)
         except (ValueError, StopIteration) as error:
@@ -741,8 +767,7 @@ class Window:
             return
         index = self.studio.index
         self._fold_current()
-        self._changed(
-            "The shared configuration changed; every stage that names it will use it.")
+        self._changed("The shared configuration changed; every stage that names it will use it.")
         self.load(index, fold_current=False)
 
     def apply_stage_route(self):
@@ -776,8 +801,7 @@ class Window:
         return True
 
     def reload(self):
-        if self.dirty and not self.messagebox.askyesno(
-                "Level Studio", "Discard unsaved workspace edits?"):
+        if self.dirty and not self.messagebox.askyesno("Level Studio", "Discard unsaved workspace edits?"):
             return
         try:
             document = load_document(self.path)
@@ -787,11 +811,15 @@ class Window:
             validate_maps(maps, self.project, self.profile)
             validate_screen_maps(screen_maps, self.project, self.profile)
             open_stage(
-                self.project, self.studio.index, profile=self.profile,
-                document=document, map_document=maps,
+                self.project,
+                self.studio.index,
+                profile=self.profile,
+                document=document,
+                map_document=maps,
                 map_baseline=self.map_baseline,
                 screen_document=screen_maps,
-                screen_baseline=self.screen_baseline)
+                screen_baseline=self.screen_baseline,
+            )
         except (OSError, ValueError) as error:
             self.messagebox.showerror("Level Studio", str(error))
             return
@@ -808,9 +836,7 @@ class Window:
         try:
             peer = load_screen_maps(self.screen_path)
             validate_screen_maps(peer, self.project, self.profile)
-            self.studio.refresh_map_preview(
-                self.map_state.document, self.map_baseline,
-                peer, self.screen_baseline)
+            self.studio.refresh_map_preview(self.map_state.document, self.map_baseline, peer, self.screen_baseline)
         except (OSError, ValueError) as error:
             self.messagebox.showerror("Level map", str(error))
             return
@@ -824,12 +850,14 @@ class Window:
             return
         try:
             result = subprocess.run(
-                ["make", "--no-print-directory", "build-content",
-                 "CONTENT_PROFILE=%s" % self.profile],
-                cwd=self.project, text=True, capture_output=True, check=False)
+                ["make", "--no-print-directory", "build-content", "CONTENT_PROFILE=%s" % self.profile],
+                cwd=self.project,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
         except OSError as error:
-            self.messagebox.showerror(
-                "Content build failed", "Cannot launch content build: " + str(error))
+            self.messagebox.showerror("Content build failed", "Cannot launch content build: " + str(error))
             self.note.configure(text="Content build could not be launched.")
             return
         detail = (result.stdout + result.stderr).strip()
@@ -847,11 +875,9 @@ class Window:
             self.messagebox.showerror("Level playtest", str(error))
             return
         try:
-            result = subprocess.run(
-                command, cwd=self.project, text=True, capture_output=True, check=False)
+            result = subprocess.run(command, cwd=self.project, text=True, capture_output=True, check=False)
         except OSError as error:
-            self.messagebox.showerror(
-                "Level playtest failed", "Cannot launch level playtest: " + str(error))
+            self.messagebox.showerror("Level playtest failed", "Cannot launch level playtest: " + str(error))
             self.note.configure(text="Level playtest could not be launched.")
             return
         detail = (result.stdout + result.stderr).strip()
@@ -861,13 +887,11 @@ class Window:
             self.note.configure(text=detail or "Playtest launched in Gens.")
 
     def _title(self):
-        self.window.title("%sAlien Soldier - Level Studio (%s)" % (
-            "*" if self.dirty else "", self.profile.upper()))
+        self.window.title("%sAlien Soldier - Level Studio (%s)" % ("*" if self.dirty else "", self.profile.upper()))
 
     def close(self):
         if self.dirty:
-            answer = self.messagebox.askyesnocancel(
-                "Level Studio", "Save workspace edits before closing?")
+            answer = self.messagebox.askyesnocancel("Level Studio", "Save workspace edits before closing?")
             if answer is None:
                 return
             if answer and not self.save():
@@ -890,16 +914,22 @@ def main() -> int:
     args = parser.parse_args()
     project = Path(args.root).resolve()
     try:
-        (_manifest, path, document, map_path, maps, map_baseline,
-         screen_path, screen_maps, screen_baseline) = load_context(project, args.profile)
+        (_manifest, path, document, map_path, maps, map_baseline, screen_path, screen_maps, screen_baseline) = (
+            load_context(project, args.profile)
+        )
         rows = stage_rows(project, document)
         if not 0 <= args.stage < len(rows):
-            raise ValueError("stage table index %d is not one of 0..%d"
-                             % (args.stage, len(rows) - 1))
+            raise ValueError("stage table index %d is not one of 0..%d" % (args.stage, len(rows) - 1))
         studio = open_stage(
-            project, args.stage, profile=args.profile, document=document,
-            map_document=maps, map_baseline=map_baseline,
-            screen_document=screen_maps, screen_baseline=screen_baseline)
+            project,
+            args.stage,
+            profile=args.profile,
+            document=document,
+            map_document=maps,
+            map_baseline=map_baseline,
+            screen_document=screen_maps,
+            screen_baseline=screen_baseline,
+        )
         if args.check:
             if studio.document() != document:
                 raise ValueError("opening a stage changes the workspace document")
@@ -907,92 +937,113 @@ def main() -> int:
                 original = studio.placements[0].entry.x
                 changed = original + 1 if original < 0xFFFF else original - 1
                 studio.set_fields(0, {"x": changed})
-                reopened = open_stage(
-                    project, args.stage, profile=args.profile,
-                    document=studio.document())
+                reopened = open_stage(project, args.stage, profile=args.profile, document=studio.document())
                 if reopened.placements[0].entry.x != changed:
                     raise ValueError("placement edit did not survive stage reopening")
             if args.stage == 0:
                 state = MapWorkspace(deepcopy(map_baseline))
-                hit = locate_stage_map_cell(
-                    studio, map_baseline, 355, 0, "chunks")
+                hit = locate_stage_map_cell(studio, map_baseline, 355, 0, "chunks")
                 state.select_payload(hit.payload_index)
                 state.select_value(hit.value_index)
-                state.replace_value(
-                    state.value ^ 1,
-                    lambda candidate: validate_maps(candidate, project, args.profile))
+                state.replace_value(state.value ^ 1, lambda candidate: validate_maps(candidate, project, args.profile))
                 reopened = open_stage(
-                    project, args.stage, profile=args.profile, document=document,
-                    map_document=state.document, map_baseline=map_baseline,
-                    screen_document=screen_maps, screen_baseline=screen_baseline)
+                    project,
+                    args.stage,
+                    profile=args.profile,
+                    document=document,
+                    map_document=state.document,
+                    map_baseline=map_baseline,
+                    screen_document=screen_maps,
+                    screen_baseline=screen_baseline,
+                )
                 original_map_scene = open_stage(
-                    project, args.stage, profile=args.profile, document=document,
-                    map_document=map_baseline, map_baseline=map_baseline,
-                    screen_document=screen_maps, screen_baseline=screen_baseline)
+                    project,
+                    args.stage,
+                    profile=args.profile,
+                    document=document,
+                    map_document=map_baseline,
+                    map_baseline=map_baseline,
+                    screen_document=screen_maps,
+                    screen_baseline=screen_baseline,
+                )
                 if reopened.scene.tilemap.ram == original_map_scene.scene.tilemap.ram:
                     raise ValueError("map edit did not reach the stage preview")
-                if reopened.image(352, 0, 8, 8) == original_map_scene.image(
-                        352, 0, 8, 8):
+                if reopened.image(352, 0, 8, 8) == original_map_scene.image(352, 0, 8, 8):
                     raise ValueError("screen-space map edit did not affect the clicked tile")
                 secondary = MapWorkspace(deepcopy(map_baseline))
-                secondary_hit = locate_stage_map_cell(
-                    original_map_scene, map_baseline, 0, 32, "chunks",
-                    "plane_b", 0)
+                secondary_hit = locate_stage_map_cell(original_map_scene, map_baseline, 0, 32, "chunks", "plane_b", 0)
                 secondary.select_payload(secondary_hit.payload_index)
                 secondary.select_value(secondary_hit.value_index)
                 if secondary.value != 1:
                     raise ValueError("Stage 1 plane-B fixture chunk changed")
-                secondary.replace_value(
-                    0, lambda candidate: validate_maps(
-                        candidate, project, args.profile))
+                secondary.replace_value(0, lambda candidate: validate_maps(candidate, project, args.profile))
                 secondary_scene = open_stage(
-                    project, args.stage, profile=args.profile,
-                    document=document, map_document=secondary.document,
-                    map_baseline=map_baseline, screen_document=screen_maps,
-                    screen_baseline=screen_baseline)
+                    project,
+                    args.stage,
+                    profile=args.profile,
+                    document=document,
+                    map_document=secondary.document,
+                    map_baseline=map_baseline,
+                    screen_document=screen_maps,
+                    screen_baseline=screen_baseline,
+                )
                 if secondary_scene.scene.plane_b.ram == original_map_scene.scene.plane_b.ram:
                     raise ValueError("plane-B map edit did not reach the stage preview")
-                if secondary_scene.image(0, 32, 32, 32) == original_map_scene.image(
-                        0, 32, 32, 32):
+                if secondary_scene.image(0, 32, 32, 32) == original_map_scene.image(0, 32, 32, 32):
                     raise ValueError("plane-B map edit did not change its visible tile")
                 pattern = MapWorkspace(deepcopy(map_baseline))
-                pattern_hit = locate_stage_map_cell(
-                    original_map_scene, map_baseline, 0, 32, "patterns",
-                    "plane_b", 0)
+                pattern_hit = locate_stage_map_cell(original_map_scene, map_baseline, 0, 32, "patterns", "plane_b", 0)
                 pattern.select_payload(pattern_hit.payload_index)
                 pattern.select_value(pattern_hit.value_index)
                 if pattern.value != 348:
                     raise ValueError("Stage 1 plane-B pattern fixture changed")
-                pattern.replace_value(
-                    0, lambda candidate: validate_maps(
-                        candidate, project, args.profile))
+                pattern.replace_value(0, lambda candidate: validate_maps(candidate, project, args.profile))
                 pattern_scene = open_stage(
-                    project, args.stage, profile=args.profile,
-                    document=document, map_document=pattern.document,
-                    map_baseline=map_baseline, screen_document=screen_maps,
-                    screen_baseline=screen_baseline)
+                    project,
+                    args.stage,
+                    profile=args.profile,
+                    document=document,
+                    map_document=pattern.document,
+                    map_baseline=map_baseline,
+                    screen_document=screen_maps,
+                    screen_baseline=screen_baseline,
+                )
                 if pattern_scene.scene.plane_b.name_word(0, 32) != 0:
                     raise ValueError("plane-B pattern edit did not reach the map reader")
-                if pattern_scene.image(0, 32, 8, 8) == original_map_scene.image(
-                        0, 32, 8, 8):
+                if pattern_scene.image(0, 32, 8, 8) == original_map_scene.image(0, 32, 8, 8):
                     raise ValueError("plane-B pattern edit did not change its visible tile")
-            print("[OK] %s Level Studio: %d stages, %d objects in stage %d" % (
-                args.profile, len(rows), len(studio.placements), args.stage))
+            print(
+                "[OK] %s Level Studio: %d stages, %d objects in stage %d"
+                % (args.profile, len(rows), len(studio.placements), args.stage)
+            )
             return 0
         if args.render_only:
             if not 1 <= args.width <= MAX_RENDER_WIDTH:
                 raise ValueError("render width must be 1..%d" % MAX_RENDER_WIDTH)
-            output, drawn, width = render_view(
-                studio, project / "build/studio" / args.profile,
-                args.x, args.width)
-            print("[OK] rendered %d pixels and %d proved sprites to %s" % (
-                width, len(drawn), output.relative_to(project)))
+            output, drawn, width = render_view(studio, project / "build/studio" / args.profile, args.x, args.width)
+            print(
+                "[OK] rendered %d pixels and %d proved sprites to %s" % (width, len(drawn), output.relative_to(project))
+            )
             return 0
         import tkinter as tk
         from tkinter import messagebox, ttk
-        Window(project, args.profile, path, document, map_path, maps,
-               map_baseline, screen_path, screen_maps, screen_baseline, args.stage,
-               tk, ttk, messagebox).run()
+
+        Window(
+            project,
+            args.profile,
+            path,
+            document,
+            map_path,
+            maps,
+            map_baseline,
+            screen_path,
+            screen_maps,
+            screen_baseline,
+            args.stage,
+            tk,
+            ttk,
+            messagebox,
+        ).run()
         return 0
     except (ContentError, ImportError, OSError, ValueError) as error:
         print("[ERROR] %s" % error, file=sys.stderr)

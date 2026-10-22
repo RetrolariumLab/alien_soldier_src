@@ -76,9 +76,7 @@ def content_manifest() -> dict:
 
 class ManifestTests(unittest.TestCase):
     def test_project_manifest_is_valid_and_matches_profiles(self) -> None:
-        manifest = content_workspace.load_manifest(
-            ROOT / "config/authoring/content_studios.json", ROOT
-        )
+        manifest = content_workspace.load_manifest(ROOT / "config/authoring/content_studios.json", ROOT)
         self.assertEqual(("jp", "eu"), tuple(manifest["profile_records"]))
         self.assertEqual([], content_workspace.validate_manifest(manifest))
 
@@ -94,9 +92,7 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_level_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
         document["artifacts"][0]["configuration_count"] = 0
         self.assertIn(
             "invalid artifact configuration_count: level_layouts",
@@ -104,12 +100,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_graphics_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        graphics = next(
-            item for item in document["artifacts"] if item["id"] == "tile_art"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        graphics = next(item for item in document["artifacts"] if item["id"] == "tile_art")
         graphics["tile_count"] = 0
         self.assertIn(
             "invalid artifact tile_count: tile_art",
@@ -117,12 +109,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_palette_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        palettes = next(
-            item for item in document["artifacts"] if item["id"] == "palette_commands"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        palettes = next(item for item in document["artifacts"] if item["id"] == "palette_commands")
         palettes["command_count"] = 0
         self.assertIn(
             "invalid artifact command_count: palette_commands",
@@ -130,15 +118,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_compressed_graphics_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        graphics = next(
-            item for item in document["artifacts"]
-            if item["id"] == "compressed_tile_art"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        graphics = next(item for item in document["artifacts"] if item["id"] == "compressed_tile_art")
         graphics["compressed_capacity"] = 0
         self.assertIn(
             "invalid artifact compressed_capacity: compressed_tile_art",
@@ -146,12 +127,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_mapping_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        mappings = next(
-            item for item in document["artifacts"] if item["id"] == "sprite_mappings"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        mappings = next(item for item in document["artifacts"] if item["id"] == "sprite_mappings")
         mappings["piece_count"] = 0
         self.assertIn(
             "invalid artifact piece_count: sprite_mappings",
@@ -159,12 +136,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_animation_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        animations = next(
-            item for item in document["artifacts"] if item["id"] == "sprite_animations"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        animations = next(item for item in document["artifacts"] if item["id"] == "sprite_animations")
         animations["frame_count"] = 0
         self.assertIn(
             "invalid artifact frame_count: sprite_animations",
@@ -172,12 +145,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_screen_map_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        maps = next(
-            item for item in document["artifacts"] if item["id"] == "screen_maps"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        maps = next(item for item in document["artifacts"] if item["id"] == "screen_maps")
         maps["value_count"] = 0
         self.assertIn(
             "invalid artifact value_count: screen_maps",
@@ -185,11 +154,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_stage_map_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        stage_maps = next(item for item in document["artifacts"]
-                          if item["id"] == "stage_maps")
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        stage_maps = next(item for item in document["artifacts"] if item["id"] == "stage_maps")
         stage_maps["compressed_capacity"] = 0
         self.assertIn(
             "invalid artifact compressed_capacity: stage_maps",
@@ -197,12 +163,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_story_text_row_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        story = next(
-            item for item in document["artifacts"] if item["id"] == "story_text_rows"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        story = next(item for item in document["artifacts"] if item["id"] == "story_text_rows")
         story["row_counts"]["eu"] = 0
         self.assertIn(
             "invalid artifact row_counts: story_text_rows",
@@ -210,13 +172,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_frontend_text_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        text = next(
-            item for item in document["artifacts"]
-            if item["id"] == "frontend_text_strings"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        text = next(item for item in document["artifacts"] if item["id"] == "frontend_text_strings")
         text["glyph_count"] = 0
         self.assertIn(
             "invalid artifact glyph_count: frontend_text_strings",
@@ -224,11 +181,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_results_detail_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        results = next(item for item in document["artifacts"]
-                       if item["id"] == "results_detail_text")
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        results = next(item for item in document["artifacts"] if item["id"] == "results_detail_text")
         results["row_bytes"] = 0
         self.assertIn(
             "invalid artifact row_bytes: results_detail_text",
@@ -242,13 +196,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_stage_message_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        messages = next(
-            item for item in document["artifacts"]
-            if item["id"] == "stage_message_sequences"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        messages = next(item for item in document["artifacts"] if item["id"] == "stage_message_sequences")
         messages["sequence_count"] = 0
         self.assertIn(
             "invalid artifact sequence_count: stage_message_sequences",
@@ -256,13 +205,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_scripted_message_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        messages = next(
-            item for item in document["artifacts"]
-            if item["id"] == "boss_and_ship_message_scripts"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        messages = next(item for item in document["artifacts"] if item["id"] == "boss_and_ship_message_scripts")
         messages["record_count"] = 0
         self.assertIn(
             "invalid artifact record_count: boss_and_ship_message_scripts",
@@ -270,13 +214,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_credits_text_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        credits = next(
-            item for item in document["artifacts"]
-            if item["id"] == "credits_text_sequence"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        credits = next(item for item in document["artifacts"] if item["id"] == "credits_text_sequence")
         credits["glyph_slot_count"] = 0
         self.assertIn(
             "invalid artifact glyph_slot_count: credits_text_sequence",
@@ -284,13 +223,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_glyph_source_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        lists = next(
-            item for item in document["artifacts"]
-            if item["id"] == "glyph_source_lists"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        lists = next(item for item in document["artifacts"] if item["id"] == "glyph_source_lists")
         lists["list_count"] = 0
         self.assertIn(
             "invalid artifact list_count: glyph_source_lists",
@@ -298,12 +232,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_sound_sequence_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        sound = next(
-            item for item in document["artifacts"] if item["id"] == "sound_sequences"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        sound = next(item for item in document["artifacts"] if item["id"] == "sound_sequences")
         sound["instruction_count"] = 0
         self.assertIn(
             "invalid artifact instruction_count: sound_sequences",
@@ -311,12 +241,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_sound_instrument_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        sound = next(
-            item for item in document["artifacts"] if item["id"] == "sound_instruments"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        sound = next(item for item in document["artifacts"] if item["id"] == "sound_instruments")
         sound["instrument_count"] = 0
         self.assertIn(
             "invalid artifact instrument_count: sound_instruments",
@@ -324,12 +250,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_sound_envelope_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        sound = next(
-            item for item in document["artifacts"] if item["id"] == "sound_envelopes"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        sound = next(item for item in document["artifacts"] if item["id"] == "sound_envelopes")
         sound["value_count"] = 0
         self.assertIn(
             "invalid artifact value_count: sound_envelopes",
@@ -337,12 +259,8 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_sound_pcm_capacity_claim_is_machine_checked(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
-        sound = next(
-            item for item in document["artifacts"] if item["id"] == "sound_pcm_samples"
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
+        sound = next(item for item in document["artifacts"] if item["id"] == "sound_pcm_samples")
         sound["sample_count"] = 0
         self.assertIn(
             "invalid artifact sample_count: sound_pcm_samples",
@@ -470,21 +388,25 @@ class WorkspaceLifecycleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             manifest = self.load(root)
-            manifest["artifacts"] = [{
-                "id": "stage_maps", "kind": "stage_map_document",
-                "workspace": "level/stage_maps.json", "profiles": ["jp", "eu"],
-            }]
+            manifest["artifacts"] = [
+                {
+                    "id": "stage_maps",
+                    "kind": "stage_map_document",
+                    "workspace": "level/stage_maps.json",
+                    "profiles": ["jp", "eu"],
+                }
+            ]
             workspace = content_workspace.workspace_path(root, manifest, "jp")
-            content_workspace.atomic_write_json(
-                workspace, content_workspace.workspace_document(manifest, "jp"))
-            path = content_workspace.artifact_path(
-                root, manifest, "jp", manifest["artifacts"][0])
+            content_workspace.atomic_write_json(workspace, content_workspace.workspace_document(manifest, "jp"))
+            path = content_workspace.artifact_path(root, manifest, "jp", manifest["artifacts"][0])
             content_workspace.atomic_write_json(path, {"value": 1})
-            with mock.patch("authoring.stage_map_model.load_document",
-                            side_effect=lambda target: json.loads(
-                                target.read_text(encoding="utf-8"))), \
-                 mock.patch("authoring.stage_map_model.export_document",
-                            return_value={"value": 0}):
+            with (
+                mock.patch(
+                    "authoring.stage_map_model.load_document",
+                    side_effect=lambda target: json.loads(target.read_text(encoding="utf-8")),
+                ),
+                mock.patch("authoring.stage_map_model.export_document", return_value={"value": 0}),
+            ):
                 output = io.StringIO()
                 with contextlib.redirect_stdout(output):
                     content_workspace.inspect(root, manifest, "jp")
@@ -507,13 +429,15 @@ class ContentOutputTests(unittest.TestCase):
             root = Path(directory).resolve()
             output = root / "build/content/jp/alien_soldier.bin"
             relative = Path("build/content/jp/private listing/source symbols.lst")
-            self.assertEqual(root / relative,
-                             build_content.checked_listing(root, output, relative))
-            self.assertEqual(root / relative,
-                             build_content.checked_listing(root, output, root / relative))
-            for path in (Path("build/content/eu/source.lst"), Path("docs/source.lst"),
-                         Path("build/content/jp/source.txt"), Path("../source.lst"),
-                         root.parent / "outside.lst"):
+            self.assertEqual(root / relative, build_content.checked_listing(root, output, relative))
+            self.assertEqual(root / relative, build_content.checked_listing(root, output, root / relative))
+            for path in (
+                Path("build/content/eu/source.lst"),
+                Path("docs/source.lst"),
+                Path("build/content/jp/source.txt"),
+                Path("../source.lst"),
+                root.parent / "outside.lst",
+            ):
                 with self.subTest(path=path), self.assertRaises(content_workspace.ContentError):
                     build_content.checked_listing(root, output, path)
 
@@ -521,22 +445,23 @@ class ContentOutputTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             manifest = content_manifest()
-            manifest["profile_records"] = {
-                item["id"]: item for item in profile_config()["profiles"]}
-            with (mock.patch.object(build_content, "validate_reference", return_value=b"rom"),
-                  mock.patch.object(build_content, "validate_workspace"),
-                  mock.patch.object(build_content, "stage_tree") as stage,
-                  self.assertRaisesRegex(content_workspace.ContentError, "selected profile")):
-                build_content.build(root, manifest, "jp", root / "asw", root / "p2bin",
-                                    "-q", False, Path("build/content/eu/source.lst"))
+            manifest["profile_records"] = {item["id"]: item for item in profile_config()["profiles"]}
+            with (
+                mock.patch.object(build_content, "validate_reference", return_value=b"rom"),
+                mock.patch.object(build_content, "validate_workspace"),
+                mock.patch.object(build_content, "stage_tree") as stage,
+                self.assertRaisesRegex(content_workspace.ContentError, "selected profile"),
+            ):
+                build_content.build(
+                    root, manifest, "jp", root / "asw", root / "p2bin", "-q", False, Path("build/content/eu/source.lst")
+                )
             stage.assert_not_called()
 
     def test_listing_argument_reaches_assembler_as_one_token(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
             manifest = content_manifest()
-            manifest["profile_records"] = {
-                item["id"]: item for item in profile_config()["profiles"]}
+            manifest["profile_records"] = {item["id"]: item for item in profile_config()["profiles"]}
             manifest["profile_records"]["jp"]["reference_rom"]["size"] = 0x200000
             listing = root / "build/content/jp/private listing/source symbols.lst"
 
@@ -546,20 +471,20 @@ class ContentOutputTests(unittest.TestCase):
                 candidate.write_bytes(bytes(0x200000))
                 return 0
 
-            with (mock.patch.object(build_content, "validate_reference", return_value=bytes(0x200000)),
-                  mock.patch.object(build_content, "validate_workspace"),
-                  mock.patch.object(build_content, "stage_tree", return_value=root / "src/main.s"),
-                  mock.patch.object(build_content, "assemble_main_src", side_effect=assemble)):
-                build_content.build(root, manifest, "jp", root / "asw", root / "p2bin",
-                                    "-q", False, listing)
+            with (
+                mock.patch.object(build_content, "validate_reference", return_value=bytes(0x200000)),
+                mock.patch.object(build_content, "validate_workspace"),
+                mock.patch.object(build_content, "stage_tree", return_value=root / "src/main.s"),
+                mock.patch.object(build_content, "assemble_main_src", side_effect=assemble),
+            ):
+                build_content.build(root, manifest, "jp", root / "asw", root / "p2bin", "-q", False, listing)
 
     def test_wrong_reference_fails_before_staging_or_assembly(self) -> None:
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 manifest = content_manifest()
-                manifest["profile_records"] = {
-                    item["id"]: item for item in profile_config()["profiles"]}
+                manifest["profile_records"] = {item["id"]: item for item in profile_config()["profiles"]}
                 (root / f"{profile}.bin").write_bytes(b"wrongROM")
                 output = root / manifest["profile_outputs"][profile]
                 output.parent.mkdir(parents=True)
@@ -568,21 +493,17 @@ class ContentOutputTests(unittest.TestCase):
                     mock.patch.object(build_content, "validate_workspace") as workspace,
                     mock.patch.object(build_content, "stage_tree") as stage,
                     mock.patch.object(build_content, "assemble_main_src") as assemble,
-                    self.assertRaisesRegex(content_workspace.ContentError,
-                                           "reference ROM differs"),
+                    self.assertRaisesRegex(content_workspace.ContentError, "reference ROM differs"),
                 ):
-                    build_content.build(root, manifest, profile, root / "asw",
-                                        root / "p2bin", "-maxerrors 2", False)
+                    build_content.build(root, manifest, profile, root / "asw", root / "p2bin", "-maxerrors 2", False)
                 workspace.assert_not_called()
                 stage.assert_not_called()
                 assemble.assert_not_called()
                 self.assertEqual(b"previous successful ROM", output.read_bytes())
 
-    def build_case(self, root: Path, *, zero_edit: bool, payload: bytes,
-                   result: int = 0, profile: str = "jp") -> Path:
+    def build_case(self, root: Path, *, zero_edit: bool, payload: bytes, result: int = 0, profile: str = "jp") -> Path:
         manifest = content_manifest()
-        manifest["profile_records"] = {
-            item["id"]: item for item in profile_config()["profiles"]}
+        manifest["profile_records"] = {item["id"]: item for item in profile_config()["profiles"]}
         manifest["profile_records"][profile]["reference_rom"]["size"] = 0x200000
         key = "zero_edit_outputs" if zero_edit else "profile_outputs"
         output = root / manifest[key][profile]
@@ -595,15 +516,14 @@ class ContentOutputTests(unittest.TestCase):
             candidate.write_bytes(payload)
             return result
 
-        with mock.patch.object(build_content, "stage_tree", return_value=root / "src/main.s"), \
-             mock.patch.object(build_content, "validate_workspace"), \
-             mock.patch.object(build_content, "validate_reference",
-                               return_value=bytes(0x200000)), \
-             mock.patch.object(build_content, "assemble_main_src", side_effect=assemble):
+        with (
+            mock.patch.object(build_content, "stage_tree", return_value=root / "src/main.s"),
+            mock.patch.object(build_content, "validate_workspace"),
+            mock.patch.object(build_content, "validate_reference", return_value=bytes(0x200000)),
+            mock.patch.object(build_content, "assemble_main_src", side_effect=assemble),
+        ):
             try:
-                build_content.build(
-                    root, manifest, profile, root / "asw", root / "p2bin",
-                    "-maxerrors 2", zero_edit)
+                build_content.build(root, manifest, profile, root / "asw", root / "p2bin", "-maxerrors 2", zero_edit)
             finally:
                 self.assertEqual([], list(output.parent.glob(".content-rom-*")))
         return output
@@ -612,8 +532,7 @@ class ContentOutputTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             payload = bytearray(0x200000)
             struct.pack_into(">H", payload, 0x200, 0x1234)
-            output = self.build_case(Path(directory), zero_edit=False,
-                                     payload=bytes(payload))
+            output = self.build_case(Path(directory), zero_edit=False, payload=bytes(payload))
             struct.pack_into(">H", payload, 0x18E, 0x1234)
             self.assertEqual(payload, output.read_bytes())
 
@@ -621,47 +540,41 @@ class ContentOutputTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             payload = bytearray(0x200000)
             struct.pack_into(">H", payload, 0x1FFFFE, 0x5678)
-            output = self.build_case(Path(directory), zero_edit=False,
-                                     payload=bytes(payload), profile="eu")
+            output = self.build_case(Path(directory), zero_edit=False, payload=bytes(payload), profile="eu")
             struct.pack_into(">H", payload, 0x18E, 0x5678)
             self.assertEqual(payload, output.read_bytes())
 
     def test_assembler_failure_preserves_the_previous_rom(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            with self.assertRaisesRegex(content_workspace.ContentError,
-                                        "content assembly failed"):
-                self.build_case(root, zero_edit=False,
-                                payload=b"partial", result=1)
+            with self.assertRaisesRegex(content_workspace.ContentError, "content assembly failed"):
+                self.build_case(root, zero_edit=False, payload=b"partial", result=1)
             self.assertEqual(
-                b"previous successful ROM",
-                (root / content_manifest()["profile_outputs"]["jp"]).read_bytes())
+                b"previous successful ROM", (root / content_manifest()["profile_outputs"]["jp"]).read_bytes()
+            )
 
     def test_zero_edit_mismatch_preserves_the_previous_rom(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            with self.assertRaisesRegex(content_workspace.ContentError,
-                                        "zero-edit ROM differs"):
+            with self.assertRaisesRegex(content_workspace.ContentError, "zero-edit ROM differs"):
                 self.build_case(root, zero_edit=True, payload=b"mismatch")
             self.assertEqual(
-                b"previous successful ROM",
-                (root / content_manifest()["zero_edit_outputs"]["jp"]).read_bytes())
+                b"previous successful ROM", (root / content_manifest()["zero_edit_outputs"]["jp"]).read_bytes()
+            )
 
     def test_short_edited_rom_preserves_the_previous_rom(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            with self.assertRaisesRegex(content_workspace.ContentError,
-                                        "edited content ROM has 5 bytes"):
+            with self.assertRaisesRegex(content_workspace.ContentError, "edited content ROM has 5 bytes"):
                 self.build_case(root, zero_edit=False, payload=b"short")
             self.assertEqual(
-                b"previous successful ROM",
-                (root / content_manifest()["profile_outputs"]["jp"]).read_bytes())
+                b"previous successful ROM", (root / content_manifest()["profile_outputs"]["jp"]).read_bytes()
+            )
 
 
 class ContentChecksumTests(unittest.TestCase):
     def test_private_reference_headers_match_both_boot_loops_when_available(self) -> None:
-        profiles = json.loads((ROOT / "config/rom_profiles.json").read_text(
-            encoding="utf-8"))["profiles"]
+        profiles = json.loads((ROOT / "config/rom_profiles.json").read_text(encoding="utf-8"))["profiles"]
         for record in profiles:
             profile = record["id"]
             reference = record["reference_rom"]
@@ -672,14 +585,12 @@ class ContentChecksumTests(unittest.TestCase):
                 original = build_content.validate_reference(path, reference)
                 image = bytearray(original)
                 stored = struct.unpack_from(">H", image, 0x18E)[0]
-                self.assertEqual(stored,
-                                 build_content.update_boot_checksum(image, profile))
+                self.assertEqual(stored, build_content.update_boot_checksum(image, profile))
                 self.assertEqual(original, image)
 
     def test_jp_and_eu_use_their_distinct_boot_checksum_spans(self) -> None:
         image = bytearray(0x200000)
-        for address, word in ((0x200, 1), (0x60000, 2),
-                              (0x60002, 4), (0x1FFFFE, 8)):
+        for address, word in ((0x200, 1), (0x60000, 2), (0x60002, 4), (0x1FFFFE, 8)):
             struct.pack_into(">H", image, address, word)
         jp = bytearray(image)
         eu = bytearray(image)
@@ -693,8 +604,7 @@ class ContentChecksumTests(unittest.TestCase):
         self.assertEqual(image, eu)
 
     def test_checksum_rejects_a_truncated_profile_span(self) -> None:
-        with self.assertRaisesRegex(content_workspace.ContentError,
-                                    "too short for its boot checksum span"):
+        with self.assertRaisesRegex(content_workspace.ContentError, "too short for its boot checksum span"):
             build_content.update_boot_checksum(bytearray(0x60000), "jp")
 
 

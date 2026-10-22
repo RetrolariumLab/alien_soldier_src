@@ -37,9 +37,7 @@ class ScriptedMessageTests(unittest.TestCase):
         document = copy.deepcopy(self.document)
         script = document["scripts"][0]
         script["records"][0]["glyphs"][0] ^= 1
-        self.assertEqual(
-            [script["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([script["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_commands_attributes_and_capacity_are_read_only(self) -> None:
         for field, mutate in (

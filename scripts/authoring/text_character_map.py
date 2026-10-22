@@ -33,8 +33,9 @@ RAW_TOKEN = re.compile(r"\[\[\$([0-9A-Fa-f]{1,4})\]\]")
 
 def source_fonts(root: Path) -> dict:
     """Do not infer regional aliases: pin the actual current source art."""
-    return {name: {field: asset[field] for field in ("first", "count", "sha256")}
-            for name, asset in inventory(root).items()}
+    return {
+        name: {field: asset[field] for field in ("first", "count", "sha256")} for name, asset in inventory(root).items()
+    }
 
 
 def map_path(root: Path, profile: str) -> Path:
@@ -47,14 +48,12 @@ def map_path(root: Path, profile: str) -> Path:
 def empty_document(root: Path, profile: str) -> dict:
     map_path(root, profile)
     fonts = source_fonts(root)
-    return {"schema_version": 1, "profile": profile,
-            "source_fonts": fonts, "answers": []}
+    return {"schema_version": 1, "profile": profile, "source_fonts": fonts, "answers": []}
 
 
 def validate_document(document: dict, root: Path, profile: str) -> None:
     map_path(root, profile)
-    if not isinstance(document, dict) or set(document) != {
-            "schema_version", "profile", "source_fonts", "answers"}:
+    if not isinstance(document, dict) or set(document) != {"schema_version", "profile", "source_fonts", "answers"}:
         raise ValueError("character-map fields differ from the workspace schema")
     if type(document["schema_version"]) is not int or document["schema_version"] != 1:
         raise ValueError("character-map schema is unsupported")
@@ -66,13 +65,20 @@ def validate_document(document: dict, root: Path, profile: str) -> None:
         raise ValueError("character-map source fonts differ")
     for family, expected in fonts.items():
         actual = recorded[family]
-        if (not isinstance(actual, dict) or set(actual) != set(expected)
-                or any(type(actual[key]) is not type(value) or actual[key] != value
-                       for key, value in expected.items())):
+        if (
+            not isinstance(actual, dict)
+            or set(actual) != set(expected)
+            or any(type(actual[key]) is not type(value) or actual[key] != value for key, value in expected.items())
+        ):
             raise ValueError("character-map source art differs: " + family)
-    validate_answers({"schema_version": 1,
-                      "source_hashes": {name: asset["sha256"] for name, asset in fonts.items()},
-                      "answers": document["answers"]}, fonts)
+    validate_answers(
+        {
+            "schema_version": 1,
+            "source_hashes": {name: asset["sha256"] for name, asset in fonts.items()},
+            "answers": document["answers"],
+        },
+        fonts,
+    )
 
 
 def from_answers(root: Path, profile: str, answers: dict) -> dict:
@@ -109,29 +115,48 @@ class CharacterMap:
     """An already validated map, without normalization or implicit aliases."""
 
     def __init__(self, document: dict):
-        if (type(document.get("schema_version")) is not int
-                or document["schema_version"] != 1 or document.get("profile") not in PROFILES):
+        if (
+            type(document.get("schema_version")) is not int
+            or document["schema_version"] != 1
+            or document.get("profile") not in PROFILES
+        ):
             raise ValueError("character-map schema or profile is unsupported")
         fonts = document.get("source_fonts")
         if not isinstance(fonts, dict) or set(fonts) != set(FAMILIES):
             raise ValueError("character-map source fonts differ")
         for font in fonts.values():
-            if (not isinstance(font, dict) or set(font) != {"first", "count", "sha256"}
-                    or type(font["first"]) is not int or not 0 <= font["first"] <= 0xFFFF
-                    or type(font["count"]) is not int or not 1 <= font["count"] <= 0x10000 - font["first"]
-                    or not isinstance(font["sha256"], str)
-                    or re.fullmatch(r"[0-9a-f]{64}", font["sha256"]) is None):
+            if (
+                not isinstance(font, dict)
+                or set(font) != {"first", "count", "sha256"}
+                or type(font["first"]) is not int
+                or not 0 <= font["first"] <= 0xFFFF
+                or type(font["count"]) is not int
+                or not 1 <= font["count"] <= 0x10000 - font["first"]
+                or not isinstance(font["sha256"], str)
+                or re.fullmatch(r"[0-9a-f]{64}", font["sha256"]) is None
+            ):
                 raise ValueError("character-map source font metadata is invalid")
-        validate_answers({"schema_version": 1,
-                          "source_hashes": {name: font["sha256"] for name, font in fonts.items()},
-                          "answers": document.get("answers")}, fonts)
+        validate_answers(
+            {
+                "schema_version": 1,
+                "source_hashes": {name: font["sha256"] for name, font in fonts.items()},
+                "answers": document.get("answers"),
+            },
+            fonts,
+        )
         self.profile = document["profile"]
         self.fonts = deepcopy(document["source_fonts"])
         self.labels = {family: {} for family in FAMILIES}
         for answer in document["answers"]:
             text, family, index = answer["transcription"], answer["set"], answer["index"]
-            if (answer["evidence"] == "unknown_or_unused" or not text
-                    or "[[" in text or "]]" in text or family == "credits" and index == 0):
+            if (
+                answer["evidence"] == "unknown_or_unused"
+                or not text
+                or "[[" in text
+                or "]]" in text
+                or family == "credits"
+                and index == 0
+            ):
                 continue
             self.labels[family][index] = text
         self.reverse = {family: {} for family in FAMILIES}
@@ -178,8 +203,7 @@ class CharacterMap:
             result.append(glyph)
         return result[::-1]
 
-    def encode(self, text: str, family: str, *, length: int,
-               protected: dict[int, int] | None = None) -> list[int]:
+    def encode(self, text: str, family: str, *, length: int, protected: dict[int, int] | None = None) -> list[int]:
         font = self._family(family)
         if not isinstance(text, str):
             raise ValueError("text must be a string")
@@ -209,17 +233,20 @@ class CharacterMap:
                 raise ValueError("explicit glyph ID is outside the source font at slot %d" % index)
         return values
 
-    def decode(self, values: list[int], family: str, *,
-               protected: dict[int, int] | None = None) -> str:
+    def decode(self, values: list[int], family: str, *, protected: dict[int, int] | None = None) -> str:
         self._family(family)
         protected = protected or {}
         reverse, labels = self.reverse[family], self.labels[family]
+
         def raw(glyph):
             return "[[$%03X]]" % glyph
 
-        pieces = [labels[glyph] if index not in protected and glyph in labels
-                  and len(reverse[labels[glyph]]) == 1 else raw(glyph)
-                  for index, glyph in enumerate(values)]
+        pieces = [
+            labels[glyph]
+            if index not in protected and glyph in labels and len(reverse[labels[glyph]]) == 1
+            else raw(glyph)
+            for index, glyph in enumerate(values)
+        ]
         text = "".join(pieces)
         try:
             if self.encode(text, family, length=len(values), protected=protected) == values:
@@ -249,8 +276,10 @@ def main() -> int:
             document = import_answers(root, args.profile, args.answers, replace=args.replace)
         else:
             document = load_document(root, args.profile)
-        print("[OK] %s character map: %d reviewed records; no inferred transcriptions" % (
-            args.profile, len(document["answers"])))
+        print(
+            "[OK] %s character map: %d reviewed records; no inferred transcriptions"
+            % (args.profile, len(document["answers"]))
+        )
         return 0
     except (OSError, ValueError) as error:
         print("[ERROR] " + str(error), file=sys.stderr)

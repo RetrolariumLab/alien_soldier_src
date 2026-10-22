@@ -20,33 +20,28 @@ def descriptor_bytes(data: dict, name: str) -> bytes:
     raw = data.get(name)
     if isinstance(raw, bytes):
         encoded = raw
-    elif isinstance(raw, tuple) and all(
-            isinstance(word, int) and 0 <= word <= 0xFFFF for word in raw):
+    elif isinstance(raw, tuple) and all(isinstance(word, int) and 0 <= word <= 0xFFFF for word in raw):
         encoded = b"".join(word.to_bytes(2, "big") for word in raw)
     else:
         raise ValueError("indexed-row descriptor is missing: %s" % name)
     if len(encoded) < 6 or encoded[:4] != DESCRIPTOR_PREFIX:
         raise ValueError("unsupported indexed-row descriptor: %s" % name)
     groups, blocks = encoded[4] + 1, encoded[5] + 1
-    if (groups * 4 > PLANE_COLUMNS or
-            2 + blocks * 4 > PLANE_ROWS or
-            len(encoded) < 6 + groups * blocks):
+    if groups * 4 > PLANE_COLUMNS or 2 + blocks * 4 > PLANE_ROWS or len(encoded) < 6 + groups * blocks:
         raise ValueError("indexed-row descriptor exceeds plane or index data: %s" % name)
     return encoded
 
 
 def apply_indexed_rows(
-        original: list[list[int]], ram: bytes | bytearray,
-        descriptor: bytes) -> tuple[tuple[int, ...], ...]:
+    original: list[list[int]], ram: bytes | bytearray, descriptor: bytes
+) -> tuple[tuple[int, ...], ...]:
     """Apply the source routine's writes to a caller-owned initial name table."""
-    if len(original) != PLANE_ROWS or any(
-            len(row) != PLANE_COLUMNS for row in original):
+    if len(original) != PLANE_ROWS or any(len(row) != PLANE_COLUMNS for row in original):
         raise ValueError("indexed-row initial plane must be 32 by 64 words")
     if len(ram) < 0x4000 or descriptor[:4] != DESCRIPTOR_PREFIX:
         raise ValueError("indexed-row RAM or descriptor is unsupported")
     groups, blocks = descriptor[4] + 1, descriptor[5] + 1
-    if (groups * 4 > PLANE_COLUMNS or 2 + blocks * 4 > PLANE_ROWS
-            or len(descriptor) < 6 + groups * blocks):
+    if groups * 4 > PLANE_COLUMNS or 2 + blocks * 4 > PLANE_ROWS or len(descriptor) < 6 + groups * blocks:
         raise ValueError("indexed-row descriptor exceeds plane or index data")
     pattern_base = int.from_bytes(descriptor[2:4], "big")
     rows = [list(row) for row in original]
@@ -59,6 +54,5 @@ def apply_indexed_rows(
                     word_at = address + part * 8
                     if not 0x2000 <= word_at <= 0x3FFE:
                         raise ValueError("indexed-row pattern reads outside bounded RAM")
-                    rows[2 + block * 4 + part][group * 4 + column] = (
-                        int.from_bytes(ram[word_at:word_at + 2], "big"))
+                    rows[2 + block * 4 + part][group * 4 + column] = int.from_bytes(ram[word_at : word_at + 2], "big")
     return tuple(tuple(row) for row in rows)

@@ -20,6 +20,7 @@ class ScreenStudioWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
@@ -40,10 +41,7 @@ class ScreenStudioWidgetTests(unittest.TestCase):
                 raise unittest.SkipTest("content workspaces are not initialized")
 
     def test_both_profiles_wire_screen_map_controls_without_staging(self) -> None:
-        records = {
-            item["id"]: item
-            for item in screen_studio.load_config(ROOT)["supported"]
-        }
+        records = {item["id"]: item for item in screen_studio.load_config(ROOT)["supported"]}
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
                 context = screen_studio.load_context(ROOT, profile)
@@ -63,30 +61,29 @@ class ScreenStudioWidgetTests(unittest.TestCase):
                 def tiny_preview(*args, **_kwargs):
                     record = records[args[6]]
                     scene = SimpleNamespace(
-                        tilemap=object() if record["plane_a"] else None,
-                        plane_b=object() if record["plane_b"] else None)
+                        tilemap=object() if record["plane_a"] else None, plane_b=object() if record["plane_b"] else None
+                    )
                     return [[(0, 0, 0)]], scene, record
 
                 window = None
-                with (mock.patch.object(self.tk, "Tk", new=hidden_tk),
-                      mock.patch.object(self.tk, "PhotoImage", new=tiny_photo),
-                      mock.patch.object(screen_studio, "stage_preview",
-                                        side_effect=tiny_preview) as preview,
-                      mock.patch.object(screen_studio, "read_ram_sources",
-                                        return_value={}),
-                      mock.patch.object(screen_studio, "write_png") as write_png,
-                      mock.patch.object(screen_studio.Window, "_validate_map_edit")):
+                with (
+                    mock.patch.object(self.tk, "Tk", new=hidden_tk),
+                    mock.patch.object(self.tk, "PhotoImage", new=tiny_photo),
+                    mock.patch.object(screen_studio, "stage_preview", side_effect=tiny_preview) as preview,
+                    mock.patch.object(screen_studio, "read_ram_sources", return_value={}),
+                    mock.patch.object(screen_studio, "write_png") as write_png,
+                    mock.patch.object(screen_studio.Window, "_validate_map_edit"),
+                ):
                     try:
                         window = screen_studio.Window(
-                            ROOT, profile, *context[1:], "title_background",
-                            self.tk, self.ttk, messages)
+                            ROOT, profile, *context[1:], "title_background", self.tk, self.ttk, messages
+                        )
                         self.assertEqual("title_background", window.preview_record["id"])
                         self.assertEqual(1, len(window.canvas.find_all()))
                         self.assertEqual(8, len(window.state.payloads))
                         write_png.assert_called_once()
 
-                        window.screen_box.current(
-                            window.screen_ids.index("story_background"))
+                        window.screen_box.current(window.screen_ids.index("story_background"))
                         window.screen_box.event_generate("<<ComboboxSelected>>")
                         window.window.update()
                         self.assertEqual("story_background", window.preview_record["id"])
@@ -100,8 +97,8 @@ class ScreenStudioWidgetTests(unittest.TestCase):
                         self.assertTrue(window.details.cget("text"))
 
                         byte_index = next(
-                            index for index, payload in enumerate(window.state.payloads)
-                            if payload["value_bits"] == 8)
+                            index for index, payload in enumerate(window.state.payloads) if payload["value_bits"] == 8
+                        )
                         window.select_payload(byte_index)
                         before = window.state.value
                         window.value_text.set("$100")
@@ -112,9 +109,7 @@ class ScreenStudioWidgetTests(unittest.TestCase):
 
                         replacement = 0 if before else 1
                         window.value_text.set("$%02X" % replacement)
-                        with mock.patch.object(
-                                window, "refresh_map_preview_fast",
-                                return_value=True) as replay:
+                        with mock.patch.object(window, "refresh_map_preview_fast", return_value=True) as replay:
                             window.apply_value()
                         self.assertEqual(replacement, window.state.value)
                         self.assertTrue(window.state.dirty)

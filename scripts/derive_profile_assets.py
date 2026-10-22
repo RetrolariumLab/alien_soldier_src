@@ -127,9 +127,7 @@ def range_text(assets: list[dict[str, Any]], base_profile: str, target_profile: 
         "",
     ]
     for asset in assets:
-        lines.append(
-            f"{asset['name']},{asset['address']},{asset['end']},{asset['region']}"
-        )
+        lines.append(f"{asset['name']},{asset['address']},{asset['end']},{asset['region']}")
     return "\n".join(lines) + "\n"
 
 
@@ -153,13 +151,9 @@ def main() -> int:
         if not reference_matches(target_image, target["reference_rom"]):
             raise ValueError("target ROM does not match its declared profile")
         base_manifest = json.loads(Path(args.base_manifest).read_text(encoding="utf-8"))
-        overrides = load_overrides(
-            Path(args.overrides), args.base_profile, args.target_profile
-        )
+        overrides = load_overrides(Path(args.overrides), args.base_profile, args.target_profile)
         shared_start = parse_address(profiles["shared_image_region"]["start"])
-        assets = derive_assets(
-            base_manifest, base_image, target_image, overrides, shared_start
-        )
+        assets = derive_assets(base_manifest, base_image, target_image, overrides, shared_start)
         target_manifest = {
             "schema_version": 1,
             "reference_rom": {

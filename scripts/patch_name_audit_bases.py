@@ -17,9 +17,7 @@ DEFAULT_CHANGES = ROOT / "config/name_audit_basis_corrections.json"
 ADDRESS_RE = re.compile(r'"address"\s*:\s*"(0x[0-9A-Fa-f]+)"')
 
 
-def patch_bytes(
-    audit: bytes, changes: list[dict[str, str | list[str]]]
-) -> tuple[bytes, int]:
+def patch_bytes(audit: bytes, changes: list[dict[str, str | list[str]]]) -> tuple[bytes, int]:
     """Return a validated byte-preserving rewrite of one-line audit records."""
     lines = audit.splitlines(keepends=True)
     locations: dict[str, int] = {}
@@ -36,10 +34,7 @@ def patch_bytes(
     for change in changes:
         required = {"address", "current_name", "old_basis", "new_basis"}
         if set(change) not in (required, required | {"prior_bases"}):
-            raise ValueError(
-                f"basis correction fields must be {sorted(required)} "
-                "with optional prior_bases"
-            )
+            raise ValueError(f"basis correction fields must be {sorted(required)} with optional prior_bases")
         if not all(isinstance(change[key], str) for key in required):
             raise ValueError("basis correction required fields must be strings")
         address = change["address"].upper().replace("0X", "0x")
@@ -68,10 +63,7 @@ def patch_bytes(
             or change["new_basis"] in prior_bases
         ):
             raise ValueError(f"{address}: invalid prior basis list")
-        next_bases = [
-            change["new_basis"] if basis == change["old_basis"] else basis
-            for basis in prior_bases
-        ]
+        next_bases = [change["new_basis"] if basis == change["old_basis"] else basis for basis in prior_bases]
         if record["basis"] == next_bases:
             continue
         if record["basis"] != prior_bases:
@@ -111,8 +103,11 @@ def main(argv: list[str] | None = None) -> int:
     temporary: Path | None = None
     try:
         with tempfile.NamedTemporaryFile(
-            mode="wb", prefix=".name_audit.", suffix=".tmp",
-            dir=args.audit.parent, delete=False,
+            mode="wb",
+            prefix=".name_audit.",
+            suffix=".tmp",
+            dir=args.audit.parent,
+            delete=False,
         ) as handle:
             temporary = Path(handle.name)
             handle.write(after)

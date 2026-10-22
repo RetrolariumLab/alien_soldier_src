@@ -11,11 +11,12 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-from authoring.stage4_boss_tilemap_model import (
-    PLANE_COLUMNS, PLANE_ROWS, build_sniper_honeyviper_name_tables)
+from authoring.stage4_boss_tilemap_model import PLANE_COLUMNS, PLANE_ROWS, build_sniper_honeyviper_name_tables
 from authoring.stage4_raster_model import (
-    sniper_honeyviper_horizontal_profile, sniper_honeyviper_primary_rows,
-    sniper_honeyviper_secondary_rows)
+    sniper_honeyviper_horizontal_profile,
+    sniper_honeyviper_primary_rows,
+    sniper_honeyviper_secondary_rows,
+)
 from authoring.stage_renderer import plane_scanline, play_palette_command, read_once, scene
 from authoring.stage_tilemap_model import decompress
 
@@ -45,8 +46,7 @@ class _NameTablePlane:
         return True
 
     def name_word(self, x: int, y: int) -> int:
-        return self.rows[(y // 8) & (PLANE_ROWS - 1)][
-            (x // 8) & (PLANE_COLUMNS - 1)]
+        return self.rows[(y // 8) & (PLANE_ROWS - 1)][(x // 8) & (PLANE_COLUMNS - 1)]
 
 
 def _signed_word(word: int) -> int:
@@ -54,10 +54,12 @@ def _signed_word(word: int) -> int:
 
 
 def draw_sniper_honeyviper_background(
-        root: Path, pose: SniperHoneyviperPose,
-        top: int = FIRST_BACKGROUND_ROW,
-        bottom: int = LAST_BACKGROUND_ROW,
-        width: int = 320) -> list[list[tuple[int, int, int]]]:
+    root: Path,
+    pose: SniperHoneyviperPose,
+    top: int = FIRST_BACKGROUND_ROW,
+    bottom: int = LAST_BACKGROUND_ROW,
+    width: int = 320,
+) -> list[list[tuple[int, int, int]]]:
     """Render boss background rows with source assets and the initial palette.
 
     Stage 4 locks the primary camera at ($1AF8, 0) for these captures. Its
@@ -83,28 +85,26 @@ def draw_sniper_honeyviper_background(
     vram = bytearray(base.vram)
     if BOSS_TILE_ART_VRAM + len(art) > len(vram):
         raise ValueError("Sniper Honeyviper tile art exceeds VRAM")
-    vram[BOSS_TILE_ART_VRAM:BOSS_TILE_ART_VRAM + len(art)] = art
+    vram[BOSS_TILE_ART_VRAM : BOSS_TILE_ART_VRAM + len(art)] = art
 
     page = pose.primary_camera_x & ~0x1FF
-    primary_rows = (
-        tables.primary_transferred_rows
-        + tuple(
-            tuple(base.tilemap.name_word(page + column * 8, row * 8)
-                  for column in range(PLANE_COLUMNS))
-            for row in range(20, PLANE_ROWS)))
-    palette = play_palette_command(
-        root, "Boss_SniperHoneyviperPaletteCommand", (),
-        base.palette)
+    primary_rows = tables.primary_transferred_rows + tuple(
+        tuple(base.tilemap.name_word(page + column * 8, row * 8) for column in range(PLANE_COLUMNS))
+        for row in range(20, PLANE_ROWS)
+    )
+    palette = play_palette_command(root, "Boss_SniperHoneyviperPaletteCommand", (), base.palette)
     displayed = replace(
-        base, vram=bytes(vram), palette=palette, backdrop=palette[16],
+        base,
+        vram=bytes(vram),
+        palette=palette,
+        backdrop=palette[16],
         tilemap=_NameTablePlane(primary_rows),
-        plane_b=_NameTablePlane(tables.secondary_rows))
+        plane_b=_NameTablePlane(tables.secondary_rows),
+    )
 
     profile = sniper_honeyviper_horizontal_profile(pose.primary_camera_x)
-    primary_scroll = sniper_honeyviper_primary_rows(
-        profile, pose.primary_shake_offset)
-    secondary_scroll = sniper_honeyviper_secondary_rows(
-        pose.current_x, pose.current_y, pose.anchor_x, pose.anchor_y)
+    primary_scroll = sniper_honeyviper_primary_rows(profile, pose.primary_shake_offset)
+    secondary_scroll = sniper_honeyviper_secondary_rows(pose.current_x, pose.current_y, pose.anchor_x, pose.anchor_y)
     secondary_vscroll = -0x30 - pose.current_y
     image = []
     cache = {}
@@ -117,12 +117,9 @@ def draw_sniper_honeyviper_background(
         # horizontal rows. Without this vertical sample offset, the
         # one-pixel-shake frames cannot match their saved VDP output.
         front = plane_scanline(
-            displayed, displayed.tilemap, camera_a,
-            screen_y + pose.primary_shake_offset,
-            width, cache, False)
-        back = plane_scanline(
-            displayed, displayed.plane_b, camera_b,
-            screen_y + secondary_vscroll, width, cache, False)
+            displayed, displayed.tilemap, camera_a, screen_y + pose.primary_shake_offset, width, cache, False
+        )
+        back = plane_scanline(displayed, displayed.plane_b, camera_b, screen_y + secondary_vscroll, width, cache, False)
         front_colours, front_indices, front_priorities = front
         back_colours, back_indices, back_priorities = back
         row = []

@@ -10,7 +10,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.shared_font_preview import (  # noqa: E402
-    FONT_PATH, SOURCE_FONT_GLYPH_COUNT, glyph_count, glyph_tiles)
+    FONT_PATH,
+    SOURCE_FONT_GLYPH_COUNT,
+    glyph_count,
+    glyph_tiles,
+)
 
 
 class SharedFontPreviewTests(unittest.TestCase):

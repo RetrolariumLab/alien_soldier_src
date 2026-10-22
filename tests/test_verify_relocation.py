@@ -25,9 +25,10 @@ class VerifyRelocationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "main.lst"
             path.write_text(
-                "(1)    1/     100 : 4E71                Payload: binclude \"data/x.bin\"\n"
+                '(1)    1/     100 : 4E71                Payload: binclude "data/x.bin"\n'
                 "(1)    2/     200 :                     Payload_End:\n",
-                encoding="utf-8")
+                encoding="utf-8",
+            )
             listing = verify_relocation.Listing(path)
         self.assertEqual({"Payload": 0x100, "Payload_End": 0x200}, listing.symbols)
         # An address inside the payload lands on the bare _End label, and the
@@ -41,8 +42,7 @@ class VerifyRelocationTests(unittest.TestCase):
         for entry in probe["probes"]:
             returns = entry.get("return_filler")
             if returns:
-                self.assertLessEqual(len(returns["skip_modules"]),
-                                     returns["maximum_skipped_modules"])
+                self.assertLessEqual(len(returns["skip_modules"]), returns["maximum_skipped_modules"])
                 for module in returns["skip_modules"]:
                     self.assertTrue((ROOT / module).is_file(), module)
                 self.assertTrue(returns["skip_reason"].strip())
@@ -56,10 +56,12 @@ class VerifyRelocationTests(unittest.TestCase):
             self.assertTrue(rule["why"].strip())
 
     def test_a_branch_table_slot_is_not_a_return(self) -> None:
-        table = ["                jmp     Dispatch(pc,d0.w)",
-                 "Dispatch:",
-                 "                rts",
-                 "                bra.s   Mode1"]
+        table = [
+            "                jmp     Dispatch(pc,d0.w)",
+            "Dispatch:",
+            "                rts",
+            "                bra.s   Mode1",
+        ]
         self.assertFalse(verify_relocation.returns_are_safe(table, 2))
         routine = ["                rts", "; End of function X", "NextRoutine:"]
         self.assertTrue(verify_relocation.returns_are_safe(routine, 0))
@@ -68,8 +70,7 @@ class VerifyRelocationTests(unittest.TestCase):
     def test_module_shifts_report_what_moved(self) -> None:
         before = [(0x100, "a.s"), (0x200, "b.s")]
         after = [(0x100, "a.s"), (0x400, "b.s")]
-        rows = verify_relocation.module_shifts(
-            _includes(before), _includes(after))
+        rows = verify_relocation.module_shifts(_includes(before), _includes(after))
         self.assertEqual(0, verify_relocation.shift_at(rows, 0x180))
         self.assertEqual(0x200, verify_relocation.shift_at(rows, 0x300))
         self.assertIsNone(verify_relocation.shift_at(rows, 0x10))

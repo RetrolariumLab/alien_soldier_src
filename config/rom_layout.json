@@ -124,13 +124,9 @@
   "dma_alignment": {
     "block_size": "0x20000",
     "reason": "The VDP latches the upper bits of a DMA source address, so a transfer that crosses a block boundary wraps to the start of that block instead of continuing. The cartridge is laid out so that no transferred payload straddles one, and the $FF gaps between regions are part of how that is achieved: they are alignment, not filler.",
-    "transferred_regions": [
-      "artunc"
-    ],
+    "transferred_regions": ["artunc"],
     "maximum_crossings": 0,
-    "compressed_regions_excluded": [
-      "artcomp"
-    ],
+    "compressed_regions_excluded": ["artcomp"],
     "exclusion_reason": "Compressed art is expanded by the 68000 a byte at a time, not transferred by the VDP, so a block boundary inside it is harmless; three such payloads cross one in the canonical image.",
     "emulator_note": "The vendored Gens increments the ROM DMA source without masking it, so make runtime cannot observe a violation. See docs/runtime.md."
   },
@@ -264,10 +260,7 @@
       }
     ],
     "coincidence_note": "A value that equals a symbol address by accident cannot be told from a pointer by its bytes, so each one is listed with why it is a number. A new entry appearing means look at it first.",
-    "content_modules": [
-      "src/data/",
-      "src/sound/"
-    ],
+    "content_modules": ["src/data/", "src/sound/"],
     "ignore_symbols_aligned_to": "0x8000",
     "ignore_alignment_reason": "Symbols on a $8000 boundary are the PCM banks. Their addresses are the same round numbers the ROM uses for VDP commands and 16.16 constants, so a four-byte window matches one by accident constantly, and the banks are referenced as (symbol >> 8), which a 32-bit scan cannot see."
   },

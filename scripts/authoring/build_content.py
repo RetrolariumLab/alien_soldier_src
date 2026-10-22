@@ -44,10 +44,8 @@ def update_boot_checksum(image: bytearray, profile: str) -> int:
     except KeyError as error:
         raise ContentError(f"unknown content checksum profile: {profile}") from error
     if len(image) < end:
-        raise ContentError(
-            f"{profile} content ROM is too short for its boot checksum span")
-    total = sum(word for (word,) in struct.iter_unpack(
-        ">H", memoryview(image)[CHECKSUM_FROM:end])) & 0xFFFF
+        raise ContentError(f"{profile} content ROM is too short for its boot checksum span")
+    total = sum(word for (word,) in struct.iter_unpack(">H", memoryview(image)[CHECKSUM_FROM:end])) & 0xFFFF
     struct.pack_into(">H", image, CHECKSUM_HEADER, total)
     return total
 
@@ -132,8 +130,7 @@ def build(
                     load_document as load_graphics_document,
                 )
 
-                document = load_graphics_document(
-                    artifact_path(root, manifest, profile, artifact))
+                document = load_graphics_document(artifact_path(root, manifest, profile, artifact))
                 apply_graphics_document(document, tree, profile)
             elif artifact["kind"] == "compressed_tile_document":
                 from authoring.compressed_graphics_model import (
@@ -142,7 +139,8 @@ def build(
                 )
 
                 document = load_compressed_graphics_document(
-                    artifact_path(root, manifest, profile, artifact), root, profile)
+                    artifact_path(root, manifest, profile, artifact), root, profile
+                )
                 apply_compressed_graphics_document(document, tree, profile)
             elif artifact["kind"] == "palette_document":
                 from authoring.palette_studio_model import (
@@ -150,8 +148,7 @@ def build(
                     load_document as load_palette_document,
                 )
 
-                document = load_palette_document(
-                    artifact_path(root, manifest, profile, artifact))
+                document = load_palette_document(artifact_path(root, manifest, profile, artifact))
                 apply_palette_document(document, tree, profile)
             elif artifact["kind"] == "mapping_document":
                 from authoring.mapping_studio_model import (
@@ -159,8 +156,7 @@ def build(
                     load_document as load_mapping_document,
                 )
 
-                document = load_mapping_document(
-                    artifact_path(root, manifest, profile, artifact))
+                document = load_mapping_document(artifact_path(root, manifest, profile, artifact))
                 apply_mapping_document(document, tree, profile)
             elif artifact["kind"] == "animation_document":
                 from authoring.animation_studio_model import (
@@ -168,8 +164,7 @@ def build(
                     load_document as load_animation_document,
                 )
 
-                document = load_animation_document(
-                    artifact_path(root, manifest, profile, artifact))
+                document = load_animation_document(artifact_path(root, manifest, profile, artifact))
                 apply_animation_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "screen_map_document":
                 from authoring.screen_map_model import (
@@ -177,150 +172,120 @@ def build(
                     load_document as load_screen_map_document,
                 )
 
-                document = load_screen_map_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_screen_map_document(
-                    document, tree, profile, validation_root=root)
+                document = load_screen_map_document(artifact_path(root, manifest, profile, artifact))
+                apply_screen_map_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "stage_map_document":
                 from authoring.stage_map_model import (
                     apply_document as apply_stage_map_document,
                     load_document as load_stage_map_document,
                 )
 
-                document = load_stage_map_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_stage_map_document(
-                    document, tree, profile, validation_root=root)
+                document = load_stage_map_document(artifact_path(root, manifest, profile, artifact))
+                apply_stage_map_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "stage_map_document":
                 from authoring.stage_map_model import (
                     apply_document as apply_stage_map_document,
                     load_document as load_stage_map_document,
                 )
 
-                document = load_stage_map_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_stage_map_document(
-                    document, tree, profile, validation_root=root)
+                document = load_stage_map_document(artifact_path(root, manifest, profile, artifact))
+                apply_stage_map_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "story_text_document":
                 from authoring.story_text_model import (
                     apply_document as apply_story_text_document,
                     load_document as load_story_text_document,
                 )
 
-                document = load_story_text_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_story_text_document(
-                    document, tree, profile, validation_root=root)
+                document = load_story_text_document(artifact_path(root, manifest, profile, artifact))
+                apply_story_text_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "frontend_text_document":
                 from authoring.frontend_text_model import (
                     apply_document as apply_frontend_text_document,
                     load_document as load_frontend_text_document,
                 )
 
-                document = load_frontend_text_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_frontend_text_document(
-                    document, tree, profile, validation_root=root)
+                document = load_frontend_text_document(artifact_path(root, manifest, profile, artifact))
+                apply_frontend_text_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "results_text_document":
                 from authoring.results_text_model import (
                     apply_document as apply_results_text_document,
                     load_document as load_results_text_document,
                 )
 
-                document = load_results_text_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_results_text_document(
-                    document, tree, profile, validation_root=root)
+                document = load_results_text_document(artifact_path(root, manifest, profile, artifact))
+                apply_results_text_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "stage_message_document":
                 from authoring.stage_message_model import (
                     apply_document as apply_stage_message_document,
                     load_document as load_stage_message_document,
                 )
 
-                document = load_stage_message_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_stage_message_document(
-                    document, tree, profile, validation_root=root)
+                document = load_stage_message_document(artifact_path(root, manifest, profile, artifact))
+                apply_stage_message_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "scripted_message_document":
                 from authoring.scripted_message_model import (
                     apply_document as apply_scripted_message_document,
                     load_document as load_scripted_message_document,
                 )
 
-                document = load_scripted_message_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_scripted_message_document(
-                    document, tree, profile, validation_root=root)
+                document = load_scripted_message_document(artifact_path(root, manifest, profile, artifact))
+                apply_scripted_message_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "credits_text_document":
                 from authoring.credits_text_model import (
                     apply_document as apply_credits_text_document,
                     load_document as load_credits_text_document,
                 )
 
-                document = load_credits_text_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_credits_text_document(
-                    document, tree, profile, validation_root=root)
+                document = load_credits_text_document(artifact_path(root, manifest, profile, artifact))
+                apply_credits_text_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "glyph_source_list_document":
                 from authoring.glyph_source_list_model import (
                     apply_document as apply_glyph_source_list_document,
                     load_document as load_glyph_source_list_document,
                 )
 
-                document = load_glyph_source_list_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_glyph_source_list_document(
-                    document, tree, profile, validation_root=root)
+                document = load_glyph_source_list_document(artifact_path(root, manifest, profile, artifact))
+                apply_glyph_source_list_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "japanese_glyph_document":
                 from authoring.japanese_glyph_model import (
                     apply_document as apply_japanese_glyph_document,
                     load_document as load_japanese_glyph_document,
                 )
 
-                document = load_japanese_glyph_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_japanese_glyph_document(
-                    document, tree, profile, validation_root=root)
+                document = load_japanese_glyph_document(artifact_path(root, manifest, profile, artifact))
+                apply_japanese_glyph_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "sound_sequence_document":
                 from authoring.sound_sequence_model import (
                     apply_document as apply_sound_sequence_document,
                     load_document as load_sound_sequence_document,
                 )
 
-                document = load_sound_sequence_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_sound_sequence_document(
-                    document, tree, profile, validation_root=root)
+                document = load_sound_sequence_document(artifact_path(root, manifest, profile, artifact))
+                apply_sound_sequence_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "sound_instrument_document":
                 from authoring.sound_instrument_model import (
                     apply_document as apply_sound_instrument_document,
                     load_document as load_sound_instrument_document,
                 )
 
-                document = load_sound_instrument_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_sound_instrument_document(
-                    document, tree, profile, validation_root=root)
+                document = load_sound_instrument_document(artifact_path(root, manifest, profile, artifact))
+                apply_sound_instrument_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "sound_envelope_document":
                 from authoring.sound_envelope_model import (
                     apply_document as apply_sound_envelope_document,
                     load_document as load_sound_envelope_document,
                 )
 
-                document = load_sound_envelope_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_sound_envelope_document(
-                    document, tree, profile, validation_root=root)
+                document = load_sound_envelope_document(artifact_path(root, manifest, profile, artifact))
+                apply_sound_envelope_document(document, tree, profile, validation_root=root)
             elif artifact["kind"] == "sound_pcm_document":
                 from authoring.sound_pcm_model import (
                     apply_document as apply_sound_pcm_document,
                     load_document as load_sound_pcm_document,
                 )
 
-                document = load_sound_pcm_document(
-                    artifact_path(root, manifest, profile, artifact))
-                apply_sound_pcm_document(
-                    document, tree, profile, validation_root=root)
+                document = load_sound_pcm_document(artifact_path(root, manifest, profile, artifact))
+                apply_sound_pcm_document(document, tree, profile, validation_root=root)
     output.parent.mkdir(parents=True, exist_ok=True)
     object_file = output.with_suffix(".p")
     padding = reference["padding_byte"].removeprefix("0x")
@@ -347,9 +312,7 @@ def build(
             raise ContentError(f"{profile} zero-edit ROM differs at 0x{offset:06X}")
         if not zero_edit:
             if len(built) != reference["size"]:
-                raise ContentError(
-                    f"{profile} edited content ROM has {len(built)} bytes; "
-                    f"expected {reference['size']}")
+                raise ContentError(f"{profile} edited content ROM has {len(built)} bytes; expected {reference['size']}")
             update_boot_checksum(built, profile)
             candidate.write_bytes(built)
         os.replace(candidate, output)

@@ -23,10 +23,7 @@ class MappingWorkspaceTests(unittest.TestCase):
 
     def test_all_mappings_are_navigable_and_piece_selection_resets(self) -> None:
         self.assertEqual(1169, len(self.state.entries))
-        multi = next(
-            index for index, (_block, mapping) in enumerate(self.state.entries)
-            if len(mapping["pieces"]) > 1
-        )
+        multi = next(index for index, (_block, mapping) in enumerate(self.state.entries) if len(mapping["pieces"]) > 1)
         self.state.select_mapping(multi)
         self.state.select_piece(1)
         self.state.select_mapping(0)
@@ -35,10 +32,7 @@ class MappingWorkspaceTests(unittest.TestCase):
             self.state.select_mapping(len(self.state.entries))
 
     def test_static_piece_fields_are_edited_with_encoded_bounds(self) -> None:
-        static = next(
-            index for index, (_block, mapping) in enumerate(self.state.entries)
-            if not mapping["dynamic"]
-        )
+        static = next(index for index, (_block, mapping) in enumerate(self.state.entries) if not mapping["dynamic"])
         self.state.select_mapping(static)
         piece = self.state.piece
         x = piece["x"] - 1 if piece["x"] > -128 else piece["x"] + 1
@@ -54,27 +48,32 @@ class MappingWorkspaceTests(unittest.TestCase):
         mapping_studio_model.validate_document(self.document, ROOT, "jp")
         with self.assertRaisesRegex(ValueError, "signed bytes"):
             self.state.set_piece(
-                x=128, y=0, attributes=piece["attributes"],
-                size=piece["size"], link=piece["link"],
+                x=128,
+                y=0,
+                attributes=piece["attributes"],
+                size=piece["size"],
+                link=piece["link"],
             )
 
     def test_dynamic_art_shape_and_mapping_boundary_are_protected(self) -> None:
-        dynamic = next(
-            index for index, (_block, mapping) in enumerate(self.state.entries)
-            if mapping["dynamic"]
-        )
+        dynamic = next(index for index, (_block, mapping) in enumerate(self.state.entries) if mapping["dynamic"])
         self.state.select_mapping(dynamic)
         piece = self.state.piece
         with self.assertRaisesRegex(ValueError, "art size"):
             self.state.set_piece(
-                x=piece["x"], y=piece["y"], attributes=piece["attributes"],
-                size=piece["size"] ^ 1, link=piece["link"],
+                x=piece["x"],
+                y=piece["y"],
+                attributes=piece["attributes"],
+                size=piece["size"] ^ 1,
+                link=piece["link"],
             )
         with self.assertRaisesRegex(ValueError, "terminator"):
             self.state.set_piece(
-                x=piece["x"], y=piece["y"],
+                x=piece["x"],
+                y=piece["y"],
                 attributes=piece["attributes"] ^ LAST_PIECE,
-                size=piece["size"], link=piece["link"],
+                size=piece["size"],
+                link=piece["link"],
             )
 
     def test_geometry_uses_only_the_low_oam_size_bits(self) -> None:

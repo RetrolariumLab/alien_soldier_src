@@ -21,8 +21,9 @@ class RegionRuntimeSmokeTests(unittest.TestCase):
         rows = []
         for frame in range(1, 226):
             row = {name: 0 for name, _width in smoke.OBSERVATIONS}
-            row.update(frame=frame, DifficultyMode=2, ConsoleVersionFlags=192,
-                       GameModeIndex=4, VBlankFrameCounter=frame)
+            row.update(
+                frame=frame, DifficultyMode=2, ConsoleVersionFlags=192, GameModeIndex=4, VBlankFrameCounter=frame
+            )
             if 25 <= frame < 125:
                 row.update(expected["title"])
             elif frame >= 125:
@@ -39,9 +40,14 @@ class RegionRuntimeSmokeTests(unittest.TestCase):
         self.assertEqual((1, 25, 125, 225), (summary["booted"], summary["title"], summary["demo"], summary["final"]))
 
     def test_wrong_region_missing_title_or_demo_fail(self):
-        for name, value, first in (("ConsoleVersionFlags", 0, 0), ("GameModeIndex", 4, 24),
-                                   ("DemoPlaybackState", 0, 124), ("DemoFramesRemaining", 4096 + 1, 124),
-                                   ("DemoStageTableIndex", 4, 124), ("PlayerObjectType", 0, 124)):
+        for name, value, first in (
+            ("ConsoleVersionFlags", 0, 0),
+            ("GameModeIndex", 4, 24),
+            ("DemoPlaybackState", 0, 124),
+            ("DemoFramesRemaining", 4096 + 1, 124),
+            ("DemoStageTableIndex", 4, 124),
+            ("PlayerObjectType", 0, 124),
+        ):
             rows = self.rows()
             for row in rows[first:]:
                 row[name] = value

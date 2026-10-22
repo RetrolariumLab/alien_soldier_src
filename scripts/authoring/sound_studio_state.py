@@ -7,7 +7,11 @@ from dataclasses import dataclass
 from typing import Any
 
 from authoring.sound_semantic_model import (
-    FM_REGISTERS, OPERATOR_REGISTER_OFFSETS, describe_event, event_controls, fm_controls,
+    FM_REGISTERS,
+    OPERATOR_REGISTER_OFFSETS,
+    describe_event,
+    event_controls,
+    fm_controls,
 )
 
 
@@ -27,25 +31,20 @@ class Value:
             return stored
         if isinstance(stored, str):
             start = self.index * 2
-            return int(stored[start:start + 2], 16)
+            return int(stored[start : start + 2], 16)
         return stored[self.index]
 
     def set(self, value: int) -> None:
         if not isinstance(value, int) or isinstance(value, bool):
             raise ValueError("sound value must be an integer")
         if not self.minimum <= value <= self.maximum:
-            raise ValueError(
-                "sound value must be between %d and %d"
-                % (self.minimum, self.maximum)
-            )
+            raise ValueError("sound value must be between %d and %d" % (self.minimum, self.maximum))
         stored = self.container[self.key]
         if self.index is None:
             self.container[self.key] = value
         elif isinstance(stored, str):
             start = self.index * 2
-            self.container[self.key] = (
-                stored[:start] + "%02X" % value + stored[start + 2:]
-            )
+            self.container[self.key] = stored[:start] + "%02X" % value + stored[start + 2 :]
         else:
             stored[self.index] = value
 
@@ -80,8 +79,11 @@ class Field:
 
 
 def _ref(
-    container: dict[str, Any], key: str, index: int | None = None,
-    minimum: int = 0, maximum: int = 0xFF,
+    container: dict[str, Any],
+    key: str,
+    index: int | None = None,
+    minimum: int = 0,
+    maximum: int = 0xFF,
 ) -> Value:
     return Value(container, key, index, minimum, maximum)
 
@@ -100,45 +102,45 @@ def _sequence_fields(identifier: str, document: dict[str, Any]) -> list[Field]:
                 if len(data) == 2:
                     values.append(_ref(instruction, "data", 1, 0, 0x7F))
             elif instruction.get("opcode") == 0xFF:
-                values.extend(
-                    _ref(instruction, "data", index)
-                    for index in range(2, len(data))
-                )
+                values.extend(_ref(instruction, "data", index) for index in range(2, len(data)))
             elif instruction.get("opcode") not in (0xF6, 0xF7, 0xF8):
                 start = 2 if instruction.get("opcode") == 0xE4 else 1
-                values.extend(
-                    _ref(instruction, "data", index)
-                    for index in range(start, len(data))
-                )
+                values.extend(_ref(instruction, "data", index) for index in range(start, len(data)))
         if values:
-            fields.append(Field(
-                identifier,
-                "%s / %s / reachable event values" % (
-                    payload["family"], payload["name"]),
-                values,
-                payload=payload,
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    "%s / %s / reachable event values" % (payload["family"], payload["name"]),
+                    values,
+                    payload=payload,
+                )
+            )
     return fields
 
 
 def _instrument_fields(identifier: str, document: dict[str, Any]) -> list[Field]:
     fields = []
     register_groups = (
-        "detune_multiplier", "rate_scale_attack", "am_decay", "sustain_rate",
-        "sustain_level_release", "total_level",
+        "detune_multiplier",
+        "rate_scale_attack",
+        "am_decay",
+        "sustain_rate",
+        "sustain_level_release",
+        "total_level",
     )
     for payload in document["payloads"]:
         for instrument in payload["instruments"]:
             values = [_ref(instrument, "algorithm_feedback")]
             for group in register_groups:
                 values.extend(_ref(instrument, group, index) for index in range(4))
-            fields.append(Field(
-                identifier,
-                "%s / instrument %d / YM2612 register bytes" % (
-                    payload["name"], instrument["index"]),
-                values,
-                payload=payload,
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    "%s / instrument %d / YM2612 register bytes" % (payload["name"], instrument["index"]),
+                    values,
+                    payload=payload,
+                )
+            )
     return fields
 
 
@@ -146,17 +148,16 @@ def _envelope_fields(identifier: str, document: dict[str, Any]) -> list[Field]:
     fields = []
     for family in document["families"]:
         for block in family["blocks"]:
-            values = [
-                _ref(record, "value", minimum=-128, maximum=127)
-                for record in block["values"]
-            ]
+            values = [_ref(record, "value", minimum=-128, maximum=127) for record in block["values"]]
             if values:
-                fields.append(Field(
-                    identifier,
-                    "%s / %s / signed values" % (family["id"], block["name"]),
-                    values,
-                    representation="signed",
-                ))
+                fields.append(
+                    Field(
+                        identifier,
+                        "%s / %s / signed values" % (family["id"], block["name"]),
+                        values,
+                        representation="signed",
+                    )
+                )
     return fields
 
 
@@ -164,17 +165,15 @@ def _pcm_fields(identifier: str, document: dict[str, Any]) -> list[Field]:
     fields = []
     for bank in document["banks"]:
         for sample in bank["samples"]:
-            values = [
-                _ref(sample, "data", index)
-                for index in range(sample["byte_count"])
-            ]
-            fields.append(Field(
-                identifier,
-                "%s / sample %d / encoded DPCM bytes" % (
-                    bank["name"], sample["index"]),
-                values,
-                representation="dpcm",
-            ))
+            values = [_ref(sample, "data", index) for index in range(sample["byte_count"])]
+            fields.append(
+                Field(
+                    identifier,
+                    "%s / sample %d / encoded DPCM bytes" % (bank["name"], sample["index"]),
+                    values,
+                    representation="dpcm",
+                )
+            )
     return fields
 
 
@@ -201,8 +200,7 @@ class Workspace:
         self.documents = documents
         self.artifact_ids = list(documents)
         self.fields = {
-            identifier: fields_for_document(identifier, document)
-            for identifier, document in documents.items()
+            identifier: fields_for_document(identifier, document) for identifier, document in documents.items()
         }
         self.artifact_index = 0
         self.field_index = 0
@@ -273,9 +271,11 @@ class Workspace:
             if ref.index is not None:
                 register += OPERATOR_REGISTER_OFFSETS[ref.index]
                 operator = "source operator slot %d" % ref.index
-            return ("%s / relative YM2612 register $%02X / raw $%02X\n"
-                    "Subfield edits preserve all other bits; no waveform claim" % (
-                        operator, register, ref.get()), fm_controls(ref.key))
+            return (
+                "%s / relative YM2612 register $%02X / raw $%02X\n"
+                "Subfield edits preserve all other bits; no waveform claim" % (operator, register, ref.get()),
+                fm_controls(ref.key),
+            )
         return "", ()
 
     def set_semantic(self, control, value, validate=None, *, owners=(), sample_ids=None):

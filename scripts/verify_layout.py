@@ -12,8 +12,8 @@ from pathlib import Path
 
 
 INCLUDE_ROW = re.compile(r'^\s*\d+/\s*([0-9A-F]+) :\s+include "([^"]+)"')
-LISTING_ROW = re.compile(r'^\(\d+\)\s+\d+/\s*([0-9A-F]+)\s*:')
-LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+LISTING_ROW = re.compile(r"^\(\d+\)\s+\d+/\s*([0-9A-F]+)\s*:")
+LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 BINCLUDE_ROW = re.compile(r'^\(\d+\)\s+\d+/\s*([0-9A-F]+)\s*:.*binclude\s+"([^"]+)"')
 
 
@@ -61,9 +61,7 @@ def listing_payloads(lines: list[str], expected_paths: set[str] | None = None) -
     return payloads
 
 
-def check_dma_alignment(
-    layout: dict, lines: list[str], manifest_path: Path, errors: list[str]
-) -> int:
+def check_dma_alignment(layout: dict, lines: list[str], manifest_path: Path, errors: list[str]) -> int:
     """No payload the VDP transfers may straddle a DMA source block boundary.
 
     The VDP latches the upper bits of a DMA source address, so a transfer that
@@ -85,6 +83,7 @@ def check_dma_alignment(
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assets = {("data/" + item["path"]).replace("\\", "/"): item for item in manifest["assets"]}
     from build_z80 import ENTRY, OUTPUT, REFERENCE
+
     generated, reference = OUTPUT.as_posix(), REFERENCE.as_posix()
     payloads = listing_payloads(lines, set(assets) | {generated})
     if generated in payloads:
@@ -106,9 +105,7 @@ def check_dma_alignment(
             errors.append("assembled Z80 layout binding: " + str(error))
     if len(payloads) != len(assets):
         missing = sorted(set(assets) - set(payloads))
-        errors.append(
-            f"listing places {len(payloads)} payloads; the asset manifest declares {len(assets)}"
-        )
+        errors.append(f"listing places {len(payloads)} payloads; the asset manifest declares {len(assets)}")
         for path in missing[:10]:
             errors.append(f"manifest payload is absent from the listing: {path}")
         if len(missing) > 10:
@@ -123,10 +120,7 @@ def check_dma_alignment(
         checked += 1
         end = start + int(asset["size"])
         if start // block != (end - 1) // block:
-            crossings.append(
-                f"{asset['name']} spans 0x{start:06X}-0x{end:06X}, "
-                f"crossing a 0x{block:X} DMA boundary"
-            )
+            crossings.append(f"{asset['name']} spans 0x{start:06X}-0x{end:06X}, crossing a 0x{block:X} DMA boundary")
     if len(crossings) > ceiling:
         for crossing in crossings[:10]:
             errors.append(crossing)
@@ -142,9 +136,7 @@ def check_modules(layout: dict, lines: list[str], errors: list[str]) -> int:
     declared = layout["modules"]
 
     if len(actual_modules) != len(declared):
-        errors.append(
-            f"listing has {len(actual_modules)} modules; layout declares {len(declared)}"
-        )
+        errors.append(f"listing has {len(actual_modules)} modules; layout declares {len(declared)}")
         return 0
 
     image_size = number(layout["rom_image"]["size"])
@@ -156,8 +148,7 @@ def check_modules(layout: dict, lines: list[str], errors: list[str]) -> int:
             continue
         if number(entry["start"]) != start or number(entry["end"]) != end:
             errors.append(
-                f"{path}: listing range 0x{start:06X}-0x{end:06X}; "
-                f"layout range {entry['start']}-{entry['end']}"
+                f"{path}: listing range 0x{start:06X}-0x{end:06X}; layout range {entry['start']}-{entry['end']}"
             )
         source = Path(path)
         if not source.is_file():
@@ -181,10 +172,7 @@ def check_landmarks(layout: dict, lines: list[str], errors: list[str]) -> int:
         if name not in symbols:
             errors.append(f"landmark {name} is absent from the listing")
         elif symbols[name] != number(landmark["address"]):
-            errors.append(
-                f"landmark {name} is at 0x{symbols[name]:06X}; "
-                f"layout declares {landmark['address']}"
-            )
+            errors.append(f"landmark {name} is at 0x{symbols[name]:06X}; layout declares {landmark['address']}")
     return len(landmarks)
 
 
@@ -209,8 +197,7 @@ def check_image(layout: dict, rom_path: Path, errors: list[str]) -> int:
         wrong = next((offset for offset in range(start, end + 1) if data[offset] != padding), None)
         if wrong is not None:
             errors.append(
-                f"gap {gap['start']}-{gap['end']} is not all {image['padding_byte']}; "
-                f"first mismatch at 0x{wrong:06X}"
+                f"gap {gap['start']}-{gap['end']} is not all {image['padding_byte']}; first mismatch at 0x{wrong:06X}"
             )
         checked += expected_size
     return checked

@@ -23,9 +23,7 @@ class FindUnreferencedLabelsTests(unittest.TestCase):
                 '                include "src/second.s"\n',
                 encoding="utf-8",
             )
-            (source / "refs.inc").write_text(
-                "                dc.l FromInc\n", encoding="utf-8"
-            )
+            (source / "refs.inc").write_text("                dc.l FromInc\n", encoding="utf-8")
             (source / "first.s").write_text(
                 "Shared:\n                rts\n"
                 "FromInc:\n                rts\n"
@@ -34,13 +32,9 @@ class FindUnreferencedLabelsTests(unittest.TestCase):
                 "Unused_End:\n",
                 encoding="utf-8",
             )
-            (source / "second.s").write_text(
-                "                jsr Shared\n", encoding="utf-8"
-            )
+            (source / "second.s").write_text("                jsr Shared\n", encoding="utf-8")
 
-            records = find_unreferenced_labels.find_unreferenced_labels(
-                source / "main.s"
-            )
+            records = find_unreferenced_labels.find_unreferenced_labels(source / "main.s")
 
             self.assertEqual({"Unused", "Asset"}, {name for name, *_ in records})
             self.assertTrue(all(module.endswith("first.s") for _, module, *_ in records))
@@ -48,9 +42,7 @@ class FindUnreferencedLabelsTests(unittest.TestCase):
     def test_comment_marker_inside_literal_is_not_a_comment(self) -> None:
         self.assertIn(
             "Unused",
-            find_unreferenced_labels.strip_comment(
-                'dc.b "text; part",Unused ; comment'
-            ),
+            find_unreferenced_labels.strip_comment('dc.b "text; part",Unused ; comment'),
         )
 
 

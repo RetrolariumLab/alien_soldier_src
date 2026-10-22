@@ -24,7 +24,9 @@ from authoring.build_content import validate_reference  # noqa: E402
 from authoring.content_workspace import checked_path  # noqa: E402
 from authoring.level_playtest import stop as stop_process, validate_playtest_rom  # noqa: E402
 from authoring.sound_audition_model import (  # noqa: E402
-    build_contract, digest_file, payload_for_request,
+    build_contract,
+    digest_file,
+    payload_for_request,
 )
 from authoring import sound_startup  # noqa: E402
 from rom_profiles import select_profile  # noqa: E402
@@ -40,21 +42,31 @@ MAX_AUDITION_FRAMES = 3600
 
 def lua_contract(contract: dict) -> bytes:
     """Generate only numeric reader fields; paths and strings stay in environment."""
-    lines = ["return {", "  hook = %d," % contract["hook_address"],
-             "  dispatch_hook = %d," % contract["dispatch_hook_address"], "  ram = {"]
+    lines = [
+        "return {",
+        "  hook = %d," % contract["hook_address"],
+        "  dispatch_hook = %d," % contract["dispatch_hook_address"],
+        "  ram = {",
+    ]
     lines.extend("    %s = %d," % (name, value) for name, value in contract["ram"].items())
     lines.extend(["  },", "  checks = {"])
-    lines.extend("    {%d, %d, %d}," % (item["address"], item["size"], item["value"])
-                 for item in contract["checks"])
+    lines.extend("    {%d, %d, %d}," % (item["address"], item["size"], item["value"]) for item in contract["checks"])
     lines.extend(["  },", "}", ""])
     return "\n".join(lines).encode("ascii")
 
 
-def audition_command(gens: Path, rom: Path, config: Path, frames: int,
-                     *, check: bool = False) -> list[str]:
-    command = [str(gens.resolve()), "-cfg", str(config.resolve()),
-               "-rom", str(rom.resolve()), "-lua", str(SCRIPT.resolve()),
-               "-max-frames", str(MAX_BOOT_FRAMES + frames + 4)]
+def audition_command(gens: Path, rom: Path, config: Path, frames: int, *, check: bool = False) -> list[str]:
+    command = [
+        str(gens.resolve()),
+        "-cfg",
+        str(config.resolve()),
+        "-rom",
+        str(rom.resolve()),
+        "-lua",
+        str(SCRIPT.resolve()),
+        "-max-frames",
+        str(MAX_BOOT_FRAMES + frames + 4),
+    ]
     if check:
         command.extend(["-turbo", "-frameskip", "8"])
     return command
@@ -69,15 +81,18 @@ def parse_result(path: Path, contract: dict) -> dict:
     if not isinstance(result, dict) or set(result) != keys:
         raise RuntimeError("sound audition report has an invalid field inventory")
     observations = result["observations"]
-    if (result["status"] != "loaded" or result["profile"] != contract["profile"]
-            or type(result["request_id"]) is not int
-            or result["request_id"] != contract["request_id"]
-            or result["rom_sha256"] != contract["rom_sha256"]
-            or type(result["frame"]) is not int
-            or not 1 <= result["frame"] <= MAX_BOOT_FRAMES
-            or not isinstance(observations, list)
-            or any(type(value) is not int for value in observations)
-            or observations != [item["value"] for item in contract["checks"]]):
+    if (
+        result["status"] != "loaded"
+        or result["profile"] != contract["profile"]
+        or type(result["request_id"]) is not int
+        or result["request_id"] != contract["request_id"]
+        or result["rom_sha256"] != contract["rom_sha256"]
+        or type(result["frame"]) is not int
+        or not 1 <= result["frame"] <= MAX_BOOT_FRAMES
+        or not isinstance(observations, list)
+        or any(type(value) is not int for value in observations)
+        or observations != [item["value"] for item in contract["checks"]]
+    ):
         raise RuntimeError("selected sound request did not match its loader-state expectations")
     return result
 
@@ -102,17 +117,25 @@ class Session:
         validate_isolation(self.contract["native_isolation"], startup="runtime", finished=True)
         validate_private_config(self.contract["native_isolation"], self.directory / "gens.cfg")
         if "sound_startup" in self.contract:
-            sound_startup.validate(self.contract["sound_startup"], self.contract["native_isolation"],
-                                   self.directory / "gens.cfg", launched=True)
-            if (sound_startup.native_contract(Path(identity["executable_path"]).resolve().parent.parent)
-                    != self.contract["sound_startup_source"]
-                    or digest_file(Path(sound_startup.__file__)) != self.contract["sound_startup_module_sha256"]):
+            sound_startup.validate(
+                self.contract["sound_startup"],
+                self.contract["native_isolation"],
+                self.directory / "gens.cfg",
+                launched=True,
+            )
+            if (
+                sound_startup.native_contract(Path(identity["executable_path"]).resolve().parent.parent)
+                != self.contract["sound_startup_source"]
+                or digest_file(Path(sound_startup.__file__)) != self.contract["sound_startup_module_sha256"]
+            ):
                 raise RuntimeError("sound startup native source or helper changed")
         if digest_file(self.directory / "audition.bin") != self.contract["rom_sha256"]:
             raise RuntimeError("sound private ROM changed during audition")
-        if (digest_file(Path(__file__)) != self.contract["runner_sha256"]
-                or digest_file(SCRIPT) != self.contract["lua_sha256"]
-                or digest_file(self.directory / "contract.lua") != self.contract["generated_contract_sha256"]):
+        if (
+            digest_file(Path(__file__)) != self.contract["runner_sha256"]
+            or digest_file(SCRIPT) != self.contract["lua_sha256"]
+            or digest_file(self.directory / "contract.lua") != self.contract["generated_contract_sha256"]
+        ):
             raise RuntimeError("sound audition harness or generated contract changed")
 
     def poll(self) -> bool:
@@ -147,9 +170,17 @@ class Session:
         self.validate_environment()
 
 
-def launch(root: Path, profile: str, request: int, rom: Path, listing: Path,
-           gens: Path, *, frames: int = DEFAULT_AUDITION_FRAMES,
-           check: bool = False) -> Session:
+def launch(
+    root: Path,
+    profile: str,
+    request: int,
+    rom: Path,
+    listing: Path,
+    gens: Path,
+    *,
+    frames: int = DEFAULT_AUDITION_FRAMES,
+    check: bool = False,
+) -> Session:
     if type(frames) is not int or not 1 <= frames <= MAX_AUDITION_FRAMES:
         raise ValueError("audition frames must be 1..%d" % MAX_AUDITION_FRAMES)
     payload_for_request(request)
@@ -157,8 +188,7 @@ def launch(root: Path, profile: str, request: int, rom: Path, listing: Path,
     if not gens.is_file():
         raise ValueError("Gens not found: %s" % gens)
     validated_digest = validate_playtest_rom(root, rom, profile)
-    reference = select_profile(root / "config/rom_profiles.json", profile,
-                               require_supported=True)["reference_rom"]
+    reference = select_profile(root / "config/rom_profiles.json", profile, require_supported=True)["reference_rom"]
     original = validate_reference(checked_path(root, reference["filename"]), reference)
     # A listing alone is insufficient: bind its pointer tables and selected bytes
     # to the exact staged source tree and to the actual checksum-validated image.
@@ -181,15 +211,25 @@ def launch(root: Path, profile: str, request: int, rom: Path, listing: Path,
     # The pin initializes a default sound device before parsing CLI options.
     # Seed State0 in its owned startup cwd, then enable through the explicit
     # config. No native sound toggle or user's configuration is modified.
-    config_bytes, isolation = isolated_config(directory, sound=True, extra_sections={
-        "Sound": {"Rate": "44100", "Stereo": "1", "Z80 State": "1",
-                  "YM2612 State": "1", "PSG State": "1", "DAC State": "1",
-                  "YM2612 Improvement": "0", "DAC Improvement": "0"},
-    })
+    config_bytes, isolation = isolated_config(
+        directory,
+        sound=True,
+        extra_sections={
+            "Sound": {
+                "Rate": "44100",
+                "Stereo": "1",
+                "Z80 State": "1",
+                "YM2612 State": "1",
+                "PSG State": "1",
+                "DAC State": "1",
+                "YM2612 Improvement": "0",
+                "DAC Improvement": "0",
+            },
+        },
+    )
     if check:
         # Loader checks remain silent while keeping native generation enabled.
-        config_bytes = config_bytes.replace(b"[Sound]\nState=1\n",
-            b"[Sound]\nState=1\nMaster Volume=0\n", 1)
+        config_bytes = config_bytes.replace(b"[Sound]\nState=1\n", b"[Sound]\nState=1\nMaster Volume=0\n", 1)
         isolation["config_sha256"] = hashlib.sha256(config_bytes).hexdigest()
     atomic_write_bytes(config, config_bytes)
     contract["sound_startup"] = sound_startup.prepare(isolation, config)
@@ -204,13 +244,18 @@ def launch(root: Path, profile: str, request: int, rom: Path, listing: Path,
     atomic_write_json(directory / "contract.json", contract)
     sound_startup.validate(contract["sound_startup"], isolation, config, launched=False)
     environment = os.environ.copy()
-    environment.update({
-        "ALIEN_SOUND_PROFILE": profile, "ALIEN_SOUND_REQUEST": str(request),
-        "ALIEN_SOUND_ROM_SHA256": contract["rom_sha256"],
-        "ALIEN_SOUND_CONTRACT": str(source), "ALIEN_SOUND_RESULT": str(result),
-        "ALIEN_SOUND_STOP": str(stop_file), "ALIEN_SOUND_FRAMES": str(frames),
-        "ALIEN_SOUND_CHECK": "1" if check else "0",
-    })
+    environment.update(
+        {
+            "ALIEN_SOUND_PROFILE": profile,
+            "ALIEN_SOUND_REQUEST": str(request),
+            "ALIEN_SOUND_ROM_SHA256": contract["rom_sha256"],
+            "ALIEN_SOUND_CONTRACT": str(source),
+            "ALIEN_SOUND_RESULT": str(result),
+            "ALIEN_SOUND_STOP": str(stop_file),
+            "ALIEN_SOUND_FRAMES": str(frames),
+            "ALIEN_SOUND_CHECK": "1" if check else "0",
+        }
+    )
     startupinfo = None
     if check and os.name == "nt":
         startupinfo = subprocess.STARTUPINFO()
@@ -218,8 +263,10 @@ def launch(root: Path, profile: str, request: int, rom: Path, listing: Path,
         startupinfo.wShowWindow = 0
     process = subprocess.Popen(
         audition_command(gens, audition_rom, config, frames, check=check),
-        cwd=Path(isolation["startup_directories"]["runtime"]), env=environment,
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=Path(isolation["startup_directories"]["runtime"]),
+        env=environment,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
         startupinfo=startupinfo,
     )
     return Session(process, contract, result, stop_file, directory, root=root)
@@ -242,15 +289,24 @@ def main() -> int:
     args = parser.parse_args()
     session = None
     try:
-        session = launch(Path(args.root), args.profile, args.request, Path(args.rom),
-                         Path(args.listing), Path(args.gens), frames=args.frames, check=args.check)
+        session = launch(
+            Path(args.root),
+            args.profile,
+            args.request,
+            Path(args.rom),
+            Path(args.listing),
+            Path(args.gens),
+            frames=args.frames,
+            check=args.check,
+        )
         reported = False
         deadline = time.monotonic() + (90 if args.check else 180)
         while session.poll():
             if session.ready is not None and not reported:
-                print("[OK] %s request $%02X loaded with %d named RAM expectations; ROM SHA256 %s" % (
-                    args.profile, args.request, len(session.contract["checks"]),
-                    session.contract["rom_sha256"]))
+                print(
+                    "[OK] %s request $%02X loaded with %d named RAM expectations; ROM SHA256 %s"
+                    % (args.profile, args.request, len(session.contract["checks"]), session.contract["rom_sha256"])
+                )
                 reported = True
             if time.monotonic() >= deadline:
                 raise RuntimeError("sound audition exceeded its bounded wall-clock deadline")

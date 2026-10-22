@@ -17,29 +17,17 @@ FADE = ROOT / "src/rendering/palette_fades.s"
 
 
 def words_at(source: str, label: str) -> list[str]:
-    match = re.search(
-        rf"(?ms)^{re.escape(label)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source
-    )
+    match = re.search(rf"(?ms)^{re.escape(label)}:(.*?)(?=^[A-Za-z_]\w*:|\Z)", source)
     if match is None:
         raise AssertionError(f"missing label {label}")
-    return [
-        word.strip()
-        for line in re.findall(r"\bdc\.w\s+([^;\r\n]+)", match.group(1))
-        for word in line.split(",")
-    ]
+    return [word.strip() for line in re.findall(r"\bdc\.w\s+([^;\r\n]+)", match.group(1)) for word in line.split(",")]
 
 
 class MappingStreamReviewEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
-        cls.audit = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        cls.reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
+        cls.audit = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         cls.combat = COMBAT.read_text(encoding="utf-8")
         cls.indexed = INDEXED.read_text(encoding="utf-8")
 
@@ -57,8 +45,7 @@ class MappingStreamReviewEvidenceTests(unittest.TestCase):
         prefix = "Enemy_FormationWaveSpriteMapping"
         stream = "Enemy_FormationWaveSpriteAnimation"
         self.assertEqual(
-            [word for index in range(3) for word in (f"{prefix}{index:02d}-*", "3")]
-            + [f"{stream}-*", "0"],
+            [word for index in range(3) for word in (f"{prefix}{index:02d}-*", "3")] + [f"{stream}-*", "0"],
             words_at(self.combat, stream),
         )
         self.assertEqual(["$680C", "$D00", "$F0"], words_at(self.combat, f"{prefix}01")[:3])
@@ -102,8 +89,7 @@ class MappingStreamReviewEvidenceTests(unittest.TestCase):
         prefix = "Projectile_MissirayVerticalShotSpriteMapping"
         stream = "Projectile_MissirayFallingShotSpriteAnimation"
         self.assertEqual(
-            [word for index in (0, 1, 2, 3, 3) for word in (f"{prefix}{index:02d}-*", "1")][:-1]
-            + ["$FF"],
+            [word for index in (0, 1, 2, 3, 3) for word in (f"{prefix}{index:02d}-*", "1")][:-1] + ["$FF"],
             words_at(self.combat, stream),
         )
         self.assertEqual(["$6800", "$700", "$E3F8", "$E808", "$700", "$FCF8"], words_at(self.combat, f"{prefix}01"))

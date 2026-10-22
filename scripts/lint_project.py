@@ -11,9 +11,7 @@ from pathlib import Path
 
 
 MARKDOWN_LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
-SOURCE_MAP_ROW = re.compile(
-    r"^\| `0x([0-9A-F]+)-0x([0-9A-F]+)` \|[^|]*\|\s*(\d+)\s*\|[^|]*\|$"
-)
+SOURCE_MAP_ROW = re.compile(r"^\| `0x([0-9A-F]+)-0x([0-9A-F]+)` \|[^|]*\|\s*(\d+)\s*\|[^|]*\|$")
 TEXT_SUFFIXES = {".mk", ".s", ".asm", ".inc", ".py", ".md", ".txt", ".json", ".dot"}
 TEXT_FILENAMES = {".gitattributes", ".gitignore", ".editorconfig", "Makefile"}
 
@@ -27,16 +25,16 @@ def tracked_text_files(project_root: Path) -> list[Path]:
     this check notices when a tool writes CRLF back into the tree.
     """
     result = subprocess.run(
-        ["git", "ls-files"], cwd=project_root,
-        capture_output=True, text=True, check=False,
+        ["git", "ls-files"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
     )
     if result.returncode != 0:
         return []
     paths = [project_root / line for line in result.stdout.splitlines() if line]
-    return [
-        path for path in paths
-        if path.is_file() and (path.suffix in TEXT_SUFFIXES or path.name in TEXT_FILENAMES)
-    ]
+    return [path for path in paths if path.is_file() and (path.suffix in TEXT_SUFFIXES or path.name in TEXT_FILENAMES)]
 
 
 def check_text_hygiene(project_root: Path, path: Path, errors: list[str]) -> None:
@@ -60,19 +58,10 @@ def check_text_hygiene(project_root: Path, path: Path, errors: list[str]) -> Non
 def check_source_map(project_root: Path, errors: list[str]) -> None:
     """Keep the human-readable ROM ranges and file counts aligned with the layout."""
     try:
-        layout = json.loads(
-            (project_root / "config/rom_layout.json").read_text(encoding="utf-8")
-        )
-        modules = [
-            (int(entry["start"], 0), int(entry["end"], 0))
-            for entry in layout["modules"]
-        ]
-        lines = (project_root / "docs/source_map.md").read_text(
-            encoding="utf-8"
-        ).splitlines()
-    except (
-        OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError
-    ) as error:
+        layout = json.loads((project_root / "config/rom_layout.json").read_text(encoding="utf-8"))
+        modules = [(int(entry["start"], 0), int(entry["end"], 0)) for entry in layout["modules"]]
+        lines = (project_root / "docs/source_map.md").read_text(encoding="utf-8").splitlines()
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
         errors.append(f"docs/source_map.md: cannot compare with ROM layout: {error}")
         return
     rows = []
@@ -94,28 +83,17 @@ def check_source_map(project_root: Path, errors: list[str]) -> None:
     next_start = modules[0][0]
     for start, end, count, line_number in rows:
         if start != next_start or end < start:
-            errors.append(
-                f"docs/source_map.md:{line_number}: ROM ranges are not contiguous"
-            )
-        owned = sum(
-            start <= module_start and module_end <= end
-            for module_start, module_end in modules
-        )
+            errors.append(f"docs/source_map.md:{line_number}: ROM ranges are not contiguous")
+        owned = sum(start <= module_start and module_end <= end for module_start, module_end in modules)
         if owned != count:
-            errors.append(
-                f"docs/source_map.md:{line_number}: files count {count}, layout has {owned}"
-            )
+            errors.append(f"docs/source_map.md:{line_number}: files count {count}, layout has {owned}")
         next_start = end + 1
     if next_start != modules[-1][1] + 1:
         errors.append("docs/source_map.md: ROM ranges do not end at the final module")
     for module_start, module_end in modules:
-        if sum(
-            start <= module_start and module_end <= end
-            for start, end, _, _ in rows
-        ) != 1:
+        if sum(start <= module_start and module_end <= end for start, end, _, _ in rows) != 1:
             errors.append(
-                f"docs/source_map.md: module 0x{module_start:06X}-0x{module_end:06X} "
-                "is not owned by exactly one range"
+                f"docs/source_map.md: module 0x{module_start:06X}-0x{module_end:06X} is not owned by exactly one range"
             )
 
 
@@ -137,9 +115,7 @@ def check(project_root: Path) -> list[str]:
 
     check_source_map(project_root, errors)
 
-    python_files = sorted((project_root / "scripts").rglob("*.py")) + sorted(
-        (project_root / "tests").rglob("*.py")
-    )
+    python_files = sorted((project_root / "scripts").rglob("*.py")) + sorted((project_root / "tests").rglob("*.py"))
     for path in python_files:
         try:
             source = path.read_text(encoding="utf-8")

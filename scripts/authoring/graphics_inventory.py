@@ -46,14 +46,16 @@ def synchronized(document: dict, root: Path) -> dict:
     )
     from authoring.object_gallery_model import spawn_stages
     from authoring.object_sprite_model import (
-        WEAPON_SELECTION_HANDLER, expand_tile_commands, read_animation_scripts,
-        weapon_selection_carried_art)
+        WEAPON_SELECTION_HANDLER,
+        expand_tile_commands,
+        read_animation_scripts,
+        weapon_selection_carried_art,
+    )
     from authoring.stage_renderer import read_once
 
     scripts = read_animation_scripts(root)
     levels = export_document(root, "jp")
-    handlers = {int(offset, 16): name
-                for offset, name in levels["object_handlers"].items()}
+    handlers = {int(offset, 16): name for offset, name in levels["object_handlers"].items()}
     stages = spawn_stages(levels)
     library = sprite_library(root)
     read = read_once(root)
@@ -66,8 +68,7 @@ def synchronized(document: dict, root: Path) -> dict:
         if stage in stage_attributes:
             continue
         visual, _palette = read["visual_loaders"][stage]
-        _commands, attributes = expand_tile_commands(
-            read["data"], lines, symbols, visual) if visual else ([], {})
+        _commands, attributes = expand_tile_commands(read["data"], lines, symbols, visual) if visual else ([], {})
         stage_attributes[stage] = attributes
     placed = []
     for spawn in levels["spawn_lists"]:
@@ -79,8 +80,7 @@ def synchronized(document: dict, root: Path) -> dict:
         default = (attributes.get(0, 0) | priority) & 0xFFFF
         for entry in spawn["entries"]:
             name = handlers.get(entry["object_type"] & ~3, "")
-            placed.append((name, default, attributes, priority,
-                           entry["parameter"], stage))
+            placed.append((name, default, attributes, priority, entry["parameter"], stage))
     no_mapping = sorted(
         {
             name
@@ -92,10 +92,16 @@ def synchronized(document: dict, root: Path) -> dict:
         {
             name
             for name, default, attributes, priority, parameter, stage in placed
-            if object_attribute(library, name, default,
-                                stage_attributes=attributes,
-                                priority=priority, parameter=parameter,
-                                stage_index=stage)[0] is None
+            if object_attribute(
+                library,
+                name,
+                default,
+                stage_attributes=attributes,
+                priority=priority,
+                parameter=parameter,
+                stage_index=stage,
+            )[0]
+            is None
         }
     )
     objects = result["object_sprites"]
@@ -108,17 +114,22 @@ def synchronized(document: dict, root: Path) -> dict:
         if name != WEAPON_SELECTION_HANDLER:
             return True
         if stage not in carried_art:
-            carried_art[stage] = (stage is not None and
-                                 weapon_selection_carried_art(root, stage) is not None)
+            carried_art[stage] = stage is not None and weapon_selection_carried_art(root, stage) is not None
         return carried_art[stage]
 
     objects["placements_drawn"] = sum(
-        resting_mapping(library, name, parameter, stage)[1] is not None and
-        object_attribute(library, name, default,
-                         stage_attributes=attributes,
-                         priority=priority, parameter=parameter,
-                         stage_index=stage)[0] is not None and
-        has_required_art(name, stage)
+        resting_mapping(library, name, parameter, stage)[1] is not None
+        and object_attribute(
+            library,
+            name,
+            default,
+            stage_attributes=attributes,
+            priority=priority,
+            parameter=parameter,
+            stage_index=stage,
+        )[0]
+        is not None
+        and has_required_art(name, stage)
         for name, default, attributes, priority, parameter, stage in placed
     )
     objects["handlers_placed"] = len({name for name, *_rest in placed})

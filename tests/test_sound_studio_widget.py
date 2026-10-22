@@ -29,28 +29,57 @@ def tiny_context() -> dict:
         "index": 0,
     }
     documents = {
-        "sound_sequences": {"payloads": [{
-            "family": "BGM", "name": "fixture",
-            "instructions": [{"kind": "duration", "data": [1]}],
-        }]},
-        "sound_instruments": {"payloads": [{
-            "name": "fixture", "instruments": [registers],
-        }]},
-        "sound_envelopes": {"families": [{
-            "id": "pitch", "blocks": [{
-                "name": "fixture", "values": [{"value": 0}],
-            }],
-        }]},
-        "sound_pcm_samples": {"banks": [{
-            "name": "fixture", "samples": [{
-                "index": 0, "byte_count": 2, "data": "0000",
-            }],
-        }]},
+        "sound_sequences": {
+            "payloads": [
+                {
+                    "family": "BGM",
+                    "name": "fixture",
+                    "instructions": [{"kind": "duration", "data": [1]}],
+                }
+            ]
+        },
+        "sound_instruments": {
+            "payloads": [
+                {
+                    "name": "fixture",
+                    "instruments": [registers],
+                }
+            ]
+        },
+        "sound_envelopes": {
+            "families": [
+                {
+                    "id": "pitch",
+                    "blocks": [
+                        {
+                            "name": "fixture",
+                            "values": [{"value": 0}],
+                        }
+                    ],
+                }
+            ]
+        },
+        "sound_pcm_samples": {
+            "banks": [
+                {
+                    "name": "fixture",
+                    "samples": [
+                        {
+                            "index": 0,
+                            "byte_count": 2,
+                            "data": "0000",
+                        }
+                    ],
+                }
+            ]
+        },
     }
     return {
         identifier: {
-            "document": document, "validate": mock.Mock(),
-            "write": mock.Mock(), "path": ROOT / "build/unused-widget-fixture.json",
+            "document": document,
+            "validate": mock.Mock(),
+            "write": mock.Mock(),
+            "path": ROOT / "build/unused-widget-fixture.json",
         }
         for identifier, document in documents.items()
     }
@@ -60,6 +89,7 @@ class SoundStudioWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
@@ -89,9 +119,7 @@ class SoundStudioWidgetTests(unittest.TestCase):
                     return root
 
                 with mock.patch.object(self.tk, "Tk", new=hidden_tk):
-                    window = Window(
-                        ROOT, profile, context, self.tk, self.ttk,
-                        messages, dialogs, files)
+                    window = Window(ROOT, profile, context, self.tk, self.ttk, messages, dialogs, files)
                 try:
                     self.assertEqual(4, len(window.state.artifact_ids))
                     for identifier in window.state.artifact_ids:
@@ -105,23 +133,19 @@ class SoundStudioWidgetTests(unittest.TestCase):
                         if identifier == "sound_pcm_samples":
                             self.assertEqual("normal", str(window.preview_button.cget("state")))
                             self.assertIn("Decoded DPCM levels", window.decoded.cget("text"))
-                            self.assertIn("80 at +0, 80 at +191 Z80 T-states",
-                                          window.decoded.cget("text"))
+                            self.assertIn("80 at +0, 80 at +191 Z80 T-states", window.decoded.cget("text"))
                             window.step_value(1)
                             self.assertEqual(1, window.state.value_index)
-                            self.assertIn("80 at +387, 80 at +578 Z80 T-states",
-                                          window.decoded.cget("text"))
+                            self.assertIn("80 at +387, 80 at +578 Z80 T-states", window.decoded.cget("text"))
                         else:
                             self.assertEqual("disabled", str(window.preview_button.cget("state")))
 
-                    window.select_artifact(
-                        window.state.artifact_ids.index("sound_pcm_samples"))
+                    window.select_artifact(window.state.artifact_ids.index("sound_pcm_samples"))
                     window.export_pcm_preview()
                     dialogs.askinteger.assert_called_once()
                     files.asksaveasfilename.assert_not_called()
 
-                    window.select_artifact(
-                        window.state.artifact_ids.index("sound_envelopes"))
+                    window.select_artifact(window.state.artifact_ids.index("sound_envelopes"))
                     window.value_text.set("128")
                     window.apply_value()
                     self.assertEqual(0, window.state.value)
@@ -162,8 +186,7 @@ class SoundStudioWidgetTests(unittest.TestCase):
                     return root
 
                 with mock.patch.object(self.tk, "Tk", new=hidden_tk):
-                    window = Window(ROOT, profile, context, self.tk, self.ttk,
-                                    messages, dialogs, files)
+                    window = Window(ROOT, profile, context, self.tk, self.ttk, messages, dialogs, files)
                 try:
                     self.assertEqual("Sound_BGM_81", window.audition_choice.get())
                     self.assertEqual("normal", str(window.play_button.cget("state")))
@@ -175,15 +198,24 @@ class SoundStudioWidgetTests(unittest.TestCase):
                     session.poll.return_value = True
                     session.process.poll.return_value = None
                     session.stop.side_effect = lambda: setattr(session.process.poll, "return_value", 0)
-                    with (mock.patch.object(sound_studio.subprocess, "run",
-                                            side_effect=lambda *_args, **_kwargs:
-                                            (calls.append("build") or mock.Mock(returncode=0))) as build,
-                          mock.patch.object(sound_studio, "launch_audition",
-                                            side_effect=lambda *_args, **_kwargs:
-                                            (calls.append("launch") or session)) as launch,
-                          mock.patch.object(sound_studio.tempfile, "mkdtemp",
-                                            return_value=str(ROOT / "build/content" / profile / "audition/mock-build")),
-                          mock.patch.object(Path, "mkdir")):
+                    with (
+                        mock.patch.object(
+                            sound_studio.subprocess,
+                            "run",
+                            side_effect=lambda *_args, **_kwargs: calls.append("build") or mock.Mock(returncode=0),
+                        ) as build,
+                        mock.patch.object(
+                            sound_studio,
+                            "launch_audition",
+                            side_effect=lambda *_args, **_kwargs: calls.append("launch") or session,
+                        ) as launch,
+                        mock.patch.object(
+                            sound_studio.tempfile,
+                            "mkdtemp",
+                            return_value=str(ROOT / "build/content" / profile / "audition/mock-build"),
+                        ),
+                        mock.patch.object(Path, "mkdir"),
+                    ):
                         window.play_button.invoke()
                     self.assertEqual(["save", "build", "launch"], calls)
                     self.assertFalse(window.state.dirty)
@@ -223,8 +255,10 @@ class SoundStudioWidgetTests(unittest.TestCase):
         try:
             window.state.set_value(2)
             context["sound_sequences"]["write"].side_effect = OSError("cannot save")
-            with (mock.patch.object(sound_studio.subprocess, "run") as build,
-                  mock.patch.object(sound_studio, "launch_audition") as launch):
+            with (
+                mock.patch.object(sound_studio.subprocess, "run") as build,
+                mock.patch.object(sound_studio, "launch_audition") as launch,
+            ):
                 window.play_button.invoke()
                 build.assert_not_called()
                 launch.assert_not_called()

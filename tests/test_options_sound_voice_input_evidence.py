@@ -17,22 +17,14 @@ def between(source: str, start: str, end: str) -> str:
 class OptionsSoundVoiceInputEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.source = (ROOT / "src/ui/options_menu_controllers.s").read_text(
-            encoding="utf-8"
-        )
+        cls.source = (ROOT / "src/ui/options_menu_controllers.s").read_text(encoding="utf-8")
         cls.audit = {
             row["address"]: row
-            for row in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for row in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             row["basis"]: row
-            for row in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for row in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
         }
 
     def test_pressed_input_gates_have_exact_two_member_reviews(self) -> None:
@@ -41,14 +33,10 @@ class OptionsSoundVoiceInputEvidenceTests(unittest.TestCase):
             ("0x009CB4", "0x009D52"),
         ):
             with self.subTest(first=first, second=second):
-                common = set(self.audit[first]["basis"]) & set(
-                    self.audit[second]["basis"]
-                )
+                common = set(self.audit[first]["basis"]) & set(self.audit[second]["basis"])
                 self.assertEqual(1, len(common))
                 review = self.reviews[common.pop()]
-                self.assertEqual(
-                    [first, second], [member["address"] for member in review["members"]]
-                )
+                self.assertEqual([first, second], [member["address"] for member in review["members"]])
                 self.assertEqual(
                     ["src/ui/options_menu_controllers.s"] * 2,
                     [member["file"] for member in review["members"]],
@@ -91,9 +79,7 @@ class OptionsSoundVoiceInputEvidenceTests(unittest.TestCase):
                     f"UI_SelectPrevious{family}TestIndex",
                 )
                 self.assertIn("btst    #2,(OptionsPressedCopy).w", primary)
-                self.assertIn(
-                    f"beq.s   UI_CheckNext{family}TestInput", primary
-                )
+                self.assertIn(f"beq.s   UI_CheckNext{family}TestInput", primary)
                 self.assertIn("move.w  #6,(OptionsCursorFlashTimer).w", primary)
                 next_gate = between(
                     self.source,
@@ -101,9 +87,7 @@ class OptionsSoundVoiceInputEvidenceTests(unittest.TestCase):
                     f"UI_SelectNext{family}TestIndex",
                 )
                 self.assertIn("btst    #3,(OptionsPressedCopy).w", next_gate)
-                self.assertIn(
-                    f"beq.s   UI_StoreAndRender{family}TestSelection", next_gate
-                )
+                self.assertIn(f"beq.s   UI_StoreAndRender{family}TestSelection", next_gate)
                 self.assertIn("move.w  #6,(OptionsCursorFlashTimer).w", next_gate)
 
         sfx_body = between(

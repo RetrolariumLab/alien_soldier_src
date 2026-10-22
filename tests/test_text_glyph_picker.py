@@ -14,7 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.text_glyph_picker import (  # noqa: E402
-    CELL_HEIGHT, CELL_WIDTH, COLUMNS, ROWS, GlyphPicker, GlyphRange, source_pixels,
+    CELL_HEIGHT,
+    CELL_WIDTH,
+    COLUMNS,
+    ROWS,
+    GlyphPicker,
+    GlyphRange,
+    source_pixels,
 )
 from authoring.text_studio import Window  # noqa: E402
 from authoring.text_studio_state import Workspace  # noqa: E402
@@ -23,28 +29,44 @@ from authoring.text_studio_state import Workspace  # noqa: E402
 def documents():
     return {
         "frontend_text_strings": {"strings": [{"name": "sample", "glyphs": [0, 127, 227]}]},
-        "japanese_glyph_sequence": {
-            "first_code": 0x20, "art_glyph_count": 295, "codes": [0x20] * 986 + [0x146]},
-        "credits_text_sequence": {"max_glyph_id": 227, "records": [{
-            "upper_delay": 2, "upper_count": 2, "upper_glyphs": [23, 0],
-            "lower_delay": 5, "lower_count": 1, "lower_glyphs": [227],
-        }]},
-        "story_text_rows": {"rows": [{
-            "index": 0, "primary": [0] * 33 + [0xFF],
-            "accent": [1, 0xFF] + [0] * 31 + [0xFF],
-        }]},
+        "japanese_glyph_sequence": {"first_code": 0x20, "art_glyph_count": 295, "codes": [0x20] * 986 + [0x146]},
+        "credits_text_sequence": {
+            "max_glyph_id": 227,
+            "records": [
+                {
+                    "upper_delay": 2,
+                    "upper_count": 2,
+                    "upper_glyphs": [23, 0],
+                    "lower_delay": 5,
+                    "lower_count": 1,
+                    "lower_glyphs": [227],
+                }
+            ],
+        },
+        "story_text_rows": {
+            "rows": [
+                {
+                    "index": 0,
+                    "primary": [0] * 33 + [0xFF],
+                    "accent": [1, 0xFF] + [0] * 31 + [0xFF],
+                }
+            ]
+        },
     }
 
 
 class GlyphRangeTests(unittest.TestCase):
     def test_font_pages_have_exact_source_ranges(self):
-        for font, sizes in ((GlyphRange("shared", 0, 227), (64, 64, 64, 36)),
-                            (GlyphRange("japanese", 0x20, 0x146), (64, 64, 64, 64, 39))):
+        for font, sizes in (
+            (GlyphRange("shared", 0, 227), (64, 64, 64, 36)),
+            (GlyphRange("japanese", 0x20, 0x146), (64, 64, 64, 64, 39)),
+        ):
             with self.subTest(family=font.family):
                 pages = [list(font.values(page)) for page in range(font.page_count)]
                 self.assertEqual(sizes, tuple(map(len, pages)))
-                self.assertEqual(list(range(font.minimum, font.maximum + 1)),
-                                 [value for page in pages for value in page])
+                self.assertEqual(
+                    list(range(font.minimum, font.maximum + 1)), [value for page in pages for value in page]
+                )
                 for page, values in enumerate(pages):
                     self.assertTrue(all(font.page_for(value) == page for value in values))
                 for value in (True, float(font.minimum), font.minimum - 1, font.maximum + 1):
@@ -55,15 +77,19 @@ class GlyphRangeTests(unittest.TestCase):
         font = GlyphRange("shared", 0, 227)
         self.assertEqual(192, font.value_at(3, 0, 0))
         self.assertEqual(227, font.value_at(3, 3 * CELL_WIDTH + 1, 2 * CELL_HEIGHT + 1))
-        for x, y in ((4 * CELL_WIDTH, 2 * CELL_HEIGHT), (-1, 0), (0, -1),
-                     (COLUMNS * CELL_WIDTH, 0), (0, ROWS * CELL_HEIGHT)):
+        for x, y in (
+            (4 * CELL_WIDTH, 2 * CELL_HEIGHT),
+            (-1, 0),
+            (0, -1),
+            (COLUMNS * CELL_WIDTH, 0),
+            (0, ROWS * CELL_HEIGHT),
+        ):
             self.assertIsNone(font.value_at(3, x, y))
 
     def test_shared_tiles_remain_in_source_order_and_separated(self):
         tiles = ([[1] * 8 for _ in range(8)], [[2] * 8 for _ in range(8)])
         with mock.patch("authoring.text_glyph_picker.glyph_tiles", return_value=tiles):
-            self.assertEqual([[1] * 8 + [0] + [2] * 8] * 8,
-                             source_pixels(ROOT, "shared", 4))
+            self.assertEqual([[1] * 8 + [0] + [2] * 8] * 8, source_pixels(ROOT, "shared", 4))
         with mock.patch("authoring.text_glyph_picker.credits_glyph_tiles", return_value=None):
             self.assertEqual([[0] * 17] * 8, source_pixels(ROOT, "credits", 0))
         with mock.patch("authoring.text_glyph_picker.glyph_pixels", return_value=[[3]]) as pixels:
@@ -106,9 +132,11 @@ class GlyphEditingTests(unittest.TestCase):
                 self.assertEqual({artifact}, state.dirty)
 
     def test_delay_and_boundary_slots_cannot_accept_palette_glyphs(self):
-        for artifact, field, index in (("credits_text_sequence", 0, 0),
-                                       ("credits_text_sequence", 2, 0),
-                                       ("story_text_rows", 1, 1)):
+        for artifact, field, index in (
+            ("credits_text_sequence", 0, 0),
+            ("credits_text_sequence", 2, 0),
+            ("story_text_rows", 1, 1),
+        ):
             with self.subTest(artifact=artifact, field=field):
                 self.state.select_artifact(artifact)
                 self.state.select_field(field)
@@ -147,10 +175,12 @@ class GlyphEditingTests(unittest.TestCase):
     def test_picker_click_uses_validation_and_rolls_back_a_rejected_change(self):
         window = Window.__new__(Window)
         window.state, window.project, window.profile = self.state, ROOT, "jp"
-        window.context = {"frontend_text_strings": {
-            "document": self.state.documents["frontend_text_strings"],
-            "validate": mock.Mock(side_effect=ValueError("fixture rejection")),
-        }}
+        window.context = {
+            "frontend_text_strings": {
+                "document": self.state.documents["frontend_text_strings"],
+                "validate": mock.Mock(side_effect=ValueError("fixture rejection")),
+            }
+        }
         window.show_value, window.messagebox, window.status = mock.Mock(), mock.Mock(), mock.Mock()
         picker = GlyphPicker.__new__(GlyphPicker)
         picker.owner, picker.font_range, picker.page = window, self.state.glyph_range, 0

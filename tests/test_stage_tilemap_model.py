@@ -10,30 +10,43 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.stage_tilemap_model import (  # noqa: E402
-    CHUNK_BYTES, COARSE_BYTES, COARSE_COLUMNS, DECOMPRESS_TO_RAM, LOAD_HANDLERS,
-    PATTERN_BYTES, RAM_BASE, AssetCommand, Descriptor, Tilemap, decompress,
-    labelled_blocks, read_asset_list, read_asset_lists, read_descriptors,
-    stage_loaders, stage_tilemaps, survey)
+    CHUNK_BYTES,
+    COARSE_BYTES,
+    COARSE_COLUMNS,
+    DECOMPRESS_TO_RAM,
+    LOAD_HANDLERS,
+    PATTERN_BYTES,
+    RAM_BASE,
+    AssetCommand,
+    Descriptor,
+    Tilemap,
+    decompress,
+    labelled_blocks,
+    read_asset_list,
+    read_asset_lists,
+    read_descriptors,
+    stage_loaders,
+    stage_tilemaps,
+    survey,
+)
 from authoring.tile_graphics import GRAPHICS_CONFIG  # noqa: E402
 
 
 def fake_ram(coarse, chunks, patterns):
     ram = bytearray(0x10000)
-    ram[0x7000:0x7000 + len(coarse)] = coarse
-    ram[0x6000:0x6000 + len(chunks)] = chunks
-    ram[0x4000:0x4000 + len(patterns)] = patterns
-    return Tilemap("fixture", (), bytes(ram),
-                   Descriptor("fixture", 0xFFFF7000, 0xFFFF6000, 0xFFFF4000,
-                              False, 0x4000))
+    ram[0x7000 : 0x7000 + len(coarse)] = coarse
+    ram[0x6000 : 0x6000 + len(chunks)] = chunks
+    ram[0x4000 : 0x4000 + len(patterns)] = patterns
+    return Tilemap("fixture", (), bytes(ram), Descriptor("fixture", 0xFFFF7000, 0xFFFF6000, 0xFFFF4000, False, 0x4000))
 
 
 class LookupTests(unittest.TestCase):
     def test_a_position_is_split_the_way_the_streamer_splits_it(self) -> None:
         """X >> 8 picks the chunk, (X >> 5) & 7 the pattern, (X >> 3) & 3 the word."""
         coarse = bytearray(COARSE_BYTES)
-        coarse[0 * COARSE_COLUMNS + 2] = 5              # chunk 5 at x $200, y 0
+        coarse[0 * COARSE_COLUMNS + 2] = 5  # chunk 5 at x $200, y 0
         chunks = bytearray(CHUNK_BYTES * 6)
-        chunks[5 * CHUNK_BYTES + 1 * 8 + 3] = 9         # pattern 9 at (x&$FF)=$60..7F, y $20..3F
+        chunks[5 * CHUNK_BYTES + 1 * 8 + 3] = 9  # pattern 9 at (x&$FF)=$60..7F, y $20..3F
         patterns = bytearray(PATTERN_BYTES * 10)
         patterns[9 * PATTERN_BYTES + 2 * 8 + 1 * 2] = 0x12
         patterns[9 * PATTERN_BYTES + 2 * 8 + 1 * 2 + 1] = 0x34
@@ -53,8 +66,7 @@ class LookupTests(unittest.TestCase):
 
     def test_a_region_runs_to_the_next_base(self) -> None:
         tilemap = fake_ram(bytes(COARSE_BYTES), bytes(CHUNK_BYTES), bytes(PATTERN_BYTES))
-        tilemap.written = (("list", "payload", 0x4020, PATTERN_BYTES * 4),
-                           ("list", "payload", 0x6000, CHUNK_BYTES * 3))
+        tilemap.written = (("list", "payload", 0x4020, PATTERN_BYTES * 4), ("list", "payload", 0x6000, CHUNK_BYTES * 3))
         # A payload landing at $4020 still counts towards the pattern region.
         self.assertEqual(4 + 1, tilemap.patterns_defined)
         self.assertEqual(3, tilemap.chunks_defined)
@@ -62,10 +74,7 @@ class LookupTests(unittest.TestCase):
 
 class AssetListTests(unittest.TestCase):
     def test_a_record_is_a_command_a_source_and_a_destination(self) -> None:
-        lines = ["    dc.w    6",
-                 "    dc.l    SomePayload",
-                 "    dc.w    $7000",
-                 "    dc.w    $FFFF"]
+        lines = ["    dc.w    6", "    dc.l    SomePayload", "    dc.w    $7000", "    dc.w    $FFFF"]
         commands = read_asset_list("fixture", lines)
         self.assertEqual(1, len(commands))
         self.assertEqual(DECOMPRESS_TO_RAM, commands[0].command)
@@ -75,17 +84,15 @@ class AssetListTests(unittest.TestCase):
 
     def test_a_destination_is_sign_extended_into_the_ram_mirror(self) -> None:
         self.assertEqual(0x7000, AssetCommand(6, "x", 0x7000).ram_offset)
-        self.assertEqual(RAM_BASE + 0x7000,
-                         RAM_BASE + AssetCommand(6, "x", 0x7000).ram_offset)
+        self.assertEqual(RAM_BASE + 0x7000, RAM_BASE + AssetCommand(6, "x", 0x7000).ram_offset)
 
     def test_something_that_is_not_a_list_is_not_read_as_one(self) -> None:
         self.assertIsNone(read_asset_list("code", ["    move.w  d0,d1"]))
         self.assertIsNone(read_asset_list("short", ["    dc.w    6", "    dc.w    $FFFF"]))
-        self.assertIsNone(read_asset_list("unterminated",
-                                          ["    dc.w    6", "    dc.l    P", "    dc.w    $10"]))
-        self.assertIsNone(read_asset_list("unknown",
-                                          ["    dc.w    9", "    dc.l    P",
-                                           "    dc.w    $10", "    dc.w    $FFFF"]))
+        self.assertIsNone(read_asset_list("unterminated", ["    dc.w    6", "    dc.l    P", "    dc.w    $10"]))
+        self.assertIsNone(
+            read_asset_list("unknown", ["    dc.w    9", "    dc.l    P", "    dc.w    $10", "    dc.w    $FFFF"])
+        )
 
     def test_the_handler_table_has_eight_entries(self) -> None:
         self.assertEqual(8, len(LOAD_HANDLERS))
@@ -124,8 +131,7 @@ class CartridgeTilemapTests(unittest.TestCase):
         self.assertEqual(0xFFFF4000, default.patterns)
         self.assertFalse(default.mirror_to_plane_buffer)
         self.assertEqual(0x4000, default.plane_base)
-        self.assertTrue(descriptors["Gfx_TitleAndZLeoVRAMTransferParameters"]
-                        .mirror_to_plane_buffer)
+        self.assertTrue(descriptors["Gfx_TitleAndZLeoVRAMTransferParameters"].mirror_to_plane_buffer)
 
     def test_every_stage_table_index_reaches_its_asset_lists(self) -> None:
         data, _ = labelled_blocks(ROOT)
@@ -139,8 +145,14 @@ class CartridgeTilemapTests(unittest.TestCase):
         config = json.loads((ROOT / GRAPHICS_CONFIG).read_text(encoding="utf-8"))
         declared = config["stage_tilemaps"]
         found = survey(ROOT)
-        for field in ("asset_lists", "asset_commands", "decompress_to_ram",
-                      "ram_payloads", "stage_table_entries", "descriptors"):
+        for field in (
+            "asset_lists",
+            "asset_commands",
+            "decompress_to_ram",
+            "ram_payloads",
+            "stage_table_entries",
+            "descriptors",
+        ):
             self.assertEqual(declared[field], found[field], field)
         self.assertEqual(found["ram_payloads"], found["ram_payloads_decoded"])
         self.assertTrue(declared["format_why"].strip())
@@ -150,8 +162,7 @@ class CartridgeTilemapTests(unittest.TestCase):
         self.assertGreater(tilemap.chunks_defined, 0)
         self.assertGreater(tilemap.patterns_defined, 0)
         words = [tilemap.name_word(x * 8, 0) for x in range(32)]
-        self.assertTrue(any(word & 0x07FF for word in words),
-                        "some column of the first row names a tile")
+        self.assertTrue(any(word & 0x07FF for word in words), "some column of the first row names a tile")
         for word in words:
             self.assertLess(word & 0x07FF, 0x800)
 

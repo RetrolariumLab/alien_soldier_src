@@ -27,14 +27,15 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
         }
         cls.reviews = {
             review["basis"]: review
-            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
 
     def assert_review(self, basis: str, members: tuple[tuple[str, str], ...]) -> None:
         self.assertEqual(
             list(members),
-            [(member["address"], member["current_name"])
-             for member in self.reviews[basis]["members"]],
+            [(member["address"], member["current_name"]) for member in self.reviews[basis]["members"]],
         )
         for address, name in members:
             self.assertEqual(name, self.audit[address]["current_name"])
@@ -58,8 +59,10 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
                 self.assertIn("movea.l #Player_SpecialAttackSecondarySpriteMappingB,a2", source)
         self.assert_review(
             "Special-attack, recovery, and Seven Forces rendering paths select this secondary mapping as one of two frame-counter variants.",
-            (("0x0E8F3A", "Player_SpecialAttackSecondarySpriteMappingA"),
-             ("0x0E8F6A", "Player_SpecialAttackSecondarySpriteMappingB")),
+            (
+                ("0x0E8F3A", "Player_SpecialAttackSecondarySpriteMappingA"),
+                ("0x0E8F6A", "Player_SpecialAttackSecondarySpriteMappingB"),
+            ),
         )
 
     def test_sirene_state_fourteen_selects_distinct_four_pointer_sets(self) -> None:
@@ -81,8 +84,7 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
             self.assertIn(instruction, source)
         self.assert_review(
             "State $14 chooses one of these four-entry pose-script pointer sets from the facing selector and the random phase.",
-            (("0x05781C", "Sirene_State14PoseScriptSet0"),
-             ("0x05782C", "Sirene_State14PoseScriptSet1")),
+            (("0x05781C", "Sirene_State14PoseScriptSet0"), ("0x05782C", "Sirene_State14PoseScriptSet1")),
         )
 
     def test_sharpssteel_blade_tables_feed_six_iteration_loop(self) -> None:
@@ -101,8 +103,10 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
         self.assertIn("dbf     d7,Boss_SharpssteelApplyBladeGraphicsSetLoop", source)
         self.assert_review(
             "The corresponding graphics-set routine consumes these six pointers while configuring embedded blade parts.",
-            (("0x04890A", "Boss_SharpssteelBladeGraphicsMappingsB"),
-             ("0x048922", "Boss_SharpssteelBladeGraphicsMappingsA")),
+            (
+                ("0x04890A", "Boss_SharpssteelBladeGraphicsMappingsB"),
+                ("0x048922", "Boss_SharpssteelBladeGraphicsMappingsA"),
+            ),
         )
 
     def test_antroid_variants_use_same_range_but_different_exits(self) -> None:
@@ -116,17 +120,20 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
                 self.assertIn("subq.w  #1,$11C(a5)", body)
                 self.assertIn(f"bmi{suffix}", body)
         self.assertIn("bmi.s   Boss_AntroidLeapAttackAFinish", block(source, "Boss_AntroidLeapAttackACheckScreenRange"))
-        self.assertIn("bmi.w   Boss_AntroidReturnToNeutralLoadAnimation", block(source, "Boss_AntroidLeapAttackBCheckScreenRange"))
+        self.assertIn(
+            "bmi.w   Boss_AntroidReturnToNeutralLoadAnimation", block(source, "Boss_AntroidLeapAttackBCheckScreenRange")
+        )
         self.assert_review(
             "The normal phase checks the derived screen coordinate against the bounded $C70..$D10 interval.",
-            (("0x037830", "Boss_AntroidLeapAttackACheckScreenRange"),
-             ("0x0378FE", "Boss_AntroidLeapAttackBCheckScreenRange")),
+            (
+                ("0x037830", "Boss_AntroidLeapAttackACheckScreenRange"),
+                ("0x0378FE", "Boss_AntroidLeapAttackBCheckScreenRange"),
+            ),
         )
 
     def test_story_title_rows_advance_different_source_strides(self) -> None:
         source = (ROOT / "src/cutscenes/story_screen_and_title_transition.s").read_text(encoding="utf-8")
-        for side, source_step in (("Left", "adda.l  #$C,a0"),
-                                  ("Right", "addq.l  #4,a0")):
+        for side, source_step in (("Left", "adda.l  #$C,a0"), ("Right", "addq.l  #4,a0")):
             with self.subTest(side=side):
                 name = f"StoryTitle_Character{side}AdvanceRow"
                 body = block(source, name)
@@ -140,8 +147,7 @@ class FrameTableAndMirrorReviewTests(unittest.TestCase):
         self.assertGreaterEqual(source.count("move.w  #$F,d6"), 2)
         self.assert_review(
             "The path advances the source and destination row bases before repeating the sixteen-row loop.",
-            (("0x004DBC", "StoryTitle_CharacterLeftAdvanceRow"),
-             ("0x004E16", "StoryTitle_CharacterRightAdvanceRow")),
+            (("0x004DBC", "StoryTitle_CharacterLeftAdvanceRow"), ("0x004E16", "StoryTitle_CharacterRightAdvanceRow")),
         )
 
 

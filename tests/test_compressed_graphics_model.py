@@ -25,9 +25,7 @@ class CompressedGraphicsTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.document = export_document(ROOT, "jp")
-        cls.records = {
-            record["name"]: record for record in cls.document["payloads"]
-        }
+        cls.records = {record["name"]: record for record in cls.document["payloads"]}
 
     def test_both_compressed_tile_inventories_have_fixed_slots(self) -> None:
         self.assertEqual(153, self.document["payload_count"])
@@ -37,10 +35,7 @@ class CompressedGraphicsTests(unittest.TestCase):
         self.assertEqual(
             {"payload": 147, "source": 6},
             {
-                storage: sum(
-                    record["storage"] == storage
-                    for record in self.document["payloads"]
-                )
+                storage: sum(record["storage"] == storage for record in self.document["payloads"])
                 for storage in ("payload", "source")
             },
         )
@@ -55,29 +50,20 @@ class CompressedGraphicsTests(unittest.TestCase):
     def test_edit_recompresses_and_pads_to_the_original_capacity(self) -> None:
         record = copy.deepcopy(self.records["Boss_AntroidTileArt"])
         tile = record["blocks"][0]["tiles"][0]
-        record["blocks"][0]["tiles"][0] = (
-            ("1" if tile[0] != "1" else "2") + tile[1:]
-        )
+        record["blocks"][0]["tiles"][0] = ("1" if tile[0] != "1" else "2") + tile[1:]
         slot = encoded_slot(record)
         self.assertEqual(record["compressed_capacity"], len(slot))
         self.assertEqual(payload_plain(record), decompress_as_vram(slot))
 
         document = copy.deepcopy(self.document)
-        edited = next(
-            item for item in document["payloads"]
-            if item["name"] == "Boss_AntroidTileArt"
-        )
+        edited = next(item for item in document["payloads"] if item["name"] == "Boss_AntroidTileArt")
         edited["blocks"][0]["tiles"] = record["blocks"][0]["tiles"]
-        self.assertEqual(
-            [record["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        self.assertEqual([record["path"]], apply_document(document, ROOT, "jp", write=False))
 
     def test_edit_that_does_not_fit_is_rejected(self) -> None:
         record = copy.deepcopy(self.records["Stage16TileArt5F00"])
         tile = record["blocks"][0]["tiles"][0]
-        record["blocks"][0]["tiles"][0] = (
-            ("1" if tile[0] != "1" else "2") + tile[1:]
-        )
+        record["blocks"][0]["tiles"][0] = ("1" if tile[0] != "1" else "2") + tile[1:]
         with self.assertRaisesRegex(ValueError, "exceeds fixed capacity"):
             encoded_slot(record)
 
@@ -87,24 +73,15 @@ class CompressedGraphicsTests(unittest.TestCase):
         path = ROOT / record["path"]
         self.assertEqual(
             path.read_text(encoding="utf-8"),
-            rebuild_source(
-                ROOT, record["path"], {record["name"]: stored[record["name"]]}
-            ),
+            rebuild_source(ROOT, record["path"], {record["name"]: stored[record["name"]]}),
         )
 
     def test_inline_edit_targets_its_source_owner_without_writing(self) -> None:
         document = copy.deepcopy(self.document)
-        record = next(
-            item for item in document["payloads"]
-            if item["name"] == "CreditsAndTransitionTileArtE000"
-        )
+        record = next(item for item in document["payloads"] if item["name"] == "CreditsAndTransitionTileArtE000")
         tile = record["blocks"][0]["tiles"][0]
-        record["blocks"][0]["tiles"][0] = (
-            ("1" if tile[0] != "1" else "2") + tile[1:]
-        )
-        self.assertEqual(
-            [record["path"]], apply_document(document, ROOT, "jp", write=False)
-        )
+        record["blocks"][0]["tiles"][0] = ("1" if tile[0] != "1" else "2") + tile[1:]
+        self.assertEqual([record["path"]], apply_document(document, ROOT, "jp", write=False))
 
 
 if __name__ == "__main__":

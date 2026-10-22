@@ -29,16 +29,24 @@ SYMBOL = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 # excludes extra writers/branches between the reviewed selection fragments.
 CALLER_OPERATIONS_SHA256 = "98dc2043a113aa322dec51895ec56e97aca864b729e22f575da81b34c6e6297f"
 NORMAL_CALLER = (
-    "move.b 2(a5),d7", "bpl.s Sprite_RenderObjectList_HandleAlternateFlags",
-    "add.b d7,d7", "bpl.w Sprite_RenderSingleObjectEntry",
-    "movea.l 8(a5),a4", "add.b d7,d7",
-    "bpl.s Sprite_RenderObjectList_RenderMapping", "bsr.w Anim_ResolveTimedMappingFrame",
+    "move.b 2(a5),d7",
+    "bpl.s Sprite_RenderObjectList_HandleAlternateFlags",
+    "add.b d7,d7",
+    "bpl.w Sprite_RenderSingleObjectEntry",
+    "movea.l 8(a5),a4",
+    "add.b d7,d7",
+    "bpl.s Sprite_RenderObjectList_RenderMapping",
+    "bsr.w Anim_ResolveTimedMappingFrame",
 )
 ALTERNATE_CALLER = (
-    "beq.s Sprite_RenderObjectList_NextObject", "add.b d7,d7",
-    "bpl.s Sprite_RenderObjectList_NextObject", "add.b d7,d7",
-    "bpl.s Sprite_RenderObjectList_NextObject", "movea.l 8(a5),a4",
-    "pea Sprite_RenderObjectList_NextObject(pc)", "bra.w Anim_ResolveTimedMappingFrame",
+    "beq.s Sprite_RenderObjectList_NextObject",
+    "add.b d7,d7",
+    "bpl.s Sprite_RenderObjectList_NextObject",
+    "add.b d7,d7",
+    "bpl.s Sprite_RenderObjectList_NextObject",
+    "movea.l 8(a5),a4",
+    "pea Sprite_RenderObjectList_NextObject(pc)",
+    "bra.w Anim_ResolveTimedMappingFrame",
 )
 
 
@@ -55,9 +63,8 @@ def _operations(text: str, start: str, end: str) -> tuple[str, ...]:
     starts = list(re.finditer(r"^" + re.escape(start) + r":", text, re.MULTILINE))
     if len(starts) != 1 or text.count(end) != 1:
         raise ValueError("animation preview source boundary is missing or ambiguous: " + start)
-    body = text[starts[0].end():].split(end, 1)[0]
-    return tuple(code for line in body.splitlines()
-                 if (code := " ".join(line.split(";", 1)[0].split())))
+    body = text[starts[0].end() :].split(end, 1)[0]
+    return tuple(code for line in body.splitlines() if (code := " ".join(line.split(";", 1)[0].split())))
 
 
 def prove_reader(root: Path) -> dict:
@@ -69,29 +76,34 @@ def prove_reader(root: Path) -> dict:
         raise ValueError("animation preview source reader is oversized")
     payload = path.read_bytes()
     text = payload.decode("utf-8")
-    reader = _operations(text, "Anim_ResolveTimedMappingFrame",
-                         "; End of function Anim_ResolveTimedMappingFrame")
+    reader = _operations(text, "Anim_ResolveTimedMappingFrame", "; End of function Anim_ResolveTimedMappingFrame")
     if reader != workspace.TIMED_READER_OPERATIONS:
         raise ValueError("animation preview timed reader operations changed")
-    caller = _operations(text, "Sprite_RenderObjectList",
-                         "; End of function Sprite_RenderObjectList")
+    caller = _operations(text, "Sprite_RenderObjectList", "; End of function Sprite_RenderObjectList")
     caller_hash = hashlib.sha256("\n".join(caller).encode("ascii")).hexdigest()
     if caller_hash != CALLER_OPERATIONS_SHA256:
         raise ValueError("animation preview complete caller operations changed")
     clock = ("move.b (FrameControlFlags).w,d3", "ror.l #8,d3")
     for required in (clock, NORMAL_CALLER):
-        if not any(caller[index:index + len(required)] == required
-                   for index in range(len(caller) - len(required) + 1)):
+        if not any(
+            caller[index : index + len(required)] == required for index in range(len(caller) - len(required) + 1)
+        ):
             raise ValueError("animation preview caller selection/pause operations changed")
     alternate = caller.index("Sprite_RenderObjectList_HandleAlternateFlags:") + 1
     if caller[alternate:] != ALTERNATE_CALLER:
         raise ValueError("animation preview advance-only caller operations changed")
-    return {"source": SOURCE, "source_sha256": hashlib.sha256(payload).hexdigest(),
-            "caller_operations_sha256": caller_hash,
-            "reader": "Anim_ResolveTimedMappingFrame", "source_reader_verified": True,
-            "source_caller_verified": True, "compiled_reader_verified": False,
-            "native_run": False, "runtime_fidelity_verified": False,
-            "tick_unit": "one_qualified_reader_invocation_not_an_assumed_native_frame"}
+    return {
+        "source": SOURCE,
+        "source_sha256": hashlib.sha256(payload).hexdigest(),
+        "caller_operations_sha256": caller_hash,
+        "reader": "Anim_ResolveTimedMappingFrame",
+        "source_reader_verified": True,
+        "source_caller_verified": True,
+        "compiled_reader_verified": False,
+        "native_run": False,
+        "runtime_fidelity_verified": False,
+        "tick_unit": "one_qualified_reader_invocation_not_an_assumed_native_frame",
+    }
 
 
 @dataclass(frozen=True)
@@ -154,17 +166,36 @@ class FrameGeometry:
     def bounds(self) -> tuple[int, int, int, int]:
         left = min(piece.x for piece in self.pieces)
         top = min(piece.y for piece in self.pieces)
-        return (left, top, max(piece.x + piece.width for piece in self.pieces) - left,
-                max(piece.y + piece.height for piece in self.pieces) - top)
+        return (
+            left,
+            top,
+            max(piece.x + piece.width for piece in self.pieces) - left,
+            max(piece.y + piece.height for piece in self.pieces) - top,
+        )
 
     def document(self) -> dict:
-        return {"symbol": self.symbol, "source_path": self.source_path,
-                "bounds": list(self.bounds), "piece_format": "dynamic-eight-byte" if self.dynamic else "static-six-byte",
-                "pieces": [{"attributes": piece.attributes, "size": piece.size, "link": piece.link,
-                            "x": piece.x, "y": piece.y, "width": piece.width, "height": piece.height,
-                            "tile_offset": piece.tile, "art": piece.art, "art_addend": piece.art_addend}
-                           for piece in self.pieces],
-                "scope": "source_relative_piece_geometry_not_OAM_art_palette_or_pixels"}
+        return {
+            "symbol": self.symbol,
+            "source_path": self.source_path,
+            "bounds": list(self.bounds),
+            "piece_format": "dynamic-eight-byte" if self.dynamic else "static-six-byte",
+            "pieces": [
+                {
+                    "attributes": piece.attributes,
+                    "size": piece.size,
+                    "link": piece.link,
+                    "x": piece.x,
+                    "y": piece.y,
+                    "width": piece.width,
+                    "height": piece.height,
+                    "tile_offset": piece.tile,
+                    "art": piece.art,
+                    "art_addend": piece.art_addend,
+                }
+                for piece in self.pieces
+            ],
+            "scope": "source_relative_piece_geometry_not_OAM_art_palette_or_pixels",
+        }
 
 
 @dataclass(frozen=True)
@@ -183,7 +214,11 @@ class Catalog:
             if not isinstance(name, str) or not SYMBOL.fullmatch(name) or not entries:
                 raise ValueError("animation preview script has no valid name/entries")
             for entry in entries:
-                if not isinstance(entry, Entry) or not isinstance(entry.target, str) or not SYMBOL.fullmatch(entry.target):
+                if (
+                    not isinstance(entry, Entry)
+                    or not isinstance(entry.target, str)
+                    or not SYMBOL.fullmatch(entry.target)
+                ):
                     raise ValueError("animation preview entry target is malformed")
                 _unsigned(entry.duration, 16, "animation entry duration")
         for entries in scripts.values():
@@ -196,33 +231,44 @@ class Catalog:
                 elif entry.target not in mappings:
                     raise ValueError("animation preview mapping is missing: " + entry.target)
         for name, geometry in mappings.items():
-            if (not isinstance(geometry, FrameGeometry) or geometry.symbol != name
-                    or not geometry.pieces or len(geometry.pieces) > MAX_PIECES):
+            if (
+                not isinstance(geometry, FrameGeometry)
+                or geometry.symbol != name
+                or not geometry.pieces
+                or len(geometry.pieces) > MAX_PIECES
+            ):
                 raise ValueError("animation preview mapping geometry is absent or outside bounds")
             for index, piece in enumerate(geometry.pieces):
                 if not isinstance(piece, SpritePiece):
                     raise ValueError("animation preview piece is not source mapping data")
                 for value, bits in ((piece.attributes, 16), (piece.size, 8), (piece.link, 8)):
                     _unsigned(value, bits, "animation mapping piece field")
-                if (type(piece.x) is not int or type(piece.y) is not int
-                        or not -128 <= piece.x <= 127 or not -128 <= piece.y <= 127
-                        or piece.dynamic != geometry.dynamic
-                        or piece.last != (index == len(geometry.pieces) - 1)):
+                if (
+                    type(piece.x) is not int
+                    or type(piece.y) is not int
+                    or not -128 <= piece.x <= 127
+                    or not -128 <= piece.y <= 127
+                    or piece.dynamic != geometry.dynamic
+                    or piece.last != (index == len(geometry.pieces) - 1)
+                ):
                     raise ValueError("animation preview piece position/terminator is malformed")
         object.__setattr__(self, "scripts", MappingProxyType(scripts))
         object.__setattr__(self, "mappings", MappingProxyType(mappings))
         object.__setattr__(self, "proof", MappingProxyType(dict(self.proof)))
 
     def entry(self, cursor: Cursor) -> Entry:
-        if (not isinstance(cursor, Cursor) or not isinstance(cursor.script, str)
-                or cursor.script not in self.scripts
-                or type(cursor.index) is not int or not 0 <= cursor.index < len(self.scripts[cursor.script])):
+        if (
+            not isinstance(cursor, Cursor)
+            or not isinstance(cursor.script, str)
+            or cursor.script not in self.scripts
+            or type(cursor.index) is not int
+            or not 0 <= cursor.index < len(self.scripts[cursor.script])
+        ):
             raise UnsupportedPlayback("cursor has no source-owned animation entry")
         return self.scripts[cursor.script][cursor.index]
 
 
-def _mapping_overlay(root: Path, profile: str, document: dict,
-                     mappings: dict[str, FrameGeometry]) -> int:
+def _mapping_overlay(root: Path, profile: str, document: dict, mappings: dict[str, FrameGeometry]) -> int:
     """Overlay a complete validated editor document, not a partial frame patch."""
     from authoring import mapping_studio_model
 
@@ -230,12 +276,23 @@ def _mapping_overlay(root: Path, profile: str, document: dict,
         raise ValueError("animation preview mapping document must contain source-owned blocks")
     # The fixed-format validator compares some metadata using equality. Refuse
     # bool/int aliases and unhashable inventories before invoking that validator.
-    for field in ("schema_version", "block_count", "mapping_count", "piece_count",
-                  "static_mapping_count", "dynamic_mapping_count", "payload_block_count", "excluded_count"):
+    for field in (
+        "schema_version",
+        "block_count",
+        "mapping_count",
+        "piece_count",
+        "static_mapping_count",
+        "dynamic_mapping_count",
+        "payload_block_count",
+        "excluded_count",
+    ):
         _unsigned(document.get(field), 32, "mapping metadata " + field)
     for block in document["blocks"]:
-        if (not isinstance(block, dict) or not isinstance(block.get("name"), str)
-                or not isinstance(block.get("mappings"), list)):
+        if (
+            not isinstance(block, dict)
+            or not isinstance(block.get("name"), str)
+            or not isinstance(block.get("mappings"), list)
+        ):
             raise ValueError("animation preview mapping block inventory is malformed")
         for field in ("mapping_count", "piece_count"):
             _unsigned(block.get(field), 32, "mapping block " + field)
@@ -259,20 +316,33 @@ def _mapping_overlay(root: Path, profile: str, document: dict,
             continue
         first = next((item for item in block["mappings"] if item["offset"] == 0), None)
         original = mappings[name]
-        if (first is None or block["source_path"] != original.source_path
-                or first["dynamic"] != original.dynamic
-                or first["piece_count"] != len(original.pieces)):
+        if (
+            first is None
+            or block["source_path"] != original.source_path
+            or first["dynamic"] != original.dynamic
+            or first["piece_count"] != len(original.pieces)
+        ):
             raise ValueError("animation preview overlay does not own the exact first mapping: " + name)
-        pieces = tuple(SpritePiece(piece["attributes"], piece["size"], piece["link"],
-                                   piece["y"], piece["x"], piece["art"], piece["art_addend"])
-                       for piece in first["pieces"])
+        pieces = tuple(
+            SpritePiece(
+                piece["attributes"],
+                piece["size"],
+                piece["link"],
+                piece["y"],
+                piece["x"],
+                piece["art"],
+                piece["art_addend"],
+            )
+            for piece in first["pieces"]
+        )
         mappings[name] = FrameGeometry(name, pieces, original.source_path)
         applied += 1
     return applied
 
 
-def build_catalog(root: Path, profile: str, document: dict | None = None, *,
-                  mapping_document: dict | None = None) -> Catalog:
+def build_catalog(
+    root: Path, profile: str, document: dict | None = None, *, mapping_document: dict | None = None
+) -> Catalog:
     """Read all exact frame targets, including names without SpriteMapping.
 
     This authenticates source operation/format evidence only. Retarget edits
@@ -285,8 +355,10 @@ def build_catalog(root: Path, profile: str, document: dict | None = None, *,
     workspace.validate_document(document, root, profile)
     proof = prove_reader(root)
     proof["profile"] = profile
-    scripts = {record["name"]: tuple(Entry(frame["target"], frame["duration"]) for frame in record["frames"])
-               for record in document["scripts"]}
+    scripts = {
+        record["name"]: tuple(Entry(frame["target"], frame["duration"]) for frame in record["frames"])
+        for record in document["scripts"]
+    }
     targets = {entry.target for entries in scripts.values() for entry in entries if not entry.jump}
     mappings = {}
     for name, source, tokens in labelled_blocks(root):
@@ -301,7 +373,8 @@ def build_catalog(root: Path, profile: str, document: dict | None = None, *,
         mappings[name] = FrameGeometry(name, tuple(blocks[0].mappings[0].pieces), source)
     proof["unsaved_mapping_document_supplied"] = mapping_document is not None
     proof["mapping_editor_targets_applied"] = (
-        _mapping_overlay(root, profile, mapping_document, mappings) if mapping_document is not None else 0)
+        _mapping_overlay(root, profile, mapping_document, mappings) if mapping_document is not None else 0
+    )
     return Catalog(scripts, mappings, proof)
 
 
@@ -319,13 +392,21 @@ class Step:
     def document(self) -> dict:
         def state(value):
             return {"script": value.cursor.script, "index": value.cursor.index, "timer": value.timer}
-        return {"before": state(self.before), "after": state(self.after), "event": self.event,
-                "mapping_render_route_selected": self.render_route_selected, "timer_written": self.timer_written,
-                "cursor_written": self.cursor_written,
-                "jump_entry": None if self.jump_entry is None else {
-                    "script": self.jump_entry.script, "index": self.jump_entry.index},
-                "mapping": self.geometry.document(), "native_run": False,
-                "runtime_fidelity_verified": False}
+
+        return {
+            "before": state(self.before),
+            "after": state(self.after),
+            "event": self.event,
+            "mapping_render_route_selected": self.render_route_selected,
+            "timer_written": self.timer_written,
+            "cursor_written": self.cursor_written,
+            "jump_entry": None
+            if self.jump_entry is None
+            else {"script": self.jump_entry.script, "index": self.jump_entry.index},
+            "mapping": self.geometry.document(),
+            "native_run": False,
+            "runtime_fidelity_verified": False,
+        }
 
 
 def _playback_inputs(catalog: Catalog, state: PlaybackState, caller: CallerState) -> Entry:
@@ -373,8 +454,16 @@ def step(catalog: Catalog, state: PlaybackState, caller: CallerState) -> Step:
     geometry = catalog.mappings[resolved.target]
     if geometry.dynamic:
         raise UnsupportedPlayback("qualified static timed caller cannot consume an eight-byte dynamic mapping")
-    return Step(state, PlaybackState(cursor, timer), geometry, event, caller.render_route_selected,
-                timer_written, cursor_written, jump_entry)
+    return Step(
+        state,
+        PlaybackState(cursor, timer),
+        geometry,
+        event,
+        caller.render_route_selected,
+        timer_written,
+        cursor_written,
+        jump_entry,
+    )
 
 
 def simulate(catalog: Catalog, initial: PlaybackState, caller: CallerState, steps: int) -> tuple[Step, ...]:

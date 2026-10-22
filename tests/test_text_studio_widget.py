@@ -21,6 +21,7 @@ class TextStudioWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
@@ -73,24 +74,21 @@ class TextStudioWidgetTests(unittest.TestCase):
                         elif identifier == "story_text_rows":
                             self.assertEqual(128, len(window.glyph_preview.find_all()))
                             self.assertEqual("grid", window.story_strip.winfo_manager())
-                            self.assertEqual((528, 80),
-                                             (window.story_photo.width(),
-                                              window.story_photo.height()))
+                            self.assertEqual((528, 80), (window.story_photo.width(), window.story_photo.height()))
                             self.assertTrue(window.story_strip.bind("<Button-1>"))
-                            row = next(item for item in
-                                       window.state.documents[identifier]["rows"]
-                                       if 0xFF in item["accent"][:-1])
+                            row = next(
+                                item
+                                for item in window.state.documents[identifier]["rows"]
+                                if 0xFF in item["accent"][:-1]
+                            )
                             window.select_field(row["index"] * 2)
                             boundary = row["accent"].index(0xFF)
-                            window._select_story_strip_pixel(
-                                SimpleNamespace(x=boundary * 16 + 8, y=56))
+                            window._select_story_strip_pixel(SimpleNamespace(x=boundary * 16 + 8, y=56))
                             self.assertEqual("accent", window.state.field.key)
                             self.assertEqual(boundary, window.state.value_index)
                             self.assertEqual(str(boundary), window.index_text.get())
-                            self.assertIn("Protected story accent",
-                                          window.glyph_caption.cget("text"))
-                            window._select_story_strip_pixel(
-                                SimpleNamespace(x=8, y=40))
+                            self.assertIn("Protected story accent", window.glyph_caption.cget("text"))
+                            window._select_story_strip_pixel(SimpleNamespace(x=8, y=40))
                             self.assertEqual(boundary, window.state.value_index)
                             window.value_text.set("$01")
                             window.apply_value()
@@ -98,16 +96,17 @@ class TextStudioWidgetTests(unittest.TestCase):
                             messages.showerror.assert_called_once()
                             messages.showerror.reset_mock()
                         elif identifier in (
-                                "boss_and_ship_message_scripts", "glyph_source_lists",
-                                "results_detail_text", "frontend_text_strings",
-                                "stage_message_sequences"):
+                            "boss_and_ship_message_scripts",
+                            "glyph_source_lists",
+                            "results_detail_text",
+                            "frontend_text_strings",
+                            "stage_message_sequences",
+                        ):
                             self.assertEqual(128, len(window.glyph_preview.find_all()))
                             if identifier == "results_detail_text":
                                 window.select_field(31)
-                                self.assertIn("Results_TotalTimeLabel",
-                                              window.state.field.label)
-                                self.assertEqual(128,
-                                                 len(window.glyph_preview.find_all()))
+                                self.assertIn("Results_TotalTimeLabel", window.state.field.label)
+                                self.assertEqual(128, len(window.glyph_preview.find_all()))
                         elif identifier == "credits_text_sequence":
                             window.select_field(1)
                             self.assertIn("Credits glyph", window.glyph_caption.cget("text"))
@@ -116,8 +115,7 @@ class TextStudioWidgetTests(unittest.TestCase):
                         if identifier != "story_text_rows":
                             self.assertEqual("", window.story_strip.winfo_manager())
 
-                    window.select_artifact(
-                        window.state.artifact_ids.index("glyph_source_lists"))
+                    window.select_artifact(window.state.artifact_ids.index("glyph_source_lists"))
                     before = window.state.value
                     replacement = 0 if before else 1
                     window.value_text.set("$%02X" % replacement)
@@ -179,8 +177,9 @@ class TextStudioWidgetTests(unittest.TestCase):
             self.assertEqual("normal", str(window.choose_button["state"]))
 
             window.select_artifact(window.state.artifact_ids.index("story_text_rows"))
-            row = next(item for item in window.state.documents["story_text_rows"]["rows"]
-                       if 0xFF in item["accent"][:-1])
+            row = next(
+                item for item in window.state.documents["story_text_rows"]["rows"] if 0xFF in item["accent"][:-1]
+            )
             window.select_field(row["index"] * 2 + 1)
             window.index_text.set(str(row["accent"].index(0xFF)))
             window.go_to_value()

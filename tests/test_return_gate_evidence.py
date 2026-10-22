@@ -14,17 +14,13 @@ class ReturnGateEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.records = {
             item["address"]: item
-            for item in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for item in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             item["basis"]: item
-            for item in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for item in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
 
     def assert_review(self, basis: str, addresses: list[str]) -> None:
@@ -51,9 +47,7 @@ class ReturnGateEvidenceTests(unittest.TestCase):
     def test_zero_animation_request_preserves_pointer_and_cursor(self) -> None:
         basis = "A zero request leaves the current animation in place."
         self.assert_review(basis, ["0x02C982", "0x02CA8E"])
-        source = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(encoding="utf-8")
         for owner, table in (
             ("Enemy", "PeriodicShotEnemySpriteAnimationPointers"),
             ("Projectile", "Enemy_ProjectileAnimationPointers"),
@@ -69,9 +63,7 @@ class ReturnGateEvidenceTests(unittest.TestCase):
     def test_paced_particle_and_projectile_returns_share_two_gates(self) -> None:
         basis = "Both the paced frames and a full pool return here."
         self.assert_review(basis, ["0x02A554", "0x02A5B4"])
-        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(encoding="utf-8")
         for entry, ret in (
             ("Effect_SpawnParticleLoop", "Effect_SpawnParticleLoop_Return"),
             ("Projectile_FallingSpawner", "Projectile_FallingSpawner_Return"),
@@ -85,14 +77,9 @@ class ReturnGateEvidenceTests(unittest.TestCase):
                 self.assertRegex(block, rf"bne\.[sw]\s+{re.escape(ret)}")
 
     def test_two_speed_projectile_returns_share_three_gates(self) -> None:
-        basis = (
-            "An active initial timer, clear terrain test, or failed impact "
-            "allocation returns through this RTS."
-        )
+        basis = "An active initial timer, clear terrain test, or failed impact allocation returns through this RTS."
         self.assert_review(basis, ["0x02B2EE", "0x02B43A"])
-        source = (ROOT / "src/projectiles/directional_and_gravity_shots.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/projectiles/directional_and_gravity_shots.s").read_text(encoding="utf-8")
         for prefix in ("", "Type254"):
             with self.subTest(prefix=prefix):
                 ret = f"Projectile_{prefix}TwoSpeedShotReturn"
@@ -106,12 +93,8 @@ class ReturnGateEvidenceTests(unittest.TestCase):
             "Skipped and emitted defeat-debris paths return here.",
             ["0x047752", "0x050F3C"],
         )
-        epsilon = (ROOT / "src/projectiles/epsilon_1_projectiles.s").read_text(
-            encoding="utf-8"
-        )
-        wolf = (
-            ROOT / "src/bosses/wolf_garopa_attack_effects_and_transition.s"
-        ).read_text(encoding="utf-8")
+        epsilon = (ROOT / "src/projectiles/epsilon_1_projectiles.s").read_text(encoding="utf-8")
+        wolf = (ROOT / "src/bosses/wolf_garopa_attack_effects_and_transition.s").read_text(encoding="utf-8")
         for source, owner, cadence in (
             (epsilon, "Boss_Epsilon1UpdateRingObjectDefeatFall", "andi.w  #3,d0"),
             (wolf, "Boss_WolfGaropaDefeatTransition", "btst    #0,(FrameCounter+1).w"),
@@ -129,12 +112,8 @@ class ReturnGateEvidenceTests(unittest.TestCase):
             "The frames between shots return here.",
             ["0x02CA3E", "0x02ED20"],
         )
-        periodic = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(
-            encoding="utf-8"
-        )
-        fish = (ROOT / "src/enemies/stage_11_fish.s").read_text(
-            encoding="utf-8"
-        )
+        periodic = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(encoding="utf-8")
+        fish = (ROOT / "src/enemies/stage_11_fish.s").read_text(encoding="utf-8")
         self.assertIn("andi.w  #$1F,d0", periodic)
         self.assertIn("bne.s   Enemy_TryPeriodicShot_Return", periodic)
         self.assertIn("(Projectile_SpawnAimedArcFromEnemy).l", periodic)
@@ -148,14 +127,10 @@ class ReturnGateEvidenceTests(unittest.TestCase):
             "The frames inside one step return here.",
             ["0x02A764", "0x02A794"],
         )
-        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(encoding="utf-8")
         for routine in ("Anim_UpdateScriptAndHide", "Anim_UpdateLoopingScript"):
             with self.subTest(routine=routine):
-                block = source.split(routine + ":", 1)[1].split(
-                    "; End of function " + routine, 1
-                )[0]
+                block = source.split(routine + ":", 1)[1].split("; End of function " + routine, 1)[0]
                 self.assertIn("subq.w  #1,$4C(a5)", block)
                 self.assertIn(f"bne.s   {routine}_Return", block)
                 self.assertIn(f"{routine}_Return:", block)

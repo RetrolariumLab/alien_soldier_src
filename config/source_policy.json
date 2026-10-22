@@ -221,11 +221,7 @@
       "XiTigerStage",
       "ZLeoEnding"
     ],
-    "hardware_exception_files": [
-      "src/equals.inc",
-      "src/ports.inc",
-      "src/ram_addrs.inc"
-    ],
+    "hardware_exception_files": ["src/equals.inc", "src/ports.inc", "src/ram_addrs.inc"],
     "hardware_exception_names": [
       "AdrErr",
       "BusErr",

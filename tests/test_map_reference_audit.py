@@ -22,12 +22,17 @@ def fixture():
     ram = bytearray(audit.RAM_SIZE)
     ram[0x6000:0x6040] = b"\1" * 64
     ram[0x4020:0x4040] = b"\x12\x34" * 16
-    return Tilemap("fixture", ("fixture-list",), bytes(ram),
-                   Descriptor("fixture-descriptor", 0xFFFF7000, 0xFFFF6000,
-                              0xFFFF4000, False, 0x4000),
-                   (("fixture-list", "coarse", 0x7000, 1024),
-                    ("fixture-list", "chunks", 0x6000, 64),
-                    ("fixture-list", "patterns", 0x4020, 32)))
+    return Tilemap(
+        "fixture",
+        ("fixture-list",),
+        bytes(ram),
+        Descriptor("fixture-descriptor", 0xFFFF7000, 0xFFFF6000, 0xFFFF4000, False, 0x4000),
+        (
+            ("fixture-list", "coarse", 0x7000, 1024),
+            ("fixture-list", "chunks", 0x6000, 64),
+            ("fixture-list", "patterns", 0x4020, 32),
+        ),
+    )
 
 
 class MapReferenceInventoryTests(unittest.TestCase):
@@ -124,17 +129,29 @@ class MapReferenceInventoryTests(unittest.TestCase):
 class StaticScopeTests(unittest.TestCase):
     def read(self):
         plane = fixture()
-        configuration = SimpleNamespace(name="config", plane_a_mode=4, plane_b_mode=4,
-                                        camera_y=16, secondary_camera_y=0)
-        return {"loaders": ["loader", "procedural"], "configurations": [configuration, configuration],
-                "tilemaps": [plane, plane], "descriptors": {plane.descriptor.name: plane.descriptor},
-                "plane_tables": {audit.PLANE_A_TABLE: [plane.descriptor.name], audit.PLANE_B_TABLE: [plane.descriptor.name]},
-                "not_reproduced": {1: "source-owned procedural route"}}
+        configuration = SimpleNamespace(
+            name="config", plane_a_mode=4, plane_b_mode=4, camera_y=16, secondary_camera_y=0
+        )
+        return {
+            "loaders": ["loader", "procedural"],
+            "configurations": [configuration, configuration],
+            "tilemaps": [plane, plane],
+            "descriptors": {plane.descriptor.name: plane.descriptor},
+            "plane_tables": {
+                audit.PLANE_A_TABLE: [plane.descriptor.name],
+                audit.PLANE_B_TABLE: [plane.descriptor.name],
+            },
+            "not_reproduced": {1: "source-owned procedural route"},
+        }
 
     def test_same_map_secondary_descriptor_is_audited_even_if_flat_renderer_suppresses_it(self):
         read = self.read()
-        built = SimpleNamespace(tilemap=read["tilemaps"][0], plane_b=None, missing_codecs=(),
-                                planes=("fixture", "same map, omitted from flat preview"))
+        built = SimpleNamespace(
+            tilemap=read["tilemaps"][0],
+            plane_b=None,
+            missing_codecs=(),
+            planes=("fixture", "same map, omitted from flat preview"),
+        )
         with mock.patch.object(audit, "scene", return_value=built):
             records = list(audit.stage_planes(ROOT, read, {"stage_rendering": {"stage_table_entries": 2}}))
         self.assertEqual(4, len(records))
@@ -159,8 +176,13 @@ class StaticScopeTests(unittest.TestCase):
         run.assert_not_called()
 
     def test_missing_compressed_ram_payload_is_not_reported_as_a_canonical_hole(self):
-        read = {"tilemaps": [fixture()], "not_reproduced": {}, "bodies": {}, "data": {},
-                "lists": {"fixture-list": (AssetCommand(6, "missing-data", 0x4000),)}}
+        read = {
+            "tilemaps": [fixture()],
+            "not_reproduced": {},
+            "bodies": {},
+            "data": {},
+            "lists": {"fixture-list": (AssetCommand(6, "missing-data", 0x4000),)},
+        }
         with self.assertRaisesRegex(ValueError, "RAM payload is unavailable"):
             audit.require_scene_sources(read, {"supported": []})
 

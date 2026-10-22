@@ -72,9 +72,7 @@ def checked_path(root: Path, relative: str | Path, owner: Path | None = None) ->
     """Resolve a relative path without allowing escapes or existing links."""
     root = root.resolve()
     relative = Path(relative)
-    if relative.is_absolute() or not relative.parts or any(
-        part in {"", ".", ".."} for part in relative.parts
-    ):
+    if relative.is_absolute() or not relative.parts or any(part in {"", ".", ".."} for part in relative.parts):
         raise ContentError(f"unsafe content path: {relative}")
     path = root
     for part in relative.parts:
@@ -114,8 +112,7 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
         else:
             for profile, defines in values.items():
                 if not isinstance(defines, list) or not all(
-                    isinstance(item, str) and item and not any(char.isspace() for char in item)
-                    for item in defines
+                    isinstance(item, str) and item and not any(char.isspace() for char in item) for item in defines
                 ):
                     errors.append(f"invalid assembler defines for {profile}")
 
@@ -162,7 +159,9 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "compressed_tile_document":
             for field in (
-                "payload_count", "tile_count", "decoded_byte_count",
+                "payload_count",
+                "tile_count",
+                "decoded_byte_count",
                 "compressed_capacity",
             ):
                 value = artifact.get(field)
@@ -175,8 +174,11 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "mapping_document":
             for field in (
-                "block_count", "mapping_count", "piece_count",
-                "static_mapping_count", "dynamic_mapping_count",
+                "block_count",
+                "mapping_count",
+                "piece_count",
+                "static_mapping_count",
+                "dynamic_mapping_count",
                 "payload_block_count",
             ):
                 value = artifact.get(field)
@@ -189,7 +191,9 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") in ("screen_map_document", "stage_map_document"):
             for field in (
-                "payload_count", "value_count", "decoded_byte_count",
+                "payload_count",
+                "value_count",
+                "decoded_byte_count",
                 "compressed_capacity",
             ):
                 value = artifact.get(field)
@@ -199,9 +203,11 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
             if artifact.get("row_bytes") != 34:
                 errors.append(f"invalid artifact row_bytes: {identifier}")
             counts = artifact.get("row_counts")
-            if not isinstance(counts, dict) or tuple(counts) != EXPECTED_PROFILES or any(
-                    isinstance(value, bool) or not isinstance(value, int) or value <= 0
-                    for value in counts.values()):
+            if (
+                not isinstance(counts, dict)
+                or tuple(counts) != EXPECTED_PROFILES
+                or any(isinstance(value, bool) or not isinstance(value, int) or value <= 0 for value in counts.values())
+            ):
                 errors.append(f"invalid artifact row_counts: {identifier}")
         elif artifact.get("kind") == "frontend_text_document":
             for field in ("string_count", "glyph_count", "encoded_byte_count"):
@@ -209,16 +215,24 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                 if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "results_text_document":
-            for field in ("row_count", "row_bytes", "glyph_count",
-                          "encoded_byte_count", "max_glyph_id",
-                          "summary_label_count", "summary_glyph_count",
-                          "summary_encoded_byte_count"):
+            for field in (
+                "row_count",
+                "row_bytes",
+                "glyph_count",
+                "encoded_byte_count",
+                "max_glyph_id",
+                "summary_label_count",
+                "summary_glyph_count",
+                "summary_encoded_byte_count",
+            ):
                 value = artifact.get(field)
                 if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "stage_message_document":
             for field in (
-                "stream_count", "sequence_count", "entry_count",
+                "stream_count",
+                "sequence_count",
+                "entry_count",
                 "encoded_byte_count",
             ):
                 value = artifact.get(field)
@@ -226,15 +240,21 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "scripted_message_document":
             for field in (
-                "script_count", "command_count", "record_count", "glyph_count",
-                "encoded_byte_count", "unexposed_byte_count",
+                "script_count",
+                "command_count",
+                "record_count",
+                "glyph_count",
+                "encoded_byte_count",
+                "unexposed_byte_count",
             ):
                 value = artifact.get(field)
                 if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "credits_text_document":
             for field in (
-                "record_count", "glyph_slot_count", "encoded_byte_count",
+                "record_count",
+                "glyph_slot_count",
+                "encoded_byte_count",
                 "max_glyph_id",
             ):
                 value = artifact.get(field)
@@ -257,7 +277,9 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "sound_instrument_document":
             for field in (
-                "payload_count", "instrument_count", "parameter_byte_count",
+                "payload_count",
+                "instrument_count",
+                "parameter_byte_count",
                 "padding_byte_count",
             ):
                 value = artifact.get(field)
@@ -265,26 +287,34 @@ def validate_manifest(document: dict[str, Any]) -> list[str]:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "sound_envelope_document":
             for field in (
-                "family_count", "envelope_count", "capacity", "value_count",
-                "command_count", "protected_byte_count",
+                "family_count",
+                "envelope_count",
+                "capacity",
+                "value_count",
+                "command_count",
+                "protected_byte_count",
             ):
                 value = artifact.get(field)
                 if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                     errors.append(f"invalid artifact {field}: {identifier}")
         elif artifact.get("kind") == "sound_pcm_document":
             for field in (
-                "bank_count", "sample_count", "sample_byte_count", "decoded_value_count",
-                "header_byte_count", "padding_byte_count", "descriptor_record_count",
-                "dispatchable_descriptor_count", "referenced_sample_count",
+                "bank_count",
+                "sample_count",
+                "sample_byte_count",
+                "decoded_value_count",
+                "header_byte_count",
+                "padding_byte_count",
+                "descriptor_record_count",
+                "dispatchable_descriptor_count",
+                "referenced_sample_count",
                 "unreferenced_sample_count",
             ):
                 value = artifact.get(field)
                 if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
                     errors.append(f"invalid artifact {field}: {identifier}")
         owners = artifact.get("source_owners")
-        if not isinstance(owners, list) or not owners or not all(
-            _is_safe_relative(owner) for owner in owners
-        ):
+        if not isinstance(owners, list) or not owners or not all(_is_safe_relative(owner) for owner in owners):
             errors.append(f"invalid artifact source owners: {identifier}")
     for studio in studios:
         if not isinstance(studio, dict):
@@ -353,9 +383,7 @@ def workspace_path(root: Path, manifest: dict[str, Any], profile: str) -> Path:
     return checked_path(root, relative, Path(manifest["workspace"]))
 
 
-def artifact_path(
-    root: Path, manifest: dict[str, Any], profile: str, artifact: dict[str, Any]
-) -> Path:
+def artifact_path(root: Path, manifest: dict[str, Any], profile: str, artifact: dict[str, Any]) -> Path:
     relative = Path(manifest["workspace"]) / profile / artifact["workspace"]
     return checked_path(root, relative, Path(manifest["workspace"]))
 
@@ -468,10 +496,7 @@ def initialize(root: Path, manifest: dict[str, Any], profile: str, force: bool =
             atomic_write_json(path, export_document(root, profile))
         created += 1
     state = "initialized" if created else "already exists"
-    print(
-        f"[OK] Content workspace {state}: {destination.parent.relative_to(root)} "
-        f"({created} file(s) written)"
-    )
+    print(f"[OK] Content workspace {state}: {destination.parent.relative_to(root)} ({created} file(s) written)")
     return bool(created)
 
 
@@ -515,18 +540,14 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 validate_document(document, root, profile)
                 observed = {
                     "spawn_list_count": len(document["spawn_lists"]),
-                    "placement_count": sum(
-                        len(item["entries"]) for item in document["spawn_lists"]
-                    ),
+                    "placement_count": sum(len(item["entries"]) for item in document["spawn_lists"]),
                     "configuration_count": len(document["configurations"]),
                     "stage_slot_count": len(document["stage_slots"]),
                     "entry_bytes": document["entry_bytes"],
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "graphics_tile_document":
                 from authoring.graphics_studio_model import load_document, validate_document
 
@@ -534,17 +555,11 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 validate_document(document, root, profile)
                 observed = {
                     "payload_count": len(document["payloads"]),
-                    "tile_count": sum(
-                        len(block["tiles"])
-                        for item in document["payloads"]
-                        for block in item["blocks"]
-                    ),
+                    "tile_count": sum(len(block["tiles"]) for item in document["payloads"] for block in item["blocks"]),
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "compressed_tile_document":
                 from authoring.compressed_graphics_model import (
                     load_document,
@@ -561,9 +576,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "palette_document":
                 from authoring.palette_studio_model import load_document, validate_document
 
@@ -576,9 +589,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "mapping_document":
                 from authoring.mapping_studio_model import load_document, validate_document
 
@@ -594,9 +605,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "animation_document":
                 from authoring.animation_studio_model import load_document, validate_document
 
@@ -610,9 +619,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] in ("screen_map_document", "stage_map_document"):
                 if artifact["kind"] == "screen_map_document":
                     from authoring.screen_map_model import load_document, validate_document
@@ -629,9 +636,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 }
                 for field, value in observed.items():
                     if artifact[field] != value:
-                        raise ValueError(
-                            f"manifest {field} {artifact[field]} differs from {value}"
-                        )
+                        raise ValueError(f"manifest {field} {artifact[field]} differs from {value}")
             elif artifact["kind"] == "story_text_document":
                 from authoring.story_text_model import load_document, validate_document
 
@@ -654,10 +659,16 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
 
                 document = load_document(path)
                 validate_document(document, root, profile)
-                for field in ("row_count", "row_bytes", "glyph_count",
-                              "encoded_byte_count", "max_glyph_id",
-                              "summary_label_count", "summary_glyph_count",
-                              "summary_encoded_byte_count"):
+                for field in (
+                    "row_count",
+                    "row_bytes",
+                    "glyph_count",
+                    "encoded_byte_count",
+                    "max_glyph_id",
+                    "summary_label_count",
+                    "summary_glyph_count",
+                    "summary_encoded_byte_count",
+                ):
                     if artifact[field] != document[field]:
                         raise ValueError(f"manifest {field} differs from document")
             elif artifact["kind"] == "stage_message_document":
@@ -667,8 +678,7 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 validate_document(document, root, profile)
                 observed = {
                     "stream_count": document["stream_count"],
-                    "sequence_count": sum(
-                        item["sequence_count"] for item in document["streams"]),
+                    "sequence_count": sum(item["sequence_count"] for item in document["streams"]),
                     "entry_count": document["entry_count"],
                     "encoded_byte_count": document["encoded_byte_count"],
                 }
@@ -681,8 +691,12 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 document = load_document(path)
                 validate_document(document, root, profile)
                 for field in (
-                    "script_count", "command_count", "record_count", "glyph_count",
-                    "encoded_byte_count", "unexposed_byte_count",
+                    "script_count",
+                    "command_count",
+                    "record_count",
+                    "glyph_count",
+                    "encoded_byte_count",
+                    "unexposed_byte_count",
                 ):
                     if artifact[field] != document[field]:
                         raise ValueError(f"manifest {field} differs from document")
@@ -692,7 +706,9 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 document = load_document(path)
                 validate_document(document, root, profile)
                 for field in (
-                    "record_count", "glyph_slot_count", "encoded_byte_count",
+                    "record_count",
+                    "glyph_slot_count",
+                    "encoded_byte_count",
                     "max_glyph_id",
                 ):
                     if artifact[field] != document[field]:
@@ -727,7 +743,9 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 document = load_document(path)
                 validate_document(document, root, profile)
                 for field in (
-                    "payload_count", "instrument_count", "parameter_byte_count",
+                    "payload_count",
+                    "instrument_count",
+                    "parameter_byte_count",
                     "padding_byte_count",
                 ):
                     if artifact[field] != document[field]:
@@ -738,8 +756,12 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 document = load_document(path)
                 validate_document(document, root, profile)
                 for field in (
-                    "family_count", "envelope_count", "capacity", "value_count",
-                    "command_count", "protected_byte_count",
+                    "family_count",
+                    "envelope_count",
+                    "capacity",
+                    "value_count",
+                    "command_count",
+                    "protected_byte_count",
                 ):
                     if artifact[field] != document[field]:
                         raise ValueError(f"manifest {field} differs from document")
@@ -749,19 +771,26 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
                 document = load_document(path)
                 validate_document(document, root, profile)
                 for field in (
-                    "bank_count", "sample_count", "sample_byte_count",
-                    "decoded_value_count", "header_byte_count", "padding_byte_count",
+                    "bank_count",
+                    "sample_count",
+                    "sample_byte_count",
+                    "decoded_value_count",
+                    "header_byte_count",
+                    "padding_byte_count",
                     "descriptor_record_count",
-                    "dispatchable_descriptor_count", "referenced_sample_count",
+                    "dispatchable_descriptor_count",
+                    "referenced_sample_count",
                     "unreferenced_sample_count",
                 ):
                     if artifact[field] != document[field]:
                         raise ValueError(f"manifest {field} differs from document")
         except ValueError as error:
             raise ContentError(f"invalid {artifact['id']}: {error}") from error
-    map_artifacts = {item["id"]: item for item in manifest["artifacts"]
-                     if item["id"] in {"screen_maps", "stage_maps"}
-                     and profile in item["profiles"]}
+    map_artifacts = {
+        item["id"]: item
+        for item in manifest["artifacts"]
+        if item["id"] in {"screen_maps", "stage_maps"} and profile in item["profiles"]
+    }
     if set(map_artifacts) == {"screen_maps", "stage_maps"}:
         from authoring.screen_map_model import (
             export_document as export_screen_maps,
@@ -773,31 +802,25 @@ def validate_workspace(root: Path, manifest: dict[str, Any], profile: str) -> No
             load_document as load_stage_maps,
         )
 
-        screen = load_screen_maps(artifact_path(
-            root, manifest, profile, map_artifacts["screen_maps"]))
-        stage = load_stage_maps(artifact_path(
-            root, manifest, profile, map_artifacts["stage_maps"]))
+        screen = load_screen_maps(artifact_path(root, manifest, profile, map_artifacts["screen_maps"]))
+        stage = load_stage_maps(artifact_path(root, manifest, profile, map_artifacts["stage_maps"]))
         screen_baseline = export_screen_maps(root, profile)
         stage_baseline = export_stage_maps(root, profile)
         try:
-            validate_screen_map_references(
-                root, profile, screen, screen_baseline,
-                stage, stage_baseline)
+            validate_screen_map_references(root, profile, screen, screen_baseline, stage, stage_baseline)
         except ValueError as error:
             raise ContentError(f"invalid screen maps: {error}") from error
-        level_artifact = next((item for item in manifest["artifacts"]
-                               if item["id"] == "level_layouts"
-                               and profile in item["profiles"]), None)
+        level_artifact = next(
+            (item for item in manifest["artifacts"] if item["id"] == "level_layouts" and profile in item["profiles"]),
+            None,
+        )
         if level_artifact is not None:
             from authoring.level_studio_model import load_document as load_levels
             from authoring.level_studio_state import validate_stage_map_references
 
-            levels = load_levels(artifact_path(
-                root, manifest, profile, level_artifact))
+            levels = load_levels(artifact_path(root, manifest, profile, level_artifact))
             try:
-                validate_stage_map_references(
-                    root, profile, levels, stage, stage_baseline,
-                    screen, screen_baseline)
+                validate_stage_map_references(root, profile, levels, stage, stage_baseline, screen, screen_baseline)
             except ValueError as error:
                 raise ContentError(f"invalid visible stage maps: {error}") from error
     print(f"[OK] {profile} content workspace is structurally valid")
@@ -809,9 +832,7 @@ def inspect(root: Path, manifest: dict[str, Any], profile: str) -> None:
         print(f"Profile: {profile}\nWorkspace: missing")
         return
     current = path.read_bytes()
-    baseline = (json.dumps(
-        workspace_document(manifest, profile), indent=2, ensure_ascii=False
-    ) + "\n").encode("utf-8")
+    baseline = (json.dumps(workspace_document(manifest, profile), indent=2, ensure_ascii=False) + "\n").encode("utf-8")
     state = "unchanged" if current == baseline else "edited"
     print(f"Profile: {profile}")
     print(f"Workspace: {state}, SHA256 {hashlib.sha256(current).hexdigest()}")
@@ -936,11 +957,9 @@ def stage_tree(root: Path, destination: Path) -> Path:
     try:
         relative = raw_destination.relative_to(root)
     except ValueError as error:
-        raise ContentError(
-            f"staging destination is outside {GENERATED_ROOT}: {destination}") from error
+        raise ContentError(f"staging destination is outside {GENERATED_ROOT}: {destination}") from error
     if not _inside(raw_destination, root / GENERATED_ROOT):
-        raise ContentError(
-            f"staging destination is outside {GENERATED_ROOT}: {destination}")
+        raise ContentError(f"staging destination is outside {GENERATED_ROOT}: {destination}")
     if relative.name != "tree" or len(relative.parts) < 4:
         raise ContentError(f"staging destination must be a profile tree: {destination}")
     destination = checked_path(root, relative, GENERATED_ROOT)

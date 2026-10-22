@@ -1,4 +1,5 @@
 """Actual model/UI safety and source-count controls; no native execution."""
+
 from copy import deepcopy
 import hashlib
 from pathlib import Path
@@ -31,13 +32,24 @@ class CreditsSourceCountTests(unittest.TestCase):
     def test_complete_source_keeps_byte_count_high_byte_and_word_loop(self):
         raw = (ROOT / SOURCE).read_bytes()
         self.assertEqual(SOURCE_SHA, hashlib.sha256(raw).hexdigest())
-        section = raw.decode("utf-8").split("CreditsGlyphSequence_ReadLowerRow:", 1)[1].split(
-            "CreditsGlyphSequence_SpawnLowerRowLoop:", 1)[0]
-        instructions = [row.split(";", 1)[0].strip() for row in section.splitlines()
-                        if row.split(";", 1)[0].strip()]
-        self.assertEqual(["moveq   #0,d0", "move.b  (a1)+,d0", "add.w   d0,d0",
-                          "move.w  d0,(SharedSequenceTimer).l", "move.b  (a1)+,d0",
-                          "beq.w   CreditsGlyphSequence_CommitRecord", "move.w  d0,d1"], instructions[:7])
+        section = (
+            raw.decode("utf-8")
+            .split("CreditsGlyphSequence_ReadLowerRow:", 1)[1]
+            .split("CreditsGlyphSequence_SpawnLowerRowLoop:", 1)[0]
+        )
+        instructions = [row.split(";", 1)[0].strip() for row in section.splitlines() if row.split(";", 1)[0].strip()]
+        self.assertEqual(
+            [
+                "moveq   #0,d0",
+                "move.b  (a1)+,d0",
+                "add.w   d0,d0",
+                "move.w  d0,(SharedSequenceTimer).l",
+                "move.b  (a1)+,d0",
+                "beq.w   CreditsGlyphSequence_CommitRecord",
+                "move.w  d0,d1",
+            ],
+            instructions[:7],
+        )
         self.assertEqual(["move.w  d0,d7", "subq.w  #1,d7"], instructions[-2:])
 
     def test_all_nonempty_high_delays_add_256_slots_but_empty_beq_skips(self):
@@ -52,7 +64,8 @@ class CreditsSourceCountTests(unittest.TestCase):
             document = model.export_document(ROOT, profile)
             self.assertEqual(5, document["records"][0]["lower_count"])
             self.assertEqual(261, consumer_counts(128, document["records"][0]["lower_count"]))
-            changed = deepcopy(document); changed["records"][0]["lower_delay"] = 128
+            changed = deepcopy(document)
+            changed["records"][0]["lower_delay"] = 128
             with self.assertRaisesRegex(ValueError, "invalid lower delay"):
                 model.validate_document(changed, ROOT, profile)
 
@@ -74,11 +87,15 @@ class CreditsLowerDelayPolicyTests(unittest.TestCase):
         for profile in ("jp", "eu"):
             doc = self.documents(profile)
             for delay in (0, 96, 127):
-                changed = deepcopy(doc); changed["records"][0]["lower_delay"] = delay
+                changed = deepcopy(doc)
+                changed["records"][0]["lower_delay"] = delay
                 self.assertEqual([], model.document_errors(changed, ROOT, profile))
             for delay in range(128, 256):
-                changed = deepcopy(doc); changed["records"][0]["lower_delay"] = delay
-                self.assertTrue(any("invalid lower delay" in row for row in model.document_errors_against(changed, doc)))
+                changed = deepcopy(doc)
+                changed["records"][0]["lower_delay"] = delay
+                self.assertTrue(
+                    any("invalid lower delay" in row for row in model.document_errors_against(changed, doc))
+                )
                 with self.assertRaisesRegex(ValueError, "invalid lower delay"):
                     model.validate_document(changed, ROOT, profile)
 
@@ -87,7 +104,8 @@ class CreditsLowerDelayPolicyTests(unittest.TestCase):
             doc = self.documents(profile)
             self.assertEqual([14], [i for i, row in enumerate(doc["records"]) if row["lower_count"] == 0])
             for delay in (0, 127, 128, 255):
-                changed = deepcopy(doc); changed["records"][14]["lower_delay"] = delay
+                changed = deepcopy(doc)
+                changed["records"][14]["lower_delay"] = delay
                 model.validate_document(changed, ROOT, profile)
                 self.assertEqual(0, consumer_counts(delay, 0))
 
@@ -112,25 +130,38 @@ class CreditsLowerDelayPolicyTests(unittest.TestCase):
                 self.assertEqual(maximum, field.maximum)
                 workspace.set_value(maximum)
                 self.assertEqual(maximum, workspace.value)
-                with self.assertRaises(ValueError): workspace.set_value(maximum + 1)
+                with self.assertRaises(ValueError):
+                    workspace.set_value(maximum + 1)
 
     def test_bad_types_do_not_alias_unsigned_byte_or_helper_count(self):
         for value in (-1, 256, True, False, 127.0, "127", None):
-            with self.assertRaises(ValueError): model.lower_delay_maximum(value)
+            with self.assertRaises(ValueError):
+                model.lower_delay_maximum(value)
             for profile in ("jp", "eu"):
-                doc = self.documents(profile); doc["records"][0]["lower_delay"] = value
-                with self.assertRaises(ValueError): model.validate_document(doc, ROOT, profile)
+                doc = self.documents(profile)
+                doc["records"][0]["lower_delay"] = value
+                with self.assertRaises(ValueError):
+                    model.validate_document(doc, ROOT, profile)
 
     def test_unsafe_payload_fails_before_actual_atomic_writer_in_isolated_tree(self):
-        doc = self.documents("jp"); doc["records"][0]["lower_delay"] = 128
+        doc = self.documents("jp")
+        doc["records"][0]["lower_delay"] = 128
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)
-            for relative in (model.DATA_PATH, "data/artunc/font.bin", "src/credits/main.s",
-                             "src/rendering/vdp_asset_transfers.s", "src/data/shared_frontend_and_gameplay_tile_art.s"):
-                target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
+            for relative in (
+                model.DATA_PATH,
+                "data/artunc/font.bin",
+                "src/credits/main.s",
+                "src/rendering/vdp_asset_transfers.s",
+                "src/data/shared_frontend_and_gameplay_tile_art.s",
+            ):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
             original = (root / model.DATA_PATH).read_bytes()
-            with mock.patch.object(atomic_output, "atomic_write_bytes", side_effect=AssertionError("must not reach writer")) as writer:
+            with mock.patch.object(
+                atomic_output, "atomic_write_bytes", side_effect=AssertionError("must not reach writer")
+            ) as writer:
                 with self.assertRaisesRegex(ValueError, "invalid lower delay"):
                     model.apply_document(doc, root, "jp", write=True)
                 writer.assert_not_called()
@@ -138,7 +169,8 @@ class CreditsLowerDelayPolicyTests(unittest.TestCase):
 
     def test_safe_saved_model_has_only_the_intended_lower_delay_byte_changed(self):
         for profile in ("jp", "eu"):
-            doc = self.documents(profile); doc["records"][0]["lower_delay"] = 127
+            doc = self.documents(profile)
+            doc["records"][0]["lower_delay"] = 127
             with tempfile.TemporaryDirectory() as name:
                 path = Path(name) / "credits.json"
                 model.atomic_write_json(path, doc)
@@ -147,7 +179,9 @@ class CreditsLowerDelayPolicyTests(unittest.TestCase):
                 self.assertEqual(doc, loaded)
                 before = model.encode_document(self.documents(profile))
                 after = model.encode_document(loaded)
-                self.assertEqual([15], [i for i, pair in enumerate(zip(before, after, strict=True)) if pair[0] != pair[1]])
+                self.assertEqual(
+                    [15], [i for i, pair in enumerate(zip(before, after, strict=True)) if pair[0] != pair[1]]
+                )
 
 
 if __name__ == "__main__":

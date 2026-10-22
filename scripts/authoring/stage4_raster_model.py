@@ -24,12 +24,10 @@ def sniper_honeyviper_horizontal_profile(primary_camera_x: int) -> tuple[int, ..
     if not 0 <= primary_camera_x <= 0x7FFF:
         raise ValueError("Stage 4 primary camera X must be a positive signed word")
     secondary_camera_x = primary_camera_x >> 2
-    return ((-secondary_camera_x & 0xFFFF,) * SECONDARY_LINES
-            + (-primary_camera_x & 0xFFFF,) * PRIMARY_LINES)
+    return (-secondary_camera_x & 0xFFFF,) * SECONDARY_LINES + (-primary_camera_x & 0xFFFF,) * PRIMARY_LINES
 
 
-def sniper_honeyviper_primary_rows(
-        profile: tuple[int, ...], shake_offset: int) -> tuple[int, ...]:
+def sniper_honeyviper_primary_rows(profile: tuple[int, ...], shake_offset: int) -> tuple[int, ...]:
     """Copy the 192 visible A rows from the profile into HScroll rows 32..223.
 
     Scroll_CopyHorizontalProfile offsets its source pointer by the plane-A
@@ -41,12 +39,10 @@ def sniper_honeyviper_primary_rows(
         raise ValueError("Stage 4 profile must contain exactly 200 words")
     if not 0 <= shake_offset <= len(profile) - VISIBLE_PRIMARY_PROFILE_LINES:
         raise ValueError("shake offset reads outside the modelled profile")
-    return profile[shake_offset:shake_offset + VISIBLE_PRIMARY_PROFILE_LINES]
+    return profile[shake_offset : shake_offset + VISIBLE_PRIMARY_PROFILE_LINES]
 
 
-def sniper_honeyviper_secondary_rows(
-        current_x: int, current_y: int, anchor_x: int,
-        anchor_y: int) -> tuple[int, ...]:
+def sniper_honeyviper_secondary_rows(current_x: int, current_y: int, anchor_x: int, anchor_y: int) -> tuple[int, ...]:
     """Model the boss writer's plane-B HScroll words for display rows 32..223.
 
     Entity fields +$10/+$14 supply the current position; +$70/+$74 supply the

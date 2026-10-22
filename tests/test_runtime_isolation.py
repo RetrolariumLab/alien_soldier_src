@@ -92,9 +92,12 @@ class PrivatePathTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 isolation.isolated_config(Path(directory))
             self.assertEqual(b"keep", original.read_bytes())
-        for extra in ({"General": {"IPS Patch path": "outside"}},
-                      {"Sound": {"Rate": "44100\n[General]"}},
-                      {"Sound": {"state": 1}}, {"Options": {"Auto Fix Checksum": 1}}):
+        for extra in (
+            {"General": {"IPS Patch path": "outside"}},
+            {"Sound": {"Rate": "44100\n[General]"}},
+            {"Sound": {"state": 1}},
+            {"Options": {"Auto Fix Checksum": 1}},
+        ):
             with self.subTest(extra=extra), tempfile.TemporaryDirectory() as directory:
                 with self.assertRaises(ValueError):
                     isolation.isolated_config(Path(directory), extra_sections=extra)
@@ -116,12 +119,16 @@ class NativeProofTests(unittest.TestCase):
         self.assertEqual("GetCurrentDirectory -> Gens_Path", contract["startup_directory_source"])
         self.assertEqual(set(isolation.NATIVE_FILES), set(contract["source_sha256"]))
         original_read = Path.read_text
-        for name, old, new in (("save.cpp", '"IPS Patch path"', '"Different IPS key"'),
-                               ("G_main.cpp", "GetCurrentDirectory(1024, Gens_Path)", "GetCurrentDirectory(1024, Different_Path)"),
-                               ("save.cpp", '"Auto Fix Checksum", 0', '"Auto Fix Checksum", 1')):
+        for name, old, new in (
+            ("save.cpp", '"IPS Patch path"', '"Different IPS key"'),
+            ("G_main.cpp", "GetCurrentDirectory(1024, Gens_Path)", "GetCurrentDirectory(1024, Different_Path)"),
+            ("save.cpp", '"Auto Fix Checksum", 0', '"Auto Fix Checksum", 1'),
+        ):
+
             def changed(path, *args, **kwargs):
                 text = original_read(path, *args, **kwargs)
                 return text.replace(old, new) if path.name == name else text
+
             with self.subTest(name=name, old=old), mock.patch.object(Path, "read_text", changed):
                 with self.assertRaises(ValueError):
                     isolation.native_config_contract(checkout)

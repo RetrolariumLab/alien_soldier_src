@@ -44,9 +44,7 @@ class Field:
         if not isinstance(value, int) or isinstance(value, bool):
             raise ValueError("text value must be an integer")
         if not self.minimum <= value <= self.maximum:
-            raise ValueError(
-                "text value must be between %d and %d" % (self.minimum, self.maximum)
-            )
+            raise ValueError("text value must be between %d and %d" % (self.minimum, self.maximum))
         if not 0 <= index < self.length:
             raise ValueError("value index is outside the selected field")
         if self.scalar:
@@ -60,84 +58,153 @@ def fields_for_document(identifier: str, document: dict[str, Any]) -> list[Field
     if identifier == "story_text_rows":
         for row in document["rows"]:
             for key in ("primary", "accent"):
-                protected = frozenset(
-                    index for index, value in enumerate(row[key][:-1])
-                    if value == 0xFF)
-                fields.append(Field(
-                    identifier, "row %03d / %s" % (row["index"], key),
-                    row, key, 0, SOURCE_FONT_GLYPH_COUNT - 1,
-                    visible_length=len(row[key]) - 1,
-                    protected_indices=protected,
-                ))
+                protected = frozenset(index for index, value in enumerate(row[key][:-1]) if value == 0xFF)
+                fields.append(
+                    Field(
+                        identifier,
+                        "row %03d / %s" % (row["index"], key),
+                        row,
+                        key,
+                        0,
+                        SOURCE_FONT_GLYPH_COUNT - 1,
+                        visible_length=len(row[key]) - 1,
+                        protected_indices=protected,
+                    )
+                )
     elif identifier == "frontend_text_strings":
         for record in document["strings"]:
-            fields.append(Field(
-                identifier, record["name"], record, "glyphs", 0,
-                SOURCE_FONT_GLYPH_COUNT - 1,
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    record["name"],
+                    record,
+                    "glyphs",
+                    0,
+                    SOURCE_FONT_GLYPH_COUNT - 1,
+                )
+            )
     elif identifier == "results_detail_text":
         for row in document["rows"]:
-            fields.append(Field(
-                identifier, "results detail / row %02d" % row["index"],
-                row, "glyphs", 0, document["max_glyph_id"],
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    "results detail / row %02d" % row["index"],
+                    row,
+                    "glyphs",
+                    0,
+                    document["max_glyph_id"],
+                )
+            )
         for record in document["summary_labels"]:
-            fields.append(Field(
-                identifier, "results summary / " + record["name"],
-                record, "glyphs", 0, document["max_glyph_id"],
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    "results summary / " + record["name"],
+                    record,
+                    "glyphs",
+                    0,
+                    document["max_glyph_id"],
+                )
+            )
     elif identifier == "stage_message_sequences":
         for stream in document["streams"]:
             for sequence_index, sequence in enumerate(stream["sequences"]):
                 for entry_index, entry in enumerate(sequence):
-                    fields.append(Field(
-                        identifier,
-                        "%s / sequence %d / entry %d / row %d" % (
-                            stream["name"], sequence_index, entry_index, entry["row"]),
-                        entry, "glyphs", 0, SOURCE_FONT_GLYPH_COUNT - 1,
-                    ))
+                    fields.append(
+                        Field(
+                            identifier,
+                            "%s / sequence %d / entry %d / row %d"
+                            % (stream["name"], sequence_index, entry_index, entry["row"]),
+                            entry,
+                            "glyphs",
+                            0,
+                            SOURCE_FONT_GLYPH_COUNT - 1,
+                        )
+                    )
     elif identifier == "boss_and_ship_message_scripts":
         maximum = document["font_glyph_count"] - 1
         for script in document["scripts"]:
             for index, record in enumerate(script["records"]):
-                fields.append(Field(
-                    identifier, "%s / record %d" % (script["name"], index),
-                    record, "glyphs", 0, maximum,
-                ))
+                fields.append(
+                    Field(
+                        identifier,
+                        "%s / record %d" % (script["name"], index),
+                        record,
+                        "glyphs",
+                        0,
+                        maximum,
+                    )
+                )
     elif identifier == "credits_text_sequence":
         maximum = document["max_glyph_id"]
         for index, record in enumerate(document["records"]):
             prefix = "record %02d" % index
-            fields.append(Field(
-                identifier, prefix + " / upper delay", record,
-                "upper_delay", 0, 0x7F,
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    prefix + " / upper delay",
+                    record,
+                    "upper_delay",
+                    0,
+                    0x7F,
+                )
+            )
             if record["upper_glyphs"]:
-                fields.append(Field(
-                    identifier, prefix + " / upper glyphs", record,
-                    "upper_glyphs", 0, maximum,
-                ))
-            fields.append(Field(
-                identifier, prefix + " / lower delay", record,
-                "lower_delay", 0, lower_delay_maximum(record["lower_count"]),
-            ))
+                fields.append(
+                    Field(
+                        identifier,
+                        prefix + " / upper glyphs",
+                        record,
+                        "upper_glyphs",
+                        0,
+                        maximum,
+                    )
+                )
+            fields.append(
+                Field(
+                    identifier,
+                    prefix + " / lower delay",
+                    record,
+                    "lower_delay",
+                    0,
+                    lower_delay_maximum(record["lower_count"]),
+                )
+            )
             if record["lower_glyphs"]:
-                fields.append(Field(
-                    identifier, prefix + " / lower glyphs", record,
-                    "lower_glyphs", 0, maximum,
-                ))
+                fields.append(
+                    Field(
+                        identifier,
+                        prefix + " / lower glyphs",
+                        record,
+                        "lower_glyphs",
+                        0,
+                        maximum,
+                    )
+                )
     elif identifier == "glyph_source_lists":
         maximum = document["font_glyph_count"] - 1
         for record in document["lists"]:
-            fields.append(Field(
-                identifier, record["name"], record, "glyphs", 0, maximum,
-            ))
+            fields.append(
+                Field(
+                    identifier,
+                    record["name"],
+                    record,
+                    "glyphs",
+                    0,
+                    maximum,
+                )
+            )
     elif identifier == "japanese_glyph_sequence":
-        fields.append(Field(
-            identifier, "story glyph stream", document, "codes",
-            document["first_code"],
-            document["first_code"] + document["art_glyph_count"] - 1,
-        ))
+        fields.append(
+            Field(
+                identifier,
+                "story glyph stream",
+                document,
+                "codes",
+                document["first_code"],
+                document["first_code"] + document["art_glyph_count"] - 1,
+            )
+        )
     else:
         raise ValueError("unsupported Text Studio artifact: %s" % identifier)
     if not fields or any(field.length == 0 for field in fields):
@@ -152,8 +219,7 @@ class Workspace:
         self.documents = documents
         self.artifact_ids = list(documents)
         self.fields = {
-            identifier: fields_for_document(identifier, document)
-            for identifier, document in documents.items()
+            identifier: fields_for_document(identifier, document) for identifier, document in documents.items()
         }
         self.artifact_index = 0
         self.field_index = 0
@@ -192,8 +258,9 @@ class Workspace:
         """A whole glyph field stays text-editable even on a protected slot."""
         if self.field.scalar:
             return None
-        return {"japanese_glyph_sequence": "japanese",
-                "credits_text_sequence": "credits"}.get(self.artifact_id, "shared")
+        return {"japanese_glyph_sequence": "japanese", "credits_text_sequence": "credits"}.get(
+            self.artifact_id, "shared"
+        )
 
     def field_text(self, character_map) -> str:
         if self.font_family is None:

@@ -16,7 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.atomic_output import (  # noqa: E402
-    atomic_write_bytes, atomic_write_json, atomic_write_text)
+    atomic_write_bytes,
+    atomic_write_json,
+    atomic_write_text,
+)
 
 
 WRITERS = {
@@ -35,12 +38,11 @@ class AtomicOutputTests(unittest.TestCase):
             for ensure_ascii in (False, True):
                 with self.subTest(ensure_ascii=ensure_ascii):
                     path = Path(directory) / ("mode_%d.json" % ensure_ascii)
-                    atomic_write_json(path, {"glyph": "é"},
-                                      ensure_ascii=ensure_ascii)
+                    atomic_write_json(path, {"glyph": "é"}, ensure_ascii=ensure_ascii)
                     self.assertEqual(
-                        (json.dumps({"glyph": "é"}, indent=2,
-                                    ensure_ascii=ensure_ascii) + "\n").encode("utf-8"),
-                        path.read_bytes())
+                        (json.dumps({"glyph": "é"}, indent=2, ensure_ascii=ensure_ascii) + "\n").encode("utf-8"),
+                        path.read_bytes(),
+                    )
 
     def test_staged_text_and_binary_bytes_are_not_newline_translated(self) -> None:
         from authoring.level_studio_model import (
@@ -75,14 +77,13 @@ class AtomicOutputTests(unittest.TestCase):
                     path = folder / "document.json"
                     sentinel = path.with_suffix(".json.tmp")
                     sentinel.write_bytes(b"another output")
-                    writer = importlib.import_module(
-                        "authoring." + module_name).atomic_write_json
+                    writer = importlib.import_module("authoring." + module_name).atomic_write_json
                     writer(path, {"glyph": "é"})
                     self.assertEqual(b"another output", sentinel.read_bytes())
                     self.assertEqual(
-                        (json.dumps({"glyph": "é"}, indent=2,
-                                    ensure_ascii=ensure_ascii) + "\n").encode("utf-8"),
-                        path.read_bytes())
+                        (json.dumps({"glyph": "é"}, indent=2, ensure_ascii=ensure_ascii) + "\n").encode("utf-8"),
+                        path.read_bytes(),
+                    )
 
     def test_fixed_tmp_symlink_cannot_redirect_a_document_save(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -103,20 +104,17 @@ class AtomicOutputTests(unittest.TestCase):
             folder = Path(directory)
             target = folder / "document.bin"
             target.write_bytes(b"old")
-            with mock.patch(
-                    "authoring.atomic_output.os.replace",
-                    side_effect=OSError("replace failed")):
+            with mock.patch("authoring.atomic_output.os.replace", side_effect=OSError("replace failed")):
                 with self.assertRaisesRegex(OSError, "replace failed"):
                     atomic_write_bytes(target, b"new")
             self.assertEqual(b"old", target.read_bytes())
-            self.assertEqual(["document.bin"],
-                             sorted(path.name for path in folder.iterdir()))
+            self.assertEqual(["document.bin"], sorted(path.name for path in folder.iterdir()))
 
     def test_all_studio_json_writers_delegate_to_the_exclusive_writer(self) -> None:
         paths = [
-            path for path in (ROOT / "scripts/authoring").glob("*.py")
-            if path.name != "atomic_output.py"
-            and "def atomic_write_json(" in path.read_text(encoding="utf-8")
+            path
+            for path in (ROOT / "scripts/authoring").glob("*.py")
+            if path.name != "atomic_output.py" and "def atomic_write_json(" in path.read_text(encoding="utf-8")
         ]
         self.assertEqual(20, len(paths))
         for path in paths:
@@ -124,10 +122,8 @@ class AtomicOutputTests(unittest.TestCase):
                 source = path.read_text(encoding="utf-8")
                 start = source.index("def atomic_write_json(")
                 end = source.find("\n\ndef ", start + 1)
-                body = source[start:end if end >= 0 else None]
-                self.assertIn(
-                    "from authoring.atomic_output import atomic_write_json as _write_json",
-                    body)
+                body = source[start : end if end >= 0 else None]
+                self.assertIn("from authoring.atomic_output import atomic_write_json as _write_json", body)
                 self.assertIn("_write_json(path, document, ensure_ascii=", body)
                 self.assertNotIn("with_suffix(path.suffix", body)
 
@@ -139,8 +135,7 @@ class AtomicOutputTests(unittest.TestCase):
                 self.assertNotIn('with_suffix(target.suffix + ".tmp")', source)
                 self.assertNotIn('with_suffix(output.suffix + ".tmp")', source)
                 self.assertNotIn('with_suffix(destination.suffix + ".tmp")', source)
-                self.assertNotIn('with_suffix(source_path.suffix + ".tmp")',
-                                 source)
+                self.assertNotIn('with_suffix(source_path.suffix + ".tmp")', source)
 
 
 if __name__ == "__main__":

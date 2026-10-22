@@ -48,21 +48,16 @@ def decoded_credits_scene_art(root: Path) -> bytes:
 def glyph_art(root: Path) -> bytes:
     """Read the shared font actually queued for credits glyphs at VRAM $6000."""
     credits = (root / "src/credits/main.s").read_text(encoding="utf-8")
-    dma = (root / "src/rendering/vdp_asset_transfers.s").read_text(
-        encoding="utf-8")
-    owner = (root / "src/data/shared_frontend_and_gameplay_tile_art.s").read_text(
-        encoding="utf-8")
-    if not re.search(
-            r"Credits_InitXiTiger:[\s\S]*?jsr\s+\(Gfx_QueueLargeFontDMACommand81\)\.l",
-            credits):
+    dma = (root / "src/rendering/vdp_asset_transfers.s").read_text(encoding="utf-8")
+    owner = (root / "src/data/shared_frontend_and_gameplay_tile_art.s").read_text(encoding="utf-8")
+    if not re.search(r"Credits_InitXiTiger:[\s\S]*?jsr\s+\(Gfx_QueueLargeFontDMACommand81\)\.l", credits):
         raise ValueError("credits no longer queue the shared font DMA")
-    if not re.search(
-            r"Gfx_QueueLargeFontDMACommand81:[\s\S]*?move\.w\s+#\$6000,-\(a1\)",
-            dma) or "move.l  #SharedFontTileArt,d0" not in dma:
+    if (
+        not re.search(r"Gfx_QueueLargeFontDMACommand81:[\s\S]*?move\.w\s+#\$6000,-\(a1\)", dma)
+        or "move.l  #SharedFontTileArt,d0" not in dma
+    ):
         raise ValueError("credits shared font DMA source or VRAM destination differs")
-    if not re.search(
-            r'^SharedFontTileArt:\s+binclude\s+"data/artunc/font\.bin"',
-            owner, re.MULTILINE):
+    if not re.search(r'^SharedFontTileArt:\s+binclude\s+"data/artunc/font\.bin"', owner, re.MULTILINE):
         raise ValueError("shared font source owner differs")
     art = (root / SHARED_FONT_PATH).read_bytes()
     if not art or len(art) % SHARED_GLYPH_BYTES:
@@ -76,15 +71,14 @@ def glyph_bounds(root: Path) -> tuple[int, int]:
 
 
 def glyph_tiles_from_art(
-    decoded: bytes, glyph_id: int,
+    decoded: bytes,
+    glyph_id: int,
 ) -> tuple[list[list[int]], list[list[int]]] | None:
     """Return the two source-order tiles for a nonblank credits glyph ID."""
     if not decoded or len(decoded) % TILE_BYTES:
         raise ValueError("credits glyph tile art has a partial tile")
     maximum = (len(decoded) // TILE_BYTES - TILES_PER_GLYPH) // TILES_PER_GLYPH
-    if isinstance(glyph_id, bool) or not isinstance(glyph_id, int) or not (
-        0 <= glyph_id <= maximum
-    ):
+    if isinstance(glyph_id, bool) or not isinstance(glyph_id, int) or not (0 <= glyph_id <= maximum):
         raise ValueError("credits glyph ID indexes outside its art")
     if glyph_id == 0:
         return None  # The ROM skips the object for ID zero.
@@ -92,7 +86,7 @@ def glyph_tiles_from_art(
     tiles = []
     for offset in (0, TILE_BYTES):
         pixels = decode_tile(decoded, start + offset)
-        tiles.append([pixels[row * 8:row * 8 + 8] for row in range(8)])
+        tiles.append([pixels[row * 8 : row * 8 + 8] for row in range(8)])
     return tiles[0], tiles[1]
 
 
@@ -130,14 +124,16 @@ def parse_stream(body: bytes, glyph_limit: int) -> tuple[list[dict[str, Any]], i
         cursor = lower_end
         if any(value > glyph_limit for value in upper + lower):
             raise ValueError("credits record selects glyph tile art out of bounds")
-        records.append({
-            "upper_delay": upper_delay,
-            "upper_count": upper_count,
-            "upper_glyphs": upper,
-            "lower_delay": lower_delay,
-            "lower_count": lower_count,
-            "lower_glyphs": lower,
-        })
+        records.append(
+            {
+                "upper_delay": upper_delay,
+                "upper_count": upper_count,
+                "upper_glyphs": upper,
+                "lower_delay": lower_delay,
+                "lower_count": lower_count,
+                "lower_glyphs": lower,
+            }
+        )
     raise ValueError("credits stream has no negative terminator")
 
 
@@ -158,8 +154,7 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "tiles_per_glyph": TILES_PER_GLYPH,
         "max_glyph_id": glyph_limit,
         "record_count": len(records),
-        "glyph_slot_count": sum(
-            record["upper_count"] + record["lower_count"] for record in records),
+        "glyph_slot_count": sum(record["upper_count"] + record["lower_count"] for record in records),
         "encoded_byte_count": len(body),
         "terminator": terminator,
         "padding": padding,
@@ -205,9 +200,20 @@ def lower_delay_maximum(lower_count: int) -> int:
 def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) -> list[str]:
     errors = []
     for field in (
-        "schema_version", "profile", "format", "name", "path", "tile_art_name",
-        "tile_art_tile_count", "tiles_per_glyph", "max_glyph_id", "record_count",
-        "glyph_slot_count", "encoded_byte_count", "terminator", "padding",
+        "schema_version",
+        "profile",
+        "format",
+        "name",
+        "path",
+        "tile_art_name",
+        "tile_art_tile_count",
+        "tiles_per_glyph",
+        "max_glyph_id",
+        "record_count",
+        "glyph_slot_count",
+        "encoded_byte_count",
+        "terminator",
+        "padding",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -222,14 +228,12 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
             if not source_value_matches(record.get(field), source[field]):
                 errors.append("record %d: %s differs" % (index, field))
         upper_delay = record.get("upper_delay")
-        if (
-            not isinstance(upper_delay, int) or isinstance(upper_delay, bool)
-            or not 0 <= upper_delay < 0x80
-        ):
+        if not isinstance(upper_delay, int) or isinstance(upper_delay, bool) or not 0 <= upper_delay < 0x80:
             errors.append("record %d: invalid upper delay" % index)
         lower_delay = record.get("lower_delay")
         if (
-            not isinstance(lower_delay, int) or isinstance(lower_delay, bool)
+            not isinstance(lower_delay, int)
+            or isinstance(lower_delay, bool)
             or not 0 <= lower_delay <= lower_delay_maximum(source["lower_count"])
         ):
             errors.append("record %d: invalid lower delay" % index)
@@ -242,8 +246,7 @@ def document_errors_against(document: dict[str, Any], baseline: dict[str, Any]) 
                 errors.append("record %d: %s capacity differs" % (index, field))
                 continue
             if any(
-                not isinstance(value, int) or isinstance(value, bool)
-                or not 0 <= value <= baseline["max_glyph_id"]
+                not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= baseline["max_glyph_id"]
                 for value in glyphs
             ):
                 errors.append("record %d: %s contains an invalid glyph" % (index, field))
@@ -266,18 +269,19 @@ def migrate_document(document: dict[str, Any], root: Path, profile: str) -> dict
     scene_art = decoded_credits_scene_art(root)
     if len(scene_art) % TILE_BYTES or len(scene_art) // TILE_BYTES != 109:
         raise ValueError("legacy credits scene art capacity differs")
-    legacy.update({
-        "schema_version": 1,
-        "tile_art_name": SCENE_ART_NAME,
-        "tile_art_tile_count": 109,
-        "max_glyph_id": 53,
-    })
+    legacy.update(
+        {
+            "schema_version": 1,
+            "tile_art_name": SCENE_ART_NAME,
+            "tile_art_tile_count": 109,
+            "max_glyph_id": 53,
+        }
+    )
     errors = document_errors_against(document, legacy)
     if errors:
         raise ValueError("cannot migrate credits text workspace: " + "; ".join(errors))
     migrated = copy.deepcopy(document)
-    for field in ("schema_version", "tile_art_name", "tile_art_tile_count",
-                  "max_glyph_id"):
+    for field in ("schema_version", "tile_art_name", "tile_art_tile_count", "max_glyph_id"):
         migrated[field] = current[field]
     validate_document(migrated, root, profile)
     return migrated
@@ -317,6 +321,7 @@ def apply_document(
         return []
     if write:
         from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
         _write_bytes(path, body)
     return [document["path"]]
 
@@ -346,8 +351,10 @@ def main() -> int:
             if not args.document:
                 raise ValueError("migrate requires --document")
             changed = migrate_path(Path(args.document), root, args.profile)
-            print("[OK] %s credits text workspace %s" % (
-                args.profile, "migrated to shared font" if changed else "already current"))
+            print(
+                "[OK] %s credits text workspace %s"
+                % (args.profile, "migrated to shared font" if changed else "already current")
+            )
         else:
             validate_document(load_document(Path(args.document)), root, args.profile)
         return 0

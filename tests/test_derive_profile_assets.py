@@ -33,9 +33,7 @@ class DeriveProfileAssetsTests(unittest.TestCase):
                 },
             ]
         }
-        assets = derive_profile_assets.derive_assets(
-            manifest, base, target, {}, shared_start=0xF
-        )
+        assets = derive_profile_assets.derive_assets(manifest, base, target, {}, shared_start=0xF)
         self.assertEqual("0x6", assets[0]["address"])
         self.assertEqual("0xF", assets[1]["address"])
 
@@ -52,9 +50,7 @@ class DeriveProfileAssetsTests(unittest.TestCase):
             ]
         }
         with self.assertRaisesRegex(ValueError, "ambiguous"):
-            derive_profile_assets.derive_assets(
-                manifest, b"AA", b"AAAA", {}, shared_start=99
-            )
+            derive_profile_assets.derive_assets(manifest, b"AA", b"AAAA", {}, shared_start=99)
         override = {
             "text": {
                 "address": "0x1",
@@ -64,18 +60,14 @@ class DeriveProfileAssetsTests(unittest.TestCase):
                 "reason": "fixture",
             }
         }
-        assets = derive_profile_assets.derive_assets(
-            manifest, b"AA", b"ABBA", override, shared_start=99
-        )
+        assets = derive_profile_assets.derive_assets(manifest, b"AA", b"ABBA", override, shared_start=99)
         self.assertEqual("profiles/eu/other/text.bin", assets[0]["path"])
         self.assertEqual("0x1", assets[0]["address"])
         self.assertEqual(2, assets[0]["size"])
 
     def test_unused_override_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "unused asset overrides"):
-            derive_profile_assets.derive_assets(
-                {"assets": []}, b"", b"", {"missing": {}}, shared_start=0
-            )
+            derive_profile_assets.derive_assets({"assets": []}, b"", b"", {"missing": {}}, shared_start=0)
 
 
 if __name__ == "__main__":

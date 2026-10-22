@@ -28,8 +28,10 @@ class ScreenSmokePreparationTests(unittest.TestCase):
             (root / "src/main.s").write_bytes(b'Blob: binclude "data/blob.bin"\n')
             (root / "data/blob.bin").write_bytes(b"\x01")
             maps = {"payloads": [{"values": [0], "value_bits": 8}]}
-            records = [{"id": name, "width": 32, "height": 32} for name in
-                       ("title_background", "story_background", "options_background")]
+            records = [
+                {"id": name, "width": 32, "height": 32}
+                for name in ("title_background", "story_background", "options_background")
+            ]
             copies, renders, operations, validations, writes = [], [], [], [], []
             actual_stage = studio.stage_tree
 
@@ -93,16 +95,32 @@ class ScreenSmokePreparationTests(unittest.TestCase):
                     (copies[0] / "data/new_empty_directory").mkdir()
                 return SimpleNamespace(cell=SimpleNamespace(payload_index=0, value_index=0))
 
-            stack.enter_context(mock.patch.object(studio, "load_context", return_value=
-                ({}, None, maps, {}, {}, None, {})))
+            stack.enter_context(
+                mock.patch.object(studio, "load_context", return_value=({}, None, maps, {}, {}, None, {}))
+            )
             stack.enter_context(mock.patch.object(studio, "load_config", return_value={"supported": records}))
             stack.enter_context(mock.patch.object(studio, "stage_tree", side_effect=stage))
-            stack.enter_context(mock.patch.object(studio, "apply_compressed", side_effect=
-                lambda document, destination, profile: write(destination, 2, "art")))
-            stack.enter_context(mock.patch.object(studio, "apply_palettes", side_effect=
-                lambda document, destination, profile: write(destination, 3, "palette")))
-            stack.enter_context(mock.patch.object(studio, "apply_stage_maps", side_effect=
-                lambda document, destination, profile, **kwargs: write(destination, 4, "stage")))
+            stack.enter_context(
+                mock.patch.object(
+                    studio,
+                    "apply_compressed",
+                    side_effect=lambda document, destination, profile: write(destination, 2, "art"),
+                )
+            )
+            stack.enter_context(
+                mock.patch.object(
+                    studio,
+                    "apply_palettes",
+                    side_effect=lambda document, destination, profile: write(destination, 3, "palette"),
+                )
+            )
+            stack.enter_context(
+                mock.patch.object(
+                    studio,
+                    "apply_stage_maps",
+                    side_effect=lambda document, destination, profile, **kwargs: write(destination, 4, "stage"),
+                )
+            )
             stack.enter_context(mock.patch.object(studio, "apply_maps", side_effect=apply_map))
             stack.enter_context(mock.patch.object(studio, "validate_maps", side_effect=validate))
             stack.enter_context(mock.patch.object(studio, "render", side_effect=render))
@@ -111,8 +129,9 @@ class ScreenSmokePreparationTests(unittest.TestCase):
             stack.enter_context(mock.patch.object(studio, "replay_screen_maps", side_effect=replay))
             stack.enter_context(mock.patch.object(studio, "export_maps", return_value=maps))
             stack.enter_context(mock.patch.object(studio, "export_stage_maps", return_value={}))
-            yield SimpleNamespace(root=root, copies=copies, renders=renders,
-                operations=operations, validations=validations, writes=writes)
+            yield SimpleNamespace(
+                root=root, copies=copies, renders=renders, operations=operations, validations=validations, writes=writes
+            )
 
     def test_two_preparations_keep_every_fresh_render_and_an_unmodified_later_screen(self):
         with self.fixture() as f:
@@ -120,11 +139,16 @@ class ScreenSmokePreparationTests(unittest.TestCase):
             baseline = f.root / "build/content/screen-smoke/jp/tree"
             edited = f.root / "build/content/screen-smoke/jp/edited/tree"
             self.assertEqual([baseline, edited], f.copies)
-            self.assertEqual([(baseline, "title_background", 5),
-                (baseline, "story_background", 5), (edited, "story_background", 6),
-                (baseline, "options_background", 5)], f.renders)
-            self.assertEqual(["art", "palette", "stage", "map"] * 2,
-                             [role for _, role, _ in f.writes])
+            self.assertEqual(
+                [
+                    (baseline, "title_background", 5),
+                    (baseline, "story_background", 5),
+                    (edited, "story_background", 6),
+                    (baseline, "options_background", 5),
+                ],
+                f.renders,
+            )
+            self.assertEqual(["art", "palette", "stage", "map"] * 2, [role for _, role, _ in f.writes])
             self.assertEqual([0, 1], f.validations)
             self.assertEqual(4, len({id(operation) for operation in f.operations}))
             self.assertTrue(all(operation.closed for operation in f.operations))

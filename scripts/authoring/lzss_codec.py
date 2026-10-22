@@ -49,21 +49,21 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from unpack_data import unpack_data                                  # noqa: E402
+from unpack_data import unpack_data  # noqa: E402
 
 
-BLOCK = 0x400                    # what one call to Data_LZSSDecomp produces
-MAX_DISTANCE = 1024              # ten bits of distance, plus one
-MAX_MATCH = 33                   # five bits of length, plus two
+BLOCK = 0x400  # what one call to Data_LZSSDecomp produces
+MAX_DISTANCE = 1024  # ten bits of distance, plus one
+MAX_MATCH = 33  # five bits of length, plus two
 MIN_MATCH = 2
-MAX_LITERAL = 32                 # five bits of count, plus one
-MAX_REPEAT = 33                  # five bits of count, plus two
+MAX_LITERAL = 32  # five bits of count, plus one
+MAX_REPEAT = 33  # five bits of count, plus two
 LITERAL_CONTROL = 0x00
 RUN_CONTROL = 0x20
 PAIR_CONTROL = 0x40
 ALTERNATE_CONTROL = 0x60
 MATCH_CONTROL = 0x80
-HASH_BITS = 12                   # candidate buckets for the match search
+HASH_BITS = 12  # candidate buckets for the match search
 
 
 def decompress(payload):
@@ -87,8 +87,7 @@ def decompress_as_vram(payload):
     # The header counts the bytes to consume, so the stop index is past them
     end = 2 + _struct.unpack_from(">H", payload, 0)[0]
     if end > len(payload):
-        raise ValueError("the header claims %d bytes and the payload holds %d"
-                         % (end - 2, len(payload) - 2))
+        raise ValueError("the header claims %d bytes and the payload holds %d" % (end - 2, len(payload) - 2))
     at = 2
     out = bytearray()
     while at < end:
@@ -97,12 +96,10 @@ def decompress_as_vram(payload):
             control = payload[at]
             if control >= 0x80:
                 length = ((control >> 2) & 0x1F) + 2
-                distance = ((((control << 8) | payload[at + 1]) & 0x3FF)) + 1
+                distance = (((control << 8) | payload[at + 1]) & 0x3FF) + 1
                 source = len(out) - distance
                 if source < base:
-                    raise ValueError(
-                        "a match at %d reaches %d bytes before its block"
-                        % (len(out), base - source))
+                    raise ValueError("a match at %d reaches %d bytes before its block" % (len(out), base - source))
                 for _ in range(length):
                     out.append(out[source])
                     source += 1
@@ -122,16 +119,15 @@ def decompress_as_vram(payload):
                     at += 2
             elif control & 0x40:
                 count = (control & 0x1F) + 2
-                out.extend(payload[at + 1:at + 3] * count)
+                out.extend(payload[at + 1 : at + 3] * count)
                 at += 3
             else:
                 count = (control & 0x1F) + 1
-                out.extend(payload[at + 1:at + 1 + count])
+                out.extend(payload[at + 1 : at + 1 + count])
                 at += 1 + count
         produced = len(out) - base
         if produced % BLOCK and at < end:
-            raise ValueError("a block produced %d bytes, not a whole $400"
-                             % produced)
+            raise ValueError("a block produced %d bytes, not a whole $400" % produced)
     return bytes(out)
 
 
@@ -146,9 +142,11 @@ def run_length(data, at, limit):
 def pair_run(data, at, left):
     """How many times the pair starting here repeats."""
     count = 1
-    while (count < min(MAX_REPEAT, left // 2)
-           and data[at + count * 2] == data[at]
-           and data[at + count * 2 + 1] == data[at + 1]):
+    while (
+        count < min(MAX_REPEAT, left // 2)
+        and data[at + count * 2] == data[at]
+        and data[at + count * 2 + 1] == data[at + 1]
+    ):
         count += 1
     return count
 
@@ -198,7 +196,7 @@ def parse(data):
     """The cheapest tokens for this data, block by independent block."""
     tokens = []
     for start in range(0, len(data), BLOCK):
-        tokens.extend(parse_block(data[start:start + BLOCK]))
+        tokens.extend(parse_block(data[start : start + BLOCK]))
     return tokens
 
 
@@ -212,8 +210,7 @@ def parse_block(data):
         if frontier and at + 1 < size:
             # Skip only future links; retain the nearest-first candidate order.
             heads[(data[at] << 8) | data[at + 1]] = previous[at]
-        matches[at] = longest_match(data, at, min(MAX_MATCH, size - at),
-                                    heads, previous)
+        matches[at] = longest_match(data, at, min(MAX_MATCH, size - at), heads, previous)
 
     cost = [0] * (size + 1)
     choice = [None] * (size + 1)
@@ -237,7 +234,7 @@ def parse_block(data):
             for count in range(2, pair_run(data, at, left) + 1):
                 here = 3 + cost[at + count * 2]
                 if here < best:
-                    best, pick = here, ("pair", count * 2, data[at:at + 2])
+                    best, pick = here, ("pair", count * 2, data[at : at + 2])
             for count in range(2, alternating_run(data, at, left) + 1):
                 here = 2 + count + cost[at + count * 2]
                 if here < best:
@@ -267,7 +264,7 @@ def emit(data, tokens):
     for kind, length, detail in tokens:
         if kind == "literal":
             out.append(LITERAL_CONTROL | (length - 1))
-            out.extend(data[at:at + length])
+            out.extend(data[at : at + length])
         elif kind == "run":
             out.append(RUN_CONTROL | (length - 2))
             out.append(detail)
@@ -292,7 +289,7 @@ def emit_blocks(data, tokens):
     out = bytearray()
     at = 0
     for start in range(0, len(data), BLOCK):
-        block = data[start:start + BLOCK]
+        block = data[start : start + BLOCK]
         taken = []
         produced = 0
         while produced < len(block):
@@ -343,8 +340,7 @@ def round_trip_errors(root, payloads=None):
             errors.append("%s: the decoder refused the result (%s)" % (name, error))
             continue
         if back != original:
-            errors.append("%s: decoded back to %d bytes, not %d"
-                          % (name, len(back), len(original)))
+            errors.append("%s: decoded back to %d bytes, not %d" % (name, len(back), len(original)))
     return errors
 
 
@@ -352,8 +348,7 @@ SHARED_TILE_SOURCES = "Stage_SharedTileSourceTable"
 ANY_DIRECTIVE = re.compile(r"^\s*(dc\.[bwl])\s+([^;]+?)\s*(?:;.*)?$")
 SYMBOL = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 ASSET_SOURCE = re.compile(r"^\s*dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$")
-LABEL_BINCLUDE = re.compile(
-    r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
+LABEL_BINCLUDE = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s+binclude\s+"([^"]+)"')
 LABEL_BYTES = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):(?P<rest>.*)$")
 BYTE_DIRECTIVE = re.compile(r"^\s*dc\.b\s+([^;]+?)\s*(?:;.*)?$")
 
@@ -469,8 +464,7 @@ def labelled_payloads(root):
             for token in directive.group(1).split(","):
                 token = token.strip()
                 try:
-                    tokens.append(int(token[1:], 16) if token.startswith("$")
-                                  else int(token))
+                    tokens.append(int(token[1:], 16) if token.startswith("$") else int(token))
                 except ValueError:
                     flush()
                     name, tokens = None, []
@@ -482,5 +476,4 @@ def labelled_payloads(root):
 def cartridge_payloads(root):
     """Every compressed payload a stage actually loads."""
     held = labelled_payloads(root)
-    return {name: held[name] for name in sorted(payload_sources(root))
-            if name in held}
+    return {name: held[name] for name in sorted(payload_sources(root)) if name in held}

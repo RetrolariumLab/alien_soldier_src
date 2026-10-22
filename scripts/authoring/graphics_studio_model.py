@@ -16,8 +16,7 @@ SCRIPT_ROOT = Path(__file__).resolve().parents[1]
 if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
-from authoring.tile_graphics import (
-    ART_DIRECTORY, TILE_BYTES, decode_tile, encode_tile, read_sheet)
+from authoring.tile_graphics import ART_DIRECTORY, TILE_BYTES, decode_tile, encode_tile, read_sheet
 from authoring.stage_tilemap_model import parsed_read_phase, with_parsed_operation
 
 
@@ -30,7 +29,7 @@ def tile_text(data: bytes, offset: int) -> str:
     if (type(data) is bytes or type(data) is bytearray) and type(offset) is int:
         if offset + TILE_BYTES > len(data):
             raise ValueError("tile at %d runs past %d bytes" % (offset, len(data)))
-        return data[offset:offset + TILE_BYTES].hex().upper()
+        return data[offset : offset + TILE_BYTES].hex().upper()
     return "".join("%X" % pixel for pixel in decode_tile(data, offset))
 
 
@@ -43,22 +42,23 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         sheet = read_sheet(path)
         blocks = []
         for block in sheet.blocks:
-            tiles = [
-                tile_text(sheet.data, block.offset + index * TILE_BYTES)
-                for index in range(block.tile_count)
-            ]
+            tiles = [tile_text(sheet.data, block.offset + index * TILE_BYTES) for index in range(block.tile_count)]
             tile_count += len(tiles)
-            blocks.append({
-                "declared_length": block.declared,
-                "tile_count": block.tile_count,
-                "tiles": tiles,
-            })
-        payloads.append({
-            "name": path.name,
-            "path": path.relative_to(root).as_posix(),
-            "byte_count": len(sheet.data),
-            "blocks": blocks,
-        })
+            blocks.append(
+                {
+                    "declared_length": block.declared,
+                    "tile_count": block.tile_count,
+                    "tiles": tiles,
+                }
+            )
+        payloads.append(
+            {
+                "name": path.name,
+                "path": path.relative_to(root).as_posix(),
+                "byte_count": len(sheet.data),
+                "blocks": blocks,
+            }
+        )
     return {
         "schema_version": SCHEMA_VERSION,
         "profile": profile,
@@ -103,8 +103,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "tile_width", "tile_height",
-        "bits_per_pixel", "payload_count", "tile_count",
+        "schema_version",
+        "profile",
+        "format",
+        "tile_width",
+        "tile_height",
+        "bits_per_pixel",
+        "payload_count",
+        "tile_count",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -146,20 +152,19 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 errors.append("%s block %d: tiles is not a list" % (name, index))
                 continue
             if len(tiles) != source["tile_count"]:
-                errors.append("%s block %d: tile count differs from fixed capacity"
-                              % (name, index))
+                errors.append("%s block %d: tile count differs from fixed capacity" % (name, index))
             for tile_index, pixels in enumerate(tiles):
                 if not isinstance(pixels, str) or PIXELS.fullmatch(pixels) is None:
-                    errors.append("%s block %d tile %d is not 64 uppercase nibbles"
-                                  % (name, index, tile_index))
+                    errors.append("%s block %d tile %d is not 64 uppercase nibbles" % (name, index, tile_index))
         try:
             encoded = payload_bytes(record)
         except (KeyError, TypeError, ValueError) as error:
             errors.append("%s: cannot encode payload (%s)" % (name, error))
         else:
             if len(encoded) != original["byte_count"]:
-                errors.append("%s: encoded size %d differs from fixed %d"
-                              % (name, len(encoded), original["byte_count"]))
+                errors.append(
+                    "%s: encoded size %d differs from fixed %d" % (name, len(encoded), original["byte_count"])
+                )
     return errors
 
 
@@ -169,9 +174,7 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
         raise ValueError("; ".join(errors))
 
 
-def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True
-) -> list[str]:
+def apply_document(document: dict[str, Any], root: Path, profile: str, write: bool = True) -> list[str]:
     """Apply graphics only to a staged tree, preserving every payload size."""
     validate_document(document, root, profile)
     changed = []
@@ -183,6 +186,7 @@ def apply_document(
         changed.append(record["path"])
         if write:
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     return changed
 
@@ -194,8 +198,10 @@ def round_trip_errors(root: Path, profile: str) -> list[str]:
         validate_document(document, root, profile)
     except ValueError as error:
         return [str(error)]
-    return ["zero-edit graphics document would change %s" % path
-            for path in apply_document(document, root, profile, write=False)]
+    return [
+        "zero-edit graphics document would change %s" % path
+        for path in apply_document(document, root, profile, write=False)
+    ]
 
 
 def main() -> int:
@@ -214,8 +220,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s graphics workspace: %d payloads, %d fixed tiles" % (
-                args.profile, document["payload_count"], document["tile_count"]))
+            print(
+                "[OK] %s graphics workspace: %d payloads, %d fixed tiles"
+                % (args.profile, document["payload_count"], document["tile_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

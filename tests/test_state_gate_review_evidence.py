@@ -31,14 +31,15 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
         }
         cls.reviews = {
             review["basis"]: review
-            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
 
     def assert_review(self, basis: str, members: tuple[tuple[str, str], ...]) -> None:
         self.assertEqual(
             list(members),
-            [(member["address"], member["current_name"])
-             for member in self.reviews[basis]["members"]],
+            [(member["address"], member["current_name"]) for member in self.reviews[basis]["members"]],
         )
         for address, name in members:
             self.assertEqual(name, self.records[address]["current_name"])
@@ -46,10 +47,16 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
 
     def test_zero_animation_selector_returns_without_pointer_write(self) -> None:
         for path, name, pointer_table in (
-            ("src/enemies/spawn_and_movement.s", "Enemy_UpdateBehaviorAnimation",
-             "Enemy_BehaviorSpriteAnimationPointers"),
-            ("src/enemies/stage_10_wasp_and_falling_shot.s", "Enemy_UpdateStage10WaspAnimation",
-             "Enemy_Stage10WaspAnimationMappings"),
+            (
+                "src/enemies/spawn_and_movement.s",
+                "Enemy_UpdateBehaviorAnimation",
+                "Enemy_BehaviorSpriteAnimationPointers",
+            ),
+            (
+                "src/enemies/stage_10_wasp_and_falling_shot.s",
+                "Enemy_UpdateStage10WaspAnimation",
+                "Enemy_Stage10WaspAnimationMappings",
+            ),
         ):
             with self.subTest(name=name):
                 body = routine(path, name)
@@ -59,15 +66,19 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
                 self.assertRegex(body, rf"(?m)^{name}_Return:.*?\n\s+rts")
         self.assert_review(
             "States that requested no animation return here.",
-            (("0x02C54E", "Enemy_UpdateBehaviorAnimation_Return"),
-             ("0x02E0AC", "Enemy_UpdateStage10WaspAnimation_Return")),
+            (
+                ("0x02C54E", "Enemy_UpdateBehaviorAnimation_Return"),
+                ("0x02E0AC", "Enemy_UpdateStage10WaspAnimation_Return"),
+            ),
         )
 
     def test_banner_descriptors_have_distinct_values_and_callers(self) -> None:
         data = (ROOT / "src/ui/message_scripts_and_glyph_lists.s").read_text(encoding="utf-8")
         engine = (ROOT / "src/ui/message_sequence_engine.s").read_text(encoding="utf-8")
         renderer = (ROOT / "src/ui/stage_message_sequences.s").read_text(encoding="utf-8")
-        self.assertRegex(data, r"BattleBanner_StaticSpriteLine:\s+dc\.l\s+\$C6A0010A[^\n]*\n(?:[^\n]*\n)*?\s+dc\.l\s+\$680B0004")
+        self.assertRegex(
+            data, r"BattleBanner_StaticSpriteLine:\s+dc\.l\s+\$C6A0010A[^\n]*\n(?:[^\n]*\n)*?\s+dc\.l\s+\$680B0004"
+        )
         self.assertRegex(data, r"BattleBanner_MovingSpriteLine:\s+dc\.l\s+\$C6AA00FF\s+[^\n]*\n\s+dc\.l\s+\$680B0006")
         self.assertEqual(2, engine.count("movea.l #BattleBanner_StaticSpriteLine,a0"))
         self.assertEqual(1, engine.count("movea.l #BattleBanner_MovingSpriteLine,a0"))
@@ -75,8 +86,7 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
         self.assertIn("move.w  (a0)+,d7", renderer)
         self.assert_review(
             "The READY/FIGHT state handlers pass this compact two-entry line descriptor to the shared message sprite-line renderer.",
-            (("0x00B43E", "BattleBanner_StaticSpriteLine"),
-             ("0x00B446", "BattleBanner_MovingSpriteLine")),
+            (("0x00B43E", "BattleBanner_StaticSpriteLine"), ("0x00B446", "BattleBanner_MovingSpriteLine")),
         )
 
     def test_terobuster_exit_order_reverses_comparison_polarity(self) -> None:
@@ -100,8 +110,10 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
                 self.assertIn("bra.w   Boss_TerobusterSelectPartOrderB", block)
         self.assert_review(
             "The active pose cursor selects which part order is installed before returning to the decision state.",
-            (("0x0387D8", "Boss_TerobusterMissileAttackAExitByPose"),
-             ("0x038892", "Boss_TerobusterMissileAttackBExitByPose")),
+            (
+                ("0x0387D8", "Boss_TerobusterMissileAttackAExitByPose"),
+                ("0x038892", "Boss_TerobusterMissileAttackBExitByPose"),
+            ),
         )
 
     def test_fish_brake_and_edge_gates_remain_distinct(self) -> None:
@@ -115,20 +127,23 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
         self.assertIn("#Enemy_Stage11FishSpriteMapping01,8(a5)", inward)
         self.assert_review(
             "The braking frames return here.",
-            (("0x02ED9A", "Enemy_Stage11FishBrakeOutwardMotionState_Return"),
-             ("0x02EE42", "Enemy_Stage11FishBrakeInwardMotionState_Return")),
+            (
+                ("0x02ED9A", "Enemy_Stage11FishBrakeOutwardMotionState_Return"),
+                ("0x02EE42", "Enemy_Stage11FishBrakeInwardMotionState_Return"),
+            ),
         )
         inner = routine(path, "Enemy_Stage11FishWaitForInnerEdgeState")
         outer = routine(path, "Enemy_Stage11FishWaitForOuterEdgeState")
-        for block, thresholds in ((inner, ("$E0", "$160")),
-                                  (outer, ("$1A0", "$A0"))):
+        for block, thresholds in ((inner, ("$E0", "$160")), (outer, ("$1A0", "$A0"))):
             for threshold in thresholds:
                 self.assertIn(f"cmpi.w  #{threshold},$10(a5)", block)
         self.assertIn("move.w  #$40,$48(a5)", outer)
         self.assert_review(
             "The frames before the edge return here.",
-            (("0x02EE0A", "Enemy_Stage11FishWaitForInnerEdgeState_Return"),
-             ("0x02EEBE", "Enemy_Stage11FishWaitForOuterEdgeState_Return")),
+            (
+                ("0x02EE0A", "Enemy_Stage11FishWaitForInnerEdgeState_Return"),
+                ("0x02EEBE", "Enemy_Stage11FishWaitForOuterEdgeState_Return"),
+            ),
         )
 
     def test_zleo_below_marker_threshold_uses_distinct_branches(self) -> None:
@@ -143,8 +158,7 @@ class StateGateReviewEvidenceTests(unittest.TestCase):
         self.assertIn("blt.s   Boss_ZLeoWaitForMarkerEnd_Return", final)
         self.assert_review(
             "The frames before the marker arrives return here.",
-            (("0x02219A", "Boss_ZLeoWaitMarkerPosition_Return"),
-             ("0x0222DC", "Boss_ZLeoWaitForMarkerEnd_Return")),
+            (("0x02219A", "Boss_ZLeoWaitMarkerPosition_Return"), ("0x0222DC", "Boss_ZLeoWaitForMarkerEnd_Return")),
         )
 
 

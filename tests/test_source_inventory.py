@@ -53,9 +53,7 @@ class SourceInventoryTests(unittest.TestCase):
 
     def test_semantic_hex_letters_do_not_look_like_an_address_suffix(self) -> None:
         self.assertIsNone(source_inventory.GENERIC_CONTAINER.search("palette_fades"))
-        self.assertIsNotNone(
-            source_inventory.GENERIC_CONTAINER.search("stage_systems_0d714")
-        )
+        self.assertIsNotNone(source_inventory.GENERIC_CONTAINER.search("stage_systems_0d714"))
 
 
 if __name__ == "__main__":

@@ -286,8 +286,7 @@ render();
 
 
 def render_html(root: Path) -> str:
-    return HTML.replace(
-        "__GLYPH_DATA__", json.dumps(inventory(root), separators=(",", ":")))
+    return HTML.replace("__GLYPH_DATA__", json.dumps(inventory(root), separators=(",", ":")))
 
 
 def validate_answers(document: dict, assets: dict) -> int:
@@ -302,13 +301,10 @@ def validate_answers(document: dict, assets: dict) -> int:
         raise ValueError("glyph answers must be a list")
     seen = set()
     for answer in answers:
-        if not isinstance(answer, dict) or set(answer) != {
-            "set", "index", "transcription", "evidence", "notes"
-        }:
+        if not isinstance(answer, dict) or set(answer) != {"set", "index", "transcription", "evidence", "notes"}:
             raise ValueError("glyph answer fields differ from the worksheet schema")
         name, index = answer["set"], answer["index"]
-        if (not isinstance(name, str) or name not in assets
-                or isinstance(index, bool) or not isinstance(index, int)):
+        if not isinstance(name, str) or name not in assets or isinstance(index, bool) or not isinstance(index, int):
             raise ValueError("glyph answer has an invalid set or index")
         asset = assets[name]
         if not asset["first"] <= index < asset["first"] + asset["count"]:
@@ -317,11 +313,15 @@ def validate_answers(document: dict, assets: dict) -> int:
         if key in seen:
             raise ValueError("duplicate glyph answer: %s %d" % key)
         seen.add(key)
-        transcription, evidence, notes = (
-            answer["transcription"], answer["evidence"], answer["notes"])
-        if (not isinstance(transcription, str) or len(transcription) > 32
-                or not isinstance(evidence, str) or evidence not in EVIDENCE
-                or not isinstance(notes, str) or len(notes) > 2000):
+        transcription, evidence, notes = (answer["transcription"], answer["evidence"], answer["notes"])
+        if (
+            not isinstance(transcription, str)
+            or len(transcription) > 32
+            or not isinstance(evidence, str)
+            or evidence not in EVIDENCE
+            or not isinstance(notes, str)
+            or len(notes) > 2000
+        ):
             raise ValueError("glyph answer has invalid transcription or evidence")
         if evidence == "unknown_or_unused" and transcription:
             raise ValueError("unknown glyph answer cannot claim a transcription")
@@ -337,8 +337,12 @@ def write_page(path: Path, body: str, force: bool) -> None:
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", newline="\n",
-            dir=path.parent, prefix=path.name + ".", suffix=".tmp",
+            mode="w",
+            encoding="utf-8",
+            newline="\n",
+            dir=path.parent,
+            prefix=path.name + ".",
+            suffix=".tmp",
             delete=False,
         ) as stream:
             temporary = Path(stream.name)
@@ -367,9 +371,7 @@ def main() -> int:
             print("[OK] %d glyph answers match the current source art" % count)
             return 0
         if args.check:
-            print("[OK] glyph review: " + ", ".join(
-                "%s %d" % (name, asset["count"])
-                for name, asset in assets.items()))
+            print("[OK] glyph review: " + ", ".join("%s %d" % (name, asset["count"]) for name, asset in assets.items()))
             return 0
         output = (root / args.output).resolve()
         if not output.is_relative_to(root / "reference"):

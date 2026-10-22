@@ -15,7 +15,10 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from authoring.content_workspace import (  # noqa: E402
-    ContentError, artifact_path, checked_path, load_manifest,
+    ContentError,
+    artifact_path,
+    checked_path,
+    load_manifest,
 )
 from authoring.sound_pcm_codec import decode_dpcm, load_tables  # noqa: E402
 from authoring.sound_pcm_model import load_document, validate_document  # noqa: E402
@@ -39,12 +42,9 @@ def sample_from_document(document: dict, bank_name: str, sample_index: int) -> d
 
 
 def wav_bytes(sample: dict, rate: int, high: bytes, low: bytes) -> bytes:
-    if isinstance(rate, bool) or not isinstance(rate, int) or not (
-        MIN_AUDITION_RATE <= rate <= MAX_AUDITION_RATE
-    ):
+    if isinstance(rate, bool) or not isinstance(rate, int) or not (MIN_AUDITION_RATE <= rate <= MAX_AUDITION_RATE):
         raise ValueError(
-            "audition rate must be an integer between %d and %d Hz"
-            % (MIN_AUDITION_RATE, MAX_AUDITION_RATE)
+            "audition rate must be an integer between %d and %d Hz" % (MIN_AUDITION_RATE, MAX_AUDITION_RATE)
         )
     encoded = bytes.fromhex(sample["data"])
     if len(encoded) != sample["byte_count"]:
@@ -60,7 +60,10 @@ def wav_bytes(sample: dict, rate: int, high: bytes, low: bytes) -> bytes:
 
 
 def load_workspace_sample(
-    project: Path, profile: str, bank_name: str, sample_index: int,
+    project: Path,
+    profile: str,
+    bank_name: str,
+    sample_index: int,
 ) -> dict:
     manifest = load_manifest(checked_path(project, MANIFEST), project)
     artifact = next(item for item in manifest["artifacts"] if item["id"] == ARTIFACT)
@@ -81,14 +84,18 @@ def export_path(root: Path, directory: Path, destination: Path) -> Path:
     if destination.is_relative_to(directory.resolve()):
         raise ValueError("PCM export cannot replace a workspace file")
     root = root.resolve()
-    if destination.is_relative_to(root) and not destination.is_relative_to(root/"build/audio-exports"):
+    if destination.is_relative_to(root) and not destination.is_relative_to(root / "build/audio-exports"):
         raise ValueError("in-project WAV exports must use build/audio-exports")
     return destination
 
 
 def export_wav(
-    project: Path, profile: str, bank_name: str, sample_index: int,
-    rate: int, destination: Path,
+    project: Path,
+    profile: str,
+    bank_name: str,
+    sample_index: int,
+    rate: int,
+    destination: Path,
 ) -> int:
     destination = export_path(project, project / "content/workspace", destination)
     sample = load_workspace_sample(project, profile, bank_name, sample_index)
@@ -96,6 +103,7 @@ def export_wav(
     payload = wav_bytes(sample, rate, high, low)
     destination.parent.mkdir(parents=True, exist_ok=True)
     from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
     _write_bytes(destination, payload)
     return sample["byte_count"] * 2
 
@@ -111,11 +119,17 @@ def main() -> int:
     args = parser.parse_args()
     try:
         count = export_wav(
-            Path(args.root).resolve(), args.profile, args.bank,
-            args.sample, args.rate, Path(args.output),
+            Path(args.root).resolve(),
+            args.profile,
+            args.bank,
+            args.sample,
+            args.rate,
+            Path(args.output),
         )
-        print("[OK] %s sample %d: %d PCM values at user-selected %d Hz -> %s" % (
-            args.bank, args.sample, count, args.rate, args.output))
+        print(
+            "[OK] %s sample %d: %d PCM values at user-selected %d Hz -> %s"
+            % (args.bank, args.sample, count, args.rate, args.output)
+        )
         return 0
     except (OSError, ValueError, ContentError) as error:
         print("[ERROR] %s" % error, file=sys.stderr)

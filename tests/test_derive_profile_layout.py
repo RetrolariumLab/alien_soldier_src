@@ -31,10 +31,10 @@ class DeriveProfileLayoutTests(unittest.TestCase):
         lines = [
             '      1/     100 : include "src/a.s"',
             '      2/     180 : include "src/b.s"',
-            '(1)    1/     120 :                     Reset: rts',
-            '(1)    2/      12 :                     Math_PackedBCDLookup_End:',
-            '(1)    3/      32 :                     Sound_PCMBank9_End:',
-            '(1)    4/      52 :                     Credits_SegaMappingData_End:',
+            "(1)    1/     120 :                     Reset: rts",
+            "(1)    2/      12 :                     Math_PackedBCDLookup_End:",
+            "(1)    3/      32 :                     Sound_PCMBank9_End:",
+            "(1)    4/      52 :                     Credits_SegaMappingData_End:",
         ]
 
         result = derive_profile_layout.derive_layout(base, lines, "fixture")

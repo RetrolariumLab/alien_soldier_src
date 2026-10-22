@@ -20,14 +20,17 @@ from authoring.compressed_graphics_model import source_paths  # noqa: E402
 from authoring.sound_pcm_codec import codec_contract  # noqa: E402
 from authoring.sound_studio_model import PROFILES  # noqa: E402
 from authoring.stage_tilemap_model import (  # noqa: E402
-    labelled_blocks, parse_number, parsed_read_phase, with_parsed_operation)
+    labelled_blocks,
+    parse_number,
+    parsed_read_phase,
+    with_parsed_operation,
+)
 
 
 SCHEMA_VERSION = 1
 FORMAT = "treasure-dpcm-headered-banks"
 WORD_DIRECTIVE = re.compile(r"\bdc\.w\s+([^;]+)", re.IGNORECASE)
-BANK_EXPRESSION = re.compile(
-    r"^\(Sound_PCMBank([1-9])\s*>>\s*\$8\)$")
+BANK_EXPRESSION = re.compile(r"^\(Sound_PCMBank([1-9])\s*>>\s*\$8\)$")
 DESCRIPTOR_TABLES = (
     {
         "id": "music",
@@ -64,25 +67,25 @@ def _parse_bank(label: str, path: str, body: bytes) -> dict[str, Any]:
     samples = []
     cursor = header_bytes
     for index, header_offset in enumerate(range(0, header_bytes, 4)):
-        start_word = _u16le(body[header_offset:header_offset + 2])
+        start_word = _u16le(body[header_offset : header_offset + 2])
         start = start_word & 0x7FFF
-        byte_count = _u16le(body[header_offset + 2:header_offset + 4])
+        byte_count = _u16le(body[header_offset + 2 : header_offset + 4])
         if start != cursor:
-            raise ValueError(
-                "%s sample %d starts at $%04X after $%04X" % (
-                    label, index, start, cursor))
+            raise ValueError("%s sample %d starts at $%04X after $%04X" % (label, index, start, cursor))
         end = start + byte_count
         if end > len(body):
             raise ValueError("%s sample %d leaves its bank" % (label, index))
-        samples.append({
-            "index": index,
-            "header_offset": header_offset,
-            "start_word": start_word,
-            "start_offset": start,
-            "byte_count": byte_count,
-            "data": body[start:end].hex().upper(),
-            "consumers": [],
-        })
+        samples.append(
+            {
+                "index": index,
+                "header_offset": header_offset,
+                "start_word": start_word,
+                "start_offset": start,
+                "byte_count": byte_count,
+                "data": body[start:end].hex().upper(),
+                "consumers": [],
+            }
+        )
         cursor = end
     padding = body[cursor:]
     return {
@@ -119,13 +122,14 @@ def music_sample_ids(bodies: dict[str, tuple[str, ...]]) -> frozenset[int]:
 
 
 def _descriptor_table(
-    bodies: dict[str, tuple[str, ...]], definition: dict[str, Any],
+    bodies: dict[str, tuple[str, ...]],
+    definition: dict[str, Any],
     banks: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     tokens = _word_tokens(bodies[definition["label"]], definition["label"])
     records = []
     for index in range(0, len(tokens), 4):
-        fields = tokens[index:index + 4]
+        fields = tokens[index : index + 4]
         bank_match = BANK_EXPRESSION.fullmatch(fields[0])
         if bank_match is None:
             raise ValueError("%s descriptor has an invalid bank expression" % definition["label"])
@@ -138,14 +142,16 @@ def _descriptor_table(
         if bank_name not in banks or sample_index >= banks[bank_name]["sample_count"]:
             raise ValueError("%s descriptor leaves %s headers" % (definition["label"], bank_name))
         record_index = index // 4
-        records.append({
-            "id": definition["first_id"] + record_index,
-            "dispatchable": record_index < definition["dispatchable_count"],
-            "bank": bank_name,
-            "header_offset": header_offset,
-            "sample_index": sample_index,
-            "descriptor_words": words,
-        })
+        records.append(
+            {
+                "id": definition["first_id"] + record_index,
+                "dispatchable": record_index < definition["dispatchable_count"],
+                "bank": bank_name,
+                "header_offset": header_offset,
+                "sample_index": sample_index,
+                "descriptor_words": words,
+            }
+        )
     if definition["dispatchable_count"] > len(records):
         raise ValueError("%s has fewer records than its reader accepts" % definition["label"])
     return {
@@ -184,7 +190,8 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
             banks[record["bank"]]["samples"][record["sample_index"]]["consumers"].append(consumer)
     referenced = sum(
         bool([consumer for consumer in sample["consumers"] if consumer["dispatchable"]])
-        for bank in bank_list for sample in bank["samples"]
+        for bank in bank_list
+        for sample in bank["samples"]
     )
     return {
         "schema_version": SCHEMA_VERSION,
@@ -224,7 +231,12 @@ def atomic_write_json(path: Path, document: dict[str, Any]) -> None:
 
 def _sample_bytes(sample: dict[str, Any], original: dict[str, Any], bank: str) -> bytes:
     for field in (
-        "index", "header_offset", "start_word", "start_offset", "byte_count", "consumers",
+        "index",
+        "header_offset",
+        "start_word",
+        "start_offset",
+        "byte_count",
+        "consumers",
     ):
         if sample.get(field) != original[field]:
             raise ValueError("%s sample %d changes %s" % (bank, original["index"], field))
@@ -241,12 +253,20 @@ def _sample_bytes(sample: dict[str, Any], original: dict[str, Any], bank: str) -
 
 
 def _bank_bytes(
-    record: dict[str, Any], original: dict[str, Any], current: bytes,
+    record: dict[str, Any],
+    original: dict[str, Any],
+    current: bytes,
     authority: bytes,
 ) -> bytes:
     for field in (
-        "name", "path", "capacity", "header_byte_count", "sample_count",
-        "sample_byte_count", "padding_byte_count", "padding_sha256",
+        "name",
+        "path",
+        "capacity",
+        "header_byte_count",
+        "sample_count",
+        "sample_byte_count",
+        "padding_byte_count",
+        "padding_sha256",
     ):
         if record.get(field) != original[field]:
             raise ValueError("%s: %s differs from the source-owned value" % (original["name"], field))
@@ -266,7 +286,7 @@ def _bank_bytes(
     for sample, baseline in zip(samples, expected):
         data = _sample_bytes(sample, baseline, original["name"])
         start = baseline["start_offset"]
-        result[start:start + len(data)] = data
+        result[start : start + len(data)] = data
     return bytes(result)
 
 
@@ -274,10 +294,21 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "codec", "bank_count", "sample_count",
-        "sample_byte_count", "decoded_value_count", "header_byte_count", "padding_byte_count",
-        "descriptor_record_count", "dispatchable_descriptor_count",
-        "referenced_sample_count", "unreferenced_sample_count", "descriptor_tables",
+        "schema_version",
+        "profile",
+        "format",
+        "codec",
+        "bank_count",
+        "sample_count",
+        "sample_byte_count",
+        "decoded_value_count",
+        "header_byte_count",
+        "padding_byte_count",
+        "descriptor_record_count",
+        "dispatchable_descriptor_count",
+        "referenced_sample_count",
+        "unreferenced_sample_count",
+        "descriptor_tables",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -307,7 +338,10 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     authority_root = validation_root or root
@@ -326,6 +360,7 @@ def apply_document(
         if write:
             path = root / bank["path"]
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, rebuilt)
     return sorted(changed)
 
@@ -338,8 +373,7 @@ def round_trip_errors(root: Path, profile: str) -> list[str]:
     except ValueError as error:
         return [str(error)]
     return [
-        "zero-edit PCM samples would change %s" % path
-        for path in apply_document(document, root, profile, write=False)
+        "zero-edit PCM samples would change %s" % path for path in apply_document(document, root, profile, write=False)
     ]
 
 
@@ -359,9 +393,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s PCM samples: %d banks, %d samples, %d bytes" % (
-                args.profile, document["bank_count"], document["sample_count"],
-                document["sample_byte_count"]))
+            print(
+                "[OK] %s PCM samples: %d banks, %d samples, %d bytes"
+                % (args.profile, document["bank_count"], document["sample_count"], document["sample_byte_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

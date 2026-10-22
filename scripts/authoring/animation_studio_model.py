@@ -36,26 +36,41 @@ RELATIVE = re.compile(r"^(?P<symbol>[A-Za-z_][A-Za-z0-9_]*)-\*$")
 SIGNED_POINTER_MIN = -0x8000
 SIGNED_POINTER_MAX = 0x7FFF
 TIMED_READER_OPERATIONS = (
-    "move.w $C(a5),d0", "tst.b d0",
+    "move.w $C(a5),d0",
+    "tst.b d0",
     "bmi.s Anim_ResolveTimedMappingFrame_ResolveMappingPointer",
-    "beq.s Anim_ResolveTimedMappingFrame_LoadInitialTimer", "tst.l d3",
-    "bmi.s Anim_ResolveTimedMappingFrame_TickTimer", "subq.w #1,d0",
+    "beq.s Anim_ResolveTimedMappingFrame_LoadInitialTimer",
+    "tst.l d3",
+    "bmi.s Anim_ResolveTimedMappingFrame_TickTimer",
+    "subq.w #1,d0",
     "Anim_ResolveTimedMappingFrame_TickTimer:",
-    "bne.s Anim_ResolveTimedMappingFrame_StoreTimer", "addq.w #4,a4",
-    "move.w 2(a4),d0", "bne.s Anim_ResolveTimedMappingFrame_StoreSequencePointer",
-    "adda.w (a4),a4", "Anim_ResolveTimedMappingFrame_LoadInitialTimer:",
-    "move.w 2(a4),d0", "Anim_ResolveTimedMappingFrame_StoreSequencePointer:",
-    "move.l a4,8(a5)", "Anim_ResolveTimedMappingFrame_StoreTimer:",
-    "move.w d0,$C(a5)", "Anim_ResolveTimedMappingFrame_ResolveMappingPointer:",
-    "adda.w (a4),a4", "rts",
+    "bne.s Anim_ResolveTimedMappingFrame_StoreTimer",
+    "addq.w #4,a4",
+    "move.w 2(a4),d0",
+    "bne.s Anim_ResolveTimedMappingFrame_StoreSequencePointer",
+    "adda.w (a4),a4",
+    "Anim_ResolveTimedMappingFrame_LoadInitialTimer:",
+    "move.w 2(a4),d0",
+    "Anim_ResolveTimedMappingFrame_StoreSequencePointer:",
+    "move.l a4,8(a5)",
+    "Anim_ResolveTimedMappingFrame_StoreTimer:",
+    "move.w d0,$C(a5)",
+    "Anim_ResolveTimedMappingFrame_ResolveMappingPointer:",
+    "adda.w (a4),a4",
+    "rts",
 )
 
 
 def relative_pointer(origin: int, target: int) -> int:
     """ADDA.W sign extends the displacement; wrapping a dc.w is not valid."""
-    if (type(origin) is not int or type(target) is not int
-            or not 0 <= origin < 0x200000 or not 0 <= target < 0x200000
-            or origin % 2 or target % 2):
+    if (
+        type(origin) is not int
+        or type(target) is not int
+        or not 0 <= origin < 0x200000
+        or not 0 <= target < 0x200000
+        or origin % 2
+        or target % 2
+    ):
         raise ValueError("animation pointer requires aligned proved ROM addresses")
     displacement = target - origin
     if not SIGNED_POINTER_MIN <= displacement <= SIGNED_POINTER_MAX:
@@ -111,14 +126,20 @@ def pointer_evidence(root: Path, profile: str, baseline: dict) -> tuple[dict, by
         raise ValueError("animation frozen address records must be a list")
     if any(not isinstance(row, dict) for row in rows):
         raise ValueError("animation frozen address row must be an object")
-    if (type(ledger.get("schema_version")) is not int or ledger["schema_version"] != 1
-            or ledger.get("profile") != "eu" or ledger.get("origin_profile") != "jp"
-            or ledger.get("origin_identity_fields") != list(verify_symbols.IDENTITY_FIELDS)
-            or ledger.get("origin_identity_sha256") != verify_symbols.origin_identity(audit)
-            or ledger.get("original_roms") != verify_symbols.original_rom_identities(profiles)
-            or not isinstance(rows, list) or type(ledger.get("record_count")) is not int
-            or ledger["record_count"] != len(audit) or len(rows) != len(audit)
-            or ledger.get("records_sha256") != verify_symbols.canonical_sha256(rows)):
+    if (
+        type(ledger.get("schema_version")) is not int
+        or ledger["schema_version"] != 1
+        or ledger.get("profile") != "eu"
+        or ledger.get("origin_profile") != "jp"
+        or ledger.get("origin_identity_fields") != list(verify_symbols.IDENTITY_FIELDS)
+        or ledger.get("origin_identity_sha256") != verify_symbols.origin_identity(audit)
+        or ledger.get("original_roms") != verify_symbols.original_rom_identities(profiles)
+        or not isinstance(rows, list)
+        or type(ledger.get("record_count")) is not int
+        or ledger["record_count"] != len(audit)
+        or len(rows) != len(audit)
+        or ledger.get("records_sha256") != verify_symbols.canonical_sha256(rows)
+    ):
         raise ValueError("animation frozen regional address evidence differs")
     origins = {row["current_name"]: verify_symbols.number(row["address"]) & 0xFFFFFF for row in audit}
     generation = ledger.get("generation")
@@ -132,12 +153,15 @@ def pointer_evidence(root: Path, profile: str, baseline: dict) -> tuple[dict, by
         if not isinstance(proof, dict):
             raise ValueError("animation address generation profile proof must be an object: " + region)
         sha = profiles["profiles_by_id"][region]["reference_rom"]["sha256"]
-        if (proof.get("resolved_flags") != verify_symbols.PROFILE_FLAGS[region]
-                or proof.get("build_rom_sha256") != sha
-                or proof.get("original_rom_sha256") != sha
-                or type(proof.get("printed_byte_rows")) is not int or proof["printed_byte_rows"] < 1
-                or not isinstance(proof.get("listing_sha256"), str)
-                or not re.fullmatch(r"[0-9a-f]{64}", proof["listing_sha256"])):
+        if (
+            proof.get("resolved_flags") != verify_symbols.PROFILE_FLAGS[region]
+            or proof.get("build_rom_sha256") != sha
+            or proof.get("original_rom_sha256") != sha
+            or type(proof.get("printed_byte_rows")) is not int
+            or proof["printed_byte_rows"] < 1
+            or not isinstance(proof.get("listing_sha256"), str)
+            or not re.fullmatch(r"[0-9a-f]{64}", proof["listing_sha256"])
+        ):
             raise ValueError("animation frozen address generation proof differs for " + region)
     addresses = {}
     seen = set()
@@ -150,15 +174,22 @@ def pointer_evidence(root: Path, profile: str, baseline: dict) -> tuple[dict, by
         if set(row) not in (normal_fields, normal_fields | {"exclusion"}):
             raise ValueError("animation frozen address row fields differ")
         if row.get("status") == "not_assembled":
-            if (name != verify_symbols.JP_ONLY_NAME or row.get("eu_address") is not None
-                    or row.get("jp_address") != "0x%06X" % origins[name]):
+            if (
+                name != verify_symbols.JP_ONLY_NAME
+                or row.get("eu_address") is not None
+                or row.get("jp_address") != "0x%06X" % origins[name]
+            ):
                 raise ValueError("animation regional unavailable-name evidence differs")
             continue
-        if (row.get("status") != "assembled" or "exclusion" in row
-                or any(not isinstance(row.get(key), str)
-                       or not re.fullmatch(r"0x[0-9A-F]{6}", row[key])
-                       for key in ("jp_address", "eu_address"))
-                or int(row["jp_address"], 16) != origins[name]):
+        if (
+            row.get("status") != "assembled"
+            or "exclusion" in row
+            or any(
+                not isinstance(row.get(key), str) or not re.fullmatch(r"0x[0-9A-F]{6}", row[key])
+                for key in ("jp_address", "eu_address")
+            )
+            or int(row["jp_address"], 16) != origins[name]
+        ):
             raise ValueError("animation frozen regional address pair differs: " + name)
         addresses[name] = int(row[profile + "_address"], 16)
     record = profiles["profiles_by_id"][profile]
@@ -182,9 +213,8 @@ def pointer_evidence(root: Path, profile: str, baseline: dict) -> tuple[dict, by
     heads = list(re.finditer(r"^" + re.escape(first), reader, re.MULTILINE))
     if len(heads) != 1 or reader.count(last) != 1:
         raise ValueError("animation signed-word reader evidence is unknown")
-    body = reader[heads[0].end():].split(last, 1)[0]
-    operations = tuple(code for line in body.splitlines()
-                       if (code := " ".join(line.split(";", 1)[0].split())))
+    body = reader[heads[0].end() :].split(last, 1)[0]
+    operations = tuple(code for line in body.splitlines() if (code := " ".join(line.split(";", 1)[0].split())))
     if operations != TIMED_READER_OPERATIONS:
         raise ValueError("animation signed-word reader contract changed")
     blocks, _skipped = read_blocks(root)
@@ -213,10 +243,10 @@ def _mapping_shape(name: str, evidence: tuple[dict, bytes, dict]) -> str:
             encoded.extend((piece.y & 0xFF, piece.x & 0xFF))
         shape = "dynamic-eight-byte-art-pointer"
     else:
-        encoded = block.data[:len(mapping.pieces) * 6]
+        encoded = block.data[: len(mapping.pieces) * 6]
         shape = "static-six-byte-piece"
     start = addresses[name]
-    if not encoded or image[start:start + len(encoded)] != encoded:
+    if not encoded or image[start : start + len(encoded)] != encoded:
         raise ValueError("animation mapping source bytes differ from the regional original: " + name)
     return shape
 
@@ -231,22 +261,22 @@ def _script_encoding(script: dict, evidence: tuple[dict, bytes, dict]) -> None:
         encoded.extend((displacement & 0xFFFF).to_bytes(2, "big"))
         encoded.extend(source_frame["duration"].to_bytes(2, "big"))
     start = addresses[script["name"]]
-    if image[start:start + len(encoded)] != encoded:
+    if image[start : start + len(encoded)] != encoded:
         raise ValueError("animation source caller encoding differs from regional original")
 
 
 def _script_shapes(script: dict, evidence: tuple[dict, bytes, dict]) -> frozenset[str]:
     """A jump may not change the source-owned piece-reader family mid-stream."""
     _script_encoding(script, evidence)
-    shapes = frozenset(_mapping_shape(frame["target"], evidence)
-                       for frame in script["frames"] if not frame["jump"])
+    shapes = frozenset(_mapping_shape(frame["target"], evidence) for frame in script["frames"] if not frame["jump"])
     if not shapes:
         raise ValueError("animation jump destination has no proved mapping consumer")
     return shapes
 
 
-def pointer_domain_error(original: dict, frame: dict, originals: dict,
-                         evidence: tuple[dict, bytes, dict]) -> str | None:
+def pointer_domain_error(
+    original: dict, frame: dict, originals: dict, evidence: tuple[dict, bytes, dict]
+) -> str | None:
     """Check one changed mapping/jump against its actual signed reader domain."""
     addresses, _image, _mappings = evidence
     try:
@@ -281,22 +311,26 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         source = index[name][0].relative_to(root).as_posix()
         entries = []
         for number, frame in enumerate(frames):
-            entries.append({
-                "index": number,
-                "target": frame.mapping,
-                "duration": frame.duration,
-                "jump": frame.is_jump,
-            })
+            entries.append(
+                {
+                    "index": number,
+                    "target": frame.mapping,
+                    "duration": frame.duration,
+                    "jump": frame.is_jump,
+                }
+            )
             if frame.is_jump:
                 jumps += 1
             else:
                 frame_targets.add(frame.mapping)
-        records.append({
-            "name": name,
-            "source_path": source,
-            "frame_count": len(entries),
-            "frames": entries,
-        })
+        records.append(
+            {
+                "name": name,
+                "source_path": source,
+                "frame_count": len(entries),
+                "frames": entries,
+            }
+        )
     return {
         "schema_version": SCHEMA_VERSION,
         "profile": profile,
@@ -335,8 +369,13 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "script_count", "frame_count",
-        "jump_count", "frame_targets",
+        "schema_version",
+        "profile",
+        "format",
+        "script_count",
+        "frame_count",
+        "jump_count",
+        "frame_targets",
     ):
         if not _source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
@@ -344,8 +383,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     if not isinstance(scripts, list):
         return errors + ["scripts is not a list"]
     originals = {record["name"]: record for record in baseline["scripts"]}
-    names = [record["name"] for record in scripts
-             if isinstance(record, dict) and type(record.get("name")) is str]
+    names = [record["name"] for record in scripts if isinstance(record, dict) and type(record.get("name")) is str]
     if len(names) != len(scripts) or len(set(names)) != len(names):
         errors.append("script names are missing or not unique")
     if set(names) != set(originals):
@@ -363,8 +401,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             continue
         for field in ("source_path", "frame_count"):
             if not _source_value_matches(record.get(field), original[field]):
-                errors.append("%s: %s differs from the source-owned value"
-                              % (original["name"], field))
+                errors.append("%s: %s differs from the source-owned value" % (original["name"], field))
         frames = record.get("frames")
         if not isinstance(frames, list):
             errors.append("%s: frames is not a list" % original["name"])
@@ -378,25 +415,24 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 continue
             number = original_frame["index"]
             if type(frame.get("index")) is not int or frame["index"] != number:
-                errors.append("%s frame %d: index differs from the source"
-                              % (original["name"], number))
+                errors.append("%s frame %d: index differs from the source" % (original["name"], number))
             if type(frame.get("jump")) is not bool or frame["jump"] != original_frame["jump"]:
-                errors.append("%s frame %d: jump role differs from the source"
-                              % (original["name"], number))
+                errors.append("%s frame %d: jump role differs from the source" % (original["name"], number))
             target = frame.get("target")
             duration = frame.get("duration")
             if not isinstance(target, str) or not SYMBOL.fullmatch(target):
-                errors.append("%s frame %d: target is not a symbol"
-                              % (original["name"], number))
+                errors.append("%s frame %d: target is not a symbol" % (original["name"], number))
             elif frame.get("jump") and target not in known_scripts:
-                errors.append("%s frame %d: jump target is not an animation script"
-                              % (original["name"], number))
+                errors.append("%s frame %d: jump target is not an animation script" % (original["name"], number))
             elif not frame.get("jump") and target not in known_targets:
-                errors.append("%s frame %d: target is not a proved frame mapping"
-                              % (original["name"], number))
-            elif (target != original_frame["target"] and type(frame.get("index")) is int
-                  and frame["index"] == number and type(frame.get("jump")) is bool
-                  and frame["jump"] == original_frame["jump"]):
+                errors.append("%s frame %d: target is not a proved frame mapping" % (original["name"], number))
+            elif (
+                target != original_frame["target"]
+                and type(frame.get("index")) is int
+                and frame["index"] == number
+                and type(frame.get("jump")) is bool
+                and frame["jump"] == original_frame["jump"]
+            ):
                 if not evidence_checked:
                     evidence_checked = True
                     try:
@@ -406,13 +442,10 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 problem = evidence_error or pointer_domain_error(original, frame, originals, evidence)
                 if problem:
                     errors.append("%s frame %d: %s" % (original["name"], number, problem))
-            if (type(duration) is not int
-                    or not 0 <= duration <= 0xFFFF):
-                errors.append("%s frame %d: duration is not an unsigned word"
-                              % (original["name"], number))
+            if type(duration) is not int or not 0 <= duration <= 0xFFFF:
+                errors.append("%s frame %d: duration is not an unsigned word" % (original["name"], number))
             elif bool(duration == 0) != original_frame["jump"]:
-                errors.append("%s frame %d: zero-duration jump role is source-owned"
-                              % (original["name"], number))
+                errors.append("%s frame %d: zero-duration jump role is source-owned" % (original["name"], number))
     return errors
 
 
@@ -430,8 +463,8 @@ def _rewrite_token(token: str, target: str | int) -> str:
         relative = RELATIVE.fullmatch(original)
         replacement = original if relative and relative.group("symbol") == target else target + "-*"
     else:
-        replacement = original if parse_number(original) & 0xFFFF == target else (
-            str(target) if target < 10 else "$%X" % target
+        replacement = (
+            original if parse_number(original) & 0xFFFF == target else (str(target) if target < 10 else "$%X" % target)
         )
     return match.group(1) + replacement + match.group(3)
 
@@ -440,11 +473,7 @@ def rebuild_source(root: Path, source_path: str, scripts: list[dict[str, Any]]) 
     path = root / source_path
     lines = path.read_text(encoding="utf-8").split("\n")
     wanted = {
-        record["name"]: [
-            value
-            for frame in record["frames"]
-            for value in (frame["target"], frame["duration"])
-        ]
+        record["name"]: [value for frame in record["frames"] for value in (frame["target"], frame["duration"])]
         for record in scripts
     }
     locations: dict[str, list[tuple[int, re.Match[str]]]] = {}
@@ -465,13 +494,10 @@ def rebuild_source(root: Path, source_path: str, scripts: list[dict[str, Any]]) 
         cursor = 0
         for line_index, match in spans:
             originals = match.group("body").split(",")
-            values = desired[cursor:cursor + len(originals)]
+            values = desired[cursor : cursor + len(originals)]
             if len(values) != len(originals):
                 raise ValueError("%s source has more tokens than its document" % name)
-            body = ",".join(
-                _rewrite_token(token, value)
-                for token, value in zip(originals, values)
-            )
+            body = ",".join(_rewrite_token(token, value) for token, value in zip(originals, values))
             output[line_index] = match.group("prefix") + body + match.group("suffix")
             cursor += len(originals)
         if cursor != len(desired):
@@ -480,7 +506,10 @@ def rebuild_source(root: Path, source_path: str, scripts: list[dict[str, Any]]) 
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     validate_document(document, validation_root or root, profile)
@@ -498,6 +527,7 @@ def apply_document(
     if write:
         for path, content in writes:
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, content)
     return changes
 
@@ -529,8 +559,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s animation workspace: %d scripts, %d fixed frames" % (
-                args.profile, document["script_count"], document["frame_count"]))
+            print(
+                "[OK] %s animation workspace: %d scripts, %d fixed frames"
+                % (args.profile, document["script_count"], document["frame_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

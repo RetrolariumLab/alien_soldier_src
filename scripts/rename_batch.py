@@ -22,9 +22,7 @@ def load_report(path: Path) -> tuple[list[str], list[dict[str, str]]] | None:
         return fields, list(reader)
 
 
-def mark_processed(
-    path: Path, report: tuple[list[str], list[dict[str, str]]], old_names: set[str]
-) -> int:
+def mark_processed(path: Path, report: tuple[list[str], list[dict[str, str]]], old_names: set[str]) -> int:
     fields, rows = report
     if "processed" not in fields:
         fields.append("processed")

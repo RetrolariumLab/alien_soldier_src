@@ -15,11 +15,7 @@ from patch_name_audit_bases import patch_bytes  # noqa: E402
 
 class NameAuditBasisCorrectionTests(unittest.TestCase):
     def test_byte_preserving_patch_is_strict_and_idempotent(self) -> None:
-        original = (
-            b'{"records":[\r\n'
-            b'  {"address":"0x000100","current_name":"Example","basis":["old"]}\r\n'
-            b']}\r\n'
-        )
+        original = b'{"records":[\r\n  {"address":"0x000100","current_name":"Example","basis":["old"]}\r\n]}\r\n'
         change = {
             "address": "0x000100",
             "current_name": "Example",
@@ -36,15 +32,12 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
             patch_bytes(original, [{**change, "current_name": "Other"}])
 
     def test_multi_basis_patch_requires_the_full_prior_list(self) -> None:
-        original = (
-            b'{"records":[\n'
-            b'  {"address":"0x000100","current_name":"Example",'
-            b'"basis":["kept","old"]}\n'
-            b']}\n'
-        )
+        original = b'{"records":[\n  {"address":"0x000100","current_name":"Example","basis":["kept","old"]}\n]}\n'
         change = {
-            "address": "0x000100", "current_name": "Example",
-            "old_basis": "old", "new_basis": "new",
+            "address": "0x000100",
+            "current_name": "Example",
+            "old_basis": "old",
+            "new_basis": "new",
             "prior_bases": ["kept", "old"],
         }
         updated, count = patch_bytes(original, [change])
@@ -57,9 +50,9 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
             patch_bytes(original, [{**change, "prior_bases": ["old", "old"]}])
 
     def test_correction_ledger_matches_audit_and_exact_source_gates(self) -> None:
-        changes = json.loads(
-            (ROOT / "config/name_audit_basis_corrections.json").read_text(encoding="utf-8")
-        )["corrections"]
+        changes = json.loads((ROOT / "config/name_audit_basis_corrections.json").read_text(encoding="utf-8"))[
+            "corrections"
+        ]
         audit = {
             record["address"]: record
             for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
@@ -72,8 +65,7 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
                 self.assertEqual(change["current_name"], record["current_name"])
                 prior = change.get("prior_bases", [change["old_basis"]])
                 self.assertEqual(
-                    [change["new_basis"] if basis == change["old_basis"] else basis
-                     for basis in prior],
+                    [change["new_basis"] if basis == change["old_basis"] else basis for basis in prior],
                     record["basis"],
                 )
                 self.assertNotEqual(change["old_basis"], change["new_basis"])
@@ -100,9 +92,12 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
 
         valkirie = (ROOT / "src/bosses/valkirie_rendering.s").read_text(encoding="utf-8")
         for instruction in (
-            "tst.w   $23E(a5)", "move.l  #$2C000,$1F8(a5)",
-            "move.l  #$FFFD4000,$1F8(a5)", "bclr    #6,$21(a5)",
-            "move.w  #4,$5C(a5)", "move.l  #$12000,$1F8(a5)",
+            "tst.w   $23E(a5)",
+            "move.l  #$2C000,$1F8(a5)",
+            "move.l  #$FFFD4000,$1F8(a5)",
+            "bclr    #6,$21(a5)",
+            "move.w  #4,$5C(a5)",
+            "move.l  #$12000,$1F8(a5)",
             "move.l  #$FFFEE000,$1F8(a5)",
         ):
             self.assertIn(instruction, valkirie)
@@ -129,9 +124,7 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
             self.assertIn(right + "_Dispatch:", terrain)
         self.assertIn("bset    #2,6(a5)", terrain)
 
-        bullet = (ROOT / "src/projectiles/shared_boss_projectiles.s").read_text(
-            encoding="utf-8"
-        )
+        bullet = (ROOT / "src/projectiles/shared_boss_projectiles.s").read_text(encoding="utf-8")
         entry = bullet.split("Projectile_InitValkirieBulletFromSource:", 1)[1].split(
             "; End of function Projectile_InitValkirieBulletFromSource", 1
         )[0]
@@ -144,30 +137,27 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
         self.assertIn("move.l  8(a1),8(a0)", packed)
         self.assertNotIn("#$480", packed)
 
-        responses = (ROOT / "src/player/terrain_responses.s").read_text(
-            encoding="utf-8"
-        )
+        responses = (ROOT / "src/player/terrain_responses.s").read_text(encoding="utf-8")
         for helper, seed, branch, caller in (
-            ("Physics_PrepareVerticalOffset6", 6,
-             "Physics_AlignFloorQuarterSubtractOffset", "Physics_ApplyOffset6Sub10"),
-            ("Physics_PrepareQuarterAddOffset3", 3,
-             "Physics_AlignFloorQuarterAddOffset", "Physics_ApplyOffset3Sub6"),
+            (
+                "Physics_PrepareVerticalOffset6",
+                6,
+                "Physics_AlignFloorQuarterSubtractOffset",
+                "Physics_ApplyOffset6Sub10",
+            ),
+            ("Physics_PrepareQuarterAddOffset3", 3, "Physics_AlignFloorQuarterAddOffset", "Physics_ApplyOffset3Sub6"),
         ):
             with self.subTest(helper=helper):
-                body = responses.split(helper + ":", 1)[1].split(
-                    "; End of function " + helper, 1
-                )[0]
+                body = responses.split(helper + ":", 1)[1].split("; End of function " + helper, 1)[0]
                 self.assertIn(f"moveq   #{seed},d3", body)
                 self.assertIn(f"bra.s   {branch}", body)
                 self.assertIn(f"bsr.s   {helper}", responses)
                 self.assertIn(caller + ":", responses)
 
-        vblank = (ROOT / "src/rendering/vblank_effects.s").read_text(
-            encoding="utf-8"
-        )
-        setup = vblank.split("VBlank_InitSplitVScrollEffect:", 1)[1].split(
-            "VBlank_InitSplitVScrollEffect_Update:", 1
-        )[0]
+        vblank = (ROOT / "src/rendering/vblank_effects.s").read_text(encoding="utf-8")
+        setup = vblank.split("VBlank_InitSplitVScrollEffect:", 1)[1].split("VBlank_InitSplitVScrollEffect_Update:", 1)[
+            0
+        ]
         update = vblank.split("VBlank_InitSplitVScrollEffect_Update:", 1)[1].split(
             "; End of function VBlank_InitSplitVScrollEffect", 1
         )[0]
@@ -180,24 +170,18 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
         self.assertIn("move.b  (PrimaryEntityWork4B).w,(VDPReg10Shadow+1).w", update)
         self.assertIn("move.w  (VDPReg10Shadow).w,(VDP_CTRL).l", update)
 
-        dma = (ROOT / "src/gameplay/math_and_buffer_helpers.s").read_text(
-            encoding="utf-8"
-        )
+        dma = (ROOT / "src/gameplay/math_and_buffer_helpers.s").read_text(encoding="utf-8")
         reset = (ROOT / "src/system/boot.s").read_text(encoding="utf-8")
         self.assertIn("bset    #0,(IO_Z80BUS).l", dma)
         self.assertIn("bne.s   Gfx_DmaTransferWithZ80Halt_RequestBus", dma)
         self.assertIn("dc.l    IO_Z80BUS", reset)
         self.assertIn("move.w  d7,(a1)", reset)
-        wait = reset.split("Reset_WaitForZ80Bus:", 1)[1].split(
-            "Reset_CopyZ80BootstrapLoop:", 1
-        )[0]
+        wait = reset.split("Reset_WaitForZ80Bus:", 1)[1].split("Reset_CopyZ80BootstrapLoop:", 1)[0]
         self.assertIn("btst    d0,(a1)", wait)
         self.assertIn("bne.s   Reset_WaitForZ80Bus", wait)
         self.assertNotIn("move.w", wait)
 
-        jampan = (ROOT / "src/bosses/jampan_support.s").read_text(
-            encoding="utf-8"
-        )
+        jampan = (ROOT / "src/bosses/jampan_support.s").read_text(encoding="utf-8")
         radial = jampan.split("Boss_JampanRadialLinkedObjectMain:", 1)[1].split(
             "; End of function Boss_JampanRadialLinkedObjectMain", 1
         )[0]
@@ -214,24 +198,15 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
             self.assertIn(f"bhi.s   {clear}", block)
             self.assertIn("andi.w  #$7FFF,$E(a5)", block)
 
-        sunset = (ROOT / "src/bosses/sunset_sting_segments.s").read_text(
-            encoding="utf-8"
-        )
-        self.assertGreaterEqual(
-            sunset.count("lea     (Entity_ObjectPool).w,a3"), 2
-        )
+        sunset = (ROOT / "src/bosses/sunset_sting_segments.s").read_text(encoding="utf-8")
+        self.assertGreaterEqual(sunset.count("lea     (Entity_ObjectPool).w,a3"), 2)
         for owner, limit, mapping in (
             ("Boss_SunsetStingSegment", "$80", "Boss_SunsetStingSegmentMappings"),
-            ("Boss_SunsetStingSecondarySegment", "$98",
-             "Boss_SunsetStingDestroyedSegmentMappings"),
+            ("Boss_SunsetStingSecondarySegment", "$98", "Boss_SunsetStingDestroyedSegmentMappings"),
         ):
             with self.subTest(owner=owner):
-                orbit = sunset.split(owner + "OrbitState:", 1)[1].split(
-                    owner + "OrbitUpdatePosition:", 1
-                )[0]
-                position = sunset.split(owner + "OrbitUpdatePosition:", 1)[1].split(
-                    owner + "LaunchFromRing:", 1
-                )[0]
+                orbit = sunset.split(owner + "OrbitState:", 1)[1].split(owner + "OrbitUpdatePosition:", 1)[0]
+                position = sunset.split(owner + "OrbitUpdatePosition:", 1)[1].split(owner + "LaunchFromRing:", 1)[0]
                 self.assertIn(f"cmpi.w  #{limit},d2", orbit)
                 self.assertIn("bsr.w   Math_GetScaledSinCos", position)
                 self.assertIn("add.l   $10(a3),d0", position)
@@ -240,12 +215,8 @@ class NameAuditBasisCorrectionTests(unittest.TestCase):
                 self.assertIn("move.l  d1,$14(a5)", position)
                 self.assertIn(f"lea     {mapping}(pc),a0", position)
 
-        ship = (ROOT / "src/cutscenes/ship_piece_and_debris.s").read_text(
-            encoding="utf-8"
-        )
-        table = ship.split("ShipDebris_SpriteFrameTable:", 1)[1].split(
-            "ShipDebris_InitialXVelocities:", 1
-        )[0]
+        ship = (ROOT / "src/cutscenes/ship_piece_and_debris.s").read_text(encoding="utf-8")
+        table = ship.split("ShipDebris_SpriteFrameTable:", 1)[1].split("ShipDebris_InitialXVelocities:", 1)[0]
         self.assertEqual(2, table.count("dc.l    ShipDebris_SpriteFrame1"))
         self.assertEqual(2, table.count("dc.l    ShipDebris_SpriteFrame3"))
 

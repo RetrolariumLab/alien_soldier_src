@@ -33,34 +33,40 @@ VISUAL_UNKNOWN_IDS = {
     ),
 }
 REVIEWED_VISUAL_ADDRESSES = {
-    "0x04079E", "0x040AF6", "0x042A10",
+    "0x04079E",
+    "0x040AF6",
+    "0x042A10",
 }
 UNKNOWN_EVIDENCE_IDS = {
-    "CODE-001": (
-        "0x040CEC", "Boss_SnakeUnreferencedReturn", "src/bosses/snake.s"
-    ),
+    "CODE-001": ("0x040CEC", "Boss_SnakeUnreferencedReturn", "src/bosses/snake.s"),
     "DATA-001": (
-        "0x040D2E", "EntityType1C0_EarlyFormPartMapping",
+        "0x040D2E",
+        "EntityType1C0_EarlyFormPartMapping",
         "src/bosses/entity_type_1c0_core.s",
     ),
     "CODE-002": (
-        "0x0586F2", "Boss_ArtemisPoseScriptUnreferencedReturn",
+        "0x0586F2",
+        "Boss_ArtemisPoseScriptUnreferencedReturn",
         "src/bosses/artemis_rendering.s",
     ),
     "CODE-003": (
-        "0x058BA0", "Projectile_ArtemisEmitterUnreferencedReturn",
+        "0x058BA0",
+        "Projectile_ArtemisEmitterUnreferencedReturn",
         "src/projectiles/artemis.s",
     ),
     "CODE-004": (
-        "0x059BAA", "Boss_SylpheedPoseScriptUnreferencedReturn",
+        "0x059BAA",
+        "Boss_SylpheedPoseScriptUnreferencedReturn",
         "src/bosses/sylpheed_pose.s",
     ),
     "CODE-005": (
-        "0x08277C", "Sound_PitchEnvelopeUnreferencedSkipReturn",
+        "0x08277C",
+        "Sound_PitchEnvelopeUnreferencedSkipReturn",
         "src/sound/driver_core.s",
     ),
     "DATA-002": (
-        "0x011356", "Gfx_UnidentifiedVRAMTransferParameters",
+        "0x011356",
+        "Gfx_UnidentifiedVRAMTransferParameters",
         "src/rendering/boss_asset_sets.s",
     ),
 }
@@ -86,17 +92,13 @@ class UnknownRegistryLinkTests(unittest.TestCase):
         referenced_tags: list[str] = []
         for path in (ROOT / "src").rglob("*.s"):
             source = path.read_text(encoding="utf-8")
-            referenced_tags.extend(
-                re.findall(r"(?m)^; (?:UNKNOWN|REVIEWED) (VIS-\d{3}):", source)
-            )
+            referenced_tags.extend(re.findall(r"(?m)^; (?:UNKNOWN|REVIEWED) (VIS-\d{3}):", source))
         self.assertEqual(set(VISUAL_UNKNOWN_IDS), set(referenced_tags))
         self.assertEqual(7, len(referenced_tags))
 
         audit = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         expected_addresses: set[str] = set()
         for unknown_id, members in VISUAL_UNKNOWN_IDS.items():
@@ -121,10 +123,7 @@ class UnknownRegistryLinkTests(unittest.TestCase):
                     )
         self.assertEqual(
             set(),
-            {
-                address for address, record in audit.items()
-                if record.get("evidence") == "hypothesis"
-            },
+            {address for address, record in audit.items() if record.get("evidence") == "hypothesis"},
         )
 
     def test_unknown_evidence_records_have_bidirectional_links(self) -> None:
@@ -136,17 +135,13 @@ class UnknownRegistryLinkTests(unittest.TestCase):
         referenced_tags: list[str] = []
         for path in (ROOT / "src").rglob("*.s"):
             source = path.read_text(encoding="utf-8")
-            referenced_tags.extend(
-                re.findall(r"(?m)^; (?:UNKNOWN|REVIEWED) ((?:CODE|DATA)-\d{3}):", source)
-            )
+            referenced_tags.extend(re.findall(r"(?m)^; (?:UNKNOWN|REVIEWED) ((?:CODE|DATA)-\d{3}):", source))
         self.assertEqual(set(UNKNOWN_EVIDENCE_IDS), set(referenced_tags))
         self.assertEqual(7, len(referenced_tags))
 
         audit = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         for unknown_id, (address, name, relative) in UNKNOWN_EVIDENCE_IDS.items():
             with self.subTest(id=unknown_id, address=address):
@@ -165,10 +160,7 @@ class UnknownRegistryLinkTests(unittest.TestCase):
                 )
         self.assertEqual(
             {address for key, (address, _, _) in UNKNOWN_EVIDENCE_IDS.items() if key != "DATA-001"},
-            {
-                address for address, record in audit.items()
-                if record.get("evidence") == "unknown"
-            },
+            {address for address, record in audit.items() if record.get("evidence") == "unknown"},
         )
 
 

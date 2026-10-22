@@ -33,11 +33,14 @@ class BaselineTests(unittest.TestCase):
             {"bare": 31, "chain-1": 256, "chain-2": 2},
             {
                 kind: sum(
-                    1 for item in document["payloads"]
+                    1
+                    for item in document["payloads"]
                     if (kind == "bare" and not item["blocks"][0]["declared_length"])
-                    or (kind.startswith("chain-")
+                    or (
+                        kind.startswith("chain-")
                         and item["blocks"][0]["declared_length"]
-                        and len(item["blocks"]) == int(kind.split("-")[1]))
+                        and len(item["blocks"]) == int(kind.split("-")[1])
+                    )
                 )
                 for kind in ("bare", "chain-1", "chain-2")
             },

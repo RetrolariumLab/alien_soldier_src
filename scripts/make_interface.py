@@ -4,6 +4,7 @@ This is a source inventory, not a Make evaluator. Dynamic, optional or escaping
 includes are refused rather than silently hiding release commands. Callers that
 reuse reviewed commands bind every path and normalized byte, not just Makefile.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -30,9 +31,11 @@ def make_files(root: Path, read_bytes=None) -> tuple[tuple[str, bytes], ...]:
 
     def visit(relative):
         nonlocal total
-        if (not re.fullmatch(r"[A-Za-z0-9_./-]+", relative)
-                or PurePosixPath(relative).is_absolute()
-                or any(part in {"", ".", ".."} for part in relative.split("/"))):
+        if (
+            not re.fullmatch(r"[A-Za-z0-9_./-]+", relative)
+            or PurePosixPath(relative).is_absolute()
+            or any(part in {"", ".", ".."} for part in relative.split("/"))
+        ):
             raise ValueError("Make include path is not a literal project path: " + relative)
         if relative in visited:
             raise ValueError("Make include is repeated or cyclic: " + relative)
@@ -75,8 +78,7 @@ def make_files(root: Path, read_bytes=None) -> tuple[tuple[str, bytes], ...]:
 
 def make_text(root: Path, read_bytes=None) -> str:
     """Complete target/selector source, preserving each file's recipe bytes."""
-    return "\n".join(body.decode("utf-8").replace("\r\n", "\n")
-                     for _name, body in make_files(root, read_bytes))
+    return "\n".join(body.decode("utf-8").replace("\r\n", "\n") for _name, body in make_files(root, read_bytes))
 
 
 def make_digest(files: tuple[tuple[str, bytes], ...]) -> str:
@@ -91,8 +93,7 @@ def make_digest(files: tuple[tuple[str, bytes], ...]) -> str:
 
 def public_targets(root: Path) -> dict[str, tuple[str, ...]]:
     """Group all literal public commands by their workflow owner."""
-    return {name: tuple(sorted(set(TARGET.findall(body.decode("utf-8")))))
-            for name, body in make_files(root)}
+    return {name: tuple(sorted(set(TARGET.findall(body.decode("utf-8"))))) for name, body in make_files(root)}
 
 
 def main():

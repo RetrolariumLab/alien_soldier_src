@@ -120,9 +120,7 @@ class StagedApplicationTests(unittest.TestCase):
         replacement = self.change_first_colour(record)
         path = self.tree / record["source_path"]
         before_size = path.stat().st_size
-        self.assertEqual(
-            [record["source_path"]], model.apply_document(document, self.tree, "jp")
-        )
+        self.assertEqual([record["source_path"]], model.apply_document(document, self.tree, "jp"))
         self.assertEqual(before_size, path.stat().st_size)
         reread = model.export_document(self.tree, "jp")
         changed = next(item for item in reread["commands"] if item["label"] == record["label"])

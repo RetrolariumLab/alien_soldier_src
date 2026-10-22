@@ -33,9 +33,9 @@ from pathlib import Path
 
 
 TILE_SIZE = 8
-TILE_BYTES = 32                  # 8 rows of 8 pixels at 4 bits
-PALETTE_LINE = 16                # colours in one CRAM line
-PALETTE_LINES = 4                # lines in CRAM
+TILE_BYTES = 32  # 8 rows of 8 pixels at 4 bits
+PALETTE_LINE = 16  # colours in one CRAM line
+PALETTE_LINES = 4  # lines in CRAM
 CRAM_COLOURS = PALETTE_LINE * PALETTE_LINES
 
 # A CRAM word is 0000 BBB0 GGG0 RRR0: three bits per channel, eight levels.
@@ -55,8 +55,10 @@ def cram_to_rgb(word, levels=CRAM_LEVELS):
 
 def rgb_to_cram(red, green, blue, levels=CRAM_LEVELS):
     """The CRAM word whose colour is nearest the one asked for."""
+
     def nearest(value):
         return min(range(8), key=lambda index: abs(levels[index] - value))
+
     return (nearest(blue) << 9) | (nearest(green) << 5) | (nearest(red) << 1)
 
 
@@ -72,9 +74,9 @@ def palette_rgb(words, levels=CRAM_LEVELS):
 class TileBlock:
     """A run of tiles, and whether the payload declared its length."""
 
-    offset: int                  # first byte of tile data within the payload
+    offset: int  # first byte of tile data within the payload
     byte_count: int
-    declared: bool               # a length word preceded the tiles
+    declared: bool  # a length word preceded the tiles
 
     @property
     def tile_count(self):
@@ -134,8 +136,7 @@ def sheet_from_bytes(name, data):
     blocks = read_blocks(data)
     if blocks is None:
         if len(data) % TILE_BYTES:
-            raise ValueError("%s: %d bytes is neither a block chain nor whole tiles"
-                             % (name, len(data)))
+            raise ValueError("%s: %d bytes is neither a block chain nor whole tiles" % (name, len(data)))
         blocks = [TileBlock(0, len(data), False)]
     return TileSheet(name, data, blocks)
 
@@ -145,7 +146,7 @@ def decode_tile(data, offset=0):
     if offset + TILE_BYTES > len(data):
         raise ValueError("tile at %d runs past %d bytes" % (offset, len(data)))
     pixels = []
-    for byte in data[offset:offset + TILE_BYTES]:
+    for byte in data[offset : offset + TILE_BYTES]:
         pixels.append(byte >> 4)
         pixels.append(byte & 0x0F)
     return pixels
@@ -153,8 +154,7 @@ def decode_tile(data, offset=0):
 
 def encode_tile(pixels):
     if len(pixels) != TILE_SIZE * TILE_SIZE:
-        raise ValueError("a tile is %d pixels, not %d"
-                         % (TILE_SIZE * TILE_SIZE, len(pixels)))
+        raise ValueError("a tile is %d pixels, not %d" % (TILE_SIZE * TILE_SIZE, len(pixels)))
     return bytes((pixels[at] << 4) | pixels[at + 1] for at in range(0, len(pixels), 2))
 
 
@@ -183,7 +183,7 @@ def sheet_image(sheet, palette, columns=16, line=0):
         left = (index % columns) * TILE_SIZE
         top = (index // columns) * TILE_SIZE
         for y in range(TILE_SIZE):
-            image[top + y][left:left + TILE_SIZE] = pixels[y * TILE_SIZE:(y + 1) * TILE_SIZE]
+            image[top + y][left : left + TILE_SIZE] = pixels[y * TILE_SIZE : (y + 1) * TILE_SIZE]
     return image
 
 
@@ -200,20 +200,21 @@ def write_png(path, image, compression=9):
     width = len(image[0]) if height else 0
     raw = bytearray()
     for row in image:
-        raw.append(0)                        # filter: none
+        raw.append(0)  # filter: none
         for red, green, blue in row:
             raw += bytes((red, green, blue))
 
     def chunk(kind, body):
-        return (struct.pack(">I", len(body)) + kind + body
-                + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF))
+        return struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
 
     header = struct.pack(">2I5B", width, height, 8, 2, 0, 0, 0)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(b"\x89PNG\r\n\x1a\n"
-                     + chunk(b"IHDR", header)
-                     + chunk(b"IDAT", zlib.compress(bytes(raw), compression))
-                     + chunk(b"IEND", b""))
+    path.write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", header)
+        + chunk(b"IDAT", zlib.compress(bytes(raw), compression))
+        + chunk(b"IEND", b"")
+    )
 
 
 def survey(root):
@@ -225,9 +226,11 @@ def survey(root):
         tiles += sheet.tile_count
         kind = "chain-%d" % len(sheet.blocks) if sheet.chained else "bare"
         kinds.setdefault(kind, []).append(path.name)
-    return {"payloads": sum(len(names) for names in kinds.values()),
-            "tiles": tiles,
-            "kinds": {kind: len(names) for kind, names in sorted(kinds.items())}}
+    return {
+        "payloads": sum(len(names) for names in kinds.values()),
+        "tiles": tiles,
+        "kinds": {kind: len(names) for kind, names in sorted(kinds.items())},
+    }
 
 
 def declared_art(root):

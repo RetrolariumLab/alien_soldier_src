@@ -47,18 +47,39 @@ class RuntimeCaptureReceiptTests(unittest.TestCase):
         (root / "gens/Output/Gens.exe").write_bytes(gens)
         (root / "movies/tas.gmv").write_bytes(movie)
         inventory = [{"id": "first", "movie": "tas", "frame": 20}]
-        config = {"rom_checksum": "0x55555558", "movies": {"tas": {
-            "path": "movies/tas.gmv", "sha256": sha(movie)}}, "scenarios": [
-                {**inventory[0], "expectations": [
-                    {"symbol": "Mode", "address": "0xFF0000", "type": "u16", "equals": "0"},
-                    {"symbol": "Mode", "address": "0xFF0000", "type": "u16", "equals": "0"}]}]}
+        config = {
+            "rom_checksum": "0x55555558",
+            "movies": {"tas": {"path": "movies/tas.gmv", "sha256": sha(movie)}},
+            "scenarios": [
+                {
+                    **inventory[0],
+                    "expectations": [
+                        {"symbol": "Mode", "address": "0xFF0000", "type": "u16", "equals": "0"},
+                        {"symbol": "Mode", "address": "0xFF0000", "type": "u16", "equals": "0"},
+                    ],
+                }
+            ],
+        }
         config_bytes = (json.dumps(config) + "\n").encode("utf-8")
         (root / "config/scenarios.json").write_bytes(config_bytes)
-        (root / "config/rom_profiles.json").write_text(json.dumps({"profiles": [
-            {"id": "jp", "reference_rom": {"size": len(rom), "sha256": sha(rom)}}]}), encoding="utf-8")
-        (root / "config/toolchain.json").write_text(json.dumps({"components": [
-            {"id": "emulator", "source_commit": "a" * 40, "files": {"any": [
-                {"path": "../gens/Output/Gens.exe"}]}}]}), encoding="utf-8")
+        (root / "config/rom_profiles.json").write_text(
+            json.dumps({"profiles": [{"id": "jp", "reference_rom": {"size": len(rom), "sha256": sha(rom)}}]}),
+            encoding="utf-8",
+        )
+        (root / "config/toolchain.json").write_text(
+            json.dumps(
+                {
+                    "components": [
+                        {
+                            "id": "emulator",
+                            "source_commit": "a" * 40,
+                            "files": {"any": [{"path": "../gens/Output/Gens.exe"}]},
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
         state = state_bytes(20)
         png = b"diagnostic screenshot fixture"
         (root / "captures/first/000020.genstate").write_bytes(state)
@@ -67,17 +88,31 @@ class RuntimeCaptureReceiptTests(unittest.TestCase):
             session = Path(private) / "first"
             session.mkdir()
             config_seed, isolation = runtime_isolation.isolated_config(session, sound=False)
-        receipt = {"schema_version": 1, "status": "captured", "requested_frames": 20,
-                   "scope": "named_ram_scenario_replay_not_renderer_or_audio_fidelity",
-                   "rom_sha256": sha(rom), "gens_sha256": sha(gens),
-                   "capture_runner_sha256": sha((root / "scripts/run_runtime_scenarios.py").read_bytes()),
-                   "capture_lua_sha256": sha((root / "scripts/runtime_capture_frames.lua").read_bytes()),
-                   "runtime_isolation_sha256": sha((root / "scripts/runtime_isolation.py").read_bytes()),
-                   "scenario_config_sha256": sha(config_bytes), "movies": {"tas": sha(movie)},
-                   "native_config_contract": NATIVE_CONTRACT, "expected_scenarios": inventory,
-                   "scenarios": [{**inventory[0], "native_header_frame": 20,
-                                  "isolated_config_sha256": sha(config_seed), "isolation": isolation,
-                                  "state_sha256": sha(state), "screenshot_sha256": sha(png)}]}
+        receipt = {
+            "schema_version": 1,
+            "status": "captured",
+            "requested_frames": 20,
+            "scope": "named_ram_scenario_replay_not_renderer_or_audio_fidelity",
+            "rom_sha256": sha(rom),
+            "gens_sha256": sha(gens),
+            "capture_runner_sha256": sha((root / "scripts/run_runtime_scenarios.py").read_bytes()),
+            "capture_lua_sha256": sha((root / "scripts/runtime_capture_frames.lua").read_bytes()),
+            "runtime_isolation_sha256": sha((root / "scripts/runtime_isolation.py").read_bytes()),
+            "scenario_config_sha256": sha(config_bytes),
+            "movies": {"tas": sha(movie)},
+            "native_config_contract": NATIVE_CONTRACT,
+            "expected_scenarios": inventory,
+            "scenarios": [
+                {
+                    **inventory[0],
+                    "native_header_frame": 20,
+                    "isolated_config_sha256": sha(config_seed),
+                    "isolation": isolation,
+                    "state_sha256": sha(state),
+                    "screenshot_sha256": sha(png),
+                }
+            ],
+        }
         (root / "captures/capture_receipt.json").write_text(json.dumps(receipt), encoding="utf-8")
 
     def change_receipt(self, root: Path, change: object) -> None:
@@ -93,10 +128,13 @@ class RuntimeCaptureReceiptTests(unittest.TestCase):
             if native_error:
                 errors.append(native_error)
 
-        with mock.patch.object(validator, "check_emulator_commit", side_effect=check_pin), \
-                mock.patch.object(validator.runtime_isolation, "native_config_contract", return_value=NATIVE_CONTRACT):
-            return validator.validate_receipt(root / "config/scenarios.json", root / "captures",
-                                              root / "gens/Output/Gens.exe", root / "rom.bin", root)
+        with (
+            mock.patch.object(validator, "check_emulator_commit", side_effect=check_pin),
+            mock.patch.object(validator.runtime_isolation, "native_config_contract", return_value=NATIVE_CONTRACT),
+        ):
+            return validator.validate_receipt(
+                root / "config/scenarios.json", root / "captures", root / "gens/Output/Gens.exe", root / "rom.bin", root
+            )
 
     def test_complete_receipt_authenticates_current_inputs_and_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -134,8 +172,15 @@ class RuntimeCaptureReceiptTests(unittest.TestCase):
                 self.assertTrue(self.validate(root))
 
     def test_every_mutable_input_is_bound_to_its_actual_hash(self) -> None:
-        for name in ("rom.bin", "gens/Output/Gens.exe", "movies/tas.gmv", "config/scenarios.json",
-                     "scripts/run_runtime_scenarios.py", "scripts/runtime_capture_frames.lua", "scripts/runtime_isolation.py"):
+        for name in (
+            "rom.bin",
+            "gens/Output/Gens.exe",
+            "movies/tas.gmv",
+            "config/scenarios.json",
+            "scripts/run_runtime_scenarios.py",
+            "scripts/runtime_capture_frames.lua",
+            "scripts/runtime_isolation.py",
+        ):
             with self.subTest(input=name), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 self.make_fixture(root)
@@ -156,7 +201,10 @@ class RuntimeCaptureReceiptTests(unittest.TestCase):
 
     def test_native_header_is_checked_even_if_receipt_artifact_hash_was_replaced(self) -> None:
         for frame, version, checksum in ((0, 1, 0x55555558), (20, 2, 0x55555558), (20, 1, 0)):
-            with self.subTest(frame=frame, version=version, checksum=checksum), tempfile.TemporaryDirectory() as directory:
+            with (
+                self.subTest(frame=frame, version=version, checksum=checksum),
+                tempfile.TemporaryDirectory() as directory,
+            ):
                 root = Path(directory)
                 self.make_fixture(root)
                 data = state_bytes(frame, version, checksum)

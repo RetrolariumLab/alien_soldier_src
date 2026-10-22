@@ -43,12 +43,16 @@ class EmulatorToolchainTests(unittest.TestCase):
         self.component = {
             "id": "emulator",
             "source_commit": self.pin,
-            "files": {"any": [{
-                "path": str(self.default / "Output/Gens.exe"),
-                "size": 3,
-                "sha256": hashlib.sha256(b"old").hexdigest(),
-                "observed_only": True,
-            }]},
+            "files": {
+                "any": [
+                    {
+                        "path": str(self.default / "Output/Gens.exe"),
+                        "size": 3,
+                        "sha256": hashlib.sha256(b"old").hexdigest(),
+                        "observed_only": True,
+                    }
+                ]
+            },
         }
         self.config = self.root / "toolchain.json"
         self.write_config()
@@ -56,7 +60,9 @@ class EmulatorToolchainTests(unittest.TestCase):
     def git(self, *arguments: str, checkout: Path | None = None) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
             ["git", "-C", str(checkout or self.checkout), *arguments],
-            capture_output=True, text=True, check=True,
+            capture_output=True,
+            text=True,
+            check=True,
         )
 
     def write_config(self) -> None:

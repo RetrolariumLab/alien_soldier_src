@@ -5,6 +5,7 @@
 A pattern selects modules whose name contains it. The exit status is 1 when
 any module fails.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -28,11 +29,17 @@ def modules(patterns: list[str]) -> list[str]:
 def run(name: str) -> tuple[str, int, float, str]:
     started = time.monotonic()
     # Some modules import their neighbours (fixtures) by bare name.
-    environment = dict(os.environ, PYTHONPATH=os.pathsep.join(
-        filter(None, (str(ROOT / "tests"), os.environ.get("PYTHONPATH")))))
+    environment = dict(
+        os.environ, PYTHONPATH=os.pathsep.join(filter(None, (str(ROOT / "tests"), os.environ.get("PYTHONPATH"))))
+    )
     result = subprocess.run(
         [sys.executable, "-B", "-m", "unittest", "-q", "tests." + name],
-        cwd=ROOT, env=environment, capture_output=True, text=True, encoding="utf-8", errors="replace",
+        cwd=ROOT,
+        env=environment,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
     )
     return name, result.returncode, time.monotonic() - started, result.stdout + result.stderr
 

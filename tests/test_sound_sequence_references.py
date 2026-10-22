@@ -15,7 +15,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.sound_envelope_model import envelope_selector_limits  # noqa: E402
 from authoring.sound_sequence_model import (  # noqa: E402
-    FORMAT, apply_document, document_errors, validate_document,
+    FORMAT,
+    apply_document,
+    document_errors,
+    validate_document,
 )
 from authoring.sound_studio import Window  # noqa: E402
 from authoring.sound_studio_model import decode_sfx_header  # noqa: E402
@@ -30,25 +33,33 @@ def fixture(profile: str = "jp") -> dict:
     decoded = decode_sfx_header(NAME, BODY)
     sequence = decoded["sequence"]
     return {
-        "schema_version": 1, "profile": profile, "format": FORMAT,
+        "schema_version": 1,
+        "profile": profile,
+        "format": FORMAT,
         "payload_count": 1,
         "instruction_count": sequence["instruction_count"],
         "reachable_byte_count": sequence["reachable_byte_count"],
-        "payloads": [{
-            "name": NAME, "family": "sfx", "path": "fixture.bin",
-            "storage": "binary", "capacity": len(BODY),
-            "header_byte_count": decoded["header_byte_count"],
-            "instrument_offset": decoded["instrument_offset"],
-            "entry_offsets": sequence["entry_offsets"],
-            "instruction_count": sequence["instruction_count"],
-            "reachable_byte_count": sequence["reachable_byte_count"],
-            "instructions": [{
-                **instruction,
-                "data": list(BODY[
-                    instruction["offset"]:instruction["offset"] + instruction["size"]
-                ]),
-            } for instruction in sequence["instructions"]],
-        }],
+        "payloads": [
+            {
+                "name": NAME,
+                "family": "sfx",
+                "path": "fixture.bin",
+                "storage": "binary",
+                "capacity": len(BODY),
+                "header_byte_count": decoded["header_byte_count"],
+                "instrument_offset": decoded["instrument_offset"],
+                "entry_offsets": sequence["entry_offsets"],
+                "instruction_count": sequence["instruction_count"],
+                "reachable_byte_count": sequence["reachable_byte_count"],
+                "instructions": [
+                    {
+                        **instruction,
+                        "data": list(BODY[instruction["offset"] : instruction["offset"] + instruction["size"]]),
+                    }
+                    for instruction in sequence["instructions"]
+                ],
+            }
+        ],
     }
 
 
@@ -61,8 +72,15 @@ class SoundSequenceReferenceTests(unittest.TestCase):
             ("labelled_blocks", ({NAME: BODY}, {})),
             ("envelope_selector_limits", {"pitch": 8, "psg_volume": 10}),
             ("music_sample_ids", frozenset(range(0x81, 0x97))),
-            ("period_contract", {"table": "Sound_PSGNotePeriodTable", "word_count": 70,
-                                 "table_sha256": "fixture-table", "reader_sha256": "fixture-readers"}),
+            (
+                "period_contract",
+                {
+                    "table": "Sound_PSGNotePeriodTable",
+                    "word_count": 70,
+                    "table_sha256": "fixture-table",
+                    "reader_sha256": "fixture-readers",
+                },
+            ),
         ):
             patcher = mock.patch(module + name, return_value=result)
             patcher.start()
@@ -70,9 +88,7 @@ class SoundSequenceReferenceTests(unittest.TestCase):
 
     def edited(self, opcode: int, operand: int, value: int) -> dict:
         document = copy.deepcopy(self.baseline)
-        instruction = next(
-            item for item in document["payloads"][0]["instructions"]
-            if item.get("opcode") == opcode)
+        instruction = next(item for item in document["payloads"][0]["instructions"] if item.get("opcode") == opcode)
         instruction["data"][operand] = value
         return document
 
@@ -115,13 +131,16 @@ class SoundSequenceReferenceTests(unittest.TestCase):
         document = copy.deepcopy(self.baseline)
         window = Window.__new__(Window)
         window.project, window.profile = ROOT, "jp"
-        window.context = {"sound_sequences": {
-            "document": document, "validate": validate_document,
-        }}
+        window.context = {
+            "sound_sequences": {
+                "document": document,
+                "validate": validate_document,
+            }
+        }
         window.state = Workspace({"sound_sequences": document})
         selected = next(
-            index for index, value in enumerate(window.state.field.values)
-            if value.container.get("opcode") == 0xF4)
+            index for index, value in enumerate(window.state.field.values) if value.container.get("opcode") == 0xF4
+        )
         window.state.select_value(selected)
         window.value_text = mock.Mock()
         window.value_text.get.return_value = "$89"
@@ -140,12 +159,10 @@ class SoundSequenceReferenceTests(unittest.TestCase):
 class SoundEnvelopeTableLimitTests(unittest.TestCase):
     def test_limits_follow_symbol_pointer_counts(self) -> None:
         bodies = {
-            "Sound_PitchEnvelopePointerTable": (
-                " dc.l PitchA,PitchB ; ignored comment", " dc.l PitchC"),
+            "Sound_PitchEnvelopePointerTable": (" dc.l PitchA,PitchB ; ignored comment", " dc.l PitchC"),
             "Sound_PSGVolumeEnvelopePointerTable": (" dc.l VolumeA,VolumeB",),
         }
-        with mock.patch("authoring.sound_envelope_model.labelled_blocks",
-                        return_value=({}, bodies)):
+        with mock.patch("authoring.sound_envelope_model.labelled_blocks", return_value=({}, bodies)):
             self.assertEqual({"pitch": 3, "psg_volume": 2}, envelope_selector_limits(ROOT))
 
     def test_literal_table_cannot_supply_a_claimed_selector_limit(self) -> None:
@@ -153,8 +170,7 @@ class SoundEnvelopeTableLimitTests(unittest.TestCase):
             "Sound_PitchEnvelopePointerTable": (" dc.l $00123456",),
             "Sound_PSGVolumeEnvelopePointerTable": (" dc.l VolumeA",),
         }
-        with mock.patch("authoring.sound_envelope_model.labelled_blocks",
-                        return_value=({}, bodies)):
+        with mock.patch("authoring.sound_envelope_model.labelled_blocks", return_value=({}, bodies)):
             with self.assertRaisesRegex(ValueError, "symbol-only pointer table"):
                 envelope_selector_limits(ROOT)
 

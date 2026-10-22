@@ -22,45 +22,45 @@ def parse_dc_value(value_str, dc_type):
     # String literal: 'text' or "text"
     if value_str.startswith(("'", '"')):
         text = value_str[1:-1]
-        return text.encode('latin1')
+        return text.encode("latin1")
 
     # Hex: $XXXX or 0xXXXX (check BEFORE label detection!)
-    if value_str.startswith('$'):
+    if value_str.startswith("$"):
         try:
             num = int(value_str[1:], 16)
         except ValueError:
             return None  # Invalid hex = probably a label
-    elif value_str.startswith('0x') or value_str.startswith('0X'):
+    elif value_str.startswith("0x") or value_str.startswith("0X"):
         try:
             num = int(value_str, 16)
         except ValueError:
             return None
     # Binary: %XXXX
-    elif value_str.startswith('%'):
+    elif value_str.startswith("%"):
         try:
             num = int(value_str[1:], 2)
         except ValueError:
             return None
     # Decimal
-    elif value_str.lstrip('-').isdigit():
+    elif value_str.lstrip("-").isdigit():
         num = int(value_str)
     else:
         # Not a recognized numeric format - must be a label reference
         return None
 
     # Convert to bytes
-    if dc_type == 'dc.b':
+    if dc_type == "dc.b":
         if num < 0:
             num = (256 + num) & 0xFF
         return bytes([num & 0xFF])
-    elif dc_type == 'dc.w':
+    elif dc_type == "dc.w":
         if num < 0:
             num = (65536 + num) & 0xFFFF
-        return num.to_bytes(2, 'big', signed=False)
-    elif dc_type == 'dc.l':
+        return num.to_bytes(2, "big", signed=False)
+    elif dc_type == "dc.l":
         if num < 0:
             num = (4294967296 + num) & 0xFFFFFFFF
-        return num.to_bytes(4, 'big', signed=False)
+        return num.to_bytes(4, "big", signed=False)
 
     return None
 
@@ -71,7 +71,7 @@ def parse_dc_line(line):
     Returns None if line contains label references.
     """
     # Extract dc directive and values
-    match = re.match(r'^\s*(dc\.[bwl])\s+(.+?)(?:\s*;.*)?$', line, re.IGNORECASE)
+    match = re.match(r"^\s*(dc\.[bwl])\s+(.+?)(?:\s*;.*)?$", line, re.IGNORECASE)
     if not match:
         return None
 
@@ -84,7 +84,7 @@ def parse_dc_line(line):
     in_quote = False
     quote_char = None
 
-    for char in values_str + ',':
+    for char in values_str + ",":
         if char in ('"', "'") and not in_quote:
             in_quote = True
             quote_char = char
@@ -93,7 +93,7 @@ def parse_dc_line(line):
             in_quote = False
             quote_char = None
             current += char
-        elif char == ',' and not in_quote:
+        elif char == "," and not in_quote:
             if current.strip():
                 values.append(current.strip())
             current = ""
@@ -119,8 +119,8 @@ def split_data_blocks(lines, min_size=1024, label_filter=None):
     filter_info = f", filter: {label_filter}" if label_filter else ""
     print(f"Scanning for data blocks (min {min_size} bytes{filter_info})...")
 
-    label_re = re.compile(r'^([a-zA-Z_][a-zA-Z0-9_]*):')
-    dc_re = re.compile(r'^\s*dc\.[bwl]\s+', re.IGNORECASE)
+    label_re = re.compile(r"^([a-zA-Z_][a-zA-Z0-9_]*):")
+    dc_re = re.compile(r"^\s*dc\.[bwl]\s+", re.IGNORECASE)
 
     def matches_filter(label):
         if label_filter is None:
@@ -132,31 +132,33 @@ def split_data_blocks(lines, min_size=1024, label_filter=None):
 
     for line_num, line in enumerate(lines, 1):
         # Skip empty lines and pure comments
-        if not line.strip() or line.strip().startswith(';'):
+        if not line.strip() or line.strip().startswith(";"):
             continue
 
         # Check for label
         label_match = label_re.match(line)
         if label_match:
             # Finalize previous block if large enough and matches filter
-            if current_block and len(current_block['data']) >= min_size and matches_filter(current_block['label']):
+            if current_block and len(current_block["data"]) >= min_size and matches_filter(current_block["label"]):
                 blocks.append(current_block)
-                print(f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
-                      f"(lines {current_block['start_line']}-{current_block['end_line']})")
+                print(
+                    f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
+                    f"(lines {current_block['start_line']}-{current_block['end_line']})"
+                )
 
             # Start new block
             label = label_match.group(1)
-            rest = line[len(label) + 1:].strip()
+            rest = line[len(label) + 1 :].strip()
 
             # Check if label line has dc data
             if rest and dc_re.match(rest):
                 data = parse_dc_line(rest)
                 if data:
                     current_block = {
-                        'label': label,
-                        'start_line': line_num,
-                        'end_line': line_num,
-                        'data': bytearray(data)
+                        "label": label,
+                        "start_line": line_num,
+                        "end_line": line_num,
+                        "data": bytearray(data),
                     }
                 else:
                     current_block = None
@@ -168,48 +170,54 @@ def split_data_blocks(lines, min_size=1024, label_filter=None):
         if current_block and dc_re.match(line):
             data = parse_dc_line(line)
             if data:
-                current_block['data'].extend(data)
-                current_block['end_line'] = line_num
+                current_block["data"].extend(data)
+                current_block["end_line"] = line_num
             else:
                 # Label reference - finalize block
-                if len(current_block['data']) >= min_size and matches_filter(current_block['label']):
+                if len(current_block["data"]) >= min_size and matches_filter(current_block["label"]):
                     blocks.append(current_block)
-                    print(f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
-                          f"(lines {current_block['start_line']}-{current_block['end_line']})")
+                    print(
+                        f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
+                        f"(lines {current_block['start_line']}-{current_block['end_line']})"
+                    )
                 current_block = None
         elif current_block:
             # Non-dc line - finalize block
-            if len(current_block['data']) >= min_size and matches_filter(current_block['label']):
+            if len(current_block["data"]) >= min_size and matches_filter(current_block["label"]):
                 blocks.append(current_block)
-                print(f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
-                      f"(lines {current_block['start_line']}-{current_block['end_line']})")
+                print(
+                    f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
+                    f"(lines {current_block['start_line']}-{current_block['end_line']})"
+                )
             current_block = None
 
     # Finalize last block
-    if current_block and len(current_block['data']) >= min_size and matches_filter(current_block['label']):
+    if current_block and len(current_block["data"]) >= min_size and matches_filter(current_block["label"]):
         blocks.append(current_block)
-        print(f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
-              f"(lines {current_block['start_line']}-{current_block['end_line']})")
+        print(
+            f"  [{len(blocks)}] {current_block['label']}: {len(current_block['data'])} bytes "
+            f"(lines {current_block['start_line']}-{current_block['end_line']})"
+        )
 
     return blocks
 
 
-def save_binary_files(blocks, data_dir, prefix=''):
+def save_binary_files(blocks, data_dir, prefix=""):
     """Save binary data to files."""
     data_dir.mkdir(exist_ok=True)
 
     for block in blocks:
         # Don't add prefix if label already starts with tiles_ or sprite_
-        if block['label'].startswith(('tiles_', 'sprite_')):
+        if block["label"].startswith(("tiles_", "sprite_")):
             filename = f"{block['label']}.bin"
         else:
             filename = f"{prefix}{block['label']}.bin" if prefix else f"{block['label']}.bin"
         filepath = data_dir / filename
 
-        with open(filepath, 'wb') as f:
-            f.write(block['data'])
+        with open(filepath, "wb") as f:
+            f.write(block["data"])
 
-        block['filename'] = filename
+        block["filename"] = filename
 
 
 def replace_with_binclude(lines, blocks, data_dir):
@@ -218,12 +226,12 @@ def replace_with_binclude(lines, blocks, data_dir):
     offset = 0
 
     for block in blocks:
-        start_idx = block['start_line'] - 1 + offset
-        end_idx = block['end_line'] + offset
+        start_idx = block["start_line"] - 1 + offset
+        end_idx = block["end_line"] + offset
 
         # Get label line
         label_line = new_lines[start_idx]
-        label_match = re.match(r'^([a-zA-Z_][a-zA-Z0-9_]*:)(.*)', label_line)
+        label_match = re.match(r"^([a-zA-Z_][a-zA-Z0-9_]*:)(.*)", label_line)
 
         if not label_match:
             print(f"Warning: Could not find label at line {block['start_line']}")
@@ -234,18 +242,18 @@ def replace_with_binclude(lines, blocks, data_dir):
 
         # Extract comment if present
         comment = ""
-        if ';' in rest:
-            comment_start = rest.index(';')
+        if ";" in rest:
+            comment_start = rest.index(";")
             comment = rest[comment_start:].rstrip()
 
         # Create replacement
-        replacement = f"{label_part}\tbinclude\t\"{data_dir.name}/{block['filename']}\"\t{comment}\n"
+        replacement = f'{label_part}\tbinclude\t"{data_dir.name}/{block["filename"]}"\t{comment}\n'
         replacement += f"{block['label']}_End:\n"
 
         # Replace block
         num_lines = end_idx - start_idx
         new_lines[start_idx:end_idx] = [replacement]
-        offset -= (num_lines - 1)
+        offset -= num_lines - 1
 
     return new_lines
 
@@ -258,20 +266,13 @@ def main():
     )
     return 1
 
-    parser = argparse.ArgumentParser(
-        description='Split large data blocks to binary files with binclude')
-    parser.add_argument('--source', default='alien_soldier_j.s',
-                       help='Assembly source file')
-    parser.add_argument('--data-dir', default='data',
-                       help='Directory for binary files')
-    parser.add_argument('--min-size', type=int, default=1024,
-                       help='Minimum block size in bytes')
-    parser.add_argument('--project-dir', default='.',
-                       help='Project directory')
-    parser.add_argument('--dry-run', action='store_true',
-                       help='Preview without making changes')
-    parser.add_argument('--label-filter', default=None,
-                       help='Regex pattern to filter labels (e.g., "sprite_F.*")')
+    parser = argparse.ArgumentParser(description="Split large data blocks to binary files with binclude")
+    parser.add_argument("--source", default="alien_soldier_j.s", help="Assembly source file")
+    parser.add_argument("--data-dir", default="data", help="Directory for binary files")
+    parser.add_argument("--min-size", type=int, default=1024, help="Minimum block size in bytes")
+    parser.add_argument("--project-dir", default=".", help="Project directory")
+    parser.add_argument("--dry-run", action="store_true", help="Preview without making changes")
+    parser.add_argument("--label-filter", default=None, help='Regex pattern to filter labels (e.g., "sprite_F.*")')
 
     args = parser.parse_args()
 
@@ -285,7 +286,7 @@ def main():
 
     # Read source
     print(f"Reading {asm_file}...")
-    with open(asm_file, 'r', encoding='utf-8', errors='ignore') as f:
+    with open(asm_file, "r", encoding="utf-8", errors="ignore") as f:
         lines = f.readlines()
 
     print(f"Source: {len(lines):,} lines\n")
@@ -298,12 +299,12 @@ def main():
         return 0
 
     # Summary
-    total_bytes = sum(len(b['data']) for b in blocks)
-    total_lines = sum(b['end_line'] - b['start_line'] + 1 for b in blocks)
+    total_bytes = sum(len(b["data"]) for b in blocks)
+    total_lines = sum(b["end_line"] - b["start_line"] + 1 for b in blocks)
 
     print(f"\nSummary:")
     print(f"  Blocks found: {len(blocks)}")
-    print(f"  Total data: {total_bytes:,} bytes ({total_bytes/1024:.1f} KB)")
+    print(f"  Total data: {total_bytes:,} bytes ({total_bytes / 1024:.1f} KB)")
     print(f"  Lines to replace: {total_lines:,}")
     print(f"  New lines: ~{len(blocks) * 2:,}")
     print(f"  Savings: ~{total_lines - len(blocks) * 2:,} lines")
@@ -313,7 +314,7 @@ def main():
         return 0
 
     # Create backup
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_file = asm_file.parent / f"{asm_file.stem}_backup_{timestamp}{asm_file.suffix}"
     print(f"\nCreating backup: {backup_file.name}")
     shutil.copy2(asm_file, backup_file)
@@ -328,7 +329,7 @@ def main():
 
     # Write modified source
     print(f"Writing modified source...")
-    with open(asm_file, 'w', encoding='utf-8', newline='\n') as f:
+    with open(asm_file, "w", encoding="utf-8", newline="\n") as f:
         f.writelines(new_lines)
 
     print(f"\n[OK] Success!")
@@ -341,6 +342,7 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
+
     sys.exit(main())

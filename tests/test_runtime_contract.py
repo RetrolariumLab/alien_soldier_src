@@ -25,8 +25,7 @@ class RuntimeContractTests(unittest.TestCase):
                 self.assertIn(expectation["symbol"], symbols)
                 self.assertEqual(
                     number(expectation["address"]),
-                    (symbols[expectation["symbol"]] + number(expectation.get("offset", 0)))
-                    & 0xFFFFFF,
+                    (symbols[expectation["symbol"]] + number(expectation.get("offset", 0))) & 0xFFFFFF,
                 )
 
     def test_every_scenario_names_a_pinned_movie(self) -> None:
@@ -73,9 +72,7 @@ class RuntimeContractTests(unittest.TestCase):
             capture = Path(directory) / "bad"
             capture.mkdir()
             (capture / "000001.genstate").write_bytes(header + table + ram)
-            errors = __import__("validate_runtime_scenarios").validate(
-                config, Path(directory), {"Mode": 0xFF0000}
-            )
+            errors = __import__("validate_runtime_scenarios").validate(config, Path(directory), {"Mode": 0xFF0000})
         self.assertEqual(2, sum("expected 0x1" in error for error in errors))
 
 

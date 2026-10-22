@@ -27,13 +27,14 @@ def legacy_bind(path, image):
             found = listing.symbols.LISTING_ROW.match(line)
             if found is None or len(line) <= listing.symbols.SOURCE_COLUMN:
                 continue
-            field = line[line.index(":") + 1:listing.symbols.SOURCE_COLUMN].strip()
+            field = line[line.index(":") + 1 : listing.symbols.SOURCE_COLUMN].strip()
             if not re.fullmatch(r"(?:[0-9A-Fa-f]{2,8}\s*)+", field):
                 continue
             encoded, address = bytes.fromhex(field), int(found[1], 16)
-            if address + len(encoded) > len(image) or image[address:address + len(encoded)] != encoded:
-                raise ValueError("listing bytes differ from original ROM: %s:%d at $%06X"
-                                 % (path, line_number, address))
+            if address + len(encoded) > len(image) or image[address : address + len(encoded)] != encoded:
+                raise ValueError(
+                    "listing bytes differ from original ROM: %s:%d at $%06X" % (path, line_number, address)
+                )
             checked += 1
     if not checked:
         raise ValueError("listing has no authenticated printed ROM byte fields: %s" % path)
@@ -77,8 +78,9 @@ class ScopedListingRowsTests(unittest.TestCase):
     def test_latin1_vt_ff_nel_do_not_invent_extra_lines(self):
         for separator in (b"\v", b"\f", b"\x85"):
             with self.subTest(separator=separator):
-                self.path.write_bytes(row(0, "01").encode() + b"not-a-row" + separator
-                                      + row(3, "FF").encode() + row(1, "02").encode())
+                self.path.write_bytes(
+                    row(0, "01").encode() + b"not-a-row" + separator + row(3, "FF").encode() + row(1, "02").encode()
+                )
                 self.assertEqual(2, legacy_bind(self.path, self.image))
                 with source.parsed_operation(self.root):
                     self.assertEqual(2, listing.bind_listing_bytes(self.path, self.image))
@@ -95,7 +97,7 @@ class ScopedListingRowsTests(unittest.TestCase):
 
     def test_first_mismatch_and_short_rom_keep_exact_line_address_diagnostic(self):
         self.path.write_bytes(("header\n" + row(0, "01") + row(1, "02")).encode())
-        for image in (b"\1\xFF", b"\1"):
+        for image in (b"\1\xff", b"\1"):
             with self.subTest(image=image):
                 with self.assertRaises(ValueError) as original:
                     legacy_bind(self.path, image)
@@ -109,12 +111,12 @@ class ScopedListingRowsTests(unittest.TestCase):
         with source.parsed_operation(self.root) as operation:
             self.assertEqual(1, listing.bind_listing_bytes(self.path, self.image))
             with self.assertRaisesRegex(ValueError, "bytes differ"):
-                listing.bind_listing_bytes(self.path, b"\xFF\2\3\4")
+                listing.bind_listing_bytes(self.path, b"\xff\2\3\4")
             self.assertEqual(1, listing.bind_listing_bytes(self.path, self.image))
             self.assertEqual(1, len(operation._listing_row_cache))
 
     def test_eager_decode_failure_preserves_first_mismatch_bounds_and_bad_field_errors(self):
-        for address, image in ((0, b"\xFF"), (6, self.image), (0, self.image)):
+        for address, image in ((0, b"\xff"), (6, self.image), (0, self.image)):
             with self.subTest(address=address, image=image):
                 self.path.write_bytes((row(address, "01") + row(1, "ABC")).encode())
                 with self.assertRaises(ValueError) as original:
@@ -129,20 +131,30 @@ class ScopedListingRowsTests(unittest.TestCase):
         class Image:
             def __init__(self, body):
                 self.body = body
+
             def __len__(self):
                 return len(self.body)
+
             def __getitem__(self, key):
                 return self.body[key]
+
         class BytesSubclass(bytes):
             pass
+
         for factory in (bytearray, Image, BytesSubclass):
-            for body in (self.image, b"\xFF\2\3\4"):
+            for body in (self.image, b"\xff\2\3\4"):
                 with self.subTest(factory=factory, body=body):
                     image = factory(body)
-                    with source.parsed_operation(self.root) as operation, mock.patch.object(
-                            operation, "listing_rows", side_effect=AssertionError("non-bytes cache admission")):
+                    with (
+                        source.parsed_operation(self.root) as operation,
+                        mock.patch.object(
+                            operation, "listing_rows", side_effect=AssertionError("non-bytes cache admission")
+                        ),
+                    ):
                         if body == self.image:
-                            self.assertEqual(legacy_bind(self.path, image), listing.bind_listing_bytes(self.path, image))
+                            self.assertEqual(
+                                legacy_bind(self.path, image), listing.bind_listing_bytes(self.path, image)
+                            )
                         else:
                             with self.assertRaises(ValueError) as original:
                                 legacy_bind(self.path, image)
@@ -154,10 +166,12 @@ class ScopedListingRowsTests(unittest.TestCase):
     def test_each_cached_call_physically_reopens_current_listing_bytes(self):
         original_open = Path.open
         reads = []
+
         def counted(path, *args, **kwargs):
             if path == self.path:
                 reads.append(args[0] if args else kwargs.get("mode", "r"))
             return original_open(path, *args, **kwargs)
+
         with source.parsed_operation(self.root), mock.patch.object(Path, "open", counted):
             listing.bind_listing_bytes(self.path, self.image)
             listing.bind_listing_bytes(self.path, self.image)
@@ -188,8 +202,7 @@ class ScopedListingRowsTests(unittest.TestCase):
             listing.bind_listing_bytes(self.path, self.image)
             key, rows = next(iter(operation._listing_row_cache.items()))
             self.assertIs(type(rows), tuple)
-            self.assertTrue(all(type(item) is tuple and tuple(map(type, item)) == (int, int, bytes)
-                                for item in rows))
+            self.assertTrue(all(type(item) is tuple and tuple(map(type, item)) == (int, int, bytes) for item in rows))
             self.assertIs(rows, operation._listing_row_anchors[0][1])
             self.assertEqual(key, operation._listing_row_anchors[0][0])
             with self.assertRaises(TypeError):
@@ -200,18 +213,20 @@ class ScopedListingRowsTests(unittest.TestCase):
             with source.parsed_operation(self.root) as operation:
                 listing.bind_listing_bytes(self.path, self.image)
                 key, original = next(iter(operation._listing_row_cache.items()))
-                operation._listing_row_cache[key] = ((1, 0, b"\xFF"),)
+                operation._listing_row_cache[key] = ((1, 0, b"\xff"),)
                 with self.assertRaisesRegex(ValueError, "listing input cache is corrupt"):
-                    listing.bind_listing_bytes(self.path, b"\xFF")
+                    listing.bind_listing_bytes(self.path, b"\xff")
                 operation._listing_row_cache[key] = original
                 with self.assertRaisesRegex(ValueError, "listing input cache is corrupt"):
                     operation.listing_rows(self.path, self.path.read_bytes(), listing._listing_parser_policy())
         self.assertIsNone(source._PARSED_OPERATION.get())
 
     def test_last_callback_cache_tampering_is_caught_by_final_close(self):
-        for change in (lambda operation: operation._listing_row_cache.clear(),
-                       lambda operation: setattr(operation, "_listing_row_cache", []),
-                       lambda operation: setattr(operation, "_listing_row_anchors", [])):
+        for change in (
+            lambda operation: operation._listing_row_cache.clear(),
+            lambda operation: setattr(operation, "_listing_row_cache", []),
+            lambda operation: setattr(operation, "_listing_row_anchors", []),
+        ):
             with self.subTest(change=change):
                 with self.assertRaisesRegex(ValueError, "listing input cache is corrupt"):
                     with source.parsed_operation(self.root) as operation:
@@ -220,11 +235,13 @@ class ScopedListingRowsTests(unittest.TestCase):
 
     def test_tampering_from_last_original_raw_closer_cannot_escape_final_guard(self):
         actual_close, closed = inventory.close, []
+
         def close_then_tamper(owner, frozen, **kwargs):
             actual_close(owner, frozen, **kwargs)
             closed.append(owner)
             if owner == self.root / "data":
                 operation._listing_row_cache.clear()
+
         with mock.patch.object(inventory, "close", close_then_tamper):
             with self.assertRaisesRegex(ValueError, "listing input cache is corrupt"):
                 with source.parsed_operation(self.root) as operation:
@@ -234,9 +251,11 @@ class ScopedListingRowsTests(unittest.TestCase):
 
     def test_body_cache_corruption_cannot_skip_original_source_physical_closers(self):
         actual_close, closed = inventory.close, []
+
         def observed_close(owner, frozen, **kwargs):
             actual_close(owner, frozen, **kwargs)
             closed.append(owner)
+
         with mock.patch.object(inventory, "close", observed_close):
             with self.assertRaisesRegex(ValueError, "listing input cache is corrupt"):
                 with source.parsed_operation(self.root) as operation:
@@ -282,7 +301,9 @@ class ScopedListingRowsTests(unittest.TestCase):
         for name in ("_LISTING_MAX_FILE", "_LISTING_MAX_KEYS", "_LISTING_MAX_TOTAL", "_LISTING_MAX_ROWS"):
             with self.subTest(limit=name), mock.patch.object(source, name, 0):
                 with source.parsed_operation(self.root) as operation:
-                    self.assertEqual(legacy_bind(self.path, self.image), listing.bind_listing_bytes(self.path, self.image))
+                    self.assertEqual(
+                        legacy_bind(self.path, self.image), listing.bind_listing_bytes(self.path, self.image)
+                    )
                     self.assertFalse(operation._listing_row_cache)
 
     def test_cumulative_capacity_does_not_evict_or_replace_original_entries(self):
@@ -299,16 +320,26 @@ class ScopedListingRowsTests(unittest.TestCase):
         for name, value in (("SOURCE_COLUMN", 39), ("LISTING_ROW", re.compile(r"^NOT_A_ROW$"))):
             with self.subTest(policy=name), source.parsed_operation(self.root) as operation:
                 listing.bind_listing_bytes(self.path, self.image)
-                with mock.patch.object(listing.symbols, name, value), mock.patch.object(
-                        operation, "listing_rows", side_effect=AssertionError("unsupported policy reused cache")):
+                with (
+                    mock.patch.object(listing.symbols, name, value),
+                    mock.patch.object(
+                        operation, "listing_rows", side_effect=AssertionError("unsupported policy reused cache")
+                    ),
+                ):
                     if name == "LISTING_ROW":
                         with self.assertRaisesRegex(ValueError, "no authenticated printed"):
                             listing.bind_listing_bytes(self.path, self.image)
                     else:
-                        self.assertEqual(legacy_bind(self.path, self.image), listing.bind_listing_bytes(self.path, self.image))
+                        self.assertEqual(
+                            legacy_bind(self.path, self.image), listing.bind_listing_bytes(self.path, self.image)
+                        )
                 self.assertEqual(1, len(operation._listing_row_cache))
-        with source.parsed_operation(self.root) as operation, mock.patch.object(
-                listing, "_parse_listing_rows", side_effect=AssertionError("unsupported parser executed")):
+        with (
+            source.parsed_operation(self.root) as operation,
+            mock.patch.object(
+                listing, "_parse_listing_rows", side_effect=AssertionError("unsupported parser executed")
+            ),
+        ):
             self.assertEqual(1, listing.bind_listing_bytes(self.path, self.image))
             self.assertFalse(operation._listing_row_cache)
 

@@ -53,28 +53,27 @@ def _payload_records(root: Path, profile: str) -> list[dict[str, Any]]:
             if path is None:
                 raise ValueError("sound payload has no source owner: %s" % name)
             sequence = payload["sequence"]
-            records.append({
-                "name": name,
-                "family": family,
-                "path": path,
-                "storage": "binary" if name in includes else "source",
-                "capacity": len(body),
-                "header_byte_count": payload["header_byte_count"],
-                "instrument_offset": payload["instrument_offset"],
-                "entry_offsets": sequence["entry_offsets"],
-                "instruction_count": sequence["instruction_count"],
-                "reachable_byte_count": sequence["reachable_byte_count"],
-                "instructions": [
-                    {
-                        **instruction,
-                        "data": list(body[
-                            instruction["offset"]:
-                            instruction["offset"] + instruction["size"]
-                        ]),
-                    }
-                    for instruction in sequence["instructions"]
-                ],
-            })
+            records.append(
+                {
+                    "name": name,
+                    "family": family,
+                    "path": path,
+                    "storage": "binary" if name in includes else "source",
+                    "capacity": len(body),
+                    "header_byte_count": payload["header_byte_count"],
+                    "instrument_offset": payload["instrument_offset"],
+                    "entry_offsets": sequence["entry_offsets"],
+                    "instruction_count": sequence["instruction_count"],
+                    "reachable_byte_count": sequence["reachable_byte_count"],
+                    "instructions": [
+                        {
+                            **instruction,
+                            "data": list(body[instruction["offset"] : instruction["offset"] + instruction["size"]]),
+                        }
+                        for instruction in sequence["instructions"]
+                    ],
+                }
+            )
     return records
 
 
@@ -113,15 +112,23 @@ def _instruction_identity(instruction: dict[str, Any]) -> dict[str, Any]:
     return {
         key: instruction.get(key)
         for key in (
-            "offset", "size", "kind", "opcode", "extension",
-            "name", "flow", "target",
+            "offset",
+            "size",
+            "kind",
+            "opcode",
+            "extension",
+            "name",
+            "flow",
+            "target",
         )
         if key in instruction
     }
 
 
 def _encoded_payload(
-    record: dict[str, Any], original: dict[str, Any], body: bytes,
+    record: dict[str, Any],
+    original: dict[str, Any],
+    body: bytes,
 ) -> bytes:
     result = bytearray(body)
     instructions = record.get("instructions")
@@ -133,29 +140,19 @@ def _encoded_payload(
             raise ValueError("%s instruction %d is not an object" % (original["name"], index))
         for field, value in _instruction_identity(source).items():
             if instruction.get(field) != value:
-                raise ValueError(
-                    "%s instruction $%04X changes %s"
-                    % (original["name"], source["offset"], field)
-                )
+                raise ValueError("%s instruction $%04X changes %s" % (original["name"], source["offset"], field))
         values = instruction.get("data")
         if not isinstance(values, list) or len(values) != source["size"]:
-            raise ValueError(
-                "%s instruction $%04X changes encoded size"
-                % (original["name"], source["offset"])
-            )
-        if any(
-            not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= 0xFF
-            for value in values
-        ):
-            raise ValueError(
-                "%s instruction $%04X has a non-byte value"
-                % (original["name"], source["offset"])
-            )
+            raise ValueError("%s instruction $%04X changes encoded size" % (original["name"], source["offset"]))
+        if any(not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= 0xFF for value in values):
+            raise ValueError("%s instruction $%04X has a non-byte value" % (original["name"], source["offset"]))
         if source.get("opcode") == 0xF7 and values != source["data"]:
-            raise ValueError("%s instruction $%04X changes a source-owned loop control operand" % (
-                original["name"], source["offset"]))
+            raise ValueError(
+                "%s instruction $%04X changes a source-owned loop control operand"
+                % (original["name"], source["offset"])
+            )
         start = source["offset"]
-        result[start:start + source["size"]] = bytes(values)
+        result[start : start + source["size"]] = bytes(values)
     return bytes(result)
 
 
@@ -166,7 +163,8 @@ def _decoded_payload(record: dict[str, Any], body: bytes) -> dict[str, Any]:
 
 
 def _validate_envelope_references(
-    instructions: list[dict[str, Any]], limits: dict[str, int],
+    instructions: list[dict[str, Any]],
+    limits: dict[str, int],
 ) -> None:
     """Keep edited selectors inside the tables indexed by the cartridge readers."""
     for instruction in instructions:
@@ -182,13 +180,15 @@ def _validate_envelope_references(
                 raise ValueError(
                     "instruction $%04X operand %d selects %s envelope %d "
                     "outside 0..%d (zero disables the envelope)"
-                    % (instruction["offset"], operand_index, family,
-                       selector, limits[family])
+                    % (instruction["offset"], operand_index, family, selector, limits[family])
                 )
 
 
 def _validate_dac_references(
-    family: str, decoded: dict[str, Any], body: bytes, sample_ids: frozenset[int],
+    family: str,
+    decoded: dict[str, Any],
+    body: bytes,
+    sample_ids: frozenset[int],
 ) -> None:
     """Constrain notes reached by the dedicated BGM DAC slot, including calls."""
     if family != "bgm" or not decoded["fm_or_dac_channel_count"]:
@@ -197,7 +197,10 @@ def _validate_dac_references(
     # Channel type $06 alone is ambiguous: the final regular FM slot also uses it.
     start = decoded["channels"][0]["sequence_offset"]
     sequence = decode_reachable_sequence(
-        decoded["label"], body, [start], decoded["instrument_offset"],
+        decoded["label"],
+        body,
+        [start],
+        decoded["instrument_offset"],
         minimum_offset=decoded["header_byte_count"],
     )
     for instruction in sequence["instructions"]:
@@ -216,8 +219,12 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "payload_count",
-        "instruction_count", "reachable_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "payload_count",
+        "instruction_count",
+        "reachable_byte_count",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -244,8 +251,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "family", "path", "storage", "capacity", "header_byte_count",
-            "instrument_offset", "entry_offsets", "instruction_count",
+            "family",
+            "path",
+            "storage",
+            "capacity",
+            "header_byte_count",
+            "instrument_offset",
+            "entry_offsets",
+            "instruction_count",
             "reachable_byte_count",
         ):
             if record.get(field) != original[field]:
@@ -258,13 +271,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             _validate_envelope_references(edited_instructions, limits)
             _validate_dac_references(original["family"], decoded, encoded, sample_ids)
             source_decoded = _decoded_payload(original, stored[name])
-            validate_period_references(original["family"], source_decoded, stored[name], decoded, encoded, period_limit, period_identity)
+            validate_period_references(
+                original["family"], source_decoded, stored[name], decoded, encoded, period_limit, period_identity
+            )
             if len(edited_instructions) != len(source_instructions):
                 raise ValueError("reachable instruction inventory changes")
             for source, edited in zip(source_instructions, edited_instructions):
                 if _instruction_identity(source) != _instruction_identity(edited):
-                    raise ValueError(
-                        "instruction identity changes at $%04X" % source["offset"])
+                    raise ValueError("instruction identity changes at $%04X" % source["offset"])
         except (KeyError, TypeError, ValueError) as error:
             errors.append("%s: %s" % (name, error))
     return errors
@@ -277,7 +291,10 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     authority = validation_root or root
@@ -299,6 +316,7 @@ def apply_document(
         if write:
             path = root / record["path"]
             from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
             _write_bytes(path, body)
     for relative, replacements in sorted(source_changes.items()):
         path = root / relative
@@ -308,6 +326,7 @@ def apply_document(
         changed.append(relative)
         if write:
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, rebuilt)
     return sorted(changed)
 
@@ -341,8 +360,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s sound sequences: %d payloads, %d instructions" % (
-                args.profile, document["payload_count"], document["instruction_count"]))
+            print(
+                "[OK] %s sound sequences: %d payloads, %d instructions"
+                % (args.profile, document["payload_count"], document["instruction_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

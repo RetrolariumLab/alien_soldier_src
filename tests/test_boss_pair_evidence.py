@@ -12,10 +12,7 @@ REVIEWS = ROOT / "config/duplicate_basis_reviews.json"
 class BossPairEvidenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.reviews = {
-            item["basis"]: item
-            for item in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
+        cls.reviews = {item["basis"]: item for item in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
 
     def test_caterpillar_gate_is_shared_but_mapping_cycles_differ(self) -> None:
         basis = (
@@ -63,8 +60,7 @@ class BossPairEvidenceTests(unittest.TestCase):
 
     def test_antroid_contact_gate_is_shared_but_followups_differ(self) -> None:
         basis = (
-            "After selecting one of two linked parts, this branch tests its Y "
-            "coordinate before applying attack impact."
+            "After selecting one of two linked parts, this branch tests its Y coordinate before applying attack impact."
         )
         self.assertEqual(
             ["0x037810", "0x0378DA"],
@@ -87,9 +83,7 @@ class BossPairEvidenceTests(unittest.TestCase):
             ["0x04E5F8", "0x04E630"],
             [member["address"] for member in self.reviews[basis]["members"]],
         )
-        source = (ROOT / "src/bosses/shield_viper_attacks.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/bosses/shield_viper_attacks.s").read_text(encoding="utf-8")
         for label, loop in (
             ("Gfx_ShieldViperAdvanceHorizontalFlipLoop", "Gfx_ShieldViperUpdateHorizontalFlipLoop"),
             ("Gfx_ShieldViperAdvanceForcedHorizontalFlipLoop", "Gfx_ShieldViperForceHorizontalFlipLoop"),
@@ -102,24 +96,17 @@ class BossPairEvidenceTests(unittest.TestCase):
         self.assertIn("ori.w   #$2000,$E(a0)", source)
 
     def test_terobuster_part_windows_differ_between_missile_attacks(self) -> None:
-        basis = (
-            "The pose cursor range and side field determine whether the two "
-            "fixed part slots are exchanged."
-        )
+        basis = "The pose cursor range and side field determine whether the two fixed part slots are exchanged."
         self.assertEqual(
             ["0x038802", "0x0388CC"],
             [member["address"] for member in self.reviews[basis]["members"]],
         )
-        source = (ROOT / "src/bosses/terobuster_core.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/bosses/terobuster_core.s").read_text(encoding="utf-8")
         for variant, low, high in (("A", "5", "$18"), ("B", "$10", "$20")):
             with self.subTest(variant=variant):
                 entry = f"Boss_TerobusterMissileAttack{variant}Update"
                 bind = f"Boss_TerobusterMissileAttack{variant}BindPart"
-                block = source.split(entry + ":", 1)[1].split(
-                    bind + ":", 1
-                )[0]
+                block = source.split(entry + ":", 1)[1].split(bind + ":", 1)[0]
                 slots = block.split("movea.w #(SixthEntityType-M68K_RAM),a0", 1)[1]
                 self.assertIn("#(SixthEntityType-M68K_RAM),a0", block)
                 self.assertIn("#(EleventhEntityType-M68K_RAM),a1", block)
@@ -134,19 +121,21 @@ class BossPairEvidenceTests(unittest.TestCase):
             ["0x04A3B6", "0x04A462"],
             [member["address"] for member in self.reviews[basis]["members"]],
         )
-        source = (ROOT / "src/bosses/jampan_support.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/bosses/jampan_support.s").read_text(encoding="utf-8")
         for owner, clear, ret in (
-            ("Boss_JampanRadialLinkedObjectMain", "Boss_JampanClearRadialObjectPriorityFlag",
-             "Boss_JampanRadialLinkedObjectMainReturn"),
-            ("Boss_JampanLinkedAnimationObjectMain", "Boss_JampanClearAnimationObjectPriorityFlag",
-             "Boss_JampanLinkedAnimationObjectMainReturn"),
+            (
+                "Boss_JampanRadialLinkedObjectMain",
+                "Boss_JampanClearRadialObjectPriorityFlag",
+                "Boss_JampanRadialLinkedObjectMainReturn",
+            ),
+            (
+                "Boss_JampanLinkedAnimationObjectMain",
+                "Boss_JampanClearAnimationObjectPriorityFlag",
+                "Boss_JampanLinkedAnimationObjectMainReturn",
+            ),
         ):
             with self.subTest(owner=owner):
-                block = source.split(owner + ":", 1)[1].split(
-                    "; End of function " + owner, 1
-                )[0]
+                block = source.split(owner + ":", 1)[1].split("; End of function " + owner, 1)[0]
                 self.assertIn("cmp.b   (PrimaryEntityAngle).w,d0", block)
                 self.assertIn(f"bhi.s   {clear}", block)
                 self.assertIn("ori.w   #$8000,$E(a5)", block)
@@ -155,27 +144,22 @@ class BossPairEvidenceTests(unittest.TestCase):
                 self.assertIn(ret + ":", block)
 
     def test_destroyer_bouncing_parts_share_downward_core(self) -> None:
-        basis = (
-            "The state rotates, adds $4000 to vertical velocity, "
-            "and disables drawing at Y $180."
-        )
+        basis = "The state rotates, adds $4000 to vertical velocity, and disables drawing at Y $180."
         self.assertEqual(
             ["0x04B8DA", "0x04B9D2"],
             [member["address"] for member in self.reviews[basis]["members"]],
         )
-        source = (
-            ROOT / "src/bosses/destroyer_mk2_linked_parts_and_debris.s"
-        ).read_text(encoding="utf-8")
+        source = (ROOT / "src/bosses/destroyer_mk2_linked_parts_and_debris.s").read_text(encoding="utf-8")
         for variant in ("A", "B"):
             with self.subTest(variant=variant):
                 owner = f"Object_DestroyerMK2AccelerateBouncingPart{variant}Downward"
-                body = source.split(owner + ":", 1)[1].split(
-                    "; End of function " + owner, 1
-                )[0]
+                body = source.split(owner + ":", 1)[1].split("; End of function " + owner, 1)[0]
                 for instruction in (
-                    "addi.w  #$10,$4C(a5)", "andi.w  #$1FE,d2",
+                    "addi.w  #$10,$4C(a5)",
+                    "andi.w  #$1FE,d2",
                     "bsr.w   Boss_DestroyerMK2SelectCurrentObjectForFrame",
-                    "addi.l  #$4000,$1C(a5)", "cmpi.w  #$180,$14(a5)",
+                    "addi.l  #$4000,$1C(a5)",
+                    "cmpi.w  #$180,$14(a5)",
                     "move.w  #$1000,2(a5)",
                 ):
                     self.assertIn(instruction, body)
@@ -187,9 +171,7 @@ class BossPairEvidenceTests(unittest.TestCase):
             ["0x0387CC", "0x038886"],
             [member["address"] for member in self.reviews[basis]["members"]],
         )
-        source = (ROOT / "src/bosses/terobuster_core.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/bosses/terobuster_core.s").read_text(encoding="utf-8")
         for variant, first, second, branch in (
             ("A", "8", "$18", "beq.w"),
             ("B", "$10", "$20", "bne.w"),
@@ -207,10 +189,7 @@ class BossPairEvidenceTests(unittest.TestCase):
                 self.assertIn(f"{branch}   Boss_TerobusterSelectPartOrderA", block)
 
     def test_medusa_no_play_returns_have_distinct_frame_masks(self) -> None:
-        basis = (
-            "This branch is the explicit no-play return of the adjacent "
-            "frame-masked Medusa sound helper."
-        )
+        basis = "This branch is the explicit no-play return of the adjacent frame-masked Medusa sound helper."
         self.assertEqual(
             ["0x057030", "0x057042"],
             [member["address"] for member in self.reviews[basis]["members"]],
@@ -220,9 +199,7 @@ class BossPairEvidenceTests(unittest.TestCase):
             with self.subTest(period=period):
                 owner = f"Boss_MedusaPlaySFXEvery{period}Frames"
                 ret = f"Boss_PlayMedusaSFXEvery{period}FramesReturn"
-                block = source.split(owner + ":", 1)[1].split(
-                    "; End of function " + owner, 1
-                )[0]
+                block = source.split(owner + ":", 1)[1].split("; End of function " + owner, 1)[0]
                 self.assertIn(f"andi.w  #{mask},d1", block)
                 self.assertIn(f"bne.s   {ret}", block)
                 self.assertIn("jmp     (Sound_QueueSFXRequest).l", block)
@@ -243,9 +220,7 @@ class BossPairEvidenceTests(unittest.TestCase):
         ):
             with self.subTest(owner=owner):
                 source = (ROOT / path).read_text(encoding="utf-8")
-                reader = source.split(owner + "ReadNextPoseCommand:", 1)[1].split(
-                    owner + "ReadPoseControlWord:", 1
-                )[0]
+                reader = source.split(owner + "ReadNextPoseCommand:", 1)[1].split(owner + "ReadPoseControlWord:", 1)[0]
                 self.assertIn(f"clr.w   {scratch}(a5)", source)
                 self.assertIn("move.w  $58(a5),d0", reader)
                 self.assertIn("cmpi.b  #$80,(a1,d0.w)", reader)
@@ -309,12 +284,8 @@ class BossPairEvidenceTests(unittest.TestCase):
         ):
             with self.subTest(owner=owner):
                 source = (ROOT / path).read_text(encoding="utf-8")
-                prelude = source.split(owner + "UpdatePose:", 1)[1].split(
-                    owner + "ReadPoseCommand:", 1
-                )[0]
-                reader = source.split(owner + "ReadPoseCommand:", 1)[1].split(
-                    owner + "HandlePoseControlWord:", 1
-                )[0]
+                prelude = source.split(owner + "UpdatePose:", 1)[1].split(owner + "ReadPoseCommand:", 1)[0]
+                reader = source.split(owner + "ReadPoseCommand:", 1)[1].split(owner + "HandlePoseControlWord:", 1)[0]
                 self.assertIn("clr.b   $23E(a5)", prelude)
                 self.assertIn("tst.w   $C(a5)", prelude)
                 self.assertIn("move.w  $58(a5),d0", reader)

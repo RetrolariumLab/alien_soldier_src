@@ -17,34 +17,76 @@ from authoring import graphics_studio  # noqa: E402
 
 
 def tiny_documents() -> tuple[dict, dict, dict, dict, dict]:
-    tile = {"payloads": [{
-        "name": "fixture_tile", "blocks": [{"tiles": ["0" * 64]}],
-    }]}
-    compressed = {"payloads": [{
-        "name": "fixture_compressed", "tile_count": 1,
-        "compressed_capacity": 64, "blocks": [{"tiles": ["0" * 64]}],
-    }]}
-    palettes = {"commands": [{
-        "label": "fixture_palette", "colour_count": 1,
-        "destination": 0, "storage": "fixture", "source_path": "fixture",
-        "colours": [0],
-    }]}
-    mappings = {"blocks": [{
-        "storage": "fixture", "payload_path": "", "source_path": "fixture",
-        "mappings": [{
-            "label": "fixture_mapping", "dynamic": False,
-            "pieces": [{
-                "x": 0, "y": 0, "attributes": 0x8000,
-                "size": 0, "link": 0,
-            }],
-        }],
-    }]}
-    animations = {"frame_targets": ["fixture_mapping"], "scripts": [{
-        "name": "fixture_animation", "source_path": "fixture",
-        "frames": [{
-            "jump": False, "target": "fixture_mapping", "duration": 1,
-        }],
-    }]}
+    tile = {
+        "payloads": [
+            {
+                "name": "fixture_tile",
+                "blocks": [{"tiles": ["0" * 64]}],
+            }
+        ]
+    }
+    compressed = {
+        "payloads": [
+            {
+                "name": "fixture_compressed",
+                "tile_count": 1,
+                "compressed_capacity": 64,
+                "blocks": [{"tiles": ["0" * 64]}],
+            }
+        ]
+    }
+    palettes = {
+        "commands": [
+            {
+                "label": "fixture_palette",
+                "colour_count": 1,
+                "destination": 0,
+                "storage": "fixture",
+                "source_path": "fixture",
+                "colours": [0],
+            }
+        ]
+    }
+    mappings = {
+        "blocks": [
+            {
+                "storage": "fixture",
+                "payload_path": "",
+                "source_path": "fixture",
+                "mappings": [
+                    {
+                        "label": "fixture_mapping",
+                        "dynamic": False,
+                        "pieces": [
+                            {
+                                "x": 0,
+                                "y": 0,
+                                "attributes": 0x8000,
+                                "size": 0,
+                                "link": 0,
+                            }
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+    animations = {
+        "frame_targets": ["fixture_mapping"],
+        "scripts": [
+            {
+                "name": "fixture_animation",
+                "source_path": "fixture",
+                "frames": [
+                    {
+                        "jump": False,
+                        "target": "fixture_mapping",
+                        "duration": 1,
+                    }
+                ],
+            }
+        ],
+    }
     return tile, compressed, palettes, mappings, animations
 
 
@@ -52,6 +94,7 @@ class GraphicsStudioWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
@@ -67,10 +110,15 @@ class GraphicsStudioWidgetTests(unittest.TestCase):
             raise unittest.SkipTest("Tk display is unavailable") from error
 
     def test_both_profiles_wire_five_editors_and_gallery_without_staging(self) -> None:
-        gallery = [{
-            "handler": "FixtureHandler", "spawn_list": "FixtureSpawnList",
-            "placement_index": 0, "stage_indices": [0], "object_type": 1,
-        }]
+        gallery = [
+            {
+                "handler": "FixtureHandler",
+                "spawn_list": "FixtureSpawnList",
+                "placement_index": 0,
+                "stage_indices": [0],
+                "object_type": 1,
+            }
+        ]
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
                 tile, compressed, palettes, mappings, animations = tiny_documents()
@@ -83,30 +131,46 @@ class GraphicsStudioWidgetTests(unittest.TestCase):
                     root.withdraw()
                     return root
 
-                with (mock.patch.object(self.tk, "Tk", new=hidden_tk),
-                      mock.patch.object(graphics_studio, "catalogue",
-                                        return_value=gallery)):
+                with (
+                    mock.patch.object(self.tk, "Tk", new=hidden_tk),
+                    mock.patch.object(graphics_studio, "catalogue", return_value=gallery),
+                ):
                     window = graphics_studio.Window(
-                        ROOT, profile,
-                        ROOT / "build/unused_tile.json", tile,
-                        ROOT / "build/unused_compressed.json", compressed,
-                        ROOT / "build/unused_palette.json", palettes,
-                        ROOT / "build/unused_mapping.json", mappings,
-                        ROOT / "build/unused_animation.json", animations,
-                        ROOT / "build/unused_level.json", {}, 0,
-                        self.tk, self.ttk, messages)
+                        ROOT,
+                        profile,
+                        ROOT / "build/unused_tile.json",
+                        tile,
+                        ROOT / "build/unused_compressed.json",
+                        compressed,
+                        ROOT / "build/unused_palette.json",
+                        palettes,
+                        ROOT / "build/unused_mapping.json",
+                        mappings,
+                        ROOT / "build/unused_animation.json",
+                        animations,
+                        ROOT / "build/unused_level.json",
+                        {},
+                        0,
+                        self.tk,
+                        self.ttk,
+                        messages,
+                    )
                 try:
                     notebook = next(
-                        child for child in window.window.winfo_children()
-                        if isinstance(child, self.ttk.Notebook))
+                        child for child in window.window.winfo_children() if isinstance(child, self.ttk.Notebook)
+                    )
                     self.assertEqual(6, len(notebook.tabs()))
                     self.assertEqual(128, len(window.canvas.find_all()))
                     self.assertEqual(128, len(window.compressed_canvas.find_all()))
                     self.assertIn("FixtureHandler", window.gallery_info.cget("text"))
                     for chooser in (
-                            window.chooser, window.compressed_chooser,
-                            window.palette_chooser, window.mapping_chooser,
-                            window.animation_chooser, window.gallery_chooser):
+                        window.chooser,
+                        window.compressed_chooser,
+                        window.palette_chooser,
+                        window.mapping_chooser,
+                        window.animation_chooser,
+                        window.gallery_chooser,
+                    ):
                         chooser.current(0)
                         chooser.event_generate("<<ComboboxSelected>>")
                         window.window.update()

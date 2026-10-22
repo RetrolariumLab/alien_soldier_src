@@ -15,7 +15,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring import level_studio, level_studio_model, level_studio_state  # noqa: E402
 from authoring.stage_map_model import (  # noqa: E402
-    export_document as export_maps, validate_document as validate_maps)
+    export_document as export_maps,
+    validate_document as validate_maps,
+)
 from authoring.screen_map_model import (  # noqa: E402
     export_document as export_screen_maps,
     validate_document as validate_screen_maps,
@@ -32,13 +34,11 @@ class WorkspaceStateTests(unittest.TestCase):
         name = self.document["configurations"][0]["fields"]["spawn_list"]
         record = next(item for item in self.document["spawn_lists"] if item["name"] == name)
         record["entries"][0]["x"] += 3
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         self.assertEqual(record["entries"][0]["x"], studio.placements[0].entry.x)
 
     def test_edits_survive_switching_to_another_stage_document(self) -> None:
-        first = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        first = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         changed = first.placements[0].entry.x + 1
         first.set_field(0, "x", changed)
         carried = first.document()
@@ -47,8 +47,7 @@ class WorkspaceStateTests(unittest.TestCase):
         self.assertEqual(changed, reopened.placements[0].entry.x)
 
     def test_placement_edits_validate_dispatch_and_pool_before_commit(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         original = studio.placements[0].entry
         with self.assertRaisesRegex(ValueError, "object_type has no dispatch handler"):
             studio.set_field(0, "object_type", 0xFFFF)
@@ -66,11 +65,9 @@ class WorkspaceStateTests(unittest.TestCase):
         self.assertFalse(studio.edited)
 
     def test_spawn_gate_follows_source_list_order_and_updates_after_edit(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 4, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 4, profile="jp", document=self.document)
         self.assertEqual("Stage5_ObjectSpawnList", studio.spawn_list_name)
-        self.assertEqual((0x400, 0x3E0),
-                         (studio.placements[12].entry.x, studio.placements[13].entry.x))
+        self.assertEqual((0x400, 0x3E0), (studio.placements[12].entry.x, studio.placements[13].entry.x))
         self.assertEqual(0x400, studio.spawn_trigger_x(13))
         studio.set_field(12, "x", 0x420)
         self.assertEqual(0x420, studio.spawn_trigger_x(13))
@@ -78,15 +75,13 @@ class WorkspaceStateTests(unittest.TestCase):
             studio.spawn_trigger_x(len(studio.placements))
 
     def test_multi_field_placement_edit_is_atomic(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         original = studio.placements[0].entry
         with self.assertRaisesRegex(ValueError, "object_type has no dispatch handler"):
             studio.set_fields(0, {"x": original.x + 1, "object_type": 0xFFFF})
         self.assertEqual(original, studio.placements[0].entry)
         self.assertFalse(studio.edited)
-        record = next(item for item in studio.document()["spawn_lists"]
-                      if item["name"] == studio.spawn_list.name)
+        record = next(item for item in studio.document()["spawn_lists"] if item["name"] == studio.spawn_list.name)
         self.assertEqual(original.x, record["entries"][0]["x"])
 
         studio.set_fields(0, {"x": original.x + 1, "y": original.y + 1})
@@ -94,8 +89,7 @@ class WorkspaceStateTests(unittest.TestCase):
         self.assertEqual(original.y + 1, studio.placements[0].entry.y)
 
     def test_configuration_change_is_all_or_nothing_and_validated(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         original = dict(studio.configuration.fields)
         invalid = dict(original)
         invalid["player_x"] = "$100"
@@ -110,23 +104,21 @@ class WorkspaceStateTests(unittest.TestCase):
         self.assertEqual(changed.camera_x, studio.scene.parallax_origin)
         self.assertEqual(changed.camera_x, studio.source_scene.parallax_origin)
         document = studio.document()
-        record = next(item for item in document["configurations"]
-                      if item["name"] == changed.name)
+        record = next(item for item in document["configurations"] if item["name"] == changed.name)
         self.assertEqual(changed.camera_x, record["fields"]["camera_x"])
 
-        reopened = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=document)
+        reopened = level_studio_state.open_stage(ROOT, 0, profile="jp", document=document)
         self.assertEqual(changed.camera_x, reopened.scene.configuration.camera_x)
         self.assertEqual(changed.camera_x, reopened.scene.parallax_origin)
 
     def test_configuration_spawn_pointer_refreshes_live_placements(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         original_name = studio.spawn_list.name
         destination = next(
-            item for item in self.document["spawn_lists"]
-            if item["name"] != original_name
-            and 0 < len(item["entries"]) < len(studio.placements))
+            item
+            for item in self.document["spawn_lists"]
+            if item["name"] != original_name and 0 < len(item["entries"]) < len(studio.placements)
+        )
         studio.selection = len(studio.placements) - 1
         values = dict(studio.configuration.fields)
         values["spawn_list"] = destination["name"]
@@ -144,15 +136,13 @@ class WorkspaceStateTests(unittest.TestCase):
         self.assertEqual(len(destination["entries"]), len(studio.placements))
 
     def test_configuration_scene_build_failure_keeps_live_state(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         original_scene = studio.scene
         original_spawn = studio.spawn_list
         original_document = studio.document()
         values = dict(studio.configuration.fields)
         values["camera_x"] = int(values["camera_x"]) + 1
-        with mock.patch.object(level_studio_state, "open_stage",
-                               side_effect=ValueError("scene cannot be built")):
+        with mock.patch.object(level_studio_state, "open_stage", side_effect=ValueError("scene cannot be built")):
             with self.assertRaisesRegex(ValueError, "scene cannot be built"):
                 studio.set_configuration_fields(values)
         self.assertIs(original_scene, studio.scene)
@@ -170,8 +160,7 @@ class WorkspaceStateTests(unittest.TestCase):
             values = dict(studio.configuration.fields)
             values["camera_x"] = int(values["camera_x"]) + 8
             values["plane_b_mode"] = "$8004"
-            with self.subTest(profile=profile), mock.patch.object(
-                    level_studio_state, "open_stage") as reopened:
+            with self.subTest(profile=profile), mock.patch.object(level_studio_state, "open_stage") as reopened:
                 with self.assertRaisesRegex(ValueError, "plane_b_mode.*aligned table offset"):
                     studio.set_configuration_fields(values)
                 window = object.__new__(level_studio.Window)
@@ -197,31 +186,24 @@ class WorkspaceStateTests(unittest.TestCase):
             self.assertFalse(studio.edited)
 
     def test_plain_stage_route_switches_configuration_and_rejects_special(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.document)
         self.assertTrue(studio.route_editable)
-        self.assertEqual("Stage2ConfigRecord",
-                         studio.set_stage_configuration("Stage2ConfigRecord").name)
+        self.assertEqual("Stage2ConfigRecord", studio.set_stage_configuration("Stage2ConfigRecord").name)
         self.assertEqual("Stage2ConfigRecord", studio.configuration.name)
-        self.assertEqual("Stage2ConfigRecord",
-                         studio.document()["stage_slots"][0]["configuration"])
-        self.assertEqual("Stage2ConfigRecord",
-                         level_studio_state.stage_rows(ROOT, studio.document())[0]
-                         ["record"])
+        self.assertEqual("Stage2ConfigRecord", studio.document()["stage_slots"][0]["configuration"])
+        self.assertEqual("Stage2ConfigRecord", level_studio_state.stage_rows(ROOT, studio.document())[0]["record"])
         with self.assertRaisesRegex(ValueError, "no known configuration"):
             studio.set_stage_configuration("InventedConfigRecord")
         self.assertEqual("Stage2ConfigRecord", studio.configuration.name)
 
-        special = level_studio_state.open_stage(
-            ROOT, 7, profile="jp", document=self.document)
+        special = level_studio_state.open_stage(ROOT, 7, profile="jp", document=self.document)
         self.assertFalse(special.route_editable)
         with self.assertRaisesRegex(ValueError, "fixed special initializer route"):
             special.set_stage_configuration("Stage1ConfigRecord")
 
     def test_workspace_rows_follow_an_edited_spawn_pointer(self) -> None:
         records = self.document["configurations"]
-        destination = next(item for item in self.document["spawn_lists"]
-                           if len(item["entries"]) != 20)
+        destination = next(item for item in self.document["spawn_lists"] if len(item["entries"]) != 20)
         records[0]["fields"]["spawn_list"] = destination["name"]
         rows = level_studio_state.stage_rows(ROOT, self.document)
         self.assertEqual(len(destination["entries"]), rows[0]["placements"])
@@ -230,20 +212,17 @@ class WorkspaceStateTests(unittest.TestCase):
 class BoundedRenderingTests(unittest.TestCase):
     def test_viewport_render_never_expands_to_the_whole_stage(self) -> None:
         document = level_studio_model.export_document(ROOT, "jp")
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=document)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", document=document)
         self.assertGreater(studio.width, 8000)
         with tempfile.TemporaryDirectory() as directory:
-            path, _, width = level_studio.render_view(
-                studio, Path(directory), start_x=128, width=64)
+            path, _, width = level_studio.render_view(studio, Path(directory), start_x=128, width=64)
             self.assertEqual(64, width)
             self.assertTrue(path.is_file())
             self.assertLess(path.stat().st_size, 100000)
 
     def test_playtest_command_maps_stage_slot_to_one_based_password_stage(self) -> None:
         self.assertEqual(
-            ["make", "--no-print-directory", "playtest-level",
-             "CONTENT_PROFILE=eu", "PLAYTEST_STAGE=13"],
+            ["make", "--no-print-directory", "playtest-level", "CONTENT_PROFILE=eu", "PLAYTEST_STAGE=13"],
             level_studio.playtest_make_command("eu", 12),
         )
         with self.assertRaisesRegex(ValueError, "slots 0..24"):
@@ -259,18 +238,17 @@ class StageMapPreviewTests(unittest.TestCase):
 
     def test_unedited_document_and_reverted_cell_use_original_ram(self) -> None:
         base = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         original_ram = base.scene.tilemap.ram
         changed = deepcopy(self.maps)
-        record = next(item for item in changed["payloads"]
-                      if item["name"] == "Stage1BaseMappingData6000")
+        record = next(item for item in changed["payloads"] if item["name"] == "Stage1BaseMappingData6000")
         record["values"][0] ^= 1
         validate_maps(changed, ROOT, "jp")
 
         edited = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=changed, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=changed, map_baseline=self.maps
+        )
         self.assertNotEqual(original_ram, edited.scene.tilemap.ram)
         self.assertEqual(edited.source_scene.tilemap.ram, original_ram)
 
@@ -279,12 +257,11 @@ class StageMapPreviewTests(unittest.TestCase):
 
     def test_configuration_refresh_retains_staged_map_preview(self) -> None:
         changed = deepcopy(self.maps)
-        record = next(item for item in changed["payloads"]
-                      if item["name"] == "Stage1BaseMappingData6000")
+        record = next(item for item in changed["payloads"] if item["name"] == "Stage1BaseMappingData6000")
         record["values"][0] ^= 1
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=changed, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=changed, map_baseline=self.maps
+        )
         original_ram = studio.source_scene.tilemap.ram
         edited_ram = studio.scene.tilemap.ram
         self.assertNotEqual(original_ram, edited_ram)
@@ -298,103 +275,107 @@ class StageMapPreviewTests(unittest.TestCase):
 
     def test_preview_rejects_missing_source_owned_baseline(self) -> None:
         with self.assertRaisesRegex(ValueError, "baseline is required"):
-            level_studio_state.open_stage(
-                ROOT, 0, profile="jp", document=self.levels,
-                map_document=self.maps)
+            level_studio_state.open_stage(ROOT, 0, profile="jp", document=self.levels, map_document=self.maps)
 
     def test_saved_screen_map_edit_is_composed_and_conflicts_fail_closed(self) -> None:
         shared = "SharedMappingData7000"
         peer = deepcopy(self.screen_maps)
-        screen_record = next(record for record in peer["payloads"]
-                             if record["name"] == shared)
+        screen_record = next(record for record in peer["payloads"] if record["name"] == shared)
         screen_record["values"] = [0] * screen_record["value_count"]
         validate_screen_maps(peer, ROOT, "jp")
         original = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         composed = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps,
-            screen_document=peer, screen_baseline=self.screen_maps)
+            ROOT,
+            0,
+            profile="jp",
+            document=self.levels,
+            map_document=self.maps,
+            map_baseline=self.maps,
+            screen_document=peer,
+            screen_baseline=self.screen_maps,
+        )
         self.assertNotEqual(original.scene.tilemap.ram, composed.scene.tilemap.ram)
 
         same = deepcopy(self.maps)
-        same_record = next(record for record in same["payloads"]
-                           if record["name"] == shared)
+        same_record = next(record for record in same["payloads"] if record["name"] == shared)
         same_record["values"] = screen_record["values"][:]
         level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=same, map_baseline=self.maps,
-            screen_document=peer, screen_baseline=self.screen_maps)
+            ROOT,
+            0,
+            profile="jp",
+            document=self.levels,
+            map_document=same,
+            map_baseline=self.maps,
+            screen_document=peer,
+            screen_baseline=self.screen_maps,
+        )
 
         same_record["values"] = [1] * same_record["value_count"]
         with self.assertRaisesRegex(ValueError, "conflicting map workspace edits"):
             level_studio_state.open_stage(
-                ROOT, 0, profile="jp", document=self.levels,
-                map_document=same, map_baseline=self.maps,
-                screen_document=peer, screen_baseline=self.screen_maps)
+                ROOT,
+                0,
+                profile="jp",
+                document=self.levels,
+                map_document=same,
+                map_baseline=self.maps,
+                screen_document=peer,
+                screen_baseline=self.screen_maps,
+            )
 
     def test_preview_pixel_resolves_each_plane_a_map_layer_to_its_source(self) -> None:
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         x, y = 355, 0
         plane = studio.scene.tilemap
         self.assertTrue(plane.defined(x, y))
         for role, actual in (
-                ("coarse", plane.coarse_index(x, y)),
-                ("chunks", plane.chunk_index(x, y)),
-                ("patterns", plane.name_word(x, y))):
-            hit = level_studio_state.locate_stage_map_cell(
-                studio, self.maps, x, y, role)
-            self.assertEqual(actual,
-                             self.maps["payloads"][hit.payload_index]["values"][
-                                 hit.value_index])
+            ("coarse", plane.coarse_index(x, y)),
+            ("chunks", plane.chunk_index(x, y)),
+            ("patterns", plane.name_word(x, y)),
+        ):
+            hit = level_studio_state.locate_stage_map_cell(studio, self.maps, x, y, role)
+            self.assertEqual(actual, self.maps["payloads"][hit.payload_index]["values"][hit.value_index])
             self.assertEqual(role, hit.role)
             self.assertEqual((x, y), (hit.world_x, hit.world_y))
-            neighbour = level_studio_state.locate_stage_map_cell(
-                studio, self.maps, x + 1, y, role)
-            self.assertEqual((hit.payload_index, hit.value_index, hit.ram_address),
-                             (neighbour.payload_index, neighbour.value_index,
-                              neighbour.ram_address))
+            neighbour = level_studio_state.locate_stage_map_cell(studio, self.maps, x + 1, y, role)
+            self.assertEqual(
+                (hit.payload_index, hit.value_index, hit.ram_address),
+                (neighbour.payload_index, neighbour.value_index, neighbour.ram_address),
+            )
 
         with self.assertRaisesRegex(ValueError, "outside the stage map preview"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, studio.width, y, "chunks")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, studio.width, y, "chunks")
         with self.assertRaisesRegex(ValueError, "unsupported stage-map role"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, x, y, "tiles")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, x, y, "tiles")
 
     def test_plane_b_hit_uses_viewport_parallax_and_source_owned_streams(self) -> None:
         for profile in ("jp", "eu"):
             maps = export_maps(ROOT, profile)
-            studio = level_studio_state.open_stage(
-                ROOT, 0, profile=profile, map_document=maps,
-                map_baseline=maps)
+            studio = level_studio_state.open_stage(ROOT, 0, profile=profile, map_document=maps, map_baseline=maps)
             plane = studio.scene.plane_b
             self.assertIsNotNone(plane)
             for role in ("coarse", "chunks", "patterns"):
-                hit = level_studio_state.locate_stage_map_cell(
-                    studio, maps, 355, 0, role, "plane_b", 352)
+                hit = level_studio_state.locate_stage_map_cell(studio, maps, 355, 0, role, "plane_b", 352)
                 self.assertEqual(91, hit.world_x)
-                actual = {"coarse": plane.coarse_index,
-                          "chunks": plane.chunk_index,
-                          "patterns": plane.name_word}[role](91, 0)
-                self.assertEqual(actual, maps["payloads"][hit.payload_index][
-                    "values"][hit.value_index])
+                actual = {"coarse": plane.coarse_index, "chunks": plane.chunk_index, "patterns": plane.name_word}[role](
+                    91, 0
+                )
+                self.assertEqual(actual, maps["payloads"][hit.payload_index]["values"][hit.value_index])
             with self.assertRaisesRegex(ValueError, "invalid plane A camera"):
-                level_studio_state.locate_stage_map_cell(
-                    studio, maps, 355, 0, "chunks", "plane_b", 356)
+                level_studio_state.locate_stage_map_cell(studio, maps, 355, 0, "chunks", "plane_b", 356)
             studio.scene = replace(studio.scene, plane_b=None)
             with self.assertRaisesRegex(ValueError, "plane B has no supported map"):
-                level_studio_state.locate_stage_map_cell(
-                    studio, maps, 355, 0, "chunks", "plane_b", 352)
+                level_studio_state.locate_stage_map_cell(studio, maps, 355, 0, "chunks", "plane_b", 352)
 
     def test_plane_b_brush_changes_a_bounded_stage_preview(self) -> None:
         window = object.__new__(level_studio.Window)
         window.studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         window.project = ROOT
         window.profile = "jp"
         window.map_baseline = self.maps
@@ -415,8 +396,7 @@ class StageMapPreviewTests(unittest.TestCase):
         window.map_paint.get.return_value = True
         window.messagebox = mock.Mock()
         window.canvas = mock.Mock()
-        window.select_map = mock.Mock(side_effect=lambda index:
-                                      window.map_state.select_payload(index))
+        window.select_map = mock.Mock(side_effect=lambda index: window.map_state.select_payload(index))
         window.show_map_value = mock.Mock()
         window._changed = mock.Mock()
         window.render = mock.Mock()
@@ -431,35 +411,32 @@ class StageMapPreviewTests(unittest.TestCase):
         window.messagebox.showerror.assert_not_called()
 
     def test_plane_b_highlight_uses_secondary_camera_origin(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", map_document=self.maps,
-            map_baseline=self.maps)
+        studio = level_studio_state.open_stage(ROOT, 0, profile="jp", map_document=self.maps, map_baseline=self.maps)
         window = object.__new__(level_studio.Window)
         window.studio = studio
         window.page_x = 352
         window.viewport_cell_plane = "plane_b"
         window.viewport_cell = level_studio_state.locate_stage_map_cell(
-            studio, self.maps, 355, 0, "chunks", "plane_b", 352)
+            studio, self.maps, 355, 0, "chunks", "plane_b", 352
+        )
         window.canvas = mock.Mock()
         window.show_viewport_map_highlight()
-        self.assertEqual([
-            mock.call(-24, 0, 8, 32, outline="#ffdf64", width=2,
-                      tags="map-hit"),
-            mock.call(488, 0, 520, 32, outline="#ffdf64", width=2,
-                      tags="map-hit"),
-        ], window.canvas.create_rectangle.call_args_list)
+        self.assertEqual(
+            [
+                mock.call(-24, 0, 8, 32, outline="#ffdf64", width=2, tags="map-hit"),
+                mock.call(488, 0, 520, 32, outline="#ffdf64", width=2, tags="map-hit"),
+            ],
+            window.canvas.create_rectangle.call_args_list,
+        )
 
     def test_stage_two_plane_b_brush_crosses_the_static_vram_ring(self) -> None:
-        studio = level_studio_state.open_stage(
-            ROOT, 1, profile="jp", map_document=self.maps,
-            map_baseline=self.maps)
+        studio = level_studio_state.open_stage(ROOT, 1, profile="jp", map_document=self.maps, map_baseline=self.maps)
         self.assertEqual(448, studio.scene.parallax_x(1792))
-        hit = level_studio_state.locate_stage_map_cell(
-            studio, self.maps, 1856, 96, "patterns", "plane_b", 1792)
+        hit = level_studio_state.locate_stage_map_cell(studio, self.maps, 1856, 96, "patterns", "plane_b", 1792)
         self.assertEqual(0, hit.world_x)
-        self.assertEqual(studio.scene.plane_b.name_word(0, 96),
-                         self.maps["payloads"][hit.payload_index][
-                             "values"][hit.value_index])
+        self.assertEqual(
+            studio.scene.plane_b.name_word(0, 96), self.maps["payloads"][hit.payload_index]["values"][hit.value_index]
+        )
 
         window = object.__new__(level_studio.Window)
         window.studio = studio
@@ -468,65 +445,57 @@ class StageMapPreviewTests(unittest.TestCase):
         window.viewport_cell = hit
         window.canvas = mock.Mock()
         window.show_viewport_map_highlight()
-        self.assertEqual([
-            mock.call(64, 96, 72, 104, outline="#ffdf64", width=2,
-                      tags="map-hit"),
-            mock.call(576, 96, 584, 104, outline="#ffdf64", width=2,
-                      tags="map-hit"),
-        ], window.canvas.create_rectangle.call_args_list)
+        self.assertEqual(
+            [
+                mock.call(64, 96, 72, 104, outline="#ffdf64", width=2, tags="map-hit"),
+                mock.call(576, 96, 584, 104, outline="#ffdf64", width=2, tags="map-hit"),
+            ],
+            window.canvas.create_rectangle.call_args_list,
+        )
 
     def test_plane_b_pattern_stream_round_trips_into_visible_tile(self) -> None:
-        baseline = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", map_document=self.maps,
-            map_baseline=self.maps)
-        hit = level_studio_state.locate_stage_map_cell(
-            baseline, self.maps, 0, 32, "patterns", "plane_b", 0)
+        baseline = level_studio_state.open_stage(ROOT, 0, profile="jp", map_document=self.maps, map_baseline=self.maps)
+        hit = level_studio_state.locate_stage_map_cell(baseline, self.maps, 0, 32, "patterns", "plane_b", 0)
         self.assertEqual("Stage1BaseMappingData2000", hit.source)
         self.assertEqual(348, baseline.scene.plane_b.name_word(0, 32))
         edited = deepcopy(self.maps)
         edited["payloads"][hit.payload_index]["values"][hit.value_index] = 0
         validate_maps(edited, ROOT, "jp")
-        changed = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", map_document=edited,
-            map_baseline=self.maps)
+        changed = level_studio_state.open_stage(ROOT, 0, profile="jp", map_document=edited, map_baseline=self.maps)
         self.assertEqual(0, changed.scene.plane_b.name_word(0, 32))
-        self.assertNotEqual(baseline.image(0, 32, 8, 8),
-                            changed.image(0, 32, 8, 8))
+        self.assertNotEqual(baseline.image(0, 32, 8, 8), changed.image(0, 32, 8, 8))
 
     def test_stage_reference_guard_rejects_new_unwritten_plane_b_pattern(self):
         baseline = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
-        hit = level_studio_state.locate_stage_map_cell(
-            baseline, self.maps, 0, 32, "chunks", "plane_b", 0)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
+        hit = level_studio_state.locate_stage_map_cell(baseline, self.maps, 0, 32, "chunks", "plane_b", 0)
         safe = deepcopy(self.maps)
         safe["payloads"][hit.payload_index]["values"][hit.value_index] = 0
         validate_maps(safe, ROOT, "jp")
         level_studio_state.validate_stage_map_references(
-            ROOT, "jp", self.levels, safe, self.maps,
-            self.screen_maps, self.screen_maps)
+            ROOT, "jp", self.levels, safe, self.maps, self.screen_maps, self.screen_maps
+        )
         unsafe = deepcopy(self.maps)
         unsafe["payloads"][hit.payload_index]["values"][hit.value_index] = 255
         validate_maps(unsafe, ROOT, "jp")  # The fixed slot alone accepts it.
-        with self.assertRaisesRegex(
-                ValueError, "pattern RAM \\$FFFF3FE0 has no asset-list writer"):
+        with self.assertRaisesRegex(ValueError, "pattern RAM \\$FFFF3FE0 has no asset-list writer"):
             level_studio_state.validate_stage_map_references(
-                ROOT, "jp", self.levels, unsafe, self.maps,
-                self.screen_maps, self.screen_maps)
+                ROOT, "jp", self.levels, unsafe, self.maps, self.screen_maps, self.screen_maps
+            )
 
     def test_window_rolls_back_a_rejected_stage_map_brush(self) -> None:
         window = object.__new__(level_studio.Window)
         window.studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         window.project = ROOT
         window.profile = "jp"
         window.map_baseline = self.maps
         window.screen_maps = self.screen_maps
         window.screen_baseline = self.screen_maps
         window.map_state = MapWorkspace(deepcopy(self.maps))
-        hit = level_studio_state.locate_stage_map_cell(
-            window.studio, self.maps, 0, 32, "chunks", "plane_b", 0)
+        hit = level_studio_state.locate_stage_map_cell(window.studio, self.maps, 0, 32, "chunks", "plane_b", 0)
         window.map_state.select_payload(hit.payload_index)
         window.map_state.select_value(hit.value_index)
         previous = window.map_state.value
@@ -543,25 +512,24 @@ class StageMapPreviewTests(unittest.TestCase):
 
     def test_stage_reference_guard_covers_distant_editor_pages(self) -> None:
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
-        hit = level_studio_state.locate_stage_map_cell(
-            studio, self.maps, 5000, 32, "chunks")
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
+        hit = level_studio_state.locate_stage_map_cell(studio, self.maps, 5000, 32, "chunks")
         ram = bytearray(studio.scene.tilemap.ram)
         ram[hit.ram_address - RAM_BASE] = 0xFF
         altered = bytes(ram)
         scene = replace(
             studio.scene,
             tilemap=replace(studio.scene.tilemap, ram=altered),
-            plane_b=replace(studio.scene.plane_b, ram=altered))
+            plane_b=replace(studio.scene.plane_b, ram=altered),
+        )
         with self.assertRaisesRegex(ValueError, "stage 0 page \\$1180"):
-            level_studio_state.validate_stage_scene_references(
-                studio.source_scene, scene, studio.width, 0, "jp")
+            level_studio_state.validate_stage_scene_references(studio.source_scene, scene, studio.width, 0, "jp")
 
     def test_periodic_guard_covers_vertical_map_cells_beyond_editor_view(self) -> None:
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         plane = studio.scene.tilemap
         address = plane.descriptor.coarse - RAM_BASE + 2 * 32
         self.assertEqual(0, plane.ram[address])
@@ -569,56 +537,48 @@ class StageMapPreviewTests(unittest.TestCase):
         altered[address] = 0xFF
         ram = bytes(altered)
         scene = replace(
-            studio.scene,
-            tilemap=replace(studio.scene.tilemap, ram=ram),
-            plane_b=replace(studio.scene.plane_b, ram=ram))
-        with self.assertRaisesRegex(
-                ValueError, "periodic stage map reference.*coarse index \\$FF"):
-            level_studio_state.validate_stage_scene_references(
-                studio.source_scene, scene, studio.width, 0, "jp")
+            studio.scene, tilemap=replace(studio.scene.tilemap, ram=ram), plane_b=replace(studio.scene.plane_b, ram=ram)
+        )
+        with self.assertRaisesRegex(ValueError, "periodic stage map reference.*coarse index \\$FF"):
+            level_studio_state.validate_stage_scene_references(studio.source_scene, scene, studio.width, 0, "jp")
 
     def test_preview_map_hit_rejects_a_non_map_final_ram_writer(self) -> None:
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
-        hit = level_studio_state.locate_stage_map_cell(
-            studio, self.maps, 355, 0, "chunks")
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
+        hit = level_studio_state.locate_stage_map_cell(studio, self.maps, 355, 0, "chunks")
         plane = studio.scene.tilemap
-        overlaid = replace(plane, written=plane.written + (
-            ("later", "NotAnEditableMap", hit.ram_address - RAM_BASE, 1),))
+        overlaid = replace(
+            plane, written=plane.written + (("later", "NotAnEditableMap", hit.ram_address - RAM_BASE, 1),)
+        )
         studio.scene = replace(studio.scene, tilemap=overlaid)
         with self.assertRaisesRegex(ValueError, "final RAM writer is not an editable"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, 355, 0, "chunks")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, 355, 0, "chunks")
 
     def test_viewport_map_brush_rejects_missing_or_alternate_plane_a(self) -> None:
         studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         original = studio.scene
         studio.scene = replace(original, tilemap=None)
         with self.assertRaisesRegex(ValueError, "no supported default map"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, 355, 0, "chunks")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, 355, 0, "chunks")
         plane = original.tilemap
-        alternate = replace(plane, descriptor=replace(
-            plane.descriptor, chunks=plane.descriptor.chunks + 0x800))
+        alternate = replace(plane, descriptor=replace(plane.descriptor, chunks=plane.descriptor.chunks + 0x800))
         studio.scene = replace(original, tilemap=alternate)
         with self.assertRaisesRegex(ValueError, "no supported default map"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, 355, 0, "chunks")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, 355, 0, "chunks")
         ram = bytearray(plane.ram)
         ram[plane.descriptor.coarse - RAM_BASE + 1] = 0xFF
         studio.scene = replace(original, tilemap=replace(plane, ram=bytes(ram)))
         with self.assertRaisesRegex(ValueError, "no defined map cell"):
-            level_studio_state.locate_stage_map_cell(
-                studio, self.maps, 355, 0, "chunks")
+            level_studio_state.locate_stage_map_cell(studio, self.maps, 355, 0, "chunks")
 
     def test_viewport_click_selects_source_cell_and_dispatches_raw_brush(self) -> None:
         window = object.__new__(level_studio.Window)
         window.studio = level_studio_state.open_stage(
-            ROOT, 0, profile="jp", document=self.levels,
-            map_document=self.maps, map_baseline=self.maps)
+            ROOT, 0, profile="jp", document=self.levels, map_document=self.maps, map_baseline=self.maps
+        )
         window.map_state = MapWorkspace(deepcopy(self.maps))
         window.map_choices = list(range(len(self.maps["payloads"])))
         window.page_x = 0
@@ -630,8 +590,7 @@ class StageMapPreviewTests(unittest.TestCase):
         window.map_paint = mock.Mock()
         window.map_paint.get.return_value = False
         window.messagebox = mock.Mock()
-        window.select_map = mock.Mock(side_effect=lambda index:
-                                      window.map_state.select_payload(index))
+        window.select_map = mock.Mock(side_effect=lambda index: window.map_state.select_payload(index))
         window.show_map_value = mock.Mock()
         window.show_viewport_map_highlight = mock.Mock()
         window._commit_map_edit = mock.Mock()
@@ -639,9 +598,9 @@ class StageMapPreviewTests(unittest.TestCase):
         window.click_viewport_map(SimpleNamespace(x=355, y=0))
         hit = window.viewport_cell
         self.assertIsNotNone(hit)
-        self.assertEqual((hit.payload_index, hit.value_index),
-                         (window.map_state.payload_index,
-                          window.map_state.value_index))
+        self.assertEqual(
+            (hit.payload_index, hit.value_index), (window.map_state.payload_index, window.map_state.value_index)
+        )
         window.messagebox.showerror.assert_not_called()
         window._commit_map_edit.assert_not_called()
 
@@ -681,11 +640,19 @@ class StageMapPreviewTests(unittest.TestCase):
             window.screen_maps = self.screen_maps
             window.screen_baseline = self.screen_maps
             window.studio = level_studio_state.open_stage(
-                ROOT, 0, profile="jp", document=window.document,
-                map_document=window.map_state.document, map_baseline=self.maps)
+                ROOT,
+                0,
+                profile="jp",
+                document=window.document,
+                map_document=window.map_state.document,
+                map_baseline=self.maps,
+            )
             original_ram = window.studio.scene.tilemap.ram
-            index = next(index for index, record in enumerate(window.map_state.payloads)
-                         if record["name"] == "Stage1BaseMappingData6000")
+            index = next(
+                index
+                for index, record in enumerate(window.map_state.payloads)
+                if record["name"] == "Stage1BaseMappingData6000"
+            )
             window.map_choices = [index]
             window.map_state.select_payload(index)
             window.map_index_text = mock.Mock()
@@ -712,8 +679,11 @@ class StageMapPreviewTests(unittest.TestCase):
             self.assertIn('"values"', window.map_path.read_text(encoding="utf-8"))
             self.assertFalse(window.dirty)
 
-            shared = next(index for index, record in enumerate(window.map_state.payloads)
-                          if record["name"] == "SharedMappingData7000")
+            shared = next(
+                index
+                for index, record in enumerate(window.map_state.payloads)
+                if record["name"] == "SharedMappingData7000"
+            )
             window.map_choices = [shared]
             window.map_state.select_payload(shared)
             window.map_value_text.get.return_value = "$1"

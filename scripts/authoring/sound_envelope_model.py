@@ -78,25 +78,24 @@ def envelope_selector_limits(root: Path) -> dict[str, int]:
     """Read one-based envelope selector limits from the source pointer tables."""
     _stored, bodies = labelled_blocks(root)
     return {
-        family["id"]: len(_pointer_labels(
-            bodies[family["pointer_table"]], family["pointer_table"]))
+        family["id"]: len(_pointer_labels(bodies[family["pointer_table"]], family["pointer_table"]))
         for family in FAMILIES
     }
 
 
 def _physical_labels(source: str, prefix: str, pointers: list[str]) -> list[str]:
     wanted = set(pointers)
-    labels = [
-        match.group(1) for match in LABEL_LINE.finditer(source)
-        if match.group(1).startswith(prefix)
-    ]
+    labels = [match.group(1) for match in LABEL_LINE.finditer(source) if match.group(1).startswith(prefix)]
     if set(labels) != wanted or len(labels) != len(wanted):
         raise ValueError("%s physical labels differ from its pointer table" % prefix)
     return labels
 
 
 def _walk(
-    region: bytes, entry: int, valid_commands: frozenset[int], family: str,
+    region: bytes,
+    entry: int,
+    valid_commands: frozenset[int],
+    family: str,
 ) -> tuple[set[int], dict[int, dict[str, Any]], set[int]]:
     """Return reachable values, commands, and operands from one table entry."""
     pending = [0]
@@ -147,7 +146,9 @@ def _walk(
 
 
 def _family_document(
-    source: str, stored: dict[str, Any], bodies: dict[str, tuple[str, ...]],
+    source: str,
+    stored: dict[str, Any],
+    bodies: dict[str, tuple[str, ...]],
     definition: dict[str, Any],
 ) -> dict[str, Any]:
     table = definition["pointer_table"]
@@ -167,7 +168,8 @@ def _family_document(
     envelopes = []
     for index, label in enumerate(pointers, 1):
         values, selected_commands, operands = _walk(
-            bytes(region), starts[label], definition["valid_commands"], definition["id"])
+            bytes(region), starts[label], definition["valid_commands"], definition["id"]
+        )
         classifications = [
             (values, "value"),
             (set(selected_commands), "command"),
@@ -177,20 +179,20 @@ def _family_document(
             for offset in offsets:
                 previous = roles.setdefault(offset, role)
                 if previous != role:
-                    raise ValueError(
-                        "%s byte $%04X is both %s and %s" % (
-                            definition["id"], offset, previous, role))
+                    raise ValueError("%s byte $%04X is both %s and %s" % (definition["id"], offset, previous, role))
         for offset, command in selected_commands.items():
             existing = commands.setdefault(offset, command)
             if existing != command:
                 raise ValueError("%s command has conflicting interpretations" % definition["id"])
         reachable = sorted(values | set(selected_commands) | operands)
-        envelopes.append({
-            "id": index,
-            "entry_label": label,
-            "entry_offset": starts[label],
-            "reachable_offsets": reachable,
-        })
+        envelopes.append(
+            {
+                "id": index,
+                "entry_label": label,
+                "entry_offset": starts[label],
+                "reachable_offsets": reachable,
+            }
+        )
 
     blocks = []
     for block_index, label in enumerate(physical):
@@ -214,14 +216,16 @@ def _family_document(
                 if "target" in item:
                     item["target"] -= start
                 block_commands.append(item)
-        blocks.append({
-            "physical_index": block_index,
-            "name": label,
-            "capacity": len(body),
-            "values": values,
-            "commands": block_commands,
-            "protected_bytes": protected,
-        })
+        blocks.append(
+            {
+                "physical_index": block_index,
+                "name": label,
+                "capacity": len(body),
+                "values": values,
+                "commands": block_commands,
+                "protected_bytes": protected,
+            }
+        )
     return {
         "id": definition["id"],
         "reader": definition["reader"],
@@ -231,10 +235,8 @@ def _family_document(
         "capacity": len(region),
         "value_count": sum(len(block["values"]) for block in blocks),
         "command_count": len(commands),
-        "protected_byte_count": sum(
-            len(block["protected_bytes"]) for block in blocks) + len({
-                offset for offset, role in roles.items() if role == "operand"
-            }),
+        "protected_byte_count": sum(len(block["protected_bytes"]) for block in blocks)
+        + len({offset for offset, role in roles.items() if role == "operand"}),
         "envelopes": envelopes,
         "blocks": blocks,
     }
@@ -278,11 +280,17 @@ def atomic_write_json(path: Path, document: dict[str, Any]) -> None:
 
 
 def _block_bytes(
-    record: dict[str, Any], original: dict[str, Any], body: bytes,
+    record: dict[str, Any],
+    original: dict[str, Any],
+    body: bytes,
     command_opcodes: set[int],
 ) -> bytes:
     for field in (
-        "physical_index", "name", "capacity", "commands", "protected_bytes",
+        "physical_index",
+        "name",
+        "capacity",
+        "commands",
+        "protected_bytes",
     ):
         if record.get(field) != original[field]:
             raise ValueError("%s: %s differs from the source-owned value" % (original["name"], field))
@@ -305,8 +313,15 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "source_path", "family_count",
-        "envelope_count", "capacity", "value_count", "command_count",
+        "schema_version",
+        "profile",
+        "format",
+        "source_path",
+        "family_count",
+        "envelope_count",
+        "capacity",
+        "value_count",
+        "command_count",
         "protected_byte_count",
     ):
         if document.get(field) != baseline[field]:
@@ -324,8 +339,15 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             continue
         original = originals[family["id"]]
         for field in (
-            "reader", "pointer_table", "command_opcodes", "envelope_count", "capacity",
-            "value_count", "command_count", "protected_byte_count", "envelopes",
+            "reader",
+            "pointer_table",
+            "command_opcodes",
+            "envelope_count",
+            "capacity",
+            "value_count",
+            "command_count",
+            "protected_byte_count",
+            "envelopes",
         ):
             if family.get(field) != original[field]:
                 errors.append("%s: %s differs from the source-owned value" % (original["id"], field))
@@ -342,7 +364,9 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 continue
             try:
                 _block_bytes(
-                    block, expected[block["name"]], stored[block["name"]],
+                    block,
+                    expected[block["name"]],
+                    stored[block["name"]],
                     set(original["command_opcodes"]),
                 )
             except (KeyError, TypeError, ValueError) as error:
@@ -357,23 +381,25 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     authority = validation_root or root
     validate_document(document, authority, profile)
     baseline = export_document(authority, profile)
-    originals = {
-        block["name"]: block
-        for family in baseline["families"] for block in family["blocks"]
-    }
+    originals = {block["name"]: block for family in baseline["families"] for block in family["blocks"]}
     stored, _bodies = labelled_blocks(root)
     replacements = {}
     for family in document["families"]:
         for block in family["blocks"]:
             definition = next(item for item in baseline["families"] if item["id"] == family["id"])
             body = _block_bytes(
-                block, originals[block["name"]], stored[block["name"]],
+                block,
+                originals[block["name"]],
+                stored[block["name"]],
                 set(definition["command_opcodes"]),
             )
             if body != stored[block["name"]]:
@@ -386,6 +412,7 @@ def apply_document(
         return []
     if write:
         from authoring.atomic_output import atomic_write_text as _write_text
+
         _write_text(path, rebuilt)
     return [SOURCE_PATH]
 
@@ -419,9 +446,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s sound envelopes: %d tables, %d values, %d commands" % (
-                args.profile, document["envelope_count"], document["value_count"],
-                document["command_count"]))
+            print(
+                "[OK] %s sound envelopes: %d tables, %d values, %d commands"
+                % (args.profile, document["envelope_count"], document["value_count"], document["command_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

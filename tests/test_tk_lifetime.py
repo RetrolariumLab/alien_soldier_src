@@ -74,12 +74,14 @@ class TkLifetimeControls(unittest.TestCase):
                 self.assertEqual(enabled, gc.isenabled())
 
         errors = []
+
         def foreign():
             try:
                 with tk_main_thread_lifetime():
                     errors.append("entered")
             except RuntimeError as error:
                 errors.append(str(error))
+
         thread = threading.Thread(target=foreign)
         thread.start()
         thread.join(timeout=5)
@@ -91,11 +93,14 @@ class TkLifetimeControls(unittest.TestCase):
         for fail in (False, True):
             with self.subTest(fail=fail):
                 events = []
+
                 class Cycle:
                     def __init__(self):
                         self.loop = self
+
                     def __del__(self):
                         events.append(("collected", threading.get_ident()))
+
                 class Case(unittest.TestCase):
                     @classmethod
                     def setUpClass(cls):
@@ -105,8 +110,10 @@ class TkLifetimeControls(unittest.TestCase):
                         del value
                         if fail:
                             raise RuntimeError("fixture failure remains an error")
+
                     def test_one(self):
                         self.assertFalse(gc.isenabled())
+
                 result = unittest.TestResult()
                 unittest.defaultTestLoader.loadTestsFromTestCase(Case).run(result)
                 self.assertEqual(int(not fail), result.testsRun)
@@ -117,8 +124,10 @@ class TkLifetimeControls(unittest.TestCase):
 
     def test_real_destroyed_tk_variables_and_images_close_without_foreign_unraisables(self):
         import tkinter as tk
+
         failures = []
         with tk_main_thread_lifetime(), mock.patch.object(sys, "unraisablehook", side_effect=failures.append):
+
             def create_destroyed_owner():
                 try:
                     root = tk.Tk()
@@ -127,8 +136,10 @@ class TkLifetimeControls(unittest.TestCase):
                     if os.name == "nt":
                         raise
                     self.skipTest(str(error))
+
                 class Owner:
                     pass
+
                 owner = Owner()
                 owner.loop, owner.root = owner, root
                 owner.variable = tk.StringVar(master=root, value="owned")
@@ -136,11 +147,14 @@ class TkLifetimeControls(unittest.TestCase):
                 reference = weakref.ref(root)
                 root.destroy()
                 return reference
+
             reference = create_destroyed_owner()
+
             def allocate():
                 for _ in range(5000):
                     cycle = []
                     cycle.append(cycle)
+
             thread = threading.Thread(target=allocate)
             thread.start()
             thread.join(timeout=5)

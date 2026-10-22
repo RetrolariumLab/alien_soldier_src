@@ -1,4 +1,5 @@
 """Actual workstation callbacks report launcher OSError without Tk exceptions."""
+
 import os
 import unittest
 from unittest import mock
@@ -14,7 +15,9 @@ class LaunchErrors(unittest.TestCase):
     def check_launch_error(self, studio, profile, action):
         with actions.WorkstationActions().fixture(studio, profile) as f:
             before = f.disk()
-            with mock.patch.object(f.module.subprocess, "run", side_effect=OSError("fixture make executable unavailable")) as process:
+            with mock.patch.object(
+                f.module.subprocess, "run", side_effect=OSError("fixture make executable unavailable")
+            ) as process:
                 f.invoke(action)
             process.assert_called_once()
             f.callback_errors.assert_not_called()

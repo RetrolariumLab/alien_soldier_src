@@ -1,4 +1,5 @@
 """Bounded Make dry-runs/stub calls; no AS, p2bin, native game or ROM output."""
+
 from __future__ import annotations
 
 from contextlib import redirect_stderr, redirect_stdout
@@ -31,23 +32,52 @@ OUTPUTS = ROOT / "build/content/profile-flags"
 class InitForwarding(unittest.TestCase):
     def virtual_init(self, flags):
         captured = []
-        argv = ["init_project.py", "--orig-rom", "virtual-original", "--manifest", "virtual-manifest",
-                "--data-dir", "virtual-data", "--data-addrs", "virtual-addrs", "--source", "virtual-source",
-                "--obj", "virtual-object", "--output", "virtual-output", "--as-bin", "never-AS",
-                "--p2bin", "never-p2bin", "--as-args=" + flags]
+        argv = [
+            "init_project.py",
+            "--orig-rom",
+            "virtual-original",
+            "--manifest",
+            "virtual-manifest",
+            "--data-dir",
+            "virtual-data",
+            "--data-addrs",
+            "virtual-addrs",
+            "--source",
+            "virtual-source",
+            "--obj",
+            "virtual-object",
+            "--output",
+            "virtual-output",
+            "--as-bin",
+            "never-AS",
+            "--p2bin",
+            "never-p2bin",
+            "--as-args=" + flags,
+        ]
+
         def virtual_open(path, mode="r", **_kwargs):
             if path == "virtual-original" and mode == "rb":
                 return io.BytesIO(b"")
             if path == "virtual-manifest":
                 return io.StringIO(json.dumps({"reference_rom": {"size": 0, "sha1": hashlib.sha1(b"").hexdigest()}}))
             raise AssertionError("unexpected real file open: " + str(path))
+
         def terminal(command):
             captured.append(command)
             return mock.Mock(returncode=0)
+
         actual_exists = os.path.exists
-        with (mock.patch.object(sys, "argv", argv), mock.patch.object(init_project.os.path, "exists", side_effect=lambda path: path == "virtual-original" or actual_exists(path)),
-              mock.patch("builtins.open", side_effect=virtual_open), mock.patch.object(init_project.subprocess, "run", side_effect=terminal),
-              redirect_stdout(io.StringIO())):
+        with (
+            mock.patch.object(sys, "argv", argv),
+            mock.patch.object(
+                init_project.os.path,
+                "exists",
+                side_effect=lambda path: path == "virtual-original" or actual_exists(path),
+            ),
+            mock.patch("builtins.open", side_effect=virtual_open),
+            mock.patch.object(init_project.subprocess, "run", side_effect=terminal),
+            redirect_stdout(io.StringIO()),
+        ):
             self.assertEqual(0, init_project.main())
         self.assertEqual(3, len(captured))
         return captured[-1]
@@ -64,13 +94,16 @@ class InitForwarding(unittest.TestCase):
         output, errors = io.StringIO(), io.StringIO()
         # The actual CLI parses successfully, then terminates on a deliberately
         # unsupported IN-MEMORY manifest before assemble_main_src can run.
-        with (mock.patch.object(sys, "argv", command[1:]),
-              mock.patch("builtins.open", return_value=io.StringIO('{"schema_version":0}')),
-              mock.patch("platform.system", return_value="Windows"),
-              mock.patch("platform.machine", return_value="i386"),
-              mock.patch.object(subprocess, "call") as assembler,
-              mock.patch.object(subprocess, "Popen") as converter,
-              redirect_stdout(output), redirect_stderr(errors)):
+        with (
+            mock.patch.object(sys, "argv", command[1:]),
+            mock.patch("builtins.open", return_value=io.StringIO('{"schema_version":0}')),
+            mock.patch("platform.system", return_value="Windows"),
+            mock.patch("platform.machine", return_value="i386"),
+            mock.patch.object(subprocess, "call") as assembler,
+            mock.patch.object(subprocess, "Popen") as converter,
+            redirect_stdout(output),
+            redirect_stderr(errors),
+        ):
             with self.assertRaises(SystemExit) as stopped:
                 runpy.run_path(str(ROOT / "scripts/build_rom.py"), run_name="__main__")
         self.assertEqual(1, stopped.exception.code)
@@ -82,22 +115,34 @@ class InitForwarding(unittest.TestCase):
 
 class FlagValidation(unittest.TestCase):
     def test_ordinary_flags_and_unrelated_defines_are_allowed(self):
-        for flags in ("", "-q", "-q -maxerrors 2", '-D MyFeature=1 -q', '-DMyFeature=0', '-d "Other=2"'):
+        for flags in ("", "-q", "-q -maxerrors 2", "-D MyFeature=1 -q", "-DMyFeature=0", '-d "Other=2"'):
             with self.subTest(flags=flags):
                 validate_flags(flags)
 
     def test_reserved_defines_fail_in_separated_attached_quoted_and_casefold_forms(self):
-        for flags in ('-D BuildProfileEU=0', '-DBuildProfileEU=1', '-dBuildProfileJP=1', '-D "bUiLdPrOfIlEeU=1"', '-d buildprofilejp', '-D BUILDPROFILEEU=0 -q'):
+        for flags in (
+            "-D BuildProfileEU=0",
+            "-DBuildProfileEU=1",
+            "-dBuildProfileJP=1",
+            '-D "bUiLdPrOfIlEeU=1"',
+            "-d buildprofilejp",
+            "-D BUILDPROFILEEU=0 -q",
+        ):
             with self.subTest(flags=flags), self.assertRaisesRegex(ValueError, "select PROFILE"):
                 validate_flags(flags)
 
     def test_invalid_quoting_and_missing_definition_fail(self):
-        for flags in ('-D "unfinished', '-D', '-D=0'):
+        for flags in ('-D "unfinished', "-D", "-D=0"):
             with self.subTest(flags=flags), self.assertRaises(ValueError):
                 validate_flags(flags)
 
     def test_single_dash_flag_cli_uses_assignment(self):
-        result = subprocess.run([sys.executable, "-B", str(ROOT / "scripts/check_profile_as_args.py"), "--flags=-q"], capture_output=True, text=True, check=False)
+        result = subprocess.run(
+            [sys.executable, "-B", str(ROOT / "scripts/check_profile_as_args.py"), "--flags=-q"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
         self.assertEqual(0, result.returncode, result.stderr)
 
 
@@ -116,7 +161,9 @@ class MakeFlags(unittest.TestCase):
         self.project = Path(self.temp.name).resolve()
         for relative, body in make_files(ROOT):
             atomic_write_bytes(self.project / relative, body)
-        atomic_write_bytes(self.project / "scripts/check_profile_as_args.py", (ROOT / "scripts/check_profile_as_args.py").read_bytes())
+        atomic_write_bytes(
+            self.project / "scripts/check_profile_as_args.py", (ROOT / "scripts/check_profile_as_args.py").read_bytes()
+        )
         atomic_write_bytes(self.project / "scripts/build_z80.py", (ROOT / "scripts/build_z80.py").read_bytes())
         # This fixture checks Make/profile dispatch only. Source assembly is
         # exercised independently by test_build_z80_source, never by a fake ROM.
@@ -134,11 +181,15 @@ class MakeFlags(unittest.TestCase):
             command.append("AS_ARGS=" + flags)
         python = '"%s" -B "%s"' % (Path(sys.executable).as_posix(), FIXTURE.as_posix())
         command += ["PYTHON=" + python, "AS_BIN=" + python + " --assembler", *extra]
-        result = subprocess.run(command, cwd=self.project, env=self.env, capture_output=True, text=True, check=False, timeout=30)
+        result = subprocess.run(
+            command, cwd=self.project, env=self.env, capture_output=True, text=True, check=False, timeout=30
+        )
         return result
 
     def expected(self, profile, flags=None):
-        return shlex.split("-maxerrors 2" if flags is None else flags) + (["-D", "BuildProfileEU=1"] if profile == "eu" else [])
+        return shlex.split("-maxerrors 2" if flags is None else flags) + (
+            ["-D", "BuildProfileEU=1"] if profile == "eu" else []
+        )
 
     def arguments(self, row):
         args = row["arguments"]
@@ -165,7 +216,9 @@ class MakeFlags(unittest.TestCase):
                         else:
                             self.assertIn('--as-args="%s"' % expected, output)
                         self.assertEqual({self.project / "build/z80/driver.bin"}, set(self.project.rglob("*.bin")))
-                        self.assertEqual(b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes())
+                        self.assertEqual(
+                            b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes()
+                        )
 
     def test_verify_all_recursive_dry_run_keeps_both_profile_arguments(self):
         result = self.run_make("verify-all", flags="-q")
@@ -176,7 +229,12 @@ class MakeFlags(unittest.TestCase):
     def test_caller_cannot_override_mandatory_internal_variables(self):
         for profile in ("jp", "eu"):
             with self.subTest(profile=profile):
-                result = self.run_make("build", profile, "-q", extra=("PROFILE_AS_ARGS=-D BuildProfileEU=0", "PRESERVATION_AS_ARGS=-D BuildProfileEU=0"))
+                result = self.run_make(
+                    "build",
+                    profile,
+                    "-q",
+                    extra=("PROFILE_AS_ARGS=-D BuildProfileEU=0", "PRESERVATION_AS_ARGS=-D BuildProfileEU=0"),
+                )
                 self.assertEqual(0, result.returncode, result.stderr)
                 self.assertIn('--as-args="%s"' % shlex.join(self.expected(profile, "-q")), result.stdout)
                 self.assertNotIn("BuildProfileEU=0", result.stdout)
@@ -189,12 +247,23 @@ class MakeFlags(unittest.TestCase):
                     result = self.run_make(target, profile, "-q", dry=False)
                     self.assertEqual(0, result.returncode, result.stderr)
                     rows = json.loads(self.events.read_text(encoding="utf-8"))
-                    consumer = next(row for row in rows if row["kind"] == "assembler" or row["arguments"][0].endswith(("init_project.py", "build_rom.py")))
+                    consumer = next(
+                        row
+                        for row in rows
+                        if row["kind"] == "assembler"
+                        or row["arguments"][0].endswith(("init_project.py", "build_rom.py"))
+                    )
                     self.assertEqual(self.expected(profile, "-q"), self.arguments(consumer))
-                    checker = next(index for index, row in enumerate(rows) if row["arguments"][0].endswith("check_profile_as_args.py"))
+                    checker = next(
+                        index
+                        for index, row in enumerate(rows)
+                        if row["arguments"][0].endswith("check_profile_as_args.py")
+                    )
                     self.assertLess(checker, rows.index(consumer))
                     self.assertEqual({self.project / "build/z80/driver.bin"}, set(self.project.rglob("*.bin")))
-                    self.assertEqual(b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes())
+                    self.assertEqual(
+                        b"dispatch-only prerequisite", (self.project / "build/z80/driver.bin").read_bytes()
+                    )
                     self.assertFalse(list(self.project.rglob("*.p")))
                     self.assertFalse(list(self.project.rglob("*.lst")))
 
@@ -226,16 +295,20 @@ class MakeFlags(unittest.TestCase):
                 for flags in (None, "-q -maxerrors 2", "-q"):
                     with self.subTest(preservation=preservation, content=content, flags=flags):
                         base = "-maxerrors 2" if flags is None else flags
-                        result = self.run_make("build-content", preservation, flags, extra=("CONTENT_PROFILE=" + content,))
+                        result = self.run_make(
+                            "build-content", preservation, flags, extra=("CONTENT_PROFILE=" + content,)
+                        )
                         self.assertEqual(0, result.returncode, result.stderr)
                         self.assertIn('--as-args="%s"' % base, result.stdout)
-                        self.assertEqual(self.expected(content, base), shlex.split(assembler_args(base, manifest, content)))
+                        self.assertEqual(
+                            self.expected(content, base), shlex.split(assembler_args(base, manifest, content))
+                        )
 
     def test_split_has_no_assembler_consumer_and_keeps_regional_reference(self):
         for profile, letter in (("jp", "J"), ("eu", "E")):
             result = self.run_make("split", profile, "-q")
             self.assertEqual(0, result.returncode, result.stderr)
-            self.assertIn('Alien Soldier (%s) [!].bin' % letter, result.stdout)
+            self.assertIn("Alien Soldier (%s) [!].bin" % letter, result.stdout)
             self.assertNotIn("--assembler", result.stdout)
 
     def test_content_profile_conflict_is_rejected_before_init_or_builder(self):
@@ -243,8 +316,9 @@ class MakeFlags(unittest.TestCase):
             for content in ("jp", "eu"):
                 with self.subTest(profile=profile, content=content):
                     atomic_write_json(self.events, [])
-                    result = self.run_make("build-content", profile, "-DBuildProfileEU=0", dry=False,
-                                           extra=("CONTENT_PROFILE=" + content,))
+                    result = self.run_make(
+                        "build-content", profile, "-DBuildProfileEU=0", dry=False, extra=("CONTENT_PROFILE=" + content,)
+                    )
                     self.assertNotEqual(0, result.returncode)
                     self.assertIn("select PROFILE", result.stderr)
                     rows = json.loads(self.events.read_text(encoding="utf-8"))

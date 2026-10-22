@@ -67,13 +67,11 @@ class AnimationScriptInputsTests(unittest.TestCase):
         self.baseline = self.owner / "baseline/tree"
         self.edited = self.owner / "edited/tree"
         self.other = self.root / "build/unlisted/tree"
-        for tree, duration in ((self.root, 4), (self.baseline, 5),
-                               (self.edited, 6), (self.other, 7)):
+        for tree, duration in ((self.root, 4), (self.baseline, 5), (self.edited, 6), (self.other, 7)):
             self.write_tree(tree, duration)
         self.source = self.root / "src/a.s"
         self.payload = self.root / "data/blob.bin"
-        self.frozen = inventory.capture(self.owner, max_file=1 << 20,
-                                       max_total=1 << 20, max_entries=1000)
+        self.frozen = inventory.capture(self.owner, max_file=1 << 20, max_total=1 << 20, max_entries=1000)
 
     @staticmethod
     def write_tree(tree, duration):
@@ -81,21 +79,22 @@ class AnimationScriptInputsTests(unittest.TestCase):
         (tree / "src/empty").mkdir(exist_ok=True)
         (tree / "data/empty").mkdir(parents=True, exist_ok=True)
         (tree / "data/blob.bin").write_bytes(b"\x01\x02")
-        (tree / "src/a.s").write_bytes((
-            "Anim: dc.w Map-*,$%X ; comment\n dc.w Anim-*,0\n"
-            "Duplicate: dc.w Old-*,1\n"
-            "Odd: dc.w Map-*,1,Map-*\n"
-            "BadTarget: dc.w $20,1\n"
-            "BadDuration: dc.w Map-*,unknown\n"
-            "WrongKind: dc.l Map-*,1\n dc.w Map-*,2\n"
-            "Mixed: dc.w Map-*,3\n dc.b 7\n dc.w Other-*,4\n"
-            "Duplicate: dc.w Local-*,2\n" % duration).encode())
-        (tree / "src/nested/z.s").write_bytes(
-            b"Duplicate: dc.w Last-*,3\nTail: dc.w Final-*,-1\n")
+        (tree / "src/a.s").write_bytes(
+            (
+                "Anim: dc.w Map-*,$%X ; comment\n dc.w Anim-*,0\n"
+                "Duplicate: dc.w Old-*,1\n"
+                "Odd: dc.w Map-*,1,Map-*\n"
+                "BadTarget: dc.w $20,1\n"
+                "BadDuration: dc.w Map-*,unknown\n"
+                "WrongKind: dc.l Map-*,1\n dc.w Map-*,2\n"
+                "Mixed: dc.w Map-*,3\n dc.b 7\n dc.w Other-*,4\n"
+                "Duplicate: dc.w Local-*,2\n" % duration
+            ).encode()
+        )
+        (tree / "src/nested/z.s").write_bytes(b"Duplicate: dc.w Last-*,3\nTail: dc.w Final-*,-1\n")
 
     def scope(self):
-        return model._readonly_staged_facts(self.root, self.owner,
-                                           self.frozen, ("baseline", "edited"))
+        return model._readonly_staged_facts(self.root, self.owner, self.frozen, ("baseline", "edited"))
 
     def change_same_size(self, path):
         before, body = path.stat(), path.read_bytes()
@@ -123,8 +122,7 @@ class AnimationScriptInputsTests(unittest.TestCase):
 
     def test_one_scope_parses_once_and_all_public_containers_and_frames_are_fresh(self):
         expected = legacy_animation_scripts(self.root)
-        with mock.patch.object(sprites, "_parse_animation_scripts",
-                               wraps=sprites._parse_animation_scripts) as parse:
+        with mock.patch.object(sprites, "_parse_animation_scripts", wraps=sprites._parse_animation_scripts) as parse:
             with model.parsed_operation(self.root):
                 first = sprites.read_animation_scripts(self.root)
                 second = sprites.read_animation_scripts(self.root)
@@ -154,8 +152,7 @@ class AnimationScriptInputsTests(unittest.TestCase):
             self.assertIsNone(model._PARSED_OPERATION.get())
 
     def test_added_source_or_empty_directory_fails_original_final_census(self):
-        for relative, body in (("src/late.s", b"Late: dc.w Map-*,1\n"),
-                               ("data/empty/late", None)):
+        for relative, body in (("src/late.s", b"Late: dc.w Map-*,1\n"), ("data/empty/late", None)):
             path = self.root / relative
             try:
                 with self.subTest(relative=relative), self.assertRaisesRegex(ValueError, "directory inventory changed"):
@@ -167,10 +164,8 @@ class AnimationScriptInputsTests(unittest.TestCase):
             self.assertIsNone(model._PARSED_OPERATION.get())
 
     def test_only_registered_exact_readonly_roots_share_distinct_original_pairs(self):
-        expected = {tree: legacy_animation_scripts(tree)
-                    for tree in (self.root, self.baseline, self.edited)}
-        with mock.patch.object(sprites, "_parse_animation_scripts",
-                               wraps=sprites._parse_animation_scripts) as parse:
+        expected = {tree: legacy_animation_scripts(tree) for tree in (self.root, self.baseline, self.edited)}
+        with mock.patch.object(sprites, "_parse_animation_scripts", wraps=sprites._parse_animation_scripts) as parse:
             with model.parsed_operation(self.root):
                 with self.scope():
                     for tree in (self.baseline, self.edited, self.root, self.edited, self.baseline):

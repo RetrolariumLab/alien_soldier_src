@@ -11,20 +11,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class InlineMetaspriteDescriptorTests(unittest.TestCase):
     def test_tagged_pointer_path_copies_three_words(self) -> None:
-        source = (ROOT / "src/rendering/boss_metasprites.s").read_text(
-            encoding="utf-8"
-        )
-        routine = source.split("Sprite_InitializeLinkedMetaspriteParts:", 1)[
-            1
-        ].split("; End of function Sprite_InitializeLinkedMetaspriteParts", 1)[0]
+        source = (ROOT / "src/rendering/boss_metasprites.s").read_text(encoding="utf-8")
+        routine = source.split("Sprite_InitializeLinkedMetaspriteParts:", 1)[1].split(
+            "; End of function Sprite_InitializeLinkedMetaspriteParts", 1
+        )[0]
         self.assertIn("bclr    #0,d4", routine)
         self.assertIn(
             "bne.s   Sprite_InitializeLinkedMetaspritePartsUseInlineDescriptor",
             routine,
         )
-        inline = routine.split(
-            "Sprite_InitializeLinkedMetaspritePartsUseInlineDescriptor:", 1
-        )[1].split("Sprite_InitializeLinkedMetaspritePartsTransform:", 1)[0]
+        inline = routine.split("Sprite_InitializeLinkedMetaspritePartsUseInlineDescriptor:", 1)[1].split(
+            "Sprite_InitializeLinkedMetaspritePartsTransform:", 1
+        )[0]
         for instruction in (
             "movea.l d4,a3",
             "move.w  (a3)+,$E(a4)",
@@ -36,17 +34,13 @@ class InlineMetaspriteDescriptorTests(unittest.TestCase):
     def test_seven_descriptor_families_have_exact_members_and_words(self) -> None:
         reviews = {
             review["basis"]: review
-            for review in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for review in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))[
+                "reviews"
+            ]
         }
         audit = {
             record["address"]: record
-            for record in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for record in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         families = (
             (
@@ -145,13 +139,9 @@ class InlineMetaspriteDescriptorTests(unittest.TestCase):
         )
         for filename, table in owners:
             with self.subTest(owner=filename):
-                setup = (ROOT / "src/bosses" / filename).read_text(
-                    encoding="utf-8"
-                )
+                setup = (ROOT / "src/bosses" / filename).read_text(encoding="utf-8")
                 self.assertIn(f"movea.l #{table},a0", setup)
-                self.assertIn(
-                    "jsr     (Sprite_InitializeLinkedMetaspriteParts).l", setup
-                )
+                self.assertIn("jsr     (Sprite_InitializeLinkedMetaspriteParts).l", setup)
 
 
 if __name__ == "__main__":

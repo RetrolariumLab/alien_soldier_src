@@ -30,8 +30,7 @@ PAYLOAD = "SharedTitleAndOptionsType3DataA"
 def check_profile(root: Path, profile: str, as_bin: Path, p2bin: Path) -> dict:
     manifest = load_manifest(root / "config/authoring/content_studios.json", root)
     record = profile_record(manifest, profile)
-    original = validate_reference(checked_path(root, record["reference_rom"]["filename"]),
-                                  record["reference_rom"])
+    original = validate_reference(checked_path(root, record["reference_rom"]["filename"]), record["reference_rom"])
     document = export_document(root, profile)
     payload = next(item for item in document["payloads"] if item["name"] == PAYLOAD)
     if payload["codec"] != "tile-codec":
@@ -45,12 +44,11 @@ def check_profile(root: Path, profile: str, as_bin: Path, p2bin: Path) -> dict:
         raise ValueError("tile-codec ROM probe has no unique profile asset range")
     owner = owners[0]
     start, end = int(owner["address"], 0), int(owner["end"], 0)
-    if (end - start != payload["compressed_capacity"]
-            or original[start:end] != source_bytes):
+    if end - start != payload["compressed_capacity"] or original[start:end] != source_bytes:
         raise ValueError("profile ROM range differs from the original tile-codec asset")
     payload["blocks"][0]["tiles"] = [
-        "".join("%X" % (int(pixel, 16) ^ 1) for pixel in tile)
-        for tile in payload["blocks"][0]["tiles"]]
+        "".join("%X" % (int(pixel, 16) ^ 1) for pixel in tile) for tile in payload["blocks"][0]["tiles"]
+    ]
     expected_pixels = bytes(value ^ 0x11 for value in decompress(source_bytes))
     generated = checked_path(root, "build/content")
     generated.mkdir(parents=True, exist_ok=True)
@@ -68,9 +66,15 @@ def check_profile(root: Path, profile: str, as_bin: Path, p2bin: Path) -> dict:
         base_args = shlex.join(["-q", "-maxerrors", "2", "-L", "-olist", str(listing)])
         output = temporary / "edited.bin"
         status = assemble_main_src(
-            str(tree), str(tree / "src/main.s"), str(temporary / "main.p"), str(output),
-            str(as_bin), str(p2bin), assembler_args(base_args, manifest, profile),
-            record["reference_rom"]["padding_byte"].removeprefix("0x"))
+            str(tree),
+            str(tree / "src/main.s"),
+            str(temporary / "main.p"),
+            str(output),
+            str(as_bin),
+            str(p2bin),
+            assembler_args(base_args, manifest, profile),
+            record["reference_rom"]["padding_byte"].removeprefix("0x"),
+        )
         if status:
             raise ValueError("tile-codec ROM probe assembly failed with code %d" % status)
         symbols, errors = load_all_listing_names(listing)
@@ -85,15 +89,22 @@ def check_profile(root: Path, profile: str, as_bin: Path, p2bin: Path) -> dict:
         published = bytearray(actual)
         update_boot_checksum(published, profile)
         if published != expected:
-            raise ValueError("edited ROM differs outside its declared changes at $%06X"
-                             % first_difference(published, expected))
+            raise ValueError(
+                "edited ROM differs outside its declared changes at $%06X" % first_difference(published, expected)
+            )
         if source.read_bytes() != source_bytes:
             raise ValueError("the canonical tile-codec source asset changed during the probe")
-        facts = {"profile": profile, "payload": PAYLOAD, "start": start, "end": end,
-                 "rom_size": len(published), "checksum": checksum,
-                 "changed_asset_bytes": sum(a != b for a, b in zip(source_bytes, encoded)),
-                 "edited_rom_sha256": hashlib.sha256(published).hexdigest(),
-                 "reference_sha256": hashlib.sha256(original).hexdigest()}
+        facts = {
+            "profile": profile,
+            "payload": PAYLOAD,
+            "start": start,
+            "end": end,
+            "rom_size": len(published),
+            "checksum": checksum,
+            "changed_asset_bytes": sum(a != b for a, b in zip(source_bytes, encoded)),
+            "edited_rom_sha256": hashlib.sha256(published).hexdigest(),
+            "reference_sha256": hashlib.sha256(original).hexdigest(),
+        }
     return facts
 
 

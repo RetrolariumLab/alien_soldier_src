@@ -25,7 +25,6 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(11, len(config["unsupported"]))
         self.assertTrue(all(record["reason"] for record in config["unsupported"]))
 
-
     def test_duplicate_and_unexplained_records_are_rejected(self) -> None:
         config = model.load_config(ROOT)
         broken = copy.deepcopy(config)
@@ -55,10 +54,7 @@ class RenderingTests(unittest.TestCase):
             with self.subTest(profile=profile):
                 report = model.survey(ROOT, profile)
                 self.assertEqual(11, report["unsupported"])
-                self.assertEqual(expected, {
-                    record["id"]: record["sha256"]
-                    for record in report["supported"]
-                })
+                self.assertEqual(expected, {record["id"]: record["sha256"] for record in report["supported"]})
                 for record in report["supported"]:
                     self.assertEqual((320, 224), (record["width"], record["height"]))
                     self.assertGreater(record["colours"], 1)
@@ -83,11 +79,14 @@ class RenderingTests(unittest.TestCase):
 
     def test_unknown_or_changed_camera_route_does_not_infer_an_origin(self):
         title = model.screen_record(model.load_config(ROOT), "title_background")
-        for profile, record in (("xx", title), ("jp", dict(title, id="unknown")),
-                                ("eu", dict(title, camera_a_y={"jp": 0, "eu": 16})),
-                                ("jp", dict(title, camera_a_y={"jp": False, "eu": -16})),
-                                ("jp", dict(title, camera_b_y=1)),
-                                ("jp", dict(title, camera_a_y=None))):
+        for profile, record in (
+            ("xx", title),
+            ("jp", dict(title, id="unknown")),
+            ("eu", dict(title, camera_a_y={"jp": 0, "eu": 16})),
+            ("jp", dict(title, camera_a_y={"jp": False, "eu": -16})),
+            ("jp", dict(title, camera_b_y=1)),
+            ("jp", dict(title, camera_a_y=None)),
+        ):
             with self.subTest(profile=profile, record=record), self.assertRaises(ValueError):
                 model.screen_view_y(record, profile)
 
@@ -97,17 +96,47 @@ class RenderingTests(unittest.TestCase):
         mutations = (
             ("upload Y", title.replace("moveq   #0,d1", "moveq   #1,d1", 1), scroll),
             ("wrong region", title.replace("if      BuildProfileEU", "if      BuildProfileJP", 1), scroll),
-            ("camera sign", title.replace("#$FFF0,(PrimaryCameraYPosition)", "#$0010,(PrimaryCameraYPosition)", 1), scroll),
-            ("extra write", title.replace("jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
-                                          "move.w #0,(PrimaryCameraYPosition).w\n"
-                                          "jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l", 1), scroll),
-            ("unary clear", title.replace("jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
-                                          "clr.w (PrimaryCameraYPosition).w\n"
-                                          "jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l", 1), scroll),
-            ("negation", title, scroll.replace("(PrimaryCameraYPosition).w,d0\n                neg.w   d0",
-                                               "(PrimaryCameraYPosition).w,d0\n                nop", 1)),
-            ("writer", title, scroll.replace("bne.s   Scroll_VerticalPlaneWriteReturn\n                move.w  d0,(a0)",
-                                             "bne.s   Scroll_VerticalPlaneWriteReturn\n                move.w  d1,(a0)", 1)),
+            (
+                "camera sign",
+                title.replace("#$FFF0,(PrimaryCameraYPosition)", "#$0010,(PrimaryCameraYPosition)", 1),
+                scroll,
+            ),
+            (
+                "extra write",
+                title.replace(
+                    "jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
+                    "move.w #0,(PrimaryCameraYPosition).w\njsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
+                    1,
+                ),
+                scroll,
+            ),
+            (
+                "unary clear",
+                title.replace(
+                    "jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
+                    "clr.w (PrimaryCameraYPosition).w\njsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l",
+                    1,
+                ),
+                scroll,
+            ),
+            (
+                "negation",
+                title,
+                scroll.replace(
+                    "(PrimaryCameraYPosition).w,d0\n                neg.w   d0",
+                    "(PrimaryCameraYPosition).w,d0\n                nop",
+                    1,
+                ),
+            ),
+            (
+                "writer",
+                title,
+                scroll.replace(
+                    "bne.s   Scroll_VerticalPlaneWriteReturn\n                move.w  d0,(a0)",
+                    "bne.s   Scroll_VerticalPlaneWriteReturn\n                move.w  d1,(a0)",
+                    1,
+                ),
+            ),
             ("comment fake", ";" + title.replace("\n", "\n;"), scroll),
         )
         model.prove_title_view_route(ROOT)
@@ -123,9 +152,11 @@ class RenderingTests(unittest.TestCase):
 
     def test_title_guard_runs_before_assets_are_read(self):
         record = model.screen_record(model.load_config(ROOT), "title_background")
-        with (mock.patch.object(model, "prove_title_view_route", side_effect=ValueError("source changed")) as guard,
-              mock.patch.object(model, "labelled_blocks") as assets,
-              self.assertRaisesRegex(ValueError, "source changed")):
+        with (
+            mock.patch.object(model, "prove_title_view_route", side_effect=ValueError("source changed")) as guard,
+            mock.patch.object(model, "labelled_blocks") as assets,
+            self.assertRaisesRegex(ValueError, "source changed"),
+        ):
             model.build_scene(ROOT, "eu", record)
         guard.assert_called_once_with(ROOT)
         assets.assert_not_called()
@@ -136,19 +167,16 @@ class RenderingTests(unittest.TestCase):
         record = model.screen_record(config, "title_background")
         scene = model.build_scene(ROOT, "jp", record)
         for start, length, expected in (
-            (0x2020, 6144,
-             "80e96c37ee46da7be3edaed4c6151c2d66ba2f8039460268b22484e791fa3555"),
-            (0x4020, 1248,
-             "ac932730e215e3c585250ee9aef5ea3846123fb20a1edc2c021e136abc89c296"),
+            (0x2020, 6144, "80e96c37ee46da7be3edaed4c6151c2d66ba2f8039460268b22484e791fa3555"),
+            (0x4020, 1248, "ac932730e215e3c585250ee9aef5ea3846123fb20a1edc2c021e136abc89c296"),
         ):
             with self.subTest(start=start):
                 self.assertEqual(
                     expected,
-                    hashlib.sha256(scene.tilemap.ram[start:start + length]).hexdigest(),
+                    hashlib.sha256(scene.tilemap.ram[start : start + length]).hexdigest(),
                 )
         visible_back_plane = b"".join(
-            scene.plane_b.name_word(1536 + x * 8, y * 8).to_bytes(2, "big")
-            for y in range(28) for x in range(40)
+            scene.plane_b.name_word(1536 + x * 8, y * 8).to_bytes(2, "big") for y in range(28) for x in range(40)
         )
         self.assertEqual(
             "21f4b7c1fab7daf403537172943334896e4ace64b24b1af292ca41625aec7b4c",

@@ -23,19 +23,45 @@ from tests.test_sound_studio_widget import tiny_context  # noqa: E402
 
 
 def shared_payload():
-    return {"family": "bgm", "name": "fixture", "entry_offsets": [0, 4], "instructions": [
-        {"offset": 0, "size": 3, "kind": "command", "opcode": 0xF8,
-         "name": "call", "flow": "call", "target": 10, "data": [0xF8, 0, 8]},
-        {"offset": 3, "size": 1, "kind": "command", "opcode": 0xF2,
-         "name": "stop", "flow": "stop", "data": [0xF2]},
-        {"offset": 4, "size": 3, "kind": "command", "opcode": 0xF8,
-         "name": "call", "flow": "call", "target": 10, "data": [0xF8, 0, 4]},
-        {"offset": 7, "size": 1, "kind": "command", "opcode": 0xF2,
-         "name": "stop", "flow": "stop", "data": [0xF2]},
-        {"offset": 10, "size": 2, "kind": "note", "data": [0x81, 5]},
-        {"offset": 12, "size": 1, "kind": "command", "opcode": 0xF9,
-         "name": "return", "flow": "return", "data": [0xF9]},
-    ]}
+    return {
+        "family": "bgm",
+        "name": "fixture",
+        "entry_offsets": [0, 4],
+        "instructions": [
+            {
+                "offset": 0,
+                "size": 3,
+                "kind": "command",
+                "opcode": 0xF8,
+                "name": "call",
+                "flow": "call",
+                "target": 10,
+                "data": [0xF8, 0, 8],
+            },
+            {"offset": 3, "size": 1, "kind": "command", "opcode": 0xF2, "name": "stop", "flow": "stop", "data": [0xF2]},
+            {
+                "offset": 4,
+                "size": 3,
+                "kind": "command",
+                "opcode": 0xF8,
+                "name": "call",
+                "flow": "call",
+                "target": 10,
+                "data": [0xF8, 0, 4],
+            },
+            {"offset": 7, "size": 1, "kind": "command", "opcode": 0xF2, "name": "stop", "flow": "stop", "data": [0xF2]},
+            {"offset": 10, "size": 2, "kind": "note", "data": [0x81, 5]},
+            {
+                "offset": 12,
+                "size": 1,
+                "kind": "command",
+                "opcode": 0xF9,
+                "name": "return",
+                "flow": "return",
+                "data": [0xF9],
+            },
+        ],
+    }
 
 
 class OwnershipTests(unittest.TestCase):
@@ -57,8 +83,11 @@ class OwnershipTests(unittest.TestCase):
             control.replace(0x81, 0x83)
 
     def test_loops_and_duplicate_roots_are_bounded_and_all_owners_remain_visible(self):
-        payload = {"instructions": [{"offset": 10, "size": 3, "kind": "command",
-                                     "flow": "jump", "target": 10, "data": [0xF6, 0xFF, 0xFE]}]}
+        payload = {
+            "instructions": [
+                {"offset": 10, "size": 3, "kind": "command", "flow": "jump", "target": 10, "data": [0xF6, 0xFF, 0xFE]}
+            ]
+        }
         channels = (semantic.Channel(0, "fm", 10, 0), semantic.Channel(1, "psg", 10, 0x80))
         self.assertEqual({10: channels}, semantic.channel_owners(payload, channels))
         payload["instructions"][0]["target"] = 11
@@ -68,8 +97,12 @@ class OwnershipTests(unittest.TestCase):
     def test_source_header_distinguishes_dac_slot_from_regular_fm_type_six(self):
         # Six ordinary FM channels follow the leading dedicated DAC slot.
         header_size = 6 + 7 * 4
-        raw = ((header_size + 3).to_bytes(2, "big") + bytes((7, 0, 1, 0))
-               + (header_size.to_bytes(2, "big") + bytes(2)) * 7 + bytes((0x81, 1, 0xF2)))
+        raw = (
+            (header_size + 3).to_bytes(2, "big")
+            + bytes((7, 0, 1, 0))
+            + (header_size.to_bytes(2, "big") + bytes(2)) * 7
+            + bytes((0x81, 1, 0xF2))
+        )
         payload = {"name": "fixture", "family": "bgm", "entry_offsets": [header_size] * 7}
         channels = semantic.source_channels(payload, raw)
         self.assertEqual("dac", channels[0].family)
@@ -167,10 +200,12 @@ class SoundSemanticWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
             from tkinter import ttk
+
             probe = tk.Tk()
             probe.withdraw()
             probe.destroy()
@@ -192,8 +227,7 @@ class SoundSemanticWidgetTests(unittest.TestCase):
             context = tiny_context()
             messages = mock.Mock()
             with mock.patch.object(self.tk, "Tk", new=hidden_tk):
-                window = Window(ROOT, profile, context, self.tk, self.ttk,
-                                messages, mock.Mock(), mock.Mock())
+                window = Window(ROOT, profile, context, self.tk, self.ttk, messages, mock.Mock(), mock.Mock())
             try:
                 window.select_artifact(window.state.artifact_ids.index("sound_instruments"))
                 self.assertIn("relative YM2612 register $B0", window.semantic_description.cget("text"))

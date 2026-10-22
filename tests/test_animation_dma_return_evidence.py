@@ -19,29 +19,17 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.audit = {
             row["address"]: row
-            for row in json.loads(
-                (ROOT / "config/name_audit.json").read_text(encoding="utf-8")
-            )["records"]
+            for row in json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))["records"]
         }
         cls.reviews = {
             row["basis"]: row
-            for row in json.loads(
-                (ROOT / "config/duplicate_basis_reviews.json").read_text(
-                    encoding="utf-8"
-                )
-            )["reviews"]
+            for row in json.loads((ROOT / "config/duplicate_basis_reviews.json").read_text(encoding="utf-8"))["reviews"]
         }
 
     def test_missiray_streams_have_distinct_installers_and_frames(self) -> None:
-        data = (ROOT / "src/data/shield_viper_and_missiray_mappings.s").read_text(
-            encoding="utf-8"
-        )
-        states = (ROOT / "src/projectiles/missiray_and_rising_shots.s").read_text(
-            encoding="utf-8"
-        )
-        resolver = (ROOT / "src/rendering/sprite_object_pipeline.s").read_text(
-            encoding="utf-8"
-        )
+        data = (ROOT / "src/data/shield_viper_and_missiray_mappings.s").read_text(encoding="utf-8")
+        states = (ROOT / "src/projectiles/missiray_and_rising_shots.s").read_text(encoding="utf-8")
+        resolver = (ROOT / "src/rendering/sprite_object_pipeline.s").read_text(encoding="utf-8")
         streams = (
             (
                 "0x0ED13E",
@@ -71,7 +59,9 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
                 self.assertIn(f"#{stream},8(a", states)
                 self.assertIn(installer + ":", states)
                 next_stream = streams[index + 1][1] if index < 2 else ""
-                stream_data = block(data, stream + ":", next_stream + ":") if next_stream else data.split(stream + ":", 1)[1]
+                stream_data = (
+                    block(data, stream + ":", next_stream + ":") if next_stream else data.split(stream + ":", 1)[1]
+                )
                 for suffix in frame_suffixes:
                     self.assertIn("Projectile_MissirayBulletSprite" + suffix + "-*", stream_data)
         self.assertEqual(3, len(set(bases)))
@@ -116,9 +106,7 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
         self.assertIn("Gfx_QueueByteStreamDMA_BeginRecord:", source)
 
     def test_gravity_returns_state_exact_gate_and_context(self) -> None:
-        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "src/actors/shared_object_helpers.s").read_text(encoding="utf-8")
         entries = (
             ("0x02A7F4", "Physics_ApplyGravity", "$2000"),
             ("0x02A822", "Projectile_FallWithGravity", "$3000"),
@@ -139,9 +127,7 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
 
     def test_bird_and_fish_acceleration_returns_are_not_one_role(self) -> None:
         bird = (ROOT / "src/enemies/bird_enemy.s").read_text(encoding="utf-8")
-        fish = (ROOT / "src/enemies/stage_11_fish.s").read_text(
-            encoding="utf-8"
-        )
+        fish = (ROOT / "src/enemies/stage_11_fish.s").read_text(encoding="utf-8")
         bird_state = block(
             bird,
             "Enemy_BirdAccelerateDownwardState:",
@@ -160,17 +146,12 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
             self.assertIn("cmpi.l  #$FFFA0000,$18(a5)", section)
             self.assertIn("addq.w  #2,4(a5)", section)
             self.assertIn(routine + "_Return:", section)
-        bases = [
-            self.audit[address]["basis"][0]
-            for address in ("0x02DD2C", "0x02EDD6", "0x02EE7E")
-        ]
+        bases = [self.audit[address]["basis"][0] for address in ("0x02DD2C", "0x02EDD6", "0x02EE7E")]
         self.assertEqual(3, len(set(bases)))
-
 
     def test_digit_queue_tails_share_cursor_publishing(self) -> None:
         basis = (
-            "The tail prepends the VDP auto-increment and DMA-length words, "
-            "then publishes both updated queue cursors."
+            "The tail prepends the VDP auto-increment and DMA-length words, then publishes both updated queue cursors."
         )
         self.assertEqual(
             ["0x001EA8", "0x001F4A"],
@@ -181,12 +162,15 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
             with self.subTest(radix=radix):
                 owner = f"Gfx_Queue{radix}DigitsDMA"
                 tail = block(
-                    source, owner + "_FinalizeQueue:",
+                    source,
+                    owner + "_FinalizeQueue:",
                     "; End of function " + owner,
                 )
                 for instruction in (
-                    "move.w  #$8F02,-(a1)", "move.l  #$94009300,d2",
-                    "add.b   d3,d2", "move.l  d2,-(a1)",
+                    "move.w  #$8F02,-(a1)",
+                    "move.l  #$94009300,d2",
+                    "add.b   d3,d2",
+                    "move.l  d2,-(a1)",
                     "move.w  a1,(VDPCommandQueueHead).w",
                     "move.w  a2,(VDPStagingDataCursor).w",
                 ):
@@ -242,11 +226,13 @@ class AnimationDMAReturnEvidenceTests(unittest.TestCase):
                 self.assertIn(f"beq.s   {prefix}_StageZero", reader)
                 self.assertIn("move.w  d0,(a2)+", reader)
         headered = block(
-            source, "Gfx_QueueHeaderedByteStreamDMA_BeginRecord:",
+            source,
+            "Gfx_QueueHeaderedByteStreamDMA_BeginRecord:",
             "Gfx_QueueHeaderedByteStreamDMA_ReadByte:",
         )
         headerless = block(
-            source, "Gfx_QueueByteStreamDMA_BeginRecord:",
+            source,
+            "Gfx_QueueByteStreamDMA_BeginRecord:",
             "Gfx_QueueByteStreamDMA_ReadByte:",
         )
         self.assertIn("move.w  (a0)+,d0", headered)

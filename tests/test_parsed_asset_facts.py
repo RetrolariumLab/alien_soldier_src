@@ -34,8 +34,8 @@ def legacy_descriptors(root):
             if len(values) != 4:
                 continue
             found[match.group("name")] = model.Descriptor(
-                match.group("name"), values[0], values[1], values[2],
-                bool(values[3] >> 16), values[3] & 0xFFFF)
+                match.group("name"), values[0], values[1], values[2], bool(values[3] >> 16), values[3] & 0xFFFF
+            )
     return found
 
 
@@ -46,14 +46,20 @@ class ParsedAssetFactsTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix="owner-", dir=base)
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.source = self.write("src/first.s", b'AssetsA:\n dc.w 6\n dc.l Blob\n'
+        self.source = self.write(
+            "src/first.s",
+            b"AssetsA:\n dc.w 6\n dc.l Blob\n"
             b' dc.w $4000\n dc.w $FFFF\nBlob: binclude "data/blob.bin"\n'
-            b'Gfx_FixtureVRAMTransferParameters: dc.l $FFFF7000,$FFFF6000,$FFFF4000,$4000\n'
-            b'Ignored: dc.b 1\nInvalidAssets: dc.w $FFFF\n')
-        self.last = self.write("src/nested/last.s", b'AssetsB:\n dc.w 7\n dc.l Blob\n'
-            b' dc.w 0\n dc.w -1\n'
-            b'Gfx_OtherVRAMTransferParameters: dc.l $FFFF7100,$FFFF6100,$FFFF4100,$14000\n'
-            b'Gfx_FixtureVRAMTransferParameters: dc.l $FFFF7200,$FFFF6200,$FFFF4200,$16000\n')
+            b"Gfx_FixtureVRAMTransferParameters: dc.l $FFFF7000,$FFFF6000,$FFFF4000,$4000\n"
+            b"Ignored: dc.b 1\nInvalidAssets: dc.w $FFFF\n",
+        )
+        self.last = self.write(
+            "src/nested/last.s",
+            b"AssetsB:\n dc.w 7\n dc.l Blob\n"
+            b" dc.w 0\n dc.w -1\n"
+            b"Gfx_OtherVRAMTransferParameters: dc.l $FFFF7100,$FFFF6100,$FFFF4100,$14000\n"
+            b"Gfx_FixtureVRAMTransferParameters: dc.l $FFFF7200,$FFFF6200,$FFFF4200,$16000\n",
+        )
         self.payload = self.write("data/blob.bin", b"\x12\x34\x56")
         (self.root / "src/empty").mkdir()
         (self.root / "data/empty").mkdir()
@@ -95,8 +101,10 @@ class ParsedAssetFactsTests(unittest.TestCase):
     def test_custom_supplied_bodies_without_original_facts_never_capture_or_read_files(self):
         bodies = {"Custom": self.asset_lines(0x4020)}
         expected = legacy_asset_lists(bodies)
-        with mock.patch.object(model.guarded_inventory, "capture", side_effect=AssertionError("capture forbidden")), \
-                mock.patch.object(Path, "open", side_effect=AssertionError("file read forbidden")):
+        with (
+            mock.patch.object(model.guarded_inventory, "capture", side_effect=AssertionError("capture forbidden")),
+            mock.patch.object(Path, "open", side_effect=AssertionError("file read forbidden")),
+        ):
             for root in (self.root, object()):
                 with self.subTest(root=type(root).__name__), model.parsed_operation(root) as operation:
                     self.assertEqual(expected, model.read_asset_lists(root, bodies))
@@ -114,8 +122,10 @@ class ParsedAssetFactsTests(unittest.TestCase):
             custom = UserDict(bodies)
             for candidate in (changed, copied, reordered, custom):
                 expected = legacy_asset_lists(candidate)
-                with self.subTest(kind=type(candidate).__name__), mock.patch.object(
-                        model, "_parse_asset_lists", wraps=model._parse_asset_lists) as parse:
+                with (
+                    self.subTest(kind=type(candidate).__name__),
+                    mock.patch.object(model, "_parse_asset_lists", wraps=model._parse_asset_lists) as parse,
+                ):
                     actual = model.read_asset_lists(self.root, candidate)
                     self.assertEqual(expected, actual)
                     self.assertEqual(list(expected), list(actual))
@@ -125,11 +135,13 @@ class ParsedAssetFactsTests(unittest.TestCase):
         with model.parsed_operation(self.root) as operation:
             _, bodies = model.labelled_blocks(self.root)
             real = model.read_asset_list
+
             def mutate(name, lines):
                 commands = real(name, lines)
                 if name == "AssetsB":
                     bodies["AssetsA"] = self.asset_lines(0x4020)
                 return commands
+
             with mock.patch.object(model, "read_asset_list", side_effect=mutate):
                 actual = model.read_asset_lists(self.root, bodies)
             self.assertEqual(0x4000, actual["AssetsA"][0].destination)
@@ -140,10 +152,12 @@ class ParsedAssetFactsTests(unittest.TestCase):
         with model.parsed_operation(self.root) as operation:
             _, bodies = model.labelled_blocks(self.root)
             real = model.read_asset_list
+
             def mutate(name, lines):
                 commands = real(name, lines)
                 bodies["Late"] = self.asset_lines(0x4020)
                 return commands
+
             with mock.patch.object(model, "read_asset_list", side_effect=mutate):
                 with self.assertRaisesRegex(RuntimeError, "dictionary changed size"):
                     model.read_asset_lists(self.root, bodies)
@@ -157,8 +171,10 @@ class ParsedAssetFactsTests(unittest.TestCase):
             for root in (self.root, Path(os.path.relpath(self.root, Path.cwd()))):
                 with self.subTest(newline=newline, root=root):
                     expected = legacy_descriptors(root)
-                    with model.parsed_operation(root) as operation, mock.patch.object(
-                            model, "_parse_descriptors", wraps=model._parse_descriptors) as parse:
+                    with (
+                        model.parsed_operation(root) as operation,
+                        mock.patch.object(model, "_parse_descriptors", wraps=model._parse_descriptors) as parse,
+                    ):
                         first = model.read_descriptors(root)
                         old_item = first["Gfx_FixtureVRAMTransferParameters"]
                         old_item.coarse = 17
@@ -174,8 +190,7 @@ class ParsedAssetFactsTests(unittest.TestCase):
                         self.assertIs(True, second["Gfx_FixtureVRAMTransferParameters"].mirror_to_plane_buffer)
 
     def test_descriptor_invalid_literal_keeps_the_original_error_and_no_fact_cache(self):
-        self.source.write_bytes(self.source.read_bytes() +
-            b"Gfx_InvalidVRAMTransferParameters: dc.l nope,2,3,4\n")
+        self.source.write_bytes(self.source.read_bytes() + b"Gfx_InvalidVRAMTransferParameters: dc.l nope,2,3,4\n")
         with self.assertRaises(ValueError) as original:
             legacy_descriptors(self.root)
         with model.parsed_operation(self.root) as operation:
@@ -190,11 +205,14 @@ class ParsedAssetFactsTests(unittest.TestCase):
         with model.parsed_operation(self.root) as operation:
             model.labelled_blocks(self.root)
             self.assertTrue(operation._unsupported)
-            with mock.patch.object(model, "_parse_asset_lists", wraps=model._parse_asset_lists) as assets, \
-                    mock.patch.object(model, "_parse_descriptors", wraps=model._parse_descriptors) as descriptors:
+            with (
+                mock.patch.object(model, "_parse_asset_lists", wraps=model._parse_asset_lists) as assets,
+                mock.patch.object(model, "_parse_descriptors", wraps=model._parse_descriptors) as descriptors,
+            ):
                 for _ in range(2):
-                    self.assertEqual(legacy_asset_lists(model.labelled_blocks(self.root)[1]),
-                                     model.read_asset_lists(self.root))
+                    self.assertEqual(
+                        legacy_asset_lists(model.labelled_blocks(self.root)[1]), model.read_asset_lists(self.root)
+                    )
                     self.assertEqual(legacy_descriptors(self.root), model.read_descriptors(self.root))
                 self.assertEqual(2, assets.call_count)
                 self.assertEqual(2, descriptors.call_count)
@@ -205,11 +223,14 @@ class ParsedAssetFactsTests(unittest.TestCase):
         staged = self.root / "build/staged"
         (staged / "src").mkdir(parents=True)
         path = staged / "src/only.s"
-        first = (b"Assets:\n dc.w 6\n dc.l Blob\n dc.w $4000\n dc.w $FFFF\n"
-                 b"Gfx_StagedVRAMTransferParameters: dc.l 1,2,3,4\n")
+        first = (
+            b"Assets:\n dc.w 6\n dc.l Blob\n dc.w $4000\n dc.w $FFFF\nGfx_StagedVRAMTransferParameters: dc.l 1,2,3,4\n"
+        )
         second = first.replace(b"$4000", b"$4002").replace(b"dc.l 1,2,3,4", b"dc.l 5,2,3,4")
+
         def facts(root):
             return model.read_asset_lists(root), model.read_descriptors(root)
+
         path.write_bytes(first)
         before = facts(staged)
         path.write_bytes(second)

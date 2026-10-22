@@ -20,17 +20,24 @@ class NativeEnvironmentTests(unittest.TestCase):
         executable.parent.mkdir(parents=True)
         executable.write_bytes(b"observed build")
         (root / "config").mkdir()
-        component = {"id": "emulator", "source_commit": "a" * 40,
-                     "files": {"any": [{"path": "../gens/Output/Gens.exe"}]}}
+        component = {
+            "id": "emulator",
+            "source_commit": "a" * 40,
+            "files": {"any": [{"path": "../gens/Output/Gens.exe"}]},
+        }
         (root / "config/toolchain.json").write_text(json.dumps({"components": [component]}), encoding="utf-8")
         return root, executable
 
     def test_clean_selected_checkout_and_actual_build_are_bound(self):
         with tempfile.TemporaryDirectory() as directory:
             root, executable = self.fixture(directory)
-            with (mock.patch.object(environment, "check_emulator_commit") as pin,
-                  mock.patch.object(environment, "emulator_git", return_value="b" * 40),
-                  mock.patch.object(environment.runtime_isolation, "native_config_contract", return_value={"proved": True})):
+            with (
+                mock.patch.object(environment, "check_emulator_commit") as pin,
+                mock.patch.object(environment, "emulator_git", return_value="b" * 40),
+                mock.patch.object(
+                    environment.runtime_isolation, "native_config_contract", return_value={"proved": True}
+                ),
+            ):
                 result = environment.environment_identity(root, executable)
             self.assertEqual("a" * 40, result["source_commit"])
             self.assertEqual("b" * 40, result["source_tree"])
@@ -41,11 +48,15 @@ class NativeEnvironmentTests(unittest.TestCase):
     def test_dirty_or_wrong_commit_is_refused_before_config_proof(self):
         with tempfile.TemporaryDirectory() as directory:
             root, executable = self.fixture(directory)
+
             def refuse(_component, errors, _notes, _checkout):
                 errors.append("dirty selected source")
-            with (mock.patch.object(environment, "check_emulator_commit", side_effect=refuse),
-                  mock.patch.object(environment, "emulator_git", return_value="b" * 40),
-                  mock.patch.object(environment.runtime_isolation, "native_config_contract") as config):
+
+            with (
+                mock.patch.object(environment, "check_emulator_commit", side_effect=refuse),
+                mock.patch.object(environment, "emulator_git", return_value="b" * 40),
+                mock.patch.object(environment.runtime_isolation, "native_config_contract") as config,
+            ):
                 with self.assertRaisesRegex(ValueError, "dirty selected source"):
                     environment.environment_identity(root, executable)
                 config.assert_not_called()

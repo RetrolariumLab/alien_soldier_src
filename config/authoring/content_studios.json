@@ -1,10 +1,7 @@
 {
   "schema_version": 1,
   "profile_manifest": "config/rom_profiles.json",
-  "profiles": [
-    "jp",
-    "eu"
-  ],
+  "profiles": ["jp", "eu"],
   "workspace": "content/workspace",
   "workspace_document": "workspace.json",
   "profile_outputs": {
@@ -17,19 +14,14 @@
   },
   "assembler_defines": {
     "jp": [],
-    "eu": [
-      "BuildProfileEU=1"
-    ]
+    "eu": ["BuildProfileEU=1"]
   },
   "studios": [
     {
       "id": "level",
       "name": "Level Studio",
       "status": "supported",
-      "artifacts": [
-        "level_layouts",
-        "stage_maps"
-      ],
+      "artifacts": ["level_layouts", "stage_maps"],
       "model_gate": "check-level-model",
       "render_gate": "check-graphics-models",
       "workstation_gate": "check-level-studio",
@@ -47,47 +39,23 @@
       "id": "graphics",
       "name": "Graphics Studio",
       "status": "supported",
-      "artifacts": [
-        "tile_art",
-        "compressed_tile_art",
-        "palette_commands",
-        "sprite_mappings",
-        "sprite_animations"
-      ],
-      "derived_views": [
-        "object_gallery"
-      ],
+      "artifacts": ["tile_art", "compressed_tile_art", "palette_commands", "sprite_mappings", "sprite_animations"],
+      "derived_views": ["object_gallery"],
       "model_gate": "check-graphics-models",
       "workspace_gate": "check-graphics-workspace",
       "workstation_gate": "check-graphics-studio",
-      "workstation_actions": [
-        "save",
-        "reload",
-        "build",
-        "dirty-close"
-      ]
+      "workstation_actions": ["save", "reload", "build", "dirty-close"]
     },
     {
       "id": "screen",
       "name": "Screen Studio",
       "status": "supported",
-      "artifacts": [
-        "screen_maps"
-      ],
-      "derived_views": [
-        "title_background",
-        "options_background",
-        "story_background"
-      ],
+      "artifacts": ["screen_maps"],
+      "derived_views": ["title_background", "options_background", "story_background"],
       "model_gate": "check-screen-model",
       "workspace_gate": "check-screen-workspace",
       "workstation_gate": "check-screen-studio",
-      "workstation_actions": [
-        "save",
-        "reload",
-        "build",
-        "dirty-close"
-      ]
+      "workstation_actions": ["save", "reload", "build", "dirty-close"]
     },
     {
       "id": "text",
@@ -105,37 +73,18 @@
       ],
       "workspace_gate": "check-text-workspace",
       "workstation_gate": "check-text-studio",
-      "workstation_actions": [
-        "save",
-        "reload",
-        "build",
-        "dirty-close"
-      ]
+      "workstation_actions": ["save", "reload", "build", "dirty-close"]
     },
     {
       "id": "sound",
       "name": "Sound Studio",
       "status": "supported",
-      "artifacts": [
-        "sound_envelopes",
-        "sound_instruments",
-        "sound_pcm_samples",
-        "sound_sequences"
-      ],
-      "derived_views": [
-        "bgm_headers",
-        "sfx_headers",
-        "pcm_banks"
-      ],
+      "artifacts": ["sound_envelopes", "sound_instruments", "sound_pcm_samples", "sound_sequences"],
+      "derived_views": ["bgm_headers", "sfx_headers", "pcm_banks"],
       "model_gate": "check-sound-model",
       "workspace_gate": "check-sound-workspace",
       "workstation_gate": "check-sound-studio",
-      "workstation_actions": [
-        "save",
-        "reload",
-        "build",
-        "dirty-close"
-      ]
+      "workstation_actions": ["save", "reload", "build", "dirty-close"]
     }
   ],
   "artifacts": [
@@ -144,10 +93,7 @@
       "studio": "level",
       "kind": "level_document",
       "workspace": "level/levels.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "spawn_list_count": 19,
       "placement_count": 314,
       "configuration_count": 30,
@@ -188,10 +134,7 @@
       "studio": "graphics",
       "kind": "graphics_tile_document",
       "workspace": "graphics/tile_art.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "payload_count": 289,
       "tile_count": 3230,
       "source_owners": [
@@ -206,10 +149,7 @@
       "studio": "graphics",
       "kind": "palette_document",
       "workspace": "graphics/palettes.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "block_count": 55,
       "command_count": 95,
       "offset_list_count": 29,
@@ -225,10 +165,7 @@
       "studio": "graphics",
       "kind": "compressed_tile_document",
       "workspace": "graphics/compressed_tile_art.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "payload_count": 153,
       "tile_count": 29405,
       "decoded_byte_count": 940960,
@@ -247,10 +184,7 @@
       "studio": "graphics",
       "kind": "mapping_document",
       "workspace": "graphics/sprite_mappings.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "block_count": 764,
       "mapping_count": 1169,
       "piece_count": 3566,
@@ -330,10 +264,7 @@
       "studio": "graphics",
       "kind": "animation_document",
       "workspace": "graphics/sprite_animations.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "script_count": 112,
       "frame_count": 670,
       "jump_count": 63,
@@ -363,10 +294,7 @@
       "studio": "screen",
       "kind": "screen_map_document",
       "workspace": "screens/maps.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "payload_count": 8,
       "value_count": 8744,
       "decoded_byte_count": 14544,
@@ -385,10 +313,7 @@
       "studio": "text",
       "kind": "story_text_document",
       "workspace": "text/story_rows.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "row_bytes": 34,
       "row_counts": {
         "jp": 99,
@@ -407,26 +332,18 @@
       "studio": "text",
       "kind": "frontend_text_document",
       "workspace": "text/frontend_strings.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "string_count": 37,
       "glyph_count": 429,
       "encoded_byte_count": 466,
-      "source_owners": [
-        "src/rendering/text_and_numbers.s"
-      ]
+      "source_owners": ["src/rendering/text_and_numbers.s"]
     },
     {
       "id": "japanese_glyph_sequence",
       "studio": "text",
       "kind": "japanese_glyph_document",
       "workspace": "text/japanese_glyph_sequence.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "entry_count": 987,
       "art_glyph_count": 295,
       "encoded_byte_count": 1976,
@@ -443,10 +360,7 @@
       "studio": "text",
       "kind": "credits_text_document",
       "workspace": "text/credits_sequence.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "record_count": 37,
       "glyph_slot_count": 724,
       "encoded_byte_count": 874,
@@ -465,37 +379,25 @@
       "studio": "text",
       "kind": "scripted_message_document",
       "workspace": "text/boss_and_ship_messages.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "script_count": 9,
       "command_count": 26,
       "record_count": 17,
       "glyph_count": 389,
       "encoded_byte_count": 910,
       "unexposed_byte_count": 418,
-      "source_owners": [
-        "src/ui/message_scripts_and_glyph_lists.s",
-        "data/artunc/font.bin"
-      ]
+      "source_owners": ["src/ui/message_scripts_and_glyph_lists.s", "data/artunc/font.bin"]
     },
     {
       "id": "glyph_source_lists",
       "studio": "text",
       "kind": "glyph_source_list_document",
       "workspace": "text/glyph_source_lists.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "list_count": 4,
       "glyph_count": 57,
       "encoded_byte_count": 62,
-      "source_owners": [
-        "src/ui/message_scripts_and_glyph_lists.s",
-        "data/artunc/font.bin"
-      ]
+      "source_owners": ["src/ui/message_scripts_and_glyph_lists.s", "data/artunc/font.bin"]
     },
     {
       "id": "results_detail_text",
@@ -511,21 +413,14 @@
       "summary_label_count": 3,
       "summary_glyph_count": 66,
       "summary_encoded_byte_count": 70,
-      "source_owners": [
-        "data/other/results_stage_detail_text.bin",
-        "src/ui/results_data.s",
-        "data/artunc/font.bin"
-      ]
+      "source_owners": ["data/other/results_stage_detail_text.bin", "src/ui/results_data.s", "data/artunc/font.bin"]
     },
     {
       "id": "stage_message_sequences",
       "studio": "text",
       "kind": "stage_message_document",
       "workspace": "text/stage_messages.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "stream_count": 4,
       "sequence_count": 5,
       "entry_count": 38,
@@ -540,29 +435,21 @@
       "studio": "sound",
       "kind": "sound_envelope_document",
       "workspace": "sound/envelopes.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "family_count": 2,
       "envelope_count": 18,
       "capacity": 360,
       "value_count": 343,
       "command_count": 16,
       "protected_byte_count": 1,
-      "source_owners": [
-        "src/sound/psg_playback_and_envelopes.s"
-      ]
+      "source_owners": ["src/sound/psg_playback_and_envelopes.s"]
     },
     {
       "id": "sound_instruments",
       "studio": "sound",
       "kind": "sound_instrument_document",
       "workspace": "sound/instruments.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "payload_count": 182,
       "instrument_count": 901,
       "parameter_byte_count": 22525,
@@ -579,10 +466,7 @@
       "studio": "sound",
       "kind": "sound_pcm_document",
       "workspace": "sound/pcm_samples.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "bank_count": 9,
       "sample_count": 90,
       "sample_byte_count": 253502,
@@ -605,10 +489,7 @@
       "studio": "sound",
       "kind": "sound_sequence_document",
       "workspace": "sound/sequences.json",
-      "profiles": [
-        "jp",
-        "eu"
-      ],
+      "profiles": ["jp", "eu"],
       "payload_count": 182,
       "instruction_count": 33062,
       "reachable_byte_count": 51045,

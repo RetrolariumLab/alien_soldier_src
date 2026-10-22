@@ -12,7 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.tile_codec import (  # noqa: E402
-    Bits, BitWriter, compress, decompress, pack_tile,
+    Bits,
+    BitWriter,
+    compress,
+    decompress,
+    pack_tile,
 )
 from authoring.tile_codec_edit import compress_edited, read_plan  # noqa: E402
 from tests.test_tile_codec import tile_codec_payloads  # noqa: E402
@@ -47,8 +51,7 @@ class EditedCodecTests(unittest.TestCase):
         self.assertEqual(len(source), len(encoded))
         old = read_plan(Bits(source, 1))
         new = read_plan(Bits(encoded, 1))
-        self.assertEqual((old.start, old.end, old.owners),
-                         (new.start, new.end, new.owners))
+        self.assertEqual((old.start, old.end, old.owners), (new.start, new.end, new.owners))
 
     def test_single_pixel_can_break_a_source_colour_group(self):
         source = marker_fixture()
@@ -92,8 +95,7 @@ class SourceTemplateTests(unittest.TestCase):
             with self.subTest(name=name):
                 original = (ROOT / path).read_bytes()
                 plain = decompress(original)
-                recoloured = bytes(((value >> 4 ^ 1) << 4) | ((value & 15) ^ 1)
-                                   for value in plain)
+                recoloured = bytes(((value >> 4 ^ 1) << 4) | ((value & 15) ^ 1) for value in plain)
                 edited = compress_edited(original, recoloured)
                 self.assertEqual(recoloured, decompress(edited))
                 self.assertLessEqual(len(edited), len(original))

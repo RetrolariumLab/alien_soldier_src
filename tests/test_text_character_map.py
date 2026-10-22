@@ -29,14 +29,15 @@ ASSETS = {
 
 
 def answer(index, text, family="shared", evidence="visual", notes="tiny human-answer fixture"):
-    return {"set": family, "index": index, "transcription": text,
-            "evidence": evidence, "notes": notes}
+    return {"set": family, "index": index, "transcription": text, "evidence": evidence, "notes": notes}
 
 
 def worksheet(*records):
-    return {"schema_version": 1,
-            "source_hashes": {name: asset["sha256"] for name, asset in ASSETS.items()},
-            "answers": list(records)}
+    return {
+        "schema_version": 1,
+        "source_hashes": {name: asset["sha256"] for name, asset in ASSETS.items()},
+        "answers": list(records),
+    }
 
 
 def character_map(*records, profile="jp"):
@@ -56,8 +57,10 @@ class EvidenceTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_import_retains_exact_answers_source_hashes_and_explicit_profile(self):
-        records = worksheet(answer(0, "A", evidence="source", notes="fixture reader line 12"),
-                            answer(1, "", evidence="unknown_or_unused"))
+        records = worksheet(
+            answer(0, "A", evidence="source", notes="fixture reader line 12"),
+            answer(1, "", evidence="unknown_or_unused"),
+        )
         source = self.root / "answers.json"
         source.write_text(json.dumps(records), encoding="utf-8")
         imported = model.import_answers(self.root, "jp", source)
@@ -126,8 +129,7 @@ class CodecTests(unittest.TestCase):
     def test_unknown_and_unreviewed_ids_stay_lossless_raw_tokens(self):
         mapping = character_map(answer(0, "A"), answer(1, "", evidence="unknown_or_unused"))
         self.assertEqual("A[[$001]][[$002]][[$003]]", mapping.decode([0, 1, 2, 3], "shared"))
-        self.assertEqual([0, 1, 2, 3], mapping.encode(
-            mapping.decode([0, 1, 2, 3], "shared"), "shared", length=4))
+        self.assertEqual([0, 1, 2, 3], mapping.encode(mapping.decode([0, 1, 2, 3], "shared"), "shared", length=4))
         with self.assertRaisesRegex(ValueError, "unmapped"):
             mapping.encode("B", "shared", length=1)
 
@@ -139,8 +141,12 @@ class CodecTests(unittest.TestCase):
         self.assertEqual([1], mapping.encode("[[$001]]", "shared", length=1))
 
     def test_unreviewed_claims_are_rejected_even_by_the_low_level_codec_constructor(self):
-        document = {"schema_version": 1, "profile": "jp", "source_fonts": ASSETS,
-                    "answers": [answer(0, "A", evidence="")]}
+        document = {
+            "schema_version": 1,
+            "profile": "jp",
+            "source_fonts": ASSETS,
+            "answers": [answer(0, "A", evidence="")],
+        }
         with self.assertRaisesRegex(ValueError, "evidence"):
             model.CharacterMap(document)
 
@@ -155,8 +161,7 @@ class CodecTests(unittest.TestCase):
         self.assertEqual([2, 0], mapping.encode("[[$002]]A", "shared", length=2))
 
     def test_japanese_codepoints_are_not_normalized_or_transferred_to_shared_font(self):
-        mapping = character_map(answer(0x20, "が", "japanese"),
-                                answer(0x21, "か\u3099", "japanese"))
+        mapping = character_map(answer(0x20, "が", "japanese"), answer(0x21, "か\u3099", "japanese"))
         self.assertEqual([0x20], mapping.encode("が", "japanese", length=1))
         self.assertEqual([0x21], mapping.encode("か\u3099", "japanese", length=1))
         self.assertEqual("がか\u3099", mapping.decode([0x20, 0x21], "japanese"))
@@ -180,8 +185,7 @@ class CodecTests(unittest.TestCase):
         mapping = character_map(answer(0, "A"), answer(1, "B"))
         text = mapping.decode([0, 0xFF, 1], "shared", protected={1: 0xFF})
         self.assertEqual("A[[$0FF]]B", text)
-        self.assertEqual([0, 0xFF, 1], mapping.encode(
-            text, "shared", length=3, protected={1: 0xFF}))
+        self.assertEqual([0, 0xFF, 1], mapping.encode(text, "shared", length=3, protected={1: 0xFF}))
         for invalid in ("A[[$0FF]]", "[[$0FF]]AB", "AAB", "A[[$0FE]]B"):
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 mapping.encode(invalid, "shared", length=3, protected={1: 0xFF})
@@ -199,15 +203,29 @@ class CodecTests(unittest.TestCase):
 class FieldEditingTests(unittest.TestCase):
     def setUp(self):
         self.mapping = character_map(answer(0, "A"), answer(1, "B"), answer(2, "C"))
-        self.state = Workspace({
-            "frontend_text_strings": {"profile": "jp", "strings": [{
-                "name": "tiny", "glyphs": [0, 1, 2]}]},
-            "story_text_rows": {"profile": "jp", "rows": [{
-                "index": 0, "primary": [0, 1, 2, 0xFF], "accent": [0, 0xFF, 1, 0xFF]}]},
-            "credits_text_sequence": {"profile": "jp", "max_glyph_id": 3, "records": [{
-                "upper_delay": 1, "upper_count": 1, "upper_glyphs": [1],
-                "lower_delay": 2, "lower_count": 1, "lower_glyphs": [2]}]},
-        })
+        self.state = Workspace(
+            {
+                "frontend_text_strings": {"profile": "jp", "strings": [{"name": "tiny", "glyphs": [0, 1, 2]}]},
+                "story_text_rows": {
+                    "profile": "jp",
+                    "rows": [{"index": 0, "primary": [0, 1, 2, 0xFF], "accent": [0, 0xFF, 1, 0xFF]}],
+                },
+                "credits_text_sequence": {
+                    "profile": "jp",
+                    "max_glyph_id": 3,
+                    "records": [
+                        {
+                            "upper_delay": 1,
+                            "upper_count": 1,
+                            "upper_glyphs": [1],
+                            "lower_delay": 2,
+                            "lower_count": 1,
+                            "lower_glyphs": [2],
+                        }
+                    ],
+                },
+            }
+        )
 
     def test_credits_fixture_counts_match_fixed_glyph_slots_and_safe_delay_bounds(self):
         self.state.select_artifact("credits_text_sequence")
@@ -263,8 +281,7 @@ class FieldEditingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "profile differs"):
             self.state.set_text("[[$000]][[$001]][[$002]]", other)
         self.state.select_artifact("credits_text_sequence")
-        for operation in (lambda: self.state.field_text(self.mapping),
-                          lambda: self.state.set_text("A", self.mapping)):
+        for operation in (lambda: self.state.field_text(self.mapping), lambda: self.state.set_text("A", self.mapping)):
             with self.assertRaisesRegex(ValueError, "timing fields"):
                 operation()
 
@@ -275,8 +292,9 @@ class FieldEditingTests(unittest.TestCase):
         window.field_text = mock.Mock()
         window.field_text.get.return_value = "CBA"
         validate = mock.Mock(side_effect=ValueError("fixture validator"))
-        window.context = {"frontend_text_strings": {
-            "document": self.state.documents["frontend_text_strings"], "validate": validate}}
+        window.context = {
+            "frontend_text_strings": {"document": self.state.documents["frontend_text_strings"], "validate": validate}
+        }
         window.show_value, window.messagebox, window.status = mock.Mock(), mock.Mock(), mock.Mock()
         original = deepcopy(self.state.documents)
         window.apply_text()
@@ -297,8 +315,7 @@ class CartridgeFontBindingTests(unittest.TestCase):
             self.assertEqual(295, document["source_fonts"]["japanese"]["count"])
             self.assertEqual([], document["answers"])
             mapping = model.CharacterMap(document)
-            for family, values in (("shared", [0, 227]), ("japanese", [0x20, 0x146]),
-                                   ("credits", [0, 227])):
+            for family, values in (("shared", [0, 227]), ("japanese", [0x20, 0x146]), ("credits", [0, 227])):
                 text = mapping.decode(values, family)
                 self.assertEqual(values, mapping.encode(text, family, length=2))
 
@@ -307,10 +324,12 @@ class CharacterMapWidgetTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
         try:
             import tkinter as tk
             from tkinter import ttk
+
             probe = tk.Tk()
             probe.withdraw()
             probe.destroy()
@@ -332,17 +351,23 @@ class CharacterMapWidgetTests(unittest.TestCase):
             with self.subTest(profile=profile), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 source = root / "answers.json"
-                source.write_text(json.dumps(worksheet(
-                    answer(0, "A"), answer(1, "B"), answer(2, "C"))), encoding="utf-8")
+                source.write_text(
+                    json.dumps(worksheet(answer(0, "A"), answer(1, "B"), answer(2, "C"))), encoding="utf-8"
+                )
                 document = {"profile": profile, "strings": [{"name": "tiny", "glyphs": [0, 1, 2]}]}
                 validate = mock.Mock()
                 context = {"frontend_text_strings": {"document": document, "validate": validate}}
                 dialogs, messages = mock.Mock(), mock.Mock()
                 dialogs.askopenfilename.return_value = str(source)
-                with (mock.patch.object(self.tk, "Tk", new=hidden_tk),
-                      mock.patch.object(model, "inventory", return_value=ASSETS),
-                      mock.patch.object(text_studio, "shared_glyph_tiles", return_value=(
-                          [[1] * 8 for _ in range(8)], [[2] * 8 for _ in range(8)]))):
+                with (
+                    mock.patch.object(self.tk, "Tk", new=hidden_tk),
+                    mock.patch.object(model, "inventory", return_value=ASSETS),
+                    mock.patch.object(
+                        text_studio,
+                        "shared_glyph_tiles",
+                        return_value=([[1] * 8 for _ in range(8)], [[2] * 8 for _ in range(8)]),
+                    ),
+                ):
                     window = Window(root, profile, context, self.tk, self.ttk, messages, dialogs)
                     try:
                         self.assertEqual("[[$000]][[$001]][[$002]]", window.field_text.get())

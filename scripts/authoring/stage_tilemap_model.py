@@ -59,8 +59,8 @@ from types import CodeType, MappingProxyType
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from unpack_data import unpack_data                                  # noqa: E402
-from authoring import guarded_inventory                              # noqa: E402
+from unpack_data import unpack_data  # noqa: E402
+from authoring import guarded_inventory  # noqa: E402
 
 
 SOURCE_ROOT = Path("src")
@@ -68,8 +68,8 @@ STREAMING_SOURCE = Path("src/rendering/tilemap_column_streaming.s")
 LOADER_TABLE = "Stage_AssetLoaderOffsets"
 SHARED_LOADER = "Stage_LoadSharedMappings"
 
-PATTERN_BYTES = 32               # 4x4 name-table words
-CHUNK_BYTES = 64                 # 8x8 pattern indices
+PATTERN_BYTES = 32  # 4x4 name-table words
+CHUNK_BYTES = 64  # 8x8 pattern indices
 COARSE_COLUMNS = 32
 COARSE_ROWS = 32
 COARSE_BYTES = COARSE_COLUMNS * COARSE_ROWS
@@ -78,7 +78,7 @@ CHUNK_PIXELS = 256
 
 RAM_BASE = 0xFFFF0000
 RAM_SIZE = 0x10000
-DECOMPRESS_TO_RAM = 6            # LoadObjDataHandlers[6] is LoadCompressedToRAM
+DECOMPRESS_TO_RAM = 6  # LoadObjDataHandlers[6] is LoadCompressedToRAM
 # src/ram_addrs.inc: the first named thing above the coarse map.
 TERRAIN_COLLISION_BUFFER = 0xFFFF7800
 
@@ -86,10 +86,8 @@ LABEL_LINE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):(?P<rest>.*)$")
 DIRECTIVE = re.compile(r"^\s*(?P<kind>dc\.[bwl]|binclude)\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
 LEA_LIST = re.compile(r"^\s+lea\s+([A-Za-z_][A-Za-z0-9_]*)\(pc\),a0\s*(?:;.*)?$")
 CALLS_LOADER = re.compile(r"^\s+bsr\.[wsl]\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$")
-TABLE_ENTRY = re.compile(
-    r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + SHARED_LOADER + r"\s*(?:;.*)?$")
-DESCRIPTOR = re.compile(
-    r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):\s+dc\.l\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
+TABLE_ENTRY = re.compile(r"^\s*dc\.w\s+([A-Za-z_][A-Za-z0-9_]*)-" + SHARED_LOADER + r"\s*(?:;.*)?$")
+DESCRIPTOR = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*):\s+dc\.l\s+(?P<body>[^;]+?)\s*(?:;.*)?$")
 
 
 def parse_number(token):
@@ -111,7 +109,7 @@ class AssetCommand:
 
     command: int
     source: str
-    destination: int             # sign-extended into the RAM mirror
+    destination: int  # sign-extended into the RAM mirror
 
     @property
     def ram_offset(self):
@@ -142,8 +140,8 @@ class Tilemap:
     lists: tuple
     ram: bytes
     descriptor: Descriptor
-    written: tuple = ()          # (list, payload, ram offset, length)
-    y_offset: int = 0            # $1000 for the offset variant, bit 15 of the mode
+    written: tuple = ()  # (list, payload, ram offset, length)
+    y_offset: int = 0  # $1000 for the offset variant, bit 15 of the mode
 
     def region(self, base):
         """How far past one of the three bases the loaders wrote.
@@ -154,12 +152,12 @@ class Tilemap:
         whichever base comes next -- with the coarse map running to
         TerrainCollisionBuffer, which `src/ram_addrs.inc` puts at $FFFF7800.
         """
-        edges = sorted({self.descriptor.patterns, self.descriptor.chunks,
-                        self.descriptor.coarse, TERRAIN_COLLISION_BUFFER})
+        edges = sorted(
+            {self.descriptor.patterns, self.descriptor.chunks, self.descriptor.coarse, TERRAIN_COLLISION_BUFFER}
+        )
         limit = next((edge for edge in edges if edge > base), RAM_BASE + RAM_SIZE)
         at, end = base - RAM_BASE, limit - RAM_BASE
-        return max((offset + length - at for _, _, offset, length in self.written
-                    if at <= offset < end), default=0)
+        return max((offset + length - at for _, _, offset, length in self.written if at <= offset < end), default=0)
 
     @property
     def chunks_defined(self):
@@ -179,8 +177,7 @@ class Tilemap:
     def name_word(self, x, y):
         """The VDP name-table word the streamer would write for this pixel."""
         y += self.y_offset
-        offset = (self._chunk(x, y) * PATTERN_BYTES
-                  + ((y >> 3) & 3) * 8 + ((x >> 3) & 3) * 2)
+        offset = self._chunk(x, y) * PATTERN_BYTES + ((y >> 3) & 3) * 8 + ((x >> 3) & 3) * 2
         at = self.descriptor.patterns - RAM_BASE + offset
         return (self.ram[at] << 8) | self.ram[at + 1]
 
@@ -189,8 +186,7 @@ class Tilemap:
         return self.ram[self.descriptor.coarse - RAM_BASE + offset]
 
     def _chunk(self, x, y):
-        offset = (self._coarse(x, y) * CHUNK_BYTES
-                  + ((y >> 5) & 7) * 8 + ((x >> 5) & 7))
+        offset = self._coarse(x, y) * CHUNK_BYTES + ((y >> 5) & 7) * 8 + ((x >> 5) & 7)
         return self.ram[self.descriptor.chunks - RAM_BASE + offset]
 
     def defined(self, x, y):
@@ -205,13 +201,11 @@ class Tilemap:
         y += self.y_offset
         if self._coarse(x, y) * CHUNK_BYTES >= self.region(self.descriptor.chunks):
             return False
-        return (self._chunk(x, y) * PATTERN_BYTES
-                < self.region(self.descriptor.patterns))
+        return self._chunk(x, y) * PATTERN_BYTES < self.region(self.descriptor.patterns)
 
     def used_coarse_columns(self):
         """How many coarse columns of row 0 are not chunk zero."""
-        row = [self.coarse_index(column * CHUNK_PIXELS, 0)
-               for column in range(COARSE_COLUMNS)]
+        row = [self.coarse_index(column * CHUNK_PIXELS, 0) for column in range(COARSE_COLUMNS)]
         while row and row[-1] == 0:
             row.pop()
         return len(row)
@@ -234,8 +228,9 @@ class _OriginalSourceChanged(Exception):
 def _same_parse_root(first, second):
     # Do not inspect sentinel arguments before the public caller can reject
     # its profile/types. In particular this performs no filesystem access.
-    return first is second or (isinstance(first, Path) and isinstance(second, Path)
-                              and first.absolute() == second.absolute())
+    return first is second or (
+        isinstance(first, Path) and isinstance(second, Path) and first.absolute() == second.absolute()
+    )
 
 
 def _check_parsed_budget(primary, readonly):
@@ -244,8 +239,10 @@ def _check_parsed_budget(primary, readonly):
         if path in combined and combined[path] != row:
             raise ValueError("readonly staged ORIGINAL records conflict; no rebind")
         combined[path] = row
-    if (len(combined) > _PARSED_MAX_ENTRIES
-            or sum(row[1] for row in combined.values() if row[0] == "file") > _PARSED_MAX_TOTAL):
+    if (
+        len(combined) > _PARSED_MAX_ENTRIES
+        or sum(row[1] for row in combined.values() if row[0] == "file") > _PARSED_MAX_TOTAL
+    ):
         raise ValueError("combined parsed source operation exceeds its total byte/entry bound")
 
 
@@ -264,11 +261,17 @@ class _ParsedSourceOperation:
 
     def require_live(self, *, closing=False):
         primary = self if self._parent is None else self._parent
-        if (self.closed or primary.closed or os.getpid() != self.pid
-                or os.getpid() != primary.pid or _PARSED_OPERATION.get() is not primary):
+        if (
+            self.closed
+            or primary.closed
+            or os.getpid() != self.pid
+            or os.getpid() != primary.pid
+            or _PARSED_OPERATION.get() is not primary
+        ):
             raise ValueError("parsed source operation is closed or outside its owning scope")
-        if self._parent is not None and (primary._readonly is None
-                or primary._readonly["facts"].get(self.root) is not self):
+        if self._parent is not None and (
+            primary._readonly is None or primary._readonly["facts"].get(self.root) is not self
+        ):
             raise ValueError("readonly staged facts are outside their explicit scope")
         if primary._budget_failed and not closing:
             raise ValueError("combined parsed source operation exceeds its total byte/entry bound")
@@ -277,20 +280,35 @@ class _ParsedSourceOperation:
         return isinstance(root, Path) and _same_parse_root(self.requested_root, root)
 
     def _listing_path(self, path):
-        return (self._parent is None and type(path) is type(Path())
-                and type(self.requested_root) is type(Path()) and ".." not in path.parts
-                and path.absolute().is_relative_to(self.requested_root.absolute()))
+        return (
+            self._parent is None
+            and type(path) is type(Path())
+            and type(self.requested_root) is type(Path())
+            and ".." not in path.parts
+            and path.absolute().is_relative_to(self.requested_root.absolute())
+        )
 
     @staticmethod
     def _listing_key(key):
-        if (type(key) is not tuple or len(key) != 3 or type(key[0]) is not str
-                or re.fullmatch(r"[0-9a-f]{64}", key[0]) is None
-                or type(key[1]) is not int or not 0 <= key[1] <= _LISTING_MAX_FILE):
+        if (
+            type(key) is not tuple
+            or len(key) != 3
+            or type(key[0]) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", key[0]) is None
+            or type(key[1]) is not int
+            or not 0 <= key[1] <= _LISTING_MAX_FILE
+        ):
             return False
         policy = key[2]
-        return (type(policy) is tuple and len(policy) == 4 and type(policy[0]) is str
-                and type(policy[1]) is int and type(policy[2]) is int and policy[2] >= 0
-                and type(policy[3]) is CodeType)
+        return (
+            type(policy) is tuple
+            and len(policy) == 4
+            and type(policy[0]) is str
+            and type(policy[1]) is int
+            and type(policy[2]) is int
+            and policy[2] >= 0
+            and type(policy[3]) is CodeType
+        )
 
     @staticmethod
     def _listing_rows_valid(rows):
@@ -298,9 +316,16 @@ class _ParsedSourceOperation:
             return False
         previous = 0
         for row in rows:
-            if (type(row) is not tuple or len(row) != 3 or type(row[0]) is not int
-                    or not previous < row[0] < 1 << 64 or type(row[1]) is not int
-                    or not 0 <= row[1] < 1 << 64 or type(row[2]) is not bytes or not row[2]):
+            if (
+                type(row) is not tuple
+                or len(row) != 3
+                or type(row[0]) is not int
+                or not previous < row[0] < 1 << 64
+                or type(row[1]) is not int
+                or not 0 <= row[1] < 1 << 64
+                or type(row[2]) is not bytes
+                or not row[2]
+            ):
                 return False
             previous = row[0]
         return True
@@ -308,22 +333,28 @@ class _ParsedSourceOperation:
     def _check_listing_cache(self, *, closing=False):
         self.require_live(closing=closing)
         try:
-            if (self._listing_corrupt is not False or type(self._listing_row_cache) is not dict
-                    or type(self._listing_row_anchors) is not tuple
-                    or len(self._listing_row_anchors) > _LISTING_MAX_KEYS):
+            if (
+                self._listing_corrupt is not False
+                or type(self._listing_row_cache) is not dict
+                or type(self._listing_row_anchors) is not tuple
+                or len(self._listing_row_anchors) > _LISTING_MAX_KEYS
+            ):
                 raise ValueError("listing input cache state changed")
             expected, total, count = {}, 0, 0
             for anchor in self._listing_row_anchors:
                 if type(anchor) is not tuple or len(anchor) != 2:
                     raise ValueError("listing input cache ORIGINAL anchor changed")
                 key, rows = anchor
-                if (not self._listing_key(key) or key in expected or type(rows) is not tuple
-                        or (closing and not self._listing_rows_valid(rows))):
+                if (
+                    not self._listing_key(key)
+                    or key in expected
+                    or type(rows) is not tuple
+                    or (closing and not self._listing_rows_valid(rows))
+                ):
                     raise ValueError("listing input cache ORIGINAL rows changed")
                 expected[key] = rows
                 total, count = total + key[1], count + len(rows)
-            if (total > _LISTING_MAX_TOTAL or count > _LISTING_MAX_ROWS
-                    or len(self._listing_row_cache) != len(expected)):
+            if total > _LISTING_MAX_TOTAL or count > _LISTING_MAX_ROWS or len(self._listing_row_cache) != len(expected):
                 raise ValueError("listing input cache inventory/bounds changed")
             for key, rows in self._listing_row_cache.items():
                 if not self._listing_key(key) or key not in expected or rows is not expected[key]:
@@ -338,13 +369,16 @@ class _ParsedSourceOperation:
         if not self._listing_path(path) or type(raw) is not bytes or len(raw) > _LISTING_MAX_FILE:
             return None
         import derive_profile_name_addresses as listing
+
         if policy is None or policy != listing._listing_parser_policy():
             return None
         key = (hashlib.sha256(raw).hexdigest(), len(raw), policy)
         if key in self._listing_row_cache:
             return self._listing_row_cache[key]
-        if (len(self._listing_row_anchors) >= _LISTING_MAX_KEYS
-                or sum(item[0][1] for item in self._listing_row_anchors) + len(raw) > _LISTING_MAX_TOTAL):
+        if (
+            len(self._listing_row_anchors) >= _LISTING_MAX_KEYS
+            or sum(item[0][1] for item in self._listing_row_anchors) + len(raw) > _LISTING_MAX_TOTAL
+        ):
             return None
         try:
             rows = tuple(listing._parse_listing_rows(raw))
@@ -353,9 +387,11 @@ class _ParsedSourceOperation:
             # the legacy loop's earlier CURRENT-ROM mismatch or bounds error.
             # No partial input facts are admitted; stream the genuine old path.
             return None
-        if (not self._listing_rows_valid(rows)
-                or sum(len(item[1]) for item in self._listing_row_anchors) + len(rows) > _LISTING_MAX_ROWS
-                or policy != listing._listing_parser_policy()):
+        if (
+            not self._listing_rows_valid(rows)
+            or sum(len(item[1]) for item in self._listing_row_anchors) + len(rows) > _LISTING_MAX_ROWS
+            or policy != listing._listing_parser_policy()
+        ):
             return None
         # Exact built-in tuples/ints/bytes are immutable. Retain their ORIGINAL
         # identities independently, not a mirror's replaceable self-digest.
@@ -371,11 +407,13 @@ class _ParsedSourceOperation:
         owners, total, count = [], 0, 0
         for name in ("src", "data"):
             owner = self.root / name
-            records = guarded_inventory.capture(owner, max_file=_PARSED_MAX_FILE,
-                max_total=_PARSED_MAX_TOTAL, max_entries=_PARSED_MAX_ENTRIES)
+            records = guarded_inventory.capture(
+                owner, max_file=_PARSED_MAX_FILE, max_total=_PARSED_MAX_TOTAL, max_entries=_PARSED_MAX_ENTRIES
+            )
             # Store immutable originals, not a mutable self-reported digest.
-            frozen = tuple((relative, row["kind"], row.get("bytes"), row.get("sha256"))
-                           for relative, row in records.items())
+            frozen = tuple(
+                (relative, row["kind"], row.get("bytes"), row.get("sha256")) for relative, row in records.items()
+            )
             owners.append((owner, frozen))
             self._owners = tuple(owners)
             for relative, kind, size, digest in frozen:
@@ -408,16 +446,20 @@ class _ParsedSourceOperation:
             base = prefix + "/" + name
             if dict(rows.get(base, ())) != {"kind": "directory"}:
                 raise ValueError("readonly staged src/data is absent from its ORIGINAL owner census")
-            selected = {relative[len(base) + 1:]: dict(fields) for relative, fields in rows.items()
-                        if relative.startswith(base + "/")}
+            selected = {
+                relative[len(base) + 1 :]: dict(fields)
+                for relative, fields in rows.items()
+                if relative.startswith(base + "/")
+            }
             guarded_inventory._frozen_children(selected, _PARSED_MAX_FILE, _PARSED_MAX_ENTRIES)
-            frozen = tuple((relative, row["kind"], row.get("bytes"), row.get("sha256"))
-                           for relative, row in sorted(selected.items()))
+            frozen = tuple(
+                (relative, row["kind"], row.get("bytes"), row.get("sha256"))
+                for relative, row in sorted(selected.items())
+            )
             owner = tree / name
             owners.append((owner, frozen))
             records[owner] = ("directory", None, None)
-            records.update({owner / relative: (kind, size, digest)
-                            for relative, kind, size, digest in frozen})
+            records.update({owner / relative: (kind, size, digest) for relative, kind, size, digest in frozen})
         retained_owners, retained_records = dict(self._readonly_owners), dict(self._readonly_records)
         for owner, frozen in owners:
             if owner in retained_owners and retained_owners[owner] != frozen:
@@ -441,8 +483,7 @@ class _ParsedSourceOperation:
             relative = path.relative_to(self.root)
         except ValueError:
             raise _UncachedInclude() from None
-        if (not relative.parts or relative.parts[0] not in {"src", "data"}
-                or ".." in relative.parts):
+        if not relative.parts or relative.parts[0] not in {"src", "data"} or ".." in relative.parts:
             raise _UncachedInclude()
         original = self._records.get(path)
         if original is None:
@@ -477,8 +518,9 @@ class _ParsedSourceOperation:
         if self._texts is None:
             if not self._owners:
                 self._capture()
-            paths = sorted(path for path in self._records
-                if path.is_relative_to(self.root / SOURCE_ROOT) and path.match("*.s"))
+            paths = sorted(
+                path for path in self._records if path.is_relative_to(self.root / SOURCE_ROOT) and path.match("*.s")
+            )
             try:
                 self._texts = tuple((path, self._text(path)) for path in paths)
             except _OriginalSourceChanged as error:
@@ -509,8 +551,8 @@ class _ParsedSourceOperation:
         original = self._facts[1]
         return len(bodies) == len(original) and all(
             type(name) is str and name == expected_name and lines is expected_lines
-            for (name, lines), (expected_name, expected_lines)
-            in zip(bodies.items(), original.items()))
+            for (name, lines), (expected_name, expected_lines) in zip(bodies.items(), original.items())
+        )
 
     def asset_lists(self, bodies):
         if not self._owns_bodies(bodies):
@@ -528,8 +570,10 @@ class _ParsedSourceOperation:
         self.require_live()
         if self._descriptors is None:
             result = _parse_descriptors(self.texts())
-            self._descriptors = tuple((item.name, item.coarse, item.chunks, item.patterns,
-                item.mirror_to_plane_buffer, item.plane_base) for item in result.values())
+            self._descriptors = tuple(
+                (item.name, item.coarse, item.chunks, item.patterns, item.mirror_to_plane_buffer, item.plane_base)
+                for item in result.values()
+            )
             return result
         # Descriptor is deliberately mutable in its public API. Retain only
         # scalar original facts, never an instance a caller can subsequently edit.
@@ -539,19 +583,24 @@ class _ParsedSourceOperation:
         """Symbolic ORIGINAL input pairs only, never a model/pointer verdict."""
         self.require_live()
         from authoring import object_sprite_model as sprites
+
         if self._animation_scripts is None:
             parsed = sprites._parse_animation_scripts(self.requested_root, original=self)
-            self._animation_scripts = tuple((name, tuple((frame.mapping, frame.duration)
-                for frame in frames)) for name, frames in parsed.items())
+            self._animation_scripts = tuple(
+                (name, tuple((frame.mapping, frame.duration) for frame in frames)) for name, frames in parsed.items()
+            )
         # Even frozen dataclasses can be changed by object.__setattr__.
         # No public dict, tuple or Frame is retained as original authority.
-        return {name: tuple(sprites.Frame(mapping, duration) for mapping, duration in frames)
-                for name, frames in self._animation_scripts}
+        return {
+            name: tuple(sprites.Frame(mapping, duration) for mapping, duration in frames)
+            for name, frames in self._animation_scripts
+        }
 
     def mapping_blocks(self):
         """Immutable ORIGINAL parsed pieces only; no model/pointer/verifier result."""
         self.require_live()
         from authoring import sprite_mapping_model as sprites
+
         if self._mapping_unsupported:
             return sprites._parse_read_blocks(self.requested_root)
         if self._mapping_blocks is None:
@@ -566,22 +615,58 @@ class _ParsedSourceOperation:
                 return sprites._parse_read_blocks(self.requested_root)
             except _OriginalSourceChanged as error:
                 raise ValueError(str(error)) from error
-            self._mapping_blocks = (tuple((
-                block.name, block.source, block.storage, block.payload, block.data,
-                tuple((mapping.block, mapping.offset, tuple((
-                    piece.attributes, piece.size, piece.link, piece.y, piece.x,
-                    piece.art, piece.art_addend) for piece in mapping.pieces))
-                      for mapping in block.mappings)) for block in blocks),
-                tuple(skipped.items()))
+            self._mapping_blocks = (
+                tuple(
+                    (
+                        block.name,
+                        block.source,
+                        block.storage,
+                        block.payload,
+                        block.data,
+                        tuple(
+                            (
+                                mapping.block,
+                                mapping.offset,
+                                tuple(
+                                    (
+                                        piece.attributes,
+                                        piece.size,
+                                        piece.link,
+                                        piece.y,
+                                        piece.x,
+                                        piece.art,
+                                        piece.art_addend,
+                                    )
+                                    for piece in mapping.pieces
+                                ),
+                            )
+                            for mapping in block.mappings
+                        ),
+                    )
+                    for block in blocks
+                ),
+                tuple(skipped.items()),
+            )
         blocks, skipped = self._mapping_blocks
         # Public mappings/blocks are mutable; even their frozen piece objects
         # must be new, rather than references held by any prior public result.
-        return ([sprites.MappingBlock(name, source, storage, payload, data,
-                    tuple(sprites.SpriteMapping(block, offset,
-                        tuple(sprites.SpritePiece(*piece) for piece in pieces))
-                          for block, offset, pieces in mappings))
-                 for name, source, storage, payload, data, mappings in blocks],
-                dict(skipped))
+        return (
+            [
+                sprites.MappingBlock(
+                    name,
+                    source,
+                    storage,
+                    payload,
+                    data,
+                    tuple(
+                        sprites.SpriteMapping(block, offset, tuple(sprites.SpritePiece(*piece) for piece in pieces))
+                        for block, offset, pieces in mappings
+                    ),
+                )
+                for name, source, storage, payload, data, mappings in blocks
+            ],
+            dict(skipped),
+        )
 
     def close(self):
         self.require_live(closing=True)
@@ -594,11 +679,15 @@ class _ParsedSourceOperation:
         raw_failed = False
         try:
             for owner, frozen in (*self._owners, *self._readonly_owners):
-                records = {relative: ({"kind": "directory"} if kind == "directory" else
-                    {"kind": "file", "bytes": size, "sha256": digest})
-                    for relative, kind, size, digest in frozen}
-                guarded_inventory.close(owner, records, max_file=_PARSED_MAX_FILE,
-                                        max_entries=_PARSED_MAX_ENTRIES)
+                records = {
+                    relative: (
+                        {"kind": "directory"}
+                        if kind == "directory"
+                        else {"kind": "file", "bytes": size, "sha256": digest}
+                    )
+                    for relative, kind, size, digest in frozen
+                }
+                guarded_inventory.close(owner, records, max_file=_PARSED_MAX_FILE, max_entries=_PARSED_MAX_ENTRIES)
         except BaseException:
             raw_failed = True
             raise
@@ -631,9 +720,15 @@ def _readonly_staged_facts(root, owner, frozen, labels):
         raise ValueError("readonly staged ORIGINAL owner census has an invalid typed bound")
     captured = {}
     for relative, row in frozen.items():
-        if (type(relative) is not str or type(row) is not dict
-                or any(type(key) is not str or not (type(value) is str or type(value) is int
-                    or type(value) is bool or value is None) for key, value in row.items())):
+        if (
+            type(relative) is not str
+            or type(row) is not dict
+            or any(
+                type(key) is not str
+                or not (type(value) is str or type(value) is int or type(value) is bool or value is None)
+                for key, value in row.items()
+            )
+        ):
             raise ValueError("readonly staged ORIGINAL census is not plain immutable data")
         captured[relative] = tuple(row.items())
     originals = MappingProxyType(captured)
@@ -646,15 +741,22 @@ def _readonly_staged_facts(root, owner, frozen, labels):
         active.require_live()
         if active._readonly is not None:
             raise ValueError("readonly staged fact scopes cannot overlap")
-        if (not isinstance(owner, Path) or ".." in owner.parts
-                or not owner.absolute().is_relative_to(root.absolute() / "build")
-                or type(labels) is not tuple or not 1 <= len(labels) <= 21
-                or any(type(label) is not str or not re.fullmatch(r"[A-Za-z0-9_]+", label)
-                       for label in labels)
-                or len({label.casefold() for label in labels}) != len(labels)):
+        if (
+            not isinstance(owner, Path)
+            or ".." in owner.parts
+            or not owner.absolute().is_relative_to(root.absolute() / "build")
+            or type(labels) is not tuple
+            or not 1 <= len(labels) <= 21
+            or any(type(label) is not str or not re.fullmatch(r"[A-Za-z0-9_]+", label) for label in labels)
+            or len({label.casefold() for label in labels}) != len(labels)
+        ):
             raise ValueError("readonly staged trees require fixed canonical owner/label/tree paths")
-        registry = {"owner": owner.absolute(), "rows": originals,
-                    "trees": {owner.absolute() / label / "tree" for label in labels}, "facts": {}}
+        registry = {
+            "owner": owner.absolute(),
+            "rows": originals,
+            "trees": {owner.absolute() / label / "tree" for label in labels},
+            "facts": {},
+        }
         active._readonly = registry
         try:
             yield
@@ -668,6 +770,7 @@ def _readonly_staged_facts(root, owner, frozen, labels):
             active._readonly = None
             if not valid:
                 raise ValueError("readonly staged facts scope was replaced during use")
+
     return activate()
 
 
@@ -693,8 +796,7 @@ def _read_operation(root, *, create=True):
                 if missing:
                     return None
             return active
-        if (active._readonly is not None and isinstance(root, Path)
-                and root.absolute() in active._readonly["trees"]):
+        if active._readonly is not None and isinstance(root, Path) and root.absolute() in active._readonly["trees"]:
             if not create and root.absolute() not in active._readonly["facts"]:
                 return None
             return active._readonly_tree(root.absolute())
@@ -748,6 +850,7 @@ def parsed_read_phase(root):
 
 def with_parsed_operation(function):
     """Wrap a genuine root-first API without changing its early refusals."""
+
     @wraps(function)
     def wrapped(*args, **kwargs):
         if not args and "root" not in kwargs:
@@ -755,6 +858,7 @@ def with_parsed_operation(function):
         root = args[0] if args else kwargs["root"]
         with parsed_operation(root):
             return function(*args, **kwargs)
+
     return wrapped
 
 
@@ -781,9 +885,11 @@ def source_texts(root):
 def _parse_labelled_blocks(root, original=None):
     data = {}
     bodies = {}
-    sources = (((path, path.read_text(encoding="utf-8"))
-                for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
-               if original is None else original.texts())
+    sources = (
+        ((path, path.read_text(encoding="utf-8")) for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
+        if original is None
+        else original.texts()
+    )
     for path, text in sources:
         name = None
         kind = None
@@ -869,9 +975,16 @@ def read_asset_list(name, lines):
     return None
 
 
-LOAD_HANDLERS = ("LoadFuncToRAM", "Gfx_LoadDataToVRAM", "Gfx_LoadAndDecompTiles",
-                 "Gfx_LoadCompressedGfx", "LoadFuncToRAM", "Gfx_LoadDataToVRAM",
-                 "LoadCompressedToRAM", "LoadCompressedToVRAM")
+LOAD_HANDLERS = (
+    "LoadFuncToRAM",
+    "Gfx_LoadDataToVRAM",
+    "Gfx_LoadAndDecompTiles",
+    "Gfx_LoadCompressedGfx",
+    "LoadFuncToRAM",
+    "Gfx_LoadDataToVRAM",
+    "LoadCompressedToRAM",
+    "LoadCompressedToVRAM",
+)
 
 
 def read_asset_lists(root, bodies=None):
@@ -934,8 +1047,7 @@ def read_descriptors(root):
     active = _read_operation(root)
     if active is not None and not active._unsupported:
         return active.descriptors()
-    sources = ((path, path.read_text(encoding="utf-8"))
-               for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
+    sources = ((path, path.read_text(encoding="utf-8")) for path in sorted(root.joinpath(SOURCE_ROOT).rglob("*.s")))
     return _parse_descriptors(sources)
 
 
@@ -950,8 +1062,8 @@ def _parse_descriptors(sources):
             if len(values) != 4:
                 continue
             found[match.group("name")] = Descriptor(
-                match.group("name"), values[0], values[1], values[2],
-                bool(values[3] >> 16), values[3] & 0xFFFF)
+                match.group("name"), values[0], values[1], values[2], bool(values[3] >> 16), values[3] & 0xFFFF
+            )
     return found
 
 
@@ -976,7 +1088,7 @@ def build_ram(root, list_names, lists, data):
                 continue
             body = decompress(payload)
             at = command.ram_offset
-            ram[at:at + len(body)] = body
+            ram[at : at + len(body)] = body
             written.append((name, command.source, at, len(body)))
     return bytes(ram), written
 
@@ -989,11 +1101,9 @@ def stage_tilemaps(root, descriptor_name="Gfx_DefaultVRAMTransferParameters"):
     found = []
     for index, loader in enumerate(stage_loaders(root, data)):
         # Stage_LoadAssetsForCurrentTableIndex plays the shared list first.
-        names = (loader_lists(root, bodies, lists, SHARED_LOADER)
-                 + loader_lists(root, bodies, lists, loader))
+        names = loader_lists(root, bodies, lists, SHARED_LOADER) + loader_lists(root, bodies, lists, loader)
         ram, written = build_ram(root, names, lists, data)
-        found.append(Tilemap("StageTableIndex%02d" % index, tuple(names), ram,
-                             descriptor, tuple(written)))
+        found.append(Tilemap("StageTableIndex%02d" % index, tuple(names), ram, descriptor, tuple(written)))
     return found
 
 
@@ -1001,8 +1111,7 @@ def survey(root):
     data, bodies = labelled_blocks(root)
     lists = read_asset_lists(root, bodies)
     loaders = stage_loaders(root, data)
-    to_ram = [command for commands in lists.values() for command in commands
-              if command.to_ram]
+    to_ram = [command for commands in lists.values() for command in commands if command.to_ram]
     payloads = {command.source for command in to_ram}
     decoded = 0
     sizes = {}
@@ -1052,38 +1161,41 @@ def survey(root):
 # $C000 and $E000 once the command bits are removed - exactly what registers 2
 # and 4 are set to in Gfx_GameVDPRegisterValues.
 
-PLANE_A_TABLE = 'Stage_EntryPrimaryPlaneVRAMParameterPointers'
-PLANE_B_TABLE = 'Stage_EntrySecondaryPlaneVRAMParameterPointers'
-ENTRY_STATES_SOURCE = Path('src/stages/gameplay_entry_states.s')
-MODE_BIAS = 4                    # -4(a0,d0.w): mode 4 is the first entry
-OFFSET_VARIANT = 0x8000          # bit 15 reads the maps $1000 further down
+PLANE_A_TABLE = "Stage_EntryPrimaryPlaneVRAMParameterPointers"
+PLANE_B_TABLE = "Stage_EntrySecondaryPlaneVRAMParameterPointers"
+ENTRY_STATES_SOURCE = Path("src/stages/gameplay_entry_states.s")
+MODE_BIAS = 4  # -4(a0,d0.w): mode 4 is the first entry
+OFFSET_VARIANT = 0x8000  # bit 15 reads the maps $1000 further down
 OFFSET_VARIANT_Y = 0x1000
 CONSTANT_FILL_MODE = 0
 # Gfx_GameVDPRegisterValues sets register 7 to $10: palette line 1, colour 0.
 BACKDROP_REGISTER_VALUE = 0x10
-POINTER_ENTRY = re.compile(r'^\s*dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$')
+POINTER_ENTRY = re.compile(r"^\s*dc\.l\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?:;.*)?$")
 
 
 def read_plane_tables(root):
     """The descriptor each plane entry mode selects, in table order."""
-    lines = (root / ENTRY_STATES_SOURCE).read_text(encoding='utf-8').split('\n')
+    lines = (root / ENTRY_STATES_SOURCE).read_text(encoding="utf-8").split("\n")
     tables = {}
     current = None
     for line in lines:
         head = LABEL_LINE.match(line)
         if head:
-            name = head.group('name')
-            current = name if name in (PLANE_A_TABLE, PLANE_B_TABLE) else (
-                current if not head.group('rest').strip() and current else None)
+            name = head.group("name")
+            current = (
+                name
+                if name in (PLANE_A_TABLE, PLANE_B_TABLE)
+                else (current if not head.group("rest").strip() and current else None)
+            )
             if name in (PLANE_A_TABLE, PLANE_B_TABLE):
                 tables[name] = []
-            line = head.group('rest')
+            line = head.group("rest")
         if current is None:
             continue
         entry = POINTER_ENTRY.match(line)
         if entry:
             tables[current].append(entry.group(1))
-        elif line.strip() and not line.strip().startswith(';'):
+        elif line.strip() and not line.strip().startswith(";"):
             current = None
     return tables
 
@@ -1097,15 +1209,13 @@ def plane_descriptor(mode, table, *, offset_variant=True):
     pass offset_variant=False instead of treating a signed offset as a flag.
     """
     if type(mode) is not int or not 0 <= mode <= 0xFFFF:
-        raise ValueError('plane entry mode must be an unsigned word')
+        raise ValueError("plane entry mode must be an unsigned word")
     if mode == CONSTANT_FILL_MODE:
         return None, 0
     flagged = bool(mode & OFFSET_VARIANT)
     table_offset = mode & ~OFFSET_VARIANT if offset_variant else mode
     index = (table_offset - MODE_BIAS) // 4
-    if (flagged and not offset_variant or table_offset % 4 != 0
-            or not 0 <= index < len(table)):
-        raise ValueError('plane entry mode $%X is not one of the %d in the table'
-                         % (mode, len(table)))
+    if flagged and not offset_variant or table_offset % 4 != 0 or not 0 <= index < len(table):
+        raise ValueError("plane entry mode $%X is not one of the %d in the table" % (mode, len(table)))
     offset = OFFSET_VARIANT_Y if flagged else 0
     return table[index], offset

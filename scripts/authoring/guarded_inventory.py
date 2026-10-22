@@ -30,8 +30,7 @@ class _Reads:
     def __enter__(self):
         self.synchronous = READ_WORKERS == 0
         if not self.synchronous:
-            self.executor = ThreadPoolExecutor(max_workers=READ_WORKERS,
-                thread_name_prefix="guarded-inventory-read")
+            self.executor = ThreadPoolExecutor(max_workers=READ_WORKERS, thread_name_prefix="guarded-inventory-read")
         return self
 
     def __exit__(self, _kind, _value, _traceback):
@@ -66,20 +65,31 @@ def _identity(info):
     # Directory storage size may change on enumeration without an entry change.
     # Keep directory identity, timestamps and names; pin regular-file size too.
     size = None if stat.S_ISDIR(info.st_mode) else info.st_size
-    return (info.st_dev, info.st_ino, stat.S_IFMT(info.st_mode), info.st_nlink,
-            size, info.st_mtime_ns, getattr(info, "st_birthtime_ns", None),
-            getattr(info, "st_file_attributes", 0))
+    return (
+        info.st_dev,
+        info.st_ino,
+        stat.S_IFMT(info.st_mode),
+        info.st_nlink,
+        size,
+        info.st_mtime_ns,
+        getattr(info, "st_birthtime_ns", None),
+        getattr(info, "st_file_attributes", 0),
+    )
 
 
 def _same_identity(before, after):
-    return (_identity(before) == _identity(after) and before.st_mode == after.st_mode
-            and before.st_ctime_ns == after.st_ctime_ns)
+    return (
+        _identity(before) == _identity(after)
+        and before.st_mode == after.st_mode
+        and before.st_ctime_ns == after.st_ctime_ns
+    )
 
 
 def _checked_stat(path):
     info = path.stat(follow_symlinks=False)
-    if (stat.S_ISLNK(info.st_mode)
-            or getattr(info, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)):
+    if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & getattr(
+        stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400
+    ):
         raise ValueError("source/owner path crosses a link/reparse point")
     return info
 
@@ -103,13 +113,15 @@ def _owner(owner):
 def _close_ancestors(ancestors):
     for index, (path, original) in enumerate(ancestors):
         current = _checked_stat(path)
+
         def stable(info):
-            return (info.st_dev, info.st_ino, stat.S_IFMT(info.st_mode),
-                    getattr(info, "st_birthtime_ns", None))
+            return (info.st_dev, info.st_ino, stat.S_IFMT(info.st_mode), getattr(info, "st_birthtime_ns", None))
+
         # Sibling files outside the exact owner may legitimately change parent
         # mtime/ctime/size/nlink. Only pin ancestry identity there, not contents.
-        matches = (_same_identity(original, current) if index == len(ancestors) - 1
-                   else stable(original) == stable(current))
+        matches = (
+            _same_identity(original, current) if index == len(ancestors) - 1 else stable(original) == stable(current)
+        )
         if not stat.S_ISDIR(current.st_mode) or not matches:
             raise ValueError("source/owner ancestor directory changed during its inventory")
 
@@ -119,9 +131,12 @@ def _names(directory, max_entries):
     with os.scandir(directory) as entries:
         for entry in entries:
             name = entry.name
-            if (name in {"", ".", ".."} or any(char in name for char in ("/", "\\", ":"))
-                    or any(ord(char) < 32 or ord(char) == 127 for char in name)
-                    or name.casefold() in aliases):
+            if (
+                name in {"", ".", ".."}
+                or any(char in name for char in ("/", "\\", ":"))
+                or any(ord(char) < 32 or ord(char) == 127 for char in name)
+                or name.casefold() in aliases
+            ):
                 raise ValueError("source/owner entry has an alias spelling")
             if len(names) >= max_entries:
                 raise ValueError("source owner exceeds its entry bound")
@@ -162,16 +177,29 @@ def _file_record(path, owner, info, max_file):
 
 
 def _validate_record(record, relative, max_file, context):
-    if (type(record) is not dict or set(record) != {"path", "bytes", "sha256"}
-            or type(record["path"]) is not str or record["path"] != relative
-            or type(record["bytes"]) is not int or not 0 <= record["bytes"] <= max_file
-            or type(record["sha256"]) is not str
-            or not re.fullmatch(r"[0-9a-f]{64}", record["sha256"])):
+    if (
+        type(record) is not dict
+        or set(record) != {"path", "bytes", "sha256"}
+        or type(record["path"]) is not str
+        or record["path"] != relative
+        or type(record["bytes"]) is not int
+        or not 0 <= record["bytes"] <= max_file
+        or type(record["sha256"]) is not str
+        or not re.fullmatch(r"[0-9a-f]{64}", record["sha256"])
+    ):
         raise ValueError(context + " file exceeds its typed byte bound")
 
 
-def capture(owner, *, max_file, max_total, max_entries, validate_entry=None,
-            context="source owner", total_bound="total byte bound"):
+def capture(
+    owner,
+    *,
+    max_file,
+    max_total,
+    max_entries,
+    validate_entry=None,
+    context="source owner",
+    total_bound="total byte bound",
+):
     """Capture every regular file and directory in one bounded physical owner."""
     if any(type(value) is not int or value < 0 for value in (max_file, max_total, max_entries)):
         raise ValueError("source/owner limits require typed nonnegative integers")
@@ -213,10 +241,18 @@ def capture(owner, *, max_file, max_total, max_entries, validate_entry=None,
         reads.drain()
         after_names, after = _names(directory, max_entries), _checked_stat(directory)
         if names != after_names or not _same_identity(before, after):
-            raise ValueError("source/owner immediate directory inventory changed during its scan: %s; "
-                "identity=%r -> %r; ctime=%r -> %r; names_changed=%r" % (
-                    relative or ".", _identity(before), _identity(after),
-                    before.st_ctime_ns, after.st_ctime_ns, names != after_names))
+            raise ValueError(
+                "source/owner immediate directory inventory changed during its scan: %s; "
+                "identity=%r -> %r; ctime=%r -> %r; names_changed=%r"
+                % (
+                    relative or ".",
+                    _identity(before),
+                    _identity(after),
+                    before.st_ctime_ns,
+                    after.st_ctime_ns,
+                    names != after_names,
+                )
+            )
 
     with _Reads(collect) as reads:
         walk(owner, "", ancestors[-1][1])
@@ -229,10 +265,15 @@ def _frozen_children(frozen, max_file, max_entries):
         raise ValueError("frozen source/owner exceeds its typed entry bound")
     children, spellings = {"": set()}, set()
     for relative, row in frozen.items():
-        if (type(relative) is not str or not relative or "\\" in relative or ":" in relative
-                or any(part in {"", ".", ".."} for part in relative.split("/"))
-                or any(ord(char) < 32 or ord(char) == 127 for char in relative)
-                or type(row) is not dict):
+        if (
+            type(relative) is not str
+            or not relative
+            or "\\" in relative
+            or ":" in relative
+            or any(part in {"", ".", ".."} for part in relative.split("/"))
+            or any(ord(char) < 32 or ord(char) == 127 for char in relative)
+            or type(row) is not dict
+        ):
             raise ValueError("frozen source/owner path has an alias spelling")
         if relative.casefold() in spellings:
             raise ValueError("frozen source/owner path has an alias spelling")
@@ -241,9 +282,15 @@ def _frozen_children(frozen, max_file, max_entries):
         children.setdefault(parent, set()).add(name)
         if type(row.get("kind")) is str and row == {"kind": "directory"}:
             children.setdefault(relative, set())
-        elif (set(row) != {"kind", "bytes", "sha256"} or type(row["kind"]) is not str or row["kind"] != "file"
-                or type(row["bytes"]) is not int or not 0 <= row["bytes"] <= max_file
-                or type(row["sha256"]) is not str or not re.fullmatch(r"[0-9a-f]{64}", row["sha256"])):
+        elif (
+            set(row) != {"kind", "bytes", "sha256"}
+            or type(row["kind"]) is not str
+            or row["kind"] != "file"
+            or type(row["bytes"]) is not int
+            or not 0 <= row["bytes"] <= max_file
+            or type(row["sha256"]) is not str
+            or not re.fullmatch(r"[0-9a-f]{64}", row["sha256"])
+        ):
             raise ValueError("frozen source/owner raw record has malformed typed bounds")
     for parent in children:
         if parent and frozen.get(parent) != {"kind": "directory"}:

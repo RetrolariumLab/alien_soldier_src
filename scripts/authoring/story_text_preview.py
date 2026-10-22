@@ -37,8 +37,8 @@ def render_row_tiles(root: Path, values: list[int]) -> list[list[int]]:
         upper, lower = cache[value]
         left = column * TILE_SIZE
         for y in range(TILE_SIZE):
-            image[y][left:left + TILE_SIZE] = upper[y]
-            image[y + TILE_SIZE][left:left + TILE_SIZE] = lower[y]
+            image[y][left : left + TILE_SIZE] = upper[y]
+            image[y + TILE_SIZE][left : left + TILE_SIZE] = lower[y]
     return image
 
 

@@ -1,4 +1,5 @@
 """The public command-line tools start and show their help without a ROM."""
+
 from contextlib import redirect_stdout
 import io
 from pathlib import Path
@@ -17,22 +18,36 @@ import validate_movie_descriptions as descriptions
 class ToolingCLIContracts(unittest.TestCase):
     def test_compatible_public_clis_show_help_without_rom_workspace_or_runtime(self):
         entries = (
-            "scripts/authoring/check_tile_codec_rom.py", "scripts/authoring/palettes.py",
-            "scripts/authoring/sprite_mappings.py", "scripts/authoring/stage_tilemaps.py",
-            "scripts/authoring/tile_art.py", "scripts/bintrace_parser.py",
-            "scripts/compare_states.py", "scripts/compare_traces.py",
-            "scripts/extract_data_addrs.py", "scripts/find_unnamed_procedures.py",
-            "scripts/generate_analysis_report.py", "scripts/generate_asset_manifest.py",
-            "scripts/inspect_runtime_ram.py", "scripts/rename_procedures.py",
+            "scripts/authoring/check_tile_codec_rom.py",
+            "scripts/authoring/palettes.py",
+            "scripts/authoring/sprite_mappings.py",
+            "scripts/authoring/stage_tilemaps.py",
+            "scripts/authoring/tile_art.py",
+            "scripts/bintrace_parser.py",
+            "scripts/compare_states.py",
+            "scripts/compare_traces.py",
+            "scripts/extract_data_addrs.py",
+            "scripts/find_unnamed_procedures.py",
+            "scripts/generate_analysis_report.py",
+            "scripts/generate_asset_manifest.py",
+            "scripts/inspect_runtime_ram.py",
+            "scripts/rename_procedures.py",
         )
-        retired = {"scripts/find_unnamed_procedures.py": "retired monolithic",
-                   "scripts/rename_procedures.py": "is retired"}
+        retired = {
+            "scripts/find_unnamed_procedures.py": "retired monolithic",
+            "scripts/rename_procedures.py": "is retired",
+        }
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             for relative in entries:
                 with self.subTest(entry=relative):
-                    result = subprocess.run([sys.executable, "-B", str(ROOT / relative), "--help"],
-                        cwd=directory, capture_output=True, text=True, timeout=10)
+                    result = subprocess.run(
+                        [sys.executable, "-B", str(ROOT / relative), "--help"],
+                        cwd=directory,
+                        capture_output=True,
+                        text=True,
+                        timeout=10,
+                    )
                     self.assertEqual(1 if relative in retired else 0, result.returncode, result.stdout + result.stderr)
                     if relative in retired:
                         self.assertIn(retired[relative], result.stdout + result.stderr)
@@ -55,10 +70,12 @@ class ToolingCLIContracts(unittest.TestCase):
     def test_movie_description_intervals_reject_overlap_gap_and_bad_start(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "description.txt"
-            for text, expected in (("20-100, boot\n120-200, attract\n", True),
-                                   ("0-100, boot\n120-200, attract\n", False),
-                                   ("20-100, boot\n90-200, overlap\n", False),
-                                   ("20-100, boot\n140-200, gap\n", False)):
+            for text, expected in (
+                ("20-100, boot\n120-200, attract\n", True),
+                ("0-100, boot\n120-200, attract\n", False),
+                ("20-100, boot\n90-200, overlap\n", False),
+                ("20-100, boot\n140-200, gap\n", False),
+            ):
                 path.write_text("Frames, Scene\n" + text, encoding="utf-8")
                 with self.subTest(text=text), redirect_stdout(io.StringIO()):
                     self.assertEqual(expected, descriptions.validate_description_file(path))

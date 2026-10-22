@@ -1,4 +1,5 @@
 """Literal Make graph controls and actual public help, without ROM/native work."""
+
 from pathlib import Path
 import shutil
 import re
@@ -28,18 +29,27 @@ class MakeInterfaceControls(unittest.TestCase):
         self.write("mk/build.mk", "include mk/identity.mk\nbuild:\n\t@echo build\n")
         self.write("mk/identity.mk", "verify:\n\t@echo verify\n")
         reads = []
+
         def original(relative):
             reads.append(relative)
             return (self.root / relative).read_bytes()
+
         files = make_files(self.root, original)
         self.assertEqual(["Makefile", "mk/build.mk", "mk/identity.mk"], reads)
         self.assertEqual(reads, [name for name, _body in files])
         self.assertIn("verify:\n\t@echo verify", make_text(self.root))
 
     def test_missing_optional_dynamic_escaping_and_cyclic_includes_are_rejected(self):
-        for directive in ("include absent.mk", "-include absent.mk", "sinclude absent.mk",
-                          "include $(DYNAMIC)", "include ../outside.mk", "include /outside.mk",
-                          "include mk/*.mk", "include Makefile"):
+        for directive in (
+            "include absent.mk",
+            "-include absent.mk",
+            "sinclude absent.mk",
+            "include $(DYNAMIC)",
+            "include ../outside.mk",
+            "include /outside.mk",
+            "include mk/*.mk",
+            "include Makefile",
+        ):
             self.write("Makefile", "all:\n" + directive + "\n")
             with self.subTest(directive=directive), self.assertRaises(ValueError):
                 make_files(self.root)
@@ -52,13 +62,17 @@ class MakeInterfaceControls(unittest.TestCase):
         rows = (("Makefile", b"all:\ninclude mk/build.mk\n"), ("mk/build.mk", b"build:\n\t@echo build\n"))
         original = make_digest(rows)
         self.assertEqual(original, make_digest(tuple((name, body.replace(b"\n", b"\r\n")) for name, body in rows)))
-        for changed in (rows[::-1], (rows[0], ("mk/other.mk", rows[1][1])),
-                        (rows[0], (rows[1][0], rows[1][1] + b"# changed\n")),
-                        ((rows[0][0], rows[0][1] + b"x"), rows[1])):
+        for changed in (
+            rows[::-1],
+            (rows[0], ("mk/other.mk", rows[1][1])),
+            (rows[0], (rows[1][0], rows[1][1] + b"# changed\n")),
+            ((rows[0][0], rows[0][1] + b"x"), rows[1]),
+        ):
             self.assertNotEqual(original, make_digest(changed))
 
     def test_bounds_and_redirected_fragment_are_rejected(self):
         from unittest import mock
+
         self.write("Makefile", "all:\ninclude mk/build.mk\n")
         self.write("mk/build.mk", "build:\n")
         with mock.patch("make_interface.MAX_BYTES", 1), self.assertRaisesRegex(ValueError, "byte bound"):
@@ -74,15 +88,21 @@ class MakeInterfaceControls(unittest.TestCase):
     def test_real_help_covers_every_public_target_and_default_remains_all(self):
         make = shutil.which("make")
         self.assertIsNotNone(make)
-        help_result = subprocess.run([make, "--no-print-directory", "help", "PYTHON=" + sys.executable],
-                                     cwd=ROOT, capture_output=True, text=True, timeout=30)
+        help_result = subprocess.run(
+            [make, "--no-print-directory", "help", "PYTHON=" + sys.executable],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
         self.assertEqual(0, help_result.returncode, help_result.stderr)
         inventory = public_targets(ROOT)
         self.assertGreater(len(inventory), 1)
         for owner, targets in inventory.items():
             self.assertIn("  " + owner + ": " + ", ".join(targets), help_result.stdout)
-        database = subprocess.run([make, "--no-print-directory", "-np", "profile-info"],
-                                  cwd=ROOT, capture_output=True, text=True, timeout=30)
+        database = subprocess.run(
+            [make, "--no-print-directory", "-np", "profile-info"], cwd=ROOT, capture_output=True, text=True, timeout=30
+        )
         self.assertEqual(0, database.returncode, database.stderr)
         self.assertIn(".DEFAULT_GOAL := all", database.stdout)
         self.assertNotIn(".PHONY", {target for targets in inventory.values() for target in targets})

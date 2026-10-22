@@ -20,9 +20,7 @@ class TextStudioStateTests(unittest.TestCase):
 
     def setUp(self) -> None:
         context = load_context(ROOT, "jp")
-        self.state = Workspace({
-            identifier: record["document"] for identifier, record in context.items()
-        })
+        self.state = Workspace({identifier: record["document"] for identifier, record in context.items()})
 
     def test_every_manifest_artifact_has_editable_fields(self) -> None:
         self.assertEqual(
@@ -99,8 +97,7 @@ class TextStudioStateTests(unittest.TestCase):
         self.assertEqual(34, len(self.state.artifact_fields))
         self.assertEqual(21, self.state.field.length)
         self.assertEqual(227, self.state.field.maximum)
-        self.assertEqual(0xFF,
-                         self.state.documents["results_detail_text"]["rows"][0]["terminator"])
+        self.assertEqual(0xFF, self.state.documents["results_detail_text"]["rows"][0]["terminator"])
         with self.assertRaisesRegex(ValueError, "between"):
             self.state.set_value(0xE4)
         self.state.select_field(31)
@@ -116,9 +113,7 @@ class TextStudioStateTests(unittest.TestCase):
                     self.state.set_value(228)
 
     def test_manifest_publishes_the_workstation_contract(self) -> None:
-        document = json.loads(
-            (ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8")
-        )
+        document = json.loads((ROOT / "config/authoring/content_studios.json").read_text(encoding="utf-8"))
         studio = next(item for item in document["studios"] if item["id"] == "text")
         self.assertEqual("check-text-workspace", studio["workspace_gate"])
         self.assertEqual("check-text-studio", studio["workstation_gate"])

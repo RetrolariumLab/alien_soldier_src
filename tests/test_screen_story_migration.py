@@ -33,20 +33,21 @@ class StoryMigrationTests(unittest.TestCase):
     def setUpClass(cls):
         # Retain genuine original bytes/census BEFORE either regional model
         # expansion. These are fixture inputs, never a persisted PASS result.
-        cls.original_inputs = {name: inventory.capture(ROOT / name,
-            max_file=128 * 1024 * 1024, max_total=512 * 1024 * 1024,
-            max_entries=32768) for name in ("src", "data", "config")}
+        cls.original_inputs = {
+            name: inventory.capture(
+                ROOT / name, max_file=128 * 1024 * 1024, max_total=512 * 1024 * 1024, max_entries=32768
+            )
+            for name in ("src", "data", "config")
+        }
         cls.addClassCleanup(cls.close_original_inputs)
         cls.enterClassContext(parsed_operation(ROOT))
-        cls.current = {profile: model.export_document(ROOT, profile)
-                       for profile in ("jp", "eu")}
+        cls.current = {profile: model.export_document(ROOT, profile) for profile in ("jp", "eu")}
         cls.close_original_inputs()
 
     @classmethod
     def close_original_inputs(cls):
         for name, original in cls.original_inputs.items():
-            inventory.close(ROOT / name, original, max_file=128 * 1024 * 1024,
-                            max_entries=32768)
+            inventory.close(ROOT / name, original, max_file=128 * 1024 * 1024, max_entries=32768)
 
     def setUp(self):
         if self._testMethodName == "test_other_metadata_mutations_and_extra_fields_are_rejected":
@@ -60,9 +61,9 @@ class StoryMigrationTests(unittest.TestCase):
         Every reused document is independent and bound to original raw inputs;
         close those same originals even when the test or producer raises.
         """
+
         def export(root, profile):
-            if (Path(root).resolve() != ROOT.resolve() or type(profile) is not str
-                    or profile not in ("jp", "eu")):
+            if Path(root).resolve() != ROOT.resolve() or type(profile) is not str or profile not in ("jp", "eu"):
                 raise ValueError("Story metadata fixture root/profile differs")
             self.close_original_inputs()
             return copy.deepcopy(self.current[profile])
@@ -82,16 +83,24 @@ class StoryMigrationTests(unittest.TestCase):
                 migrated = model.migrate_story_plane(old, ROOT, profile)
                 self.assertEqual(before, old)
                 self.assertEqual(current, migrated)
-                changed = [record["name"] for record, original in
-                           zip(migrated["payloads"], old["payloads"], strict=True)
-                           if record["uses"] != original["uses"]]
-                self.assertEqual(["SharedMappingData7000", "StoryScreenMappingData4000",
-                                  "StoryScreenMappingData6000"], changed)
+                changed = [
+                    record["name"]
+                    for record, original in zip(migrated["payloads"], old["payloads"], strict=True)
+                    if record["uses"] != original["uses"]
+                ]
+                self.assertEqual(
+                    ["SharedMappingData7000", "StoryScreenMappingData4000", "StoryScreenMappingData6000"], changed
+                )
                 for record, original in zip(migrated["payloads"], old["payloads"], strict=True):
                     self.assertEqual(record["values"], original["values"])
                     self.assertEqual(record["compressed_capacity"], original["compressed_capacity"])
-                self.assertEqual((8, 8744, 14544, 4836), tuple(migrated[field] for field in
-                    ("payload_count", "value_count", "decoded_byte_count", "compressed_capacity")))
+                self.assertEqual(
+                    (8, 8744, 14544, 4836),
+                    tuple(
+                        migrated[field]
+                        for field in ("payload_count", "value_count", "decoded_byte_count", "compressed_capacity")
+                    ),
+                )
 
     def test_current_document_is_an_explicit_idempotent_copy(self):
         current = self.current["jp"]
@@ -104,8 +113,7 @@ class StoryMigrationTests(unittest.TestCase):
         for profile, current in self.current.items():
             with self.subTest(profile=profile):
                 old = legacy_document(current)
-                record = next(item for item in old["payloads"]
-                              if item["name"] == "StoryScreenMappingData6000")
+                record = next(item for item in old["payloads"] if item["name"] == "StoryScreenMappingData6000")
                 record["values"][0] = 1
                 before = copy.deepcopy(old)
                 migrated = model.migrate_story_plane(old, ROOT, profile)
@@ -146,9 +154,11 @@ class StoryMigrationTests(unittest.TestCase):
             self.assertEqual(before, old)
 
     def test_partial_or_arbitrary_story_use_remapping_is_rejected(self):
-        for plane, descriptor in (("plane_b", "Gfx_DefaultVRAMTransferParameters"),
-                                  ("plane_a", "Gfx_FrontendAlternateVRAMTransferParameters"),
-                                  ("plane_b", "Gfx_ScrollVRAMTransferParameters")):
+        for plane, descriptor in (
+            ("plane_b", "Gfx_DefaultVRAMTransferParameters"),
+            ("plane_a", "Gfx_FrontendAlternateVRAMTransferParameters"),
+            ("plane_b", "Gfx_ScrollVRAMTransferParameters"),
+        ):
             old = legacy_document(self.current["jp"])
             record = next(item for item in old["payloads"] if item["name"] == "StoryScreenMappingData6000")
             record["uses"][0].update(plane=plane, descriptor=descriptor)
@@ -177,10 +187,23 @@ class MigrationCliTests(unittest.TestCase):
             original = b'{"profile":"jp","payloads":[]}\n'
             source.write_bytes(original)
             output = root / "build/content/jp/story-migrated.json"
-            args = ["screen_map_model.py", "migrate-story-plane", "--root", str(root),
-                    "--profile", "jp", "--document", str(source), "--output", str(output)]
+            args = [
+                "screen_map_model.py",
+                "migrate-story-plane",
+                "--root",
+                str(root),
+                "--profile",
+                "jp",
+                "--document",
+                str(source),
+                "--output",
+                str(output),
+            ]
             migrated = {"profile": "jp", "payloads": [{"values": [7]}]}
-            with mock.patch.object(sys, "argv", args), mock.patch.object(model, "migrate_story_plane", return_value=migrated):
+            with (
+                mock.patch.object(sys, "argv", args),
+                mock.patch.object(model, "migrate_story_plane", return_value=migrated),
+            ):
                 self.assertEqual(0, model.main())
             self.assertEqual(original, source.read_bytes())
             self.assertEqual(migrated, json.loads(output.read_text(encoding="utf-8")))
@@ -196,8 +219,18 @@ class MigrationCliTests(unittest.TestCase):
             source = root / "maps.json"
             source.write_text("{}", encoding="utf-8")
             for destination in ("content/workspace/jp/screens/maps.json", "build/content/eu/migrated.json"):
-                args = ["screen_map_model.py", "migrate-story-plane", "--root", str(root),
-                        "--profile", "jp", "--document", str(source), "--output", destination]
+                args = [
+                    "screen_map_model.py",
+                    "migrate-story-plane",
+                    "--root",
+                    str(root),
+                    "--profile",
+                    "jp",
+                    "--document",
+                    str(source),
+                    "--output",
+                    destination,
+                ]
                 with self.subTest(destination=destination), mock.patch.object(sys, "argv", args):
                     self.assertEqual(1, model.main())
                 self.assertEqual("{}", source.read_text(encoding="utf-8"))
@@ -212,15 +245,19 @@ class MetadataFixtureControls(unittest.TestCase):
             for name in ("src", "data", "config"):
                 (root / name).mkdir()
                 (root / name / "original.bin").write_bytes(b"original fixture bytes")
-            originals = {name: inventory.capture(root / name, max_file=128,
-                max_total=512, max_entries=16) for name in ("src", "data", "config")}
+            originals = {
+                name: inventory.capture(root / name, max_file=128, max_total=512, max_entries=16)
+                for name in ("src", "data", "config")
+            }
 
             def close():
                 for name, original in originals.items():
                     inventory.close(root / name, original, max_file=128, max_entries=16)
 
-            fixture = SimpleNamespace(current={profile: {"profile": profile, "nested": [[1]]}
-                for profile in ("jp", "eu")}, close_original_inputs=close)
+            fixture = SimpleNamespace(
+                current={profile: {"profile": profile, "nested": [[1]]} for profile in ("jp", "eu")},
+                close_original_inputs=close,
+            )
             producer = model.export_document
             with StoryMigrationTests.metadata_fixture(fixture):
                 first = model.export_document(ROOT, "jp")

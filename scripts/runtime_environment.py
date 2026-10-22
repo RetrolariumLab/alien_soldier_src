@@ -28,8 +28,12 @@ def environment_identity(root: Path, executable: Path) -> dict:
     tree = emulator_git(checkout, ["rev-parse", "HEAD^{tree}"], errors)
     if errors:
         raise ValueError("; ".join(errors))
-    return {"source_commit": component["source_commit"], "source_tree": tree,
-            "executable_path": str(executable), "executable_sha256": digest(executable),
-            "config_loader": runtime_isolation.native_config_contract(checkout),
-            "isolation_sha256": digest(Path(runtime_isolation.__file__)),
-            "environment_verifier_sha256": digest(Path(__file__))}
+    return {
+        "source_commit": component["source_commit"],
+        "source_tree": tree,
+        "executable_path": str(executable),
+        "executable_sha256": digest(executable),
+        "config_loader": runtime_isolation.native_config_contract(checkout),
+        "isolation_sha256": digest(Path(runtime_isolation.__file__)),
+        "environment_verifier_sha256": digest(Path(__file__)),
+    }

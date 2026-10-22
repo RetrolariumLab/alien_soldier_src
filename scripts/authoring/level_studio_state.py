@@ -32,12 +32,21 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 
 from authoring.level_studio_model import (
-    CONFIG_FIELDS, FIELD_ORDER, SIZE_LIMIT, SpawnEntry, SpawnList,
-    StageConfiguration, apply_document, editable_stage_slot_locations,
-    export_document, handler_names,
-    read_source_lists, stage_configurations, validate_document)
-from authoring.map_reference_guard import (
-    periodic_reference_error, visible_reference_errors)
+    CONFIG_FIELDS,
+    FIELD_ORDER,
+    SIZE_LIMIT,
+    SpawnEntry,
+    SpawnList,
+    StageConfiguration,
+    apply_document,
+    editable_stage_slot_locations,
+    export_document,
+    handler_names,
+    read_source_lists,
+    stage_configurations,
+    validate_document,
+)
+from authoring.map_reference_guard import periodic_reference_error, visible_reference_errors
 from authoring.ram_map_workspace import merged_edit_streams, resolve_map_cell
 from authoring.stage_renderer import draw, read_once, scene
 from authoring.stage_tilemap_model import build_ram
@@ -79,39 +88,40 @@ class Placement:
         return ""
 
     def describe(self):
-        return "%s at $%X,$%X%s" % (self.handler or "type $%X" % self.entry.object_type,
-                                    self.entry.x, self.entry.y,
-                                    "  (%s)" % self.gate if self.gate else "")
+        return "%s at $%X,$%X%s" % (
+            self.handler or "type $%X" % self.entry.object_type,
+            self.entry.x,
+            self.entry.y,
+            "  (%s)" % self.gate if self.gate else "",
+        )
 
 
-def locate_stage_map_cell(studio, document, x, y, role,
-                          plane_name="plane_a", camera_a_x=0):
+def locate_stage_map_cell(studio, document, x, y, role, plane_name="plane_a", camera_a_x=0):
     """Trace a viewport pixel through a selected plane to its RAM writer.
 
     Plane B uses its camera origin for the viewport, not a quarter-scaled
     screen pixel. Its alternate descriptor is allowed only when the final
     RAM writer is already a source-owned record in the stage-map document.
     """
-    if (type(x) is not int or type(y) is not int or
-            not 0 <= x < studio.width or not 0 <= y < 8192):
+    if type(x) is not int or type(y) is not int or not 0 <= x < studio.width or not 0 <= y < 8192:
         raise ValueError("point is outside the stage map preview")
     if plane_name == "plane_a":
         plane = studio.scene.tilemap
         default = read_once(studio.root)["descriptors"][DEFAULT_MAP_DESCRIPTOR]
-        if plane is None or (
-                plane.descriptor.coarse, plane.descriptor.chunks,
-                plane.descriptor.patterns) != (default.coarse, default.chunks,
-                                               default.patterns):
+        if plane is None or (plane.descriptor.coarse, plane.descriptor.chunks, plane.descriptor.patterns) != (
+            default.coarse,
+            default.chunks,
+            default.patterns,
+        ):
             raise ValueError("plane A has no supported default map descriptor")
         world_x = x
     elif plane_name == "plane_b":
-        if (type(camera_a_x) is not int or not 0 <= camera_a_x <= x):
+        if type(camera_a_x) is not int or not 0 <= camera_a_x <= x:
             raise ValueError("invalid plane A camera origin for plane B")
         plane = studio.scene.plane_b
         if plane is None:
             raise ValueError("plane B has no supported map")
-        world_x = studio.scene.plane_b_source_x(
-            studio.scene.parallax_x(camera_a_x) + x - camera_a_x)
+        world_x = studio.scene.plane_b_source_x(studio.scene.parallax_x(camera_a_x) + x - camera_a_x)
     else:
         raise ValueError("stage map plane must be plane_a or plane_b")
     return resolve_map_cell(plane, document, world_x, y, role)
@@ -149,8 +159,7 @@ class Studio:
         Either plane can be absent: an entry mode of zero fills the plane with
         one word and reads no map, and index 16 does exactly that for plane A.
         """
-        planes = [plane for plane in (self.scene.tilemap, self.scene.plane_b)
-                  if plane is not None]
+        planes = [plane for plane in (self.scene.tilemap, self.scene.plane_b) if plane is not None]
         return max([256] + [plane.chunks_defined * 256 for plane in planes])
 
     def selected(self):
@@ -162,7 +171,7 @@ class Studio:
         """The camera threshold for this row is the prefix maximum of X values."""
         if not 0 <= index < len(self.placements):
             raise ValueError("no placement %d" % index)
-        return max(placement.entry.x for placement in self.placements[:index + 1])
+        return max(placement.entry.x for placement in self.placements[: index + 1])
 
     @property
     def configuration(self):
@@ -176,19 +185,23 @@ class Studio:
         """Build a complete replacement before exposing any changed live state."""
         validate_document(candidate, self.root, self.profile)
         refreshed = open_stage(
-            self.root, self.index, palette_override=self.palette_override,
-            profile=self.profile, document=candidate,
-            map_document=self.map_document, map_baseline=self.map_baseline,
+            self.root,
+            self.index,
+            palette_override=self.palette_override,
+            profile=self.profile,
+            document=candidate,
+            map_document=self.map_document,
+            map_baseline=self.map_baseline,
             screen_document=self.screen_document,
-            screen_baseline=self.screen_baseline)
+            screen_baseline=self.screen_baseline,
+        )
         old_spawn_name = self.spawn_list_name
         self.document_data = candidate
         self.scene = refreshed.scene
         self.source_scene = refreshed.source_scene
         self.spawn_list = refreshed.spawn_list
         self.placements = refreshed.placements
-        if (old_spawn_name != self.spawn_list_name
-                or self.selection >= len(self.placements)):
+        if old_spawn_name != self.spawn_list_name or self.selection >= len(self.placements):
             self.selection = -1
         self.edited = True
 
@@ -214,18 +227,13 @@ class Studio:
             raise ValueError("this stage slot has no configuration record")
         document = self.document()
         candidate = deepcopy(document)
-        record = next(
-            item for item in candidate["configurations"]
-            if item["name"] == self.configuration.name
-        )
+        record = next(item for item in candidate["configurations"] if item["name"] == self.configuration.name)
         parsed = {}
         for field, size in CONFIG_FIELDS:
             raw = str(values[field]).strip()
             if not raw:
                 raise ValueError("%s may not be empty" % field)
-            if field in {"spawn_list", "palette_list"} and not (
-                raw.startswith("$") or raw[0].isdigit()
-            ):
+            if field in {"spawn_list", "palette_list"} and not (raw.startswith("$") or raw[0].isdigit()):
                 parsed[field] = raw
                 continue
             number = int(raw[1:], 16) if raw.startswith("$") else int(raw)
@@ -240,7 +248,7 @@ class Studio:
         """The nearest placement to a point, or none within reach."""
         best, distance = -1, radius * radius
         for placement in self.placements:
-            gap = ((placement.map_x - map_x) ** 2 + (placement.map_y - map_y) ** 2)
+            gap = (placement.map_x - map_x) ** 2 + (placement.map_y - map_y) ** 2
             if gap <= distance:
                 best, distance = placement.index, gap
         self.selection = best
@@ -263,8 +271,7 @@ class Studio:
         changed = SpawnEntry(**fields)
         handler = self.handlers.get(changed.object_type & ~3, "")
         candidate = self.document()
-        record = next(item for item in candidate["spawn_lists"]
-                      if item["name"] == self.spawn_list.name)
+        record = next(item for item in candidate["spawn_lists"] if item["name"] == self.spawn_list.name)
         record["entries"][index] = {**fields, "handler": handler}
         validate_document(candidate, self.root, self.profile)
         self.placements[index] = Placement(index, changed, handler)
@@ -280,12 +287,11 @@ class Studio:
     def image(self, x, y, width, height, cache=None):
         return draw(self.scene, x, y, width, height, cache=cache)
 
-    def refresh_map_preview(self, map_document, map_baseline,
-                            screen_document=None, screen_baseline=None):
+    def refresh_map_preview(self, map_document, map_baseline, screen_document=None, screen_baseline=None):
         """Rebuild from the unedited scene so reverting a cell restores it."""
         refreshed = preview_stage_maps(
-            self.root, self.source_scene or self.scene,
-            map_document, map_baseline, screen_document, screen_baseline)
+            self.root, self.source_scene or self.scene, map_document, map_baseline, screen_document, screen_baseline
+        )
         self.scene = refreshed
         self.map_document = map_document
         self.map_baseline = map_baseline
@@ -300,9 +306,7 @@ class Studio:
         looked at.
         """
         document = deepcopy(
-            self.document_data
-            if self.document_data is not None
-            else export_document(self.root, self.profile)
+            self.document_data if self.document_data is not None else export_document(self.root, self.profile)
         )
         if self.spawn_list is None:
             return document
@@ -310,13 +314,17 @@ class Studio:
             if item["name"] != self.spawn_list.name:
                 continue
             item["entries"] = [
-                {"x": placement.entry.x, "y": placement.entry.y,
-                 "object_type": placement.entry.object_type,
-                 "parameter": placement.entry.parameter,
-                 "slot_first": placement.entry.slot_first,
-                 "slot_limit": placement.entry.slot_limit,
-                 "handler": placement.handler}
-                for placement in self.placements]
+                {
+                    "x": placement.entry.x,
+                    "y": placement.entry.y,
+                    "object_type": placement.entry.object_type,
+                    "parameter": placement.entry.parameter,
+                    "slot_first": placement.entry.slot_first,
+                    "slot_limit": placement.entry.slot_limit,
+                    "handler": placement.handler,
+                }
+                for placement in self.placements
+            ]
         self.document_data = document
         return document
 
@@ -329,10 +337,7 @@ class Studio:
 
 def _document_configurations(document):
     """Return stage configurations in slot order from a workspace document."""
-    records = {
-        item["name"]: StageConfiguration(item["name"], item["fields"])
-        for item in document["configurations"]
-    }
+    records = {item["name"]: StageConfiguration(item["name"], item["fields"]) for item in document["configurations"]}
     return [records.get(slot["configuration"]) for slot in document["stage_slots"]]
 
 
@@ -348,16 +353,17 @@ def stage_rows(root, document=None):
     for index, configuration in enumerate(configurations):
         name = configuration.spawn_list if configuration else ""
         spawn = lists.get(name) if isinstance(name, str) else None
-        rows.append({
-            "index": index,
-            "record": configuration.name if configuration else "",
-            "spawn_list": name if isinstance(name, str) else "$%08X" % name,
-            "placements": (
-                len(spawn.entries) if isinstance(spawn, SpawnList)
-                else len(spawn["entries"]) if spawn else 0
-            ),
-            "palette": configuration.palette_list if configuration else "",
-        })
+        rows.append(
+            {
+                "index": index,
+                "record": configuration.name if configuration else "",
+                "spawn_list": name if isinstance(name, str) else "$%08X" % name,
+                "placements": (
+                    len(spawn.entries) if isinstance(spawn, SpawnList) else len(spawn["entries"]) if spawn else 0
+                ),
+                "palette": configuration.palette_list if configuration else "",
+            }
+        )
     return rows
 
 
@@ -367,18 +373,14 @@ def _spawn_list_from_document(root, document, name):
         return None
     originals = {item.name: item for item in read_source_lists(root)[0]}
     original = originals.get(name)
-    record = next((item for item in document["spawn_lists"]
-                   if item["name"] == name), None)
+    record = next((item for item in document["spawn_lists"] if item["name"] == name), None)
     if original is None or record is None:
         return None
-    entries = [SpawnEntry(*(entry[field] for field in FIELD_ORDER))
-               for entry in record["entries"]]
-    return SpawnList(original.name, original.storage, original.payload,
-                     entries, original.terminated)
+    entries = [SpawnEntry(*(entry[field] for field in FIELD_ORDER)) for entry in record["entries"]]
+    return SpawnList(original.name, original.storage, original.payload, entries, original.terminated)
 
 
-def preview_stage_maps(root, built, map_document, map_baseline,
-                       screen_document=None, screen_baseline=None):
+def preview_stage_maps(root, built, map_document, map_baseline, screen_document=None, screen_baseline=None):
     """Replay edited RAM streams into a scene without writing source files.
 
     The caller supplies a validated document. Replaying the loader order is
@@ -429,40 +431,49 @@ def validate_stage_scene_references(source, candidate, width, index, profile):
         raise ValueError("new undefined periodic stage map reference: " + error)
 
 
-def validate_stage_map_references(root, profile, level_document,
-                                  map_document, map_baseline,
-                                  screen_document, screen_baseline):
+def validate_stage_map_references(
+    root, profile, level_document, map_document, map_baseline, screen_document, screen_baseline
+):
     """Check every stage reached by a changed map stream before content build."""
-    changed = merged_edit_streams(
-        (map_document, map_baseline),
-        (screen_document, screen_baseline))
+    changed = merged_edit_streams((map_document, map_baseline), (screen_document, screen_baseline))
     if not changed:
         return
-    indices = sorted({
-        use["stage_table_index"]
-        for record in map_baseline["payloads"] if record["name"] in changed
-        for use in record["uses"]
-    })
+    indices = sorted(
+        {
+            use["stage_table_index"]
+            for record in map_baseline["payloads"]
+            if record["name"] in changed
+            for use in record["uses"]
+        }
+    )
     for index in indices:
         studio = open_stage(
-            root, index, profile=profile, document=level_document,
-            map_document=map_document, map_baseline=map_baseline,
-            screen_document=screen_document, screen_baseline=screen_baseline)
-        validate_stage_scene_references(
-            studio.source_scene, studio.scene, studio.width, index, profile)
+            root,
+            index,
+            profile=profile,
+            document=level_document,
+            map_document=map_document,
+            map_baseline=map_baseline,
+            screen_document=screen_document,
+            screen_baseline=screen_baseline,
+        )
+        validate_stage_scene_references(studio.source_scene, studio.scene, studio.width, index, profile)
 
 
-def open_stage(root, index, palette_override="", profile="jp", document=None,
-               map_document=None, map_baseline=None,
-               screen_document=None, screen_baseline=None):
-    configurations = (
-        _document_configurations(document)
-        if document is not None
-        else stage_configurations(root)
-    )
+def open_stage(
+    root,
+    index,
+    palette_override="",
+    profile="jp",
+    document=None,
+    map_document=None,
+    map_baseline=None,
+    screen_document=None,
+    screen_baseline=None,
+):
+    configurations = _document_configurations(document) if document is not None else stage_configurations(root)
     if not 0 <= index < len(configurations):
-        raise ValueError("stage table index %d is not one of 0..%d"
-                         % (index, len(configurations) - 1))
+        raise ValueError("stage table index %d is not one of 0..%d" % (index, len(configurations) - 1))
     configuration = configurations[index]
     palette = palette_override
     if not palette and configuration and isinstance(configuration.palette_list, str):
@@ -472,37 +483,51 @@ def open_stage(root, index, palette_override="", profile="jp", document=None,
     if map_document is not None:
         if map_baseline is None:
             raise ValueError("a source-owned map baseline is required for preview")
-        built = preview_stage_maps(root, built, map_document, map_baseline,
-                                   screen_document, screen_baseline)
+        built = preview_stage_maps(root, built, map_document, map_baseline, screen_document, screen_baseline)
     if document is None:
         lists = {item.name: item for item in read_source_lists(root)[0]}
     else:
         lists = None
     name = configuration.spawn_list if configuration else ""
     spawn = (
-        lists.get(name) if lists is not None and isinstance(name, str)
+        lists.get(name)
+        if lists is not None and isinstance(name, str)
         else _spawn_list_from_document(root, document, name)
-        if document is not None else None
+        if document is not None
+        else None
     )
     handlers = handler_names(root)
     placements = []
     if spawn:
-        placements = [Placement(at, entry, handlers.get(entry.object_type & ~3, ""))
-                      for at, entry in enumerate(spawn.entries)]
-    return Studio(root, index, built, spawn, placements, handlers, profile,
-                  deepcopy(document) if document is not None else None,
-                  source_scene=source_scene,
-                  map_document=map_document, map_baseline=map_baseline,
-                  screen_document=screen_document,
-                  screen_baseline=screen_baseline,
-                  palette_override=palette_override)
+        placements = [
+            Placement(at, entry, handlers.get(entry.object_type & ~3, "")) for at, entry in enumerate(spawn.entries)
+        ]
+    return Studio(
+        root,
+        index,
+        built,
+        spawn,
+        placements,
+        handlers,
+        profile,
+        deepcopy(document) if document is not None else None,
+        source_scene=source_scene,
+        map_document=map_document,
+        map_baseline=map_baseline,
+        screen_document=screen_document,
+        screen_baseline=screen_baseline,
+        palette_override=palette_override,
+    )
 
 
 def sprite_library(root):
     """Everything needed to turn a handler into a picture, read once."""
     from authoring.object_sprite_model import (
-        indexed_sprite_entries, read_animation_scripts, source_index,
-        tile_attribute_slots)
+        indexed_sprite_entries,
+        read_animation_scripts,
+        source_index,
+        tile_attribute_slots,
+    )
     from authoring.sprite_mapping_model import read_blocks
 
     blocks, _ = read_blocks(root)
@@ -511,47 +536,55 @@ def sprite_library(root):
         if block.mappings:
             mappings.setdefault(block.name, block.mappings[0])
     lines, index = source_index(root)
-    return {"scripts": read_animation_scripts(root), "mappings": mappings,
-            "lines": lines, "index": index, "resting": {}, "attributes": {},
-            "tile_slots": tile_attribute_slots(root),
-            "indexed_sprites": indexed_sprite_entries(lines, index)}
+    return {
+        "scripts": read_animation_scripts(root),
+        "mappings": mappings,
+        "lines": lines,
+        "index": index,
+        "resting": {},
+        "attributes": {},
+        "tile_slots": tile_attribute_slots(root),
+        "indexed_sprites": indexed_sprite_entries(lines, index),
+    }
 
 
 def resting_mapping(library, handler, parameter=None, stage_index=None):
     """The mapping a handler shows at rest, or None when the chain stops."""
     from authoring.object_sprite_model import (
-        INDEXED_SPRITE_HANDLER, STAGE18_PLATFORM_HANDLER, resolve_mapping,
-        resting_symbol, stage18_platform_variant,
-        selected_indexed_sprite_entry)
+        INDEXED_SPRITE_HANDLER,
+        STAGE18_PLATFORM_HANDLER,
+        resolve_mapping,
+        resting_symbol,
+        stage18_platform_variant,
+        selected_indexed_sprite_entry,
+    )
 
     if handler == STAGE18_PLATFORM_HANDLER:
-        variant = stage18_platform_variant(
-            library["lines"], library["index"], stage_index)
+        variant = stage18_platform_variant(library["lines"], library["index"], stage_index)
         if variant is None:
             return "", None
         symbol = variant[0]
         return symbol, library["mappings"].get(symbol)
 
     if handler == INDEXED_SPRITE_HANDLER:
-        selected = selected_indexed_sprite_entry(
-            library["indexed_sprites"], parameter)
+        selected = selected_indexed_sprite_entry(library["indexed_sprites"], parameter)
         if selected is None:
             return "", None
         symbol = selected[0]
-        return symbol, resolve_mapping(
-            symbol, library["scripts"], library["mappings"])
+        return symbol, resolve_mapping(symbol, library["scripts"], library["mappings"])
 
     if handler not in library["resting"]:
         symbol = resting_symbol(library["lines"], library["index"], handler)
         library["resting"][handler] = (
-            symbol, resolve_mapping(symbol, library["scripts"], library["mappings"])
-            if symbol else None)
+            symbol,
+            resolve_mapping(symbol, library["scripts"], library["mappings"]) if symbol else None,
+        )
     return library["resting"][handler]
 
 
-def object_attribute(library, handler, stage_default, *,
-                     stage_attributes=None, priority=0, parameter=None,
-                     stage_index=None):
+def object_attribute(
+    library, handler, stage_default, *, stage_attributes=None, priority=0, parameter=None, stage_index=None
+):
     """The tile attribute a handler gives its object, or None when unknown.
 
     A mapping's tile index is relative, so drawing one through the wrong base
@@ -559,49 +592,62 @@ def object_attribute(library, handler, stage_default, *,
     marker, so a handler whose own attribute cannot be found is not drawn.
     """
     from authoring.object_sprite_model import (
-        INDEXED_SPRITE_HANDLER, WEAPON_SELECTION_HANDLER,
-        resting_attribute, selected_indexed_sprite_entry,
-        weapon_selection_initial_attribute)
+        INDEXED_SPRITE_HANDLER,
+        WEAPON_SELECTION_HANDLER,
+        resting_attribute,
+        selected_indexed_sprite_entry,
+        weapon_selection_initial_attribute,
+    )
 
     if handler == INDEXED_SPRITE_HANDLER:
-        selected = selected_indexed_sprite_entry(
-            library["indexed_sprites"], parameter)
-        return ((selected[1], "indexed sprite table") if selected is not None
-                else (None, ""))
+        selected = selected_indexed_sprite_entry(library["indexed_sprites"], parameter)
+        return (selected[1], "indexed sprite table") if selected is not None else (None, "")
 
     if handler == WEAPON_SELECTION_HANDLER:
         if stage_index is None:
             return None, ""
-        initial = weapon_selection_initial_attribute(
-            library["lines"], library["index"], priority)
-        return ((initial, "initial stage configuration priority; runtime can change")
-                if initial is not None else (None, ""))
+        initial = weapon_selection_initial_attribute(library["lines"], library["index"], priority)
+        return (
+            (initial, "initial stage configuration priority; runtime can change") if initial is not None else (None, "")
+        )
 
     stage_attributes = stage_attributes or {}
-    key = (handler, stage_default, tuple(sorted(stage_attributes.items())),
-           priority, parameter, stage_index)
+    key = (handler, stage_default, tuple(sorted(stage_attributes.items())), priority, parameter, stage_index)
     if key not in library["attributes"]:
         library["attributes"][key] = resting_attribute(
-            library["lines"], library["index"], handler, stage_default,
-            stage_attributes, priority, library["tile_slots"], parameter,
-            stage_index)
+            library["lines"],
+            library["index"],
+            handler,
+            stage_default,
+            stage_attributes,
+            priority,
+            library["tile_slots"],
+            parameter,
+            stage_index,
+        )
     return library["attributes"][key]
 
 
 def placement_sprite(studio, library, placement, background=None):
     """One placement drawn as its resting frame, or None where it has none."""
     from authoring.object_sprite_model import (
-        WEAPON_SELECTION_ART_END, WEAPON_SELECTION_ART_START,
-        WEAPON_SELECTION_HANDLER, compose_static, weapon_selection_carried_art)
+        WEAPON_SELECTION_ART_END,
+        WEAPON_SELECTION_ART_START,
+        WEAPON_SELECTION_HANDLER,
+        compose_static,
+        weapon_selection_carried_art,
+    )
 
-    _, mapping = resting_mapping(
-        library, placement.handler, placement.entry.parameter, studio.index)
-    attribute, _ = object_attribute(library, placement.handler,
-                                    studio.scene.object_attribute,
-                                    stage_attributes=studio.scene.object_attributes,
-                                    priority=studio.scene.configuration.sprite_priority,
-                                    parameter=placement.entry.parameter,
-                                    stage_index=studio.index)
+    _, mapping = resting_mapping(library, placement.handler, placement.entry.parameter, studio.index)
+    attribute, _ = object_attribute(
+        library,
+        placement.handler,
+        studio.scene.object_attribute,
+        stage_attributes=studio.scene.object_attributes,
+        priority=studio.scene.configuration.sprite_priority,
+        parameter=placement.entry.parameter,
+        stage_index=studio.index,
+    )
     if mapping is None or attribute is None:
         return None
     vram = studio.scene.vram
@@ -609,9 +655,8 @@ def placement_sprite(studio, library, placement, background=None):
         carried = weapon_selection_carried_art(studio.root, studio.index)
         if carried is None or len(vram) != WEAPON_SELECTION_ART_END:
             return None
-        vram = (vram[:WEAPON_SELECTION_ART_START] + carried)
-    image, left, top = compose_static(mapping, vram, studio.scene.palette,
-                                      attribute, background)
+        vram = vram[:WEAPON_SELECTION_ART_START] + carried
+    image, left, top = compose_static(mapping, vram, studio.scene.palette, attribute, background)
     return image, placement.map_x + left, placement.map_y + top
 
 

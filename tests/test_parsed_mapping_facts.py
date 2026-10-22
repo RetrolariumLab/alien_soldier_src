@@ -31,17 +31,17 @@ class ParsedMappingFactsTests(unittest.TestCase):
         for relative in ("src/empty", "data/empty", "config"):
             (root / relative).mkdir(parents=True, exist_ok=True)
         (root / "src/a.s").write_bytes(
-            b'PairSpriteMapping: dc.w $0001,$0500,$FE08,$8002,$0000,$0203\r\n'
-            b'SeriesSpriteMapping: dc.w $8003,$0000,$0102,$8004,$0000,$0304\r\n'
-            b'DynamicSpriteMapping: dc.w $8001\r\n dc.l Art+$05000010\r\n dc.w $F608\r\n'
+            b"PairSpriteMapping: dc.w $0001,$0500,$FE08,$8002,$0000,$0203\r\n"
+            b"SeriesSpriteMapping: dc.w $8003,$0000,$0102,$8004,$0000,$0304\r\n"
+            b"DynamicSpriteMapping: dc.w $8001\r\n dc.l Art+$05000010\r\n dc.w $F608\r\n"
             b'PayloadSpriteMapping: binclude "data/sprites.bin"\r\n'
-            b'PointerSpriteMapping: dc.l PairSpriteMapping,DynamicSpriteMapping\r\n'
-            b'BadSpriteMapping: dc.w $8000,$0000\r\n'
-            b'Terrain_StampObjectSpriteMapping: dc.w 0,0\r\n'
-            b'MixedSpriteMapping: dc.w 0\r\n dc.b 0\r\n'
-            b'Unrelated: dc.b 99\r\n')
-        (root / "src/z.s").write_bytes(
-            b'ByteSpriteMapping: dc.b $80,$05,$00,$00,-1,2\r')
+            b"PointerSpriteMapping: dc.l PairSpriteMapping,DynamicSpriteMapping\r\n"
+            b"BadSpriteMapping: dc.w $8000,$0000\r\n"
+            b"Terrain_StampObjectSpriteMapping: dc.w 0,0\r\n"
+            b"MixedSpriteMapping: dc.w 0\r\n dc.b 0\r\n"
+            b"Unrelated: dc.b 99\r\n"
+        )
+        (root / "src/z.s").write_bytes(b"ByteSpriteMapping: dc.b $80,$05,$00,$00,-1,2\r")
         (root / "data/sprites.bin").write_bytes(struct.pack(">HBBbb", 0x8003, 0, 0, 1, x))
         (root / "config/marker.json").write_bytes(b'{"outside_mapping_input":true}\n')
 
@@ -105,8 +105,15 @@ class ParsedMappingFactsTests(unittest.TestCase):
                         object.__setattr__(one, "x", 999)
                     before.block, before.offset, before.pieces = "forged", -1, ()
                 left.name, left.source, left.storage, left.payload, left.data, left.mappings = (
-                    "forged", "foreign", "fake", "none", b"bad", ())
-            first[0].clear(); first[1].clear()
+                    "forged",
+                    "foreign",
+                    "fake",
+                    "none",
+                    b"bad",
+                    (),
+                )
+            first[0].clear()
+            first[1].clear()
             self.assertEqual(expected, second)
             self.assertEqual(expected, sprites.read_blocks(self.root))
 
@@ -148,7 +155,7 @@ class ParsedMappingFactsTests(unittest.TestCase):
                         if directory:
                             path.mkdir()
                         else:
-                            path.write_bytes(b'LateSpriteMapping: dc.w $8000,0,0\n')
+                            path.write_bytes(b"LateSpriteMapping: dc.w $8000,0,0\n")
             finally:
                 if path.exists():
                     path.rmdir() if directory else path.unlink()
@@ -177,12 +184,14 @@ class ParsedMappingFactsTests(unittest.TestCase):
         self.write_tree(foreign, 2)
         with source.parsed_operation(self.root) as operation:
             for sentinel in (None, object()):
+
                 def outcome(function):
                     try:
                         function(sentinel)
                     except Exception as error:
                         return type(error), str(error)
                     self.fail("malformed root unexpectedly produced mapping facts")
+
                 self.assertEqual(outcome(self.legacy), outcome(sprites.read_blocks))
             self.assertEqual((), operation._owners)
             original = sprites.read_blocks(self.root)
@@ -221,7 +230,6 @@ class ParsedMappingFactsTests(unittest.TestCase):
             self.write_tree(tree, index)
         frozen = inventory.capture(owner, max_file=1 << 20, max_total=1 << 20, max_entries=1000)
         return owner, trees, frozen
-
 
     def test_readonly_staged_mapping_facts_use_only_explicit_original_src_data_authority(self):
         owner, trees, frozen = self.readonly_trees()

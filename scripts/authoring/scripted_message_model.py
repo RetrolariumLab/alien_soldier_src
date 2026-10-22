@@ -46,7 +46,7 @@ NAMES = (
 def read_word(body: bytes, offset: int, name: str) -> int:
     if offset < 0 or offset + 2 > len(body):
         raise ValueError("%s command word exceeds its fixed slot" % name)
-    return int.from_bytes(body[offset:offset + 2], "big")
+    return int.from_bytes(body[offset : offset + 2], "big")
 
 
 def signed_word(value: int) -> int:
@@ -73,20 +73,24 @@ def parse_script(body: bytes, name: str, glyph_limit: int) -> dict[str, Any]:
         if value == DMA_COMMAND:
             if cursor + 6 > len(body):
                 raise ValueError("%s DMA command exceeds its fixed slot" % name)
-            commands.append({
-                "offset": cursor,
-                "kind": "dma",
-                "source_pointer": int.from_bytes(body[cursor + 2:cursor + 6], "big"),
-            })
+            commands.append(
+                {
+                    "offset": cursor,
+                    "kind": "dma",
+                    "source_pointer": int.from_bytes(body[cursor + 2 : cursor + 6], "big"),
+                }
+            )
             cursor += 6
             continue
         target = cursor + signed_word(value)
-        commands.append({
-            "offset": cursor,
-            "kind": "record",
-            "relative_offset": signed_word(value),
-            "target": target,
-        })
+        commands.append(
+            {
+                "offset": cursor,
+                "kind": "record",
+                "relative_offset": signed_word(value),
+                "target": target,
+            }
+        )
         targets.append(target)
         cursor += 2
 
@@ -106,20 +110,22 @@ def parse_script(body: bytes, name: str, glyph_limit: int) -> dict[str, Any]:
         if occupied & span:
             raise ValueError("%s record ranges overlap" % name)
         occupied.update(span)
-        glyphs = list(body[target + 2:end])
+        glyphs = list(body[target + 2 : end])
         if any(value >= glyph_limit for value in glyphs):
             raise ValueError("%s record selects a glyph outside the shared font" % name)
-        records.append({
-            "target": target,
-            "attributes": list(body[target:target + 2]),
-            "glyph_capacity": len(glyphs),
-            "glyphs": glyphs,
-        })
+        records.append(
+            {
+                "target": target,
+                "attributes": list(body[target : target + 2]),
+                "glyph_capacity": len(glyphs),
+                "glyphs": glyphs,
+            }
+        )
 
     layout = bytearray(body)
     for record in records:
         start = record["target"] + 2
-        layout[start:start + record["glyph_capacity"]] = bytes(record["glyph_capacity"])
+        layout[start : start + record["glyph_capacity"]] = bytes(record["glyph_capacity"])
     return {
         "capacity": len(body),
         "command_count": len(commands),
@@ -144,11 +150,13 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         if not isinstance(body, bytes):
             raise ValueError("scripted-message payload is missing: %s" % name)
         record = parse_script(body, name, glyph_limit)
-        record.update({
-            "name": name,
-            "path": owners[name],
-            "storage": "source",
-        })
+        record.update(
+            {
+                "name": name,
+                "path": owners[name],
+                "storage": "source",
+            }
+        )
         scripts.append(record)
     return {
         "schema_version": SCHEMA_VERSION,
@@ -161,8 +169,7 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         "record_count": sum(item["record_count"] for item in scripts),
         "glyph_count": sum(item["glyph_count"] for item in scripts),
         "encoded_byte_count": sum(item["capacity"] for item in scripts),
-        "unexposed_byte_count": sum(
-            item["unexposed_byte_count"] for item in scripts),
+        "unexposed_byte_count": sum(item["unexposed_byte_count"] for item in scripts),
         "scripts": scripts,
     }
 
@@ -171,9 +178,7 @@ def load_document(path: Path) -> dict[str, Any]:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise ValueError(
-            "cannot load scripted-message document %s: %s" % (path, error)
-        ) from error
+        raise ValueError("cannot load scripted-message document %s: %s" % (path, error)) from error
     if not isinstance(document, dict):
         raise ValueError("scripted-message document is not an object")
     return document
@@ -189,9 +194,17 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     fields = (
-        "schema_version", "profile", "format", "font_path", "font_glyph_count",
-        "script_count", "command_count", "record_count", "glyph_count",
-        "encoded_byte_count", "unexposed_byte_count",
+        "schema_version",
+        "profile",
+        "format",
+        "font_path",
+        "font_glyph_count",
+        "script_count",
+        "command_count",
+        "record_count",
+        "glyph_count",
+        "encoded_byte_count",
+        "unexposed_byte_count",
     )
     for field in fields:
         if not source_value_matches(document.get(field), baseline[field]):
@@ -213,8 +226,15 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "path", "storage", "capacity", "command_count", "record_count",
-            "glyph_count", "unexposed_byte_count", "layout_sha256", "commands",
+            "path",
+            "storage",
+            "capacity",
+            "command_count",
+            "record_count",
+            "glyph_count",
+            "unexposed_byte_count",
+            "layout_sha256",
+            "commands",
         ):
             if not source_value_matches(script.get(field), original[field]):
                 errors.append("%s: %s differs" % (name, field))
@@ -234,8 +254,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
                 errors.append("%s record %d: glyph capacity differs" % (name, index))
                 continue
             if any(
-                not isinstance(value, int) or isinstance(value, bool)
-                or not 0 <= value < baseline["font_glyph_count"]
+                not isinstance(value, int) or isinstance(value, bool) or not 0 <= value < baseline["font_glyph_count"]
                 for value in glyphs
             ):
                 errors.append("%s record %d: invalid glyph index" % (name, index))
@@ -278,6 +297,7 @@ def apply_document(
             path = root / relative
             rebuilt = rebuild_source(root, relative, payloads)
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, rebuilt)
     return sorted(changes)
 

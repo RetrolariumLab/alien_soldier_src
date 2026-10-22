@@ -3,27 +3,27 @@
 The canonical input identity is recorded in `assets/manifest.json`; tool binary
 identity and origin are recorded in `config/toolchain.json`.
 
-The assembly initially carried 4,822 unique mappings from the current symbol to the
-original IDA-generated name. They use `; was: sub_...`, `loc_...`,
-`locret_...`, or `nullsub_...`. In 298 cases the historical annotation is on
-the first instruction after the owning label, which is how the earlier rename
-tool wrote it. `scripts/lint_source.py` deliberately associates such a marker
-with the most recent definition and checks that both sides remain unique.
-Reviewed RAM renames add mappings such as `; was: word_FFA284`, so the checked
-total is allowed to grow but never to fall below the original 4,822. Reviewed
+The assembly initially carried 4,822 unique mappings from the current symbol to
+the original IDA-generated name. They use `; was: sub_...`, `loc_...`,
+`locret_...`, or `nullsub_...`. In 298 cases the historical annotation is on the
+first instruction after the owning label, which is how the earlier rename tool
+wrote it. `scripts/lint_source.py` deliberately associates such a marker with
+the most recent definition and checks that both sides remain unique. Reviewed
+RAM renames add mappings such as `; was: word_FFA284`, so the checked total is
+allowed to grow but never to fall below the original 4,822. Reviewed
 preserved-data definitions retain their exact imported spelling too; for
-example, `Sound_UnreferencedSFXChannelPointers` records `; was: unused_10`
-after its six pointer values were identified.
+example, `Sound_UnreferencedSFXChannelPointers` records `; was: unused_10` after
+its six pointer values were identified.
 
 These mappings establish symbol continuity, not semantic correctness. Their
 default evidence level is `hypothesis`. Correcting a semantic name must retain
 the same historical mapping unless a documented source correction proves that
 the mapping itself was wrong.
 
-The current reconstruction carries 16,053 checked mappings. The total grows
-when a live address-derived ROM or RAM definition receives an evidence-backed
-name; corrections to an already renamed symbol retain its existing imported
-IDA mapping and therefore do not inflate this count.
+The current reconstruction carries 16,053 checked mappings. The total grows when
+a live address-derived ROM or RAM definition receives an evidence-backed name;
+corrections to an already renamed symbol retain its existing imported IDA
+mapping and therefore do not inflate this count.
 
 ## Runtime toolchain selection
 
@@ -48,8 +48,8 @@ option is supplied, allowing preservation-only builds without an emulator.
 
 Executable size and SHA-256 are printed for the selected build. The emulator's
 `observed_only` entry remains an observation, not a universal binary hash gate:
-different supported compiler builds can produce different executable bytes.
-A clean source pin does not prove how an existing executable was compiled;
-keep the source, build recipe, executable hash and runtime result together.
+different supported compiler builds can produce different executable bytes. A
+clean source pin does not prove how an existing executable was compiled; keep
+the source, build recipe, executable hash and runtime result together.
 [Runtime verification](runtime.md#building-the-pinned-emulator) gives the MSVC
 recipe for the pinned commit.

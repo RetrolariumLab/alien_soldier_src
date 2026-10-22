@@ -1,4 +1,5 @@
 """Studio I/O regressions using actual fixed classes and private synthetic state."""
+
 from __future__ import annotations
 
 from contextlib import ExitStack
@@ -18,13 +19,20 @@ from authoring import graphics_studio as graphics, screen_studio as screen, text
 from authoring import atomic_output, level_studio as level, sound_studio as sound
 from authoring.ram_map_state import Workspace
 
-ERRORS = (OSError("source unavailable"), ValueError("invalid field"), RuntimeError("reader failed"),
-          TypeError("damaged reader inventory"), KeyError("missing source label"))
+ERRORS = (
+    OSError("source unavailable"),
+    ValueError("invalid field"),
+    RuntimeError("reader failed"),
+    TypeError("damaged reader inventory"),
+    KeyError("missing source label"),
+)
 
 
 def text_window(project):
-    documents = {"frontend_text_strings": {"strings": [{"name": "Fixture", "glyphs": [1, 2]}]},
-                 "glyph_source_lists": {"font_glyph_count": 128, "lists": [{"name": "Peer", "glyphs": [3, 4]}]}}
+    documents = {
+        "frontend_text_strings": {"strings": [{"name": "Fixture", "glyphs": [1, 2]}]},
+        "glyph_source_lists": {"font_glyph_count": 128, "lists": [{"name": "Peer", "glyphs": [3, 4]}]},
+    }
     item = text.Window.__new__(text.Window)
     item.project, item.profile = project, "jp"
     item.state = text.Workspace(documents)
@@ -38,8 +46,16 @@ def text_window(project):
 
 
 def map_state():
-    metadata = {"value_bits": 8, "unit_width": 2, "unit_height": 2, "role": "patterns",
-                "value_count": 4, "decoded_byte_count": 4, "compressed_capacity": 16, "consuming_asset_lists": []}
+    metadata = {
+        "value_bits": 8,
+        "unit_width": 2,
+        "unit_height": 2,
+        "role": "patterns",
+        "value_count": 4,
+        "decoded_byte_count": 4,
+        "compressed_capacity": 16,
+        "consuming_asset_lists": [],
+    }
     item = Workspace({"payloads": [dict(metadata, values=[1, 2, 3, 4]), dict(metadata, values=[5, 6, 7, 8])]})
     item.select_value(1)
     return item
@@ -58,7 +74,11 @@ def screen_window(project):
     item.preview_plane.get.return_value, item.preview_role.get.return_value = "plane_a", "patterns"
     item.preview_scene, item.preview_ram_sources, item.screen_hit = object(), object(), object()
     item.preview_record = {"id": "Fixture", "width": 2, "height": 2}
-    item.refresh_map_preview_fast, item.show_preview_highlight, item._validate_map_edit = mock.Mock(), mock.Mock(), mock.Mock()
+    item.refresh_map_preview_fast, item.show_preview_highlight, item._validate_map_edit = (
+        mock.Mock(),
+        mock.Mock(),
+        mock.Mock(),
+    )
     return item
 
 
@@ -81,7 +101,9 @@ class ScalarRollbackTests(FixtureTest):
                     item.apply_value(glyph)
                     self.assertEqual(before, item.state.documents)
                     self.assertEqual({"glyph_source_lists"}, item.state.dirty)
-                    self.assertEqual(selected, (item.state.artifact_index, item.state.field_index, item.state.value_index))
+                    self.assertEqual(
+                        selected, (item.state.artifact_index, item.state.field_index, item.state.value_index)
+                    )
                     item.messagebox.showerror.assert_called_once_with("Text Studio", str(error))
                     item.status.configure.assert_not_called()
 
@@ -95,10 +117,13 @@ class ScalarRollbackTests(FixtureTest):
         item.window.destroy.assert_not_called()
 
     def test_unknown_ordinary_validator_error_rolls_back_but_is_not_swallowed(self):
-        class UnknownReaderError(Exception): pass
+        class UnknownReaderError(Exception):
+            pass
+
         item = text_window(self.project)
         item.context["frontend_text_strings"]["validate"].side_effect = UnknownReaderError("unexpected reader bug")
-        with self.assertRaises(UnknownReaderError): item.apply_value()
+        with self.assertRaises(UnknownReaderError):
+            item.apply_value()
         self.assertEqual(2, item.state.value)
         self.assertEqual({"glyph_source_lists"}, item.state.dirty)
         item.messagebox.showerror.assert_not_called()
@@ -107,7 +132,8 @@ class ScalarRollbackTests(FixtureTest):
         for error in (KeyboardInterrupt(), SystemExit(2)):
             item = text_window(self.project)
             item.context["frontend_text_strings"]["validate"].side_effect = error
-            with self.subTest(error=error), self.assertRaises(type(error)): item.apply_value()
+            with self.subTest(error=error), self.assertRaises(type(error)):
+                item.apply_value()
             item.messagebox.showerror.assert_not_called()
 
 
@@ -144,8 +170,10 @@ class ScreenRollbackTests(FixtureTest):
                 before, scene, sources = deepcopy(item.state.document), item.preview_scene, item.preview_ram_sources
                 item._validate_map_edit.side_effect = error
                 with self.subTest(error=error, method=method):
-                    if method == "apply_value": item.apply_value()
-                    else: item.click_cell(SimpleNamespace(x=128, y=128))
+                    if method == "apply_value":
+                        item.apply_value()
+                    else:
+                        item.click_cell(SimpleNamespace(x=128, y=128))
                     self.assertEqual(before, item.state.document)
                     self.assertEqual((0, 1), (item.state.payload_index, item.state.value_index))
                     self.assertTrue(item.state.dirty)
@@ -178,13 +206,16 @@ class ScreenRollbackTests(FixtureTest):
                 state.replace_value(9, mock.Mock(side_effect=error))
 
     def test_unknown_preview_validator_error_restores_owned_selection_before_rethrow(self):
-        class CustomReaderException(Exception): pass
+        class CustomReaderException(Exception):
+            pass
+
         hit = SimpleNamespace(cell=SimpleNamespace(payload_index=1, value_index=2))
         with mock.patch.object(screen, "locate_screen_map_cell", return_value=hit):
             item = screen_window(self.project)
             before, previous = deepcopy(item.state.document), item.screen_hit
             item._validate_map_edit.side_effect = CustomReaderException("unexpected reader error")
-            with self.assertRaises(CustomReaderException): item.click_preview(SimpleNamespace(x=1, y=1))
+            with self.assertRaises(CustomReaderException):
+                item.click_preview(SimpleNamespace(x=1, y=1))
             self.assertEqual(before, item.state.document)
             self.assertEqual((0, 1), (item.state.payload_index, item.state.value_index))
             self.assertIs(previous, item.screen_hit)
@@ -218,7 +249,10 @@ class BuildLauncherTests(FixtureTest):
 
     def test_launcher_oserror_reports_once_no_false_success_no_real_process(self):
         for module, item in self.studios():
-            with self.subTest(module=module.__name__), mock.patch.object(module.subprocess, "run", side_effect=FileNotFoundError("make unavailable")) as run:
+            with (
+                self.subTest(module=module.__name__),
+                mock.patch.object(module.subprocess, "run", side_effect=FileNotFoundError("make unavailable")) as run,
+            ):
                 item.build_rom()
                 run.assert_called_once()
                 item.messagebox.showerror.assert_called_once()
@@ -227,21 +261,32 @@ class BuildLauncherTests(FixtureTest):
 
     def test_dirty_text_screen_and_failed_graphics_save_never_dispatch_build(self):
         for module, item in self.studios():
-            if module is graphics: item.save.return_value = False
-            elif module is screen: item.state.dirty = True
-            else: item.state.dirty = {"frontend_text_strings"}
+            if module is graphics:
+                item.save.return_value = False
+            elif module is screen:
+                item.state.dirty = True
+            else:
+                item.state.dirty = {"frontend_text_strings"}
             with self.subTest(module=module.__name__), mock.patch.object(module.subprocess, "run") as run:
                 item.build_rom()
                 run.assert_not_called()
 
     def test_child_failure_existing_handling_and_baseexception_not_swallowed(self):
         for module, item in self.studios():
-            with self.subTest(module=module.__name__), mock.patch.object(module.subprocess, "run", return_value=SimpleNamespace(returncode=2, stdout="bad", stderr="build")):
+            with (
+                self.subTest(module=module.__name__),
+                mock.patch.object(
+                    module.subprocess, "run", return_value=SimpleNamespace(returncode=2, stdout="bad", stderr="build")
+                ),
+            ):
                 item.build_rom()
                 item.messagebox.showerror.assert_called_once()
                 item.messagebox.showinfo.assert_not_called()
             item.messagebox.reset_mock()
-            with mock.patch.object(module.subprocess, "run", side_effect=KeyboardInterrupt()), self.assertRaises(KeyboardInterrupt):
+            with (
+                mock.patch.object(module.subprocess, "run", side_effect=KeyboardInterrupt()),
+                self.assertRaises(KeyboardInterrupt),
+            ):
                 item.build_rom()
             item.messagebox.showerror.assert_not_called()
 
@@ -250,16 +295,31 @@ class BuildLauncherTests(FixtureTest):
         item.project, item.profile = self.project, "jp"
         state_names = ("state", "compressed_state", "palette_state", "mapping_state", "animation_state")
         flags = (True, False, True, False, True)
-        for name, dirty in zip(state_names, flags): setattr(item, name, SimpleNamespace(document={}, dirty=dirty))
+        for name, dirty in zip(state_names, flags):
+            setattr(item, name, SimpleNamespace(document={}, dirty=dirty))
         for name in ("tile_path", "compressed_path", "palette_path", "mapping_path", "animation_path"):
             setattr(item, name, self.project / (name + ".json"))
         item.messagebox, item.window, item.status = mock.Mock(), mock.Mock(), mock.Mock()
         item.messagebox.askyesnocancel.return_value = True
-        validators = ("validate_tile_document", "validate_compressed_document", "validate_palette_document", "validate_mapping_document", "validate_animation_document")
-        writers = ("write_tile_document", "write_compressed_document", "write_palette_document", "write_mapping_document", "write_animation_document")
+        validators = (
+            "validate_tile_document",
+            "validate_compressed_document",
+            "validate_palette_document",
+            "validate_mapping_document",
+            "validate_animation_document",
+        )
+        writers = (
+            "write_tile_document",
+            "write_compressed_document",
+            "write_palette_document",
+            "write_mapping_document",
+            "write_animation_document",
+        )
         from contextlib import ExitStack
+
         with ExitStack() as stack:
-            for name in validators: stack.enter_context(mock.patch.object(graphics, name))
+            for name in validators:
+                stack.enter_context(mock.patch.object(graphics, name))
             write_mocks = [stack.enter_context(mock.patch.object(graphics, name)) for name in writers]
             write_mocks[1].side_effect = OSError("second atomic output unavailable")
             self.assertFalse(item.save())
@@ -280,30 +340,39 @@ class LateSaveBoundaryTests(FixtureTest):
         module = {"level": level, "graphics": graphics, "text": text, "sound": sound}[studio]
         definitions = {
             "level": (("level_layouts", "atomic_write_json"), ("stage_maps", "atomic_write_json")),
-            "graphics": (("tile_art", "write_tile_document"),
-                         ("compressed_tile_art", "write_compressed_document"),
-                         ("palette_commands", "write_palette_document"),
-                         ("sprite_mappings", "write_mapping_document"),
-                         ("sprite_animations", "write_animation_document")),
-            "text": (("boss_and_ship_message_scripts", "scripted_message_document"),
-                     ("credits_text_sequence", "credits_text_document"),
-                     ("frontend_text_strings", "frontend_text_document"),
-                     ("glyph_source_lists", "glyph_source_list_document"),
-                     ("japanese_glyph_sequence", "japanese_glyph_document"),
-                     ("results_detail_text", "results_text_document"),
-                     ("stage_message_sequences", "stage_message_document"),
-                     ("story_text_rows", "story_text_document")),
-            "sound": (("sound_envelopes", "sound_envelope_document"),
-                      ("sound_instruments", "sound_instrument_document"),
-                      ("sound_pcm_samples", "sound_pcm_document"),
-                      ("sound_sequences", "sound_sequence_document")),
+            "graphics": (
+                ("tile_art", "write_tile_document"),
+                ("compressed_tile_art", "write_compressed_document"),
+                ("palette_commands", "write_palette_document"),
+                ("sprite_mappings", "write_mapping_document"),
+                ("sprite_animations", "write_animation_document"),
+            ),
+            "text": (
+                ("boss_and_ship_message_scripts", "scripted_message_document"),
+                ("credits_text_sequence", "credits_text_document"),
+                ("frontend_text_strings", "frontend_text_document"),
+                ("glyph_source_lists", "glyph_source_list_document"),
+                ("japanese_glyph_sequence", "japanese_glyph_document"),
+                ("results_detail_text", "results_text_document"),
+                ("stage_message_sequences", "stage_message_document"),
+                ("story_text_rows", "story_text_document"),
+            ),
+            "sound": (
+                ("sound_envelopes", "sound_envelope_document"),
+                ("sound_instruments", "sound_instrument_document"),
+                ("sound_pcm_samples", "sound_pcm_document"),
+                ("sound_sequences", "sound_sequence_document"),
+            ),
         }[studio]
         project = self.project / ("%s-%s-%d" % (studio, profile, fail_at))
         paths = {name: project / (name + ".json") for name, _kind in definitions}
-        documents = {name: {"fixture_only": True, "profile": profile,
-                           "artifact": name, "values": [10, 20]} for name in paths}
-        writers = {name: (getattr(module, kind) if studio in ("level", "graphics")
-                          else module.HANDLERS[kind][2]) for name, kind in definitions}
+        documents = {
+            name: {"fixture_only": True, "profile": profile, "artifact": name, "values": [10, 20]} for name in paths
+        }
+        writers = {
+            name: (getattr(module, kind) if studio in ("level", "graphics") else module.HANDLERS[kind][2])
+            for name, kind in definitions
+        }
         for name, writer in writers.items():
             writer(paths[name], {**documents[name], "values": [1, 2]})
         old_bytes = {name: path.read_bytes() for name, path in paths.items()}
@@ -345,12 +414,18 @@ class LateSaveBoundaryTests(FixtureTest):
             for name in ("compressed_status", "palette_status", "mapping_status", "animation_status"):
                 setattr(window, name, mock.Mock())
                 statuses.append(getattr(window, name))
-            validators = ("validate_tile_document", "validate_compressed_document", "validate_palette_document",
-                          "validate_mapping_document", "validate_animation_document")
+            validators = (
+                "validate_tile_document",
+                "validate_compressed_document",
+                "validate_palette_document",
+                "validate_mapping_document",
+                "validate_animation_document",
+            )
         else:
-            window.context = {name: {"document": document, "path": paths[name],
-                                    "write": writers[name], "validate": validate}
-                              for name, document in documents.items()}
+            window.context = {
+                name: {"document": document, "path": paths[name], "write": writers[name], "validate": validate}
+                for name, document in documents.items()
+            }
             window.state = SimpleNamespace(documents=documents, dirty=set(documents))
             states = None
 
@@ -360,8 +435,9 @@ class LateSaveBoundaryTests(FixtureTest):
             return {name: record["document"] for name, record in window.context.items()}
 
         def dirty():
-            return ({name: state.dirty for name, state in states.items()}
-                    if states is not None else set(window.state.dirty))
+            return (
+                {name: state.dirty for name, state in states.items()} if states is not None else set(window.state.dirty)
+            )
 
         expected, flags = deepcopy(current_documents()), deepcopy(dirty())
         identities = {name: id(document) for name, document in current_documents().items()}
@@ -456,11 +532,13 @@ class HiddenTkTests(FixtureTest):
     @classmethod
     def setUpClass(cls):
         from tk_test_lifetime import tk_main_thread_lifetime
+
         cls.enterClassContext(tk_main_thread_lifetime())
 
     def test_hidden_real_button_scalar_apply_and_failed_close_without_assets(self):
         try:
             import tkinter as tk
+
             root = tk.Tk()
             root.withdraw()
         except Exception as error:

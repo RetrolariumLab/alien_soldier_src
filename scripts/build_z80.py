@@ -1,4 +1,5 @@
 """Assemble the shared DAC program from Z80 source before a cartridge build."""
+
 from __future__ import annotations
 
 import argparse
@@ -32,10 +33,13 @@ def build(root: Path, assembler: Path, converter: Path) -> Path:
     with tempfile.TemporaryDirectory(prefix=".assemble-", dir=output.parent) as directory:
         work = Path(directory)
         obj, image = work / "driver.p", work / "driver.bin"
-        subprocess.run([str(assembler), "-i", str(root), "-maxerrors", "2",
-                        "-o", str(obj), str(source)], cwd=root, env=environment, check=True)
-        subprocess.run([str(converter), str(obj), str(image), "-p=00"],
-                       cwd=root, env=environment, check=True)
+        subprocess.run(
+            [str(assembler), "-i", str(root), "-maxerrors", "2", "-o", str(obj), str(source)],
+            cwd=root,
+            env=environment,
+            check=True,
+        )
+        subprocess.run([str(converter), str(obj), str(image), "-p=00"], cwd=root, env=environment, check=True)
         body = image.read_bytes()
         if len(body) != IMAGE_BYTES:
             raise ValueError("Z80 image must fit the exact 3072-byte loader contract")
@@ -60,8 +64,7 @@ def main(argv=None):
             original = (args.root / REFERENCE).read_bytes()
             if body != original:
                 raise ValueError("assembled Z80 program differs from the preservation reference")
-        print("[OK] assembled Z80 program: %d bytes, SHA256 %s" % (
-            len(body), hashlib.sha256(body).hexdigest()))
+        print("[OK] assembled Z80 program: %d bytes, SHA256 %s" % (len(body), hashlib.sha256(body).hexdigest()))
         return 0
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         print("[ERROR] " + str(error), file=sys.stderr)

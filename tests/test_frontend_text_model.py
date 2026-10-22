@@ -45,19 +45,13 @@ class FrontendTextTests(unittest.TestCase):
     def test_capacity_and_glyphs_outside_the_shared_font_are_rejected(self) -> None:
         document = copy.deepcopy(self.document)
         document["strings"][0]["glyphs"].pop()
-        self.assertTrue(any(
-            "glyph count differs" in error
-            for error in document_errors(document, ROOT, "jp")
-        ))
+        self.assertTrue(any("glyph count differs" in error for error in document_errors(document, ROOT, "jp")))
 
         document = copy.deepcopy(self.document)
         for invalid in (228, 0xFF):
             document = copy.deepcopy(self.document)
             document["strings"][0]["glyphs"][0] = invalid
-            self.assertTrue(any(
-                "exceeds the shared font" in error
-                for error in document_errors(document, ROOT, "jp")
-            ))
+            self.assertTrue(any("exceeds the shared font" in error for error in document_errors(document, ROOT, "jp")))
 
 
 if __name__ == "__main__":

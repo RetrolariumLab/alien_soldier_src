@@ -45,17 +45,15 @@ def check_files(entries: list[dict], errors: list[str], notes: list[str]) -> int
         if size != entry["size"]:
             errors.append(f"{path} is {size} bytes, expected {entry['size']}")
         if digest != entry["sha256"]:
-            errors.append(
-                f"{path} SHA256 differs\n"
-                f"        expected {entry['sha256']}\n"
-                f"        actual   {digest}"
-            )
+            errors.append(f"{path} SHA256 differs\n        expected {entry['sha256']}\n        actual   {digest}")
         checked += 1
     return checked
 
 
 def emulator_paths(
-    entries: list[dict], override: Path | None, errors: list[str],
+    entries: list[dict],
+    override: Path | None,
+    errors: list[str],
 ) -> tuple[Path | None, list[dict]]:
     """Bind the declared runtime files to the explicitly selected checkout.
 
@@ -100,7 +98,10 @@ def emulator_git(checkout: Path, arguments: list[str], errors: list[str]) -> str
 
 
 def check_emulator_commit(
-    component: dict, errors: list[str], notes: list[str], checkout: Path | None = None,
+    component: dict,
+    errors: list[str],
+    notes: list[str],
+    checkout: Path | None = None,
 ) -> None:
     if checkout is None:
         checkout, _ = emulator_paths(component.get("files", {}).get("any", []), None, errors)
@@ -120,7 +121,9 @@ def check_emulator_commit(
     if actual is not None and actual != expected:
         errors.append(f"emulator is at {actual}, expected pinned commit {expected}")
     changes = emulator_git(
-        checkout, ["status", "--porcelain=v1", "--untracked-files=no", "--ignore-submodules=none"], errors,
+        checkout,
+        ["status", "--porcelain=v1", "--untracked-files=no", "--ignore-submodules=none"],
+        errors,
     )
     if changes:
         errors.append(f"emulator has tracked changes at {checkout}:\n{changes}")
@@ -134,7 +137,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--platform")
     parser.add_argument("--require-emulator", action="store_true")
     parser.add_argument(
-        "--emulator-dir", type=Path,
+        "--emulator-dir",
+        type=Path,
         help="verify runtime files in this Git checkout instead of the manifest's default; requires a built emulator",
     )
     args = parser.parse_args(argv)

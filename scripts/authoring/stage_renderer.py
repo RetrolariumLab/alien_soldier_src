@@ -38,21 +38,30 @@ import json
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from authoring.object_sprite_model import (
-    expand_tile_commands, read_visual_loaders, source_index)
+from authoring.object_sprite_model import expand_tile_commands, read_visual_loaders, source_index
 from authoring.palette_model import named_sets
 from authoring.level_studio_model import stage_configurations
 from authoring.stage_tilemap_model import (
-    BACKDROP_REGISTER_VALUE, PLANE_A_TABLE, PLANE_B_TABLE, SHARED_LOADER,
-    decompress, labelled_blocks, loader_lists, plane_descriptor, read_asset_lists,
-    read_descriptors, read_plane_tables, stage_loaders, stage_tilemaps)
-from authoring.tile_graphics import (
-    GRAPHICS_CONFIG, TILE_SIZE, decode_tile, write_png)
+    BACKDROP_REGISTER_VALUE,
+    PLANE_A_TABLE,
+    PLANE_B_TABLE,
+    SHARED_LOADER,
+    decompress,
+    labelled_blocks,
+    loader_lists,
+    plane_descriptor,
+    read_asset_lists,
+    read_descriptors,
+    read_plane_tables,
+    stage_loaders,
+    stage_tilemaps,
+)
+from authoring.tile_graphics import GRAPHICS_CONFIG, TILE_SIZE, decode_tile, write_png
 
 
-COPY_TO_VRAM = 1                 # LoadObjDataHandlers[1] is Gfx_LoadDataToVRAM
-DECODE_TO_VRAM = 3               # ...[3] is Gfx_LoadCompressedGfx, the bit codec
-DECOMPRESS_TO_VRAM = 7           # ...[7] is LoadCompressedToVRAM, plain LZSS
+COPY_TO_VRAM = 1  # LoadObjDataHandlers[1] is Gfx_LoadDataToVRAM
+DECODE_TO_VRAM = 3  # ...[3] is Gfx_LoadCompressedGfx, the bit codec
+DECOMPRESS_TO_VRAM = 7  # ...[7] is LoadCompressedToVRAM, plain LZSS
 VRAM_SIZE = 0x10000
 TILE_MASK = 0x07FF
 HFLIP = 0x0800
@@ -85,19 +94,19 @@ class Scene:
     """One stage table index, with everything needed to draw it."""
 
     index: int
-    tilemap: object              # plane A, or None where the mode is a fill
+    tilemap: object  # plane A, or None where the mode is a fill
     plane_b: object
     vram: bytes
     palette: list
     palette_name: str
     configuration: object
-    missing_codecs: tuple        # (list, payload) pairs this model cannot decode
+    missing_codecs: tuple  # (list, payload) pairs this model cannot decode
     backdrop: tuple = (0, 0, 0)
-    planes: tuple = ()           # the descriptor each plane reads, for reporting
+    planes: tuple = ()  # the descriptor each plane reads, for reporting
     parallax_shift: int = PARALLAX_SHIFT
-    parallax_origin: int = 0     # plane A's configured starting camera X
-    parallax_offset: int = 0     # plane B's configured starting camera X
-    object_attribute: int = 0    # what Enemy_SetupBehaviorSprite puts in $E(a5)
+    parallax_origin: int = 0  # plane A's configured starting camera X
+    parallax_offset: int = 0  # plane B's configured starting camera X
+    object_attribute: int = 0  # what Enemy_SetupBehaviorSprite puts in $E(a5)
     absolute_quarter_scroll: bool = False
     plane_b_wrap_pixels: int = 0
     object_attributes: dict[int, int] = field(default_factory=dict)
@@ -112,8 +121,7 @@ class Scene:
         """
         if self.absolute_quarter_scroll:
             return x >> self.parallax_shift
-        return (((x - self.parallax_origin) >> self.parallax_shift)
-                + self.parallax_offset)
+        return ((x - self.parallax_origin) >> self.parallax_shift) + self.parallax_offset
 
     def plane_b_source_x(self, x):
         """Map the visible secondary-plane coordinate through its VRAM ring."""
@@ -152,7 +160,7 @@ def merge(vram, commands, data):
         if command.source not in data:
             continue
         body = decompress(data[command.source])
-        merged[command.destination:command.destination + len(body)] = body
+        merged[command.destination : command.destination + len(body)] = body
     return bytes(merged)
 
 
@@ -175,7 +183,7 @@ def build_vram(root, list_names, lists, data):
             else:
                 continue
             at = command.destination
-            vram[at:at + len(body)] = body
+            vram[at : at + len(body)] = body
     return bytes(vram), tuple(missing)
 
 
@@ -225,8 +233,7 @@ def not_reproduced(root):
     each one in config/authoring/graphics.json.
     """
     config = json.loads((root / GRAPHICS_CONFIG).read_text(encoding="utf-8"))
-    return {item["index"]: item["why"]
-            for item in config["stage_rendering"]["two_planes"]["planes_not_reproduced"]}
+    return {item["index"]: item["why"] for item in config["stage_rendering"]["two_planes"]["planes_not_reproduced"]}
 
 
 def planes_for(read, index, configuration=None):
@@ -238,17 +245,12 @@ def planes_for(read, index, configuration=None):
     configuration = configuration or read["configurations"][index]
     base = read["tilemaps"][index]
     if index in read["not_reproduced"]:
-        name, offset = plane_descriptor(configuration.plane_a_mode,
-                                        read["plane_tables"][PLANE_A_TABLE])
-        plane = None if name is None else replace(
-            base, descriptor=read["descriptors"][name], y_offset=offset)
-        return [(plane, name or "constant fill"),
-                (None, "not reproduced: " + read["not_reproduced"][index])]
+        name, offset = plane_descriptor(configuration.plane_a_mode, read["plane_tables"][PLANE_A_TABLE])
+        plane = None if name is None else replace(base, descriptor=read["descriptors"][name], y_offset=offset)
+        return [(plane, name or "constant fill"), (None, "not reproduced: " + read["not_reproduced"][index])]
     built = []
-    for mode, table in ((configuration.plane_a_mode, PLANE_A_TABLE),
-                        (configuration.plane_b_mode, PLANE_B_TABLE)):
-        name, offset = plane_descriptor(
-            mode, read["plane_tables"][table], offset_variant=table == PLANE_A_TABLE)
+    for mode, table in ((configuration.plane_a_mode, PLANE_A_TABLE), (configuration.plane_b_mode, PLANE_B_TABLE)):
+        name, offset = plane_descriptor(mode, read["plane_tables"][table], offset_variant=table == PLANE_A_TABLE)
         if name is None:
             built.append((None, "constant fill"))
             continue
@@ -258,8 +260,7 @@ def planes_for(read, index, configuration=None):
         # nor $FFFF2000. Reading them anyway produces noise, so an empty region
         # means the plane is not there, which is a fact about the asset lists
         # rather than a guess.
-        if not (plane.region(plane.descriptor.chunks)
-                and plane.region(plane.descriptor.patterns)):
+        if not (plane.region(plane.descriptor.chunks) and plane.region(plane.descriptor.patterns)):
             built.append((None, name + ", whose maps this stage does not load"))
             continue
         # Shared source maps do not make the two VDP planes interchangeable.
@@ -275,55 +276,63 @@ def scene(root, index, palette_override="", configuration_override=None):
     read = read_once(root)
     data, lists, loaders = read["data"], read["lists"], read["loaders"]
     if not 0 <= index < len(loaders):
-        raise ValueError("stage table index %d is not one of 0..%d"
-                         % (index, len(loaders) - 1))
+        raise ValueError("stage table index %d is not one of 0..%d" % (index, len(loaders) - 1))
     bodies = read["bodies"]
-    names = (loader_lists(root, bodies, lists, SHARED_LOADER)
-             + loader_lists(root, bodies, lists, loaders[index]))
+    names = loader_lists(root, bodies, lists, SHARED_LOADER) + loader_lists(root, bodies, lists, loaders[index])
     vram, missing = build_vram(root, names, lists, data)
 
     # The second dispatch table. Stage_DispatchVisualAssetLoader submits a
     # compact command list of its own, which is both how a stage's object art
     # reaches VRAM and where SpawnedEnemyTileAttr comes from.
     lines, symbols = read["source_index"]
-    visual, visual_palette = (read["visual_loaders"][index]
-                              if index < len(read["visual_loaders"]) else ("", ""))
+    visual, visual_palette = read["visual_loaders"][index] if index < len(read["visual_loaders"]) else ("", "")
     attributes = {}
     if visual:
         extra, attributes = expand_tile_commands(data, lines, symbols, visual)
         vram = merge(vram, extra, data)
     configuration = configuration_override or read["configurations"][index]
-    (plane_a, name_a), (plane_b, name_b) = planes_for(
-        read, index, configuration)
+    (plane_a, name_a), (plane_b, name_b) = planes_for(read, index, configuration)
 
     wanted = palette_override or (configuration.palette_list if configuration else "")
     sets = read["palettes"]
     chosen = sets.get(wanted)
     if chosen is None:
-        chosen = next((item for name, item in sets.items()
-                       if name.lower().startswith(str(wanted).lower())), None)
+        chosen = next((item for name, item in sets.items() if name.lower().startswith(str(wanted).lower())), None)
     if chosen is None:
         raise ValueError("no palette offset list named %s" % wanted)
     colours = list(chosen["rgb"])
     if visual_palette:
         colours = play_palette_command(root, visual_palette, chosen["words"], colours)
-    backdrop = colours[((BACKDROP_REGISTER_VALUE >> 4) & 3) * 16
-                       + (BACKDROP_REGISTER_VALUE & 0x0F)]
+    backdrop = colours[((BACKDROP_REGISTER_VALUE >> 4) & 3) * 16 + (BACKDROP_REGISTER_VALUE & 0x0F)]
     if plane_b is not None:
-        plane_b = replace(plane_b, y_offset=plane_b.y_offset
-                          + signed_word(configuration.camera_y)
-                          - signed_word(configuration.secondary_camera_y))
+        plane_b = replace(
+            plane_b,
+            y_offset=plane_b.y_offset
+            + signed_word(configuration.camera_y)
+            - signed_word(configuration.secondary_camera_y),
+        )
     # Enemy_SetupBehaviorSprite: SpawnedEnemyTileAttr[0] or the stage's
     # GlobalSpritePriorityBit, stored at $E(a5).
     attribute = (attributes.get(0, 0) | configuration.sprite_priority) & 0xFFFF
-    return Scene(index, plane_a, plane_b, vram, colours, chosen["name"],
-                 configuration, missing, backdrop, (name_a, name_b),
-                 PARALLAX_SHIFT, signed_word(configuration.camera_x),
-                 signed_word(configuration.secondary_camera_x), attribute,
-                 absolute_quarter_scroll=index in EARLY_STATIC_BACK_PLANE,
-                 plane_b_wrap_pixels=(
-                     BACK_PLANE_RING_PIXELS if index in EARLY_STATIC_BACK_PLANE
-                     else 0), object_attributes=attributes)
+    return Scene(
+        index,
+        plane_a,
+        plane_b,
+        vram,
+        colours,
+        chosen["name"],
+        configuration,
+        missing,
+        backdrop,
+        (name_a, name_b),
+        PARALLAX_SHIFT,
+        signed_word(configuration.camera_x),
+        signed_word(configuration.secondary_camera_x),
+        attribute,
+        absolute_quarter_scroll=index in EARLY_STATIC_BACK_PLANE,
+        plane_b_wrap_pixels=(BACK_PLANE_RING_PIXELS if index in EARLY_STATIC_BACK_PLANE else 0),
+        object_attributes=attributes,
+    )
 
 
 def tile_rows(scene_, word, show_priority=False):
@@ -340,13 +349,14 @@ def tile_rows(scene_, word, show_priority=False):
     colours, indices = [], []
     for at_y in range(TILE_SIZE):
         source_y = TILE_SIZE - 1 - at_y if word & VFLIP else at_y
-        row = pixels[source_y * TILE_SIZE:(source_y + 1) * TILE_SIZE]
+        row = pixels[source_y * TILE_SIZE : (source_y + 1) * TILE_SIZE]
         if word & HFLIP:
             row = row[::-1]
         colour = [scene_.palette[line + index] for index in row]
         if lift:
-            colour = [(min(255, red + lift), min(255, green + lift),
-                       min(255, blue + lift)) for red, green, blue in colour]
+            colour = [
+                (min(255, red + lift), min(255, green + lift), min(255, blue + lift)) for red, green, blue in colour
+            ]
         indices.append(row)
         colours.append(colour)
     return colours, indices, bool(word & PRIORITY)
@@ -363,8 +373,7 @@ def plane_rows(scene_, plane, x, y, cache, show_priority):
     return found
 
 
-def plane_scanline(scene_, plane, camera_x, world_y, width, cache, show_priority,
-                   wrap_pixels=0):
+def plane_scanline(scene_, plane, camera_x, world_y, width, cache, show_priority, wrap_pixels=0):
     """Sample one plane, optionally wrapping a static VRAM name table."""
     colours = [scene_.backdrop] * width
     indices = [0] * width
@@ -373,17 +382,15 @@ def plane_scanline(scene_, plane, camera_x, world_y, width, cache, show_priority
     row = world_y % TILE_SIZE
     at = 0
     while at < width:
-        world_x = ((camera_x + at) % wrap_pixels if wrap_pixels
-                   else camera_x + at)
+        world_x = (camera_x + at) % wrap_pixels if wrap_pixels else camera_x + at
         offset = world_x % TILE_SIZE
         span = min(TILE_SIZE - offset, width - at)
-        tile = plane_rows(
-            scene_, plane, world_x - offset, tile_y, cache, show_priority)
+        tile = plane_rows(scene_, plane, world_x - offset, tile_y, cache, show_priority)
         if tile is not None:
             tile_colours, tile_indices, priority = tile
-            colours[at:at + span] = tile_colours[row][offset:offset + span]
-            indices[at:at + span] = tile_indices[row][offset:offset + span]
-            priorities[at:at + span] = [priority] * span
+            colours[at : at + span] = tile_colours[row][offset : offset + span]
+            indices[at : at + span] = tile_indices[row][offset : offset + span]
+            priorities[at : at + span] = [priority] * span
         at += span
     return colours, indices, priorities
 
@@ -394,11 +401,10 @@ def draw(scene_, x=0, y=0, width=512, height=224, show_priority=False, cache=Non
     back_x = scene_.parallax_x(x)
     image = []
     for screen_y in range(height):
-        front = plane_scanline(
-            scene_, scene_.tilemap, x, y + screen_y, width, cache, show_priority)
+        front = plane_scanline(scene_, scene_.tilemap, x, y + screen_y, width, cache, show_priority)
         back = plane_scanline(
-            scene_, scene_.plane_b, back_x, y + screen_y, width, cache,
-            show_priority, scene_.plane_b_wrap_pixels)
+            scene_, scene_.plane_b, back_x, y + screen_y, width, cache, show_priority, scene_.plane_b_wrap_pixels
+        )
         front_colours, front_indices, front_priorities = front
         back_colours, back_indices, back_priorities = back
         row = []
@@ -427,12 +433,10 @@ def compose(front, back, at_y, span, backdrop):
         return [backdrop] * span
     if back is None:
         colours, indices, _ = front
-        return [colours[at_y][at] if indices[at_y][at] else backdrop
-                for at in range(span)]
+        return [colours[at_y][at] if indices[at_y][at] else backdrop for at in range(span)]
     if front is None:
         colours, indices, _ = back
-        return [colours[at_y][at] if indices[at_y][at] else backdrop
-                for at in range(span)]
+        return [colours[at_y][at] if indices[at_y][at] else backdrop for at in range(span)]
 
     front_colours, front_indices, front_priority = front
     back_colours, back_indices, back_priority = back
@@ -459,15 +463,26 @@ def compose(front, back, at_y, span, backdrop):
     return out
 
 
-def render_to_png(root, index, output, x=0, y=0, width=512, height=224,
-                  palette_override="", scale=1, show_priority=False, objects=False):
+def render_to_png(
+    root,
+    index,
+    output,
+    x=0,
+    y=0,
+    width=512,
+    height=224,
+    palette_override="",
+    scale=1,
+    show_priority=False,
+    objects=False,
+):
     built = scene(root, index, palette_override)
     image = draw(built, x, y, width, height, show_priority)
     if objects:
         from authoring.level_studio_state import open_stage, overlay_placements
+
         overlay_placements(open_stage(root, index, palette_override), image, x, y)
     if scale > 1:
-        image = [[pixel for pixel in row for _ in range(scale)]
-                 for row in image for _ in range(scale)]
+        image = [[pixel for pixel in row for _ in range(scale)] for row in image for _ in range(scale)]
     write_png(root / output, image)
     return built

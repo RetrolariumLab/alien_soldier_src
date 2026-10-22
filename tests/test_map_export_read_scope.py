@@ -1,4 +1,5 @@
 """Physical Screen Map export boundaries; document semantics are explicit seams."""
+
 from contextlib import ExitStack
 import os
 from pathlib import Path
@@ -43,6 +44,7 @@ class MapExportReadScopeTests(unittest.TestCase):
                 path.write_bytes(b"Value: dc.b 9\n")
                 os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
             return {"value": first}
+
         return stack.enter_context(mock.patch.object(module, "_export_document", side_effect=export))
 
     def test_every_export_runs_the_body_and_owns_fresh_positional_and_keyword_lifetimes(self):
@@ -50,8 +52,9 @@ class MapExportReadScopeTests(unittest.TestCase):
             with self.subTest(model=module.__name__), ExitStack() as stack:
                 operations = []
                 body = self.seam(module, stack, operations)
-                parse = stack.enter_context(mock.patch.object(
-                    parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks))
+                parse = stack.enter_context(
+                    mock.patch.object(parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks)
+                )
                 first = module.export_document(self.root, "jp")
                 first["value"] = b"changed returned document"
                 second = module.export_document(root=self.root, profile="jp")
@@ -85,8 +88,7 @@ class MapExportReadScopeTests(unittest.TestCase):
                     self.assertEqual(b"\x01", parsed.labelled_blocks(self.root)[0]["Value"])
                     for value in (2, 3):
                         (foreign / "src/main.s").write_bytes(b"Value: dc.b " + str(value).encode() + b"\n")
-                        self.assertEqual({"value": bytes([value])}, module.export_document(
-                            foreign, "jp"))
+                        self.assertEqual({"value": bytes([value])}, module.export_document(foreign, "jp"))
                         self.assertIs(primary, parsed._PARSED_OPERATION.get())
                         self.assertFalse(primary.closed)
                         self.assertEqual({}, primary._readonly_records)

@@ -34,9 +34,9 @@ byte 0          : tile count minus one (so 1...256 tiles)
 bytes 1 onward  : the bit stream, most significant bit first
 ```
 
-The bit stream is read as one continuous sequence of bits over bytes 1, 2, 3, ...
-A payload is padded to an even total length, because the ROM decoder fetches the
-stream a 16-bit word at a time. The final byte is zero-padded.
+The bit stream is read as one continuous sequence of bits over bytes 1, 2, 3,
+... A payload is padded to an even total length, because the ROM decoder fetches
+the stream a 16-bit word at a time. The final byte is zero-padded.
 
 The ROM keeps a 16-bit rotating reservoir plus a count of unconsumed bits, and
 reloads a word when the count runs out. That is an implementation detail: the
@@ -54,14 +54,14 @@ Decoding a tile means running this until 64 slots are filled:
 2. **Marker sequence -- only if the low bit was set.** A cumulative walk forward
    that seeds the *same* colour at slots the fill has not reached yet:
 
-   | bits | meaning |
-   |---|---|
-   | `01` | step 7 |
-   | `10` | step 8 |
-   | `11` | step 9 |
-   | `00` `1` `0` | step 6 |
-   | `00` `1` `1` | step 10 |
-   | `00` `0` | end of sequence |
+   | bits         | meaning         |
+   | ------------ | --------------- |
+   | `01`         | step 7          |
+   | `10`         | step 8          |
+   | `11`         | step 9          |
+   | `00` `1` `0` | step 6          |
+   | `00` `1` `1` | step 10         |
+   | `00` `0`     | end of sequence |
 
    The steps accumulate. Writing `q` for the position of the token's own pixel,
    after steps `s1, s2, s3 ...` the seeded slots are `q+s1`, `q+s1+s2`,
@@ -229,13 +229,13 @@ def compress(data):
 
 ## Cost model
 
-| construct | bits |
-|---|---|
-| token | 5 |
-| marker step of 7, 8 or 9 | 2 |
-| marker step of 6 or 10 | 4 |
-| marker sequence terminator | 3 |
-| run of length `R` | `2 * floor(log2(R + 2))` |
+| construct                  | bits                     |
+| -------------------------- | ------------------------ |
+| token                      | 5                        |
+| marker step of 7, 8 or 9   | 2                        |
+| marker step of 6 or 10     | 4                        |
+| marker sequence terminator | 3                        |
+| run of length `R`          | `2 * floor(log2(R + 2))` |
 
 A token with no markers costs `5 + 2k`. A token with `m` markers costs
 `5 + (sum of step costs) + 3 + 2k`.
@@ -250,18 +250,18 @@ and the runs that sweep past those seeds get shorter and cheaper too.
 The standalone encoder above remains a run-only reference. The authoring
 pipeline now additionally uses `scripts/authoring/tile_codec_edit.py`: it reads
 the original token stream and attributes final pixels to their literal colour
-tokens, including marker seeds consumed by later runs. If edited pixels owned
-by a token still share one colour, that literal can be changed while retaining
-the original marker paths and run lengths. Otherwise a changed tile can fall
-back to the reference run encoding. Unchanged tiles retain their original
-unaligned bit intervals. The shorter legal candidate is selected per changed
-tile, and the complete stream is decoded again before use.
+tokens, including marker seeds consumed by later runs. If edited pixels owned by
+a token still share one colour, that literal can be changed while retaining the
+original marker paths and run lengths. Otherwise a changed tile can fall back to
+the reference run encoding. Unchanged tiles retain their original unaligned bit
+intervals. The shorter legal candidate is selected per changed tile, and the
+complete stream is decoded again before use.
 
 This source-guided path recolours all seven cartridge streams within their
 original slots and preserves exact original bytes at zero edit. It uses one
-64-pixel ownership plan at a time, with no growing search frontier. It does
-not solve the general optimization problem below: arbitrary new art may still
-fail the fixed-capacity check in Graphics Studio.
+64-pixel ownership plan at a time, with no growing search frontier. It does not
+solve the general optimization problem below: arbitrary new art may still fail
+the fixed-capacity check in Graphics Studio.
 
 **Given 64 target pixels, emit the fewest bits that decode to exactly them.**
 
@@ -270,21 +270,21 @@ the position must land on 64 without the final run overshooting.
 
 What makes it more than a greedy walk:
 
-* A marker sequence is cumulative and unbounded in reach, so a single token can
+- A marker sequence is cumulative and unbounded in reach, so a single token can
   seed a whole column, or a diagonal, or any path whose steps are all in 6...10.
-* Seeds change what later runs paint. A run does not simply lay down one colour;
+- Seeds change what later runs paint. A run does not simply lay down one colour;
   it changes colour at every seeded slot it crosses. So the choice of markers
   and the choice of run lengths are not independent.
-* A seed can be overwritten by a later token's own pixel before the fill ever
+- A seed can be overwritten by a later token's own pixel before the fill ever
   reaches it, which wastes it -- or can be used deliberately.
-* `k` is forced by `R`, so run length has no encoding slack, but *where you end
+- `k` is forced by `R`, so run length has no encoding slack, but *where you end
   one token and start the next* is free, and the cost is not linear in length.
 
 A natural formulation is a shortest-path search over states of
 `(position, pending seeds at slots ahead)`, with edges for each legal token
-choice. The pending-seed component is what makes it interesting: it is
-unbounded in principle but small in practice, because a seed is consumed as soon
-as the fill reaches it.
+choice. The pending-seed component is what makes it interesting: it is unbounded
+in principle but small in practice, because a seed is consumed as soon as the
+fill reaches it.
 
 An encoder is *correct* if every tile round-trips through the reference decoder.
 It is *good* in proportion to how far below 152% of the original it gets. The
@@ -297,16 +297,16 @@ approaching the original would be a real result.
 The seven payloads in the shipped cartridge, with the size the original encoder
 achieved and the size the naive encoder above produces:
 
-| payload | tiles | original | naive | naive / original |
-|---|---|---|---|---|
-| `SharedTitleAndOptionsType3DataA` | 256 | 5204 | 7686 | 148% |
-| `XiTigerCutsceneType3Data0000` | 128 | 1956 | 3134 | 160% |
-| `SharedMenuType3DataF680` | 76 | 1370 | 1894 | 138% |
-| `ResultsPostStageType3Data0000` | 256 | 1316 | 2180 | 166% |
-| `WeaponSetupType3Data5800` | 38 | 594 | 972 | 164% |
-| `DebugMenuInitialType3DataF680` | 64 | 614 | 1000 | 163% |
-| `SharedTitleAndOptionsType3DataB` | 32 | 468 | 638 | 136% |
-| **total** | 850 | **11522** | **17504** | **152%** |
+| payload                           | tiles | original  | naive     | naive / original |
+| --------------------------------- | ----- | --------- | --------- | ---------------- |
+| `SharedTitleAndOptionsType3DataA` | 256   | 5204      | 7686      | 148%             |
+| `XiTigerCutsceneType3Data0000`    | 128   | 1956      | 3134      | 160%             |
+| `SharedMenuType3DataF680`         | 76    | 1370      | 1894      | 138%             |
+| `ResultsPostStageType3Data0000`   | 256   | 1316      | 2180      | 166%             |
+| `WeaponSetupType3Data5800`        | 38    | 594       | 972       | 164%             |
+| `DebugMenuInitialType3DataF680`   | 64    | 614       | 1000      | 163%             |
+| `SharedTitleAndOptionsType3DataB` | 32    | 468       | 638       | 136%             |
+| **total**                         | 850   | **11522** | **17504** | **152%**         |
 
 Sizes include the one count byte and the even-length padding.
 

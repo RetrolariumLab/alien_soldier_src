@@ -24,8 +24,7 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
         self.owner = self.root / "build/content/jp/source-format-builds/batch-jp-fixture"
         self.baseline, self.edited = (self.owner / name / "tree" for name in ("baseline", "edited"))
         self.other = self.root / "build/unlisted/tree"
-        for tree, version in ((self.root, 0x10), (self.baseline, 0x20),
-                              (self.edited, 0x30), (self.other, 0x40)):
+        for tree, version in ((self.root, 0x10), (self.baseline, 0x20), (self.edited, 0x30), (self.other, 0x40)):
             self.write_tree(tree, version)
         self.labels = ("baseline", "edited")
         self.frozen = self.capture()
@@ -36,14 +35,16 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
         (tree / "src/empty").mkdir(exist_ok=True)
         (tree / "data/empty").mkdir(parents=True, exist_ok=True)
         (tree / "config").mkdir(exist_ok=True)
-        (tree / "src/a.s").write_bytes((
-            'Bytes: dc.b $%02X,-1\r\nBlob: binclude "data/blob.bin"\r\n'
-            'Duplicate: dc.w %d\r\nAssets:\r\n dc.w 6\r\n dc.l Blob\r\n'
-            ' dc.w $4000\r\n dc.w $FFFF\r\n'
-            'Gfx_FixtureVRAMTransferParameters: dc.l $%X,$FFFF6000,$FFFF4000,$4000\r\n'
-            % (version, version, 0xFFFF7000 + version)).encode())
-        (tree / "src/nested/z.s").write_bytes(('Duplicate: dc.w %d\nLast: dc.b 7\n'
-                                               % (version + 1)).encode())
+        (tree / "src/a.s").write_bytes(
+            (
+                'Bytes: dc.b $%02X,-1\r\nBlob: binclude "data/blob.bin"\r\n'
+                "Duplicate: dc.w %d\r\nAssets:\r\n dc.w 6\r\n dc.l Blob\r\n"
+                " dc.w $4000\r\n dc.w $FFFF\r\n"
+                "Gfx_FixtureVRAMTransferParameters: dc.l $%X,$FFFF6000,$FFFF4000,$4000\r\n"
+                % (version, version, 0xFFFF7000 + version)
+            ).encode()
+        )
+        (tree / "src/nested/z.s").write_bytes(("Duplicate: dc.w %d\nLast: dc.b 7\n" % (version + 1)).encode())
         (tree / "data/blob.bin").write_bytes(bytes(range(version, version + 8)))
         (tree / "config/marker.json").write_bytes(b'{"marker":"original"}\n')
 
@@ -51,14 +52,20 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
         return inventory.capture(self.owner, max_file=1 << 20, max_total=1 << 20, max_entries=1000)
 
     def scope(self, frozen=None, labels=None):
-        return model._readonly_staged_facts(self.root, self.owner,
-            self.frozen if frozen is None else frozen, self.labels if labels is None else labels)
+        return model._readonly_staged_facts(
+            self.root, self.owner, self.frozen if frozen is None else frozen, self.labels if labels is None else labels
+        )
 
     @staticmethod
     def read(tree):
         data, bodies = model.labelled_blocks(tree)
-        return (data, bodies, model.read_asset_lists(tree, bodies), model.read_descriptors(tree),
-                tuple(model.source_texts(tree)))
+        return (
+            data,
+            bodies,
+            model.read_asset_lists(tree, bodies),
+            model.read_descriptors(tree),
+            tuple(model.source_texts(tree)),
+        )
 
     def change_same_size(self, path):
         before, body = path.stat(), path.read_bytes()
@@ -82,8 +89,9 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                     for tree in (self.root, self.baseline, self.edited, self.baseline, self.root):
                         actual = self.read(tree)
                         self.assertEqual(expected[tree], actual)
-                        self.assertEqual([list(value) for value in expected[tree][:4]],
-                                         [list(value) for value in actual[:4]])
+                        self.assertEqual(
+                            [list(value) for value in expected[tree][:4]], [list(value) for value in actual[:4]]
+                        )
                     self.assertEqual(2, len(primary._owners))
                     self.assertEqual(4, len(primary._readonly_owners))
                     self.assertEqual(bytes(range(0x33, 0x36)), edited[0]["Blob"][3:6])
@@ -102,8 +110,10 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
         with model.parsed_operation(self.root) as primary:
             # The factory freezes plain rows, but unused trees trigger no physical lookup.
             lazy = self.scope(frozen={})
-            with mock.patch.object(inventory, "_owner", side_effect=AssertionError("unexpected IO")), \
-                    mock.patch.object(Path, "open", side_effect=AssertionError("unexpected open")):
+            with (
+                mock.patch.object(inventory, "_owner", side_effect=AssertionError("unexpected IO")),
+                mock.patch.object(Path, "open", side_effect=AssertionError("unexpected open")),
+            ):
                 with lazy:
                     self.assertEqual(expected_custom, model.read_asset_lists(self.baseline, custom))
                     self.assertEqual({}, primary._readonly["facts"])
@@ -114,12 +124,14 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                         self.fail("public wrong-root scope was admitted")
                 for sentinel in (None, object()):
                     with self.subTest(sentinel=type(sentinel).__name__):
+
                         def outcome(function):
                             try:
                                 function(sentinel)
                             except Exception as error:
                                 return type(error), str(error)
                             self.fail("sentinel unexpectedly produced ROOT facts")
+
                         self.assertEqual(outcome(model._parse_labelled_blocks), outcome(model.labelled_blocks))
                 first = self.read(self.other)
                 (self.other / "data/blob.bin").write_bytes(b"new external facts")
@@ -143,8 +155,11 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                     self.read(self.baseline)
                 self.assertEqual({}, primary._readonly["facts"])
             self.assertEqual(bytes(range(0x20, 0x28)), original[0]["Blob"])
-        for change, pattern in (("hash", "ORIGINAL"), ("alias", "alias spelling"),
-                                ("missing", "absent from its ORIGINAL")):
+        for change, pattern in (
+            ("hash", "ORIGINAL"),
+            ("alias", "alias spelling"),
+            ("missing", "absent from its ORIGINAL"),
+        ):
             malformed = deepcopy(self.frozen)
             if change == "hash":
                 malformed["baseline/tree/data/blob.bin"]["sha256"] = "0" * 64
@@ -176,8 +191,10 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                 primary_bytes = self.total(primary._records)
                 staged_bytes = self.total(primary._readonly_records)
                 primary_entries, staged_entries = len(primary._records), len(primary._readonly_records)
-        for bound, limit in (("_PARSED_MAX_TOTAL", primary_bytes + staged_bytes - 1),
-                             ("_PARSED_MAX_ENTRIES", primary_entries + staged_entries - 1)):
+        for bound, limit in (
+            ("_PARSED_MAX_TOTAL", primary_bytes + staged_bytes - 1),
+            ("_PARSED_MAX_ENTRIES", primary_entries + staged_entries - 1),
+        ):
             frozen_scope = self.scope()  # Freeze full owner before setting an intentionally tiny joint cap.
             with self.subTest(order="primary-first", bound=bound), model.parsed_operation(self.root) as primary:
                 self.read(self.root)
@@ -200,7 +217,6 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                             self.read(self.baseline)
                 # Bounds no longer patched; ORIGINAL closure still runs after partial primary capture.
 
-
     def test_scope_lifetime_pid_errors_and_sibling_outputs_do_not_rebind_source(self):
         with model.parsed_operation(self.root) as primary:
             with self.scope():
@@ -217,8 +233,12 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
                 self.assertTrue(self.read(self.baseline))
             with self.assertRaisesRegex(ValueError, "closed"):
                 child.blocks()
-            for relative in ("batch.json", "baseline/image.p", "baseline/image.lst",
-                             "baseline/tree/config/marker.json"):
+            for relative in (
+                "batch.json",
+                "baseline/image.p",
+                "baseline/image.lst",
+                "baseline/tree/config/marker.json",
+            ):
                 (self.owner / relative).write_bytes(b"legitimate sibling output update")
             with self.assertRaisesRegex(RuntimeError, "original callback failure"):
                 with self.scope():
@@ -237,8 +257,10 @@ class ReadonlyStagedFactsTests(unittest.TestCase):
         (self.baseline / "src/external.s").write_bytes(b'Outside: binclude "external/blob.bin"\n')
         self.frozen = self.capture()
         with model.parsed_operation(self.root):
-            with self.scope(), mock.patch.object(model, "_parse_labelled_blocks",
-                                                  wraps=model._parse_labelled_blocks) as parse:
+            with (
+                self.scope(),
+                mock.patch.object(model, "_parse_labelled_blocks", wraps=model._parse_labelled_blocks) as parse,
+            ):
                 before = self.read(self.baseline)
                 external.write_bytes(b"two")
                 after = self.read(self.baseline)

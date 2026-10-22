@@ -1,9 +1,6 @@
 {
   "schema_version": 1,
-  "profiles": [
-    "jp",
-    "eu"
-  ],
+  "profiles": ["jp", "eu"],
   "supported": [
     {
       "id": "title_background",

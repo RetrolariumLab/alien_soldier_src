@@ -30,8 +30,7 @@ class UnsavedMappingTests(unittest.TestCase):
         return model.build_catalog(self.root, "jp", self.animation, mapping_document=self.mapping)
 
     def first(self):
-        return next(block for block in self.mapping["blocks"]
-                    if block["name"] == "FirstSpriteMapping")["mappings"][0]
+        return next(block for block in self.mapping["blocks"] if block["name"] == "FirstSpriteMapping")["mappings"][0]
 
     def test_duration_and_geometry_edits_share_one_immutable_unsaved_snapshot(self):
         piece = self.first()["pieces"][0]
@@ -41,8 +40,9 @@ class UnsavedMappingTests(unittest.TestCase):
         observed = model.step(catalog, model.PlaybackState(model.Cursor("FirstAnimation")), model.CallerState(0xE0))
         self.assertEqual(5, observed.after.timer)
         self.assertEqual((-11, 13, 24, 24), observed.geometry.bounds)
-        self.assertEqual((0xA004, 10, 7), tuple(getattr(observed.geometry.pieces[0], key)
-                                            for key in ("attributes", "size", "link")))
+        self.assertEqual(
+            (0xA004, 10, 7), tuple(getattr(observed.geometry.pieces[0], key) for key in ("attributes", "size", "link"))
+        )
         piece["x"] = 70
         selected(self.animation, "FirstAnimation")["frames"][0]["duration"] = 9
         self.assertEqual(-11, catalog.mappings["FirstSpriteMapping"].pieces[0].x)
@@ -54,7 +54,9 @@ class UnsavedMappingTests(unittest.TestCase):
         selected(self.animation, "FirstAnimation")["frames"][0]["target"] = "SecondSpriteMapping"
         block = next(block for block in self.mapping["blocks"] if block["name"] == "SecondSpriteMapping")
         block["mappings"][0]["pieces"][0]["x"] = 23
-        observed = model.step(self.build(), model.PlaybackState(model.Cursor("FirstAnimation")), model.CallerState(0xE0))
+        observed = model.step(
+            self.build(), model.PlaybackState(model.Cursor("FirstAnimation")), model.CallerState(0xE0)
+        )
         self.assertEqual("SecondSpriteMapping", observed.geometry.symbol)
         self.assertEqual(23, observed.geometry.pieces[0].x)
 
@@ -67,9 +69,11 @@ class UnsavedMappingTests(unittest.TestCase):
 
     def test_wrong_profile_partial_and_duplicate_documents_are_rejected(self):
         original = copy.deepcopy(self.mapping)
-        for change in (lambda doc: doc.update(profile="eu"),
-                       lambda doc: doc["blocks"].pop(),
-                       lambda doc: doc["blocks"].append(copy.deepcopy(doc["blocks"][0]))):
+        for change in (
+            lambda doc: doc.update(profile="eu"),
+            lambda doc: doc["blocks"].pop(),
+            lambda doc: doc["blocks"].append(copy.deepcopy(doc["blocks"][0])),
+        ):
             self.mapping = copy.deepcopy(original)
             change(self.mapping)
             with self.assertRaises(ValueError):
@@ -77,12 +81,14 @@ class UnsavedMappingTests(unittest.TestCase):
 
     def test_bool_numeric_aliases_and_unhashable_inventory_are_not_accepted(self):
         original = copy.deepcopy(self.mapping)
-        for change in (lambda doc: doc.update(schema_version=True),
-                       lambda doc: doc["blocks"][0].update(name=[]),
-                       lambda doc: doc["blocks"][0]["mappings"][0].update(offset=False),
-                       lambda doc: doc["blocks"][0]["mappings"][0].update(dynamic=0),
-                       lambda doc: doc["blocks"][0]["mappings"][0]["pieces"][0].update(index=False),
-                       lambda doc: doc["blocks"][0]["mappings"][0]["pieces"][0].update(art_addend=False)):
+        for change in (
+            lambda doc: doc.update(schema_version=True),
+            lambda doc: doc["blocks"][0].update(name=[]),
+            lambda doc: doc["blocks"][0]["mappings"][0].update(offset=False),
+            lambda doc: doc["blocks"][0]["mappings"][0].update(dynamic=0),
+            lambda doc: doc["blocks"][0]["mappings"][0]["pieces"][0].update(index=False),
+            lambda doc: doc["blocks"][0]["mappings"][0]["pieces"][0].update(art_addend=False),
+        ):
             self.mapping = copy.deepcopy(original)
             change(self.mapping)
             with self.assertRaises(ValueError):

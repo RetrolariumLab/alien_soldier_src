@@ -68,19 +68,21 @@ class SoundPCMCodecTests(unittest.TestCase):
         self.assertEqual(bytes.fromhex("41 10 FE"), driver[0x177:0x17A])
 
         music = (ROOT / "src/sound/driver_core.s").read_text(encoding="utf-8")
-        voice = (ROOT / "src/sound/command_dispatch_and_dac.s").read_text(
-            encoding="utf-8")
+        voice = (ROOT / "src/sound/command_dispatch_and_dac.s").read_text(encoding="utf-8")
         self.assertIn("move.b  #1,(Z80DACRequestState).l", music)
         self.assertIn("move.b  #$80,(Z80DACRequestState).l", voice)
         self.assertIn("move.b  (a3)+,(Z80DACCommandByte4).l", music)
 
     def test_music_delay_pair_is_twelve_cpu_t_states_at_both_sites(self) -> None:
-        self.assertEqual({
-            "request_state_load": 0x107,
-            "delay_sites": [0x139, 0x177],
-            "music_request_count": 1,
-            "music_delay_t_states_per_site": 12,
-        }, ordinary_delay_contract(ROOT))
+        self.assertEqual(
+            {
+                "request_state_load": 0x107,
+                "delay_sites": [0x139, 0x177],
+                "music_request_count": 1,
+                "music_delay_t_states_per_site": 12,
+            },
+            ordinary_delay_contract(ROOT),
+        )
         self.assertEqual(25, ordinary_delay_t_states(2))
         self.assertEqual(4 + 255 * 13 + 8, ordinary_delay_t_states(0))
         for invalid in (-1, 256, True, 1.0):
@@ -91,12 +93,15 @@ class SoundPCMCodecTests(unittest.TestCase):
         contract = ordinary_dac_timing_contract(ROOT)
         self.assertEqual(0x134, contract["first_write"])
         self.assertEqual(0x173, contract["second_write"])
-        self.assertEqual({
-            "equal_ready": 94,
-            "negative_clear": 94,
-            "negative_set": 94,
-            "positive": 94,
-        }, contract["branch_t_states"])
+        self.assertEqual(
+            {
+                "equal_ready": 94,
+                "negative_clear": 94,
+                "negative_set": 94,
+                "positive": 94,
+            },
+            contract["branch_t_states"],
+        )
         self.assertEqual(191, contract["first_to_second_t_states"])
         self.assertEqual(196, contract["second_to_next_first_t_states"])
         self.assertEqual(387, contract["encoded_byte_t_states"])

@@ -6,9 +6,7 @@ REQUIRED_DATA_DIRS = ("artcomp", "artunc")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Check that the ROM data required by the assembler exists."
-    )
+    parser = argparse.ArgumentParser(description="Check that the ROM data required by the assembler exists.")
     parser.add_argument("--data-dir", required=True)
     parser.add_argument("--orig-rom", required=True)
     args = parser.parse_args()

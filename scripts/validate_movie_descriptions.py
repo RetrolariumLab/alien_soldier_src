@@ -20,7 +20,7 @@ from pathlib import Path
 def parse_interval_line(line):
     """Parse a line like '20-300, Sega screen' into (left, right, description)."""
     # Match pattern: digits-digits, text
-    pattern = r'^(\d+)-(\d+),\s*(.+)$'
+    pattern = r"^(\d+)-(\d+),\s*(.+)$"
     match = re.match(pattern, line.strip())
 
     if not match:
@@ -38,7 +38,7 @@ def validate_description_file(file_path):
     print(f"\nValidating: {file_path}")
     print("=" * 80)
 
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
     if len(lines) < 2:
@@ -88,14 +88,18 @@ def validate_description_file(file_path):
         # Check no overlap with previous interval (except for first line)
         if prev_right is not None:
             if prev_right >= left:
-                errors.append(f"  Line {line_num}: Overlap detected - previous interval ends at {prev_right}, current starts at {left}")
+                errors.append(
+                    f"  Line {line_num}: Overlap detected - previous interval ends at {prev_right}, current starts at {left}"
+                )
 
         # Check interval continuity (except for first line)
         if prev_right is not None:
             expected_left = prev_right + 20
             if left != expected_left:
                 gap = left - prev_right
-                errors.append(f"  Line {line_num}: Interval should start at {expected_left} (prev_right + 20), got {left} (gap: {gap})")
+                errors.append(
+                    f"  Line {line_num}: Interval should start at {expected_left} (prev_right + 20), got {left} (gap: {gap})"
+                )
 
         prev_line_num = line_num
         prev_right = right
@@ -156,5 +160,5 @@ def main():
     return 0 if all_valid else 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(main())

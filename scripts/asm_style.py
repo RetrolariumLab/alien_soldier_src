@@ -26,9 +26,7 @@ STATEMENT_RE = re.compile(r"^(\s*)(\S+)(.*)$")
 INLINE_COMMENT_RE = re.compile(r"^(.*?\S)(\s+)(;.*)$")
 BLOCK_OPEN_RE = re.compile(r"^\s*\S+\s+macro\b", re.IGNORECASE)
 BLOCK_CLOSE_RE = re.compile(r"^\s*endm\b", re.IGNORECASE)
-LABEL_FIELD_RE = re.compile(
-    r"^([A-Za-z_][A-Za-z0-9_]*)(\s+(?:equ|set|macro)\b.*)$", re.IGNORECASE
-)
+LABEL_FIELD_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)(\s+(?:equ|set|macro)\b.*)$", re.IGNORECASE)
 LOCAL_ASSIGN_RE = re.compile(r"^(\.[A-Za-z_][A-Za-z0-9_]*)(\s*:=.*)$")
 
 
@@ -202,9 +200,7 @@ def check_lines(path: Path, lines: list[str], issues: list[Issue]) -> None:
             issues.append(Issue(path, number, "trailing-space", "trailing whitespace"))
         for char in line:
             if ord(char) > 0x7E or (ord(char) < 0x20 and char != "\t"):
-                issues.append(
-                    Issue(path, number, "charset", "non-ASCII character; use English")
-                )
+                issues.append(Issue(path, number, "charset", "non-ASCII character; use English"))
                 break
 
         if not line.strip():
@@ -233,7 +229,9 @@ def check_lines(path: Path, lines: list[str], issues: list[Issue]) -> None:
                 if indent % COMMENT_INDENT_STEP:
                     issues.append(
                         Issue(
-                            path, number, "comment-indent",
+                            path,
+                            number,
+                            "comment-indent",
                             f"indent whole-line comments in multiples of {COMMENT_INDENT_STEP}",
                         )
                     )

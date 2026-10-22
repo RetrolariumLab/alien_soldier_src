@@ -11,16 +11,28 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.palette_model import (  # noqa: E402
-    ACTIVE_BUFFER, DESTINATION_BIAS, PALETTE_COLOURS, PRELUDE_COMMAND,
-    SHADOW_BUFFER, PaletteCommand, apply_commands, command_index, named_sets,
-    read_commands, read_source, resolve, round_trip_errors, survey)
+    ACTIVE_BUFFER,
+    DESTINATION_BIAS,
+    PALETTE_COLOURS,
+    PRELUDE_COMMAND,
+    SHADOW_BUFFER,
+    PaletteCommand,
+    apply_commands,
+    command_index,
+    named_sets,
+    read_commands,
+    read_source,
+    resolve,
+    round_trip_errors,
+    survey,
+)
 from authoring.tile_graphics import GRAPHICS_CONFIG  # noqa: E402
 
 
 class CommandFormatTests(unittest.TestCase):
     def test_a_command_is_two_header_bytes_and_that_many_words(self) -> None:
         data = bytes((0x62, 0x02)) + struct.pack(">3H", 0x0EEE, 0x00E0, 0x000E)
-        command, = read_commands(data, "fixture")
+        (command,) = read_commands(data, "fixture")
         self.assertEqual(0x62, command.destination)
         self.assertEqual(3, command.count)
         self.assertEqual(8, command.size)
@@ -30,7 +42,7 @@ class CommandFormatTests(unittest.TestCase):
     def test_the_count_byte_is_one_less_than_the_colours(self) -> None:
         """dbf runs d7 + 1 times, so $3F is a full sixty-four."""
         full = bytes((0x00, 0x3F)) + bytes(2 * PALETTE_COLOURS)
-        command, = read_commands(full, "fixture")
+        (command,) = read_commands(full, "fixture")
         self.assertEqual(PALETTE_COLOURS, command.count)
         self.assertEqual(0x82, command.size)
         self.assertTrue(command.full_palette)
@@ -46,7 +58,7 @@ class CommandFormatTests(unittest.TestCase):
 
     def test_a_chain_that_does_not_fit_is_refused(self) -> None:
         with self.assertRaises(ValueError):
-            read_commands(bytes((0x00, 0x3F, 0x00)), "short")      # runs past
+            read_commands(bytes((0x00, 0x3F, 0x00)), "short")  # runs past
         with self.assertRaises(ValueError):
             read_commands(bytes((0x7F, 0x00, 0x00, 0x00)), "odd")  # odd destination
         with self.assertRaises(ValueError):
@@ -99,21 +111,19 @@ class CartridgePaletteTests(unittest.TestCase):
         blocks, lists = read_source(ROOT)
         commands, _ = command_index(blocks)
         prelude = commands[(PRELUDE_COMMAND, 0)]
-        match = next(item for item in named_sets(ROOT)
-                     if item["name"] == "StageStartPaletteOffsetList")
+        match = next(item for item in named_sets(ROOT) if item["name"] == "StageStartPaletteOffsetList")
         self.assertEqual(PALETTE_COLOURS, len(match["words"]))
         self.assertEqual(PALETTE_COLOURS, len(match["rgb"]))
         # Gfx_LoadMultiplePalettes plays CommonPaletteCommand before the list,
         # and nothing in this list writes over line two.
-        self.assertEqual(list(prelude.colours),
-                         match["words"][prelude.first_colour:
-                                        prelude.first_colour + prelude.count])
+        self.assertEqual(
+            list(prelude.colours), match["words"][prelude.first_colour : prelude.first_colour + prelude.count]
+        )
 
     def test_an_offset_that_misses_a_command_boundary_is_refused(self) -> None:
         blocks, lists = read_source(ROOT)
         commands, _ = command_index(blocks)
-        broken = lists[0].__class__(lists[0].name, 0,
-                                    (("StageReadyPaletteCommand", 0x01),))
+        broken = lists[0].__class__(lists[0].name, 0, (("StageReadyPaletteCommand", 0x01),))
         with self.assertRaises(ValueError):
             resolve(broken, commands)
 

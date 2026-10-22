@@ -32,8 +32,7 @@ def main() -> int:
     if args.find_u16 is not None:
         for name, state in named:
             matches = [
-                address for address in range(args.start, args.end, 2)
-                if state.m68k_u16(address) == args.find_u16
+                address for address in range(args.start, args.end, 2) if state.m68k_u16(address) == args.find_u16
             ]
             print(f"{name}: " + " ".join(f"{address:06X}" for address in matches))
         return 0

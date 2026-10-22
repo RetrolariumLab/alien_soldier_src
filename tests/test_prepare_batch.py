@@ -21,14 +21,11 @@ class PrepareBatchTests(unittest.TestCase):
             source = root / "src"
             source.mkdir()
             (source / "main.s").write_text(
-                '                include "src/first.s"\n'
-                '                include "src/second.s"\n',
+                '                include "src/first.s"\n                include "src/second.s"\n',
                 encoding="utf-8",
             )
             (source / "first.s").write_text("First:\n                rts\n", encoding="utf-8")
-            (source / "second.s").write_text(
-                "Target:\n                rts\n", encoding="utf-8"
-            )
+            (source / "second.s").write_text("Target:\n                rts\n", encoding="utf-8")
 
             modules = prepare_batch.source_modules(source / "main.s")
             self.assertEqual([source / "first.s", source / "second.s"], modules)
@@ -59,9 +56,7 @@ class PrepareBatchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "src"
             source.mkdir()
-            (source / "main.s").write_text(
-                '                include "src/missing.s"\n', encoding="utf-8"
-            )
+            (source / "main.s").write_text('                include "src/missing.s"\n', encoding="utf-8")
             with self.assertRaises(FileNotFoundError):
                 prepare_batch.source_modules(source / "main.s")
 
@@ -70,9 +65,7 @@ class PrepareBatchTests(unittest.TestCase):
             root = Path(directory)
             source = root / "src"
             source.mkdir()
-            (source / "main.s").write_text(
-                '                include "src/module.s"\n', encoding="utf-8"
-            )
+            (source / "main.s").write_text('                include "src/module.s"\n', encoding="utf-8")
             (source / "module.s").write_text(
                 "Target:\n                rts\n; End of function Target\n",
                 encoding="utf-8",
@@ -81,15 +74,12 @@ class PrepareBatchTests(unittest.TestCase):
             workflow.mkdir()
             marker = workflow / ".movie"
             marker.write_text("tas\n", encoding="utf-8")
-            (workflow / "analysis_report_tas.csv").write_text(
-                "procedure,address\nTarget,1234\n", encoding="utf-8"
-            )
+            (workflow / "analysis_report_tas.csv").write_text("procedure,address\nTarget,1234\n", encoding="utf-8")
             output = workflow / "batch.txt"
 
             with redirect_stdout(StringIO()):
                 result = prepare_batch.main(
-                    ["--movie-file", str(marker), "--source", str(source / "main.s"),
-                     "--output", str(output)]
+                    ["--movie-file", str(marker), "--source", str(source / "main.s"), "--output", str(output)]
                 )
 
             self.assertEqual(0, result)

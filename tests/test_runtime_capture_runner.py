@@ -59,15 +59,30 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
 
     def run_capture(self, root: Path, fake_run: object) -> int:
         argv = [
-            "run_runtime_scenarios.py", "--scenarios", "scenarios.json",
-            "--gens", "gens.exe", "--rom", "rom.bin",
-            "--output-dir", "captures", "--minimum-timeout", "1",
-            "--seconds-per-1000-frames", "20",
+            "run_runtime_scenarios.py",
+            "--scenarios",
+            "scenarios.json",
+            "--gens",
+            "gens.exe",
+            "--rom",
+            "rom.bin",
+            "--output-dir",
+            "captures",
+            "--minimum-timeout",
+            "1",
+            "--seconds-per-1000-frames",
+            "20",
         ]
         with mock.patch.object(run_runtime_scenarios.Path, "cwd", return_value=root):
             with mock.patch.object(run_runtime_scenarios.sys, "argv", argv):
-                with mock.patch.object(run_runtime_scenarios.runtime_isolation, "native_config_contract", return_value={"native": "fixture"}), \
-                        mock.patch.object(run_runtime_scenarios, "run_hidden", side_effect=fake_run):
+                with (
+                    mock.patch.object(
+                        run_runtime_scenarios.runtime_isolation,
+                        "native_config_contract",
+                        return_value={"native": "fixture"},
+                    ),
+                    mock.patch.object(run_runtime_scenarios, "run_hidden", side_effect=fake_run),
+                ):
                     stdout = StringIO()
                     stderr = StringIO()
                     with redirect_stdout(stdout), redirect_stderr(stderr):
@@ -76,8 +91,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
         self.capture_stderr = stderr.getvalue()
         return result
 
-    def fake_success(self, command: list[str], cwd: Path, timeout: int,
-                     environment: dict[str, str]) -> subprocess.CompletedProcess:
+    def fake_success(
+        self, command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+    ) -> subprocess.CompletedProcess:
         frame = int(command[command.index("-screenshot-interval") + 1])
         states = Path(command[command.index("-dump-state-dir") + 1])
         shots = Path(command[command.index("-screenshot-dir") + 1])
@@ -99,8 +115,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
                 (capture / "manual.png").write_bytes(b"manual image")
             calls = []
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 calls.append((command, timeout, environment))
                 self.assertTrue(cwd.is_relative_to(root / "captures"))
                 self.assertEqual([], list(cwd.iterdir()))
@@ -142,8 +159,12 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             self.assertEqual(300, receipt["requested_frames"])
             self.assertEqual([100, 200], [item["native_header_frame"] for item in receipt["scenarios"]])
             self.assertEqual(["first", "second"], [item["id"] for item in receipt["expected_scenarios"]])
-            self.assertEqual(run_runtime_scenarios.sha256(run_runtime_scenarios.CAPTURE_SCRIPT), receipt["capture_lua_sha256"])
-            self.assertEqual(run_runtime_scenarios.sha256(run_runtime_scenarios.RUNNER_SCRIPT), receipt["capture_runner_sha256"])
+            self.assertEqual(
+                run_runtime_scenarios.sha256(run_runtime_scenarios.CAPTURE_SCRIPT), receipt["capture_lua_sha256"]
+            )
+            self.assertEqual(
+                run_runtime_scenarios.sha256(run_runtime_scenarios.RUNNER_SCRIPT), receipt["capture_runner_sha256"]
+            )
             self.assertEqual(run_runtime_scenarios.sha256(root / "rom.bin"), receipt["rom_sha256"])
             self.assertEqual([], list((root / "captures").glob(".runtime-inputs-*")))
 
@@ -162,8 +183,13 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             self.assertEqual(b"old state", old.read_bytes())
 
     def test_all_inventory_is_validated_before_any_cleanup(self) -> None:
-        for field, value in (("id", "../user"), ("id", "first"), ("frame", True),
-                             ("frame", 100001), ("movie", "missing")):
+        for field, value in (
+            ("id", "../user"),
+            ("id", "first"),
+            ("frame", True),
+            ("frame", 100001),
+            ("movie", "missing"),
+        ):
             with self.subTest(field=field, value=value), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 self.make_inputs(root)
@@ -211,8 +237,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             old = capture / "000100.genstate"
             old.write_bytes(b"user state")
             fake_run = mock.Mock()
-            with mock.patch.object(run_runtime_scenarios.Path, "is_symlink", autospec=True,
-                                   side_effect=lambda path: path == capture):
+            with mock.patch.object(
+                run_runtime_scenarios.Path, "is_symlink", autospec=True, side_effect=lambda path: path == capture
+            ):
                 self.assertEqual(1, self.run_capture(root, fake_run))
             self.assertIn("unsafe runtime capture directory", self.capture_stderr)
             fake_run.assert_not_called()
@@ -222,9 +249,17 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.make_inputs(root)
-            arguments = mock.Mock(scenarios="scenarios.json", gens="gens.exe", rom="rom.bin",
-                                  output_dir="rom.bin", minimum_timeout=1, seconds_per_1000_frames=20)
-            with mock.patch.object(run_runtime_scenarios.runtime_isolation, "native_config_contract", return_value={"native": "fixture"}):
+            arguments = mock.Mock(
+                scenarios="scenarios.json",
+                gens="gens.exe",
+                rom="rom.bin",
+                output_dir="rom.bin",
+                minimum_timeout=1,
+                seconds_per_1000_frames=20,
+            )
+            with mock.patch.object(
+                run_runtime_scenarios.runtime_isolation, "native_config_contract", return_value={"native": "fixture"}
+            ):
                 with self.assertRaisesRegex(ValueError, "aliases a runtime input"):
                     run_runtime_scenarios.replay(root, arguments)
             self.assertEqual(b"rom placeholder", (root / "rom.bin").read_bytes())
@@ -235,8 +270,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             self.make_inputs(root)
             calls = 0
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 nonlocal calls
                 calls += 1
                 states = Path(command[command.index("-dump-state-dir") + 1])
@@ -255,8 +291,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
                 root = Path(directory)
                 self.make_inputs(root)
 
-                def fake_run(command: list[str], cwd: Path, timeout: int,
-                             environment: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake_run(
+                    command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     self.fake_success(command, cwd, timeout, environment)
                     states = Path(command[command.index("-dump-state-dir") + 1])
                     (states / "100.genstate").write_bytes(native_state(frame, checksum))
@@ -275,8 +312,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
                 lua = root / "capture.lua"
                 lua.write_bytes(run_runtime_scenarios.CAPTURE_SCRIPT.read_bytes())
 
-                def fake_run(command: list[str], cwd: Path, timeout: int,
-                             environment: dict[str, str]) -> subprocess.CompletedProcess:
+                def fake_run(
+                    command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+                ) -> subprocess.CompletedProcess:
                     result = self.fake_success(command, cwd, timeout, environment)
                     (root / input_name).write_bytes(b"mutated after authentication")
                     return result
@@ -285,15 +323,18 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
                     self.assertEqual(1, self.run_capture(root, fake_run))
                 self.assertIn("runtime input changed during replay", self.capture_stderr)
                 self.assertFalse((root / "captures" / "first" / "000100.genstate").exists())
-                self.assertEqual("failed", json.loads((root / "captures" / "capture_receipt.json").read_text())["status"])
+                self.assertEqual(
+                    "failed", json.loads((root / "captures" / "capture_receipt.json").read_text())["status"]
+                )
 
     def test_private_snapshot_mutation_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.make_inputs(root)
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 result = self.fake_success(command, cwd, timeout, environment)
                 Path(command[command.index("-play") + 1]).write_bytes(b"snapshot mutation")
                 return result
@@ -307,8 +348,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             root = Path(directory)
             self.make_inputs(root)
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 result = self.fake_success(command, cwd, timeout, environment)
                 run_runtime_scenarios.runtime_isolation.native_config_contract.return_value = {"native": "changed"}
                 return result
@@ -322,8 +364,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             root = Path(directory)
             self.make_inputs(root)
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 result = self.fake_success(command, cwd, timeout, environment)
                 (cwd / "preservation.ips").write_bytes(b"unrequested patch")
                 return result
@@ -337,8 +380,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
             root = Path(directory)
             self.make_inputs(root)
 
-            def fake_run(command: list[str], cwd: Path, timeout: int,
-                         environment: dict[str, str]) -> subprocess.CompletedProcess:
+            def fake_run(
+                command: list[str], cwd: Path, timeout: int, environment: dict[str, str]
+            ) -> subprocess.CompletedProcess:
                 result = self.fake_success(command, cwd, timeout, environment)
                 Path(command[command.index("-cfg") + 1]).write_bytes(b"unexpected config edit")
                 return result
@@ -378,7 +422,9 @@ class RuntimeCaptureRunnerTests(unittest.TestCase):
                 run_runtime_scenarios.run_hidden(["gens"], ROOT, 1, {})
         process.terminate.assert_called_once()
         process.kill.assert_called_once()
-        self.assertEqual([mock.call(timeout=1), mock.call(timeout=5), mock.call(timeout=5)], process.wait.call_args_list)
+        self.assertEqual(
+            [mock.call(timeout=1), mock.call(timeout=5), mock.call(timeout=5)], process.wait.call_args_list
+        )
 
 
 if __name__ == "__main__":

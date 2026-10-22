@@ -13,8 +13,17 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from authoring import lzss_codec as codec
 from authoring.lzss_codec import (
-    BLOCK, MAX_LITERAL, MAX_MATCH, MAX_REPEAT, MIN_MATCH, alternating_run,
-    build_chains, longest_match, pair_run, run_length)
+    BLOCK,
+    MAX_LITERAL,
+    MAX_MATCH,
+    MAX_REPEAT,
+    MIN_MATCH,
+    alternating_run,
+    build_chains,
+    longest_match,
+    pair_run,
+    run_length,
+)
 
 
 def legacy_parse_block(data):
@@ -23,8 +32,7 @@ def legacy_parse_block(data):
     heads, previous = build_chains(data)
     matches = [(0, 0)] * size
     for at in range(size):
-        matches[at] = longest_match(data, at, min(MAX_MATCH, size - at),
-                                    heads, previous)
+        matches[at] = longest_match(data, at, min(MAX_MATCH, size - at), heads, previous)
 
     cost = [0] * (size + 1)
     choice = [None] * (size + 1)
@@ -48,7 +56,7 @@ def legacy_parse_block(data):
             for count in range(2, pair_run(data, at, left) + 1):
                 here = 3 + cost[at + count * 2]
                 if here < best:
-                    best, pick = here, ("pair", count * 2, data[at:at + 2])
+                    best, pick = here, ("pair", count * 2, data[at : at + 2])
             for count in range(2, alternating_run(data, at, left) + 1):
                 here = 2 + count + cost[at + count * 2]
                 if here < best:
@@ -74,7 +82,7 @@ def legacy_parse_block(data):
 def legacy_parse(data):
     tokens = []
     for start in range(0, len(data), BLOCK):
-        tokens.extend(legacy_parse_block(data[start:start + BLOCK]))
+        tokens.extend(legacy_parse_block(data[start : start + BLOCK]))
     return tokens
 
 
@@ -145,8 +153,15 @@ class LZSSMatchFrontierTests(unittest.TestCase):
         tie = b"abXabYabZ"
         self.assertEqual((2, 3), longest_match(tie, 6, 3, *build_chains(tie)))
         samples = (
-            b"", b"a", b"ab", b"aa", b"aaa", tie,
-            b"A" * 129, b"AB" * 67, b"abc" * 45,
+            b"",
+            b"a",
+            b"ab",
+            b"aa",
+            b"aaa",
+            tie,
+            b"A" * 129,
+            b"AB" * 67,
+            b"abc" * 45,
             b"a0a1a2a3a4a5" * 9,
             b"abcXabcYabcZabcXabcYabcZ",
             bytes(range(256)),
@@ -162,8 +177,7 @@ class LZSSMatchFrontierTests(unittest.TestCase):
             for size in (2, 3, 17, 32, 33, 64, 129, 257):
                 sample = bytes(randomizer.randrange(alphabet) for _ in range(size))
                 for factory in (bytes, bytearray):
-                    with self.subTest(alphabet=alphabet, size=size,
-                                      factory=factory.__name__):
+                    with self.subTest(alphabet=alphabet, size=size, factory=factory.__name__):
                         self.assert_legacy_identity(factory(sample))
 
     def test_block_edges_keep_exact_independent_block_tokens_and_stream(self):

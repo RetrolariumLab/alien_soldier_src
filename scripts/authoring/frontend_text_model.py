@@ -31,8 +31,7 @@ def inventory(root: Path) -> dict[str, bytes]:
     return {
         name: value
         for name, value in data.items()
-        if name.startswith("Text_") and isinstance(value, bytes)
-        and value and value[-1] == TERMINATOR
+        if name.startswith("Text_") and isinstance(value, bytes) and value and value[-1] == TERMINATOR
     }
 
 
@@ -85,7 +84,11 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     maximum_glyph = glyph_count(root) - 1
     errors = []
     for field in (
-        "schema_version", "profile", "format", "string_count", "glyph_count",
+        "schema_version",
+        "profile",
+        "format",
+        "string_count",
+        "glyph_count",
         "encoded_byte_count",
     ):
         if not source_value_matches(document.get(field), baseline[field]):
@@ -114,9 +117,11 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
             errors.append("%s: glyph count differs from fixed capacity" % name)
             continue
         invalid = next(
-            (index for index, value in enumerate(glyphs)
-             if not isinstance(value, int) or isinstance(value, bool)
-             or not 0 <= value <= maximum_glyph),
+            (
+                index
+                for index, value in enumerate(glyphs)
+                if not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= maximum_glyph
+            ),
             None,
         )
         if invalid is not None:
@@ -131,15 +136,16 @@ def validate_document(document: dict[str, Any], root: Path, profile: str) -> Non
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     validate_document(document, validation_root or root, profile)
     source = inventory(root)
     changes = {
-        record["name"]: encoded(record)
-        for record in document["strings"]
-        if source[record["name"]] != encoded(record)
+        record["name"]: encoded(record) for record in document["strings"] if source[record["name"]] != encoded(record)
     }
     if not changes:
         return []
@@ -147,6 +153,7 @@ def apply_document(
     rebuilt = rebuild_source(root, OWNER, changes)
     if write:
         from authoring.atomic_output import atomic_write_text as _write_text
+
         _write_text(path, rebuilt)
     return [OWNER]
 
@@ -158,8 +165,10 @@ def round_trip_errors(root: Path, profile: str) -> list[str]:
         validate_document(document, root, profile)
     except ValueError as error:
         return [str(error)]
-    return ["zero-edit frontend text would change %s" % path
-            for path in apply_document(document, root, profile, write=False)]
+    return [
+        "zero-edit frontend text would change %s" % path
+        for path in apply_document(document, root, profile, write=False)
+    ]
 
 
 def main() -> int:
@@ -178,8 +187,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s frontend text: %d strings, %d fixed bytes" % (
-                args.profile, document["string_count"], document["encoded_byte_count"]))
+            print(
+                "[OK] %s frontend text: %d strings, %d fixed bytes"
+                % (args.profile, document["string_count"], document["encoded_byte_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

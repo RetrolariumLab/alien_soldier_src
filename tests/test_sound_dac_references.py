@@ -15,7 +15,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from authoring.sound_pcm_model import music_sample_ids  # noqa: E402
 from authoring.sound_sequence_model import (  # noqa: E402
-    FORMAT, apply_document, document_errors,
+    FORMAT,
+    apply_document,
+    document_errors,
 )
 from authoring.sound_studio_model import decode_bgm_header, decode_sfx_header  # noqa: E402
 
@@ -30,25 +32,33 @@ def fixture(body: bytes, family: str, profile: str) -> dict:
     decoded = decoder(NAME, body)
     sequence = decoded["sequence"]
     return {
-        "schema_version": 1, "profile": profile, "format": FORMAT,
+        "schema_version": 1,
+        "profile": profile,
+        "format": FORMAT,
         "payload_count": 1,
         "instruction_count": sequence["instruction_count"],
         "reachable_byte_count": sequence["reachable_byte_count"],
-        "payloads": [{
-            "name": NAME, "family": family, "path": "fixture.bin",
-            "storage": "binary", "capacity": len(body),
-            "header_byte_count": decoded["header_byte_count"],
-            "instrument_offset": decoded["instrument_offset"],
-            "entry_offsets": sequence["entry_offsets"],
-            "instruction_count": sequence["instruction_count"],
-            "reachable_byte_count": sequence["reachable_byte_count"],
-            "instructions": [{
-                **instruction,
-                "data": list(body[
-                    instruction["offset"]:instruction["offset"] + instruction["size"]
-                ]),
-            } for instruction in sequence["instructions"]],
-        }],
+        "payloads": [
+            {
+                "name": NAME,
+                "family": family,
+                "path": "fixture.bin",
+                "storage": "binary",
+                "capacity": len(body),
+                "header_byte_count": decoded["header_byte_count"],
+                "instrument_offset": decoded["instrument_offset"],
+                "entry_offsets": sequence["entry_offsets"],
+                "instruction_count": sequence["instruction_count"],
+                "reachable_byte_count": sequence["reachable_byte_count"],
+                "instructions": [
+                    {
+                        **instruction,
+                        "data": list(body[instruction["offset"] : instruction["offset"] + instruction["size"]]),
+                    }
+                    for instruction in sequence["instructions"]
+                ],
+            }
+        ],
     }
 
 
@@ -60,8 +70,15 @@ class SoundDACReferenceTests(unittest.TestCase):
             ("export_document", baseline),
             ("labelled_blocks", ({NAME: body}, {TABLE: (DESCRIPTOR,) * 22})),
             ("envelope_selector_limits", {"pitch": 8, "psg_volume": 10}),
-            ("period_contract", {"table": "Sound_PSGNotePeriodTable", "word_count": 70,
-                                 "table_sha256": "fixture-table", "reader_sha256": "fixture-readers"}),
+            (
+                "period_contract",
+                {
+                    "table": "Sound_PSGNotePeriodTable",
+                    "word_count": 70,
+                    "table_sha256": "fixture-table",
+                    "reader_sha256": "fixture-readers",
+                },
+            ),
         ):
             patcher = mock.patch(module + name, return_value=result)
             patcher.start()
@@ -69,8 +86,7 @@ class SoundDACReferenceTests(unittest.TestCase):
         return copy.deepcopy(baseline)
 
     def set_note(self, document: dict, offset: int, value: int) -> None:
-        instruction = next(item for item in document["payloads"][0]["instructions"]
-                           if item["offset"] == offset)
+        instruction = next(item for item in document["payloads"][0]["instructions"] if item["offset"] == offset)
         self.assertEqual("note", instruction["kind"])
         instruction["data"][0] = value
 
@@ -129,9 +145,14 @@ class SoundDACReferenceTests(unittest.TestCase):
 
 class MusicSampleTableTests(unittest.TestCase):
     def test_ids_follow_four_word_source_descriptors(self) -> None:
-        self.assertEqual(frozenset((0x81, 0x82)), music_sample_ids({
-            TABLE: (DESCRIPTOR, DESCRIPTOR),
-        }))
+        self.assertEqual(
+            frozenset((0x81, 0x82)),
+            music_sample_ids(
+                {
+                    TABLE: (DESCRIPTOR, DESCRIPTOR),
+                }
+            ),
+        )
 
     def test_partial_descriptor_table_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "four-word descriptors"):

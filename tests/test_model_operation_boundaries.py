@@ -14,14 +14,27 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from authoring import stage_tilemap_model as parsed
 
 
-MODULES = tuple(importlib.import_module("authoring." + name) for name in (
-    "level_studio_model", "graphics_studio_model", "compressed_graphics_model",
-    "palette_studio_model", "mapping_studio_model", "animation_studio_model",
-    "screen_map_model", "stage_map_model", "frontend_text_model",
-    "japanese_glyph_model", "results_text_model", "story_text_model",
-    "sound_envelope_model", "sound_instrument_model", "sound_pcm_model",
-    "sound_sequence_model",
-))
+MODULES = tuple(
+    importlib.import_module("authoring." + name)
+    for name in (
+        "level_studio_model",
+        "graphics_studio_model",
+        "compressed_graphics_model",
+        "palette_studio_model",
+        "mapping_studio_model",
+        "animation_studio_model",
+        "screen_map_model",
+        "stage_map_model",
+        "frontend_text_model",
+        "japanese_glyph_model",
+        "results_text_model",
+        "story_text_model",
+        "sound_envelope_model",
+        "sound_instrument_model",
+        "sound_pcm_model",
+        "sound_sequence_model",
+    )
+)
 
 
 class ModelOperationBoundaryTests(unittest.TestCase):
@@ -79,10 +92,14 @@ class ModelOperationBoundaryTests(unittest.TestCase):
             for keyword in (False, True):
                 with self.subTest(module=module.__name__, keyword=keyword), ExitStack() as stack:
                     calls = self.callbacks(stack, module)
-                    parser = stack.enter_context(mock.patch.object(
-                        parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks))
-                    result = (module.round_trip_errors(root=self.root, profile="jp") if keyword
-                              else module.round_trip_errors(self.root, "jp"))
+                    parser = stack.enter_context(
+                        mock.patch.object(parsed, "_parse_labelled_blocks", wraps=parsed._parse_labelled_blocks)
+                    )
+                    result = (
+                        module.round_trip_errors(root=self.root, profile="jp")
+                        if keyword
+                        else module.round_trip_errors(self.root, "jp")
+                    )
                     self.assertEqual([], result)
                     self.assertEqual(["export", "validate", "apply"], calls)
                     self.assertEqual(1, parser.call_count)
@@ -127,9 +144,11 @@ class ModelOperationBoundaryTests(unittest.TestCase):
 
     def test_early_profile_refusal_remains_lazy_and_unchanged(self):
         for module in MODULES:
-            with self.subTest(module=module.__name__), mock.patch.object(
-                    module, "export_document", side_effect=TypeError("original profile refusal")), \
-                    mock.patch.object(parsed.guarded_inventory, "capture") as capture:
+            with (
+                self.subTest(module=module.__name__),
+                mock.patch.object(module, "export_document", side_effect=TypeError("original profile refusal")),
+                mock.patch.object(parsed.guarded_inventory, "capture") as capture,
+            ):
                 with self.assertRaisesRegex(TypeError, "original profile refusal"):
                     module.round_trip_errors(root=object(), profile="unsupported")
                 capture.assert_not_called()

@@ -32,6 +32,7 @@ class RomProfileTests(unittest.TestCase):
             "afd4642f78ee1ae3004d630b1228e54a6e51e5dc7a991e1c192d91a41f366f71",
             profile["reference_rom"]["sha256"],
         )
+
     def test_profiles_use_distinct_outputs_and_reference_inputs(self) -> None:
         profiles = list(self.document["profiles_by_id"].values())
         self.assertEqual(len(profiles), len({item["output"] for item in profiles}))

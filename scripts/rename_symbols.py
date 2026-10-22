@@ -10,9 +10,7 @@ import sys
 from pathlib import Path
 
 
-DEFINITION_RE = re.compile(
-    r"^([A-Za-z_][A-Za-z0-9_]*)(?=:|\s+equ\b|\s+macro\b)", re.IGNORECASE
-)
+DEFINITION_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)(?=:|\s+equ\b|\s+macro\b)", re.IGNORECASE)
 PROVENANCE_RE = re.compile(r";\s*was:")
 
 
@@ -57,9 +55,7 @@ def load_renames(path: Path) -> list[tuple[str, str]]:
                 fail(f"{path}: expected 'old,new', got {row!r}")
             old, new = row[0].strip(), row[1].strip()
             if not old or (
-                row_index == 0
-                and old.lower() in {"old", "old_name"}
-                and new.lower() in {"new", "new_name"}
+                row_index == 0 and old.lower() in {"old", "old_name"} and new.lower() in {"new", "new_name"}
             ):
                 continue
             renames.append((old, new))
@@ -75,9 +71,7 @@ def collect_symbols(files: list[Path]) -> set[str]:
     return symbols
 
 
-def substitute_unquoted(
-    line: str, pattern: re.Pattern[str], mapping: dict[str, str]
-) -> tuple[str, int]:
+def substitute_unquoted(line: str, pattern: re.Pattern[str], mapping: dict[str, str]) -> tuple[str, int]:
     """Replace symbols outside quoted assembly literals."""
     pieces: list[str] = []
     start = 0
@@ -90,9 +84,7 @@ def substitute_unquoted(
             index += 1
             continue
 
-        segment, count = pattern.subn(
-            lambda match: mapping[match.group(1)], line[start:index]
-        )
+        segment, count = pattern.subn(lambda match: mapping[match.group(1)], line[start:index])
         pieces.append(segment)
         replaced += count
 
@@ -114,9 +106,7 @@ def substitute_unquoted(
     return "".join(pieces), replaced + count
 
 
-def apply_renames(
-    files: list[Path], renames: list[tuple[str, str]], provenance: bool
-) -> tuple[int, int]:
+def apply_renames(files: list[Path], renames: list[tuple[str, str]], provenance: bool) -> tuple[int, int]:
     mapping = dict(renames)
     pattern = re.compile(r"\b(" + "|".join(re.escape(old) for old in mapping) + r")\b")
     replaced = 0
@@ -136,9 +126,7 @@ def apply_renames(
             # batch; rewriting it would silently falsify provenance.
             marker = provenance_start(line)
             if marker is not None:
-                new_prefix, count = substitute_unquoted(
-                    line[:marker], pattern, mapping
-                )
+                new_prefix, count = substitute_unquoted(line[:marker], pattern, mapping)
                 new_line = new_prefix + line[marker:]
             else:
                 new_line, count = substitute_unquoted(line, pattern, mapping)
@@ -203,10 +191,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     replaced, annotated = apply_renames(files, renames, not args.no_provenance)
-    print(
-        f"[OK] renamed {len(renames)} symbols, {replaced} references, "
-        f"{annotated} annotated"
-    )
+    print(f"[OK] renamed {len(renames)} symbols, {replaced} references, {annotated} annotated")
     print("[INFO] renaming must not move a byte -- run 'make verify'")
     return 0
 

@@ -1,4 +1,5 @@
 """Owned sound startup ordering: real config bytes and native-source mutants."""
+
 from __future__ import annotations
 
 import hashlib
@@ -15,26 +16,26 @@ from runtime_isolation import isolated_config, validate_isolation  # noqa: E402
 
 
 NATIVE_FIXTURE = {
-    "src/G_main.cpp": '''
+    "src/G_main.cpp": """
 Sound_Enable = 0; Sound_Initialised = 0;
 strcpy(Str_Tmp,Gens_Path); strcat(Str_Tmp,"\\\\gens.cfg"); Load_Config(Str_Tmp,NULL);
 if (!Init_Sound(hWnd)) { Sound_Enable=0; YM2612_Enable=0; PSG_Enable=0; DAC_Enable=0; }
 Sound_Enable=1; Play_Sound();
 int PASCAL WinMain()
 { Init(hInst, nCmdShow); ParseCmdLine(lpCmdLine, HWnd); }
-''',
-    "src/ParseCmdLine.cpp": '''
+""",
+    "src/ParseCmdLine.cpp": """
 if (found) { newCommand="argument"; } else newCommand="";
 // Assignment switch is outside the argument-present branch.
 switch (x) { case 15: //-nosound
 Sound_Enable = 0; break; }
 Load_Config((char*)CfgToLoad.c_str(), NULL);
 GensLoadRom(RomToLoad.c_str());
-''',
-    "src/save.cpp": '''
+""",
+    "src/save.cpp": """
 new_val = GetPrivateProfileInt("Sound", "State", 1, Conf_File);
 if (new_val != Sound_Enable) { if (Change_Sound(HWnd)) { } }
-''',
+""",
     "src/G_dsound.cpp": "if (Sound_Initialised) return 0; End_Sound();\n",
     "src/Gens.cpp": "if (Sound_Enable) { End_Sound(); if (!Init_Sound(HWnd)) Sound_Enable = 0; else Play_Sound(); }\n",
 }
@@ -42,8 +43,9 @@ if (new_val != Sound_Enable) { if (Change_Sound(HWnd)) { } }
 
 class SoundStartupTests(unittest.TestCase):
     def context(self, root, **options):
-        data, isolation = isolated_config(root, sound=True, extra_sections={
-            "Sound": {"Rate": "44100", "Stereo": "1", "PSG State": "1"}}, **options)
+        data, isolation = isolated_config(
+            root, sound=True, extra_sections={"Sound": {"Rate": "44100", "Stereo": "1", "PSG State": "1"}}, **options
+        )
         config = root / "gens.cfg"
         config.write_bytes(data)
         return config, isolation
@@ -98,8 +100,7 @@ class SoundStartupTests(unittest.TestCase):
             self.assertEqual([], list(Path(isolation["startup_directories"]["runtime"]).iterdir()))
 
     def test_zero_or_duplicate_state_sites_are_not_guessed(self):
-        for data in (b"[Sound]\nState=0\n", startup.STATE_SITE * 2,
-                     b"[Sound]\r\nState=1\r\n", b"[sound]\nState=1\n"):
+        for data in (b"[Sound]\nState=0\n", startup.STATE_SITE * 2, b"[Sound]\r\nState=1\r\n", b"[sound]\nState=1\n"):
             with self.subTest(data=data), self.assertRaises(ValueError):
                 startup.seed_bytes(data)
 
@@ -126,9 +127,14 @@ class SoundStartupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             config, isolation = self.context(Path(directory))
             record = startup.prepare(isolation, config)
-            for field, value in (("schema_version", True), ("startup", []),
-                                 ("snapshot", "../outside.ini"), ("working", "other.cfg"),
-                                 ("scope", "audio_fidelity"), ("extra", 1)):
+            for field, value in (
+                ("schema_version", True),
+                ("startup", []),
+                ("snapshot", "../outside.ini"),
+                ("working", "other.cfg"),
+                ("scope", "audio_fidelity"),
+                ("extra", 1),
+            ):
                 mutant = dict(record, **{field: value})
                 with self.subTest(field=field), self.assertRaises(ValueError):
                     startup.validate(mutant, isolation, config, launched=True)
@@ -163,8 +169,9 @@ class SoundStartupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             config, isolation = self.context(Path(directory))
             record = startup.prepare(isolation, config)
-            with mock.patch.object(Path, "is_symlink", autospec=True,
-                                   side_effect=lambda path: path.name == startup.SNAPSHOT):
+            with mock.patch.object(
+                Path, "is_symlink", autospec=True, side_effect=lambda path: path.name == startup.SNAPSHOT
+            ):
                 with self.assertRaises(ValueError):
                     startup.validate(record, isolation, config, launched=True)
 
@@ -183,17 +190,24 @@ class SoundStartupSourceTests(unittest.TestCase):
             proof = startup.native_contract(root)
             self.assertEqual(startup.SCOPE, proof["scope"])
             self.assertEqual(set(startup.NATIVE_FILES), set(proof["source_sha256"]))
-            self.assertEqual({name: hashlib.sha256((root / name).read_bytes()).hexdigest()
-                              for name in startup.NATIVE_FILES}, proof["source_sha256"])
+            self.assertEqual(
+                {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in startup.NATIVE_FILES},
+                proof["source_sha256"],
+            )
 
     def test_each_native_chain_step_and_order_mutation_fails(self):
-        cases = (("src/G_main.cpp", "Init(hInst, nCmdShow); ParseCmdLine(lpCmdLine, HWnd);",
-                  "ParseCmdLine(lpCmdLine, HWnd); Init(hInst, nCmdShow);"),
-                 ("src/ParseCmdLine.cpp", "else newCommand=\"\";", "else { newCommand=\"\"; }"),
-                 ("src/ParseCmdLine.cpp", "case 15:", "case 16:"),
-                 ("src/save.cpp", "new_val != Sound_Enable", "new_val == Sound_Enable"),
-                 ("src/G_dsound.cpp", "if (Sound_Initialised) return 0;", "if (Sound_Initialised) return 1;"),
-                 ("src/Gens.cpp", "End_Sound();", "Skip_End_Sound();"))
+        cases = (
+            (
+                "src/G_main.cpp",
+                "Init(hInst, nCmdShow); ParseCmdLine(lpCmdLine, HWnd);",
+                "ParseCmdLine(lpCmdLine, HWnd); Init(hInst, nCmdShow);",
+            ),
+            ("src/ParseCmdLine.cpp", 'else newCommand="";', 'else { newCommand=""; }'),
+            ("src/ParseCmdLine.cpp", "case 15:", "case 16:"),
+            ("src/save.cpp", "new_val != Sound_Enable", "new_val == Sound_Enable"),
+            ("src/G_dsound.cpp", "if (Sound_Initialised) return 0;", "if (Sound_Initialised) return 1;"),
+            ("src/Gens.cpp", "End_Sound();", "Skip_End_Sound();"),
+        )
         for name, before, after in cases:
             with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
                 texts = dict(NATIVE_FIXTURE)

@@ -20,25 +20,25 @@ from dataclasses import dataclass
 from typing import List, Dict, Optional, BinaryIO, Tuple
 
 # Event types (must match bintrace.h)
-EVT_FRAME        = 0x00
-EVT_EXEC         = 0x01
-EVT_READ         = 0x02
-EVT_WRITE        = 0x03
-EVT_READ_BLOCK   = 0x04
-EVT_WRITE_BLOCK  = 0x05
-EVT_VRAM_WRITE   = 0x10
-EVT_VRAM_READ    = 0x11
-EVT_CRAM_WRITE   = 0x12
-EVT_CRAM_READ    = 0x13
-EVT_VSRAM_WRITE  = 0x14
-EVT_VSRAM_READ   = 0x15
-EVT_DMA          = 0x20
+EVT_FRAME = 0x00
+EVT_EXEC = 0x01
+EVT_READ = 0x02
+EVT_WRITE = 0x03
+EVT_READ_BLOCK = 0x04
+EVT_WRITE_BLOCK = 0x05
+EVT_VRAM_WRITE = 0x10
+EVT_VRAM_READ = 0x11
+EVT_CRAM_WRITE = 0x12
+EVT_CRAM_READ = 0x13
+EVT_VSRAM_WRITE = 0x14
+EVT_VSRAM_READ = 0x15
+EVT_DMA = 0x20
 EVT_POINTER_LOAD = 0x30
 
 # Flags
 FLAG_ROM_ACCESS = 0x01
 FLAG_RAM_ACCESS = 0x02
-FLAG_POINTER    = 0x04
+FLAG_POINTER = 0x04
 
 EVENT_NAMES = {
     EVT_FRAME: "FRAME",
@@ -57,6 +57,7 @@ EVENT_NAMES = {
     EVT_POINTER_LOAD: "PTR_LOAD",
 }
 
+
 @dataclass
 class TraceHeader:
     magic: str
@@ -66,15 +67,18 @@ class TraceHeader:
     end_frame: int
     event_count: int
 
+
 @dataclass
 class Event:
     type: int
     flags: int
     frame_delta: int
 
+
 @dataclass
 class FrameEvent(Event):
     frame: int
+
 
 @dataclass
 class MemEvent(Event):
@@ -83,11 +87,13 @@ class MemEvent(Event):
     size: int
     value: int
 
+
 @dataclass
 class BlockEvent(Event):
     pc: int
     addr: int
     data: bytes
+
 
 @dataclass
 class VDPEvent(Event):
@@ -96,6 +102,7 @@ class VDPEvent(Event):
     size: int
     value: int
 
+
 @dataclass
 class DMAEvent(Event):
     pc: int
@@ -103,6 +110,7 @@ class DMAEvent(Event):
     dst: int
     length: int
     dst_type: int
+
 
 @dataclass
 class PointerEvent(Event):
@@ -125,28 +133,25 @@ class SymbolMap:
         """Rebuild sorted ROM address list for binary search"""
         if self._rom_addrs_dirty:
             # Only include ROM addresses (0x000000 - 0x3FFFFF)
-            self._rom_addrs = sorted(
-                addr for addr in self.symbols.keys()
-                if 0 <= addr < 0x400000
-            )
+            self._rom_addrs = sorted(addr for addr in self.symbols.keys() if 0 <= addr < 0x400000)
             self._rom_addrs_dirty = False
 
     def load_lst(self, path: str):
         """Load symbols from IDA/Ghidra .lst file"""
-        with open(path, 'r', errors='ignore') as f:
+        with open(path, "r", errors="ignore") as f:
             for line in f:
                 # Try various listing formats
                 # Format: "00:1234 label:"
-                if ':' in line:
+                if ":" in line:
                     parts = line.split()
                     if len(parts) >= 2:
                         addr_part = parts[0]
-                        if ':' in addr_part:
+                        if ":" in addr_part:
                             try:
-                                seg, off = addr_part.split(':')
+                                seg, off = addr_part.split(":")
                                 addr = (int(seg, 16) << 16) | int(off, 16)
-                                label = parts[1].rstrip(':')
-                                if label and not label.startswith(';'):
+                                label = parts[1].rstrip(":")
+                                if label and not label.startswith(";"):
                                     self.symbols[addr] = label
                                     self.reverse[label] = addr
                             except ValueError:
@@ -155,10 +160,10 @@ class SymbolMap:
 
     def load_sym(self, path: str):
         """Load symbols from simple sym file (addr label format)"""
-        with open(path, 'r', errors='ignore') as f:
+        with open(path, "r", errors="ignore") as f:
             for line in f:
                 line = line.strip()
-                if not line or line.startswith(';') or line.startswith('#'):
+                if not line or line.startswith(";") or line.startswith("#"):
                     continue
                 parts = line.split()
                 if len(parts) >= 2:
@@ -187,6 +192,7 @@ class SymbolMap:
 
         # Binary search for the largest address <= addr
         import bisect
+
         idx = bisect.bisect_right(self._rom_addrs, addr) - 1
         if idx < 0:
             return None
@@ -244,7 +250,7 @@ class BinTraceParser:
 
     def parse(self, path: str):
         """Parse a binary trace file"""
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             self._parse_header(f)
             self._parse_events(f)
 
@@ -254,11 +260,11 @@ class BinTraceParser:
         if len(data) < 32:
             raise ValueError("File too small for header")
 
-        magic = data[0:4].decode('ascii')
+        magic = data[0:4].decode("ascii")
         if magic != "BTRC":
             raise ValueError(f"Invalid magic: {magic}")
 
-        version, flags, start_frame, end_frame, event_count = struct.unpack_from('<HHIII', data, 4)
+        version, flags, start_frame, end_frame, event_count = struct.unpack_from("<HHIII", data, 4)
 
         self.header = TraceHeader(
             magic=magic,
@@ -266,7 +272,7 @@ class BinTraceParser:
             flags=flags,
             start_frame=start_frame,
             end_frame=end_frame,
-            event_count=event_count
+            event_count=event_count,
         )
 
     def _parse_events(self, f: BinaryIO):
@@ -277,7 +283,7 @@ class BinTraceParser:
             if len(header_data) < 4:
                 break
 
-            evt_type, flags, frame_delta = struct.unpack('<BBH', header_data)
+            evt_type, flags, frame_delta = struct.unpack("<BBH", header_data)
 
             event = self._parse_event(f, evt_type, flags, frame_delta)
             if event:
@@ -288,14 +294,14 @@ class BinTraceParser:
 
         if evt_type == EVT_FRAME:
             data = f.read(4)
-            frame, = struct.unpack('<I', data)
+            (frame,) = struct.unpack("<I", data)
             self.current_frame = frame
             return FrameEvent(evt_type, flags, frame_delta, frame)
 
         elif evt_type in (EVT_READ, EVT_WRITE):
             # 12 bytes: pc(4) + addr:size(4) + value(4)
             data = f.read(12)
-            pc, addr_size, value = struct.unpack('<III', data)
+            pc, addr_size, value = struct.unpack("<III", data)
             addr = addr_size & 0xFFFFFF
             size = (addr_size >> 24) & 0xFF
             return MemEvent(evt_type, flags, frame_delta, pc, addr, size, value)
@@ -303,7 +309,7 @@ class BinTraceParser:
         elif evt_type in (EVT_READ_BLOCK, EVT_WRITE_BLOCK):
             # 12 bytes header + variable data
             data = f.read(12)
-            pc, addr, data_len_reserved = struct.unpack('<III', data)
+            pc, addr, data_len_reserved = struct.unpack("<III", data)
             data_len = data_len_reserved & 0xFFFF
             # Read data + padding
             block_data = f.read(data_len)
@@ -312,25 +318,31 @@ class BinTraceParser:
                 f.read(pad)
             return BlockEvent(evt_type, flags, frame_delta, pc, addr, block_data)
 
-        elif evt_type in (EVT_VRAM_WRITE, EVT_VRAM_READ, EVT_CRAM_WRITE,
-                          EVT_CRAM_READ, EVT_VSRAM_WRITE, EVT_VSRAM_READ):
+        elif evt_type in (
+            EVT_VRAM_WRITE,
+            EVT_VRAM_READ,
+            EVT_CRAM_WRITE,
+            EVT_CRAM_READ,
+            EVT_VSRAM_WRITE,
+            EVT_VSRAM_READ,
+        ):
             # 12 bytes: pc(4) + addr(2) + size(1) + reserved(1) + value(4)
             data = f.read(12)
-            pc, addr, size, _, value = struct.unpack('<IHBBI', data)
+            pc, addr, size, _, value = struct.unpack("<IHBBI", data)
             return VDPEvent(evt_type, flags, frame_delta, pc, addr, size, value)
 
         elif evt_type == EVT_DMA:
             # 12 bytes: pc(4) + src(4) + dst(2) + len(2)
             # Plus 4 more bytes: type(1) + pad(3)
             data = f.read(16)
-            pc, src, dst, length = struct.unpack('<IIHH', data[:12])
+            pc, src, dst, length = struct.unpack("<IIHH", data[:12])
             dst_type = data[12]
             return DMAEvent(evt_type, flags, frame_delta, pc, src, dst, length, dst_type)
 
         elif evt_type == EVT_POINTER_LOAD:
             # 12 bytes: pc(4) + table_addr(4) + target_addr(4)
             data = f.read(12)
-            pc, table_addr, target_addr = struct.unpack('<III', data)
+            pc, table_addr, target_addr = struct.unpack("<III", data)
             return PointerEvent(evt_type, flags, frame_delta, pc, table_addr, target_addr)
 
         else:
@@ -339,7 +351,7 @@ class BinTraceParser:
 
     def generate_story(self, output_path: str):
         """Generate human-readable story log"""
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write(f"# Binary Trace Story Log\n")
             f.write(f"# Frames: {self.header.start_frame} - {self.header.end_frame}\n")
             f.write(f"# Events: {self.header.event_count}\n\n")
@@ -356,7 +368,9 @@ class BinTraceParser:
                     addr_str = self.symbols.format_data_addr(event.addr)
                     pc_str = self.symbols.format_pc(event.pc)
                     ptr_flag = " [POINTER?]" if event.flags & FLAG_POINTER else ""
-                    f.write(f"  [{pc_str}] {evt_name} {event.size}B: {addr_str} = ${event.value:0{event.size*2}X}{ptr_flag}\n")
+                    f.write(
+                        f"  [{pc_str}] {evt_name} {event.size}B: {addr_str} = ${event.value:0{event.size * 2}X}{ptr_flag}\n"
+                    )
 
                 elif isinstance(event, BlockEvent):
                     evt_name = "Read block" if event.type == EVT_READ_BLOCK else "Write block"
@@ -364,7 +378,7 @@ class BinTraceParser:
                     pc_str = self.symbols.format_pc(event.pc)
                     f.write(f"  [{pc_str}] {evt_name}: {len(event.data)} bytes from {addr_str}\n")
                     # Show first few bytes
-                    preview = event.data[:16].hex(' ').upper()
+                    preview = event.data[:16].hex(" ").upper()
                     if len(event.data) > 16:
                         preview += " ..."
                     f.write(f"    Data: {preview}\n")
@@ -372,7 +386,7 @@ class BinTraceParser:
                 elif isinstance(event, VDPEvent):
                     vdp_type = EVENT_NAMES.get(event.type, "VDP")
                     pc_str = self.symbols.format_pc(event.pc)
-                    f.write(f"  [{pc_str}] {vdp_type}: ${event.addr:04X} = ${event.value:0{event.size*2}X}\n")
+                    f.write(f"  [{pc_str}] {vdp_type}: ${event.addr:04X} = ${event.value:0{event.size * 2}X}\n")
 
                 elif isinstance(event, DMAEvent):
                     src_str = self.symbols.format_data_addr(event.src)
@@ -417,7 +431,7 @@ class BinTraceParser:
                     pointers[event.table_addr] = set()
                 pointers[event.table_addr].add(target)
 
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write("digraph pointers {\n")
             f.write("  rankdir=LR;\n")
             f.write("  node [shape=box];\n\n")
@@ -440,7 +454,7 @@ class BinTraceParser:
                 node_ids[table] = table_id
 
                 # ROM tables are filled
-                style = 'style=filled fillcolor=lightblue' if table < 0x400000 else ''
+                style = "style=filled fillcolor=lightblue" if table < 0x400000 else ""
                 f.write(f'  {table_id} [label="{table_label}\\n${table:06X}" {style}];\n')
 
                 for target in targets:
@@ -460,7 +474,7 @@ class BinTraceParser:
                         node_ids[target] = target_id
                         f.write(f'  {target_id} [label="{target_label}\\n${target:06X}"];\n')
 
-                    f.write(f'  {table_id} -> {node_ids[target]};\n')
+                    f.write(f"  {table_id} -> {node_ids[target]};\n")
 
             f.write("}\n")
 
@@ -475,7 +489,7 @@ class BinTraceParser:
                 key = (event.src, event.dst, event.dst_type)
                 dma_flows[key] = dma_flows.get(key, 0) + event.length
 
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write("digraph dma {\n")
             f.write("  rankdir=LR;\n")
             f.write("  node [shape=box];\n\n")
@@ -483,8 +497,8 @@ class BinTraceParser:
             # Create subgraphs for different memory regions
             f.write("  subgraph cluster_rom {\n")
             f.write('    label="ROM";\n')
-            f.write('    style=filled;\n')
-            f.write('    fillcolor=lightyellow;\n')
+            f.write("    style=filled;\n")
+            f.write("    fillcolor=lightyellow;\n")
 
             rom_nodes = set()
             vdp_nodes = set()
@@ -512,10 +526,10 @@ class BinTraceParser:
             # VDP destinations
             f.write("  subgraph cluster_vdp {\n")
             f.write('    label="VDP";\n')
-            f.write('    style=filled;\n')
-            f.write('    fillcolor=lightgreen;\n')
+            f.write("    style=filled;\n")
+            f.write("    fillcolor=lightgreen;\n")
 
-            for (dst, dst_type) in vdp_nodes:
+            for dst, dst_type in vdp_nodes:
                 dst_name = ["VRAM", "CRAM", "VSRAM"][dst_type] if dst_type < 3 else "?"
                 f.write(f'    vdp_{dst:04X}_{dst_type} [label="{dst_name}\\n${dst:04X}"];\n')
 
@@ -539,8 +553,8 @@ class BinTraceParser:
         for event in self.events:
             if isinstance(event, DMAEvent):
                 func_name = self.symbols.format_pc(event.pc)
-                if '+' in func_name:
-                    func_name = func_name.split('+')[0]
+                if "+" in func_name:
+                    func_name = func_name.split("+")[0]
 
                 # Get source label
                 src_label = self.symbols.lookup(event.src)
@@ -564,7 +578,7 @@ class BinTraceParser:
             funcs.add(func)
             regions.add(region)
 
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write("digraph callers {\n")
             f.write("  rankdir=LR;\n")
             f.write("  node [shape=box];\n\n")
@@ -572,8 +586,8 @@ class BinTraceParser:
             # Functions cluster
             f.write("  subgraph cluster_funcs {\n")
             f.write('    label="Functions (DMA callers)";\n')
-            f.write('    style=filled;\n')
-            f.write('    fillcolor=lightyellow;\n')
+            f.write("    style=filled;\n")
+            f.write("    fillcolor=lightyellow;\n")
 
             func_ids = {}
             for func in sorted(funcs):
@@ -586,8 +600,8 @@ class BinTraceParser:
             # Data regions cluster
             f.write("  subgraph cluster_data {\n")
             f.write('    label="Data Sources";\n')
-            f.write('    style=filled;\n')
-            f.write('    fillcolor=lightblue;\n')
+            f.write("    style=filled;\n")
+            f.write("    fillcolor=lightblue;\n")
 
             region_ids = {}
             for region in sorted(regions):
@@ -634,7 +648,7 @@ class BinTraceParser:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Parse Gens-automation binary trace files',
+        description="Parse Gens-automation binary trace files",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -643,22 +657,26 @@ Examples:
   %(prog)s trace.btrc --graphviz pointers.dot --mode pointers
   %(prog)s trace.btrc --graphviz dma.dot --mode dma
   %(prog)s trace.btrc --symbols game.lst --story story.txt
-        """
+        """,
     )
-    parser.add_argument('trace', help='Binary trace file (.btrc)')
-    parser.add_argument('--story', metavar='FILE', help='Generate human-readable story log')
-    parser.add_argument('--graphviz', metavar='FILE', help='Generate Graphviz DOT file')
-    parser.add_argument('--mode', choices=['pointers', 'dma', 'callers'], default='pointers',
-                        help='Graphviz output mode (default: pointers)')
-    parser.add_argument('--symbols', metavar='FILE', help='Load symbols from .lst or .sym file')
-    parser.add_argument('--stats', action='store_true', help='Print trace statistics')
+    parser.add_argument("trace", help="Binary trace file (.btrc)")
+    parser.add_argument("--story", metavar="FILE", help="Generate human-readable story log")
+    parser.add_argument("--graphviz", metavar="FILE", help="Generate Graphviz DOT file")
+    parser.add_argument(
+        "--mode",
+        choices=["pointers", "dma", "callers"],
+        default="pointers",
+        help="Graphviz output mode (default: pointers)",
+    )
+    parser.add_argument("--symbols", metavar="FILE", help="Load symbols from .lst or .sym file")
+    parser.add_argument("--stats", action="store_true", help="Print trace statistics")
 
     args = parser.parse_args()
 
     # Load symbols if provided
     symbols = SymbolMap()
     if args.symbols:
-        if args.symbols.endswith('.lst'):
+        if args.symbols.endswith(".lst"):
             symbols.load_lst(args.symbols)
         else:
             symbols.load_sym(args.symbols)
@@ -677,13 +695,13 @@ Examples:
         trace.generate_story(args.story)
 
     if args.graphviz:
-        if args.mode == 'pointers':
+        if args.mode == "pointers":
             trace.generate_graphviz_pointers(args.graphviz)
-        elif args.mode == 'dma':
+        elif args.mode == "dma":
             trace.generate_graphviz_dma(args.graphviz)
-        elif args.mode == 'callers':
+        elif args.mode == "callers":
             trace.generate_graphviz_callers(args.graphviz)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -15,14 +15,8 @@ AUDIT = ROOT / "config/name_audit.json"
 class EnemyBehaviorAnimationTests(unittest.TestCase):
     def test_exact_mapping_members_and_frame_timers(self) -> None:
         source = DATA.read_text(encoding="utf-8")
-        reviews = {
-            review["basis"]: review
-            for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]
-        }
-        records = {
-            record["address"]: record
-            for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]
-        }
+        reviews = {review["basis"]: review for review in json.loads(REVIEWS.read_text(encoding="utf-8"))["reviews"]}
+        records = {record["address"]: record for record in json.loads(AUDIT.read_text(encoding="utf-8"))["records"]}
         cases = (
             (
                 "Movement",
@@ -76,10 +70,7 @@ class EnemyBehaviorAnimationTests(unittest.TestCase):
                     loops,
                     f"dc.w    {label}-*" in section,
                 )
-                basis = (
-                    f"{label} references this address-ordered composite "
-                    "sprite mapping."
-                )
+                basis = f"{label} references this address-ordered composite sprite mapping."
                 self.assertEqual(
                     addresses,
                     tuple(member["address"] for member in reviews[basis]["members"]),
@@ -88,27 +79,17 @@ class EnemyBehaviorAnimationTests(unittest.TestCase):
                     self.assertIn(basis, records[address]["basis"])
 
     def test_final_attack_timer_holds_without_advancing(self) -> None:
-        resolver = (ROOT / "src/rendering/sprite_object_pipeline.s").read_text(
-            encoding="utf-8"
-        )
+        resolver = (ROOT / "src/rendering/sprite_object_pipeline.s").read_text(encoding="utf-8")
         routine = resolver.split("Anim_ResolveTimedMappingFrame:", 1)[1].split(
             "; End of function Anim_ResolveTimedMappingFrame", 1
         )[0]
         self.assertIn("tst.b   d0", routine)
-        self.assertIn(
-            "bmi.s   Anim_ResolveTimedMappingFrame_ResolveMappingPointer", routine
-        )
+        self.assertIn("bmi.s   Anim_ResolveTimedMappingFrame_ResolveMappingPointer", routine)
         self.assertIn("addq.w  #4,a4", routine)
-        enemy = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(
-            encoding="utf-8"
-        )
+        enemy = (ROOT / "src/enemies/jetsripper_stage_actors.s").read_text(encoding="utf-8")
         self.assertIn("move.w  #$10,$5C(a5)", enemy)
-        spawn = (ROOT / "src/enemies/spawn_and_movement.s").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn(
-            "move.l  #Enemy_BehaviorDefeatSpriteAnimation,8(a5)", spawn
-        )
+        spawn = (ROOT / "src/enemies/spawn_and_movement.s").read_text(encoding="utf-8")
+        self.assertIn("move.l  #Enemy_BehaviorDefeatSpriteAnimation,8(a5)", spawn)
 
 
 if __name__ == "__main__":

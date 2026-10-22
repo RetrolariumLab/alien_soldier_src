@@ -31,22 +31,27 @@ try:
     from tqdm import tqdm
 except ImportError:
     print("Warning: tqdm not installed. Progress bars will be disabled.")
+
     class tqdm:
         def __init__(self, iterable=None, **kwargs):
             self.iterable = iterable
+
         def __iter__(self):
             return iter(self.iterable)
+
         def __enter__(self):
             return self
+
         def __exit__(self, *args):
             pass
+
         def update(self, n=1):
             pass
 
 
 def read_disassembly(file_path: str) -> List[str]:
     """Read the disassembly file and return lines."""
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         return f.readlines()
 
 
@@ -55,10 +60,10 @@ def load_analyzed_procedures(csv_file: str) -> Set[str]:
     analyzed = set()
 
     try:
-        with open(csv_file, 'r', encoding='utf-8') as f:
+        with open(csv_file, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                analyzed.add(row['procedure'])
+                analyzed.add(row["procedure"])
     except FileNotFoundError:
         print(f"Warning: {csv_file} not found, treating all as unanalyzed")
         return set()
@@ -80,15 +85,15 @@ def find_unnamed_procedures(lines: List[str]) -> Tuple[List[Tuple[str, int]], Li
     label_lines = {}  # Map label name -> line number
 
     # Pattern to find sub_* label definitions
-    sub_pattern = re.compile(r'^(sub_[0-9A-Fa-f]+):')
+    sub_pattern = re.compile(r"^(sub_[0-9A-Fa-f]+):")
 
     # Pattern to find any label definition (for line number lookup)
-    any_label_pattern = re.compile(r'^([a-zA-Z_][a-zA-Z0-9_]*):')
+    any_label_pattern = re.compile(r"^([a-zA-Z_][a-zA-Z0-9_]*):")
 
     # Pattern to find offset table entries: dc.w/dc.l Label-Base or dc.w Label
     # Matches: dc.w sub_1234-Base, dc.w loc_5678-Base, dc.l SomeProc, etc.
     offset_table_pattern = re.compile(
-        r'dc\.[wl]\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*(?:-\s*[a-zA-Z_][a-zA-Z0-9_]*)?(?:\s*;|$)'
+        r"dc\.[wl]\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*(?:-\s*[a-zA-Z_][a-zA-Z0-9_]*)?(?:\s*;|$)"
     )
 
     print(f"Analyzing {len(lines):,} lines...")
@@ -102,7 +107,7 @@ def find_unnamed_procedures(lines: List[str]) -> Tuple[List[Tuple[str, int]], Li
             label_lines[label_name] = line_num
 
             # Also check if it's a sub_* label
-            if label_name.startswith('sub_'):
+            if label_name.startswith("sub_"):
                 sub_labels.append((label_name, line_num))
 
     # Second pass: find labels referenced in offset tables
@@ -113,31 +118,33 @@ def find_unnamed_procedures(lines: List[str]) -> Tuple[List[Tuple[str, int]], Li
         stripped = line.strip()
 
         # Detect start of offset table (off_* label or label followed by dc.w/dc.l)
-        if re.match(r'^off_[0-9A-Fa-f]+:', line):
+        if re.match(r"^off_[0-9A-Fa-f]+:", line):
             in_offset_table = True
             continue
 
         # Check for dc.w/dc.l entries
-        if 'dc.w' in line or 'dc.l' in line:
+        if "dc.w" in line or "dc.l" in line:
             # Find all label references in this line
             matches = offset_table_pattern.findall(line)
             for label_name in matches:
                 # Only add if it's an unnamed label (sub_, loc_, locret_, nullsub_)
-                if (label_name.startswith('sub_') or
-                    label_name.startswith('loc_') or
-                    label_name.startswith('locret_') or
-                    label_name.startswith('nullsub_')):
+                if (
+                    label_name.startswith("sub_")
+                    or label_name.startswith("loc_")
+                    or label_name.startswith("locret_")
+                    or label_name.startswith("nullsub_")
+                ):
                     table_labels_set.add(label_name)
         else:
             # If not a dc.w/dc.l line and not a comment/empty, we're out of the table
-            if stripped and not stripped.startswith(';') and not stripped.startswith('dc.'):
+            if stripped and not stripped.startswith(";") and not stripped.startswith("dc."):
                 in_offset_table = False
 
     # Convert set to sorted list with line numbers
     table_labels = []
     for label_name in table_labels_set:
         # Skip sub_* labels as they're already in sub_labels
-        if label_name.startswith('sub_'):
+        if label_name.startswith("sub_"):
             continue
         line_num = label_lines.get(label_name, 0)
         if line_num > 0:
@@ -150,8 +157,7 @@ def find_unnamed_procedures(lines: List[str]) -> Tuple[List[Tuple[str, int]], Li
     return sub_labels, table_labels, label_lines
 
 
-def format_simple_list(sub_labels: List[Tuple[str, int]],
-                       table_labels: List[Tuple[str, int]]) -> str:
+def format_simple_list(sub_labels: List[Tuple[str, int]], table_labels: List[Tuple[str, int]]) -> str:
     """Format as simple list (one procedure name per line) for analysis."""
     output = []
 
@@ -163,12 +169,12 @@ def format_simple_list(sub_labels: List[Tuple[str, int]],
     for label_name, _ in table_labels:
         output.append(label_name)
 
-    return '\n'.join(output)
+    return "\n".join(output)
 
 
-def format_output(sub_labels: List[Tuple[str, int]],
-                  table_labels: List[Tuple[str, int]],
-                  show_stats: bool = False) -> str:
+def format_output(
+    sub_labels: List[Tuple[str, int]], table_labels: List[Tuple[str, int]], show_stats: bool = False
+) -> str:
     """Format the output for display or file writing."""
     output = []
     output.append("=" * 80)
@@ -182,9 +188,9 @@ def format_output(sub_labels: List[Tuple[str, int]],
 
     if show_stats:
         # Count by type
-        loc_count = sum(1 for name, _ in table_labels if name.startswith('loc_'))
-        locret_count = sum(1 for name, _ in table_labels if name.startswith('locret_'))
-        nullsub_count = sum(1 for name, _ in table_labels if name.startswith('nullsub_'))
+        loc_count = sum(1 for name, _ in table_labels if name.startswith("loc_"))
+        locret_count = sum(1 for name, _ in table_labels if name.startswith("locret_"))
+        nullsub_count = sum(1 for name, _ in table_labels if name.startswith("nullsub_"))
 
         output.append("\nStatistics:")
         output.append(f"  sub_* procedures:           {len(sub_labels):5d}")
@@ -192,7 +198,7 @@ def format_output(sub_labels: List[Tuple[str, int]],
         output.append(f"  locret_* in offset tables:  {locret_count:5d}")
         output.append(f"  nullsub_* in offset tables: {nullsub_count:5d}")
         output.append(f"  Total:                      {len(sub_labels) + len(table_labels):5d}")
-        return '\n'.join(output)
+        return "\n".join(output)
 
     # Show full list
     output.append("\nSUB_* PROCEDURES ({} total):".format(len(sub_labels)))
@@ -202,7 +208,7 @@ def format_output(sub_labels: List[Tuple[str, int]],
         prev_range = None
         for label_name, line_num in sub_labels:
             addr = label_name[4:]  # Remove 'sub_'
-            addr_range = addr[0] if addr else '?'
+            addr_range = addr[0] if addr else "?"
 
             if addr_range != prev_range:
                 output.append(f"\n  {addr_range}xxxx range:")
@@ -218,9 +224,9 @@ def format_output(sub_labels: List[Tuple[str, int]],
         prev_range = None
         for label_name, line_num in table_labels:
             # Get address from label name
-            parts = label_name.split('_')
-            addr = parts[1] if len(parts) > 1 else '?'
-            addr_range = addr[0] if addr else '?'
+            parts = label_name.split("_")
+            addr = parts[1] if len(parts) > 1 else "?"
+            addr_range = addr[0] if addr else "?"
 
             if addr_range != prev_range:
                 output.append(f"\n  {addr_range}xxxx range:")
@@ -228,7 +234,7 @@ def format_output(sub_labels: List[Tuple[str, int]],
 
             output.append(f"    Line {line_num:6d}: {label_name}")
 
-    return '\n'.join(output)
+    return "\n".join(output)
 
 
 def main():
@@ -239,38 +245,22 @@ def main():
     )
     return 1
 
-    parser = argparse.ArgumentParser(
-        description='Find unnamed procedures in Alien Soldier disassembly'
+    parser = argparse.ArgumentParser(description="Find unnamed procedures in Alien Soldier disassembly")
+
+    parser.add_argument(
+        "input", nargs="?", default="alien_soldier_j.s", help="Input disassembly file (default: alien_soldier_j.s)"
+    )
+
+    parser.add_argument("--output", help="Output file for results")
+
+    parser.add_argument("--stats", action="store_true", help="Show statistics only")
+
+    parser.add_argument(
+        "--list", action="store_true", help="Output as simple list (one procedure per line) instead of detailed report"
     )
 
     parser.add_argument(
-        'input',
-        nargs='?',
-        default='alien_soldier_j.s',
-        help='Input disassembly file (default: alien_soldier_j.s)'
-    )
-
-    parser.add_argument(
-        '--output',
-        help='Output file for results'
-    )
-
-    parser.add_argument(
-        '--stats',
-        action='store_true',
-        help='Show statistics only'
-    )
-
-    parser.add_argument(
-        '--list',
-        action='store_true',
-        help='Output as simple list (one procedure per line) instead of detailed report'
-    )
-
-    parser.add_argument(
-        '--exclude-analyzed',
-        metavar='CSV_FILE',
-        help='Exclude procedures already analyzed (from analysis_results.csv)'
+        "--exclude-analyzed", metavar="CSV_FILE", help="Exclude procedures already analyzed (from analysis_results.csv)"
     )
 
     args = parser.parse_args()
@@ -302,7 +292,9 @@ def main():
         sub_labels = [(name, line) for name, line in sub_labels if name not in analyzed]
         table_labels = [(name, line) for name, line in table_labels if name not in analyzed]
 
-        print(f"OK Remaining after filtering: {len(sub_labels):,} sub_* + {len(table_labels):,} table = {len(sub_labels) + len(table_labels):,} total")
+        print(
+            f"OK Remaining after filtering: {len(sub_labels):,} sub_* + {len(table_labels):,} table = {len(sub_labels) + len(table_labels):,} total"
+        )
 
     print()
     print("=" * 80)
@@ -320,12 +312,12 @@ def main():
 
     # Write to file if requested
     if args.output:
-        with open(args.output, 'w', encoding='utf-8') as f:
+        with open(args.output, "w", encoding="utf-8") as f:
             f.write(output_text)
         print(f"\nOK Results saved to {args.output}")
         if args.list:
             print(f"OK Saved {len(sub_labels) + len(table_labels)} procedure names (one per line)")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

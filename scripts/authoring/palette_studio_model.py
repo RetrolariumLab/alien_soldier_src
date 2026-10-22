@@ -16,7 +16,11 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from authoring.palette_model import (  # noqa: E402
-    PALETTE_SOURCE, command_index, parse_number, read_source)
+    PALETTE_SOURCE,
+    command_index,
+    parse_number,
+    read_source,
+)
 from authoring.tile_graphics import cram_to_rgb  # noqa: E402
 from authoring.stage_tilemap_model import parsed_read_phase, with_parsed_operation  # noqa: E402
 
@@ -36,33 +40,28 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
     blocks, lists = read_source(root)
     commands, other = command_index(blocks)
     if other:
-        raise ValueError("palette source contains non-command blocks: %s"
-                         % ", ".join(sorted(other)))
+        raise ValueError("palette source contains non-command blocks: %s" % ", ".join(sorted(other)))
     records = []
     for (block, offset), command in sorted(commands.items()):
         owner = blocks[block]
-        records.append({
-            "block": block,
-            "offset": offset,
-            "label": command.label,
-            "storage": owner.storage,
-            "source_path": (
-                PALETTE_SOURCE.as_posix()
-                if owner.storage == "source" else owner.payload
-            ),
-            "destination": command.destination,
-            "colour_count": command.count,
-            "colours": list(command.colours),
-        })
+        records.append(
+            {
+                "block": block,
+                "offset": offset,
+                "label": command.label,
+                "storage": owner.storage,
+                "source_path": (PALETTE_SOURCE.as_posix() if owner.storage == "source" else owner.payload),
+                "destination": command.destination,
+                "colour_count": command.count,
+                "colours": list(command.colours),
+            }
+        )
     offset_lists = [
         {
             "name": item.name,
             "index": item.index,
             "label": item.label,
-            "entries": [
-                {"block": block, "offset": offset}
-                for block, offset in item.entries
-            ],
+            "entries": [{"block": block, "offset": offset} for block, offset in item.entries],
         }
         for item in lists
     ]
@@ -103,8 +102,14 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     errors = []
     for field in (
-        "schema_version", "profile", "format", "source", "block_count",
-        "command_count", "offset_list_count", "offset_lists",
+        "schema_version",
+        "profile",
+        "format",
+        "source",
+        "block_count",
+        "command_count",
+        "offset_list_count",
+        "offset_lists",
     ):
         if document.get(field) != baseline[field]:
             errors.append("%s differs from the source-owned value" % field)
@@ -125,22 +130,23 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         if original is None:
             continue
         for field in (
-            "label", "storage", "source_path", "destination", "colour_count",
+            "label",
+            "storage",
+            "source_path",
+            "destination",
+            "colour_count",
         ):
             if record.get(field) != original[field]:
-                errors.append("%s: %s differs from the source-owned value"
-                              % (original["label"], field))
+                errors.append("%s: %s differs from the source-owned value" % (original["label"], field))
         colours = record.get("colours")
         if not isinstance(colours, list):
             errors.append("%s: colours is not a list" % original["label"])
             continue
         if len(colours) != original["colour_count"]:
-            errors.append("%s: colour count differs from fixed capacity"
-                          % original["label"])
+            errors.append("%s: colour count differs from fixed capacity" % original["label"])
         for index, word in enumerate(colours):
             if isinstance(word, bool) or not isinstance(word, int) or not 0 <= word <= 0xFFFF:
-                errors.append("%s colour %d is not an unsigned word"
-                              % (original["label"], index))
+                errors.append("%s colour %d is not an unsigned word" % (original["label"], index))
     return errors
 
 
@@ -159,8 +165,7 @@ def encoded_blocks(document: dict[str, Any]) -> dict[str, bytes]:
         body = bytearray()
         for offset, record in sorted(records):
             if offset != len(body):
-                raise ValueError("%s command offset $%X follows $%X bytes"
-                                 % (block, offset, len(body)))
+                raise ValueError("%s command offset $%X follows $%X bytes" % (block, offset, len(body)))
             count = record["colour_count"]
             body += bytes((record["destination"], count - 1))
             for word in record["colours"]:
@@ -202,9 +207,7 @@ def rewrite_byte_body(body: str, values: bytes) -> str:
     return ",".join(rendered)
 
 
-def rebuild_source(
-    document: dict[str, Any], root: Path, source_blocks: set[str]
-) -> list[str]:
+def rebuild_source(document: dict[str, Any], root: Path, source_blocks: set[str]) -> list[str]:
     blocks = encoded_blocks(document)
     lines, spans = source_spans(root, source_blocks)
     output = list(lines)
@@ -213,29 +216,22 @@ def rebuild_source(
         cursor = 0
         for line_index, match in locations:
             count = len(match.group("body").split(","))
-            body = rewrite_byte_body(
-                match.group("body"), data[cursor:cursor + count])
+            body = rewrite_byte_body(match.group("body"), data[cursor : cursor + count])
             cursor += count
             output[line_index] = match.group("prefix") + body + match.group("suffix")
         if cursor != len(data):
-            raise ValueError("%s source holds %d byte tokens, document encodes %d"
-                             % (block, cursor, len(data)))
+            raise ValueError("%s source holds %d byte tokens, document encodes %d" % (block, cursor, len(data)))
     if set(spans) != source_blocks:
         missing = sorted(source_blocks - set(spans))
         raise ValueError("cannot locate palette source blocks: %s" % ", ".join(missing))
     return output
 
 
-def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True
-) -> list[str]:
+def apply_document(document: dict[str, Any], root: Path, profile: str, write: bool = True) -> list[str]:
     validate_document(document, root, profile)
     encoded = encoded_blocks(document)
     baseline, _ = read_source(root)
-    source_blocks = {
-        name for name, block in baseline.items()
-        if name in encoded and block.storage == "source"
-    }
+    source_blocks = {name for name, block in baseline.items() if name in encoded and block.storage == "source"}
     path = root / PALETTE_SOURCE
     lines = path.read_text(encoding="utf-8").split("\n")
     rebuilt = rebuild_source(document, root, source_blocks)
@@ -294,8 +290,10 @@ def main() -> int:
                 if errors:
                     raise ValueError("; ".join(errors))
                 document = export_document(root, args.profile)
-            print("[OK] %s palette workspace: %d fixed commands in %d blocks" % (
-                args.profile, document["command_count"], document["block_count"]))
+            print(
+                "[OK] %s palette workspace: %d fixed commands in %d blocks"
+                % (args.profile, document["command_count"], document["block_count"])
+            )
         elif args.command == "export":
             if not args.output:
                 raise ValueError("export requires --output")

@@ -25,8 +25,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from authoring.stage_renderer import render_to_png
 from authoring.stage_tilemap_model import (
-    COARSE_COLUMNS, CHUNK_PIXELS, decompress, labelled_blocks, read_asset_lists,
-    stage_loaders, stage_tilemaps, survey)
+    COARSE_COLUMNS,
+    CHUNK_PIXELS,
+    decompress,
+    labelled_blocks,
+    read_asset_lists,
+    stage_loaders,
+    stage_tilemaps,
+    survey,
+)
 
 
 def validate(root):
@@ -43,8 +50,7 @@ def validate(root):
             try:
                 decompress(data[command.source])
             except ValueError as error:
-                errors.append("%s: %s does not decompress (%s)"
-                              % (name, command.source, error))
+                errors.append("%s: %s does not decompress (%s)" % (name, command.source, error))
     maps = stage_tilemaps(root)
     if not maps:
         errors.append("no stage table entries found")
@@ -53,11 +59,18 @@ def validate(root):
             print("[ERROR] %s" % error, file=sys.stderr)
         return 1
     found = survey(root)
-    print("[OK] stage tilemaps: %d asset lists, %d commands, %d decompress to RAM, "
-          "%d payloads all decoding, %d stage table entries through %d descriptors"
-          % (found["asset_lists"], found["asset_commands"], found["decompress_to_ram"],
-             found["ram_payloads_decoded"], found["stage_table_entries"],
-             found["descriptors"]))
+    print(
+        "[OK] stage tilemaps: %d asset lists, %d commands, %d decompress to RAM, "
+        "%d payloads all decoding, %d stage table entries through %d descriptors"
+        % (
+            found["asset_lists"],
+            found["asset_commands"],
+            found["decompress_to_ram"],
+            found["ram_payloads_decoded"],
+            found["stage_table_entries"],
+            found["descriptors"],
+        )
+    )
     return 0
 
 
@@ -66,52 +79,61 @@ def show_list(root):
     loaders = stage_loaders(root, data)
     print("%-5s %-34s %7s %9s  %s" % ("index", "loader", "chunks", "patterns", "lists"))
     for index, tilemap in enumerate(stage_tilemaps(root)):
-        print("%-5d %-34s %7d %9d  %s"
-              % (index, loaders[index] if index < len(loaders) else "",
-                 tilemap.chunks_defined, tilemap.patterns_defined,
-                 ", ".join(tilemap.lists)))
+        print(
+            "%-5d %-34s %7d %9d  %s"
+            % (
+                index,
+                loaders[index] if index < len(loaders) else "",
+                tilemap.chunks_defined,
+                tilemap.patterns_defined,
+                ", ".join(tilemap.lists),
+            )
+        )
     return 0
 
 
 def inspect(root, index, rows, columns):
     maps = stage_tilemaps(root)
     if not 0 <= index < len(maps):
-        print("[ERROR] stage table index %d is not one of 0..%d"
-              % (index, len(maps) - 1), file=sys.stderr)
+        print("[ERROR] stage table index %d is not one of 0..%d" % (index, len(maps) - 1), file=sys.stderr)
         return 1
     tilemap = maps[index]
     print("%s  %s" % (tilemap.name, ", ".join(tilemap.lists)))
-    print("descriptor %s: coarse $%X, chunks $%X, patterns $%X, plane base $%X"
-          % (tilemap.descriptor.name, tilemap.descriptor.coarse,
-             tilemap.descriptor.chunks, tilemap.descriptor.patterns,
-             tilemap.descriptor.plane_base))
-    print("%d chunks and %d patterns defined" % (tilemap.chunks_defined,
-                                                 tilemap.patterns_defined))
-    print("coarse row 0: %s"
-          % " ".join("%02X" % tilemap.coarse_index(column * CHUNK_PIXELS, 0)
-                     for column in range(COARSE_COLUMNS)))
+    print(
+        "descriptor %s: coarse $%X, chunks $%X, patterns $%X, plane base $%X"
+        % (
+            tilemap.descriptor.name,
+            tilemap.descriptor.coarse,
+            tilemap.descriptor.chunks,
+            tilemap.descriptor.patterns,
+            tilemap.descriptor.plane_base,
+        )
+    )
+    print("%d chunks and %d patterns defined" % (tilemap.chunks_defined, tilemap.patterns_defined))
+    print(
+        "coarse row 0: %s"
+        % " ".join("%02X" % tilemap.coarse_index(column * CHUNK_PIXELS, 0) for column in range(COARSE_COLUMNS))
+    )
     for row in range(rows):
         y = row * 8
-        print("y=%4d  %s" % (y, " ".join("%04X" % tilemap.name_word(column * 8, y)
-                                         for column in range(columns))))
+        print("y=%4d  %s" % (y, " ".join("%04X" % tilemap.name_word(column * 8, y) for column in range(columns))))
     return 0
 
 
-def draw(root, index, output, x, y, width, height, palette, scale, show_priority,
-         objects=False):
+def draw(root, index, output, x, y, width, height, palette, scale, show_priority, objects=False):
     try:
-        built = render_to_png(root, index, output, x, y, width, height,
-                              palette, scale, show_priority, objects)
+        built = render_to_png(root, index, output, x, y, width, height, palette, scale, show_priority, objects)
     except ValueError as error:
         print("[ERROR] %s" % error, file=sys.stderr)
         return 1
-    print("[OK] wrote %s: stage table index %d at (%d, %d), %dx%d, palette %s"
-          % (output, index, x, y, width, height, built.palette_name))
+    print(
+        "[OK] wrote %s: stage table index %d at (%d, %d), %dx%d, palette %s"
+        % (output, index, x, y, width, height, built.palette_name)
+    )
     print("      plane A: %s" % built.planes[0])
     print("      plane B: %s" % built.planes[1])
     for name, payload in built.missing_codecs:
-        print("      %s: %s needs the bit-token codec and was left out"
-              % (name, payload))
+        print("      %s: %s needs the bit-token codec and was left out" % (name, payload))
     return 0
 
 
@@ -129,8 +151,7 @@ def main():
     parser.add_argument("--palette", default="")
     parser.add_argument("--scale", type=int, default=1)
     parser.add_argument("--show-priority", action="store_true")
-    parser.add_argument("--objects", action="store_true",
-                        help="draw the stage's placed objects on top")
+    parser.add_argument("--objects", action="store_true", help="draw the stage's placed objects on top")
     args = parser.parse_args()
     root = Path.cwd()
 
@@ -139,9 +160,19 @@ def main():
     if args.action == "list":
         return show_list(root)
     if args.action == "draw":
-        return draw(root, args.stage, args.output, args.x, args.y,
-                    max(8, args.width), max(8, args.height), args.palette,
-                    max(1, args.scale), args.show_priority, args.objects)
+        return draw(
+            root,
+            args.stage,
+            args.output,
+            args.x,
+            args.y,
+            max(8, args.width),
+            max(8, args.height),
+            args.palette,
+            max(1, args.scale),
+            args.show_priority,
+            args.objects,
+        )
     return inspect(root, args.stage, max(1, args.rows), max(1, args.columns))
 
 

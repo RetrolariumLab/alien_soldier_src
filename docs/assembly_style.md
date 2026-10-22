@@ -31,5 +31,5 @@ make test
 make lint
 ```
 
-Formatting is never allowed to explain a ROM difference. If `make verify`
-fails after formatting, the formatter or source edit is wrong.
+Formatting is never allowed to explain a ROM difference. If `make verify` fails
+after formatting, the formatter or source edit is wrong.

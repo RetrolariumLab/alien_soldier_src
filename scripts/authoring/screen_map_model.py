@@ -27,8 +27,15 @@ from authoring.screen_studio_model import (  # noqa: E402
 )
 from authoring.content_workspace import checked_path  # noqa: E402
 from authoring.ram_map_workspace import (  # noqa: E402
-    ROLE_SHAPES, apply_fixed_map_document, atomic_write_json, decode_values,
-    document_errors_against, encode_values, encoded_slot, load_document, role_at,
+    ROLE_SHAPES,
+    apply_fixed_map_document,
+    atomic_write_json,
+    decode_values,
+    document_errors_against,
+    encode_values,
+    encoded_slot,
+    load_document,
+    role_at,
 )
 from authoring.stage_tilemap_model import (  # noqa: E402
     RAM_BASE,
@@ -49,8 +56,7 @@ def map_uses(root: Path) -> dict[str, list[dict[str, Any]]]:
     found: dict[str, list[dict[str, Any]]] = {}
     for record in load_config(root)["supported"]:
         scene = build_scene(root, "jp", record)
-        for plane_name, tilemap in (("plane_a", scene.tilemap),
-                                    ("plane_b", scene.plane_b)):
+        for plane_name, tilemap in (("plane_a", scene.tilemap), ("plane_b", scene.plane_b)):
             if tilemap is None:
                 continue
             for list_name, source, offset, _length in tilemap.written:
@@ -60,10 +66,7 @@ def map_uses(root: Path) -> dict[str, list[dict[str, Any]]]:
                 role, byte_offset = located
                 value_bytes = ROLE_SHAPES[role]["value_bits"] // 8
                 if byte_offset % value_bytes:
-                    raise ValueError(
-                        "%s is not aligned for %s values in %s"
-                        % (source, role, tilemap.descriptor.name)
-                    )
+                    raise ValueError("%s is not aligned for %s values in %s" % (source, role, tilemap.descriptor.name))
                 use = {
                     "screen": record["id"],
                     "plane": plane_name,
@@ -115,28 +118,28 @@ def _export_document(root: Path, profile: str) -> dict[str, Any]:
             for list_name, commands in all_lists.items()
             if any(command.source == name for command in commands)
         )
-        consumers = sorted(set(consumers) | {
-            item["asset_list"] for item in uses[name]
-        })
+        consumers = sorted(set(consumers) | {item["asset_list"] for item in uses[name]})
         shape = ROLE_SHAPES[role]
-        records.append({
-            "name": name,
-            "path": path,
-            "storage": storage,
-            "role": role,
-            "value_bits": shape["value_bits"],
-            "unit_width": shape["unit_width"],
-            "unit_height": shape["unit_height"],
-            "decoded_byte_count": len(plain),
-            "compressed_capacity": len(raw),
-            "value_count": len(plain) // (shape["value_bits"] // 8),
-            "consuming_asset_lists": consumers,
-            "uses": sorted(
-                uses[name],
-                key=lambda item: (item["screen"], item["plane"], item["descriptor"]),
-            ),
-            "values": decode_values(role, plain),
-        })
+        records.append(
+            {
+                "name": name,
+                "path": path,
+                "storage": storage,
+                "role": role,
+                "value_bits": shape["value_bits"],
+                "unit_width": shape["unit_width"],
+                "unit_height": shape["unit_height"],
+                "decoded_byte_count": len(plain),
+                "compressed_capacity": len(raw),
+                "value_count": len(plain) // (shape["value_bits"] // 8),
+                "consuming_asset_lists": consumers,
+                "uses": sorted(
+                    uses[name],
+                    key=lambda item: (item["screen"], item["plane"], item["descriptor"]),
+                ),
+                "values": decode_values(role, plain),
+            }
+        )
     return {
         "schema_version": SCHEMA_VERSION,
         "profile": profile,
@@ -168,30 +171,38 @@ def migrate_story_plane(document: dict[str, Any], root: Path, profile: str) -> d
     The caller must explicitly choose where to keep the returned document.
     """
     record = screen_record(load_config(root), "story_background")
-    if (record.get("plane_a") is not None
-            or record.get("plane_b") != "Gfx_ScrollVRAMTransferParameters"):
+    if record.get("plane_a") is not None or record.get("plane_b") != "Gfx_ScrollVRAMTransferParameters":
         raise ValueError("story registry has not selected the proved physical plane B")
     descriptors = read_descriptors(root)
     primary = descriptors["Gfx_DefaultVRAMTransferParameters"]
     secondary = descriptors["Gfx_ScrollVRAMTransferParameters"]
-    if ((primary.coarse, primary.chunks, primary.patterns) !=
-            (secondary.coarse, secondary.chunks, secondary.patterns)
-            or primary.plane_base != 0x4000 or secondary.plane_base != 0x6000):
+    if (
+        (primary.coarse, primary.chunks, primary.patterns) != (secondary.coarse, secondary.chunks, secondary.patterns)
+        or primary.plane_base != 0x4000
+        or secondary.plane_base != 0x6000
+    ):
         raise ValueError("story descriptor migration would change its source RAM maps")
     baseline = export_document(root, profile)
     legacy = deepcopy(baseline)
-    expected = {"SharedMappingData7000": ("coarse", secondary.coarse),
-                "StoryScreenMappingData6000": ("chunks", secondary.chunks),
-                "StoryScreenMappingData4000": ("patterns", secondary.patterns)}
+    expected = {
+        "SharedMappingData7000": ("coarse", secondary.coarse),
+        "StoryScreenMappingData6000": ("chunks", secondary.chunks),
+        "StoryScreenMappingData4000": ("patterns", secondary.patterns),
+    }
     seen = set()
     for payload in legacy["payloads"]:
         for use in payload["uses"]:
             if use["screen"] != "story_background":
                 continue
-            if (payload["name"] not in expected or payload["name"] in seen
-                    or (use["role"], use["destination"]) != expected[payload["name"]]
-                    or use["plane"] != "plane_b" or use["descriptor"] != secondary.name
-                    or use["asset_list"] != record["asset_list"] or use["base_value_index"] != 0):
+            if (
+                payload["name"] not in expected
+                or payload["name"] in seen
+                or (use["role"], use["destination"]) != expected[payload["name"]]
+                or use["plane"] != "plane_b"
+                or use["descriptor"] != secondary.name
+                or use["asset_list"] != record["asset_list"]
+                or use["base_value_index"] != 0
+            ):
                 raise ValueError("story source-use inventory differs from the bounded migration")
             seen.add(payload["name"])
             use["plane"], use["descriptor"] = "plane_a", primary.name
@@ -201,9 +212,10 @@ def migrate_story_plane(document: dict[str, Any], root: Path, profile: str) -> d
         raise ValueError("story migration document fields differ from the source inventory")
     records = document.get("payloads")
     if not isinstance(records, list) or any(
-            not isinstance(item, dict) or set(item) != set(baseline["payloads"][0])
-            for item in records):
+        not isinstance(item, dict) or set(item) != set(baseline["payloads"][0]) for item in records
+    ):
         raise ValueError("story migration payload fields differ from the source inventory")
+
     def metadata(candidate):
         value = deepcopy(candidate)
         for item in value["payloads"]:
@@ -239,7 +251,10 @@ def migrate_story_plane(document: dict[str, Any], root: Path, profile: str) -> d
 
 
 def apply_document(
-    document: dict[str, Any], root: Path, profile: str, write: bool = True,
+    document: dict[str, Any],
+    root: Path,
+    profile: str,
+    write: bool = True,
     validation_root: Path | None = None,
 ) -> list[str]:
     """Apply changed maps only to fixed-size slots in an isolated tree."""
@@ -278,8 +293,7 @@ def main() -> int:
                 document = export_document(root, args.profile)
             print(
                 "[OK] %s screen maps: %d payloads, %d values, %d fixed bytes"
-                % (args.profile, document["payload_count"], document["value_count"],
-                   document["compressed_capacity"])
+                % (args.profile, document["payload_count"], document["value_count"], document["compressed_capacity"])
             )
         elif args.command == "export":
             if not args.output:

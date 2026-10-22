@@ -4,9 +4,23 @@
   "timeout_seconds": 180,
   "demo_stable_frames": 100,
   "expectations": {
-    "console_flags": {"mask": 192, "equals": 192},
-    "boot": {"DifficultyMode": 2},
-    "title": {"GameModeIndex": 24, "GameSubstateIndex": 0, "PaletteFadeMode": 0, "PaletteFadeColorOffset": 0, "TitleMenuSelection": 2, "DemoPlaybackActive": 0},
-    "attract_demo": {"GameModeIndex": 16, "DemoPlaybackActive": 1, "DemoPlaybackState": 4, "DemoRecordingMode": 0, "DifficultyMode": 2, "PlayerObjectType": 8}
+    "console_flags": { "mask": 192, "equals": 192 },
+    "boot": { "DifficultyMode": 2 },
+    "title": {
+      "GameModeIndex": 24,
+      "GameSubstateIndex": 0,
+      "PaletteFadeMode": 0,
+      "PaletteFadeColorOffset": 0,
+      "TitleMenuSelection": 2,
+      "DemoPlaybackActive": 0
+    },
+    "attract_demo": {
+      "GameModeIndex": 16,
+      "DemoPlaybackActive": 1,
+      "DemoPlaybackState": 4,
+      "DemoRecordingMode": 0,
+      "DifficultyMode": 2,
+      "PlayerObjectType": 8
+    }
   }
 }

@@ -14,8 +14,8 @@ make init PROFILE=eu
 make release-check     # The full ordered check, as a release runs it
 ```
 
-`make init` writes the extracted segments into `data/`. Nothing derived from
-the cartridge is ever committed; `.gitignore` keeps it out.
+`make init` writes the extracted segments into `data/`. Nothing derived from the
+cartridge is ever committed; `.gitignore` keeps it out.
 [Release verification](docs/release_check.md) lists what the full check runs.
 
 ## Before you commit
@@ -27,9 +27,9 @@ make test     # Every test module
 make verify-all   # Byte identity against both cartridge dumps
 ```
 
-`make verify-all` is not optional after any change under `src/`, including a pure
-rename. Formatting and renaming are byte-neutral by definition, so a divergence
-means the change was not what it appeared to be.
+`make verify-all` is not optional after any change under `src/`, including a
+pure rename. Formatting and renaming are byte-neutral by definition, so a
+divergence means the change was not what it appeared to be.
 
 ## Naming a symbol
 

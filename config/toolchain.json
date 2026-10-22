@@ -12,16 +12,48 @@
       "verification": "make verify-toolchain",
       "files": {
         "windows_i386": [
-          {"path": "bin/windows_i386/asw.exe", "size": 2718552, "sha256": "02bcdccc6a887aa94d382059e4f4a83a0d5bd87246aa586e1b6692c1c2e3c896"},
-          {"path": "bin/windows_i386/as.msg", "size": 26005, "sha256": "92be47faed496e90ab5b1e1298325d9a4f0f1540e9fb69685baa291f117890ab"},
-          {"path": "bin/windows_i386/cmdarg.msg", "size": 307, "sha256": "83aabb22cdde0fd0579d5cf5f39af9ccae4639465286c1c109d8bbfa1ec6bc62"},
-          {"path": "bin/windows_i386/ioerrs.msg", "size": 2862, "sha256": "1f5e97d35696caf34eef35923b8280cb1ff483772cec0d60c765d3af13c09097"}
+          {
+            "path": "bin/windows_i386/asw.exe",
+            "size": 2718552,
+            "sha256": "02bcdccc6a887aa94d382059e4f4a83a0d5bd87246aa586e1b6692c1c2e3c896"
+          },
+          {
+            "path": "bin/windows_i386/as.msg",
+            "size": 26005,
+            "sha256": "92be47faed496e90ab5b1e1298325d9a4f0f1540e9fb69685baa291f117890ab"
+          },
+          {
+            "path": "bin/windows_i386/cmdarg.msg",
+            "size": 307,
+            "sha256": "83aabb22cdde0fd0579d5cf5f39af9ccae4639465286c1c109d8bbfa1ec6bc62"
+          },
+          {
+            "path": "bin/windows_i386/ioerrs.msg",
+            "size": 2862,
+            "sha256": "1f5e97d35696caf34eef35923b8280cb1ff483772cec0d60c765d3af13c09097"
+          }
         ],
         "linux_x86_64": [
-          {"path": "bin/linux_x86_64/asl", "size": 2372248, "sha256": "be2ffab7be719e9c2b5452655be8ce40ad9888d04084e397687f23b6f8b85f1c"},
-          {"path": "bin/linux_x86_64/as.msg", "size": 26005, "sha256": "18542d756467b567cf7713d4ee95081d784d8cf11575a7bb57516fc2c5c1c594"},
-          {"path": "bin/linux_x86_64/cmdarg.msg", "size": 307, "sha256": "aaa93507412473a546276128bd58a01ac9119979e80b1ef79b3671b602eade0e"},
-          {"path": "bin/linux_x86_64/ioerrs.msg", "size": 2862, "sha256": "5da942aa76c3ed784d967ba795543d87d3a52b80d5812737e12f18f3b2c94fba"}
+          {
+            "path": "bin/linux_x86_64/asl",
+            "size": 2372248,
+            "sha256": "be2ffab7be719e9c2b5452655be8ce40ad9888d04084e397687f23b6f8b85f1c"
+          },
+          {
+            "path": "bin/linux_x86_64/as.msg",
+            "size": 26005,
+            "sha256": "18542d756467b567cf7713d4ee95081d784d8cf11575a7bb57516fc2c5c1c594"
+          },
+          {
+            "path": "bin/linux_x86_64/cmdarg.msg",
+            "size": 307,
+            "sha256": "aaa93507412473a546276128bd58a01ac9119979e80b1ef79b3671b602eade0e"
+          },
+          {
+            "path": "bin/linux_x86_64/ioerrs.msg",
+            "size": 2862,
+            "sha256": "5da942aa76c3ed784d967ba795543d87d3a52b80d5812737e12f18f3b2c94fba"
+          }
         ]
       }
     },
@@ -36,10 +68,18 @@
       "verification": "make verify-toolchain",
       "files": {
         "windows_i386": [
-          {"path": "bin/windows_i386/p2bin.exe", "size": 28672, "sha256": "1323430afdfa630ab56ce76f0286ccbb05a04566126411d4b7d673f2a08115eb"}
+          {
+            "path": "bin/windows_i386/p2bin.exe",
+            "size": 28672,
+            "sha256": "1323430afdfa630ab56ce76f0286ccbb05a04566126411d4b7d673f2a08115eb"
+          }
         ],
         "linux_x86_64": [
-          {"path": "bin/linux_x86_64/p2bin", "size": 31040, "sha256": "969c1df15a15ef32bc25124093228dab3b81906d772f37fc873e00bb70a94459"}
+          {
+            "path": "bin/linux_x86_64/p2bin",
+            "size": 31040,
+            "sha256": "969c1df15a15ef32bc25124093228dab3b81906d772f37fc873e00bb70a94459"
+          }
         ]
       }
     },
@@ -56,7 +96,12 @@
       "identity_note": "The source commit is authoritative because locally built PE files contain build-time fields; the observed executable hash records the current evidence runner.",
       "files": {
         "any": [
-          {"path": "../gens_automation/Output/Gens.exe", "size": 9658397, "sha256": "d536817f33cc9871e2749bc0d5ced8956502d3182541a07e1d44279fdf45d141", "observed_only": true}
+          {
+            "path": "../gens_automation/Output/Gens.exe",
+            "size": 9658397,
+            "sha256": "d536817f33cc9871e2749bc0d5ced8956502d3182541a07e1d44279fdf45d141",
+            "observed_only": true
+          }
         ]
       }
     }
@@ -66,7 +111,7 @@
       "os": "Windows 11 Pro 10.0.26200",
       "architecture": "x86_64",
       "shell": "PowerShell 5.1 and Git Bash",
-      "language_versions": {"python": "3.14.6", "make": "GNU Make 4.4.1"},
+      "language_versions": { "python": "3.14.6", "make": "GNU Make 4.4.1" },
       "supported_status": "supported",
       "evidence": "Canonical identity and toolchain gates run on this host"
     },
@@ -74,7 +119,7 @@
       "os": "Linux x86_64",
       "architecture": "x86_64",
       "shell": "sh",
-      "language_versions": {"python": ">=3.9", "make": "GNU Make"},
+      "language_versions": { "python": ">=3.9", "make": "GNU Make" },
       "supported_status": "partial",
       "evidence": "The binaries are vendored but the complete Source Reconstruction 1.0 gate has not run on Linux"
     }

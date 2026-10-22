@@ -3,18 +3,21 @@
 ## Overview
 
 This reference explains the state-dump container consumed by the project tools.
-It preserves the original implementation design and examples; not every
-optional section or proposed flag is an accepted runtime capability. The current
-pinned runner, declared sections and exact-frame validation are described in
+It preserves the original implementation design and examples; not every optional
+section or proposed flag is an accepted runtime capability. The current pinned
+runner, declared sections and exact-frame validation are described in
 [runtime verification](runtime.md). A container checksum identifies an input; it
 does not replace complete ROM identity or scenario acceptance predicates.
 
 ## Use Case
 
-When modifying ROMs (e.g., removing unused data), visual differences may appear but the root cause is unclear. By comparing full memory state between original and modified ROM runs, we can identify exactly what changed in RAM, VRAM, registers, etc.
+When modifying ROMs (e.g., removing unused data), visual differences may appear
+but the root cause is unclear. By comparing full memory state between original
+and modified ROM runs, we can identify exactly what changed in RAM, VRAM,
+registers, etc.
 
-An illustrative relocation failure can be investigated by comparing the
-first differing RAM/VRAM state. This is a debugging example, not a reproduced
+An illustrative relocation failure can be investigated by comparing the first
+differing RAM/VRAM state. This is a debugging example, not a reproduced
 current-game defect, proof of a particular boss identity or an accepted patch.
 
 ## Command Line Interface
@@ -67,6 +70,7 @@ See `scripts/genstate_format.py` for detailed format specification.
 ```
 
 Examples:
+
 - `20.genstate` - State at frame 20
 - `5000.genstate` - State at frame 5000
 
@@ -96,11 +100,13 @@ Examples:
 ## Required Sections
 
 ### Section 0x01: 68000 RAM
+
 - **Size:** 65536 bytes (64KB)
 - **Source:** Main 68000 work RAM (0xFF0000-0xFFFFFF)
 - **Implementation:** `memcpy(dest, M68K_RAM, 0x10000)`
 
 ### Section 0x02: 68000 Registers
+
 - **Size:** 72 bytes
 - **Layout:**
   ```
@@ -112,21 +118,25 @@ Examples:
 - **Implementation:** Access from M68K emulation core
 
 ### Section 0x10: VDP VRAM
+
 - **Size:** 65536 bytes (64KB)
 - **Source:** VDP video RAM
 - **Implementation:** Copy from VDP VRAM buffer
 
 ### Section 0x11: VDP CRAM (Color RAM)
+
 - **Size:** 128 bytes
 - **Source:** VDP color palette (64 colors × 2 bytes)
 - **Implementation:** Copy from VDP CRAM buffer
 
 ### Section 0x12: VDP VSRAM (Vertical Scroll RAM)
+
 - **Size:** 80 bytes
 - **Source:** VDP vertical scroll values (40 entries × 2 bytes)
 - **Implementation:** Copy from VDP VSRAM buffer
 
 ### Section 0x13: VDP Registers
+
 - **Size:** 24 bytes
 - **Source:** VDP register set (registers 0-23)
 - **Implementation:** Copy from VDP register array
@@ -134,18 +144,22 @@ Examples:
 ## Optional Sections (Future Enhancement)
 
 ### Section 0x20: Z80 RAM
+
 - **Size:** 8192 bytes (8KB)
 - **Source:** Z80 RAM
 
 ### Section 0x21: Z80 Registers
+
 - **Size:** ~20 bytes
 - **Layout:** A, F, BC, DE, HL, IX, IY, SP, PC, etc.
 
 ### Section 0x30: YM2612 State
+
 - **Size:** Variable
 - **Contents:** YM2612 FM synthesizer register state
 
 ### Section 0x31: PSG State
+
 - **Size:** ~16 bytes
 - **Contents:** PSG tone/noise generator state
 
@@ -153,11 +167,14 @@ Examples:
 
 ### Performance Considerations
 
-State dumps are relatively small (~130KB per frame with basic sections) but can add up:
+State dumps are relatively small (~130KB per frame with basic sections) but can
+add up:
+
 - 20 frame interval over 90000 frames = 4500 dumps
 - 4500 × 130KB ≈ 585 MB
 
 Recommendations:
+
 1. Use reasonable frame intervals (20-60)
 2. Limit dump range to regions where bugs appear
 3. Consider compression (gzip) if needed
@@ -165,6 +182,7 @@ Recommendations:
 ### Integration Points
 
 **In `automation.cpp`:**
+
 ```cpp
 // Add state dump check in frame update loop
 if (ShouldDumpState(frameCount)) {
@@ -173,6 +191,7 @@ if (ShouldDumpState(frameCount)) {
 ```
 
 **New file `state_dump.cpp`:**
+
 ```cpp
 void DumpEmulatorState(int frame) {
     // Open file
@@ -201,6 +220,7 @@ void DumpEmulatorState(int frame) {
 ### ROM Checksum Calculation
 
 Use CRC32 of entire ROM for header:
+
 ```cpp
 uint32_t CalculateROMChecksum() {
     // Use existing ROM buffer
@@ -211,16 +231,20 @@ uint32_t CalculateROMChecksum() {
 ## Testing
 
 ### Basic Test
-1. Run original ROM with `-dump-state-dir states/original -dump-state-frames 1000`
+
+1. Run original ROM with
+   `-dump-state-dir states/original -dump-state-frames 1000`
 2. Verify `states/original/1000.genstate` is created
 3. Use Python tool to read and display contents
 
 ### Comparison Test
+
 1. Run original ROM, dump state at frame 5000
 2. Run modified ROM, dump state at frame 5000
 3. Use `compare_states.py` to show differences
 
 ### Range Test
+
 1. Run with `-dump-state-interval 20 -dump-state-end 10000`
 2. Verify 500 state files created (10000 / 20)
 3. Check file sizes are consistent (~130KB each)

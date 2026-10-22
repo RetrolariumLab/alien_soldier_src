@@ -15,7 +15,10 @@ if str(SCRIPT_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPT_ROOT))
 
 from authoring.compressed_graphics_model import (  # noqa: E402
-    rebuild_source, source_owners, source_paths)
+    rebuild_source,
+    source_owners,
+    source_paths,
+)
 from authoring.shared_font_preview import glyph_count  # noqa: E402
 from authoring.stage_tilemap_model import labelled_blocks  # noqa: E402
 from authoring.text_document_contract import record_names, source_value_matches  # noqa: E402
@@ -66,16 +69,18 @@ def export_document(root: Path, profile: str) -> dict[str, Any]:
         if not isinstance(body, bytes):
             raise ValueError("stage-message payload is missing: %s" % name)
         sequences, padding = parse_payload(body, name)
-        streams.append({
-            "name": name,
-            "path": paths.get(name, owners.get(name)),
-            "storage": "payload" if name in paths else "source",
-            "capacity": len(body),
-            "sequence_count": len(sequences),
-            "entry_count": sum(len(sequence) for sequence in sequences),
-            "padding": padding,
-            "sequences": sequences,
-        })
+        streams.append(
+            {
+                "name": name,
+                "path": paths.get(name, owners.get(name)),
+                "storage": "payload" if name in paths else "source",
+                "capacity": len(body),
+                "sequence_count": len(sequences),
+                "entry_count": sum(len(sequence) for sequence in sequences),
+                "padding": padding,
+                "sequences": sequences,
+            }
+        )
     return {
         "schema_version": SCHEMA_VERSION,
         "profile": profile,
@@ -119,8 +124,7 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
     baseline = export_document(root, profile)
     maximum_glyph = glyph_count(root) - 1
     errors = []
-    for field in ("schema_version", "profile", "format", "stream_count",
-                  "entry_count", "encoded_byte_count"):
+    for field in ("schema_version", "profile", "format", "stream_count", "entry_count", "encoded_byte_count"):
         if not source_value_matches(document.get(field), baseline[field]):
             errors.append("%s differs from the source-owned value" % field)
     records = document.get("streams")
@@ -128,42 +132,36 @@ def document_errors(document: dict[str, Any], root: Path, profile: str) -> list[
         return errors + ["streams is not a list"]
     originals = {item["name"]: item for item in baseline["streams"]}
     names = record_names(records)
-    if (len(names) != len(records) or len(names) != len(set(names))
-            or set(names) != set(originals)):
+    if len(names) != len(records) or len(names) != len(set(names)) or set(names) != set(originals):
         errors.append("stream inventory differs from the source")
     for record in records:
-        if (not isinstance(record, dict) or not isinstance(record.get("name"), str)
-                or record["name"] not in originals):
+        if not isinstance(record, dict) or not isinstance(record.get("name"), str) or record["name"] not in originals:
             continue
         original = originals[record["name"]]
-        for field in ("path", "storage", "capacity", "sequence_count",
-                      "entry_count", "padding"):
+        for field in ("path", "storage", "capacity", "sequence_count", "entry_count", "padding"):
             if not source_value_matches(record.get(field), original[field]):
                 errors.append("%s: %s differs" % (record["name"], field))
         sequences = record.get("sequences")
         if not isinstance(sequences, list) or len(sequences) != original["sequence_count"]:
             errors.append("%s: sequence inventory differs" % record["name"])
             continue
-        for sequence_index, (sequence, source_sequence) in enumerate(
-                zip(sequences, original["sequences"])):
+        for sequence_index, (sequence, source_sequence) in enumerate(zip(sequences, original["sequences"])):
             if not isinstance(sequence, list) or len(sequence) != len(source_sequence):
-                errors.append("%s sequence %d: entry inventory differs" % (
-                    record["name"], sequence_index))
+                errors.append("%s sequence %d: entry inventory differs" % (record["name"], sequence_index))
                 continue
             for index, (entry, source) in enumerate(zip(sequence, source_sequence)):
-                if (not isinstance(entry, dict)
-                        or not source_value_matches(entry.get("row"), source["row"])):
+                if not isinstance(entry, dict) or not source_value_matches(entry.get("row"), source["row"]):
                     errors.append("%s entry %d: row byte differs" % (record["name"], index))
                     continue
                 glyphs = entry.get("glyphs")
                 if not isinstance(glyphs, list) or len(glyphs) != len(source["glyphs"]):
-                    errors.append("%s entry %d: glyph capacity differs" % (
-                        record["name"], index))
+                    errors.append("%s entry %d: glyph capacity differs" % (record["name"], index))
                     continue
-                if any(not isinstance(value, int) or isinstance(value, bool)
-                       or not 0 <= value <= maximum_glyph for value in glyphs):
-                    errors.append("%s entry %d: glyph exceeds the shared font" % (
-                        record["name"], index))
+                if any(
+                    not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= maximum_glyph
+                    for value in glyphs
+                ):
+                    errors.append("%s entry %d: glyph exceeds the shared font" % (record["name"], index))
         try:
             if len(encode_stream(record)) != original["capacity"]:
                 errors.append("%s: encoded size differs" % record["name"])
@@ -194,6 +192,7 @@ def apply_document(document, root: Path, profile: str, write=True, validation_ro
             if write:
                 path = root / record["path"]
                 from authoring.atomic_output import atomic_write_bytes as _write_bytes
+
                 _write_bytes(path, body)
     for relative, payloads in source_changes.items():
         changed.append(relative)
@@ -201,6 +200,7 @@ def apply_document(document, root: Path, profile: str, write=True, validation_ro
             path = root / relative
             rebuilt = rebuild_source(root, relative, payloads)
             from authoring.atomic_output import atomic_write_text as _write_text
+
             _write_text(path, rebuilt)
     return sorted(changed)
 
@@ -220,8 +220,10 @@ def main() -> int:
             validate_document(document, root, args.profile)
             if apply_document(document, root, args.profile, write=False):
                 raise ValueError("zero-edit stage messages would change files")
-            print("[OK] %s stage messages: %d streams, %d records" % (
-                args.profile, document["stream_count"], document["entry_count"]))
+            print(
+                "[OK] %s stage messages: %d streams, %d records"
+                % (args.profile, document["stream_count"], document["entry_count"])
+            )
         elif args.command == "export":
             atomic_write_json(Path(args.output), export_document(root, args.profile))
         else:

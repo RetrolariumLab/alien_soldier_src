@@ -18,8 +18,12 @@ class StageReadyDispatchNameTests(unittest.TestCase):
         body = source.split(name + ":", 1)[1].split("; End of function", 1)[0]
         self.assertIn("was: loc_1F11C", body)
         self.assertRegex(body, r"move\.w\s+#\$3C,\(GameModeIndex\)\.w")
-        table = (ROOT / "src/system/vblank.s").read_text(encoding="utf-8").split(
-            "Sys_GameStateHandlers:", 1)[1].split("; End of function", 1)[0]
+        table = (
+            (ROOT / "src/system/vblank.s")
+            .read_text(encoding="utf-8")
+            .split("Sys_GameStateHandlers:", 1)[1]
+            .split("; End of function", 1)[0]
+        )
         handlers = re.findall(r"\bdc\.l\s+(\w+)", table)
         self.assertEqual("StageReady_Initialize", handlers[0x3C // 4])
         document = json.loads((ROOT / "config/name_audit.json").read_text(encoding="utf-8"))
