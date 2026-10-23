@@ -1,0 +1,28 @@
+schema = "retrolarium.game"
+schema_version = 1
+
+# Opened by Retrolarium Studio: it checks the ROM, copies this repository
+# into .retrolarium/<revision>/alien-soldier-source and keeps your edits
+# there (not tracked).
+
+[game]
+id = "alien-soldier"
+name = "Alien Soldier"
+platform = "megadrive"
+profile = "alien-soldier.v1"
+
+[[revisions]]
+id = "jp"
+label = "Japan"
+rom = "Alien Soldier (J) [!].bin"
+
+[[revisions]]
+id = "eu"
+label = "Europe"
+rom = "Alien Soldier (E) [!].bin"
+
+# The data the source builds from: the kit cuts it out of the ROMs by
+# assets/manifest.json, as `make split` does.
+[split]
+revision = "jp"
+manifest = "assets/manifest.json"

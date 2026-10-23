@@ -1,0 +1,190 @@
+{
+  "schema": "retrolarium.game-profile",
+  "schema_version": 1,
+  "id": "alien-soldier",
+  "profile_version": 1,
+  "name": "Alien Soldier",
+  "platform": "megadrive",
+  "capabilities": ["levels", "graphics", "animations", "palettes", "screens", "text", "audio"],
+  "revisions": [
+    {
+      "id": "jp",
+      "name": "Alien Soldier (Japan)",
+      "size": 2097152,
+      "sha1": "8f6eb584ed9487b8504fbc21d86783f58e6c9cd6",
+      "sha256": "5613637d267cf8d0bf3ff1e396d7929526cd5221cb8af06349528c8bedced1a0",
+      "container": "megadrive"
+    },
+    {
+      "id": "eu",
+      "name": "Alien Soldier (Europe)",
+      "size": 2097152,
+      "sha1": "fa141778bd6540775194d77318f27d2a934e1ac1",
+      "sha256": "afd4642f78ee1ae3004d630b1228e54a6e51e5dc7a991e1c192d91a41f366f71",
+      "container": "megadrive"
+    }
+  ],
+  "resources": [
+    {
+      "id": "levels",
+      "kind": "level",
+      "codec": "alien-soldier.levels.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "maps",
+      "kind": "level",
+      "codec": "alien-soldier.maps.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "tiles",
+      "kind": "graphics",
+      "codec": "alien-soldier.tiles.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "compressed-tiles",
+      "kind": "graphics",
+      "codec": "alien-soldier.compressed-tiles.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "palettes",
+      "kind": "palette",
+      "codec": "alien-soldier.palettes.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "mappings",
+      "kind": "animation",
+      "codec": "alien-soldier.mappings.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "animations",
+      "kind": "animation",
+      "codec": "alien-soldier.animations.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "screens",
+      "kind": "screen",
+      "codec": "alien-soldier.screens.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "text",
+      "kind": "text",
+      "codec": "alien-soldier.text.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "sound",
+      "kind": "audio",
+      "codec": "alien-soldier.sound.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "envelopes",
+      "kind": "audio",
+      "codec": "alien-soldier.envelopes.v1",
+      "capacity_policy": "fixed"
+    },
+    {
+      "id": "pcm",
+      "kind": "audio",
+      "codec": "alien-soldier.pcm.v1",
+      "capacity_policy": "fixed"
+    }
+  ],
+  "source": {
+    "copy": ["src", "data"],
+    "steps": [
+      {
+        "entry": "src/sound/z80/driver.asm",
+        "output": "build/z80/driver.bin",
+        "fill": "0x00",
+        "size": 3072
+      },
+      {
+        "entry": "src/main.s",
+        "output": "build/alien_soldier.bin",
+        "fill": "0xFF",
+        "size": 2097152
+      }
+    ],
+    "revisions": {
+      "jp": {
+        "defines": {},
+        "symbols": {
+          "BuildProfileEU": 0,
+          "BuildProfileJP": 1
+        },
+        "checksum": ["0x200", "0x60002"],
+        "machine": "megadrij"
+      },
+      "eu": {
+        "defines": {
+          "BuildProfileEU": 1
+        },
+        "symbols": {
+          "BuildProfileEU": 1,
+          "BuildProfileJP": 0
+        },
+        "checksum": ["0x200", "0x200000"],
+        "machine": "megadriv"
+      }
+    },
+    "screens": [
+      {
+        "id": "title",
+        "asset_list": "Frontend_TitleAssetLoadDescriptors",
+        "planes": ["Gfx_TitleAndZLeoVRAMTransferParameters", "Gfx_FrontendAlternateVRAMTransferParameters"],
+        "camera_x": [0, 1536],
+        "lookup_y": [
+          {
+            "jp": 0,
+            "eu": 16
+          },
+          0
+        ],
+        "palette": {
+          "command": "FrontendPaletteCommands"
+        },
+        "transforms": [
+          {
+            "routine": "adjust-rows",
+            "ram": "0xFFFF4020",
+            "groups": 40
+          },
+          {
+            "routine": "update-indices",
+            "ram": "0xFFFF2020",
+            "groups": 192
+          }
+        ]
+      },
+      {
+        "id": "options",
+        "asset_list": "Options_AssetLoadDescriptors",
+        "planes": [null, "Gfx_FrontendAlternateVRAMTransferParameters"],
+        "camera_x": [0, 1536],
+        "lookup_y": [0, 0],
+        "palette": {
+          "list": "OptionsScreenPaletteOffsetList"
+        }
+      },
+      {
+        "id": "story",
+        "asset_list": "StoryScreenAssetCommands",
+        "planes": [null, "Gfx_ScrollVRAMTransferParameters"],
+        "camera_x": [0, 0],
+        "lookup_y": [0, 0],
+        "palette": {
+          "list": "StoryScreenPaletteOffsetList"
+        }
+      }
+    ]
+  }
+}

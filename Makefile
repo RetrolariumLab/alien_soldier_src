@@ -1,114 +1,112 @@
-# Alien Soldier multi-profile Makefile
-# Build configuration for AS assembler
-
+# Alien Soldier (Sega Mega Drive): build the source back into the original
+# ROMs and check it. `make` alone lists the targets. The ROMs are yours: copy
+# them next to this file under the names assets/manifest.json gives, then run
+# `make split` once.
 PYTHON ?= python
+RLTOOL ?= rltool
+export RLTOOL
 
-# Toolchain selection: auto-detect host OS/arch and pick the matching
-# build-tools folder under bin/. Override with: make PLATFORM=<subfolder>
-ifeq ($(OS),Windows_NT)
-    PLATFORM ?= windows_i386
-    AS_EXE = asw.exe
-    P2BIN_EXE = p2bin.exe
-else
-    UNAME_S := $(shell uname -s)
-    UNAME_M := $(shell uname -m)
-    ifeq ($(UNAME_S),Darwin)
-        PLATFORM ?= macos_$(UNAME_M)
-    else
-        PLATFORM ?= linux_$(UNAME_M)
-    endif
-    AS_EXE = asl
-    P2BIN_EXE = p2bin
+# jp (the default) or eu: the revision built, verified and played.
+REVISION ?= jp
+ifeq ($(filter $(REVISION),jp eu),)
+$(error unknown REVISION "$(REVISION)": jp or eu)
 endif
+# Each build passes through config/game_profile.json's build/alien_soldier.bin.
+ROM = build/alien_soldier_$(REVISION).bin
+RELOCATED_ROM := build/relocated/alien_soldier.bin
+# The movies the relocated build plays in `make test-full`, by name
+# (movies/<name>.check.json, written by `make golden`).
+MOVIES := attract
+MOVIE_CHECKS = $(foreach movie,$(MOVIES),movies/$(movie).check.json)
+MAME_OPTION = $(if $(MAME),--mame "$(MAME)")
 
-TOOLS_DIR = bin/$(PLATFORM)
+.PHONY: help split build verify verify-revisions build-relocated studio-check lint format \
+	test test-full golden play hooks clean _assets
+.DEFAULT_GOAL := help
 
-# Tools
-AS_BIN = $(TOOLS_DIR)/$(AS_EXE)
-P2BIN = $(TOOLS_DIR)/$(P2BIN_EXE)
+split:
+	$(RLTOOL) assets split
 
-# Set message path for AS assembler (needed for as.msg, cmdarg.msg, etc.)
-export AS_MSGPATH = $(TOOLS_DIR)
+_assets:
+	$(RLTOOL) assets check --image $(REVISION)
 
-# Preservation profile. The Source 1.0 command surface remains the JP default;
-# PROFILE=eu selects the independent European reference contract.
-PROFILE ?= jp
-PROFILE_CONFIG = config/rom_profiles.json
+# Retrolarium Kit assembles the Z80 sound program, then the 68000 source that
+# includes it, with its own AS and p2bin, as config/game_profile.json says.
+build: _assets
+	$(RLTOOL) profile build --revision $(REVISION) --output $(ROM)
 
-ifeq ($(PROFILE),jp)
-override PROFILE_AS_ARGS =
-SRC = src/main.s
-OBJ = build/main.p
-ROM = asbuilt.bin
-LISTING = build/main.lst
-ORIG_ROM = Alien Soldier (J) [!].bin
-ASSET_MANIFEST = assets/manifest.json
-ROM_LAYOUT = config/rom_layout.json
-DATA_ADDRS = data/data_addrs.txt
-else ifeq ($(PROFILE),eu)
-override PROFILE_AS_ARGS = -D BuildProfileEU=1
-SRC = src/main.s
-OBJ = build/eu/main.p
-ROM = asbuilt_eu.bin
-LISTING = build/eu/main.lst
-ORIG_ROM = Alien Soldier (E) [!].bin
-ASSET_MANIFEST = assets/manifest_eu.json
-ROM_LAYOUT = config/rom_layout_eu.json
-DATA_ADDRS = data/data_addrs_eu.txt
-else
-$(error Unknown PROFILE "$(PROFILE)"; expected jp or eu)
-endif
+verify: build
+	$(RLTOOL) assets verify --image $(REVISION) --built "$(ROM)"
 
-# Caller flags are independent of mandatory preservation-profile selection.
-AS_ARGS = -maxerrors 2
-override PRESERVATION_AS_ARGS = $(strip $(AS_ARGS) $(PROFILE_AS_ARGS))
+verify-revisions:
+	$(MAKE) --no-print-directory verify REVISION=jp
+	$(MAKE) --no-print-directory verify REVISION=eu
 
-TOOLCHAIN_MANIFEST = config/toolchain.json
-RUNTIME_SCENARIOS = config/runtime_scenarios.json
-RUNTIME_DIR = runtime/captures
-RUNTIME_REQUIRE_RECEIPT ?= 0
-CONTENT_MANIFEST = config/authoring/content_studios.json
-CONTENT_PROFILE ?= $(PROFILE)
-CONTENT_ROM = build/content/$(CONTENT_PROFILE)/alien_soldier.bin
-PLAYTEST_STAGE ?= 1
-PLAYTEST_DIFFICULTY ?= easy
-SOUND_REQUEST ?= 0x81
-SOUND_FRAMES ?= 1800
-SOUND_LISTING = $(abspath build/content/$(CONTENT_PROFILE)/sound_audition.lst)
+# The Japanese source with every procedure moved (scripts/relocate.py),
+# built the same way and given the checksum its boot code compares.
+build-relocated:
+	$(RLTOOL) assets check --image jp
+	$(PYTHON) scripts/relocate.py --output-dir build/relocated
+	$(RLTOOL) profile build --revision jp --entry build/relocated/main.s --output $(RELOCATED_ROM)
+	$(PYTHON) scripts/relocate.py --finish $(RELOCATED_ROM) --revision jp
 
-# Directories
-DATA_DIR = data
-SRC_DIR = src
-SCRIPTS_DIR = scripts
-BIN_DIR = bin
+# Open alien_soldier.rlj in a throwaway copy of the repository the way
+# Retrolarium Studio does, and rebuild both revisions without edits.
+studio-check:
+	$(RLTOOL) studio check alien_soldier.rlj
 
-# Default target
-.PHONY: all build verify verify-all check-assets update-asset-manifest verify-toolchain verify-layout verify-relocation format lint test runtime runtime-capture runtime-validate release-check profile-info check-profile-ready derive-eu-assets derive-eu-layout init-content init-content-all inspect-content validate-content validate-content-all build-content check-content check-content-zero-edit check-level-model level-studio playtest-level check-graphics-models check-graphics-workspace graphics-studio screen-studio text-studio sound-studio
-all: build
+lint:
+	$(RLTOOL) lint
 
-include mk/preservation.mk
-include mk/authoring.mk
-include mk/validation.mk
-include mk/runtime.mk
-include mk/workflow.mk
-include mk/tracing.mk
-include mk/symbols.mk
-include mk/help.mk
+format:
+	$(RLTOOL) lint --fix
 
-# Everything a release needs, in order: the inputs, the tests, both cartridges
-# rebuilt from a clean tree, their symbols and relocation, the content
-# pipeline, then the game itself in the pinned emulator (twelve Japanese
-# scenarios and the European boot).
-release-check:
-	@$(MAKE) --no-print-directory check-assets PROFILE=jp
-	@$(MAKE) --no-print-directory check-assets PROFILE=eu
-	@$(MAKE) --no-print-directory lint
-	@$(MAKE) --no-print-directory test
-	@$(MAKE) --no-print-directory clean
-	@$(MAKE) --no-print-directory verify-all
-	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=jp
-	@$(MAKE) --no-print-directory verify-symbols verify-relocation PROFILE=eu
-	@$(MAKE) --no-print-directory check-content-zero-edit
-	@$(MAKE) --no-print-directory check-content
-	@$(MAKE) --no-print-directory runtime-capture PROFILE=jp
-	@$(MAKE) --no-print-directory check-region-runtime-eu PROFILE=eu
+# The quick suite: the unit tests, both ROMs byte for byte, the relocated
+# build and the studio check.
+test:
+	$(PYTHON) -m unittest discover -s tests -t .
+	$(MAKE) --no-print-directory verify-revisions build-relocated studio-check
+
+# The full suite: the quick one, then the movies in MAME on the relocated
+# build, compared with what the original ROM gives (`make golden`).
+test-full: test
+	$(RLTOOL) movie check $(MOVIE_CHECKS) --rom "$(RELOCATED_ROM)" $(MAME_OPTION)
+
+golden:
+	$(RLTOOL) movie golden $(MOVIE_CHECKS) --rom "$(shell $(RLTOOL) assets path --image jp)" $(MAME_OPTION)
+
+# Watch a movie in a MAME window at the game's speed, on the relocated build
+# or on ROM=<image>; once the window is closed, its cells are compared with
+# the original's. In MAME, F10 lifts the speed limit and Insert fast-forwards.
+#   make play [MOVIE=<name>] [ROM=<image>] [FRAMES=<frame>] [CLOSE=1]
+MOVIE ?= $(firstword $(MOVIES))
+PLAY_ROM = $(if $(filter command line,$(origin ROM)),$(ROM),$(RELOCATED_ROM))
+
+play: $(if $(filter command line,$(origin ROM)),,build-relocated)
+	$(if $(wildcard movies/$(MOVIE).check.json),,$(error unknown MOVIE "$(MOVIE)": movies/ has \
+		$(basename $(basename $(notdir $(wildcard movies/*.check.json))))))
+	$(RLTOOL) movie play movies/$(MOVIE).check.json --rom "$(PLAY_ROM)" $(MAME_OPTION) \
+		$(if $(FRAMES),--stop-at $(FRAMES)) $(if $(CLOSE),--close)
+
+# `make hooks`, once per clone, makes Git check every commit and push for stop
+# words and run `make lint` first (Retrolarium Kit's rltool hooks; the
+# stop-word list lives outside the repositories).
+hooks:
+	$(RLTOOL) hooks install --project .
+
+clean:
+	$(PYTHON) -c "import shutil; shutil.rmtree('build', ignore_errors=True)"
+
+help:
+	$(info Alien Soldier source reconstruction)
+	$(info   make split                  cut the data out of the ROMs, once)
+	$(info   make build [REVISION=eu]    build the ROM into build/alien_soldier_jp.bin (or _eu))
+	$(info   make verify [REVISION=eu]   build it and compare it with the ROM byte for byte)
+	$(info   make verify-revisions       verify both revisions)
+	$(info   make build-relocated        the Japanese ROM with every procedure moved)
+	$(info   make test                   the quick suite)
+	$(info   make test-full              test, then the movies in MAME: MAME=path or the kit's)
+	$(info   make golden                 record the movies' checkpoints from the original ROM)
+	$(info   make play [MOVIE=name]      watch a movie in MAME; ROM=image for another build)
+	$(info   make studio-check / lint / format / hooks / clean)
+	@exit 0

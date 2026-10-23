@@ -1,0 +1,96 @@
+{
+  "schema": "retrolarium.movie-check",
+  "schema_version": 1,
+  "movie": "attract.rlmovie",
+  "title": "Attract demos and menus",
+  "kind": "attract",
+  "description": "From power-on: the story and title, the options with the music, effect and voice tests, the four attract demos (stages 2, 8, 10 and 16) and the weapon setup (movies/attract.scenes.txt maps frames to scenes).",
+  "machine": "megadrij",
+  "cells": {
+    "game_mode": {
+      "address": "0xFFA284",
+      "length": 2
+    },
+    "stage": {
+      "address": "0xFFA204",
+      "length": 2
+    },
+    "score": {
+      "address": "0xFFA212",
+      "length": 4
+    },
+    "health": {
+      "address": "0xFFA216",
+      "length": 2
+    }
+  },
+  "frames": [11800, 13000, 20000, 30000, 36000, 42000, 48000, 54000, 59000, 62000, "end"],
+  "expected": {
+    "11800": {
+      "game_mode": "0018",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "0000"
+    },
+    "13000": {
+      "game_mode": "0020",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "0000"
+    },
+    "20000": {
+      "game_mode": "0020",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "0000"
+    },
+    "30000": {
+      "game_mode": "0020",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "0000"
+    },
+    "36000": {
+      "game_mode": "0010",
+      "stage": "0002",
+      "score": "00001878",
+      "health": "0200"
+    },
+    "42000": {
+      "game_mode": "0010",
+      "stage": "000e",
+      "score": "00000000",
+      "health": "0200"
+    },
+    "48000": {
+      "game_mode": "0010",
+      "stage": "0012",
+      "score": "00000626",
+      "health": "01ce"
+    },
+    "54000": {
+      "game_mode": "0010",
+      "stage": "001e",
+      "score": "00001259",
+      "health": "0160"
+    },
+    "59000": {
+      "game_mode": "0074",
+      "stage": "0002",
+      "score": "00000000",
+      "health": "0200"
+    },
+    "62000": {
+      "game_mode": "0074",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "0200"
+    },
+    "end": {
+      "game_mode": "0074",
+      "stage": "0000",
+      "score": "00000000",
+      "health": "01ce"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "retrolarium.lint",
+  "schema_version": 1,
+  "assembly": {
+    "dialect": "asl",
+    "paths": ["src"]
+  },
+  "text": {
+    "json": "valid"
+  }
+}

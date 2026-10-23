@@ -1,0 +1,21 @@
+Frames, Scene
+20-680, Sega screen
+700-11160, Story screen
+11180-11600, Alien Soldier letters
+11620-11960, Title screen
+11980-12280, Options
+12300-14100, Music test
+14120-28540, SFX test
+28560-33040, Voice test
+33060-34860, Title screen
+34880-39060, Demo play Stage 2
+39080-40860, Title screen
+40880-45060, Demo play Stage 8
+45080-46860, Title screen
+46880-51080, Demo play Stage 10
+51100-52880, Title screen
+52900-57100, Demo play Stage 16
+57120-58900, Title screen
+58920-59660, Demo play Stage 2 interrupted
+59680-59880, Title screen
+59900-65260, Weapon select screen
