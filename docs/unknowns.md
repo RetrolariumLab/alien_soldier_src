@@ -1,7 +1,5 @@
 # Unknowns register
 
-The machine-readable thresholds live in `config/source_policy.json`.
-
 ## Active visual-identity unknowns
 
 These stable IDs track three encounter-level investigations originally behind
@@ -189,23 +187,24 @@ their observable command-like byte structure. See `docs/payload_archives.md`.
   `UI_ResetPaletteAndMessageMode_Clear`; boot writes 0. `ShipName_StartScript`
   has its own entrance, and the type-$308 initializer that reaches it is not in
   the live Stage 17 handler table. These are bounded findings, not proof that no
-  indirect path exists. The scripts stay editable in Text Studio.
-- [Graphics models](graphics_models.md): unbound mapping, art and palette
-  associations remain visible as unknown markers.
+  indirect path exists. The scripts stay editable in Retrolarium Studio.
+- Graphics: unbound mapping, art and palette associations remain visible as
+  unknown markers.
 - Orphaned cross-stage dispatch: the first offset at ROM $02FC46 resolves to
   $0304B2, inside a bsr.w displacement rather than a procedure entry. Its
   constructor and possible indirect runtime selection remain unknown; the bytes
   and symbolic expressions are preserved in the historical record.
-- [Sound reference safety](sound_models.md): canonical out-of-table PSG reads
-  are retained by exact source-relative identity, not silently repaired.
-  [Sound driver](sound_driver.md) also separates assembled Z80 source identity
-  from incomplete indirect-flow, scheduling and native waveform semantics.
+- Sound reference safety: out-of-table PSG reads (a note past
+  `Sound_PSGNotePeriodTable` reads the pointers after it) stay as the driver has
+  them, not silently repaired; Retrolarium Kit's sequencer reads those bytes
+  from the ROM. [Sound driver](sound_driver.md) also separates assembled Z80
+  source identity from incomplete indirect-flow, scheduling and native waveform
+  semantics.
 
 ## Resolved naming work
 
-The naming policy, exact-address evidence and reviewed duplicate groups live in
-`config/source_policy.json`, `config/name_audit.json` and
-`config/duplicate_basis_reviews.json`; `make lint` and `make semantic-audit`
-check them. Resolving an unknown does not delete its ID or strengthen old
+The naming policy, the exact-address evidence and the reviewed duplicate groups
+of the earlier releases stay at their tags (up to 3.0), with the audits that
+checked them. Resolving an unknown does not delete its ID or strengthen old
 evidence. Keep the CODE, DATA and VIS entries above in step with the source
 comments that cite them.

@@ -19,15 +19,17 @@ from that origin or from a name that sounds plausible.
   `boss_code` are not module identities.
 - Preserve the original IDA symbol through its `; was:` provenance mapping when
   renaming a definition.
-- Record corrections to earlier generated semantic names, including their
-  evidence basis, in `config/name_audit.json`.
-- Rename all references atomically and require `make verify` afterward.
+- Record corrections to earlier generated semantic names with their evidence
+  basis in the commit that makes them (the name audit of the earlier releases
+  stays at their tags, up to 3.0).
+- Rename all references atomically and require `make verify-revisions`
+  afterward.
 - Do not infer behavior solely from a caller name that is itself provisional.
 
 ## Subsystem vocabulary
 
-Every definition in assembly source must satisfy one of three rules, which
-`make lint` checks:
+Every definition in assembly source must satisfy one of three rules (the earlier
+releases' lint checked them; keep to them by hand):
 
 - the name is owned by a declared subsystem, which is the segment before the
   first underscore or, for a name without one, its leading capitalised word;
@@ -35,12 +37,11 @@ Every definition in assembly source must satisfy one of three rules, which
   `Owner` and `Block_End` from `Block`;
 - the name is a declared hardware exception.
 
-The vocabulary is the `naming.subsystem_vocabulary` list in
-`config/source_policy.json`. It is closed: a name owned by a token that is not
-on the list fails lint until the token is added deliberately. The list was
-adopted from the reviewed state of the source at Source Reconstruction 1.0
-rather than designed in advance, so it records which subsystems this program
-actually has.
+The vocabulary is the set of owners the source already uses; the closed list of
+Source Reconstruction 1.0 to 3.0 (`config/source_policy.json` at those tags) was
+adopted from the reviewed state of the source rather than designed in advance,
+so it records which subsystems this program actually has. Add an owner
+deliberately, not by accident.
 
 The hardware exceptions are the definitions in `src/equals.inc`, `src/ports.inc`
 and `src/ram_addrs.inc`, which name the machine rather than the program, plus
@@ -62,11 +63,9 @@ Descriptions and maps must state the level when a reader could otherwise mistake
 a hypothesis for a confirmed fact.
 
 An evidence value alone is not proof: its basis must identify the instruction,
-field, table, caller or observation supporting the exact record. make
-semantic-audit reports review queues; repeated wording is not by itself wrong,
-because one proved table format may legitimately have many members.
-config/duplicate_basis_reviews.json records accepted uniform groups with exact
-addresses, names, modules and reasons. Membership drift reopens review.
+field, table, caller or observation supporting the exact record. Repeated
+wording is not by itself wrong, because one proved table format may legitimately
+have many members.
 
 The full 1.0 investigation record stays in `docs/unknowns.md` at the
 `source-reconstruction-1.0` tag; the active VIS/CODE/DATA entries are in
@@ -84,7 +83,5 @@ identity; a resolved name can coexist with unobserved artwork or entry paths.
 - Assembly lines are at most 200 characters. This accommodates imported XREF
   comments without allowing generated annotations to grow without bound.
 
-The preservation subset of these rules is currently enforced by `make lint`. The
-stricter destination and its migration order are described in
-`docs/modularization_plan.md`. Passing mechanical style checks never establishes
-semantic confidence in a label.
+`make lint` enforces the layout; the rest is kept by review. Passing mechanical
+style checks never establishes semantic confidence in a label.

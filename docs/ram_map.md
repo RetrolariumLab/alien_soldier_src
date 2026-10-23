@@ -1603,14 +1603,13 @@ executable references use one of 33 contextual views.
   assertion that exercises both reads and writes.
 - Record structure extent only after bounds are supported by iteration limits,
   adjacent accesses, or runtime traces.
-- Runtime scenarios should use reviewed semantic aliases. Raw address names are
-  acceptable only while the expectation is explicitly marked `unknown` or
-  `hypothesis`.
+- Movie checks should read reviewed semantic aliases. Raw address names are
+  acceptable only while the cell is explicitly marked `unknown` or `hypothesis`.
 
 This is a subsystem-organized RAM reference, not an append-only experiment log
 or a claim that every alias has one universal semantic role. Its size is
 intentional: comparing mutually exclusive scene overlays in one address-space
 reference is safer than splitting a single memory owner into unrelated pages.
-The exact definitions remain in `src/ram_addrs.inc`; semantic evidence remains
-in `config/name_audit.json`. The twelve inherited JP scenarios use named fields
-but do not exercise every overlay; see [runtime verification](runtime.md).
+The exact definitions remain in `src/ram_addrs.inc`; the semantic evidence of
+the earlier releases stays in `config/name_audit.json` at their tags (up to
+3.0).

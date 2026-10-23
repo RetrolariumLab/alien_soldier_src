@@ -1,9 +1,8 @@
 # Source and subsystem map
 
-The authoritative machine-readable map is `config/rom_layout.json`. The table
-below is an orientation layer; exact ownership is checked from the assembler
-listing by `make verify-layout`. `make lint` checks that these broad ranges
-cover each layout module exactly once and that the file counts stay current.
+The table below is an orientation layer: `src/main.s` and the assembler listing
+are the exact ownership. The ranges and file counts were checked against the
+listing up to tag 3.0; keep them current by hand when modules move.
 
 | ROM range           | Broad owner                                                                                                     | Files | Confidence               |
 | ------------------- | --------------------------------------------------------------------------------------------------------------- | ----: | ------------------------ |

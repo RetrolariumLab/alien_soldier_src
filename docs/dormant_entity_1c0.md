@@ -50,12 +50,12 @@ body-part table was already written with longword symbols; two tables feeding
 the same reader had disagreed in source type.
 
 `make verify` compares bytes at the canonical positions, so it could not detect
-the previous literal encoding. `make verify-relocation` checks assembler-owned
-references, so it could not see addresses hidden as numbers. Under a layout
-shift, stale pointers sent the sprite renderer into unrelated mapping data; the
-sprite list filled and later sprites, including shots and the weapon overlay,
-disappeared. This explains the repacker experiment, not an observed fault in the
-preservation ROM.
+the previous literal encoding, and the earlier static relocation check followed
+assembler-owned references, so it could not see addresses hidden as numbers.
+Under a layout shift, stale pointers sent the sprite renderer into unrelated
+mapping data; the sprite list filled and later sprites, including shots and the
+weapon overlay, disappeared. This explains the repacker experiment, not an
+observed fault in the preservation ROM.
 
 The general check is reader-first: when code advances a table with
 `move.l (aN)+`, inspect whether the table is typed as longwords and whether any

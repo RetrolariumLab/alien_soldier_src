@@ -41,12 +41,10 @@ separate modules; fixed RAM and hardware bindings stay in `memory.asm`. Neutral
 `Dac_Path` and `Dac_FixedWord` names preserve unresolved semantics without
 asserting a behaviour.
 
-`make verify-z80-source` assembles all 3,072 bytes and compares them byte for
-byte with the private preservation reference. Cartridge and staged content
-builds independently rebuild `build/z80/driver.bin` from their own source tree.
-The 68000 include consumes this generated image; it no longer executes a
-verbatim extracted asset. The private `data/sound/z80_data.bin` remains the
-reference for identity and the existing PCM/source-evidence readers.
+Retrolarium Kit assembles all 3,072 bytes into `build/z80/driver.bin` before the
+cartridge, and the 68000 include consumes that generated image, never a verbatim
+extracted asset; `make verify` compares the whole ROM, the Z80 program inside it
+included.
 
 The ROM layout check still checks all 589 asset positions. It accepts the
 assembled driver at the original asset's position only when its size and hash
@@ -221,7 +219,7 @@ first eight are `$8000` bytes; the ninth is `$1A5E` bytes followed by an
 explicit `$E5A2`-byte `$FF` gap to `$E8000`. Descriptor tables select a bank's
 high address byte and add per-sample offsets, which proves the bank naming. The
 preservation assets retain their imported `PCMPart1.bin` through `PCMPart9.bin`
-filenames. Sound Studio now splits them non-destructively from their native
+filenames. Retrolarium Kit splits them non-destructively by their native
 four-byte little-endian `(start,length)` records. The first start pointer gives
 each bank's header-table size; all 90 records form contiguous sample chains.
 Header bytes and post-sample bank tails remain protected.

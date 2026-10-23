@@ -6,9 +6,11 @@ cartridges byte for byte, and the Z80 sound program inside them is assembled
 from its own source. Every pointer is symbolic, so code and data can move.
 
 Source Reconstruction 1.0 (tag `source-reconstruction-1.0`) rebuilt the Japanese
-cartridge. 2.0 adds the European cartridge, the Z80 source and fixed-format
-content editing: twenty data formats with headless models and five Tk Studios
-that build an edited ROM without touching the preservation source.
+cartridge. 2.0 added the European cartridge, the Z80 source and fixed-format
+content editing. In 3.0 the editing moved to Retrolarium: the game opens in
+Retrolarium Studio and Kit through `alien_soldier.rlj`. 3.1 keeps only what
+builds and checks the source: both ROMs byte for byte, a build with every
+procedure moved, and a recorded run in MAME on it.
 
 ## Build and verify
 
@@ -18,54 +20,39 @@ Put your own dumps of the original cartridges in the project root:
 - `Alien Soldier (E) [!].bin`
 
 ROMs, extracted data and edited outputs are private and never go into Git. The
-AS assembler and `p2bin` are vendored in `bin/` and hash-pinned in
-`config/toolchain.json` ([tool provenance](bin/README.md)).
+build needs Python and [Retrolarium Kit](https://github.com/Retrolarium)
+(`rltool` on `PATH`, or `RLTOOL=...`), which brings the AS assembler and
+`p2bin`.
 
 ```text
-python -m pip install -r requirements-dev.txt
-make init PROFILE=jp      # extract the data from the Japanese dump, build, verify
-make init PROFILE=eu      # the same for the European dump
-make verify-all           # both cartridges, byte for byte
+make split               # cut the data out of both ROMs, once
+make verify-revisions    # both cartridges, byte for byte
 ```
 
-`PROFILE=jp` is the default. Initialize only the profiles whose dumps you have;
-[regional profiles](docs/region_profiles.md) lists the exact identities.
+`make build` and `make verify` take `REVISION=eu` for the European cartridge
+(`jp` is the default); [revisions](docs/revisions.md) lists their identities and
+what differs.
 
 ## Checks
 
 ```text
-make lint                # assembly style, source policy, project hygiene
-make test                # every test module, eight at a time (about two minutes)
-make verify-relocation   # move code and data; every pointer must follow
-make verify-symbols      # export and check the debugger symbols
-make check-content       # every content model and Studio against both cartridges
-make release-check       # all of the above from a clean build, plus the game in Gens
+make lint                # assembly layout and the shared formatters
+make test                # unit tests, both ROMs, the moved build, the studio check
+make test-full           # test, then the attract run in MAME on the moved build
+make play                # watch that run in a MAME window
 ```
 
-`make release-check` also replays twelve Japanese scenarios in the pinned Gens
-build and boots the European cartridge to its attract demo. It needs the
-[gens_automation](https://github.com/oranguthang/gens_automation) emulator at
-the pinned commit (`GENS_DIR=...`); see
-[release verification](docs/release_check.md).
+`make test-full` and `make play` need MAME (`MAME=...`, or the one
+`rltool movie mame` remembers); [the movies](movies/README.md) describes the
+run.
 
 ## Edit content
 
-The Studios edit an ignored workspace in `content/workspace/<profile>/`, never
-`src/` or `data/`, and build the edited ROM into `build/content/`.
-
-```text
-make level-studio STAGE_INDEX=0
-make graphics-studio GRAPHICS_PAYLOAD=0
-make screen-studio SCREEN_ID=title_background
-make text-studio
-make sound-studio
-make build-content
-make playtest-level PLAYTEST_STAGE=1
-```
-
-Add `CONTENT_PROFILE=eu` to work on the European cartridge.
-[Content authoring](docs/content_authoring.md) describes the formats, their
-fixed capacities and what is not editable yet.
+Alien Soldier is edited in [Retrolarium Studio](https://github.com/Retrolarium):
+open `alien_soldier.rlj` and choose a revision. The studio copies this
+repository into the ignored `.retrolarium/<revision>/` and rebuilds the edited
+ROM from the source; [editing in Retrolarium](docs/retrolarium.md) lists what it
+edits.
 
 ## Find your way around
 
@@ -87,7 +74,8 @@ fixed capacities and what is not editable yet.
   Bell and the
   [SMPS Research project](https://github.com/sonicretro/smps-rips/tree/master/68k/Alien%20Soldier)
 - AS Macro Assembler by Alfred Arnold
-- [Gens automation](https://github.com/oranguthang/gens_automation)
+- [Gens automation](https://github.com/oranguthang/gens_automation), with which
+  the earlier releases were researched and the movies recorded
 - Inspired by
   [lab313ru's Quackshot disassembly](https://github.com/lab313ru/quackshot_src/)
 

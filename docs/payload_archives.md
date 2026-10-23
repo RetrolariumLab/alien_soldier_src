@@ -3,8 +3,9 @@
 The preservation source includes the original bytes. Eight former payload files
 contained two consecutive LZSS archives but exposed only the first archive's
 name. The ranges below are now independent extracted assets and `binclude`
-symbols. `tests/test_payload_archives.py` checks their headers, exact lengths,
-decoded tile counts, and the pointers that use them.
+symbols. The earlier releases' tests checked their headers, exact lengths,
+decoded tile counts and the pointers that use them; `make verify` keeps their
+bytes.
 
 | Second archive ROM address | First symbol                                | Second symbol                            | Decoded tiles |
 | -------------------------- | ------------------------------------------- | ---------------------------------------- | ------------: |

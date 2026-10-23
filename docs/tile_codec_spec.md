@@ -247,9 +247,9 @@ and the runs that sweep past those seeds get shorter and cheaper too.
 
 ## The problem
 
-The standalone encoder above remains a run-only reference. The authoring
-pipeline now additionally uses `scripts/authoring/tile_codec_edit.py`: it reads
-the original token stream and attributes final pixels to their literal colour
+The standalone encoder above remains a run-only reference. Retrolarium Kit's
+encoder (`games/alien_soldier/tile_codec.py`) goes further: it reads the
+original token stream and attributes final pixels to their literal colour
 tokens, including marker seeds consumed by later runs. If edited pixels owned by
 a token still share one colour, that literal can be changed while retaining the
 original marker paths and run lengths. Otherwise a changed tile can fall back to
@@ -261,7 +261,7 @@ This source-guided path recolours all seven cartridge streams within their
 original slots and preserves exact original bytes at zero edit. It uses one
 64-pixel ownership plan at a time, with no growing search frontier. It does not
 solve the general optimization problem below: arbitrary new art may still fail
-the fixed-capacity check in Graphics Studio.
+the fixed-capacity check when the kit fits it into its slot.
 
 **Given 64 target pixels, emit the fewest bits that decode to exactly them.**
 

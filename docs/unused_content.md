@@ -6,8 +6,8 @@ claim is tied to a live ROM consumer or a recorded runtime trace, character
 identities, intended placement, and “unused” status remain external
 attributions. Source symbols therefore use neutral entity-type names.
 
-The patch bytes below are research inputs and have not yet been reproduced by
-the release runtime suite. They must not be applied to the preservation build.
+The patch bytes below are research inputs and have not been reproduced by any
+recorded run. They must not be applied to the preservation build.
 
 ## Global Activation Code
 
