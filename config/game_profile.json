@@ -166,16 +166,6 @@
         ]
       },
       {
-        "id": "options",
-        "asset_list": "Options_AssetLoadDescriptors",
-        "planes": [null, "Gfx_FrontendAlternateVRAMTransferParameters"],
-        "camera_x": [0, 1536],
-        "lookup_y": [0, 0],
-        "palette": {
-          "list": "OptionsScreenPaletteOffsetList"
-        }
-      },
-      {
         "id": "story",
         "asset_list": "StoryScreenAssetCommands",
         "planes": [null, "Gfx_ScrollVRAMTransferParameters"],
@@ -183,6 +173,26 @@
         "lookup_y": [0, 0],
         "palette": {
           "list": "StoryScreenPaletteOffsetList"
+        }
+      },
+      {
+        "id": "password",
+        "asset_list": "Options_AssetLoadDescriptors",
+        "planes": ["Gfx_TitleAndZLeoVRAMTransferParameters", "Gfx_FrontendAlternateVRAMTransferParameters"],
+        "camera_x": [1024, 1536],
+        "lookup_y": [0, 0],
+        "palette": {
+          "command": "FrontendPaletteCommands"
+        }
+      },
+      {
+        "id": "ending",
+        "asset_list": "EndingSequence_AssetLoads",
+        "planes": ["Gfx_DefaultVRAMTransferParameters", null],
+        "camera_x": [1536, 0],
+        "lookup_y": [0, 0],
+        "palette": {
+          "list": "CreditsAndPlanetPaletteOffsetList"
         }
       }
     ]

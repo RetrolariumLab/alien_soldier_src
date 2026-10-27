@@ -16,14 +16,19 @@ and which screens are static; the kit reads every table from the source when a
 project opens. The data comes from your ROM: the kit cuts it out by
 `assets/manifest.json`, as `make split` does. The studio offers:
 
-- Levels: each stage slot's objects (spawn lists), their 32×32 blocks and the
-  stage records, with playtest from any stage through the password screen;
+- Levels: one level per block set (the stages that load the same chunks and
+  patterns), each stage on the part of the shared map its camera covers, with
+  its objects (spawn lists), its 32×32 blocks and its stage record, and playtest
+  from any stage through the password screen;
 - Tiles: the compressed (LZSS and the tile codec) and plain art, painted in the
   stage's palettes;
 - Metatiles: the 32×32 blocks, their 8×8 chunks and the plane maps;
 - Palettes, with the stage or screen that uses them as a preview;
-- Animations: every sprite frame and the scripts that play them;
-- Screens: the title, options and story screens;
+- Objects: every block of sprite mappings, drawn with the tiles and colours the
+  game uses for it;
+- Animations: the scripts that play the sprite frames, drawn the same way;
+- Screens: the title, story and options-and-password screens (the two load the
+  same maps and art), the ending, and the credits' twenty picture scenes;
 - Text: the story, menus, stage and boss messages, credits and results;
 - Sound: the songs and effects on a piano roll, with Listen (the kit plays the
   68000 driver's sequences through a YM2612 and PSG renderer; it follows the
@@ -43,6 +48,24 @@ Japanese story font's glyphs are shown as numbers). The studio and the kit read
 it when a project opens and show the names as they are, untranslated; without it
 they show numbers instead. Its `guard` list names what Retrolarium's own
 repositories must never contain.
+
+A sprite's static pieces take their tiles from whatever the game loaded into
+VRAM, which the source does not tie to each mapping. `config/object_art.json`
+records what play showed, by mapping block: the attribute objects drew it with
+(base tile, palette line, priority), the art payloads its tiles were found in
+with the VRAM address each was loaded at, and the palette commands that wrote
+the colour lines its pieces use. It was taken in MAME by starting every stage
+through the password screen and logging each mapping the renderer drew, with the
+VRAM and colour RAM the CPU had written. A block it does not list borrows the
+record of another block of its file; one with none draws as outlines.
+
+Its `spawns` list says what each placement of the stages' spawn lists draws, so
+the studio's levels show the objects in their art: the list and index, the type
+and parameter (which find the placement again after edits), the mapping block
+and frame it first drew and the attribute it drew with. In MAME each placement
+was put into a free slot of its range as `Sys_SpawnObject` does, at the stage's
+start, and its first mapping logged. A placement it does not list (a few never
+draw on their own) shows as a marker.
 
 ## Checking the repository
 

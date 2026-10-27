@@ -1,7 +1,7 @@
 {
   "schema": "retrolarium.names",
   "schema_version": 1,
-  "description": "The names inside Alien Soldier, in English, and the lists that carry them, for Retrolarium Studio and Kit; Retrolarium keeps none of them. stages are the stage slots as the results screen names them (Results_StageDetailTextTable); font_characters maps each glyph of the shared and Japanese story fonts to the character it draws (empty: a glyph with no character). guard lists the names Retrolarium's own repositories must never contain.",
+  "description": "The names inside Alien Soldier, in English, and the lists that carry them, for Retrolarium Studio and Kit; Retrolarium keeps none of them. stages are the stage slots as the results screen names them (Results_StageDetailTextTable); bosses are the cut bosses by their entity type, which no text in the ROM names; font_characters maps each glyph of the shared and Japanese story fonts to the character it draws (empty: a glyph with no character). guard lists the names Retrolarium's own repositories must never contain.",
   "names": {
     "stages": {
       "0": "Jetsripper",
@@ -29,6 +29,10 @@
       "22": "Wolfgunblood / Garopa",
       "23": "Missiray",
       "24": "Z-Leo"
+    },
+    "bosses": {
+      "0x1C0": "Love Penguin",
+      "0x3EC": "Lambda Bunny"
     }
   },
   "catalogs": {

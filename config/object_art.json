@@ -1,0 +1,5109 @@
+{
+  "schema": "alien-soldier.object-art",
+  "schema_version": 1,
+  "mappings": {
+    "SharedCombatSpriteFrame00": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame01": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame02": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame03": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame04": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame05": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame06": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame07": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame08": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame09": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame10": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame11": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame12": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame13": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame14": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame15": {
+      "attribute": "$9C80",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame19": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame21": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame22": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame23": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame24": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame25": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame26": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame27": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame28": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame29": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame30": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame31": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame32": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame37": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame38": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame40": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame41": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame42": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame43": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame44": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame45": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame56": {
+      "attribute": "$8480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame59": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame62": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame63": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame64": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame65": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame66": {
+      "attribute": "$0480",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame67": {
+      "attribute": "$0C80",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame68": {
+      "attribute": "$0C80",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "SharedCombatSpriteFrame69": {
+      "attribute": "$0C80",
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "WeaponSelect_AnimatedSpriteMapping00": {
+      "attribute": "$0000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "WeaponSelect_AnimatedSpriteMapping01": {
+      "attribute": "$0000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "WeaponSelect_AnimatedSpriteMapping02": {
+      "attribute": "$8000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ]
+    },
+    "WeaponSelect_AnimatedSpriteMapping03": {
+      "attribute": "$8000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "WeaponSelect_AnimatedSpriteMapping04": {
+      "attribute": "$0000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "WeaponSelect_AnimatedSpriteMapping05": {
+      "attribute": "$0000",
+      "art": [
+        ["SharedMenuType3DataF680", "$F680"],
+        ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["SharedStagePaletteCommand", 0]
+      ]
+    },
+    "Enemy_BehaviorSpriteMapping01": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping02": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping03": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping04": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping05": {
+      "attribute": "$0B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping06": {
+      "attribute": "$0B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping07": {
+      "attribute": "$0B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping08": {
+      "attribute": "$0B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping09": {
+      "attribute": "$8B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping10": {
+      "attribute": "$8B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping11": {
+      "attribute": "$8B00",
+      "art": [["StageSharedTileArtSource00", "$6000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping12": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping13": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BehaviorSpriteMapping14": {
+      "attribute": "$0B00",
+      "art": [
+        ["StageSharedTileArtSource00", "$6000"],
+        ["StageSharedTileArtSource00", "$7000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "PeriodicShotEnemySpriteMapping00": {
+      "attribute": "$8B80",
+      "art": [["StageSharedTileArtSource02", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "PeriodicShotEnemySpriteMapping03": {
+      "attribute": "$8B80",
+      "art": [["StageSharedTileArtSource02", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "PeriodicShotEnemySpriteMapping05": {
+      "attribute": "$8B80",
+      "art": [["StageSharedTileArtSource02", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "PeriodicShotEnemySpriteMapping06": {
+      "attribute": "$8B80",
+      "art": [["StageSharedTileArtSource02", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping00": {
+      "attribute": "$0B80",
+      "art": [
+        ["StageSharedTileArtSource04", "$7000"],
+        ["StageSharedTileArtSource04", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping01": {
+      "attribute": "$0B80",
+      "art": [
+        ["StageSharedTileArtSource04", "$7000"],
+        ["StageSharedTileArtSource04", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping02": {
+      "attribute": "$0B80",
+      "art": [
+        ["StageSharedTileArtSource04", "$7000"],
+        ["StageSharedTileArtSource04", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping03": {
+      "attribute": "$0B80",
+      "art": [
+        ["StageSharedTileArtSource04", "$7000"],
+        ["StageSharedTileArtSource04", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping13": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping14": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_ProjectileSpriteMapping15": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping00": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping01": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping02": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping03": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping04": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping05": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping06": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping07": {
+      "attribute": "$0B80",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping08": {
+      "attribute": "$0380",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping09": {
+      "attribute": "$0380",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_BirdSpriteMapping10": {
+      "attribute": "$0380",
+      "art": [["StageSharedTileArtSource06", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_PhasePatternSpriteMappingA": {
+      "attribute": "$8C00",
+      "art": [["StageSharedTileArtSource08", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_PhasePatternSpriteMappingB": {
+      "attribute": "$8C00",
+      "art": [["StageSharedTileArtSource08", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_PhasePatternSpriteMappingC": {
+      "attribute": "$8C00",
+      "art": [["StageSharedTileArtSource08", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_PhasePatternSpriteMappingD": {
+      "attribute": "$8C00",
+      "art": [["StageSharedTileArtSource08", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingA": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingB": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingC": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingD": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingG": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingH": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingI": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingJ": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_Stage10WaspSpriteMappingK": {
+      "attribute": "$0C00",
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingAnimationSpriteMappingA": {
+      "attribute": "$8C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingAnimationSpriteMappingB": {
+      "attribute": "$8C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingAnimationSpriteMappingC": {
+      "attribute": "$8C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingAnimationSpriteMappingD": {
+      "attribute": "$8C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingAnimationSpriteMappingE": {
+      "attribute": "$8C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Enemy_CirclingRotationSpriteMapping4": {
+      "attribute": "$1C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Enemy_CirclingRotationSpriteMapping3": {
+      "attribute": "$0C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Enemy_CirclingRotationSpriteMapping2": {
+      "attribute": "$0C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Enemy_CirclingRotationSpriteMapping1": {
+      "attribute": "$0C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Enemy_CirclingRotationSpriteMapping0": {
+      "attribute": "$0C00",
+      "art": [
+        ["StageSharedTileArtSource0C", "$6000"],
+        ["StageSharedTileArtSource0C", "$7000"],
+        ["StageSharedTileArtSource0C", "$8000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Stage11_RisingHazardLauncherSpriteMapping": {
+      "attribute": "$08C2",
+      "art": [["Stage10EnemyTileArt1", "$1840"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Projectile_MissirayVerticalShotSpriteMapping00": {
+      "attribute": "$4400",
+      "art": [["Stage22And24TileArt", "$8000"]],
+      "palettes": [["DestroyerProtoIntroPaletteCommands", 32]]
+    },
+    "Projectile_MissirayVerticalShotSpriteMapping03": {
+      "attribute": "$0400",
+      "art": [["Stage22And24TileArt", "$8000"]],
+      "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
+    },
+    "Enemy_Stage11FishSpriteMapping00": {
+      "attribute": "$0C00",
+      "art": [["Stage22And24TileArt", "$8000"]],
+      "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
+    },
+    "Enemy_Stage11FishSpriteMapping03": {
+      "attribute": "$0C00",
+      "art": [["Stage22And24TileArt", "$8000"]],
+      "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping00": {
+      "attribute": "$0380",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping01": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping02": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping03": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping04": {
+      "attribute": "$0380",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping05": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping06": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping07": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping08": {
+      "attribute": "$0380",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping09": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping10": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormSpriteMapping11": {
+      "attribute": "$0B80",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Stage18_SegmentedWormParticleSpriteMapping00": {
+      "attribute": "$0380",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["Stage17PaletteCommandBank", 32]]
+    },
+    "Stage18_SegmentedWormParticleSpriteMapping01": {
+      "attribute": "$0380",
+      "art": [["Stage22And24TileArt2", "$7000"]],
+      "palettes": [["Stage17PaletteCommandBank", 32]]
+    },
+    "Boss_Stage3OrbitingFormationSpriteMapping00": {
+      "attribute": "$0B00",
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Boss_Stage3OrbitingFormationSpriteMapping01": {
+      "attribute": "$0B00",
+      "palettes": [["SharedStagePaletteCommand", 0]]
+    },
+    "Boss_CaterpillarFourPhaseSegmentMappingA": {
+      "attribute": "$C300",
+      "art": [["Stage9CaterpillarTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarFourPhaseSegmentMappingB": {
+      "attribute": "$C300",
+      "art": [["Stage9CaterpillarTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarHomingProjectileSegmentMapping": {
+      "attribute": "$C300",
+      "art": [["Stage9CaterpillarTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarFourPhaseSegmentMappingC": {
+      "attribute": "$C300",
+      "art": [["Stage9CaterpillarTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarTwoPhaseSegmentMappingA": {
+      "attribute": "$C300",
+      "art": [
+        ["Stage9CaterpillarTileArt", "$5F00"],
+        ["Stage9CaterpillarTileArt", "$6000"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarTwoPhaseSegmentMappingB": {
+      "attribute": "$C300",
+      "art": [
+        ["Stage9CaterpillarTileArt", "$6000"],
+        ["Stage9CaterpillarTileArt", "$6100"]
+      ],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_CaterpillarShipTransitionSegmentMapping": {
+      "attribute": "$C300",
+      "art": [["Stage9CaterpillarTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
+    },
+    "Boss_ShellshogunSpriteMapping00": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping01": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping02": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping03": {
+      "attribute": "$1B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping04": {
+      "attribute": "$1300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping05": {
+      "attribute": "$1300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping06": {
+      "attribute": "$1300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping07": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping08": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping09": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping10": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping11": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping12": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping13": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping14": {
+      "attribute": "$8300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping15": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping16": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping17": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping18": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping19": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping20": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping21": {
+      "attribute": "$9300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping22": {
+      "attribute": "$8300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping23": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping24": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping25": {
+      "attribute": "$0300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping26": {
+      "attribute": "$8B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping27": {
+      "attribute": "$8300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping28": {
+      "attribute": "$8300",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [["Boss_ShellshogunPaletteCommand", 0]]
+    },
+    "Boss_ShellshogunSpriteMapping29": {
+      "attribute": "$9B00",
+      "art": [["Boss_ShellshogunTileArt", "$6000"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["Boss_ShellshogunPaletteCommand", 0]
+      ]
+    },
+    "Boss_XiTigerGroundedBodyMapping": {
+      "attribute": "$C280",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_XiTigerAirborneBodyMapping": {
+      "attribute": "$C280",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Boss_XiTigerPaletteCommand", 0],
+        ["XiTigerCutscenePaletteCommand", 0]
+      ]
+    },
+    "Boss_XiTigerClawMappingA": {
+      "attribute": "$D280",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Boss_TerobusterPaletteCommand", 0],
+        ["Stage15PaletteCommands", 0],
+        ["SevenForcesValkiriePaletteCommand", 0]
+      ]
+    },
+    "Boss_XiTigerClawMappingB": {
+      "attribute": "$DA80",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Boss_XiTigerPaletteCommand", 0],
+        ["XiTigerCutscenePaletteCommand", 0]
+      ]
+    },
+    "Boss_XiTigerClawMappingD": {
+      "attribute": "$CA80",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_XiTigerClawMappingC": {
+      "attribute": "$CA80",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Boss_XiTigerPaletteCommand", 0],
+        ["XiTigerCutscenePaletteCommand", 0]
+      ]
+    },
+    "Boss_XiTigerClawMappingE": {
+      "attribute": "$C280",
+      "art": [["Boss_XiTigerTileArt", "$5000"]],
+      "palettes": [
+        ["Boss_JampanPaletteCommand", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_FlyingNeoAuxiliaryPartMappingA": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoAuxiliaryPartMappingB": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping0": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping1": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping2": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping3": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping4": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping5": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping6": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoRotationMapping7": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoAnchorPartMappingA": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Boss_FlyingNeoAnchorPartMappingB": {
+      "attribute": "$4B00",
+      "art": [["Boss_FlyingNeoTileArt", "$6000"]],
+      "palettes": [["Boss_FlyingNeoPaletteCommands", 0]]
+    },
+    "Cutscene_XiTigerEntranceLandingMappingB": {
+      "attribute": "$E400",
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]],
+      "palettes": [["XiTigerCutscenePaletteCommand", 0]]
+    },
+    "Cutscene_XiTigerEntranceLandingMappingA": {
+      "attribute": "$E400",
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]],
+      "palettes": [["XiTigerCutscenePaletteCommand", 0]]
+    },
+    "Cutscene_XiTigerEntranceGroundedMapping": {
+      "attribute": "$EC00",
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]],
+      "palettes": [["XiTigerCutscenePaletteCommand", 0]]
+    },
+    "Cutscene_XiTigerEntrancePreJumpAndLandingMapping": {
+      "attribute": "$EC00",
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]]
+    },
+    "Cutscene_XiTigerEntranceAirborneMapping": {
+      "attribute": "$EC00",
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]]
+    },
+    "SharedVictorSunsetStingSegmentMappingA": {
+      "attribute": "$2300",
+      "art": [["Boss_VictorTileArt", "$6000"]],
+      "palettes": [
+        ["EntityType1C0PaletteCommand", 0],
+        ["FrontendPaletteCommands", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 296]
+      ]
+    },
+    "SharedVictorSunsetStingSegmentMappingB": {
+      "attribute": "$2300",
+      "art": [["Boss_VictorTileArt", "$6000"]],
+      "palettes": [["SevenForcesSireneTimedPaletteCommandB", 0]]
+    },
+    "Boss_Epsilon1PrimaryBodyMapping": {
+      "attribute": "$4300",
+      "art": [
+        ["Boss_Epsilon1TileArt", "$5E40"],
+        ["Boss_Epsilon1TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_Epsilon1AlternateBodyMapping": {
+      "attribute": "$4300",
+      "art": [
+        ["Boss_Epsilon1TileArt", "$6000"],
+        ["Boss_Epsilon1TileArt", "$61C0"]
+      ],
+      "palettes": [
+        ["Boss_SniperHoneyviperPaletteCommand", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_Epsilon1LinkedSidePartMapping": {
+      "attribute": "$4B00",
+      "art": [["Boss_Epsilon1TileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Boss_JampanShieldAndOrbitingPartMapping": {
+      "attribute": "$EB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanLinkedPartMappingA": {
+      "attribute": "$EB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanOrbitingPartMappingA": {
+      "attribute": "$EB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanLinkedPartMappingB": {
+      "attribute": "$EB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanLinkedAnimationMappingA": {
+      "attribute": "$EB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanLinkedAnimationMappingB": {
+      "attribute": "$EB00",
+      "art": [
+        ["Boss_JampanTileArt", "$5F00"],
+        ["Boss_JampanTileArt", "$6000"]
+      ],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanLinkedAnimationMappingC": {
+      "attribute": "$EB00",
+      "art": [
+        ["Boss_JampanTileArt", "$6000"],
+        ["Boss_JampanTileArt", "$6100"]
+      ],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_JampanOrbitingPartMappingB": {
+      "attribute": "$FB00",
+      "art": [["Boss_JampanTileArt", "$6000"]],
+      "palettes": [["Boss_JampanPaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2SpawnedProjectileMapping": {
+      "attribute": "$4300",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2ComponentMapping": {
+      "attribute": "$FB00",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2ProjectileMapping": {
+      "attribute": "$FB00",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2OrbitingPartMapping0": {
+      "attribute": "$E300",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2OrbitingPartMapping1": {
+      "attribute": "$E300",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2OrbitingPartMapping2": {
+      "attribute": "$EB00",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2OrbitingPartMapping3": {
+      "attribute": "$6B00",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "Boss_DestroyerMK2OrbitingPartMapping4": {
+      "attribute": "$6300",
+      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+    },
+    "SevenForcesRotationSpriteFrame00": {
+      "attribute": "$6300",
+      "art": [
+        ["SevenForcesValkirieTileArt", "$6000"],
+        ["Stage20TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame01": {
+      "attribute": "$6300",
+      "art": [
+        ["SevenForcesValkirieTileArt", "$6000"],
+        ["Stage20TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame02": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame03": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame04": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame05": {
+      "attribute": "$6B00",
+      "art": [
+        ["SevenForcesValkirieTileArt", "$6000"],
+        ["Stage20TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame06": {
+      "attribute": "$6B00",
+      "art": [
+        ["SevenForcesValkirieTileArt", "$6000"],
+        ["Stage20TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame07": {
+      "attribute": "$6B00",
+      "art": [
+        ["SevenForcesValkirieTileArt", "$6000"],
+        ["Stage20TileArt", "$6000"]
+      ],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame08": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame09": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesValkiriePaletteCommand", 0],
+        ["EntityType3F4PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame10": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [["SevenForcesValkiriePaletteCommand", 0]]
+    },
+    "SevenForcesRotationSpriteFrame11": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesValkiriePaletteCommand", 0],
+        ["EntityType3F4PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame12": {
+      "attribute": "$7300",
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame13": {
+      "attribute": "$7300",
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame14": {
+      "attribute": "$7300",
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame15": {
+      "attribute": "$7300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame16": {
+      "attribute": "$7300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame17": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame18": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame19": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame20": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame21": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame22": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame23": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame24": {
+      "attribute": "$7300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame25": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame26": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame27": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame28": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame29": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame30": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame31": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame32": {
+      "attribute": "$7300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame33": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame34": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame35": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame36": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame37": {
+      "attribute": "$6300",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame38": {
+      "attribute": "$6B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "SevenForcesRotationSpriteFrame39": {
+      "attribute": "$7B00",
+      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "palettes": [
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage15PaletteCommands", 0],
+        ["Boss_Epsilon1PaletteCommands", 0]
+      ]
+    },
+    "Stage24SceneObject_SpriteFrame00": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 296]]
+    },
+    "Stage24SceneObject_SpriteFrame01": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesSylpheedPaletteCommand", 0],
+        ["SevenForcesSireneTimedPaletteCommandB", 0]
+      ]
+    },
+    "Stage24SceneObject_SpriteFrame02": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesIntroPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Stage24SceneObject_SpriteFrame03": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesIntroPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Stage24SceneObject_SpriteFrame04": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesIntroPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Stage24SceneObject_SpriteFrame05": {
+      "attribute": "$2300",
+      "art": [["Stage20TileArt", "$6000"]],
+      "palettes": [
+        ["SevenForcesIntroPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame00": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame01": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame02": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame03": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame04": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame05": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame06": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame07": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame08": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame09": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0]
+      ]
+    },
+    "Projectile_MissirayBulletSpriteFrame10": {
+      "attribute": "$0300",
+      "art": [["Boss_MissirayTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["Boss_MissirayPaletteCommand", 0],
+        ["Stage17PaletteCommandBank", 0]
+      ]
+    },
+    "Boss_WolfGaropaInitialPartMapping": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaOrbDirectionMapping0": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaOrbDirectionMapping1": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaOrbDirectionMapping2": {
+      "attribute": "$B288",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaOrbDirectionMapping3": {
+      "attribute": "$B288",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA0": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA1": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingA2": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingA3": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA4": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA5": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA6": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingA7": {
+      "attribute": "$B288",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingB0": {
+      "attribute": "$3288",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingB1": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingB2": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingB3": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingB4": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingB5": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingB6": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingB7": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC0": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC1": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC2": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingC3": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaRotationMappingC4": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC5": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC6": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaRotationMappingC7": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["Boss_ZLeoPaletteCommands", 0]
+      ]
+    },
+    "Boss_WolfGaropaPoseAngleOutsideRangeMapping": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaPoseAngleMidRangeMapping": {
+      "attribute": "$AA88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["Boss_WolfGaropaPaletteCommand", 0],
+        ["EntityType3F0PaletteCommand", 0]
+      ]
+    },
+    "Boss_WolfGaropaOrbNeutralMapping": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaOrbAlternateMapping": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaNearPlayerMapping": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [["Boss_WolfGaropaPaletteCommand", 0]]
+    },
+    "Boss_WolfGaropaFarPlayerMapping": {
+      "attribute": "$2A88",
+      "art": [["Boss_WolfGaropaTileArt1", "$5100"]],
+      "palettes": [
+        ["SireneAndLateStagePaletteCommandBank", 70],
+        ["Boss_WolfGaropaPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoIntroFarSidePartMapping": {
+      "attribute": "$4380",
+      "art": [
+        ["Boss_ZLeoTileArt1", "$6FE0"],
+        ["Boss_ZLeoTileArt1", "$7000"],
+        ["Boss_ZLeoTileArt1", "$7020"]
+      ],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoIntroSidePartMapping": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoValkirieForceSharedMappingE": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoIntroPartRowMapping": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoIntroLowerPartMapping": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoValkirieForceSharedMappingA": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoValkirieForceSharedMappingB": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoValkirieForceSharedMappingD": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoValkirieForceSharedMappingC": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoBladeDirectionMapping0": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoBladeDirectionMapping1": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoBladeDirectionMapping2": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoBladeDirectionMapping3": {
+      "attribute": "$4B80",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoIntroOuterPartMapping": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "IndexedObjectSpriteMapping00": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping01": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping02": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping03": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping04": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping05": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping06": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping07": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "IndexedObjectSpriteMapping08": {
+      "attribute": "$02DF",
+      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
+    },
+    "Stage8_FlyingNeoCompositeSpriteMapping": {
+      "attribute": "$81E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 618]]
+    },
+    "Midgame_LightningSpriteMapping00": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping01": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping02": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping03": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping04": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping05": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping06": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping07": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 160],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping08": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping09": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366],
+        ["Stage17PaletteCommandBank", 32]
+      ]
+    },
+    "Midgame_LightningSpriteMapping10": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping11": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "Midgame_LightningSpriteMapping12": {
+      "attribute": "$01E8",
+      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Stage17PaletteCommandBank", 32],
+        ["CreditsAndEarlyStagePaletteCommandBank", 366]
+      ]
+    },
+    "SharedProjectileSpriteMappingB": {
+      "attribute": "$5000",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
+    },
+    "SharedProjectileSpriteMappingC": {
+      "attribute": "$5000",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
+    },
+    "SharedProjectileSpriteMappingD": {
+      "attribute": "$5000",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
+    },
+    "Stage18_MovingPlatformSpriteMapping": {
+      "attribute": "$4000",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
+    },
+    "Enemy_Stage10BeetleSpriteMappingA": {
+      "attribute": "$8000",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Enemy_Stage10BeetleSpriteMappingB": {
+      "attribute": "$8800",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Enemy_Stage10BeetleSpriteMappingC": {
+      "attribute": "$8800",
+      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Stage21_AsteroidLargeMapping": {
+      "attribute": "$6400",
+      "art": [["Stage21TileArt8000", "$8000"]],
+      "palettes": [["Stage15PaletteCommands", 32]]
+    },
+    "Shared_AsteroidAndDestroyerProtoMapping": {
+      "attribute": "$6400",
+      "art": [["Stage21TileArt8000", "$8000"]],
+      "palettes": [["Stage15PaletteCommands", 32]]
+    },
+    "Stage21_AmbientRockMappingA": {
+      "attribute": "$0400",
+      "art": [["Stage21TileArt8000", "$8000"]],
+      "palettes": [["SireneAndLateStagePaletteCommandBank", 70]]
+    },
+    "Stage21_AmbientRockMappingB": {
+      "attribute": "$0400",
+      "art": [["Stage21TileArt8000", "$8000"]],
+      "palettes": [["SireneAndLateStagePaletteCommandBank", 70]]
+    },
+    "Stage21_AmbientRockMappingC": {
+      "attribute": "$0400",
+      "art": [["Stage21TileArt8000", "$8000"]],
+      "palettes": [
+        ["SireneAndLateStagePaletteCommandBank", 70],
+        ["Stage17PaletteCommandBank", 160],
+        ["SireneAndLateStagePaletteCommandBank", 294]
+      ]
+    },
+    "MissirayEntrySecondarySpriteMapping": {
+      "attribute": "$8200",
+      "art": [["Stage3Phase3Tiles", "$4000"]],
+      "palettes": [["SireneAndLateStagePaletteCommandBank", 134]]
+    },
+    "Player_PhoenixDashAttackSpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping07": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping05": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalPrimarySpriteMapping06": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping07": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping05": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DirectionalSecondarySpriteMapping06": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_IdleSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CommonPrimarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DashSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CommonMovementSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping05": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping06": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_StateAnimationSpriteMapping07": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_KnockbackPrimarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CounterForcePrimarySpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CounterForcePrimarySpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CounterForcePrimarySpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_CounterForcePrimarySpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DefaultVerticalSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_RisingSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_FallingSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_FallPrimarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_FastFallPrimarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponAnimationSpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponAnimationSpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponAnimationSpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponAnimationSpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_WeaponAnimationSpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PrimaryLayoutSpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PrimaryLayoutSpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PrimaryLayoutSpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PrimaryLayoutSpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PrimaryLayoutSpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_AlternateLayoutSpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_AlternateLayoutSpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_AlternateLayoutSpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_AlternateLayoutSpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_AlternateLayoutSpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_PhoenixAndTeleportDashSpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_TeleportDashTrailSpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_MotionPoseSecondarySpriteMapping": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_SpecialAttackSecondarySpriteMappingA": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_SpecialAttackSecondarySpriteMappingB": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping00": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping01": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping02": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping03": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping04": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping05": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping06": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Player_DeathSequenceSpriteMapping07": {
+      "attribute": "$4DC0",
+      "palettes": [["CommonPaletteCommand", 0]]
+    }
+  },
+  "spawns": [
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$10",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 2,
+      "type": "$1C",
+      "parameter": "$15",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 3,
+      "type": "$1C",
+      "parameter": "$18",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 4,
+      "type": "$44",
+      "parameter": "$4",
+      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 5,
+      "type": "$1C",
+      "parameter": "$10",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 6,
+      "type": "$1C",
+      "parameter": "$10",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 7,
+      "type": "$8C",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 8,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 9,
+      "type": "$44",
+      "parameter": "$0",
+      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 10,
+      "type": "$1E0",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 11,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 12,
+      "type": "$44",
+      "parameter": "$0",
+      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 13,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 14,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 15,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 16,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 17,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 18,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage1_ObjectSpawnList",
+      "index": 19,
+      "type": "$1E0",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 1,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 2,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 3,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 4,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$8300"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 5,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 6,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 7,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 8,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 9,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 10,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 11,
+      "type": "$44",
+      "parameter": "$4",
+      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 12,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 13,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 15,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 16,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 17,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 18,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 20,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 21,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 22,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 23,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 24,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 25,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 26,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 28,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 29,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 30,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 31,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 33,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 34,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 35,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 36,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 37,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 38,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage2_ObjectSpawnList",
+      "index": 39,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 2,
+      "type": "$28C",
+      "parameter": "$0",
+      "mapping": "Enemy_PhasePatternSpriteMappingD",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 3,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 7,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 9,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 10,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 11,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage3_ObjectSpawnList",
+      "index": 12,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 2,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 3,
+      "type": "$48",
+      "parameter": "$2",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$1C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 4,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 5,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 6,
+      "type": "$48",
+      "parameter": "$2",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$1C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 7,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 8,
+      "type": "$28C",
+      "parameter": "$0",
+      "mapping": "Enemy_PhasePatternSpriteMappingD",
+      "frame": 0,
+      "attribute": "$8C00"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 9,
+      "type": "$48",
+      "parameter": "$2",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$1C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 10,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 11,
+      "type": "$48",
+      "parameter": "$2",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$1C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 12,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 13,
+      "type": "$48",
+      "parameter": "$2",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$1C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 14,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 16,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 18,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 20,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 21,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 22,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage4_ObjectSpawnList",
+      "index": 24,
+      "type": "$134",
+      "parameter": "$8000",
+      "mapping": "UnreferencedPostStageTileArtSpriteMapping",
+      "frame": 0,
+      "attribute": "$02D6"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 2,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 3,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 4,
+      "type": "$44",
+      "parameter": "$0",
+      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 5,
+      "type": "$90",
+      "parameter": "$1",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 6,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 7,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 8,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 9,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 10,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 11,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 12,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 13,
+      "type": "$12C",
+      "parameter": "$8",
+      "mapping": "IndexedObjectSpriteMapping02",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 14,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 15,
+      "type": "$90",
+      "parameter": "$1",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 16,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 17,
+      "type": "$12C",
+      "parameter": "$8000",
+      "mapping": "IndexedObjectSpriteMapping02",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 18,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 19,
+      "type": "$90",
+      "parameter": "$3",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 20,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 21,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 22,
+      "type": "$90",
+      "parameter": "$3",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 23,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage5_ObjectSpawnList",
+      "index": 24,
+      "type": "$12C",
+      "parameter": "$8008",
+      "mapping": "IndexedObjectSpriteMapping02",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage6_ObjectSpawnList",
+      "index": 0,
+      "type": "$12C",
+      "parameter": "$8",
+      "mapping": "IndexedObjectSpriteMapping02",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage6_ObjectSpawnList",
+      "index": 1,
+      "type": "$12C",
+      "parameter": "$18",
+      "mapping": "IndexedObjectSpriteMapping05",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage6_ObjectSpawnList",
+      "index": 2,
+      "type": "$12C",
+      "parameter": "$10",
+      "mapping": "IndexedObjectSpriteMapping03",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 2,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 3,
+      "type": "$8C",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping32",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 4,
+      "type": "$3B4",
+      "parameter": "$500",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 5,
+      "type": "$3B4",
+      "parameter": "$402",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 6,
+      "type": "$3B4",
+      "parameter": "$304",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 7,
+      "type": "$3B4",
+      "parameter": "$206",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 8,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 9,
+      "type": "$3B4",
+      "parameter": "$402",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 10,
+      "type": "$3B4",
+      "parameter": "$506",
+      "mapping": "Enemy_FormationWaveSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0400"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 11,
+      "type": "$8C",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage7_ObjectSpawnList",
+      "index": 12,
+      "type": "$12C",
+      "parameter": "$8020",
+      "mapping": "IndexedObjectSpriteMapping09",
+      "frame": 0,
+      "attribute": "$02DF"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$11",
+      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 2,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 3,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 4,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 5,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 6,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 7,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 8,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 9,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 10,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 11,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage8_ObjectSpawnList",
+      "index": 12,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 0,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$0480"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 4,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 5,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 6,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 7,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4000"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 8,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping05",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 9,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 10,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 11,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 12,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 13,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4000"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 14,
+      "type": "$90",
+      "parameter": "$3",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0380"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 17,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 18,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 19,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 20,
+      "type": "$90",
+      "parameter": "$2",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 21,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 22,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 23,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage10_ObjectSpawnList",
+      "index": 24,
+      "type": "$90",
+      "parameter": "$1",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0380"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 1,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 4,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 5,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 6,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 7,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 8,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 9,
+      "type": "$388",
+      "parameter": "$0",
+      "mapping": "Stage11_RisingHazardLauncherSpriteMapping",
+      "frame": 0,
+      "attribute": "$08C2"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 10,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 11,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 12,
+      "type": "$8C",
+      "parameter": "$0",
+      "mapping": "Enemy_ProjectileSpriteMapping32",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 13,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 14,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 15,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 16,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 17,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 18,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$0480"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 19,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage11_ObjectSpawnList",
+      "index": 21,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 0,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 1,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 2,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 3,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 4,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 5,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 6,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 7,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 8,
+      "type": "$2C0",
+      "parameter": "$0",
+      "mapping": "Enemy_Stage10WaspSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0C00"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 13,
+      "type": "$2CC",
+      "parameter": "$0",
+      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 14,
+      "type": "$2CC",
+      "parameter": "$0",
+      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 15,
+      "type": "$388",
+      "parameter": "$0",
+      "mapping": "Stage11_RisingHazardLauncherSpriteMapping",
+      "frame": 0,
+      "attribute": "$08C2"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 16,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 17,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 18,
+      "type": "$2CC",
+      "parameter": "$0",
+      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 19,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 22,
+      "type": "$36C",
+      "parameter": "$80",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0300"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 23,
+      "type": "$368",
+      "parameter": "$0",
+      "mapping": "SharedTeddyHazardSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 24,
+      "type": "$36C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage12_ObjectSpawnList",
+      "index": 25,
+      "type": "$36C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage14_ObjectSpawnList",
+      "index": 0,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    },
+    {
+      "list": "Stage14_ObjectSpawnList",
+      "index": 1,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping02",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage14_ObjectSpawnList",
+      "index": 2,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage14_ObjectSpawnList",
+      "index": 3,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage14_ObjectSpawnList",
+      "index": 4,
+      "type": "$1C",
+      "parameter": "$0",
+      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage15_ObjectSpawnList",
+      "index": 0,
+      "type": "$380",
+      "parameter": "$0",
+      "mapping": "SharedTeddyHazardSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage15_ObjectSpawnList",
+      "index": 1,
+      "type": "$39C",
+      "parameter": "$0",
+      "mapping": "SharedTeddyHazardSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage15_ObjectSpawnList",
+      "index": 2,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping02",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage15_ObjectSpawnList",
+      "index": 3,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 0,
+      "type": "$448",
+      "parameter": "$0",
+      "mapping": "Stage18_SegmentedWormSpriteMapping02",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 2,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 3,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 4,
+      "type": "$448",
+      "parameter": "$0",
+      "mapping": "Stage18_SegmentedWormSpriteMapping02",
+      "frame": 0,
+      "attribute": "$0B80"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 5,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 6,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 7,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 8,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 9,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 10,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 11,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 12,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 13,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 14,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 15,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 16,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 17,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 18,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 19,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 20,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4470"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 21,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 22,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 23,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4470"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 24,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$0480"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 25,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 26,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 27,
+      "type": "$48",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame67",
+      "frame": 0,
+      "attribute": "$0C80"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 28,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 29,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 30,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 31,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 32,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 33,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 34,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 35,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 36,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 37,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 38,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 39,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 40,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 41,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 42,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 43,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 44,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 45,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 46,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 47,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 48,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 49,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 50,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$0B00"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 51,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping05",
+      "frame": 0,
+      "attribute": "$0000"
+    },
+    {
+      "list": "Stage18_ObjectSpawnList",
+      "index": 52,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$4470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 0,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 1,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 2,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 3,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 4,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 5,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 6,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 7,
+      "type": "$24C",
+      "parameter": "$0",
+      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "frame": 0,
+      "attribute": "$8000"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 8,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 9,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 10,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 11,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 12,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 13,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 14,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 15,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 16,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 17,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 18,
+      "type": "$3DC",
+      "parameter": "$1",
+      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "frame": 0,
+      "attribute": "$C470"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 19,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 20,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 21,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 22,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 23,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 24,
+      "type": "$90",
+      "parameter": "$0",
+      "mapping": "Enemy_BirdSpriteMapping00",
+      "frame": 0,
+      "attribute": "$8B00"
+    },
+    {
+      "list": "Stage19_ObjectSpawnList",
+      "index": 25,
+      "type": "$2A0",
+      "parameter": "$0",
+      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "frame": 0,
+      "attribute": "$8B80"
+    },
+    {
+      "list": "Stage25_ObjectSpawnList",
+      "index": 0,
+      "type": "$20",
+      "parameter": "$0",
+      "mapping": "SharedCombatSpriteFrame19",
+      "frame": 0,
+      "attribute": "$8480"
+    }
+  ]
+}
