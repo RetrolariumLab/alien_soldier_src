@@ -29,7 +29,7 @@ Projectile_FindFreeSlotForward:                         ; CODE XREF: ShipSequenc
                 lea     $60(a0),a0
 ; Scans 20 consecutive 96-byte records forward from the caller-supplied A0
 Projectile_FindFreeSlotForward20:                       ; CODE XREF: Boss_CaterpillarFindFreeHomingProjectileSlot+4   j  ; was: loc_1C0A4
-                                        ; EntityType1C0_InitHomingProjectile+E   p
+                                        ; Boss_LovePenguinInitHomingProjectile+E   p
                 move.w  (a0),d0
                 beq.w   Projectile_FindFreeSlotForward_Return
                 lea     $60(a0),a0

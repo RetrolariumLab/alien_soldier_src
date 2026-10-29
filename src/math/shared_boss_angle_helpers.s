@@ -35,8 +35,8 @@ Physics_ReturnHorizontalAxisAngle:                      ; CODE XREF: Physics_Cal
                 rts
 ; ---------------------------------------------------------------------------
 ; Calculates the angle from the source object to a target object
-Physics_CalculateAngleToTarget:                         ; CODE XREF: EntityType1C0_CalculateAngleAndFlip+E   p  ; was: loc_427EC
-                                        ; EntityType1C0_MainDispatcher+18   p
+Physics_CalculateAngleToTarget:                         ; CODE XREF: Boss_LovePenguinCalculateAngleAndFlip+E   p  ; was: loc_427EC
+                                        ; Boss_LovePenguinMainDispatcher+18   p
                 pea     Physics_AddAngleOffset(pc)
                 lea     Physics_AngleOctantBaseTable(pc),a0
                 moveq   #0,d0
@@ -105,8 +105,8 @@ Math_SelectWeightedChoiceReturn:                        ; CODE XREF: Math_Select
                 rts
 ; End of function Math_SelectWeightedChoice
 ; Selects and jumps to a weighted relative target
-Math_JumpToWeightedChoice:                              ; CODE XREF: EntityType1C0_IdleState+40   j  ; was: sub_4287C
-                                        ; EntityType1C0_CloseRangeAttack+4   j
+Math_JumpToWeightedChoice:                              ; CODE XREF: Boss_LovePenguinIdleState+40   j  ; was: sub_4287C
+                                        ; Boss_LovePenguinCloseRangeAttack+4   j
                 bsr.s   Math_SelectWeightedChoice
                 adda.w  (a0),a0
                 jmp     (a0)

@@ -220,16 +220,15 @@ Boss_DestroyerMk2GraphicsLoadList:  dc.w    7           ; field_0  ; was: stru_1
                 dc.l    SharedBossMappingData2020       ; field_2
                 dc.w    $2020                           ; field_6
                 dc.w    $FFFF
-; No static pointer names this asset-set start. Historical material associates
-; the art with "Love Penguin", but the ROM record itself establishes only entity
-; type $1C0, graphics, and palette fields; see docs/unknowns.md
-EntityType1C0AssetSet:
+; Love Penguin's asset set (entity type $1C0). No static pointer names it; put
+; in place of Bugmax's set, it draws the boss (docs/love_penguin.md)
+Boss_LovePenguinAssetSet:
                 dc.w    $1C0                            ; entity type
-                dc.l    EntityType1C0GraphicsLoadList   ; Graphics structure pointer
-                dc.l    EntityType1C0PaletteCommand     ; Palette data pointer
-EntityType1C0GraphicsLoadList:  dc.w    7               ; field_0  ; was: stru_11542
-                                        ; DATA XREF: ROM:EntityType1C0AssetSet   o
-                dc.l    EntityType1C0TileArt            ; field_2
+                dc.l    Boss_LovePenguinGraphicsLoadList  ; Graphics structure pointer
+                dc.l    Boss_LovePenguinPaletteCommand  ; Palette data pointer
+Boss_LovePenguinGraphicsLoadList:   dc.w    7           ; field_0  ; was: stru_11542
+                                        ; DATA XREF: ROM:Boss_LovePenguinAssetSet   o
+                dc.l    Boss_LovePenguinTileArt         ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    6                               ; field_0
                 dc.l    SharedBossMappingData2020       ; field_2
@@ -271,15 +270,15 @@ Boss_WolfGaropaGraphicsLoadList:    dc.w    7           ; field_0  ; was: stru_1
                 dc.l    WolfGaropaMappingData2020       ; field_2
                 dc.w    $2020                           ; field_6
                 dc.w    $FFFF
-; Stage 18's dormant late-phase table references this record. The ROM proves
-; entity type $3EC and its assets, but not the imported "Lambda Bunny" identity
-EntityType3ECAssetSet:  dc.w    $3EC                    ; entity type  ; was: stru_115A8
-                                        ; DATA XREF: UnreferencedStage20Variant2_InitializeEntity3ECPhase   o
-                dc.l    EntityType3ECGraphicsLoadList   ; Graphics structure pointer
-                dc.l    EntityType3ECPaletteCommand     ; Palette data pointer
-EntityType3ECGraphicsLoadList:  dc.w    7               ; field_0  ; was: stru_115B2
-                                        ; DATA XREF: ROM:EntityType3ECAssetSet   o
-                dc.l    EntityType3ECTileArt            ; field_2
+; Lambda Bunny's asset set (entity type $3EC), referenced by Stage 18's dormant
+; late-phase table; its art is the head and ears the pose viewer draws
+Boss_LambdaBunnyAssetSet:   dc.w    $3EC                ; entity type  ; was: stru_115A8
+                                        ; DATA XREF: UnreferencedStage20Variant2_InitializeLambdaBunnyPhase   o
+                dc.l    Boss_LambdaBunnyGraphicsLoadList  ; Graphics structure pointer
+                dc.l    Boss_LambdaBunnyPaletteCommand  ; Palette data pointer
+Boss_LambdaBunnyGraphicsLoadList:   dc.w    7           ; field_0  ; was: stru_115B2
+                                        ; DATA XREF: ROM:Boss_LambdaBunnyAssetSet   o
+                dc.l    Boss_LambdaBunnyTileArt         ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    6                               ; field_0
                 dc.l    SharedLateBossMappingData2020   ; field_2

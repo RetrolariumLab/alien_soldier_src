@@ -3,7 +3,7 @@
 
 ; Loads the default entry list and falls through to clear the color-fade state
 Gfx_ResetDefaultColorFadeState:                         ; CODE XREF: Boss_LoadAssetSet+72   j  ; was: sub_3C08
-                                        ; EntityType1C0_LoadGraphics+1A   p
+                                        ; Boss_LovePenguinLoadGraphics+1A   p
                 lea     PaletteFade_DefaultEntryOffsets(pc),a2
                 nop
 ; End of function Gfx_ResetDefaultColorFadeState

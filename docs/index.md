@@ -26,7 +26,7 @@ address-ordered neighbour.
 - [Naming](naming.md), [assembly style](assembly_style.md) and
   [provenance](provenance.md) govern edits.
 - [Unknowns](unknowns.md) lists open questions.
-  [The dormant type-$1C0 family](dormant_entity_1c0.md) and
+  [Love Penguin, the dormant type-$1C0 boss](love_penguin.md) and
   [payload boundaries](payload_archives.md) keep two investigations;
   [external dormant-content notes](unused_content.md) are unverified
   attributions, not naming authority.

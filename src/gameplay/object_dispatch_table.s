@@ -111,9 +111,9 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    OrphanedFloatingOscillator
                 dc.l    Stage12_YachtControllerMain
                 dc.l    Boss_GustheadSegmentMain
-                dc.l    EntityType1C0_InitDispatcher
-                dc.l    EntityType1C0_DebrisPartMain
-                dc.l    EntityType1C0_MainDispatcher
+                dc.l    Boss_LovePenguinInitDispatcher
+                dc.l    Boss_LovePenguinDebrisPartMain
+                dc.l    Boss_LovePenguinMainDispatcher
                 dc.l    Object_UpdateRemovalTimer
                 dc.l    Projectile_UpdateTrailingArcHazardType1D0
                 dc.l    Enemy_UpdateDefeatProjectile
@@ -250,7 +250,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    StageTransition_UpdateMissiraySceneObject
                 dc.l    StageTransition_AdvanceStateFromObject
                 dc.l    Boss_WolfGaropaUpdate
-                dc.l    Debug_ValkirieCompositeViewerMain
+                dc.l    Debug_LambdaBunnyViewerMain
                 dc.l    Debug_ValkirieType3F0Main
                 dc.l    Debug_ValkirieType3F4Main
                 dc.l    Boss_ZLeoMain

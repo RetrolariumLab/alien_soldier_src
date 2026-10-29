@@ -1,4 +1,4 @@
-Debug_ValkirieViewerFixedPartMapping:   dc.w    $2870, $100, $FEF4  ; DATA XREF: Debug_ValkirieViewerInitialize+D4   o ; was: word_EC6F0
+Debug_LambdaBunnyViewerFixedPartMapping:    dc.w    $2870, $100, $FEF4  ; DATA XREF: Debug_LambdaBunnyViewerInitialize+D4   o ; was: word_EC6F0
                 dc.w    $A86A, $600, $F6FC
 Boss_ValkirieRotationAMapping0: dc.w    $A872, $500, $F8F8  ; DATA XREF: ROM:Boss_ValkirieRotationFramesA   o ; was: word_EC6FC
                                         ; ROM:Boss_ValkirieAlternateRotationFramesAndNeutralPose   o
@@ -41,8 +41,8 @@ Boss_ValkirieRotationBMapping7: dc.w    $A09A, $900, $F6F3  ; DATA XREF: ROM:000
                 dc.w    $28D6, $500, $1F5
                 dc.w    $A8D0, $900, $F1F6
                 dc.w    $A8DA, $700, $F1FB
-Debug_ValkirieViewerExtendedGunMapping: dc.w    $A8E2, $700, $F0F7  ; DATA XREF: Debug_ValkirieViewerInitialize+EE   o ; was: word_EC792
-                                        ; Debug_ValkirieViewerInitialize+274   o
+Debug_LambdaBunnyViewerExtendedGunMapping:  dc.w    $A8E2, $700, $F0F7  ; DATA XREF: Debug_LambdaBunnyViewerInitialize+EE   o ; was: word_EC792
+                                        ; Debug_LambdaBunnyViewerInitialize+274   o
                 dc.w    $28EE, $900, $FFF4
                 dc.w    $A8EA, $500, $EFF4
                 dc.w    $28FA, $500, $FB02
@@ -51,29 +51,29 @@ Boss_ValkirieMetaspriteMappingA:    dc.w    $290D, $500, $23EA  ; DATA XREF: ROM
                                         ; ROM:0003546C   o
                 dc.w    $2907, $900, $13EA
                 dc.w    $A8FE, $A00, $FBF1
-Debug_ValkirieViewerPartPairMappingA:   dc.w    $A911, $900, $F8FB  ; DATA XREF: Debug_ValkirieViewerInitialize+68   o ; was: word_EC7C2
-                                        ; Debug_ValkirieViewerInitialize+9C   o
-Debug_ValkirieViewerPartPairMappingB:   dc.w    $A917, $900, $FBF8  ; DATA XREF: Debug_ValkirieViewerInitialize+1D0   o ; was: word_EC7C8
-                                        ; Debug_ValkirieViewerInitialize+20A   o
-Debug_ValkirieViewerPartPairMappingC:   dc.w    $A91D, $500, $F8F2  ; DATA XREF: Debug_ValkirieViewerInitialize+82   o ; was: word_EC7CE
-                                        ; Debug_ValkirieViewerInitialize+B6   o
+Debug_LambdaBunnyViewerPartPairMappingA:    dc.w    $A911, $900, $F8FB  ; DATA XREF: Debug_LambdaBunnyViewerInitialize+68   o ; was: word_EC7C2
+                                        ; Debug_LambdaBunnyViewerInitialize+9C   o
+Debug_LambdaBunnyViewerPartPairMappingB:    dc.w    $A917, $900, $FBF8  ; DATA XREF: Debug_LambdaBunnyViewerInitialize+1D0   o ; was: word_EC7C8
+                                        ; Debug_LambdaBunnyViewerInitialize+20A   o
+Debug_LambdaBunnyViewerPartPairMappingC:    dc.w    $A91D, $500, $F8F2  ; DATA XREF: Debug_LambdaBunnyViewerInitialize+82   o ; was: word_EC7CE
+                                        ; Debug_LambdaBunnyViewerInitialize+B6   o
 Boss_ValkirieMetaspriteMappingB:    dc.w    $A921, $500, $F8F9  ; DATA XREF: ROM:Boss_ValkirieMetaspriteDescriptors   o ; was: word_EC7D4
                                         ; ROM:00035510   o
 Boss_ValkirieMetaspriteMappingC:    dc.w    $A925, $500, $F8F8  ; DATA XREF: ROM:00035430   o ; was: word_EC7DA
                                         ; ROM:00035444   o
 Boss_ValkirieMetaspriteMappingD:    dc.w    $A929, $500, $F8F8  ; DATA XREF: ROM:00035458   o ; was: word_EC7E0
                                         ; ROM:00035468   o
-Debug_ValkirieViewerGunMapping0:    dc.w    $A8B6, $D00, $F3E4  ; DATA XREF: ROM:Debug_ValkirieViewerGunMappingTable   o ; was: word_EC7E6
-Debug_ValkirieViewerGunMapping1:    dc.w    $A8BE, $D00, $F4E2  ; DATA XREF: ROM:0005139E   o ; was: word_EC7EC
-Debug_ValkirieViewerGunMapping2:    dc.w    $28CE, $400, $7E4  ; DATA XREF: ROM:000513A2   o ; was: word_EC7F2
+Debug_LambdaBunnyViewerGunMapping0: dc.w    $A8B6, $D00, $F3E4  ; DATA XREF: ROM:Debug_LambdaBunnyViewerGunMappingTable   o ; was: word_EC7E6
+Debug_LambdaBunnyViewerGunMapping1: dc.w    $A8BE, $D00, $F4E2  ; DATA XREF: ROM:0005139E   o ; was: word_EC7EC
+Debug_LambdaBunnyViewerGunMapping2: dc.w    $28CE, $400, $7E4  ; DATA XREF: ROM:000513A2   o ; was: word_EC7F2
                 dc.w    $A8C6, $D00, $F7E4
-Debug_ValkirieViewerGunMapping3:    dc.w    $28D6, $500, $9EA  ; DATA XREF: ROM:000513A6   o ; was: word_EC7FE
+Debug_LambdaBunnyViewerGunMapping3: dc.w    $28D6, $500, $9EA  ; DATA XREF: ROM:000513A6   o ; was: word_EC7FE
                 dc.w    $A8D0, $900, $F9EB
-Debug_ValkirieViewerGunMapping4:    dc.w    $A8DA, $700, $FBF4  ; DATA XREF: ROM:000513AA   o ; was: word_EC80A
-Debug_ValkirieViewerGunMapping5:    dc.w    $A8E2, $700, $FCF5  ; DATA XREF: ROM:000513AE   o ; was: word_EC810
-Debug_ValkirieViewerGunMapping6:    dc.w    $28EE, $900, $AF7  ; DATA XREF: ROM:000513B2   o ; was: word_EC816
+Debug_LambdaBunnyViewerGunMapping4: dc.w    $A8DA, $700, $FBF4  ; DATA XREF: ROM:000513AA   o ; was: word_EC80A
+Debug_LambdaBunnyViewerGunMapping5: dc.w    $A8E2, $700, $FCF5  ; DATA XREF: ROM:000513AE   o ; was: word_EC810
+Debug_LambdaBunnyViewerGunMapping6: dc.w    $28EE, $900, $AF7  ; DATA XREF: ROM:000513B2   o ; was: word_EC816
                 dc.w    $A8EA, $500, $FAF7
-Debug_ValkirieViewerGunMapping7:    dc.w    $28FA, $500, $509  ; DATA XREF: ROM:000513B6   o ; was: word_EC822
+Debug_LambdaBunnyViewerGunMapping7: dc.w    $28FA, $500, $509  ; DATA XREF: ROM:000513B6   o ; was: word_EC822
                 dc.w    $A8F4, $600, $FBF9
 Boss_ValkiriePackedSpriteMappings:  binclude "data/other/word_EC82E.bin"  ; DATA XREF: ROM:00035424   o ; was: word_EC82E
 Boss_ValkiriePackedSpriteMappingsEnd:                   ; was: word_EC82E_End

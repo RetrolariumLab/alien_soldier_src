@@ -10,7 +10,7 @@ The `CODE` and `DATA` entries below retain seven historical IDs, of which six
 exact-address name-audit records still have `unknown` evidence. The full
 investigation record, with its superseded interpretations, is `docs/unknowns.md`
 at the `source-reconstruction-1.0` tag; see also
-[the dormant-family investigation](dormant_entity_1c0.md). Keep an entry and its
+[the dormant-family investigation](love_penguin.md). Keep an entry and its
 evidence when it is resolved.
 
 The five returns without a demonstrated entry path and the unselected transfer
@@ -55,13 +55,12 @@ remains an unreproduced observation.
 - **Experiment:** Completed with `reference/tas/028000.png` and
   `reference/tas/028000.genstate`; the archive is local and ignored by Git.
 
-### VIS-003 Dormant type-$1C0 family versus stage-15 Sunset Sting
+### VIS-003 Love Penguin (type $1C0) versus stage-15 Sunset Sting
 
-- **Status:** resolved for source ownership; visual identity of dormant family
-  open
-- **Confidence:** high for code ownership; low for external graphic attribution
-- **Location:** `src/bosses/entity_type_1c0_core.s` at `$040CEE`,
-  `src/bosses/entity_type_1c0_attacks.s` at `$0418FC`, and
+- **Status:** resolved
+- **Confidence:** high for code ownership and for the art
+- **Location:** `src/bosses/love_penguin_core.s` at `$040CEE`,
+  `src/bosses/love_penguin_attacks.s` at `$0418FC`, and
   `src/bosses/sunset_sting_main.s` at `$042A10` and `$04309E`
 - **Evidence:** Stage 15 loads the `$1EC` asset set. The human reviewer
   identified its vertically stretched appearance at TAS frame 32,124 and its
@@ -70,13 +69,12 @@ remains an unreproduced observation.
   angles, and its second form preserves `$1C8` during pool cleanup. The stage-15
   controller builds sixteen segments and preserves `$1EC`. An unselected asset
   record at `$011538` carries type `$1C0` and pointers to graphics `$011542` and
-  palette `$00C404`; outside material calls the art Love Penguin, but that name
-  is not established by the ROM. The `$04309E` state increases
-  `BossCombatCounter` and oscillates position; its appearance was not observed.
-  See `docs/dormant_entity_1c0.md`.
-- **Experiment:** The source naming is now neutral for `$1C0/$1C8` and
-  behavior-specific for `$04309E`. Further pictures or traces can identify
-  appearances but are not needed to justify the current names.
+  palette `$00C404`; put in place of Bugmax's set and played in MAME, it draws
+  Love Penguin, part for part as the kit reads its builder. The `$04309E` state
+  increases `BossCombatCounter` and oscillates position; its appearance was not
+  observed. See `docs/love_penguin.md`.
+- **Experiment:** The source names `$1C0/$1C8` after Love Penguin and keeps a
+  behavior-specific name for `$04309E`.
 
 ## Active unknown-evidence records
 
@@ -103,7 +101,7 @@ references, computed addresses, or other indirect selection.
 
 - **Status:** resolved
 - **Confidence:** high
-- **Location:** `src/bosses/entity_type_1c0_core.s`, `$040D2E`
+- **Location:** `src/bosses/love_penguin_core.s`, `$040D2E`
 - **Evidence:** Five flagged pointers in the 61-long body-part table at
   `$041568` select these six bytes as a sprite mapping. The reader consumes each
   entry with `move.l (a1)+`. Their earlier `dc.w` spelling hid the pointers from
@@ -175,8 +173,8 @@ their observable command-like byte structure. See `docs/payload_archives.md`.
 
 ## Other open investigations
 
-- [Dormant type-$1C0 family](dormant_entity_1c0.md): distinguish proven pointer
-  ownership from external artwork attribution and unobserved stock entry paths.
+- [Love Penguin](love_penguin.md): distinguish proven pointer ownership from
+  external artwork attribution and unobserved stock entry paths.
 - [Compressed payloads](payload_archives.md): two archive-adjacent tails retain
   neutral names; the Stage 4 rendering report still lacks a reproducible exact
   failing image/frame. Controlled sampled shifts are not an all-frame proof.

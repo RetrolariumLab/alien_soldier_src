@@ -30,8 +30,8 @@ without separating a procedure from its tables. The size inventory is a review
 queue, not a waiver for unexamined semantics.
 
 The only module now above 900 lines is
-[`src/bosses/entity_type_1c0_core.s`](../src/bosses/entity_type_1c0_core.s), at
-922\. Its dormant type-$1C0 controller, body-part recipe, angle data and the
+[`src/bosses/love_penguin_core.s`](../src/bosses/love_penguin_core.s), at 922.
+Its dormant type-$1C0 controller, body-part recipe, angle data and the
 family-shared readers next to them stay together in ROM order; it is still under
 the 1,000-line ceiling.
 
@@ -129,7 +129,7 @@ emulator (`make verify-relocation`, tags up to 3.0), and reported every value
 that equals the address of a symbol which moved without moving with it. Both
 defects found this way were the same shape: a 32-bit address encoded as two
 `dc.w` constants, in the stage tile asset command lists and in
-`EntityType1C0_BodyPartInitTable`.
+`Boss_LovePenguinBodyPartInitTable`.
 
 Precision is the hard part, because with fifteen thousand symbols a four-byte
 window matches one by accident often. Four rules cut that down, each stated
@@ -142,10 +142,10 @@ addresses: the speed-10 and speed-11 weapon direction vectors peak at 10.0 and
 11.0 in 16.16, which happen to equal the addresses of two PCM banks.
 
 The probe cannot detect a pointer that carries flags in its high bits by a plain
-equality search. `EntityType1C0_BodyPartInitTable` had 24 such entries encoded
+equality search. `Boss_LovePenguinBodyPartInitTable` had 24 such entries encoded
 as `dc.w` pairs. They are now `dc.l` expressions with symbolic bases, without
 changing ROM bytes. The reader consumes longwords, so the table's source width
-must match it; see `docs/dormant_entity_1c0.md`.
+must match it; see `docs/love_penguin.md`.
 
 A reader-first triage also checked direct `lea`/`movea` table loads followed
 locally by longword reads, plus direct calls that pass the table register to a

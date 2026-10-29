@@ -163,8 +163,8 @@ Boss_SharpsteelObjectInitTable: dc.w    $C620, $1014, $F010, $F010, $F010, $F010
                 dc.w    $CC20, 0, $F010, $F010, $F20E, $F20E, 0
                 dc.w    $CC80, 0, $F010, $F010, $F20E, $F20E, 0
                 dc.w    $FFFE
-EntityType1C0_ObjectInitTable:  dc.w    $C620, $502C, $E41C, $E41C, $E41C, $E41C, $3280  ; was: word_1BD78
-                                        ; DATA XREF: EntityType1C0_LoadGraphics+C   o
+Boss_LovePenguinObjectInitTable:    dc.w    $C620, $502C, $E41C, $E41C, $E41C, $E41C, $3280  ; was: word_1BD78
+                                        ; DATA XREF: Boss_LovePenguinLoadGraphics+C   o
                 dc.w    $C860, $1004, $F010, $F010, $F808, $F808, $3200
                 dc.w    $CA40, $1004, $F010, $F010, $F808, $F808, $3200
                 dc.w    $CC20, $1004, $F010, $F010, $F808, $F808, $3200
@@ -186,8 +186,8 @@ Boss_WolfGaropaObjectInitTable: dc.w    $C620, $5004, $E004, $E040, $E0F8, $E030
                 dc.w    $CF80, 8, $F010, $FF24, $F010, $FC04, $2A04
                 dc.w    $CFE0, $1038, $FC2C, $F010, 0, 0, $84
                 dc.w    $FFFE
-Debug_ValkirieViewerObjectInitTable:    dc.w    $C620, $501C, $D010, $F010, $D808, $F808, $6909  ; was: word_1BE6C
-                                        ; DATA XREF: Debug_ValkirieViewerInitialize+F6   o
+Debug_LambdaBunnyViewerObjectInitTable: dc.w    $C620, $501C, $D010, $F010, $D808, $F808, $6909  ; was: word_1BE6C
+                                        ; DATA XREF: Debug_LambdaBunnyViewerInitialize+F6   o
                 dc.w    $CB60, $5004, $F010, $F010, $FC04, $FC04, $7D09
                 dc.w    $CCE0, $5004, $F010, $F010, $FC04, $FC04, $7D09
                 dc.w    $CC20, $5004, $E41C, $F010, $F808, $FE02, $7D09

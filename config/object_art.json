@@ -1098,7 +1098,7 @@
       "attribute": "$2300",
       "art": [["Boss_VictorTileArt", "$6000"]],
       "palettes": [
-        ["EntityType1C0PaletteCommand", 0],
+        ["Boss_LovePenguinPaletteCommand", 0],
         ["FrontendPaletteCommands", 0],
         ["CreditsAndEarlyStagePaletteCommandBank", 296]
       ]

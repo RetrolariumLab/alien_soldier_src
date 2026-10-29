@@ -11,9 +11,9 @@ XiTigerCutsceneTilemapBlockIndices: dc.b    0, $27, $31, 0, 1, $12, $13, $84, $1
 ; Type-6 compressed words for the direct tilemap transfer's third source
 XiTigerCutsceneTilemapWordSource:   binclude "data/mappings/byte_11A644.bin"  ; was: byte_11A644
 XiTigerCutsceneTilemapWordSource_End:                   ; was: byte_11A644_End
-EntityType1C0TileArt:               binclude "data/artcomp/tiles_11A8FC.bin"  ; entity type $1C0 art  ; was: tiles_11A8FC
-                                        ; Referenced by EntityType1C0GraphicsLoadList
-EntityType1C0TileArt_End:                               ; was: tiles_11A8FC_End
+Boss_LovePenguinTileArt:            binclude "data/artcomp/tiles_11A8FC.bin"  ; entity type $1C0 art  ; was: tiles_11A8FC
+                                        ; Referenced by Boss_LovePenguinGraphicsLoadList
+Boss_LovePenguinTileArt_End:                            ; was: tiles_11A8FC_End
 Boss_DeepStriderTileArt:    binclude "data/artcomp/tiles_11B542.bin"  ; was: tiles_11B542
 Boss_DeepStriderTileArt_End:                            ; was: tiles_11B542_End
 Boss_SunsetStingTileArt:    binclude "data/artcomp/tiles_11D002.bin"  ; was: tiles_11D002
@@ -35,9 +35,9 @@ Boss_JampanTileArt:         binclude "data/artcomp/tiles_12453E.bin"  ; was: til
 Boss_JampanTileArt_End:                                 ; was: tiles_12453E_End
 Boss_DestroyerMk2TileArt:   binclude "data/artcomp/tiles_124CCE.bin"  ; was: tiles_124CCE
 Boss_DestroyerMk2TileArt_End:                           ; was: tiles_124CCE_End
-EntityType3ECTileArt:       binclude "data/artcomp/tiles_125902.bin"  ; entity type $3EC art  ; was: tiles_125902
-                                        ; Referenced by EntityType3ECGraphicsLoadList
-EntityType3ECTileArt_End:                               ; was: tiles_125902_End
+Boss_LambdaBunnyTileArt:    binclude "data/artcomp/tiles_125902.bin"  ; entity type $3EC art  ; was: tiles_125902
+                                        ; Referenced by Boss_LambdaBunnyGraphicsLoadList
+Boss_LambdaBunnyTileArt_End:                            ; was: tiles_125902_End
 EntityType3F0TileArt:   binclude "data/artcomp/tiles_12772E.bin"  ; entity type $3F0 art  ; was: tiles_12772E
                                         ; Referenced by EntityType3F0GraphicsLoadList
 UnreferencedEntityType3F0TileArt2:  binclude "data/artcomp/tiles_1291DE.bin"  ; second archive at original ROM $1291DE

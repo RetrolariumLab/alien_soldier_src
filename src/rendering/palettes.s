@@ -279,9 +279,8 @@ Boss_SharpsteelPaletteCommand:  dc.b    $62, $E, 0, 0, $C, $EC, 8, $C8, 6, $64, 
 Boss_SnakePaletteCommand:   dc.b    $62, 8, 0, 0, $E, $EE, 8, $CE, 6, $8C, 6, $6C, $F, $FF, 4, $26  ; was: byte_C3F0
                                         ; DATA XREF: Stage_LoadStage13Palette   o
                 dc.b    2, 2, 4, $4A
-EntityType1C0PaletteCommand:    dc.b    $62, $E, 0, 2, $E, $EE, $A, $AA, 6, $66, 2, $22, $F, $FF, $A, $EE  ; was: byte_C404
-                                        ; DATA XREF: ROM:EntityType1C0AssetSet   o
-                                        ; Identity beyond entity type $1C0 is unproven
+Boss_LovePenguinPaletteCommand: dc.b    $62, $E, 0, 2, $E, $EE, $A, $AA, 6, $66, 2, $22, $F, $FF, $A, $EE  ; was: byte_C404
+                                        ; DATA XREF: ROM:Boss_LovePenguinAssetSet   o
                 dc.b    8, $CE, 6, $8C, 4, $6A, 2, $48, 0, $26, 0, 4, 0, 0, 0, $A
 Boss_VictorPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $E, $AA, $E, $88, $FF, $FF, $A, $46  ; was: byte_C424
                                         ; DATA XREF: ROM:Boss_VictorAssetSet   o
@@ -321,8 +320,8 @@ Boss_DestroyerMk2PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $
 Boss_BugmaxPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 6, $AC, 4, $8A, 2, $68, $F, $FF, 2, $46  ; was: byte_C59E
                                         ; DATA XREF: ROM:Boss_BugmaxAssetSet   o
                 dc.b    0, $24, 2, 6, 2, $2A, 2, $6C, 0, 0, 2, 2, 6, $24, 8, $68
-EntityType3ECPaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, $A, $AC, 2, $AC, 8, $EE, $F, $FF, 0, $48  ; was: byte_C5BE
-                                        ; DATA XREF: ROM:EntityType3ECAssetSet   o
+Boss_LambdaBunnyPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $A, $AC, 2, $AC, 8, $EE, $F, $FF, 0, $48  ; was: byte_C5BE
+                                        ; DATA XREF: ROM:Boss_LambdaBunnyAssetSet   o
                                         ; Selected by the dormant Stage 18 late-phase path
                 dc.b    0, 4, 2, 4, 2, $A, $C, $8E, 2, 2, 6, $44, $A, $A8, $E, $CA
 EntityType3F0PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 0, 6, 0, $48, 0, $8C, $F, $FF, 4, 0  ; was: byte_C5DE

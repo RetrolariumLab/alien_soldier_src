@@ -1086,10 +1086,10 @@ structural `PrimaryEntity` names rather than a boss name.
 | `PrimaryEntityWork5E`     | `$FFFFC67E` |  `$5E` | Owner-dependent work word cleared and advanced as the type-$1C0 family's graphics-animation progress.                    |
 
 The type-`$1C0/$1C8` handlers use owner-specific overlays for these four fields:
-`EntityType1C0ChainRootOffset`, `EntityType1C0PartYReference`,
-`EntityType1C0BodyPartCount`, and `EntityType1C0AnimationProgress`. The
-structural aliases remain available to other owners; the overlay names are not
-claims about the entire entity pool.
+`LovePenguinChainRootOffset`, `LovePenguinPartYReference`,
+`LovePenguinBodyPartCount`, and `LovePenguinAnimationProgress`. The structural
+aliases remain available to other owners; the overlay names are not claims about
+the entire entity pool.
 
 ## Reviewed secondary entity record
 
@@ -1110,57 +1110,57 @@ claims about the entire entity pool.
 | `SecondaryEntityWork58` | `$FFFFC6D8` |  `$58` | Union work longword used for Epsilon 1 motion and the type-$1C0 family's oscillation phase.         |
 | `SecondaryEntityWork5C` | `$FFFFC6DC` |  `$5C` | Union work longword used as motion or byte-granular control state by different owners.              |
 
-`EntityType1C0OscillationPhase` overlays the low word of
-`SecondaryEntityWork58`; Epsilon 1 separately uses the full longword as motion.
-The type-$1C0 family also accesses the two bytes of `SecondaryEntityWork5C` for
-distinct aim/phase control, so that union retains its structural name.
+`LovePenguinOscillationPhase` overlays the low word of `SecondaryEntityWork58`;
+Epsilon 1 separately uses the full longword as motion. The type-$1C0 family also
+accesses the two bytes of `SecondaryEntityWork5C` for distinct aim/phase
+control, so that union retains its structural name.
 
 ## Reviewed tertiary entity record
 
-| Symbol                   |     Address | Offset | Static evidence                                                                                    |
-| ------------------------ | ----------: | -----: | -------------------------------------------------------------------------------------------------- |
-| `TertiaryEntityType`     | `$FFFFC6E0` |  `$00` | Object type and base of the third 96-byte pool record; clearing it deactivates the record.         |
-| `TertiaryEntityFlags`    | `$FFFFC6E2` |  `$02` | Display/control flags written by cutscene setup and cleared during transition cleanup.             |
-| `TertiaryEntityAttr`     | `$FFFFC6EE` |  `$0E` | Sprite-attribute word whose priority bit is toggled by the ship-arrival flash.                     |
-| `TertiaryEntityXPos`     | `$FFFFC6F0` |  `$10` | Signed 16.16 X coordinate consumed by Bugmax linked-chain geometry.                                |
-| `TertiaryEntityYPos`     | `$FFFFC6F4` |  `$14` | Signed 16.16 Y coordinate consumed by Bugmax geometry and direction calculations.                  |
-| `TertiaryEntityStatus`   | `$FFFFC701` |  `$21` | Status byte set and cleared with linked Destroyer-Mk2 records and cleared during Epsilon 1 defeat. |
-| `TertiaryEntityWork40`   | `$FFFFC720` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                           |
-| `TertiaryEntityWork4C`   | `$FFFFC72C` |  `$4C` | Owner-specific work word used as Bugmax's second joint angle.                                      |
-| `TertiaryEntityWork50`   | `$FFFFC730` |  `$50` | Owner-specific work word used as a Bugmax linked-part projection radius.                           |
-| `TertiaryEntityWork52`   | `$FFFFC732` |  `$52` | Owner-specific linked-object control word used by Jampan.                                          |
-| `EntityType1C0TrailSpan` | `$FFFFC738` |  `$58` | Vertical span used to distribute the type-$1C0 family's eight trail objects.                       |
-| `EntityType1C0TrailStep` | `$FFFFC73C` |  `$5C` | Accumulating contraction step subtracted from the trail span.                                      |
-| `EntityType1C0AimAngle`  | `$FFFFC73E` |  `$5E` | Cached angle-to-player sample used by the second-form body layout.                                 |
+| Symbol                 |     Address | Offset | Static evidence                                                                                    |
+| ---------------------- | ----------: | -----: | -------------------------------------------------------------------------------------------------- |
+| `TertiaryEntityType`   | `$FFFFC6E0` |  `$00` | Object type and base of the third 96-byte pool record; clearing it deactivates the record.         |
+| `TertiaryEntityFlags`  | `$FFFFC6E2` |  `$02` | Display/control flags written by cutscene setup and cleared during transition cleanup.             |
+| `TertiaryEntityAttr`   | `$FFFFC6EE` |  `$0E` | Sprite-attribute word whose priority bit is toggled by the ship-arrival flash.                     |
+| `TertiaryEntityXPos`   | `$FFFFC6F0` |  `$10` | Signed 16.16 X coordinate consumed by Bugmax linked-chain geometry.                                |
+| `TertiaryEntityYPos`   | `$FFFFC6F4` |  `$14` | Signed 16.16 Y coordinate consumed by Bugmax geometry and direction calculations.                  |
+| `TertiaryEntityStatus` | `$FFFFC701` |  `$21` | Status byte set and cleared with linked Destroyer-Mk2 records and cleared during Epsilon 1 defeat. |
+| `TertiaryEntityWork40` | `$FFFFC720` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                           |
+| `TertiaryEntityWork4C` | `$FFFFC72C` |  `$4C` | Owner-specific work word used as Bugmax's second joint angle.                                      |
+| `TertiaryEntityWork50` | `$FFFFC730` |  `$50` | Owner-specific work word used as a Bugmax linked-part projection radius.                           |
+| `TertiaryEntityWork52` | `$FFFFC732` |  `$52` | Owner-specific linked-object control word used by Jampan.                                          |
+| `LovePenguinTrailSpan` | `$FFFFC738` |  `$58` | Vertical span used to distribute the type-$1C0 family's eight trail objects.                       |
+| `LovePenguinTrailStep` | `$FFFFC73C` |  `$5C` | Accumulating contraction step subtracted from the trail span.                                      |
+| `LovePenguinAimAngle`  | `$FFFFC73E` |  `$5E` | Cached angle-to-player sample used by the second-form body layout.                                 |
 
 ## Reviewed quaternary entity record
 
-| Symbol                     |     Address | Offset | Static evidence                                                                                                               |
-| -------------------------- | ----------: | -----: | ----------------------------------------------------------------------------------------------------------------------------- |
-| `QuaternaryEntityType`     | `$FFFFC740` |  `$00` | Object type and base of the fourth 96-byte pool record; boss, projectile, cutscene, and credits code use it as a record base. |
-| `QuaternaryEntityFlags`    | `$FFFFC742` |  `$02` | Display/control flags initialized with the preceding star-row entity records.                                                 |
-| `QuaternaryEntityState`    | `$FFFFC744` |  `$04` | Even state-table offset tested by Destroyer-Mk2 cleanup and Epsilon 1 defeat handling.                                        |
-| `QuaternaryEntityStatus`   | `$FFFFC761` |  `$21` | Status byte cleared with the controller and third record when Epsilon 1 begins defeat.                                        |
-| `QuaternaryEntityWork40`   | `$FFFFC780` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                                                      |
-| `QuaternaryEntityWork46`   | `$FFFFC786` |  `$46` | Owner-specific second angle word used by Destroyer Proto.                                                                     |
-| `QuaternaryEntityWork52`   | `$FFFFC792` |  `$52` | Owner-specific linked-part control word used by Jampan.                                                                       |
-| `EntityType1C0ChainPeriod` | `$FFFFC79C` |  `$5C` | Reload period for the second-form active-chain countdown.                                                                     |
+| Symbol                   |     Address | Offset | Static evidence                                                                                                               |
+| ------------------------ | ----------: | -----: | ----------------------------------------------------------------------------------------------------------------------------- |
+| `QuaternaryEntityType`   | `$FFFFC740` |  `$00` | Object type and base of the fourth 96-byte pool record; boss, projectile, cutscene, and credits code use it as a record base. |
+| `QuaternaryEntityFlags`  | `$FFFFC742` |  `$02` | Display/control flags initialized with the preceding star-row entity records.                                                 |
+| `QuaternaryEntityState`  | `$FFFFC744` |  `$04` | Even state-table offset tested by Destroyer-Mk2 cleanup and Epsilon 1 defeat handling.                                        |
+| `QuaternaryEntityStatus` | `$FFFFC761` |  `$21` | Status byte cleared with the controller and third record when Epsilon 1 begins defeat.                                        |
+| `QuaternaryEntityWork40` | `$FFFFC780` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                                                      |
+| `QuaternaryEntityWork46` | `$FFFFC786` |  `$46` | Owner-specific second angle word used by Destroyer Proto.                                                                     |
+| `QuaternaryEntityWork52` | `$FFFFC792` |  `$52` | Owner-specific linked-part control word used by Jampan.                                                                       |
+| `LovePenguinChainPeriod` | `$FFFFC79C` |  `$5C` | Reload period for the second-form active-chain countdown.                                                                     |
 
 ## Reviewed fifth entity record
 
-| Symbol                    |     Address | Offset | Static evidence                                                                                             |
-| ------------------------- | ----------: | -----: | ----------------------------------------------------------------------------------------------------------- |
-| `FifthEntityType`         | `$FFFFC7A0` |  `$00` | Object type and base of the fifth 96-byte pool record; several subsystems traverse later records from here. |
-| `FifthEntityFlags`        | `$FFFFC7A2` |  `$02` | Display/control flags initialized with adjacent star-row records.                                           |
-| `FifthEntityState`        | `$FFFFC7A4` |  `$04` | Epsilon 1 ring-controller state and common linked-record state field checked by Destroyer-Mk2.              |
-| `FifthEntityWork40`       | `$FFFFC7E0` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                                    |
-| `FifthEntityWork52`       | `$FFFFC7F2` |  `$52` | Owner-specific linked-part control word used by Jampan.                                                     |
-| `EntityType1C0ChainCycle` | `$FFFFC7F8` |  `$58` | Packed chain selector and per-chain countdown used by the type-$1C0 family's second form.                   |
-| `FifthEntityWork5C`       | `$FFFFC7FC` |  `$5C` | Union word/byte storage used for type-$1C0 turning and Madam Barbar rotation bounds.                        |
-| `EntityType1C0PoseRadius` | `$FFFFC7FD` |  `$5D` | Low-byte pose radius derived from randomness and player distance.                                           |
-| `FifthEntityWork5E`       | `$FFFFC7FE` |  `$5E` | Union work word used for Epsilon 1 ring commands and Madam Barbar rotation bounds.                          |
+| Symbol                  |     Address | Offset | Static evidence                                                                                             |
+| ----------------------- | ----------: | -----: | ----------------------------------------------------------------------------------------------------------- |
+| `FifthEntityType`       | `$FFFFC7A0` |  `$00` | Object type and base of the fifth 96-byte pool record; several subsystems traverse later records from here. |
+| `FifthEntityFlags`      | `$FFFFC7A2` |  `$02` | Display/control flags initialized with adjacent star-row records.                                           |
+| `FifthEntityState`      | `$FFFFC7A4` |  `$04` | Epsilon 1 ring-controller state and common linked-record state field checked by Destroyer-Mk2.              |
+| `FifthEntityWork40`     | `$FFFFC7E0` |  `$40` | Owner-specific work word used as a linked-part angle by Destroyer Proto.                                    |
+| `FifthEntityWork52`     | `$FFFFC7F2` |  `$52` | Owner-specific linked-part control word used by Jampan.                                                     |
+| `LovePenguinChainCycle` | `$FFFFC7F8` |  `$58` | Packed chain selector and per-chain countdown used by the type-$1C0 family's second form.                   |
+| `FifthEntityWork5C`     | `$FFFFC7FC` |  `$5C` | Union word/byte storage used for type-$1C0 turning and Madam Barbar rotation bounds.                        |
+| `LovePenguinPoseRadius` | `$FFFFC7FD` |  `$5D` | Low-byte pose radius derived from randomness and player distance.                                           |
+| `FifthEntityWork5E`     | `$FFFFC7FE` |  `$5E` | Union work word used for Epsilon 1 ring commands and Madam Barbar rotation bounds.                          |
 
-`EntityType1C0TurnControl` overlays the high byte of `FifthEntityWork5C` in the
+`LovePenguinTurnControl` overlays the high byte of `FifthEntityWork5C` in the
 dormant family; Madam Barbar uses the structural word separately.
 
 ## Reviewed sixth entity record

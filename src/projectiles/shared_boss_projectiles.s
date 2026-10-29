@@ -211,8 +211,8 @@ Effect_InitSharedExplosionFromCurrent:                  ; CODE XREF: Projectile_
                                         ; Projectile_UpdateTopFallingHazardType108+36   j
                 movea.w a5,a0
 ; Set the target's type, initial velocity, and directional tile attribute
-Effect_InitSharedExplosion:                             ; CODE XREF: EntityType1C0_DebrisPartMain+30   p  ; was: loc_2A2A4
-                                        ; EntityType1C0_UpdateScatteredBodyPart+30   p
+Effect_InitSharedExplosion:                             ; CODE XREF: Boss_LovePenguinDebrisPartMain+30   p  ; was: loc_2A2A4
+                                        ; Boss_LovePenguinUpdateScatteredBodyPart+30   p
                 move.w  #$C4,(a0)
                 move.l  #$FFFDC000,$1C(a0)
                 move.w  #$480,d0

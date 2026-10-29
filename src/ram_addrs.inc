@@ -874,10 +874,10 @@ PrimaryEntityWork58             equ     $FFFFC678       ; was: word_FFC678
 PrimaryEntityWork5A             equ     $FFFFC67A       ; was: word_FFC67A
 PrimaryEntityWork5C             equ     $FFFFC67C       ; was: word_FFC67C
 PrimaryEntityWork5E             equ     $FFFFC67E       ; was: word_FFC67E
-EntityType1C0ChainRootOffset    equ     PrimaryEntityWork58
-EntityType1C0PartYReference     equ     PrimaryEntityWork5A
-EntityType1C0BodyPartCount      equ     PrimaryEntityWork5C
-EntityType1C0AnimationProgress  equ     PrimaryEntityWork5E
+LovePenguinChainRootOffset      equ     PrimaryEntityWork58
+LovePenguinPartYReference       equ     PrimaryEntityWork5A
+LovePenguinBodyPartCount        equ     PrimaryEntityWork5C
+LovePenguinAnimationProgress    equ     PrimaryEntityWork5E
 SecondaryEntityType             equ     $FFFFC680       ; was: word_FFC680
 SecondaryEntityFlags            equ     $FFFFC682       ; was: word_FFC682
 SecondaryEntityState            equ     $FFFFC684       ; was: word_FFC684
@@ -892,7 +892,7 @@ SecondaryEntityWork4C           equ     $FFFFC6CC       ; was: word_FFC6CC
 SecondaryEntityWork52           equ     $FFFFC6D2       ; was: word_FFC6D2
 SecondaryEntityWork58           equ     $FFFFC6D8       ; was: dword_FFC6D8
 SecondaryEntityWork5C           equ     $FFFFC6DC       ; was: dword_FFC6DC
-EntityType1C0OscillationPhase   equ     SecondaryEntityWork58
+LovePenguinOscillationPhase     equ     SecondaryEntityWork58
 TertiaryEntityType              equ     $FFFFC6E0       ; was: word_FFC6E0
 TertiaryEntityFlags             equ     $FFFFC6E2       ; was: word_FFC6E2
 TertiaryEntityAttr              equ     $FFFFC6EE       ; was: word_FFC6EE
@@ -903,9 +903,9 @@ TertiaryEntityWork40            equ     $FFFFC720       ; was: word_FFC720
 TertiaryEntityWork4C            equ     $FFFFC72C       ; was: word_FFC72C
 TertiaryEntityWork50            equ     $FFFFC730       ; was: word_FFC730
 TertiaryEntityWork52            equ     $FFFFC732       ; was: word_FFC732
-EntityType1C0TrailSpan          equ     $FFFFC738       ; was: word_FFC738
-EntityType1C0TrailStep          equ     $FFFFC73C       ; was: word_FFC73C
-EntityType1C0AimAngle           equ     $FFFFC73E       ; was: byte_FFC73E
+LovePenguinTrailSpan            equ     $FFFFC738       ; was: word_FFC738
+LovePenguinTrailStep            equ     $FFFFC73C       ; was: word_FFC73C
+LovePenguinAimAngle             equ     $FFFFC73E       ; was: byte_FFC73E
 QuaternaryEntityType            equ     $FFFFC740       ; was: word_FFC740
 QuaternaryEntityFlags           equ     $FFFFC742       ; was: word_FFC742
 QuaternaryEntityState           equ     $FFFFC744       ; was: word_FFC744
@@ -913,16 +913,16 @@ QuaternaryEntityStatus          equ     $FFFFC761       ; was: byte_FFC761
 QuaternaryEntityWork40          equ     $FFFFC780       ; was: word_FFC780
 QuaternaryEntityWork46          equ     $FFFFC786       ; was: word_FFC786
 QuaternaryEntityWork52          equ     $FFFFC792       ; was: word_FFC792
-EntityType1C0ChainPeriod        equ     $FFFFC79C       ; was: byte_FFC79C
+LovePenguinChainPeriod          equ     $FFFFC79C       ; was: byte_FFC79C
 FifthEntityType                 equ     $FFFFC7A0       ; was: word_FFC7A0
 FifthEntityFlags                equ     $FFFFC7A2       ; was: word_FFC7A2
 FifthEntityState                equ     $FFFFC7A4       ; was: word_FFC7A4
 FifthEntityWork40               equ     $FFFFC7E0       ; was: word_FFC7E0
 FifthEntityWork52               equ     $FFFFC7F2       ; was: word_FFC7F2
-EntityType1C0ChainCycle         equ     $FFFFC7F8       ; was: word_FFC7F8
+LovePenguinChainCycle           equ     $FFFFC7F8       ; was: word_FFC7F8
 FifthEntityWork5C               equ     $FFFFC7FC       ; was: byte_FFC7FC
-EntityType1C0PoseRadius         equ     $FFFFC7FD       ; was: byte_FFC7FD
-EntityType1C0TurnControl        equ     FifthEntityWork5C
+LovePenguinPoseRadius           equ     $FFFFC7FD       ; was: byte_FFC7FD
+LovePenguinTurnControl          equ     FifthEntityWork5C
 FifthEntityWork5E               equ     $FFFFC7FE       ; was: word_FFC7FE
 SixthEntityType                 equ     $FFFFC800       ; was: word_FFC800
 SixthEntityFlags                equ     $FFFFC802       ; was: word_FFC802

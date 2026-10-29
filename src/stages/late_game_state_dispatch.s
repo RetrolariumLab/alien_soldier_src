@@ -29,8 +29,8 @@ Stage_LateGameStateHandlerOffsets:  dc.w    Stage18_UpdateInitialScroll-Stage_La
                 dc.w    UnreferencedStage20Variant1_UpdateJampanPhase-Stage_LateGameStateReturn
                 dc.w    UnreferencedStage20Variant1_StartTransition-Stage_LateGameStateReturn
                 dc.w    Stage_LateGameStateReturn-Stage_LateGameStateReturn
-                dc.w    UnreferencedStage20Variant2_InitializeEntity3ECPhase-Stage_LateGameStateReturn
-                dc.w    UnreferencedStage20Variant2_UpdateEntity3ECPhase-Stage_LateGameStateReturn
+                dc.w    UnreferencedStage20Variant2_InitializeLambdaBunnyPhase-Stage_LateGameStateReturn
+                dc.w    UnreferencedStage20Variant2_UpdateLambdaBunnyPhase-Stage_LateGameStateReturn
                 dc.w    UnreferencedStage20Variant2_StartTransition-Stage_LateGameStateReturn
                 dc.w    Stage_LateGameStateReturn-Stage_LateGameStateReturn
                 dc.w    UnreferencedStage20Variant3_InitializeEntity3F0Phase-Stage_LateGameStateReturn

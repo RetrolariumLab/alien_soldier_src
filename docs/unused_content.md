@@ -22,12 +22,12 @@ This patches out a check that prevents unused content from loading. The bytes
 
 ______________________________________________________________________
 
-## Externally Attributed Entity Records
+## Cut Bosses
 
 ### Entity Type `$01C0`
 
-Community material associates this record with “Love Penguin”. Static ROM
-evidence establishes only the entity type and its resource set.
+Love Penguin. Put in place of Bugmax's asset set and played in MAME, the record
+draws the boss community material calls by that name.
 
 **Activation:**
 
@@ -40,17 +40,17 @@ Encounter at Stage 13.
 
 **Current source locations:**
 
-- Asset set: `EntityType1C0AssetSet`
-- Graphics list: `EntityType1C0GraphicsLoadList`
-- Graphics data: `EntityType1C0TileArt`
-- Palette command: `EntityType1C0PaletteCommand`
+- Asset set: `Boss_LovePenguinAssetSet`
+- Graphics list: `Boss_LovePenguinGraphicsLoadList`
+- Graphics data: `Boss_LovePenguinTileArt`
+- Palette command: `Boss_LovePenguinPaletteCommand`
 
 ______________________________________________________________________
 
 ### Entity Type `$03EC`
 
-Community material associates this record with “Lambda Bunny”. That identity is
-not encoded by the asset-set record or its Stage 18 table consumer.
+Lambda Bunny. Its handler is a pad-driven pose viewer; the head and ears it
+queues as plane columns are the art community material calls by that name.
 
 **Activation:**
 
@@ -63,10 +63,10 @@ Encounter at Stage 5 (convenient spawn area).
 
 **Current source locations:**
 
-- Asset set: `EntityType3ECAssetSet`
-- Graphics list: `EntityType3ECGraphicsLoadList`
-- Graphics data: `EntityType3ECTileArt`
-- Palette command: `EntityType3ECPaletteCommand`
+- Asset set: `Boss_LambdaBunnyAssetSet`
+- Graphics list: `Boss_LambdaBunnyGraphicsLoadList`
+- Graphics data: `Boss_LambdaBunnyTileArt`
+- Palette command: `Boss_LambdaBunnyPaletteCommand`
 - Stage entry: `Stage_InitBossPhase2`
 
 ______________________________________________________________________

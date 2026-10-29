@@ -187,23 +187,23 @@ UnreferencedStage20Variant1_StartTransition:            ; DATA XREF: ROM:0000E46
                 bra.w   Stage_StartInterstageTransition
 ; End of function UnreferencedStage20Variant1_StartTransition
 ; Unreferenced Stage 20 variant 2 entry using entity type $3EC
-UnreferencedStage20Variant2_InitializeEntity3ECPhase:   ; DATA XREF: ROM:0000E468   o  ; was: sub_E6D6
+UnreferencedStage20Variant2_InitializeLambdaBunnyPhase:  ; DATA XREF: ROM:0000E468   o  ; was: sub_E6D6
                 bsr.w   Stage_TransitionToNextPhase
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$40,(CameraXLowerBound).w      ; '@'
                 move.w  #$80,(CameraXUpperBound).w
                 move.b  #1,(SoundFadeOutDelay).w
-                lea     (EntityType3ECAssetSet).l,a1
+                lea     (Boss_LambdaBunnyAssetSet).l,a1
                 jmp     Boss_LoadAssetSet
-; End of function UnreferencedStage20Variant2_InitializeEntity3ECPhase
+; End of function UnreferencedStage20Variant2_InitializeLambdaBunnyPhase
 ; Wait for the variant 2 completion flag while updating the camera
-UnreferencedStage20Variant2_UpdateEntity3ECPhase:       ; DATA XREF: ROM:0000E46A   o  ; was: sub_E6FC
+UnreferencedStage20Variant2_UpdateLambdaBunnyPhase:     ; DATA XREF: ROM:0000E46A   o  ; was: sub_E6FC
                 tst.b   (SceneSequenceFlags).w
-                beq.s   UnreferencedStage20Variant2_UpdateEntity3ECPhase_Camera
+                beq.s   UnreferencedStage20Variant2_UpdateLambdaBunnyPhase_Camera
                 addq.w  #2,(StageStateOffset).w
-UnreferencedStage20Variant2_UpdateEntity3ECPhase_Camera:  ; CODE XREF: UnreferencedStage20Variant2_UpdateEntity3ECPhase+4   j  ; was: loc_E706
+UnreferencedStage20Variant2_UpdateLambdaBunnyPhase_Camera:  ; CODE XREF: UnreferencedStage20Variant2_UpdateLambdaBunnyPhase+4   j  ; was: loc_E706
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
-; End of function UnreferencedStage20Variant2_UpdateEntity3ECPhase
+; End of function UnreferencedStage20Variant2_UpdateLambdaBunnyPhase
 ; Start the variant 2 transition after both shared gates clear
 UnreferencedStage20Variant2_StartTransition:            ; DATA XREF: ROM:0000E46C   o  ; was: sub_E70A
                 tst.w   (GameplayExitMode).w
