@@ -1,12 +1,12 @@
 ; Adjacent type-$164 no-op followed by the shared small/large health pickups
-Entity_Type164NoOp:                                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: nullsub_6
+Entity_Type164NoOp:                                     ; was: nullsub_6
                 rts
 ; End of function Entity_Type164NoOp
 ; Creates the small pickup variant from the current object
-Pickup_SpawnSmallFromCurrentObject:                     ; CODE XREF: Projectile_UpdateEightDirectionShotCollision:Projectile_ConvertEightDirectionShotToPickup   p  ; was: sub_2BCFE
+Pickup_SpawnSmallFromCurrentObject:                     ; was: sub_2BCFE
                                         ; sub_2B298:Projectile_ConvertTwoSpeedShotToPickup   p
                 movea.w a5,a0
-Pickup_SpawnSmall:                                      ; CODE XREF: Enemy_UpdateBouncingObject+1E   p  ; was: loc_2BD00
+Pickup_SpawnSmall:                                      ; was: loc_2BD00
                                         ; Effect_InitializeWolfGaropaBoundaryPair+64   p
                 moveq   #0,d7
                 bra.w   Pickup_InitializeSelectedSize
@@ -21,7 +21,7 @@ UnreferencedPickup_SpawnSmallFromCurrentObjectViaThunk:
 UnreferencedPickup_SpawnLargeFromCurrentObject:
                 movea.w a5,a0                           ; was: sub_2BD0E
 ; End of function UnreferencedPickup_SpawnLargeFromCurrentObject
-Pickup_SpawnLarge:                                      ; CODE XREF: Object_UpdateProximityPickupEmitterType48+78   p  ; was: sub_2BD10
+Pickup_SpawnLarge:                                      ; was: sub_2BD10
                                         ; Projectile_JetsripperMain+46   p
                 moveq   #1,d7
                 bra.w   Pickup_InitializeSelectedSize
@@ -29,16 +29,16 @@ Pickup_SpawnLarge:                                      ; CODE XREF: Object_Upda
 ; Unreferenced alternate entry that creates a large pickup through the thunk
 UnreferencedPickup_SpawnLargeFromCurrentObjectViaThunk:
                 movea.w a5,a0                           ; was: sub_2BD16
-Pickup_SelectLargeSize:                                 ; CODE XREF: Pickup_SpawnRandomFromCurrentObject+A   j  ; was: loc_2BD18
+Pickup_SelectLargeSize:                                 ; was: loc_2BD18
                                         ; Projectile_UpdateArtemisRadialEmitter+EC   p
                 moveq   #1,d7
                 bra.w   Pickup_InitializeSelectedSizeThunk
 ; End of function UnreferencedPickup_SpawnLargeFromCurrentObjectViaThunk
 ; Selects a pickup size randomly with the caller-provided mask
-Pickup_SpawnRandomFromCurrentObject:                    ; CODE XREF: Enemy_UpdateDefeatProjectile+26   j  ; was: sub_2BD1E
+Pickup_SpawnRandomFromCurrentObject:                    ; was: sub_2BD1E
                                         ; Enemy_PeriodicShotController+18   j
                 movea.w a5,a0
-Pickup_SelectRandomSize:                                ; CODE XREF: Stage18_SegmentedWormScatterSegments+36   p  ; was: loc_2BD20
+Pickup_SelectRandomSize:                                ; was: loc_2BD20
                                         ; Boss_WolfGaropaSpawnFiniteRewardPickups+2A   p
                 moveq   #0,d7
                 move.w  (RandomNumberState).w,d1
@@ -47,7 +47,7 @@ Pickup_SelectRandomSize:                                ; CODE XREF: Stage18_Seg
                 bra.w   *+4
 ; End of function Pickup_SpawnRandomFromCurrentObject
 ; Attributes: thunk
-Pickup_InitializeSelectedSizeThunk:                     ; CODE XREF: UnreferencedPickup_SpawnSmallFromCurrentObjectViaThunk+4   j  ; was: sub_2BD2E
+Pickup_InitializeSelectedSizeThunk:                     ; was: sub_2BD2E
                                         ; UnreferencedPickup_SpawnLargeFromCurrentObjectViaThunk+4   j
                 bra.s   Pickup_InitializeSelectedSize
 ; End of function Pickup_InitializeSelectedSizeThunk
@@ -56,13 +56,13 @@ UnreferencedPickup_InitializeSelectedSizeIfHealthDiffersFromMax:
                 move.w  (PlayerHealth).w,d0             ; was: sub_2BD30
                 cmp.w   (PlayerMaxHealth).w,d0
                 bne.s   Pickup_InitializeSelectedSize
-Pickup_DeactivateTargetObject:                          ; CODE XREF: UnreferencedPickup_InitializeSelectedSizeIfHealthDiffersFromMax+1C   j  ; was: loc_2BD3A
+Pickup_DeactivateTargetObject:                          ; was: loc_2BD3A
                 move.w  #$10,(a0)
                 bset    #4,2(a0)
                 rts
 ; ---------------------------------------------------------------------------
 ; Initializes the selected pickup size in the target object
-Pickup_InitializeSelectedSize:                          ; CODE XREF: Pickup_SpawnSmallFromCurrentObject+4   j  ; was: loc_2BD46
+Pickup_InitializeSelectedSize:                          ; was: loc_2BD46
                                         ; Pickup_SpawnLarge+2   j
                 cmpi.w  #6,(ActivePickupCountMinus1).w
                 bpl.s   Pickup_DeactivateTargetObject
@@ -86,14 +86,13 @@ Pickup_InitializeSelectedSize:                          ; CODE XREF: Pickup_Spaw
                 rts
 ; End of function Pickup_InitializeSelectedSize
 ; ---------------------------------------------------------------------------
-Pickup_SoundIds:                dc.b    $46, $47        ; DATA XREF: Pickup_InitializeSelectedSize+3E   r  ; was: byte_2BDA2
-Pickup_HealthRestoreAmounts:    dc.w    $1E, $64        ; DATA XREF: Pickup_InitializeSelectedSize+46   r  ; was: word_2BDA4
-Pickup_SpriteMappings:          dc.l    SharedCombatSpriteAnimation28  ; DATA XREF: Pickup_InitializeSelectedSize+4E   r  ; was: off_2BDA8
+Pickup_SoundIds:                dc.b    $46, $47        ; was: byte_2BDA2
+Pickup_HealthRestoreAmounts:    dc.w    $1E, $64        ; was: word_2BDA4
+Pickup_SpriteMappings:          dc.l    SharedCombatSpriteAnimation28  ; was: off_2BDA8
                 dc.l    SharedCombatSpriteAnimation27
 
 ; Updates health-pickup lifetime, collection, display priority, and motion
-Pickup_Update:                                          ; CODE XREF: Effect_WolfGaropaBoundaryFollowerMain:Effect_UpdateWolfGaropaBoundaryFollowerSprite   j  ; was: sub_2BDB0
-                                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o
+Pickup_Update:                                          ; was: sub_2BDB0
                 subq.w  #1,$4A(a5)
                 bmi.s   Pickup_Remove
                 cmpi.w  #$20,$4A(a5)                    ; ' '
@@ -102,7 +101,7 @@ Pickup_Update:                                          ; CODE XREF: Effect_Wolf
                 btst    #0,(FrameCounter+1).w
                 bne.s   Pickup_CheckCollection
                 bclr    #7,2(a5)
-Pickup_CheckCollection:                                 ; CODE XREF: Pickup_Update+C   j  ; was: loc_2BDD2
+Pickup_CheckCollection:                                 ; was: loc_2BDD2
                                         ; Pickup_Update+1A   j
                 bclr    #7,$22(a5)
                 beq.s   Pickup_UpdateFlipAndStageMotion
@@ -119,16 +118,16 @@ Pickup_CheckCollection:                                 ; CODE XREF: Pickup_Upda
                 cmp.w   (PlayerMaxHealth).w,d0
                 bmi.s   Pickup_StoreHealthAndStartDeltaDisplay
                 move.w  (PlayerMaxHealth).w,d0
-Pickup_StoreHealthAndStartDeltaDisplay:                 ; CODE XREF: Pickup_Update+4C   j  ; was: loc_2BE0E
+Pickup_StoreHealthAndStartDeltaDisplay:                 ; was: loc_2BE0E
                                         ; Pickup_Update+4E   j
                 move.w  d0,(PlayerHealth).w
                 move.w  $48(a5),(HealthDeltaDisplayValue).w
                 move.w  #$30,(HealthDeltaDisplayTimer).w  ; '0'
-Pickup_Remove:                                          ; CODE XREF: Pickup_Update+4   j  ; was: loc_2BE1E
+Pickup_Remove:                                          ; was: loc_2BE1E
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Pickup_UpdateFlipAndStageMotion:                        ; CODE XREF: Pickup_Update+28   j  ; was: loc_2BE26
+Pickup_UpdateFlipAndStageMotion:                        ; was: loc_2BE26
                                         ; Pickup_Update+30   j
                 andi.w  #$E7FF,$E(a5)
                 lea     (SpriteFlipBitsTable).l,a0

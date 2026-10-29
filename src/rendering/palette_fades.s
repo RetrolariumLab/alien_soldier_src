@@ -7,7 +7,7 @@ Palette_UpdateFullScreenFade:                           ; was: sub_EF4
                 bpl.w   Palette_UpdateFullScreenFade_SelectTarget
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_SelectTarget:              ; CODE XREF: Palette_UpdateFullScreenFade+4   j  ; was: loc_EFE
+Palette_UpdateFullScreenFade_SelectTarget:              ; was: loc_EFE
                 tst.w   (PaletteFillColor).w
                 bne.w   Palette_UpdateFullScreenFade_SelectWhiteDirection
                 move.w  (PaletteFadeStep).w,d0
@@ -15,11 +15,11 @@ Palette_UpdateFullScreenFade_SelectTarget:              ; CODE XREF: Palette_Upd
                 bne.w   Palette_UpdateFullScreenFade_BeginToBlack
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_StepFromBlack:             ; CODE XREF: Palette_UpdateFullScreenFade+16   j  ; was: loc_F14
+Palette_UpdateFullScreenFade_StepFromBlack:             ; was: loc_F14
                 add.w   d0,(PaletteFadeProgress).w
                 bpl.w   Palette_UpdateFullScreenFade_RenderFromBlack
                 clr.w   (PaletteFadeProgress).w
-Palette_UpdateFullScreenFade_RenderFromBlack:           ; CODE XREF: Palette_UpdateFullScreenFade+24   j  ; was: loc_F20
+Palette_UpdateFullScreenFade_RenderFromBlack:           ; was: loc_F20
                 lea     (PaletteActiveBuffer).w,a0
                 lea     (PaletteShadowBuffer).w,a1
                 move.b  (PaletteFadeProgress).w,d5
@@ -29,7 +29,7 @@ Palette_UpdateFullScreenFade_RenderFromBlack:           ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_FromBlackLoop:             ; CODE XREF: Palette_UpdateFullScreenFade+84   j  ; was: loc_F3C
+Palette_UpdateFullScreenFade_FromBlackLoop:             ; was: loc_F3C
                 move.w  (a1)+,d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -38,21 +38,21 @@ Palette_UpdateFullScreenFade_FromBlackLoop:             ; CODE XREF: Palette_Upd
                 sub.w   d5,d2
                 bpl.w   Palette_UpdateFullScreenFade_FromBlackClampRed
                 clr.w   d2
-Palette_UpdateFullScreenFade_FromBlackClampRed:         ; CODE XREF: Palette_UpdateFullScreenFade+52   j  ; was: loc_F52
+Palette_UpdateFullScreenFade_FromBlackClampRed:         ; was: loc_F52
                                         ; Palette_UpdateFullScreenFade+58   j
                 andi.w  #$F0,d3
                 beq.w   Palette_UpdateFullScreenFade_FromBlackClampGreen
                 sub.w   d6,d3
                 bpl.w   Palette_UpdateFullScreenFade_FromBlackClampGreen
                 clr.w   d3
-Palette_UpdateFullScreenFade_FromBlackClampGreen:       ; CODE XREF: Palette_UpdateFullScreenFade+62   j  ; was: loc_F62
+Palette_UpdateFullScreenFade_FromBlackClampGreen:       ; was: loc_F62
                                         ; Palette_UpdateFullScreenFade+68   j
                 andi.w  #$F00,d4
                 beq.w   Palette_UpdateFullScreenFade_FromBlackStoreColor
                 sub.w   d7,d4
                 bpl.w   Palette_UpdateFullScreenFade_FromBlackStoreColor
                 clr.w   d4
-Palette_UpdateFullScreenFade_FromBlackStoreColor:       ; CODE XREF: Palette_UpdateFullScreenFade+72   j  ; was: loc_F72
+Palette_UpdateFullScreenFade_FromBlackStoreColor:       ; was: loc_F72
                                         ; Palette_UpdateFullScreenFade+78   j
                 or.w    d3,d2
                 or.w    d4,d2
@@ -61,10 +61,10 @@ Palette_UpdateFullScreenFade_FromBlackStoreColor:       ; CODE XREF: Palette_Upd
                 tst.w   (PaletteFadeProgress).w
                 bne.w   Palette_UpdateFullScreenFade_FromBlackReturn
                 clr.w   (PaletteFadeStep).w
-Palette_UpdateFullScreenFade_FromBlackReturn:           ; CODE XREF: Palette_UpdateFullScreenFade+8C   j  ; was: locret_F88
+Palette_UpdateFullScreenFade_FromBlackReturn:           ; was: locret_F88
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_BeginToBlack:              ; CODE XREF: Palette_UpdateFullScreenFade+1A   j  ; was: loc_F8A
+Palette_UpdateFullScreenFade_BeginToBlack:              ; was: loc_F8A
                 tst.w   (PaletteFadeProgress).w
                 bne.w   Palette_UpdateFullScreenFade_ContinueToBlack
                 add.w   d0,(PaletteFadeProgress).w
@@ -77,7 +77,7 @@ Palette_UpdateFullScreenFade_BeginToBlack:              ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_BeginToBlackLoop:          ; CODE XREF: Palette_UpdateFullScreenFade+FC   j  ; was: loc_FB2
+Palette_UpdateFullScreenFade_BeginToBlackLoop:          ; was: loc_FB2
                 move.w  (a0),d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -86,21 +86,21 @@ Palette_UpdateFullScreenFade_BeginToBlackLoop:          ; CODE XREF: Palette_Upd
                 sub.w   d5,d2
                 bpl.w   Palette_UpdateFullScreenFade_BeginToBlackClampRed
                 clr.w   d2
-Palette_UpdateFullScreenFade_BeginToBlackClampRed:      ; CODE XREF: Palette_UpdateFullScreenFade+C8   j  ; was: loc_FC8
+Palette_UpdateFullScreenFade_BeginToBlackClampRed:      ; was: loc_FC8
                                         ; Palette_UpdateFullScreenFade+CE   j
                 andi.w  #$F0,d3
                 beq.w   Palette_UpdateFullScreenFade_BeginToBlackClampGreen
                 sub.w   d6,d3
                 bpl.w   Palette_UpdateFullScreenFade_BeginToBlackClampGreen
                 clr.w   d3
-Palette_UpdateFullScreenFade_BeginToBlackClampGreen:    ; CODE XREF: Palette_UpdateFullScreenFade+D8   j  ; was: loc_FD8
+Palette_UpdateFullScreenFade_BeginToBlackClampGreen:    ; was: loc_FD8
                                         ; Palette_UpdateFullScreenFade+DE   j
                 andi.w  #$F00,d4
                 beq.w   Palette_UpdateFullScreenFade_BeginToBlackStoreColor
                 sub.w   d7,d4
                 bpl.w   Palette_UpdateFullScreenFade_BeginToBlackStoreColor
                 clr.w   d4
-Palette_UpdateFullScreenFade_BeginToBlackStoreColor:    ; CODE XREF: Palette_UpdateFullScreenFade+E8   j  ; was: loc_FE8
+Palette_UpdateFullScreenFade_BeginToBlackStoreColor:    ; was: loc_FE8
                                         ; Palette_UpdateFullScreenFade+EE   j
                 or.w    d3,d2
                 or.w    d4,d2
@@ -113,10 +113,10 @@ Palette_UpdateFullScreenFade_BeginToBlackStoreColor:    ; CODE XREF: Palette_Upd
                 clr.w   (PaletteFadeStep).w
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
-Palette_UpdateFullScreenFade_BeginToBlackReturn:        ; CODE XREF: Palette_UpdateFullScreenFade+106   j  ; was: locret_1012
+Palette_UpdateFullScreenFade_BeginToBlackReturn:        ; was: locret_1012
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_ContinueToBlack:           ; CODE XREF: Palette_UpdateFullScreenFade+9A   j  ; was: loc_1014
+Palette_UpdateFullScreenFade_ContinueToBlack:           ; was: loc_1014
                 add.w   d0,(PaletteFadeProgress).w
                 lea     (PaletteActiveBuffer).w,a0
                 lea     (PaletteShadowBuffer).w,a1
@@ -127,7 +127,7 @@ Palette_UpdateFullScreenFade_ContinueToBlack:           ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_ToBlackLoop:               ; CODE XREF: Palette_UpdateFullScreenFade+17C   j  ; was: loc_1034
+Palette_UpdateFullScreenFade_ToBlackLoop:               ; was: loc_1034
                 move.w  (a1)+,d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -136,21 +136,21 @@ Palette_UpdateFullScreenFade_ToBlackLoop:               ; CODE XREF: Palette_Upd
                 sub.w   d5,d2
                 bpl.w   Palette_UpdateFullScreenFade_ToBlackClampRed
                 clr.w   d2
-Palette_UpdateFullScreenFade_ToBlackClampRed:           ; CODE XREF: Palette_UpdateFullScreenFade+14A   j  ; was: loc_104A
+Palette_UpdateFullScreenFade_ToBlackClampRed:           ; was: loc_104A
                                         ; Palette_UpdateFullScreenFade+150   j
                 andi.w  #$F0,d3
                 beq.w   Palette_UpdateFullScreenFade_ToBlackClampGreen
                 sub.w   d6,d3
                 bpl.w   Palette_UpdateFullScreenFade_ToBlackClampGreen
                 clr.w   d3
-Palette_UpdateFullScreenFade_ToBlackClampGreen:         ; CODE XREF: Palette_UpdateFullScreenFade+15A   j  ; was: loc_105A
+Palette_UpdateFullScreenFade_ToBlackClampGreen:         ; was: loc_105A
                                         ; Palette_UpdateFullScreenFade+160   j
                 andi.w  #$F00,d4
                 beq.w   Palette_UpdateFullScreenFade_ToBlackStoreColor
                 sub.w   d7,d4
                 bpl.w   Palette_UpdateFullScreenFade_ToBlackStoreColor
                 clr.w   d4
-Palette_UpdateFullScreenFade_ToBlackStoreColor:         ; CODE XREF: Palette_UpdateFullScreenFade+16A   j  ; was: loc_106A
+Palette_UpdateFullScreenFade_ToBlackStoreColor:         ; was: loc_106A
                                         ; Palette_UpdateFullScreenFade+170   j
                 or.w    d3,d2
                 or.w    d4,d2
@@ -162,20 +162,20 @@ Palette_UpdateFullScreenFade_ToBlackStoreColor:         ; CODE XREF: Palette_Upd
                 clr.w   (PaletteFadeStep).w
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
-Palette_UpdateFullScreenFade_ToBlackReturn:             ; CODE XREF: Palette_UpdateFullScreenFade+186   j  ; was: locret_1092
+Palette_UpdateFullScreenFade_ToBlackReturn:             ; was: locret_1092
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_SelectWhiteDirection:      ; CODE XREF: Palette_UpdateFullScreenFade+E   j  ; was: loc_1094
+Palette_UpdateFullScreenFade_SelectWhiteDirection:      ; was: loc_1094
                 move.w  (PaletteFadeStep).w,d0
                 bmi.w   Palette_UpdateFullScreenFade_StepFromWhite
                 bne.w   Palette_UpdateFullScreenFade_BeginToWhite
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_StepFromWhite:             ; CODE XREF: Palette_UpdateFullScreenFade+1A4   j  ; was: loc_10A2
+Palette_UpdateFullScreenFade_StepFromWhite:             ; was: loc_10A2
                 add.w   d0,(PaletteFadeProgress).w
                 bpl.w   Palette_UpdateFullScreenFade_RenderFromWhite
                 clr.w   (PaletteFadeProgress).w
-Palette_UpdateFullScreenFade_RenderFromWhite:           ; CODE XREF: Palette_UpdateFullScreenFade+1B2   j  ; was: loc_10AE
+Palette_UpdateFullScreenFade_RenderFromWhite:           ; was: loc_10AE
                 lea     (PaletteActiveBuffer).w,a0
                 lea     (PaletteShadowBuffer).w,a1
                 move.b  (PaletteFadeProgress).w,d5
@@ -185,7 +185,7 @@ Palette_UpdateFullScreenFade_RenderFromWhite:           ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_FromWhiteLoop:             ; CODE XREF: Palette_UpdateFullScreenFade+218   j  ; was: loc_10CA
+Palette_UpdateFullScreenFade_FromWhiteLoop:             ; was: loc_10CA
                 move.w  (a1)+,d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -196,17 +196,17 @@ Palette_UpdateFullScreenFade_FromWhiteLoop:             ; CODE XREF: Palette_Upd
                 cmpi.w  #$F,d2
                 bls.w   Palette_UpdateFullScreenFade_FromWhiteClampRed
                 move.w  #$F,d2
-Palette_UpdateFullScreenFade_FromWhiteClampRed:         ; CODE XREF: Palette_UpdateFullScreenFade+1EE   j  ; was: loc_10EA
+Palette_UpdateFullScreenFade_FromWhiteClampRed:         ; was: loc_10EA
                 add.w   d6,d3
                 cmpi.w  #$F0,d3
                 bls.w   Palette_UpdateFullScreenFade_FromWhiteClampGreen
                 move.w  #$F0,d3
-Palette_UpdateFullScreenFade_FromWhiteClampGreen:       ; CODE XREF: Palette_UpdateFullScreenFade+1FC   j  ; was: loc_10F8
+Palette_UpdateFullScreenFade_FromWhiteClampGreen:       ; was: loc_10F8
                 add.w   d7,d4
                 cmpi.w  #$F00,d4
                 bls.w   Palette_UpdateFullScreenFade_FromWhiteStoreColor
                 move.w  #$F00,d4
-Palette_UpdateFullScreenFade_FromWhiteStoreColor:       ; CODE XREF: Palette_UpdateFullScreenFade+20A   j  ; was: loc_1106
+Palette_UpdateFullScreenFade_FromWhiteStoreColor:       ; was: loc_1106
                 or.w    d3,d2
                 or.w    d4,d2
                 move.w  d2,(a0)+
@@ -214,10 +214,10 @@ Palette_UpdateFullScreenFade_FromWhiteStoreColor:       ; CODE XREF: Palette_Upd
                 tst.w   (PaletteFadeProgress).w
                 bne.w   Palette_UpdateFullScreenFade_FromWhiteReturn
                 clr.w   (PaletteFadeStep).w
-Palette_UpdateFullScreenFade_FromWhiteReturn:           ; CODE XREF: Palette_UpdateFullScreenFade+220   j  ; was: locret_111C
+Palette_UpdateFullScreenFade_FromWhiteReturn:           ; was: locret_111C
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_BeginToWhite:              ; CODE XREF: Palette_UpdateFullScreenFade+1A8   j  ; was: loc_111E
+Palette_UpdateFullScreenFade_BeginToWhite:              ; was: loc_111E
                 tst.w   (PaletteFadeProgress).w
                 bne.w   Palette_UpdateFullScreenFade_ContinueToWhite
                 add.w   d0,(PaletteFadeProgress).w
@@ -230,7 +230,7 @@ Palette_UpdateFullScreenFade_BeginToWhite:              ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_BeginToWhiteLoop:          ; CODE XREF: Palette_UpdateFullScreenFade+296   j  ; was: loc_1146
+Palette_UpdateFullScreenFade_BeginToWhiteLoop:          ; was: loc_1146
                 move.w  (a0),d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -241,17 +241,17 @@ Palette_UpdateFullScreenFade_BeginToWhiteLoop:          ; CODE XREF: Palette_Upd
                 cmpi.w  #$F,d2
                 bls.w   Palette_UpdateFullScreenFade_BeginToWhiteClampRed
                 move.w  #$F,d2
-Palette_UpdateFullScreenFade_BeginToWhiteClampRed:      ; CODE XREF: Palette_UpdateFullScreenFade+26A   j  ; was: loc_1166
+Palette_UpdateFullScreenFade_BeginToWhiteClampRed:      ; was: loc_1166
                 add.w   d6,d3
                 cmpi.w  #$F0,d3
                 bls.w   Palette_UpdateFullScreenFade_BeginToWhiteClampGreen
                 move.w  #$F0,d3
-Palette_UpdateFullScreenFade_BeginToWhiteClampGreen:    ; CODE XREF: Palette_UpdateFullScreenFade+278   j  ; was: loc_1174
+Palette_UpdateFullScreenFade_BeginToWhiteClampGreen:    ; was: loc_1174
                 add.w   d7,d4
                 cmpi.w  #$F00,d4
                 bls.w   Palette_UpdateFullScreenFade_BeginToWhiteStoreColor
                 move.w  #$F00,d4
-Palette_UpdateFullScreenFade_BeginToWhiteStoreColor:    ; CODE XREF: Palette_UpdateFullScreenFade+286   j  ; was: loc_1182
+Palette_UpdateFullScreenFade_BeginToWhiteStoreColor:    ; was: loc_1182
                 or.w    d3,d2
                 or.w    d4,d2
                 move.w  d2,(a0)+
@@ -263,10 +263,10 @@ Palette_UpdateFullScreenFade_BeginToWhiteStoreColor:    ; CODE XREF: Palette_Upd
                 clr.w   (PaletteFadeStep).w
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
-Palette_UpdateFullScreenFade_BeginToWhiteReturn:        ; CODE XREF: Palette_UpdateFullScreenFade+2A0   j  ; was: locret_11AC
+Palette_UpdateFullScreenFade_BeginToWhiteReturn:        ; was: locret_11AC
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateFullScreenFade_ContinueToWhite:           ; CODE XREF: Palette_UpdateFullScreenFade+22E   j  ; was: loc_11AE
+Palette_UpdateFullScreenFade_ContinueToWhite:           ; was: loc_11AE
                 add.w   d0,(PaletteFadeProgress).w
                 lea     (PaletteActiveBuffer).w,a0
                 lea     (PaletteShadowBuffer).w,a1
@@ -277,7 +277,7 @@ Palette_UpdateFullScreenFade_ContinueToWhite:           ; CODE XREF: Palette_Upd
                 move.w  d6,d7
                 lsl.w   #4,d7
                 move.w  #$3F,d1                         ; '?'
-Palette_UpdateFullScreenFade_ToWhiteLoop:               ; CODE XREF: Palette_UpdateFullScreenFade+31C   j  ; was: loc_11CE
+Palette_UpdateFullScreenFade_ToWhiteLoop:               ; was: loc_11CE
                 move.w  (a1)+,d2
                 move.w  d2,d3
                 move.w  d2,d4
@@ -288,17 +288,17 @@ Palette_UpdateFullScreenFade_ToWhiteLoop:               ; CODE XREF: Palette_Upd
                 cmpi.w  #$F,d2
                 bls.w   Palette_UpdateFullScreenFade_ToWhiteClampRed
                 move.w  #$F,d2
-Palette_UpdateFullScreenFade_ToWhiteClampRed:           ; CODE XREF: Palette_UpdateFullScreenFade+2F2   j  ; was: loc_11EE
+Palette_UpdateFullScreenFade_ToWhiteClampRed:           ; was: loc_11EE
                 add.w   d6,d3
                 cmpi.w  #$F0,d3
                 bls.w   Palette_UpdateFullScreenFade_ToWhiteClampGreen
                 move.w  #$F0,d3
-Palette_UpdateFullScreenFade_ToWhiteClampGreen:         ; CODE XREF: Palette_UpdateFullScreenFade+300   j  ; was: loc_11FC
+Palette_UpdateFullScreenFade_ToWhiteClampGreen:         ; was: loc_11FC
                 add.w   d7,d4
                 cmpi.w  #$F00,d4
                 bls.w   Palette_UpdateFullScreenFade_ToWhiteStoreColor
                 move.w  #$F00,d4
-Palette_UpdateFullScreenFade_ToWhiteStoreColor:         ; CODE XREF: Palette_UpdateFullScreenFade+30E   j  ; was: loc_120A
+Palette_UpdateFullScreenFade_ToWhiteStoreColor:         ; was: loc_120A
                 or.w    d3,d2
                 or.w    d4,d2
                 move.w  d2,(a0)+
@@ -309,7 +309,7 @@ Palette_UpdateFullScreenFade_ToWhiteStoreColor:         ; CODE XREF: Palette_Upd
                 clr.w   (PaletteFadeStep).w
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
-Palette_UpdateFullScreenFade_ToWhiteReturn:             ; CODE XREF: Palette_UpdateFullScreenFade+326   j  ; was: locret_1232
+Palette_UpdateFullScreenFade_ToWhiteReturn:             ; was: locret_1232
                 rts
 ; End of function Palette_UpdateFullScreenFade
 ; Queues the horizontal-scroll table DMA to VRAM $F000. VDP register 11 bit 1
@@ -337,9 +337,9 @@ Gfx_QueueHorizontalScrollDMA:                           ; was: sub_1234
                 move.l  #$94009302,-(a0)
                 bra.w   Gfx_QueueHorizontalScrollDMA_CommitCommand
 ; ---------------------------------------------------------------------------
-Gfx_QueueHorizontalScrollDMA_UsePerLineLength:          ; CODE XREF: Gfx_QueueHorizontalScrollDMA+3C   j  ; was: loc_127E
+Gfx_QueueHorizontalScrollDMA_UsePerLineLength:          ; was: loc_127E
                 move.l  #$940193C0,-(a0)
-Gfx_QueueHorizontalScrollDMA_CommitCommand:             ; CODE XREF: Gfx_QueueHorizontalScrollDMA+46   j  ; was: loc_1284
+Gfx_QueueHorizontalScrollDMA_CommitCommand:             ; was: loc_1284
                 move.w  a0,(VDPCommandQueueHead).w
                 rts
 ; End of function Gfx_QueueHorizontalScrollDMA
@@ -368,29 +368,29 @@ Gfx_QueueVerticalScrollDMA:                             ; was: sub_128A
                 move.l  #$94009302,-(a0)
                 bra.w   Gfx_QueueVerticalScrollDMA_CommitCommand
 ; ---------------------------------------------------------------------------
-Gfx_QueueVerticalScrollDMA_UsePerColumnLength:          ; CODE XREF: Gfx_QueueVerticalScrollDMA+3C   j  ; was: loc_12D4
+Gfx_QueueVerticalScrollDMA_UsePerColumnLength:          ; was: loc_12D4
                 move.l  #$94009328,-(a0)
-Gfx_QueueVerticalScrollDMA_CommitCommand:               ; CODE XREF: Gfx_QueueVerticalScrollDMA+46   j  ; was: loc_12DA
+Gfx_QueueVerticalScrollDMA_CommitCommand:               ; was: loc_12DA
                 move.w  a0,(VDPCommandQueueHead).w
                 rts
 ; End of function Gfx_QueueVerticalScrollDMA
 ; Closes a frame-timing debug pass by cycling backdrop color indices 15..0,
 ; then writing the display-enable and backdrop shadow values back to the VDP
-Gfx_CycleBackdropColorIndices:                          ; CODE XREF: Sys_GameplayMainLoop+230   j  ; was: sub_12E0
+Gfx_CycleBackdropColorIndices:                          ; was: sub_12E0
                 tst.b   (FrameTimingDebugFlag).w
                 bpl.w   Gfx_CycleBackdropColorIndices_Return
                 move.w  (VDPReg1Shadow).w,d0
                 bclr    #6,d0
                 move.w  d0,(VDP_CTRL).l
                 move.w  #$F,d0
-Gfx_CycleBackdropColorIndices_Loop:                     ; CODE XREF: Gfx_CycleBackdropColorIndices+26   j  ; was: loc_12FA
+Gfx_CycleBackdropColorIndices_Loop:                     ; was: loc_12FA
                 move.w  d0,d1
                 ori.w   #$8700,d1
                 move.w  d1,(VDP_CTRL).l
                 dbf     d0,Gfx_CycleBackdropColorIndices_Loop
                 move.w  (VDPReg1Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg7Shadow).w,(VDP_CTRL).l
-Gfx_CycleBackdropColorIndices_Return:                   ; CODE XREF: Gfx_CycleBackdropColorIndices+4   j  ; was: locret_131A
+Gfx_CycleBackdropColorIndices_Return:                   ; was: locret_131A
                 rts
 ; End of function Gfx_CycleBackdropColorIndices
 ; Blanks the display and selects backdrop color zero during timing diagnostics
@@ -401,7 +401,7 @@ Gfx_BlankDisplayAndBackdrop:                            ; was: sub_131C
                 bclr    #6,d0
                 move.w  d0,(VDP_CTRL).l
                 move.w  #$8700,(VDP_CTRL).l
-Gfx_BlankDisplayAndBackdrop_Return:                     ; CODE XREF: Gfx_BlankDisplayAndBackdrop+4   j  ; was: locret_133A
+Gfx_BlankDisplayAndBackdrop_Return:                     ; was: locret_133A
                 rts
 ; End of function Gfx_BlankDisplayAndBackdrop
 ; Restores display-enable and backdrop state after timing diagnostics
@@ -410,6 +410,6 @@ Gfx_RestoreDisplayAndBackdrop:                          ; was: sub_133C
                 bpl.w   Gfx_RestoreDisplayAndBackdrop_Return
                 move.w  (VDPReg1Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg7Shadow).w,(VDP_CTRL).l
-Gfx_RestoreDisplayAndBackdrop_Return:                   ; CODE XREF: Gfx_RestoreDisplayAndBackdrop+4   j  ; was: locret_1354
+Gfx_RestoreDisplayAndBackdrop_Return:                   ; was: locret_1354
                 rts
 ; End of function Gfx_RestoreDisplayAndBackdrop

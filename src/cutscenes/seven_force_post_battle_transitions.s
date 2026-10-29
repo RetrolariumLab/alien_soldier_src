@@ -1,6 +1,6 @@
 ; Seven Force post-battle transition controller
 ; Dispatch the post-battle transition requested by the completed boss
-Boss_QueueSevenForcePostBattleTransition:               ; CODE XREF: Entity_UpdateValkirieBattle+26   j  ; was: sub_555C8
+Boss_QueueSevenForcePostBattleTransition:               ; was: sub_555C8
                                         ; Boss_UpdateMedusa+26   j
                 bset    #0,(StageTimerPauseFlag).w
                 movea.w #(Entity60Type-M68K_RAM),a5
@@ -9,14 +9,13 @@ Boss_QueueSevenForcePostBattleTransition:               ; CODE XREF: Entity_Upda
                 rts
 ; End of function Boss_QueueSevenForcePostBattleTransition
 ; Dispatch a post-battle transition by the caller-supplied even index
-Entity_DispatchSevenForcePostBattleTransition:          ; CODE XREF: Boss_QueueSevenForcePostBattleTransition+A   p  ; was: sub_555DA
+Entity_DispatchSevenForcePostBattleTransition:          ; was: sub_555DA
                 movea.w Entity_SevenForcePostBattleTransitionOffsets(pc,d0.w),a1
                 adda.l  #Entity_ResetSevenForceTransitionController,a1
                 jmp     (a1)
 ; End of function Entity_DispatchSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Entity_SevenForcePostBattleTransitionOffsets:   dc.w    Entity_ResetSevenForceTransitionController-Entity_ResetSevenForceTransitionController  ; was: off_555E6
-                                        ; DATA XREF: Entity_DispatchSevenForcePostBattleTransition   r
                 dc.w    Entity_StartSevenForceMedusaTransition-Entity_ResetSevenForceTransitionController
                 dc.w    Entity_StartSevenForceSylpheedTransition-Entity_ResetSevenForceTransitionController
                 dc.w    Entity_StartSevenForceArtemisTransition-Entity_ResetSevenForceTransitionController
@@ -27,13 +26,13 @@ Entity_SevenForcePostBattleTransitionOffsets:   dc.w    Entity_ResetSevenForceTr
                 dc.w    Entity_SevenForcePostBattleNoOp-Entity_ResetSevenForceTransitionController
 
 ; Reset the Seven Force transition controller state
-Entity_ResetSevenForceTransitionController:             ; DATA XREF: Entity_DispatchSevenForcePostBattleTransition+4   o  ; was: sub_555F8
+Entity_ResetSevenForceTransitionController:             ; was: sub_555F8
                                         ; ROM:Entity_SevenForcePostBattleTransitionOffsets   o
                 move.w  #0,4(a5)
                 rts
 ; End of function Entity_ResetSevenForceTransitionController
 ; Start the Medusa form transition after Valkirie completes
-Entity_StartSevenForceMedusaTransition:                 ; DATA XREF: ROM:000555E8   o  ; was: sub_55600
+Entity_StartSevenForceMedusaTransition:                 ; was: sub_55600
                 move.w  #$10,4(a5)
                 bsr.w   Entity_InitSevenForceTransitionSprite
                 move.w  #$428,d0
@@ -45,7 +44,7 @@ Entity_StartSevenForceMedusaTransition:                 ; DATA XREF: ROM:000555E
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_StartSevenForceMedusaTransition
 ; Start the Sylpheed form transition after Medusa completes
-Entity_StartSevenForceSylpheedTransition:               ; DATA XREF: ROM:000555EA   o  ; was: sub_5562A
+Entity_StartSevenForceSylpheedTransition:               ; was: sub_5562A
                 move.w  #$18,4(a5)
                 bsr.w   Entity_InitSevenForceTransitionSprite
                 move.w  #$428,d0
@@ -62,7 +61,7 @@ Entity_StartSevenForceSylpheedTransition:               ; DATA XREF: ROM:000555E
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_StartSevenForceSylpheedTransition
 ; Start the Artemis form transition after Sylpheed completes
-Entity_StartSevenForceArtemisTransition:                ; DATA XREF: ROM:000555EC   o  ; was: sub_5566C
+Entity_StartSevenForceArtemisTransition:                ; was: sub_5566C
                 move.b  #1,(SceneSequenceFlags).w
                 move.w  #$22,4(a5)                      ; '"'
                 bsr.w   Entity_InitSevenForceTransitionSprite
@@ -77,7 +76,7 @@ Entity_StartSevenForceArtemisTransition:                ; DATA XREF: ROM:000555E
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_StartSevenForceArtemisTransition
 ; Start the Sirene form transition after Artemis completes
-Entity_StartSevenForceSireneTransition:                 ; DATA XREF: ROM:000555EE   o  ; was: sub_556A8
+Entity_StartSevenForceSireneTransition:                 ; was: sub_556A8
                 move.w  #$2A,4(a5)                      ; '*'
                 bsr.w   Entity_InitSevenForceTransitionSprite
                 move.w  #$428,d0
@@ -89,7 +88,7 @@ Entity_StartSevenForceSireneTransition:                 ; DATA XREF: ROM:000555E
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_StartSevenForceSireneTransition
 ; Resume the intro controller at state $24 and clear obsolete objects
-Entity_ResumeSevenForceIntroState24:                    ; DATA XREF: ROM:000555F0   o  ; was: sub_556D2
+Entity_ResumeSevenForceIntroState24:                    ; was: sub_556D2
                 move.w  #$24,4(a5)                      ; '$'
                 move.b  #1,(SceneSequenceFlags).w
                 move.w  #$428,d0
@@ -99,7 +98,7 @@ Entity_ResumeSevenForceIntroState24:                    ; DATA XREF: ROM:000555F
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_ResumeSevenForceIntroState24
 ; Resume the intro controller at state $26 and clear obsolete objects
-Entity_ResumeSevenForceIntroState26:                    ; DATA XREF: ROM:000555F2   o  ; was: sub_556F4
+Entity_ResumeSevenForceIntroState26:                    ; was: sub_556F4
                 move.w  #$26,4(a5)                      ; '&'
                 move.b  #1,(SceneSequenceFlags).w
                 move.w  #$428,d0
@@ -109,7 +108,7 @@ Entity_ResumeSevenForceIntroState26:                    ; DATA XREF: ROM:000555F
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Entity_ResumeSevenForceIntroState26
 ; Start the final explosion sequence after Sirene completes
-Entity_StartSevenForceFinalTransition:                  ; DATA XREF: ROM:000555F4   o  ; was: sub_55716
+Entity_StartSevenForceFinalTransition:                  ; was: sub_55716
                 move.w  #$36,4(a5)                      ; '6'
                 bclr    #0,(PlayerObjectFlags).w
                 bset    #0,(PlayerModeFlags).w
@@ -127,6 +126,6 @@ Entity_StartSevenForceFinalTransition:                  ; DATA XREF: ROM:000555F
                 rts
 ; End of function Entity_StartSevenForceFinalTransition
 ; Intentional no-op post-battle transition entry
-Entity_SevenForcePostBattleNoOp:                        ; DATA XREF: ROM:000555F6   o  ; was: nullsub_127
+Entity_SevenForcePostBattleNoOp:                        ; was: nullsub_127
                 rts
 ; End of function Entity_SevenForcePostBattleNoOp

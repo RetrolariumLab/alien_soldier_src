@@ -1,5 +1,5 @@
 ; Initializes credits screen
-Credits_InitializeScreen:                               ; DATA XREF: Sys_DispatchGameState+B6   o  ; was: sub_1E16C
+Credits_InitializeScreen:                               ; was: sub_1E16C
                 tst.w   (GameSubstateIndex).w
                 bne.s   Credits_ActivateScreen
                 addq.w  #2,(GameSubstateIndex).w
@@ -19,7 +19,7 @@ Credits_InitializeScreen:                               ; DATA XREF: Sys_Dispatc
                 rts
 ; ---------------------------------------------------------------------------
 ; Activates the loaded credits screen and configures its raster transition
-Credits_ActivateScreen:                                 ; CODE XREF: Credits_InitializeScreen+4   j  ; was: loc_1E1BE
+Credits_ActivateScreen:                                 ; was: loc_1E1BE
                 addq.w  #4,(GameModeIndex).w
                 jsr     (Gfx_FadePaletteTransition).l
                 movea.l #Credits_IntroVRAMTransferParameters,a0
@@ -37,7 +37,6 @@ Credits_ActivateScreen:                                 ; CODE XREF: Credits_Ini
 ; End of function Credits_InitializeScreen
 ; ---------------------------------------------------------------------------
 Credits_IntroAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1E204
-                                        ; DATA XREF: Credits_InitializeScreen+10   o
                 dc.l    CreditsAndEndingTileArt         ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    7                               ; field_0
@@ -57,10 +56,9 @@ Credits_IntroAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1
                 dc.w    $7000                           ; field_6
                 dc.w    $FFFF
 Credits_IntroVRAMTransferParameters:    dc.l    $FFFF7000, $FFFF6000, $FFFF4000, $4000  ; was: dword_1E236
-                                        ; DATA XREF: Credits_InitializeScreen+5C   o
 
 ; Updates the credits fade and transition raster buffers
-Credits_UpdateFadeAndTransitionBuffers:                 ; DATA XREF: Sys_DispatchGameState+BA   o  ; was: sub_1E246
+Credits_UpdateFadeAndTransitionBuffers:                 ; was: sub_1E246
                 jsr     (Gfx_FadePaletteTransition).l
                 jsr     (TransitionEffect_UpdateBuffers).l
                 rts

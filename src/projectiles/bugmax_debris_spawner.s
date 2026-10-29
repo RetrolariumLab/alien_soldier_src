@@ -3,7 +3,7 @@ Projectile_InitBugmaxDebrisSpawnerFromCurrentObject:
                 movea.w a5,a0                           ; was: sub_2C254
 ; Initializes a type-$348 spawner with lifetime D0, horizontal span D1,
 ; vertical separation D2, and a randomized 0-31-frame initial delay
-Projectile_InitBugmaxDebrisSpawner:                     ; CODE XREF: Boss_BugmaxSpawnTransitionDebris+30   p  ; was: loc_2C256
+Projectile_InitBugmaxDebrisSpawner:                     ; was: loc_2C256
                 move.w  #$348,(a0)
                 move.w  #$F40,2(a0)
                 move.w  d0,$4A(a0)
@@ -16,34 +16,34 @@ Projectile_InitBugmaxDebrisSpawner:                     ; CODE XREF: Boss_Bugmax
                 rts
 ; End of function Projectile_InitBugmaxDebrisSpawnerFromCurrentObject
 ; Counts down the spawner lifetime and dispatches its three-state emission loop
-Projectile_BugmaxDebrisSpawner:                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2C280
+Projectile_BugmaxDebrisSpawner:                         ; was: sub_2C280
                 subq.w  #1,$4A(a5)
                 bpl.s   Projectile_BugmaxDebrisSpawner_DispatchState
                 move.w  #$1000,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
 ; Dispatches the debris spawner's current state
-Projectile_BugmaxDebrisSpawner_DispatchState:           ; CODE XREF: Projectile_BugmaxDebrisSpawner+4   j  ; was: loc_2C28E
+Projectile_BugmaxDebrisSpawner_DispatchState:           ; was: loc_2C28E
                 move.w  4(a5),d0
                 lea     Projectile_BugmaxDebrisSpawnerStateHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Projectile_BugmaxDebrisSpawner
 ; ---------------------------------------------------------------------------
-Projectile_BugmaxDebrisSpawnerStateHandlers:    dc.w    Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay-*  ; DATA XREF: Projectile_BugmaxDebrisSpawner+12   o  ; was: off_2C29A
+Projectile_BugmaxDebrisSpawnerStateHandlers:    dc.w    Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay-*  ; was: off_2C29A
                 dc.w    Projectile_BugmaxDebrisSpawner_TrySpawnParticle-*
                 dc.w    Projectile_BugmaxDebrisSpawner_WaitSpawnInterval-*
 
 ; Waits for the initial randomized delay
-Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay:  ; DATA XREF: ROM:Projectile_BugmaxDebrisSpawnerStateHandlers   o  ; was: sub_2C2A0
+Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay:  ; was: sub_2C2A0
                 subq.w  #1,$48(a5)
                 bpl.s   Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay_Return
                 addq.w  #2,4(a5)
-Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay_Return:  ; CODE XREF: Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay+4   j  ; was: locret_2C2AA
+Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay_Return:  ; was: locret_2C2AA
                 rts
 ; End of function Projectile_BugmaxDebrisSpawner_WaitInitialRandomDelay
 ; Tries to spawn one debris particle and starts the eight-frame interval
-Projectile_BugmaxDebrisSpawner_TrySpawnParticle:        ; DATA XREF: ROM:0002C29C   o  ; was: sub_2C2AC
+Projectile_BugmaxDebrisSpawner_TrySpawnParticle:        ; was: sub_2C2AC
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_BugmaxDebrisSpawner_SpawnAttemptReturn
                 jsr     (RandomNumber).l
@@ -51,17 +51,17 @@ Projectile_BugmaxDebrisSpawner_TrySpawnParticle:        ; DATA XREF: ROM:0002C29
                 beq.s   Projectile_BugmaxDebrisSpawner_InitializeParticle
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Projectile_BugmaxDebrisSpawner_InitializeParticle:      ; CODE XREF: Projectile_BugmaxDebrisSpawner_TrySpawnParticle+14   j  ; was: loc_2C2CC
+Projectile_BugmaxDebrisSpawner_InitializeParticle:      ; was: loc_2C2CC
                 jsr     (Projectile_InitType88).l
                 btst    #0,(RandomNumberState+2).w
                 beq.s   Projectile_BugmaxDebrisSpawner_UseAnimation05
                 move.l  #SharedCombatSpriteAnimation00,8(a0)
                 bra.s   Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread
 ; ---------------------------------------------------------------------------
-Projectile_BugmaxDebrisSpawner_UseAnimation05:          ; CODE XREF: Projectile_BugmaxDebrisSpawner_TrySpawnParticle+2C   j  ; was: loc_2C2E4
+Projectile_BugmaxDebrisSpawner_UseAnimation05:          ; was: loc_2C2E4
                 move.l  #SharedCombatSpriteAnimation05,8(a0)
 ; Selects X within the centered D1 span and Y at either half of D2 from center
-Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread:  ; CODE XREF: Projectile_BugmaxDebrisSpawner_TrySpawnParticle+36   j  ; was: loc_2C2EC
+Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread:  ; was: loc_2C2EC
                 move.b  (RandomNumberState).w,d0
                 move.w  $4C(a5),d1
                 move.w  d1,d2
@@ -82,18 +82,18 @@ Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread:  ; CODE XREF:
                 move.w  d0,$14(a0)
                 move.w  #8,$50(a5)
                 addq.w  #2,4(a5)
-Projectile_BugmaxDebrisSpawner_SpawnAttemptReturn:      ; CODE XREF: Projectile_BugmaxDebrisSpawner_TrySpawnParticle+6   j  ; was: locret_2C32A
+Projectile_BugmaxDebrisSpawner_SpawnAttemptReturn:      ; was: locret_2C32A
                 rts
 ; End of function Projectile_BugmaxDebrisSpawner_TrySpawnParticle
 ; Counts down the interval before returning to the spawn-attempt state
-Projectile_BugmaxDebrisSpawner_WaitSpawnInterval:       ; DATA XREF: ROM:0002C29E   o  ; was: sub_2C32C
+Projectile_BugmaxDebrisSpawner_WaitSpawnInterval:       ; was: sub_2C32C
                 subq.w  #1,$50(a5)
                 bne.s   Projectile_BugmaxDebrisSpawner_WaitSpawnInterval_Return
                 subq.w  #2,4(a5)
-Projectile_BugmaxDebrisSpawner_WaitSpawnInterval_Return:  ; CODE XREF: Projectile_BugmaxDebrisSpawner_WaitSpawnInterval+4   j  ; was: locret_2C336
+Projectile_BugmaxDebrisSpawner_WaitSpawnInterval_Return:  ; was: locret_2C336
                 rts
 ; End of function Projectile_BugmaxDebrisSpawner_WaitSpawnInterval
-Effect_ExplosionUpdateReturn:                           ; CODE XREF: Effect_SpawnExplosionA+6   j  ; was: nullsub_61
+Effect_ExplosionUpdateReturn:                           ; was: nullsub_61
                                         ; Effect_SpawnExplosionB+6   j
                 rts
 ; End of function Effect_ExplosionUpdateReturn

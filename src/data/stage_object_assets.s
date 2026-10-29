@@ -7,12 +7,10 @@ Stage3And4TileArt_End:                                  ; was: tiles_1912EC_End
 Stage1To4MappingData6000:   binclude "data/mappings/byte_192C38.bin"  ; was: byte_192C38
 Stage1To4MappingData6000_End:                           ; was: byte_192C38_End
 Stage1To4MappingData6800:   dc.b    0, $48, $26, 0, $1F, 1, 2, 3, 4, 5, 6, 7, 8, $B, $C, $D, $E, $F, $10, $11, $12, $15, $16, $17, $18, $19, $1A, $1B, $1C, $1F, $20, $21  ; was: byte_192F7C
-                                        ; DATA XREF: ROM:000117C0   o
                 dc.b    $22, $23, $24, $25, $26, $3E, 0, $1F, 9, $A, $29, $2A, $2B, $2C, $2D, $2E, $13, $14, $2F, $30, $31, $32, $33, $34, $1D, $1E, $35, $36, $37, $38, $39, $3A
                 dc.b    $27, $28, $3B, $3C, $3D, $3E, $3F, $40, $D8, $3F
 Stage3And4MappingData6800:  dc.b    0, $48, $26, 0, $1F, 2, 3, 4, 5, 6, 7, 8, 9, $C, $D, $E, $F, $10, $11, $12, $13, $16, $17, $18, $19, $1A, $1B, $1C, $1D, $20, $21, $22
                                         ; was: byte_192FC6
-                                        ; DATA XREF: ROM:00011806   o
                                         ; ROM:00011830   o
                 dc.b    $23, $24, $25, $26, $27, $3E, 0, $1F, $A, $B, $2A, $2B, $2C, $2D, $2E, $2F, $14, $15, $30, $31, $32, $33, $34, $35, $1E, $1F, $36, $37, $38, $39, $3A, $3B
                 dc.b    $28, $29, $3C, $3D, $3E, $3F, $40, $41, $D8, $3F
@@ -38,7 +36,6 @@ Stage8And9MappingData4000:  binclude "data/mappings/byte_19B0F6.bin"  ; was: byt
 Stage8And9MappingData4000_End:                          ; was: byte_19B0F6_End
 SharedMappingData7000:      dc.b    0, $6E, $1F, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $F, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $1A, $1B, $1C
                                         ; was: byte_19BA44
-                                        ; DATA XREF: ROM:000048F2   o
                                         ; ROM:00007C12   o
                 dc.b    $1D, $1E, $1F, $3F, 0, $84, $3F, $5F, 0, 0, $5F, 0, 0, $D8, $A7, $20, $FF, $98, $E1, $84, 9, $C4, $CC, $2F, 7, $C4, $DF, 0, 4, $8D, $24, $95
                 dc.b    $29, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $96, $DE, $82, $F7, $F8, $1F, $FC, $3F, $FC, $5F

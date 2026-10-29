@@ -5,7 +5,7 @@ Cutscene_DispatchPlanetGrid:
                 jmp     (a0)
 ; End of function Cutscene_DispatchPlanetGrid
 ; ---------------------------------------------------------------------------
-Cutscene_PlanetGridStates:  dc.w    Cutscene_StartPlanetGrid-*  ; DATA XREF: Cutscene_DispatchPlanetGrid+6   o  ; was: off_515E
+Cutscene_PlanetGridStates:  dc.w    Cutscene_StartPlanetGrid-*  ; was: off_515E
                 dc.w    Cutscene_SetupFirstPlanetGrid-*
                 dc.w    Cutscene_EraseFirstPlanetGrid-*
                 dc.w    Cutscene_HoldFirstPlanetGrid-*
@@ -18,13 +18,13 @@ Cutscene_PlanetGridStates:  dc.w    Cutscene_StartPlanetGrid-*  ; DATA XREF: Cut
                 dc.w    Cutscene_PlanetGridSequenceComplete-*
 
 ; Starts the planet-grid controller with a one-frame setup delay
-Cutscene_StartPlanetGrid:                               ; DATA XREF: ROM:Cutscene_PlanetGridStates   o  ; was: sub_5174
+Cutscene_StartPlanetGrid:                               ; was: sub_5174
                 move.w  #1,(PlanetGridTimer).l
                 addq.w  #2,(PlanetGridState).l
                 rts
 ; End of function Cutscene_StartPlanetGrid
 ; Configures the first 2-by-4 planet sprite grid and its pattern buffer
-Cutscene_SetupFirstPlanetGrid:                          ; DATA XREF: ROM:00005160   o  ; was: sub_5184
+Cutscene_SetupFirstPlanetGrid:                          ; was: sub_5184
                 subq.w  #1,(PlanetGridTimer).l
                 bne.w   Cutscene_Return
                 lea     (EleventhEntityType).w,a5
@@ -51,7 +51,7 @@ Cutscene_SetupFirstPlanetGrid:                          ; DATA XREF: ROM:0000516
                 rts
 ; End of function Cutscene_SetupFirstPlanetGrid
 ; Accelerates the first grid horizontally while erasing pattern nibbles
-Cutscene_EraseFirstPlanetGrid:                          ; DATA XREF: ROM:00005162   o  ; was: sub_5214
+Cutscene_EraseFirstPlanetGrid:                          ; was: sub_5214
                 addi.l  #$80,(EleventhEntityXVel).w
                 bsr.w   Cutscene_CopyPlanetGridCenter
                 bsr.w   Cutscene_ErasePlanetPatternStep
@@ -63,7 +63,7 @@ Cutscene_EraseFirstPlanetGrid:                          ; DATA XREF: ROM:0000516
                 rts
 ; End of function Cutscene_EraseFirstPlanetGrid
 ; Keeps the first grid visible until its hold timer expires
-Cutscene_HoldFirstPlanetGrid:                           ; DATA XREF: ROM:00005164   o  ; was: sub_5244
+Cutscene_HoldFirstPlanetGrid:                           ; was: sub_5244
                 bsr.w   Cutscene_CopyPlanetGridCenter
                 bsr.w   Cutscene_QueuePlanetPatternRows
                 subq.w  #1,(PlanetGridTimer).l
@@ -75,7 +75,7 @@ Cutscene_AdvancePlanetGridState:
                 rts
 ; End of function Cutscene_AdvancePlanetGridState
 ; Reverses the first grid's horizontal motion while restoring its pattern
-Cutscene_RevealFirstPlanetGrid:                         ; DATA XREF: ROM:00005166   o  ; was: sub_525E
+Cutscene_RevealFirstPlanetGrid:                         ; was: sub_525E
                                         ; ROM:00005168   o
                 subi.l  #$80,(EleventhEntityXVel).w
                 bsr.w   Cutscene_CopyPlanetGridCenter
@@ -89,7 +89,7 @@ Cutscene_RevealFirstPlanetGrid:                         ; DATA XREF: ROM:0000516
                 rts
 ; End of function Cutscene_RevealFirstPlanetGrid
 ; Reconfigures the object as the second 4-by-2 planet grid
-Cutscene_SetupSecondPlanetGrid:                         ; DATA XREF: ROM:0000516A   o  ; was: sub_5290
+Cutscene_SetupSecondPlanetGrid:                         ; was: sub_5290
                 bsr.w   Cutscene_CopyPlanetGridCenter
                 bsr.w   Cutscene_QueuePlanetPatternRows
                 subq.w  #1,(PlanetGridTimer).l
@@ -119,7 +119,7 @@ Cutscene_SetupSecondPlanetGrid:                         ; DATA XREF: ROM:0000516
                 rts
 ; End of function Cutscene_SetupSecondPlanetGrid
 ; Accelerates the second grid vertically while erasing pattern nibbles
-Cutscene_EraseSecondPlanetGrid:                         ; DATA XREF: ROM:0000516C   o  ; was: sub_532E
+Cutscene_EraseSecondPlanetGrid:                         ; was: sub_532E
                 ori.w   #$8000,(EleventhEntityFlags).w
                 subi.l  #$40,(EleventhEntityYVel).w     ; '@'
                 bsr.w   Cutscene_CopyPlanetGridCenter
@@ -135,7 +135,7 @@ Cutscene_StartSecondPlanetGridHold:
                 rts
 ; End of function Cutscene_StartSecondPlanetGridHold
 ; Refreshes the second grid before entering the timer fall-through
-Cutscene_UpdateSecondPlanetGrid:                        ; DATA XREF: ROM:0000516E   o  ; was: sub_5364
+Cutscene_UpdateSecondPlanetGrid:                        ; was: sub_5364
                 bsr.w   Cutscene_CopyPlanetGridCenter
                 bsr.w   Cutscene_QueuePlanetPatternRows
 ; End of function Cutscene_UpdateSecondPlanetGrid
@@ -147,7 +147,7 @@ Cutscene_WaitSecondPlanetGridHold:
                 rts
 ; End of function Cutscene_WaitSecondPlanetGridHold
 ; Reverses the second grid's vertical motion while restoring its pattern
-Cutscene_RevealSecondPlanetGrid:                        ; DATA XREF: ROM:00005170   o  ; was: sub_537E
+Cutscene_RevealSecondPlanetGrid:                        ; was: sub_537E
                 addi.l  #$40,(EleventhEntityYVel).w     ; '@'
                 bsr.w   Cutscene_CopyPlanetGridCenter
                 bsr.w   Cutscene_RevealPlanetPatternStep
@@ -158,7 +158,7 @@ Cutscene_RevealSecondPlanetGrid:                        ; DATA XREF: ROM:0000517
                 addq.w  #2,(PlanetGridState).l
                 rts
 ; End of function Cutscene_RevealSecondPlanetGrid
-Cutscene_PlanetGridSequenceComplete:                    ; DATA XREF: ROM:00005172   o  ; was: nullsub_15
+Cutscene_PlanetGridSequenceComplete:                    ; was: nullsub_15
                 rts
 ; End of function Cutscene_PlanetGridSequenceComplete
 
@@ -170,7 +170,7 @@ Cutscene_DispatchShipGrid:
                 jmp     (a0)
 ; End of function Cutscene_DispatchShipGrid
 ; ---------------------------------------------------------------------------
-Cutscene_ShipGridStates:    dc.w    Cutscene_StartFirstShipGridDelay-*  ; DATA XREF: Cutscene_DispatchShipGrid+6   o  ; was: off_53B8
+Cutscene_ShipGridStates:    dc.w    Cutscene_StartFirstShipGridDelay-*  ; was: off_53B8
                 dc.w    Cutscene_SetupFirstShipGrid-*
                 dc.w    Cutscene_EraseFirstShipGrid-*
                 dc.w    Cutscene_HoldFirstShipGrid-*
@@ -182,13 +182,13 @@ Cutscene_ShipGridStates:    dc.w    Cutscene_StartFirstShipGridDelay-*  ; DATA X
                 dc.w    Cutscene_ShipGridSequenceComplete-*
 
 ; Starts the delay before the first ship grid is configured
-Cutscene_StartFirstShipGridDelay:                       ; DATA XREF: ROM:Cutscene_ShipGridStates   o  ; was: sub_53CC
+Cutscene_StartFirstShipGridDelay:                       ; was: sub_53CC
                 move.w  #$100,(ShipGridTimer).l
                 addq.w  #2,(ShipGridState).l
                 rts
 ; End of function Cutscene_StartFirstShipGridDelay
 ; Configures the first 2-by-4 ship sprite grid and its pattern buffer
-Cutscene_SetupFirstShipGrid:                            ; DATA XREF: ROM:000053BA   o  ; was: sub_53DC
+Cutscene_SetupFirstShipGrid:                            ; was: sub_53DC
                 subq.w  #1,(ShipGridTimer).l
                 bne.w   Cutscene_Return
                 lea     (TwelfthEntityType).w,a5
@@ -215,7 +215,7 @@ Cutscene_SetupFirstShipGrid:                            ; DATA XREF: ROM:000053B
                 rts
 ; End of function Cutscene_SetupFirstShipGrid
 ; Changes horizontal velocity while erasing the first ship-grid pattern
-Cutscene_EraseFirstShipGrid:                            ; DATA XREF: ROM:000053BC   o  ; was: sub_546C
+Cutscene_EraseFirstShipGrid:                            ; was: sub_546C
                 subi.l  #$80,(TwelfthEntityXVel).w
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_EraseShipPatternStep
@@ -227,7 +227,7 @@ Cutscene_EraseFirstShipGrid:                            ; DATA XREF: ROM:000053B
                 rts
 ; End of function Cutscene_EraseFirstShipGrid
 ; Keeps the first ship grid visible until its hold timer expires
-Cutscene_HoldFirstShipGrid:                             ; DATA XREF: ROM:000053BE   o  ; was: sub_549C
+Cutscene_HoldFirstShipGrid:                             ; was: sub_549C
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_QueueShipPatternRows
                 subq.w  #1,(ShipGridTimer).l
@@ -236,7 +236,7 @@ Cutscene_HoldFirstShipGrid:                             ; DATA XREF: ROM:000053B
                 rts
 ; End of function Cutscene_HoldFirstShipGrid
 ; Reverses horizontal velocity while restoring the first ship-grid pattern
-Cutscene_RevealFirstShipGrid:                           ; DATA XREF: ROM:000053C0   o  ; was: sub_54B6
+Cutscene_RevealFirstShipGrid:                           ; was: sub_54B6
                 addi.l  #$80,(TwelfthEntityXVel).w
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_RevealShipPatternStep
@@ -249,7 +249,7 @@ Cutscene_RevealFirstShipGrid:                           ; DATA XREF: ROM:000053C
                 rts
 ; End of function Cutscene_RevealFirstShipGrid
 ; Reconfigures the object as the second 4-by-2 ship grid
-Cutscene_SetupSecondShipGrid:                           ; DATA XREF: ROM:000053C2   o  ; was: sub_54E8
+Cutscene_SetupSecondShipGrid:                           ; was: sub_54E8
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_QueueShipPatternRows
                 subq.w  #1,(ShipGridTimer).l
@@ -279,7 +279,7 @@ Cutscene_SetupSecondShipGrid:                           ; DATA XREF: ROM:000053C
                 rts
 ; End of function Cutscene_SetupSecondShipGrid
 ; Changes vertical velocity while erasing the second ship-grid pattern
-Cutscene_EraseSecondShipGrid:                           ; DATA XREF: ROM:000053C4   o  ; was: sub_5586
+Cutscene_EraseSecondShipGrid:                           ; was: sub_5586
                 ori.w   #$8000,(TwelfthEntityFlags).w
                 addi.l  #$40,(TwelfthEntityYVel).w      ; '@'
                 bsr.w   Cutscene_RenderShipSpriteGrid
@@ -292,7 +292,7 @@ Cutscene_EraseSecondShipGrid:                           ; DATA XREF: ROM:000053C
                 rts
 ; End of function Cutscene_EraseSecondShipGrid
 ; Keeps the second ship grid visible until its hold timer expires
-Cutscene_HoldSecondShipGrid:                            ; DATA XREF: ROM:000053C6   o  ; was: sub_55BC
+Cutscene_HoldSecondShipGrid:                            ; was: sub_55BC
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_QueueShipPatternRows
                 subq.w  #1,(ShipGridTimer).l
@@ -301,7 +301,7 @@ Cutscene_HoldSecondShipGrid:                            ; DATA XREF: ROM:000053C
                 rts
 ; End of function Cutscene_HoldSecondShipGrid
 ; Reverses vertical velocity while restoring the second ship-grid pattern
-Cutscene_RevealSecondShipGrid:                          ; DATA XREF: ROM:000053C8   o  ; was: sub_55D6
+Cutscene_RevealSecondShipGrid:                          ; was: sub_55D6
                 subi.l  #$40,(TwelfthEntityYVel).w      ; '@'
                 bsr.w   Cutscene_RenderShipSpriteGrid
                 bsr.w   Cutscene_RevealShipPatternStep
@@ -312,7 +312,7 @@ Cutscene_RevealSecondShipGrid:                          ; DATA XREF: ROM:000053C
                 addq.w  #2,(ShipGridState).l
                 rts
 ; End of function Cutscene_RevealSecondShipGrid
-Cutscene_ShipGridSequenceComplete:                      ; DATA XREF: ROM:000053CA   o  ; was: nullsub_16
+Cutscene_ShipGridSequenceComplete:                      ; was: nullsub_16
                 rts
 ; End of function Cutscene_ShipGridSequenceComplete
 
@@ -324,7 +324,7 @@ Cutscene_DispatchStarRows:
                 jmp     (a0)
 ; End of function Cutscene_DispatchStarRows
 ; ---------------------------------------------------------------------------
-Cutscene_StarRowStates: dc.w    Cutscene_StartStarRowDelay-*  ; DATA XREF: Cutscene_DispatchStarRows+6   o  ; was: off_5610
+Cutscene_StarRowStates: dc.w    Cutscene_StartStarRowDelay-*  ; was: off_5610
                 dc.w    Cutscene_SetupStarRows-*
                 dc.w    Cutscene_ExpandStarRows-*
                 dc.w    Cutscene_HoldExpandedStarRows-*
@@ -332,13 +332,13 @@ Cutscene_StarRowStates: dc.w    Cutscene_StartStarRowDelay-*  ; DATA XREF: Cutsc
                 dc.w    Cutscene_StarRowSequenceComplete-*
 
 ; Starts the long delay before the star objects are created
-Cutscene_StartStarRowDelay:                             ; DATA XREF: ROM:Cutscene_StarRowStates   o  ; was: sub_561C
+Cutscene_StartStarRowDelay:                             ; was: sub_561C
                 move.w  #$2480,(StarRowTimer).l
                 addq.w  #2,(StarRowState).l
                 rts
 ; End of function Cutscene_StartStarRowDelay
 ; Creates ten objects arranged as two five-object rows
-Cutscene_SetupStarRows:                                 ; DATA XREF: ROM:00005612   o  ; was: sub_562C
+Cutscene_SetupStarRows:                                 ; was: sub_562C
                 subq.w  #1,(StarRowTimer).l
                 bne.w   Cutscene_Return
                 lea     (Entity_ObjectPool).w,a5
@@ -436,7 +436,7 @@ Cutscene_SetupStarRows:                                 ; DATA XREF: ROM:0000561
                 rts
 ; End of function Cutscene_SetupStarRows
 ; Separates the two star rows for twenty updates
-Cutscene_ExpandStarRows:                                ; DATA XREF: ROM:00005614   o  ; was: sub_5824
+Cutscene_ExpandStarRows:                                ; was: sub_5824
                 addq.w  #1,(StarRowSeparation).l
                 bsr.w   Cutscene_UpdateStarRowPositions
                 cmpi.w  #$14,(StarRowSeparation).l
@@ -446,27 +446,27 @@ Cutscene_ExpandStarRows:                                ; DATA XREF: ROM:0000561
                 rts
 ; End of function Cutscene_ExpandStarRows
 ; Holds the expanded star rows for $40 frames
-Cutscene_HoldExpandedStarRows:                          ; DATA XREF: ROM:00005616   o  ; was: sub_584A
+Cutscene_HoldExpandedStarRows:                          ; was: sub_584A
                 subq.w  #1,(StarRowTimer).l
                 bne.w   Cutscene_Return
                 addq.w  #2,(StarRowState).l
                 rts
 ; End of function Cutscene_HoldExpandedStarRows
 ; Collapses both star rows, then clears all ten object slots
-Cutscene_CollapseStarRows:                              ; DATA XREF: ROM:00005618   o  ; was: sub_585C
+Cutscene_CollapseStarRows:                              ; was: sub_585C
                 subq.w  #1,(StarRowSeparation).l
                 bsr.w   Cutscene_UpdateStarRowPositions
                 tst.w   (StarRowSeparation).l
                 bpl.w   Cutscene_Return
                 lea     (PrimaryEntityFlags).w,a0
                 move.w  #9,d0
-Cutscene_ClearNextStarObject:                           ; CODE XREF: Cutscene_CollapseStarRows+22   j  ; was: loc_5878
+Cutscene_ClearNextStarObject:                           ; was: loc_5878
                 clr.w   (a0)
                 adda.w  #$60,a0                         ; '`'
                 dbf     d0,Cutscene_ClearNextStarObject
                 addq.w  #2,(StarRowState).l
                 rts
 ; End of function Cutscene_CollapseStarRows
-Cutscene_StarRowSequenceComplete:                       ; DATA XREF: ROM:0000561A   o  ; was: nullsub_17
+Cutscene_StarRowSequenceComplete:                       ; was: nullsub_17
                 rts
 ; End of function Cutscene_StarRowSequenceComplete

@@ -1,5 +1,5 @@
 ; In: d0.w = even angle-table offset. Out: d0.w = cosine, d1.w = sine
-Math_LookupSineCosinePair:                              ; CODE XREF: EndingStarfield_Initialize+98   p  ; was: sub_8618
+Math_LookupSineCosinePair:                              ; was: sub_8618
                                         ; EndingPlanet_ApproachCenter+24   p
                 lea     (Math_QuarterSineTable).l,a0
                 move.w  (a0,d0.w),d1
@@ -10,7 +10,6 @@ Math_LookupSineCosinePair:                              ; CODE XREF: EndingStarf
 ; End of function Math_LookupSineCosinePair
 ; ---------------------------------------------------------------------------
 Sprite_SharedGraphicsFrameTable:    dc.w    $8000       ; field_0  ; was: stru_8630
-                                        ; DATA XREF: EndingPlanet_Initialize+7C   o
                                         ; Sprite_SelectSharedGraphicsFrame+8   o
                 dc.l    $F00F0F0                        ; field_2
                 dc.w    $8010                           ; field_0

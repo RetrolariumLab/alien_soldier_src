@@ -1,11 +1,11 @@
 ; Retires a committed weapon-selection object after freezing play and requesting SFX $1C
-UI_WeaponSelectionCommitFeedback:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2BB70
+UI_WeaponSelectionCommitFeedback:                       ; was: sub_2BB70
                 move.w  #$30,(FrameFreezeTimer).w       ; '0'
                 bset    #4,2(a5)
                 move.b  #$1C,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function UI_WeaponSelectionCommitFeedback
-UI_InitWeaponSelectionObject:                           ; CODE XREF: UI_WeaponSelectionObject+6   p  ; was: sub_2BB86
+UI_InitWeaponSelectionObject:                           ; was: sub_2BB86
                 addq.w  #2,4(a5)
                 move.w  #$C700,2(a5)
                 move.w  (GlobalSpritePriorityBit).w,$E(a5)
@@ -18,12 +18,12 @@ UI_InitWeaponSelectionObject:                           ; CODE XREF: UI_WeaponSe
                 rts
 ; End of function UI_InitWeaponSelectionObject
 ; Updates weapon-selection animation, input, and selected-weapon state
-UI_UpdateWeaponSelectionObject:                         ; CODE XREF: UI_WeaponSelectionObject:UI_WeaponSelectionObject_Update   j  ; was: sub_2BBC0
+UI_UpdateWeaponSelectionObject:                         ; was: sub_2BBC0
                 move.b  #$7C,$20(a5)                    ; '|'
                 btst    #0,(FrameCounter+1).w
                 bne.s   UI_UpdateWeaponSelectionObject_UpdateAnimationHoldTimer
                 clr.b   $20(a5)
-UI_UpdateWeaponSelectionObject_UpdateAnimationHoldTimer:  ; CODE XREF: UI_UpdateWeaponSelectionObject+C   j  ; was: loc_2BBD2
+UI_UpdateWeaponSelectionObject_UpdateAnimationHoldTimer:  ; was: loc_2BBD2
                 tst.w   $4C(a5)
                 bmi.s   UI_UpdateWeaponSelectionObject_AdvanceAnimationPhase
                 subq.w  #1,$4C(a5)
@@ -33,13 +33,13 @@ UI_UpdateWeaponSelectionObject_UpdateAnimationHoldTimer:  ; CODE XREF: UI_Update
                 beq.s   UI_UpdateWeaponSelectionObject_UseIdleMapping
                 btst    #4,$22(a5)
                 beq.s   UI_UpdateWeaponSelectionObject_SelectAnimatedMapping
-UI_UpdateWeaponSelectionObject_UseIdleMapping:          ; CODE XREF: UI_UpdateWeaponSelectionObject+2A   j  ; was: loc_2BBF4
+UI_UpdateWeaponSelectionObject_UseIdleMapping:          ; was: loc_2BBF4
                 move.l  #WeaponSelect_IdleSpriteMapping,8(a5)
                 bra.s   UI_UpdateWeaponSelectionObject_RefreshPreviewFromActiveSlot
 ; ---------------------------------------------------------------------------
-UI_UpdateWeaponSelectionObject_AdvanceAnimationPhase:   ; CODE XREF: UI_UpdateWeaponSelectionObject+16   j  ; was: loc_2BBFE
+UI_UpdateWeaponSelectionObject_AdvanceAnimationPhase:   ; was: loc_2BBFE
                 addq.w  #1,$48(a5)
-UI_UpdateWeaponSelectionObject_SelectAnimatedMapping:   ; CODE XREF: UI_UpdateWeaponSelectionObject+22   j  ; was: loc_2BC02
+UI_UpdateWeaponSelectionObject_SelectAnimatedMapping:   ; was: loc_2BC02
                                         ; UI_UpdateWeaponSelectionObject+32   j
                 move.w  $48(a5),d1
                 asr.w   #4,d1
@@ -48,10 +48,10 @@ UI_UpdateWeaponSelectionObject_SelectAnimatedMapping:   ; CODE XREF: UI_UpdateWe
                 bmi.s   UI_UpdateWeaponSelectionObject_LoadSelectedAnimatedMapping
                 moveq   #0,d1
                 move.w  d1,$48(a5)
-UI_UpdateWeaponSelectionObject_LoadSelectedAnimatedMapping:  ; CODE XREF: UI_UpdateWeaponSelectionObject+50   j  ; was: loc_2BC18
+UI_UpdateWeaponSelectionObject_LoadSelectedAnimatedMapping:  ; was: loc_2BC18
                 lea     (WeaponSelect_SpriteFramePointers).l,a0
                 move.l  (a0,d1.w),8(a5)
-UI_UpdateWeaponSelectionObject_RefreshPreviewFromActiveSlot:  ; CODE XREF: UI_UpdateWeaponSelectionObject+3C   j  ; was: loc_2BC24
+UI_UpdateWeaponSelectionObject_RefreshPreviewFromActiveSlot:  ; was: loc_2BC24
                 bclr    #3,$22(a5)
                 beq.s   UI_UpdateWeaponSelectionObject_HandleCommitFlag
                 btst    #4,$22(a5)
@@ -64,7 +64,7 @@ UI_UpdateWeaponSelectionObject_RefreshPreviewFromActiveSlot:  ; CODE XREF: UI_Up
                 asl.w   #5,d0
                 move.w  d0,$48(a5)
                 move.w  #$18,$4C(a5)
-UI_UpdateWeaponSelectionObject_HandleCommitFlag:        ; CODE XREF: UI_UpdateWeaponSelectionObject+6A   j  ; was: loc_2BC54
+UI_UpdateWeaponSelectionObject_HandleCommitFlag:        ; was: loc_2BC54
                                         ; UI_UpdateWeaponSelectionObject+72   j
                 bclr    #7,$22(a5)
                 beq.w   UI_UpdateWeaponSelectionObject_ClearInteractionFlags
@@ -82,7 +82,7 @@ UI_UpdateWeaponSelectionObject_HandleCommitFlag:        ; CODE XREF: UI_UpdateWe
                 cmpi.w  #$C,d1
                 bmi.s   UI_UpdateWeaponSelectionObject_ApplyWeaponTypeOrIncreaseAmmoCapacity
                 moveq   #0,d1
-UI_UpdateWeaponSelectionObject_ApplyWeaponTypeOrIncreaseAmmoCapacity:  ; CODE XREF: UI_UpdateWeaponSelectionObject+D0   j  ; was: loc_2BC94
+UI_UpdateWeaponSelectionObject_ApplyWeaponTypeOrIncreaseAmmoCapacity:  ; was: loc_2BC94
                 cmp.w   (a0),d1
                 beq.s   UI_UpdateWeaponSelectionObject_IncreaseSelectedAmmoCapacity
                 move.w  d1,(a0)
@@ -96,31 +96,31 @@ UI_UpdateWeaponSelectionObject_ApplyWeaponTypeOrIncreaseAmmoCapacity:  ; CODE XR
                 jsr     (UI_QueueSelectedWeaponIconTransfer).l
                 bra.s   UI_UpdateWeaponSelectionObject_RefillSelectedAmmoAndCommit
 ; ---------------------------------------------------------------------------
-UI_UpdateWeaponSelectionObject_IncreaseSelectedAmmoCapacity:  ; CODE XREF: UI_UpdateWeaponSelectionObject+D6   j  ; was: loc_2BCBE
+UI_UpdateWeaponSelectionObject_IncreaseSelectedAmmoCapacity:  ; was: loc_2BCBE
                 addi.w  #$FA,$18(a0)
                 cmpi.w  #$7D0,$18(a0)
                 bmi.s   UI_UpdateWeaponSelectionObject_RefillSelectedAmmoAndCommit
                 move.w  #$7D0,$18(a0)
-UI_UpdateWeaponSelectionObject_RefillSelectedAmmoAndCommit:  ; CODE XREF: UI_UpdateWeaponSelectionObject+FC   j  ; was: loc_2BCD2
+UI_UpdateWeaponSelectionObject_RefillSelectedAmmoAndCommit:  ; was: loc_2BCD2
                                         ; UI_UpdateWeaponSelectionObject+10A   j
                 move.w  $18(a0),$10(a0)
                 move.w  #$330,(a5)
                 clr.b   $21(a5)
-UI_UpdateWeaponSelectionObject_ClearInteractionFlags:   ; CODE XREF: UI_UpdateWeaponSelectionObject+9A   j  ; was: loc_2BCE0
+UI_UpdateWeaponSelectionObject_ClearInteractionFlags:   ; was: loc_2BCE0
                                         ; UI_UpdateWeaponSelectionObject+A4   j
                 clr.b   $22(a5)
                 rts
 ; ---------------------------------------------------------------------------
-UI_UpdateWeaponSelectionObject_RetireWhenStateHasNoDisplay:  ; CODE XREF: UI_UpdateWeaponSelectionObject+B8   j  ; was: loc_2BCE6
+UI_UpdateWeaponSelectionObject_RetireWhenStateHasNoDisplay:  ; was: loc_2BCE6
                 bset    #4,2(a5)
                 rts
 ; End of function UI_UpdateWeaponSelectionObject
 ; Initializes the weapon-selection object on first update
-UI_WeaponSelectionObject:                               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2BCEE
+UI_WeaponSelectionObject:                               ; was: sub_2BCEE
                 tst.w   4(a5)
                 bne.s   UI_WeaponSelectionObject_Update
                 bsr.w   UI_InitWeaponSelectionObject
 ; Runs the weapon-selection object update
-UI_WeaponSelectionObject_Update:                        ; CODE XREF: UI_WeaponSelectionObject+4   j  ; was: loc_2BCF8
+UI_WeaponSelectionObject_Update:                        ; was: loc_2BCF8
                 bra.w   UI_UpdateWeaponSelectionObject
 ; End of function UI_WeaponSelectionObject

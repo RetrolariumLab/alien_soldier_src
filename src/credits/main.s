@@ -1,4 +1,4 @@
-Credits_InitXiTiger:                                    ; DATA XREF: Sys_DispatchGameState+E2   o  ; was: sub_20956
+Credits_InitXiTiger:                                    ; was: sub_20956
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
                 jsr     (Sys_InitGameMode).l
@@ -7,7 +7,7 @@ Credits_InitXiTiger:                                    ; DATA XREF: Sys_Dispatc
                 jsr     (LoadObjData).l
                 lea     (LargeTilemapPage2).l,a0
                 move.w  #$FF,d7
-Credits_InitXiTiger_ClearTileAttributesLoop:            ; CODE XREF: Credits_InitXiTiger+34   j  ; was: loc_20982
+Credits_InitXiTiger_ClearTileAttributesLoop:            ; was: loc_20982
                 move.w  (a0),d0
                 andi.w  #$FEFF,d0
                 move.w  d0,(a0)+
@@ -21,7 +21,7 @@ Credits_InitXiTiger_ClearTileAttributesLoop:            ; CODE XREF: Credits_Ini
                 lea     (XiTigerCreditsFineTable).l,a0
                 moveq   #0,d0
                 move.w  #$1F,d1
-Credits_InitXiTiger_ClearFineLookupLoop:                ; CODE XREF: Credits_InitXiTiger+64   j  ; was: loc_209B8
+Credits_InitXiTiger_ClearFineLookupLoop:                ; was: loc_209B8
                 move.l  d0,(a0)+
                 dbf     d1,Credits_InitXiTiger_ClearFineLookupLoop
                 move.l  #$81828300,(XiTigerCreditsPatch0).l
@@ -48,13 +48,13 @@ Credits_InitXiTiger_ClearFineLookupLoop:                ; CODE XREF: Credits_Ini
                 move.l  #$FFF80000,d0
                 lea     (HScrollBuffer).w,a0
                 move.w  #$1B,d7
-Credits_InitXiTiger_InitHorizontalScrollLoop:           ; CODE XREF: Credits_InitXiTiger+102   j  ; was: loc_20A52
+Credits_InitXiTiger_InitHorizontalScrollLoop:           ; was: loc_20A52
                 move.l  d0,(a0)
                 adda.w  #$20,a0                         ; ' '
                 dbf     d7,Credits_InitXiTiger_InitHorizontalScrollLoop
                 lea     (VScrollBuffer).w,a0
                 move.w  #$13,d7
-Credits_InitXiTiger_InitVerticalScrollLoop:             ; CODE XREF: Credits_InitXiTiger+110   j  ; was: loc_20A64
+Credits_InitXiTiger_InitVerticalScrollLoop:             ; was: loc_20A64
                 move.l  d0,(a0)+
                 dbf     d7,Credits_InitXiTiger_InitVerticalScrollLoop
                 lea     (SecondaryEntityType).w,a5
@@ -104,7 +104,6 @@ Credits_InitXiTiger_InitVerticalScrollLoop:             ; CODE XREF: Credits_Ini
 ; End of function Credits_InitXiTiger
 ; ---------------------------------------------------------------------------
 Credits_XiTigerAssetLoadList:   dc.w    7               ; field_0  ; was: stru_20B4A
-                                        ; DATA XREF: Credits_InitXiTiger+16   o
                 dc.l    CreditsAndEndingTileArt         ; field_2
                 dc.w    $4000                           ; field_6
                 dc.w    7                               ; field_0
@@ -122,7 +121,7 @@ Credits_XiTigerAssetLoadList:   dc.w    7               ; field_0  ; was: stru_2
                 dc.w    $FFFF
 
 ; Main loop for credits sequence processing objects and graphics
-Credits_MainLoop:                                       ; DATA XREF: Sys_DispatchGameState+E6   o  ; was: sub_20B74
+Credits_MainLoop:                                       ; was: sub_20B74
                 jsr     (Object_ApplyCameraMotion).l
                 jsr     (Sprite_InitializePriorityBuckets).l
                 jsr     (Sys_BeginVisibleObjectList).l
@@ -136,7 +135,7 @@ Credits_MainLoop:                                       ; DATA XREF: Sys_Dispatc
                 rts
 ; End of function Credits_MainLoop
 ; Dispatches to current credits state handler based on state index
-Credits_StateDispatcher:                                ; CODE XREF: Credits_MainLoop+18   p  ; was: sub_20BAE
+Credits_StateDispatcher:                                ; was: sub_20BAE
                 subq.w  #1,(CreditsMasterCountdown).l
                 move.w  (GameSubstateIndex).w,d0
                 lea     Credits_StateHandlers(pc,d0.w),a0
@@ -144,7 +143,7 @@ Credits_StateDispatcher:                                ; CODE XREF: Credits_Mai
                 jmp     (a0)
 ; End of function Credits_StateDispatcher
 ; ---------------------------------------------------------------------------
-Credits_StateHandlers:  dc.w    Credits_FadeInState-*   ; DATA XREF: Credits_StateDispatcher+A   o  ; was: off_20BC0
+Credits_StateHandlers:  dc.w    Credits_FadeInState-*   ; was: off_20BC0
                 dc.w    Credits_ScrollWithColorCycle-*
                 dc.w    Credits_WaitForTimerEnd-*
                 dc.w    Credits_FadeOutAndClearVRAM-*
@@ -153,7 +152,7 @@ Credits_StateHandlers:  dc.w    Credits_FadeInState-*   ; DATA XREF: Credits_Sta
                 dc.w    Credits_FadeOutAndExit-*
 
 ; Handles fade-in transition at start of credits sequence
-Credits_FadeInState:                                    ; DATA XREF: ROM:Credits_StateHandlers   o  ; was: sub_20BCE
+Credits_FadeInState:                                    ; was: sub_20BCE
                 jsr     Credits_UpdateScrollTables(pc)  ; (pc)
                 nop
                 move.w  (FrameCounter).w,d0
@@ -174,12 +173,12 @@ Credits_FadeInState:                                    ; DATA XREF: ROM:Credits
                 clr.w   (CreditsSceneState).l
                 move.w  #$4D80,(CreditsMasterCountdown).l
                 addq.w  #2,(GameSubstateIndex).w
-Credits_StateReturn:                                    ; CODE XREF: Credits_FadeInState+E   j  ; was: locret_20C30
+Credits_StateReturn:                                    ; was: locret_20C30
                                         ; Credits_FadeInState+16   j
                 rts
 ; End of function Credits_FadeInState
 ; Scrolls credits text with color cycling palette effect
-Credits_ScrollWithColorCycle:                           ; DATA XREF: ROM:00020BC2   o  ; was: sub_20C32
+Credits_ScrollWithColorCycle:                           ; was: sub_20C32
                 jsr     (CreditsGlyphSequence_Dispatch).l
                 bsr.w   Credits_HandleXiTigerMusicCues
                 jsr     Credits_UpdateScrollTables(pc)  ; (pc)
@@ -202,7 +201,7 @@ Credits_ScrollWithColorCycle:                           ; DATA XREF: ROM:00020BC
                 rts
 ; End of function Credits_ScrollWithColorCycle
 ; Waits for timer to reach specific value before advancing state
-Credits_WaitForTimerEnd:                                ; DATA XREF: ROM:00020BC4   o  ; was: sub_20C88
+Credits_WaitForTimerEnd:                                ; was: sub_20C88
                 jsr     (CreditsGlyphSequence_Dispatch).l
                 bsr.w   Credits_HandleXiTigerMusicCues
                 jsr     Credits_UpdateScrollTables(pc)  ; (pc)
@@ -215,7 +214,7 @@ Credits_WaitForTimerEnd:                                ; DATA XREF: ROM:00020BC
                 rts
 ; End of function Credits_WaitForTimerEnd
 ; Cycles RGB color values in palette entries with XOR operation
-Credits_CyclePaletteColors:                             ; CODE XREF: Credits_ScrollWithColorCycle+10   p  ; was: sub_20CB6
+Credits_CyclePaletteColors:                             ; was: sub_20CB6
                                         ; Credits_WaitForTimerEnd+10   p
                 eori.w  #$22E,(PaletteActiveColor20).w
                 eori.w  #$2E2,(PaletteActiveColor21).w
@@ -223,7 +222,7 @@ Credits_CyclePaletteColors:                             ; CODE XREF: Credits_Scr
                 rts
 ; End of function Credits_CyclePaletteColors
 ; Drives the two plane halves in opposite directions from one accumulating phase
-Credits_UpdateScrollTables:                             ; CODE XREF: Credits_FadeInState   p  ; was: sub_20CCA
+Credits_UpdateScrollTables:                             ; was: sub_20CCA
                                         ; Credits_ScrollWithColorCycle+A   p
                 move.l  (EndingScrollRate).l,d0
                 add.l   d0,(EndingScrollPhase).l
@@ -235,7 +234,7 @@ Credits_UpdateScrollTables:                             ; CODE XREF: Credits_Fad
                 neg.l   d0
                 lea     (HScrollPlaneBRow112).w,a0
                 move.w  #$D,d7
-Credits_UpdateScrollTables_UpperForwardLoop:            ; CODE XREF: Credits_UpdateScrollTables+32   j  ; was: loc_20CEE
+Credits_UpdateScrollTables_UpperForwardLoop:            ; was: loc_20CEE
                 move.l  d0,d2
                 swap    d2
                 move.w  d2,(a0)
@@ -248,7 +247,7 @@ Credits_UpdateScrollTables_UpperForwardLoop:            ; CODE XREF: Credits_Upd
                 asr.l   #1,d0
                 lea     (HScrollPlaneBRow104).w,a0
                 move.w  #$D,d7
-Credits_UpdateScrollTables_UpperReverseLoop:            ; CODE XREF: Credits_UpdateScrollTables+56   j  ; was: loc_20D12
+Credits_UpdateScrollTables_UpperReverseLoop:            ; was: loc_20D12
                 move.l  d0,d2
                 swap    d2
                 move.w  d2,(a0)
@@ -264,7 +263,7 @@ Credits_UpdateScrollTables_UpperReverseLoop:            ; CODE XREF: Credits_Upd
                 asl.l   #1,d1
                 lea     (VScrollPlaneBColumn10).w,a0
                 move.w  #9,d7
-Credits_UpdateScrollTables_LowerForwardLoop:            ; CODE XREF: Credits_UpdateScrollTables+80   j  ; was: loc_20D3C
+Credits_UpdateScrollTables_LowerForwardLoop:            ; was: loc_20D3C
                 move.l  d0,d2
                 swap    d2
                 move.w  d2,(a0)
@@ -277,7 +276,7 @@ Credits_UpdateScrollTables_LowerForwardLoop:            ; CODE XREF: Credits_Upd
                 asl.l   #1,d1
                 lea     (VScrollPlaneBColumn9).w,a0
                 move.w  #9,d7
-Credits_UpdateScrollTables_LowerReverseLoop:            ; CODE XREF: Credits_UpdateScrollTables+A4   j  ; was: loc_20D60
+Credits_UpdateScrollTables_LowerReverseLoop:            ; was: loc_20D60
                 move.l  d0,d2
                 swap    d2
                 move.w  d2,(a0)
@@ -288,7 +287,7 @@ Credits_UpdateScrollTables_LowerReverseLoop:            ; CODE XREF: Credits_Upd
                 rts
 ; End of function Credits_UpdateScrollTables
 ; Fades out palette and clears VRAM plane data
-Credits_FadeOutAndClearVRAM:                            ; DATA XREF: ROM:00020BC6   o  ; was: sub_20D74
+Credits_FadeOutAndClearVRAM:                            ; was: sub_20D74
                 jsr     (CreditsGlyphSequence_Dispatch).l
                 bsr.w   Credits_HandleXiTigerMusicCues
                 jsr     Credits_UpdateScrollTables(pc)  ; (pc)
@@ -310,7 +309,7 @@ Credits_FadeOutAndClearVRAM:                            ; DATA XREF: ROM:00020BC
                 move.l  #$40000003,(VDP_CTRL).l
                 move.w  #$7FF,d0
                 move.w  #0,d1
-Credits_FadeOutAndClearVRAM_PlaneALoop:                 ; CODE XREF: Credits_FadeOutAndClearVRAM+6C   j  ; was: loc_20DDE
+Credits_FadeOutAndClearVRAM_PlaneALoop:                 ; was: loc_20DDE
                 move.w  d1,(a0)
                 dbf     d0,Credits_FadeOutAndClearVRAM_PlaneALoop
                 move    (sp)+,sr
@@ -321,7 +320,7 @@ Credits_FadeOutAndClearVRAM_PlaneALoop:                 ; CODE XREF: Credits_Fad
                 move.l  #$60000003,(VDP_CTRL).l
                 move.w  #$7FF,d0
                 move.w  #0,d1
-Credits_FadeOutAndClearVRAM_PlaneBLoop:                 ; CODE XREF: Credits_FadeOutAndClearVRAM+9A   j  ; was: loc_20E0C
+Credits_FadeOutAndClearVRAM_PlaneBLoop:                 ; was: loc_20E0C
                 move.w  d1,(a0)
                 dbf     d0,Credits_FadeOutAndClearVRAM_PlaneBLoop
                 move    (sp)+,sr
@@ -329,7 +328,7 @@ Credits_FadeOutAndClearVRAM_PlaneBLoop:                 ; CODE XREF: Credits_Fad
                 rts
 ; End of function Credits_FadeOutAndClearVRAM
 ; Fades palette from black to normal colors
-Credits_FadeInFromBlack:                                ; DATA XREF: ROM:00020BC8   o  ; was: sub_20E1A
+Credits_FadeInFromBlack:                                ; was: sub_20E1A
                 jsr     (CreditsGlyphSequence_Dispatch).l
                 bsr.w   Credits_HandleXiTigerMusicCues
                 move.w  (FrameCounter).w,d0
@@ -347,7 +346,7 @@ Credits_FadeInFromBlack:                                ; DATA XREF: ROM:00020BC
                 rts
 ; End of function Credits_FadeInFromBlack
 ; Waits for scroll sequence to complete before advancing
-Credits_WaitForScrollEnd:                               ; DATA XREF: ROM:00020BCA   o  ; was: sub_20E5E
+Credits_WaitForScrollEnd:                               ; was: sub_20E5E
                 jsr     (CreditsGlyphSequence_Dispatch).l
                 bsr.w   Credits_HandleXiTigerMusicCues
                 bsr.w   Credits_ScrollStateDispatcher
@@ -358,7 +357,7 @@ Credits_WaitForScrollEnd:                               ; DATA XREF: ROM:00020BC
                 rts
 ; End of function Credits_WaitForScrollEnd
 ; Fades out and returns to title screen mode
-Credits_FadeOutAndExit:                                 ; DATA XREF: ROM:00020BCC   o  ; was: sub_20E84
+Credits_FadeOutAndExit:                                 ; was: sub_20E84
                 subq.w  #2,(ScenePaletteFadeOffset).l
                 move.w  (ScenePaletteFadeOffset).l,d0
                 lea     (PaletteActiveBuffer).w,a0
@@ -375,7 +374,7 @@ Credits_FadeOutAndExit:                                 ; DATA XREF: ROM:00020BC
                 rts
 ; End of function Credits_FadeOutAndExit
 ; Queue the Xi-Tiger credits music cues at their three scroll milestones
-Credits_HandleXiTigerMusicCues:                         ; CODE XREF: Credits_ScrollWithColorCycle+6   p  ; was: sub_20ECC
+Credits_HandleXiTigerMusicCues:                         ; was: sub_20ECC
                                         ; Credits_WaitForTimerEnd+6   p
                 cmpi.w  #CreditsMusicFadeOutCountdown,(CreditsMasterCountdown).l
                 beq.s   Credits_QueueXiTigerMusicFadeOut
@@ -385,24 +384,24 @@ Credits_HandleXiTigerMusicCues:                         ; CODE XREF: Credits_Scr
                 beq.s   Credits_QueueXiTigerMusicFadeOut
                 rts
 ; ---------------------------------------------------------------------------
-Credits_QueueXiTigerMusicFadeOut:                       ; CODE XREF: Credits_HandleXiTigerMusicCues+8   j  ; was: loc_20EEC
+Credits_QueueXiTigerMusicFadeOut:                       ; was: loc_20EEC
                                         ; Credits_HandleXiTigerMusicCues+1C   j
                 move.b  #1,d0
                 jmp     (Sound_QueueBGMRequest).l
 ; ---------------------------------------------------------------------------
-Credits_QueueXiTigerBGM94:                              ; CODE XREF: Credits_HandleXiTigerMusicCues+12   j  ; was: loc_20EF6
+Credits_QueueXiTigerBGM94:                              ; was: loc_20EF6
                 move.b  #$94,d0
                 jmp     (Sound_QueueBGMRequest).l
 ; End of function Credits_HandleXiTigerMusicCues
 ; Dispatches to scroll sequence state handler
-Credits_ScrollStateDispatcher:                          ; CODE XREF: Credits_WaitForScrollEnd+A   p  ; was: sub_20F00
+Credits_ScrollStateDispatcher:                          ; was: sub_20F00
                 move.w  (CreditsSceneState).l,d0
                 lea     Credits_SceneStateHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Credits_ScrollStateDispatcher
 ; ---------------------------------------------------------------------------
-Credits_SceneStateHandlers: dc.w    Credits_InitializeSceneSequence-*  ; DATA XREF: Credits_ScrollStateDispatcher+6   o  ; was: off_20F0E
+Credits_SceneStateHandlers: dc.w    Credits_InitializeSceneSequence-*  ; was: off_20F0E
                 dc.w    Credits_LoadNextScene-*
                 dc.w    Credits_WaitForSceneActivation-*
                 dc.w    Credits_UpdateScene-*
@@ -417,7 +416,7 @@ Credits_SceneStateHandlers: dc.w    Credits_InitializeSceneSequence-*  ; DATA XR
                 dc.w    Credits_SceneStateIdle-*
 
 ; Builds the two Xi-Tiger sprites and primes the scroll buffer for the reveal
-Credits_InitializeSceneSequence:                        ; DATA XREF: ROM:Credits_SceneStateHandlers   o  ; was: sub_20F28
+Credits_InitializeSceneSequence:                        ; was: sub_20F28
                 clr.w   (CreditsClearedSceneWord).l
                 lea     Credits_InitialAssetLoadList(pc),a0
                 nop
@@ -453,7 +452,7 @@ Credits_InitializeSceneSequence:                        ; DATA XREF: ROM:Credits
                 lea     (HScrollBuffer).w,a0
                 move.l  #$7F008000,d1
                 move.w  #$EF,d0
-Credits_InitializeSceneSequence_FillScrollBufferLoop:   ; CODE XREF: Credits_InitializeSceneSequence+B2   j  ; was: loc_20FD8
+Credits_InitializeSceneSequence_FillScrollBufferLoop:   ; was: loc_20FD8
                 move.l  d1,(a0)+
                 dbf     d0,Credits_InitializeSceneSequence_FillScrollBufferLoop
                 move.w  #$AA,(CreditsSceneTimer).l
@@ -463,7 +462,7 @@ Credits_InitializeSceneSequence_FillScrollBufferLoop:   ; CODE XREF: Credits_Ini
                 rts
 ; End of function Credits_InitializeSceneSequence
 ; Load next phase of credits data and process pointer
-Credits_LoadNextScene:                                  ; DATA XREF: ROM:00020F10   o  ; was: sub_21002
+Credits_LoadNextScene:                                  ; was: sub_21002
                 subq.w  #1,(CreditsSceneTimer).l
                 bne.w   Credits_StateReturn
                 movea.l (CreditsSceneDataCursor).l,a2
@@ -477,7 +476,7 @@ Credits_LoadNextScene:                                  ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_LoadNextScene
 ; Waits for the asset loader rather than for input
-Credits_WaitForSceneActivation:                         ; DATA XREF: ROM:00020F12   o  ; was: sub_21036
+Credits_WaitForSceneActivation:                         ; was: sub_21036
                 subq.w  #1,(CreditsSceneTimer).l
                 tst.w   (DataLoaderControl).w
                 bmi.w   Credits_StateReturn
@@ -486,7 +485,7 @@ Credits_WaitForSceneActivation:                         ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_WaitForSceneActivation
 ; Main credits update loop with data cycling
-Credits_UpdateScene:                                    ; DATA XREF: ROM:00020F14   o  ; was: sub_21052
+Credits_UpdateScene:                                    ; was: sub_21052
                 bsr.w   Credits_StartNextScrollRowReveal
                 bsr.w   Credits_AdvanceRevealedScrollRows
                 subq.w  #1,(CreditsSceneTimer).l
@@ -503,7 +502,7 @@ Credits_UpdateScene:                                    ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_UpdateScene
 ; Starts one more scroll row moving, in the order the reveal table gives
-Credits_StartNextScrollRowReveal:                       ; CODE XREF: Credits_UpdateScene   p  ; was: sub_210A2
+Credits_StartNextScrollRowReveal:                       ; was: sub_210A2
                 move.w  (CreditsPaletteFadeIndex).l,d0
                 cmpi.w  #$1E0,d0
                 bcc.w   Credits_StateReturn
@@ -520,24 +519,24 @@ Credits_ScrollRowRevealOrder:   binclude "data/other/word_210CE.bin"  ; was: wor
 Credits_ScrollRowRevealOrder_End:                       ; was: word_210CE_End
 
 ; Advances every scroll row that has already started, leaving untouched rows alone
-Credits_AdvanceRevealedScrollRows:                      ; CODE XREF: Credits_UpdateScene+4   p  ; was: sub_212AE
+Credits_AdvanceRevealedScrollRows:                      ; was: sub_212AE
                 lea     (HScrollBuffer).w,a0
                 move.l  #$7FFF8,d1
                 move.w  #$EF,d0
-Credits_AdvanceRevealedScrollRows_Loop:                 ; CODE XREF: Credits_AdvanceRevealedScrollRows+20   j  ; was: loc_212BC
+Credits_AdvanceRevealedScrollRows_Loop:                 ; was: loc_212BC
                 move.l  (a0),d2
                 andi.l  #$FF00FF,d2
                 beq.s   Credits_AdvanceRevealedScrollRows_Next
                 move.l  (a0),d2
                 sub.l   d1,d2
                 move.l  d2,(a0)
-Credits_AdvanceRevealedScrollRows_Next:                 ; CODE XREF: Credits_AdvanceRevealedScrollRows+16   j  ; was: loc_212CC
+Credits_AdvanceRevealedScrollRows_Next:                 ; was: loc_212CC
                 addq.l  #4,a0
                 dbf     d0,Credits_AdvanceRevealedScrollRows_Loop
                 rts
 ; End of function Credits_AdvanceRevealedScrollRows
 ; Copies the staged palette before loading a special credits scene
-Credits_PrepareSpecialScenePalette:                     ; DATA XREF: ROM:00020F16   o  ; was: sub_212D4
+Credits_PrepareSpecialScenePalette:                     ; was: sub_212D4
                                         ; ROM:00020F1E   o
                 subq.w  #1,(CreditsSceneTimer).l
                 bne.w   Credits_StateReturn
@@ -552,7 +551,7 @@ Credits_PrepareSpecialScenePalette:                     ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_PrepareSpecialScenePalette
 ; Fades out the rolling credits and loads the treasure scene
-Credits_LoadTreasureScene:                              ; DATA XREF: ROM:00020F18   o  ; was: sub_2130A
+Credits_LoadTreasureScene:                              ; was: sub_2130A
                 subq.w  #1,(CreditsSceneTimer).l
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
@@ -586,7 +585,7 @@ Credits_LoadTreasureScene:                              ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_LoadTreasureScene
 ; Waits until the special-scene state may advance
-Credits_WaitForSpecialSceneActivation:                  ; DATA XREF: ROM:00020F1A   o  ; was: sub_2139A
+Credits_WaitForSpecialSceneActivation:                  ; was: sub_2139A
                                         ; ROM:00020F22   o
                 subq.w  #1,(CreditsSceneTimer).l
                 tst.w   (DataLoaderControl).w
@@ -595,7 +594,7 @@ Credits_WaitForSpecialSceneActivation:                  ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_WaitForSpecialSceneActivation
 ; Fades a newly loaded special scene in from black
-Credits_FadeInSpecialScene:                             ; DATA XREF: ROM:00020F1C   o  ; was: sub_213B0
+Credits_FadeInSpecialScene:                             ; was: sub_213B0
                                         ; ROM:00020F24   o
                 subq.w  #1,(CreditsSceneTimer).l
                 move.w  (FrameCounter).w,d0
@@ -613,7 +612,7 @@ Credits_FadeInSpecialScene:                             ; DATA XREF: ROM:00020F1
                 rts
 ; End of function Credits_FadeInSpecialScene
 ; Fades out the treasure scene and loads the SEGA presentation
-Credits_LoadSegaScene:                                  ; DATA XREF: ROM:00020F20   o  ; was: sub_213F2
+Credits_LoadSegaScene:                                  ; was: sub_213F2
                 subq.w  #1,(CreditsSceneTimer).l
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
@@ -633,7 +632,7 @@ Credits_LoadSegaScene:                                  ; DATA XREF: ROM:00020F2
                 move.l  #$40000003,(VDP_CTRL).l
                 move.w  #$7FF,d0
                 move.w  #0,d1
-Credits_LoadSegaScene_ClearPlaneALoop:                  ; CODE XREF: Credits_LoadSegaScene+64   j  ; was: loc_21454
+Credits_LoadSegaScene_ClearPlaneALoop:                  ; was: loc_21454
                 move.w  d1,(a0)
                 dbf     d0,Credits_LoadSegaScene_ClearPlaneALoop
                 move    (sp)+,sr
@@ -644,7 +643,7 @@ Credits_LoadSegaScene_ClearPlaneALoop:                  ; CODE XREF: Credits_Loa
                 move.l  #$60000003,(VDP_CTRL).l
                 move.w  #$7FF,d0
                 move.w  #0,d1
-Credits_LoadSegaScene_ClearPlaneBLoop:                  ; CODE XREF: Credits_LoadSegaScene+92   j  ; was: loc_21482
+Credits_LoadSegaScene_ClearPlaneBLoop:                  ; was: loc_21482
                 move.w  d1,(a0)
                 dbf     d0,Credits_LoadSegaScene_ClearPlaneBLoop
                 move    (sp)+,sr
@@ -659,7 +658,7 @@ Credits_LoadSegaScene_ClearPlaneBLoop:                  ; CODE XREF: Credits_Loa
                 addq.w  #2,(CreditsSceneState).l
                 rts
 ; End of function Credits_LoadSegaScene
-Credits_SceneStateIdle:                                 ; DATA XREF: ROM:00020F26   o  ; was: nullsub_54
+Credits_SceneStateIdle:                                 ; was: nullsub_54
                 rts
 ; End of function Credits_SceneStateIdle
 

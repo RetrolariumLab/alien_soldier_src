@@ -1,7 +1,7 @@
 ; Sniper Honeyviper projectile spawning and update handlers
 
 ; Spawns Sniper Honeyviper's oscillating shot at a frame-counter interval
-Boss_SniperHoneyviperSpawnOscillatingShot:              ; CODE XREF: Boss_SniperHoneyviperUpdateAttackAndSpawnProjectile+26   p  ; was: sub_371E8
+Boss_SniperHoneyviperSpawnOscillatingShot:              ; was: sub_371E8
                 move.w  (FrameCounter).w,d0
                 andi.w  #$1F,d0
                 bne.w   Boss_SniperHoneyviperSpawnOscillatingShotReturn
@@ -12,10 +12,10 @@ Boss_SniperHoneyviperSpawnOscillatingShot:              ; CODE XREF: Boss_Sniper
                 beq.s   Boss_SniperHoneyviperSpawnOscillatingShotInitialize
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SniperHoneyviperSpawnOscillatingShotUseEnemySlots:  ; CODE XREF: Boss_SniperHoneyviperSpawnOscillatingShot+14   j  ; was: loc_37208
+Boss_SniperHoneyviperSpawnOscillatingShotUseEnemySlots:  ; was: loc_37208
                 jsr     (Projectile_FindFreeSlotForward8).l
                 bne.s   Boss_SniperHoneyviperSpawnOscillatingShotReturn
-Boss_SniperHoneyviperSpawnOscillatingShotInitialize:    ; CODE XREF: Boss_SniperHoneyviperSpawnOscillatingShot+1C   j  ; was: loc_37210
+Boss_SniperHoneyviperSpawnOscillatingShotInitialize:    ; was: loc_37210
                 move.w  #$98,(a0)
                 move.w  #$8D80,2(a0)
                 clr.w   $24(a0)
@@ -35,12 +35,12 @@ Boss_SniperHoneyviperSpawnOscillatingShotInitialize:    ; CODE XREF: Boss_Sniper
                 addi.w  #$60,d0                         ; '`'
                 move.w  d0,$48(a0)
                 move.w  d0,$4A(a0)
-Boss_SniperHoneyviperSpawnOscillatingShotReturn:        ; CODE XREF: Boss_SniperHoneyviperSpawnOscillatingShot+8   j  ; was: locret_37274
+Boss_SniperHoneyviperSpawnOscillatingShotReturn:        ; was: locret_37274
                                         ; Boss_SniperHoneyviperSpawnOscillatingShot+26   j
                 rts
 ; End of function Boss_SniperHoneyviperSpawnOscillatingShot
 ; Updates Sniper Honeyviper's oscillating shot, then emits its terminal projectile burst
-Projectile_SniperHoneyviperOscillatingShot:             ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_37276
+Projectile_SniperHoneyviperOscillatingShot:             ; was: sub_37276
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 cmpi.w  #$1AD8,d0
@@ -48,7 +48,7 @@ Projectile_SniperHoneyviperOscillatingShot:             ; DATA XREF: ROM:Entity_
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SniperHoneyviperOscillatingShotUpdate:       ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+C   j  ; was: loc_3728C
+Projectile_SniperHoneyviperOscillatingShotUpdate:       ; was: loc_3728C
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Projectile_SniperHoneyviperOscillatingShotBurst
                 tst.w   $24(a5)
@@ -59,13 +59,13 @@ Projectile_SniperHoneyviperOscillatingShotUpdate:       ; CODE XREF: Projectile_
                 move.w  $14(a5),$14(a0)
                 move.w  #$8004,d2
                 jsr     (Projectile_InitializeAimedDelayedCollisionShot).l
-Projectile_SniperHoneyviperOscillatingShotBurst:        ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+1A   j  ; was: loc_372B6
+Projectile_SniperHoneyviperOscillatingShotBurst:        ; was: loc_372B6
                                         ; Projectile_SniperHoneyviperOscillatingShot+28   j
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 jmp     Enemy_SpawnQuadProjectiles
 ; ---------------------------------------------------------------------------
-Projectile_SniperHoneyviperOscillatingShotSteer:        ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+20   j  ; was: loc_372C4
+Projectile_SniperHoneyviperOscillatingShotSteer:        ; was: loc_372C4
                 addq.w  #1,$4A(a5)
                 move.w  #$E3E8,$E(a5)
                 move.w  #$A00,8(a5)
@@ -75,7 +75,7 @@ Projectile_SniperHoneyviperOscillatingShotSteer:        ; CODE XREF: Projectile_
                 move.w  #$E3F1,$E(a5)
                 move.w  #$900,8(a5)
                 move.w  #$F4FA,$A(a5)
-Projectile_SniperHoneyviperOscillatingShotChooseVelocity:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+6A   j  ; was: loc_372F4
+Projectile_SniperHoneyviperOscillatingShotChooseVelocity:  ; was: loc_372F4
                 jsr     (RandomNumber).l
                 move.w  (RandomNumberState).w,d1
                 andi.w  #$1FFF,d1
@@ -92,39 +92,39 @@ Projectile_SniperHoneyviperOscillatingShotChooseVelocity:  ; CODE XREF: Projecti
                 cmp.w   $14(a5),d2
                 bpl.s   Projectile_SniperHoneyviperOscillatingShotSteerHorizontal
                 neg.l   $1C(a5)
-Projectile_SniperHoneyviperOscillatingShotSteerHorizontal:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+B8   j  ; was: loc_37334
+Projectile_SniperHoneyviperOscillatingShotSteerHorizontal:  ; was: loc_37334
                 tst.w   $48(a5)
                 bmi.s   Projectile_SniperHoneyviperOscillatingShotAccelerateLeft
                 subq.w  #1,$48(a5)
                 move.w  (PrimaryEntityXPos).w,d0
                 cmp.w   $10(a5),d0
                 bpl.s   Projectile_SniperHoneyviperOscillatingShotAccelerateRight
-Projectile_SniperHoneyviperOscillatingShotAccelerateLeft:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+C2   j  ; was: loc_37348
+Projectile_SniperHoneyviperOscillatingShotAccelerateLeft:  ; was: loc_37348
                 tst.w   $18(a5)
                 bpl.s   Projectile_SniperHoneyviperOscillatingShotApplyLeftAcceleration
                 cmpi.w  #$FFFE,$18(a5)
                 bmi.s   Projectile_SniperHoneyviperOscillatingShotReturn
-Projectile_SniperHoneyviperOscillatingShotApplyLeftAcceleration:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+D6   j  ; was: loc_37356
+Projectile_SniperHoneyviperOscillatingShotApplyLeftAcceleration:  ; was: loc_37356
                 sub.l   d1,$18(a5)
-Projectile_SniperHoneyviperOscillatingShotReturn:       ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+DE   j  ; was: locret_3735A
+Projectile_SniperHoneyviperOscillatingShotReturn:       ; was: locret_3735A
                                         ; Projectile_SniperHoneyviperOscillatingShot+F2   j
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SniperHoneyviperOscillatingShotAccelerateRight:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+D0   j  ; was: loc_3735C
+Projectile_SniperHoneyviperOscillatingShotAccelerateRight:  ; was: loc_3735C
                 tst.w   $18(a5)
                 bmi.s   Projectile_SniperHoneyviperOscillatingShotApplyRightAcceleration
                 cmpi.w  #4,$18(a5)
                 bpl.s   Projectile_SniperHoneyviperOscillatingShotReturn
-Projectile_SniperHoneyviperOscillatingShotApplyRightAcceleration:  ; CODE XREF: Projectile_SniperHoneyviperOscillatingShot+EA   j  ; was: loc_3736A
+Projectile_SniperHoneyviperOscillatingShotApplyRightAcceleration:  ; was: loc_3736A
                 add.l   d1,$18(a5)
                 rts
 ; End of function Projectile_SniperHoneyviperOscillatingShot
 ; Spawns four projectiles in circular pattern with angle calculation
-Boss_SniperHoneyviperSpawnCircleShot:                   ; CODE XREF: Boss_SniperHoneyviperUpdateSpinShotCycle+52   p  ; was: sub_37370
+Boss_SniperHoneyviperSpawnCircleShot:                   ; was: sub_37370
                 moveq   #0,d5
                 moveq   #$FFFFFFE0,d6
                 moveq   #3,d7
-Boss_SniperHoneyviperSpawnCircleShotNext:               ; CODE XREF: Boss_SniperHoneyviperSpawnCircleShot+A0   j  ; was: loc_37376
+Boss_SniperHoneyviperSpawnCircleShotNext:               ; was: loc_37376
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_SniperHoneyviperSpawnCircleShotReturn
                 move.w  #$35C,(a0)
@@ -160,23 +160,22 @@ Boss_SniperHoneyviperSpawnCircleShotNext:               ; CODE XREF: Boss_Sniper
                 jsr     (RandomNumber).l
                 movem.l (sp)+,d5-d7
                 dbf     d7,Boss_SniperHoneyviperSpawnCircleShotNext
-Boss_SniperHoneyviperSpawnCircleShotReturn:             ; CODE XREF: Boss_SniperHoneyviperSpawnCircleShot+C   j  ; was: locret_37414
+Boss_SniperHoneyviperSpawnCircleShotReturn:             ; was: locret_37414
                 rts
 ; End of function Boss_SniperHoneyviperSpawnCircleShot
 ; ---------------------------------------------------------------------------
 Boss_SniperHoneyviperCircleShotObjectParameters:    dc.w    $A3F7, $A00, $F4F4, $7A, $A410, $500, $F8F8, $3D, $A400, $F00, $F0F0, $F4, $A410, $500, $F8F8, $3D  ; was: word_37416
-                                        ; DATA XREF: Boss_SniperHoneyviperSpawnCircleShot+4A   r
                                         ; Boss_SniperHoneyviperSpawnCircleShot+50   r
 
 ; Updates Sniper Honeyviper's rotating bouncing shot and converts it to debris on impact
-Projectile_SniperHoneyviperBouncingShot:                ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_37436
+Projectile_SniperHoneyviperBouncingShot:                ; was: sub_37436
                 tst.w   (StageSpawnCountdown).w
                 bpl.w   Projectile_SniperHoneyviperBouncingShotConvertToDebris
                 moveq   #1,d1
                 tst.w   $18(a5)
                 bmi.s   Projectile_SniperHoneyviperBouncingShotUpdateRotation
                 moveq   #$FFFFFFFF,d1
-Projectile_SniperHoneyviperBouncingShotUpdateRotation:  ; CODE XREF: Projectile_SniperHoneyviperBouncingShot+E   j  ; was: loc_37448
+Projectile_SniperHoneyviperBouncingShotUpdateRotation:  ; was: loc_37448
                 add.w   d1,$48(a5)
                 move.w  $48(a5),d0
                 asr.w   #1,d0
@@ -195,14 +194,14 @@ Projectile_SniperHoneyviperBouncingShotUpdateRotation:  ; CODE XREF: Projectile_
                 asr.l   #1,d0
                 move.l  d0,$18(a5)
                 move.w  #$FFFD,$1C(a5)
-Projectile_SniperHoneyviperBouncingShotApplyGravity:    ; CODE XREF: Projectile_SniperHoneyviperBouncingShot+3A   j  ; was: loc_37490
+Projectile_SniperHoneyviperBouncingShotApplyGravity:    ; was: loc_37490
                 addi.l  #$1000,$1C(a5)
                 bmi.s   Projectile_SniperHoneyviperBouncingShotReturn
                 moveq   #0,d0
                 moveq   #7,d1
                 jsr     (Physics_AddEntityOffset).l
                 beq.s   Projectile_SniperHoneyviperBouncingShotReturn
-Projectile_SniperHoneyviperBouncingShotConvertToDebris:  ; CODE XREF: Projectile_SniperHoneyviperBouncingShot+4   j  ; was: loc_374A6
+Projectile_SniperHoneyviperBouncingShotConvertToDebris:  ; was: loc_374A6
                                         ; Projectile_SniperHoneyviperBouncingShot+42   j
                 move.w  #$FFFD,$1C(a5)
                 move.l  $18(a5),d0
@@ -211,7 +210,7 @@ Projectile_SniperHoneyviperBouncingShotConvertToDebris:  ; CODE XREF: Projectile
                 move.l  #SharedCombatSpriteAnimation00,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_SniperHoneyviperBouncingShotReturn:          ; CODE XREF: Projectile_SniperHoneyviperBouncingShot+62   j  ; was: locret_374C4
+Projectile_SniperHoneyviperBouncingShotReturn:          ; was: locret_374C4
                                         ; Projectile_SniperHoneyviperBouncingShot+6E   j
                 rts
 ; End of function Projectile_SniperHoneyviperBouncingShot

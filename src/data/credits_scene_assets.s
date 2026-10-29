@@ -85,7 +85,6 @@ Credits_TreasureMappingData0_End:                       ; was: byte_16494A_End
 Credits_TreasureTileArt1:       binclude "data/artcomp/tiles_164ADA.bin"  ; was: tiles_164ADA
 Credits_TreasureTileArt1_End:                           ; was: tiles_164ADA_End
 Credits_TreasureMappingData1:   dc.b    0, $DC, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0  ; was: byte_164E24
-                                        ; DATA XREF: ROM:000219F6   o
                 dc.b    $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $FF, $DD, 0, 0, $50, 0, 0, $62, $64, 1, 2, 3, 4, $5F, 0, 0, $57
                 dc.b    0, 0, $66, $64, 5, 6, 7, 8, 9, $A, $B, $C, $5F, 0, 0, $54, 0, 0, $68, $64, $D, $E, $F, $10, $11, $12, $13, $14, $15, $16, $5F, 0
                 dc.b    0, $53, 0, 0, $68, $64, $17, $18, $19, $1A, $1B, $1C, $1D, $1E, $1F, $20, $5F, 0, 0, $55, 0, 0, $64, $64, $21, $22, $23, $24, $25, $26, $5F, 0
@@ -96,7 +95,6 @@ Credits_SegaTileArt:        binclude "data/artcomp/tiles_164F02.bin"  ; was: til
 Credits_SegaTileArt_End:                                ; was: tiles_164F02_End
 Credits_SegaMappingData:    dc.b    0, $4A, $6A, $60, $40, $44, $48, $4C, $50, $54, $58, $5C, $60, $64, $68, $6C, $5F, 0, 0, $51, 0, 0, $6A, $60, $41, $45, $49, $4D, $51, $55, $59, $5D
                                         ; was: byte_16537C
-                                        ; DATA XREF: ROM:00021A28   o
                 dc.b    $61, $65, $69, $6D, $5F, 0, 0, $51, 0, 0, $6A, $60, $42, $46, $4A, $4E, $52, $56, $5A, $5E, $62, $66, $6A, $6E, $5F, 0, 0, $51, 0, 0, $6A, $60
                 dc.b    $43, $47, $4B, $4F, $53, $57, $5B, $5F, $63, $67, $6B, $6F
 Credits_SegaMappingData_End:

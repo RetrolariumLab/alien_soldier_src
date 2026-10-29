@@ -1,4 +1,4 @@
-CutsceneProjection_Initialize:                          ; CODE XREF: Cutscene_InitializeScene+36   p  ; was: sub_260A2
+CutsceneProjection_Initialize:                          ; was: sub_260A2
                                         ; XiTigerCutscene_LoadAssets+34   j
                 move.l  #$1FFFE,(CutsceneScaleStep).w
                 move.w  #$1E,(CutsceneOffsetCenter).w
@@ -10,7 +10,7 @@ CutsceneProjection_Initialize:                          ; CODE XREF: Cutscene_In
                 rts
 ; End of function CutsceneProjection_Initialize
 ; Resamples a cutscene frame, queues its row transfers, and builds the line-offset table
-CutsceneProjection_BuildFrame:                          ; CODE XREF: Cutscene_UpdateFrameSelectionFromInput+4E   j  ; was: sub_260CE
+CutsceneProjection_BuildFrame:                          ; was: sub_260CE
                                         ; XiTigerCutscene_WaitBeforeReveal+44   j
                 movea.l #CutsceneFrameSourceBuffer,a0
                 move.w  #$9400,(CutsceneRowSource).w
@@ -19,11 +19,11 @@ CutsceneProjection_BuildFrame:                          ; CODE XREF: Cutscene_Up
                 move.l  d0,(CutsceneScaleSnapshot).w
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
-CutsceneProjection_BuildFrame_InitializeCopy:           ; CODE XREF: CutsceneProjection_BuildFrame+1A   j  ; was: loc_260EC
+CutsceneProjection_BuildFrame_InitializeCopy:           ; was: loc_260EC
                 moveq   #0,d3
                 moveq   #0,d4
                 moveq   #$13,d6
-CutsceneProjection_BuildFrame_CopyColumnPairLoop:       ; CODE XREF: CutsceneProjection_BuildFrame+64   j  ; was: loc_260F2
+CutsceneProjection_BuildFrame_CopyColumnPairLoop:       ; was: loc_260F2
                 movea.w (CutsceneRowSource).w,a1
                 movea.w (CutsceneRowSource).w,a2
                 lea     $26(a1),a1
@@ -38,7 +38,7 @@ CutsceneProjection_BuildFrame_CopyColumnPairLoop:       ; CODE XREF: CutscenePro
                 neg.w   d1
                 move.w  #$80,d5
                 move.w  (CutsceneRowLoopLimit).w,d7
-CutsceneProjection_BuildFrame_CopyColumnWordsLoop:      ; CODE XREF: CutsceneProjection_BuildFrame+5E   j  ; was: loc_2611C
+CutsceneProjection_BuildFrame_CopyColumnWordsLoop:      ; was: loc_2611C
                 move.w  $26(a0,d1.w),(a1)
                 move.w  $28(a0,d2.w),(a2)
                 add.w   d5,d1
@@ -51,7 +51,7 @@ CutsceneProjection_BuildFrame_CopyColumnWordsLoop:      ; CODE XREF: CutscenePro
                 movea.w (VDPCommandQueueHead).w,a4
                 move.w  (CutsceneRowVRAM).w,d0
                 move.w  (CutsceneRowLoopLimit).w,d7
-CutsceneProjection_BuildFrame_QueueTransferLoop:        ; CODE XREF: CutsceneProjection_BuildFrame+B2   j  ; was: loc_26142
+CutsceneProjection_BuildFrame_QueueTransferLoop:        ; was: loc_26142
                 move.w  #$83,-(a4)
                 move.w  d0,d4
                 andi.w  #$3FFE,d4
@@ -83,7 +83,7 @@ CutsceneProjection_BuildFrame_QueueTransferLoop:        ; CODE XREF: CutscenePro
                 moveq   #0,d6
                 moveq   #0,d7
                 sub.l   d1,d7
-CutsceneProjection_BuildFrame_BuildLineOffsetsLoop:     ; CODE XREF: CutsceneProjection_BuildFrame:CutsceneProjection_BuildFrame_AdvanceLineOffsetLoop   j  ; was: loc_261AE
+CutsceneProjection_BuildFrame_BuildLineOffsetsLoop:     ; was: loc_261AE
                 cmpa.w  #$9F80,a1
                 bmi.s   CutsceneProjection_BuildFrame_WriteRightLineOffset
                 sub.l   d1,d6
@@ -92,7 +92,7 @@ CutsceneProjection_BuildFrame_BuildLineOffsetsLoop:     ; CODE XREF: CutscenePro
                 and.w   d4,d3
                 add.w   d5,d3
                 move.w  d3,-(a1)
-CutsceneProjection_BuildFrame_WriteRightLineOffset:     ; CODE XREF: CutsceneProjection_BuildFrame+E4   j  ; was: loc_261C0
+CutsceneProjection_BuildFrame_WriteRightLineOffset:     ; was: loc_261C0
                 cmpa.w  #$9FC0,a2
                 bpl.s   CutsceneProjection_BuildFrame_AdvanceLineOffsetLoop
                 add.l   d1,d7
@@ -101,7 +101,7 @@ CutsceneProjection_BuildFrame_WriteRightLineOffset:     ; CODE XREF: CutscenePro
                 and.w   d4,d3
                 add.w   d5,d3
                 move.w  d3,(a2)+
-CutsceneProjection_BuildFrame_AdvanceLineOffsetLoop:    ; CODE XREF: CutsceneProjection_BuildFrame+F6   j  ; was: loc_261D2
+CutsceneProjection_BuildFrame_AdvanceLineOffsetLoop:    ; was: loc_261D2
                 dbf     d0,CutsceneProjection_BuildFrame_BuildLineOffsetsLoop
                 rts
 ; End of function CutsceneProjection_BuildFrame

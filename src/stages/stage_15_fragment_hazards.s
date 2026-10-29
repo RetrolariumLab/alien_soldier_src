@@ -1,4 +1,4 @@
-Stage15_FragmentEmitterWaveMain:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_304E4
+Stage15_FragmentEmitterWaveMain:                        ; was: sub_304E4
                 move.w  4(a5),d0
                 lea     Stage15_FragmentEmitterWaveStates(pc,d0.w),a0
                 adda.w  (a0),a0
@@ -54,7 +54,7 @@ Stage15_FragmentEmitterSchedule:
                 dc.w    $E190, $200, $E1F0, $40, $E230, $200, $E290, $40
                 dc.w    $E2E0, $40, $E320, $200, $E360, $200, $FFFF
 
-Stage15_FragmentEmitterMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3057A
+Stage15_FragmentEmitterMain:                            ; was: sub_3057A
                 move.w  4(a5),d0
                 lea     Stage15_FragmentEmitterStates(pc,d0.w),a0
                 adda.w  (a0),a0
@@ -170,7 +170,7 @@ Projectile_SpawnFragmentCluster:                        ; was: sub_30670
                 rts
 ; End of function Projectile_SpawnFragmentCluster
 ; Projectile state dispatcher using jump table for behavior selection
-Projectile_FragmentClusterMain:                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_306EA
+Projectile_FragmentClusterMain:                         ; was: sub_306EA
                 move.w  4(a5),d0
                 lea     Projectile_FragmentClusterStates(pc,d0.w),a0
                 adda.w  (a0),a0
@@ -509,7 +509,7 @@ Projectile_SetNewFragmentHighHealth:
                 rts
 ; End of function Projectile_SetNewFragmentHealth
 ; Scroll-driven wave of the falling rocks seen in Stage 15
-Stage15_FallingRockWaveMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_30B3A
+Stage15_FallingRockWaveMain:                            ; was: sub_30B3A
                 move.w  4(a5),d0
                 lea     Stage15_FallingRockWaveStates(pc,d0.w),a0
                 adda.w  (a0),a0
@@ -595,7 +595,7 @@ Stage15_FallingRockSchedulePrimary:
                 dc.w    $58, $C0, $40, $180, $70
                 dc.w    $1B0, $60, $FFFF
 
-Stage15_FallingRockMain:                                ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_30CBE
+Stage15_FallingRockMain:                                ; was: sub_30CBE
                 move.w  4(a5),d0
                 lea     Stage15_FallingRockStates(pc,d0.w),a0
                 adda.w  (a0),a0

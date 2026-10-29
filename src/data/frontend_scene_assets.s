@@ -16,7 +16,6 @@ FrontendUnreferencedMappingData_End:
 FrontendUnreferencedTileArt:        binclude "data/artcomp/tiles_180F84.bin"  ; was: tiles_180F84
 FrontendUnreferencedTileArt_End:                        ; was: tiles_180F84_End
 SharedFrontendAndTransitionTileArt: dc.b    0, $C4, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0  ; was: byte_18140E
-                                        ; DATA XREF: ROM:FrontendSegaSequenceAssetLoadList   o
                                         ; ROM:0001CF04   o
                 dc.b    $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $FF, $DD, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F
                 dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0
@@ -27,7 +26,6 @@ SharedFrontendAndTransitionTileArt: dc.b    0, $C4, $5F, 0, 0, $5F, 0, 0, $5F, 0
 FrontendTitleTileArt3000:       binclude "data/artcomp/tiles_1814D4.bin"  ; was: tiles_1814D4
 FrontendTitleTileArt3000_End:                           ; was: tiles_1814D4_End
 FrontendTitleMappingData6000:   dc.b    0, $44, $26, 0, $17, 2, 3, 4, 5, 6, 7, 8, 9, $C, $D, $E, $F, $10, $11, $12, $13, $16, $17, $18, $19, $1A, $1B, $1C, $1D, $80, $1F, $20  ; was: byte_182C9C
-                                        ; DATA XREF: ROM:0000A1CE   o
                 dc.b    $20, 1, $21, $22, $80, 3, $84, $27, 0, $23, $80, $2B, 0, $24, $80, $2E, 2, $25, $26, $27, $32, 0, 1, $A, $B, $90, $49, 1, $14, $15, $90, $51
                 dc.b    1, $1E, $1F, $51, 0, 0
 FrontendTitleMappingData4000:               binclude "data/mappings/byte_182CE2.bin"  ; was: byte_182CE2
@@ -37,13 +35,11 @@ SharedTitleAndOptionsType3DataA_End:                    ; was: byte_182F24_End
 SharedTitleAndOptionsType3DataB:            binclude "data/other/byte_184378.bin"  ; was: byte_184378
 SharedTitleAndOptionsType3DataB_End:                    ; was: byte_184378_End
 SharedFrontendAndTransitionMappingData7000: dc.b    0, $41, $A, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $FF, $35, 0, $84, $20, 0, 0, $88, $21, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F  ; was: byte_18454C
-                                        ; DATA XREF: ROM:0000A1EE   o
                                         ; ROM:0000A218   o
                 dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0
                 dc.b    $5B, 0, 0, $FF
 SharedFrontendAndTransitionMappingDataA:                ; was: byte_184590
                 dc.b    0, $F5, $1F, 0, $30, $31, $32, $33, $34, $35, $36, $41, $38, $39, $3A, $3B, $3C, $3D, $3E, $43, 4, 5, 6, 7, $C, $D, $E, 3, 8, 9, $A, $B
-                                        ; DATA XREF: ROM:0000A1DE   o
                                         ; ROM:0000A208   o
                 dc.b    $10, $11, $12, $F, $1E, $1F, $20, $21, $22, $23, $24, $25, 0, $27, $28, $29, $2A, $2B, $2C, $2D, $20, 0, 5, $14, $15, $16, $17, $18, $19, $26, 0, 0
                 dc.b    $37, $94, 8, 1, $3F, $40, $90, $11, 1, $F, 1, $90, $19, 1, $13, 2, $90, $21, 1, $26, $2F, $90, $29, 0, $2E, $39, 0, 1, $45, $46, $88, $4D
@@ -57,7 +53,6 @@ SharedFrontendAndTransitionMappingDataB_End:            ; was: byte_184688_End
 ResultsPostStageCompletionTileArt2000:      binclude "data/artcomp/tiles_1850C6.bin"  ; was: tiles_1850C6
 ResultsPostStageCompletionTileArt2000_End:              ; was: tiles_1850C6_End
 ResultsPostStageCompletionMappingData2020:  dc.b    0, $9F, $22, 0, $21, 1, 0, 2, $8C, 7, 2, $1E, 1, $1F, $2E, 0, $60, 1, 3, 4, $84, $21, 0, 5, $60, 1, $20, $21, $84, $29, 0, $22  ; was: byte_185268
-                                        ; DATA XREF: ROM:0001DCBA   o
                 dc.b    $BC, $1F, 0, 6, $65, 1, 7, 8, 9, $23, $24, $25, $26, $30, 0, $61, 1, $A, $B, $C, $84, $65, 0, $27, $60, 1, $28, $29, $BC, $5F, 0, $D
                 dc.b    $65, 1, $E, $F, $10, $2A, $2B, $2C, $2D, $C4, $3F, 0, $11, $60, 1, $12, $13, $84, $A5, 0, $2E, $60, 1, $2F, $30, $BC, $9F, 0, $14, $60, 1, $15
                 dc.b    $16, 1, 9, $16, $61, 1, $31, $32, $33, 1, 9, $33, $BC, $BF, 0, $17, $65, 1, $18, $10, 5, $34, $35, $36, $22, $C4, $BF, 0, $19, $84, $3D, 0

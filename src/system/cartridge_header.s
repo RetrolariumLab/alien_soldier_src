@@ -16,7 +16,7 @@
 ; Segment type: Pure code
 ; segment "ROM"
 ; ROM segment
-Sys_VectorTable:    dc.l    $FFFFFF00                   ; DATA XREF: ROM:Boss_SniperHoneyviperAssetSet   o  ; was: dword_0
+Sys_VectorTable:    dc.l    $FFFFFF00                   ; was: dword_0
                                         ; ROM:Boss_FlyingNeoAssetSet   o
                 dc.l    Reset
                 dc.l    BusErr
@@ -92,7 +92,7 @@ Checksum:
                 if      BuildProfileEU
                 dc.w    $A62B
                 else
-                dc.w    $834F                           ; DATA XREF: Reset+164   o
+                dc.w    $834F
                 endif
 Peripherials:   dc.b    'J               '
 RomStart:       dc.l    0

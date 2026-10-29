@@ -1,10 +1,10 @@
-Math_LookupPackedBCDWord:                               ; CODE XREF: Continue_RenderStageAndDifficulty+1C   p  ; was: sub_1B404
+Math_LookupPackedBCDWord:                               ; was: sub_1B404
                 lea     (Math_PackedBCDLookup).l,a0
                 move.w  (a0,d0.w),d0
                 rts
 ; End of function Math_LookupPackedBCDWord
 ; Returns the player's absolute horizontal and signed vertical deltas
-Physics_GetPlayerDelta:                                 ; CODE XREF: Object_UpdateProximityPickupEmitterType48:Object_UpdateProximityPickupEmitterType48_CheckPlayerProximity   p  ; was: sub_1B410
+Physics_GetPlayerDelta:                                 ; was: sub_1B410
                                         ; Projectile_UpdateOscillatingContactHazardType2B4:Projectile_UpdateOscillatingContactHazardType2B4_CheckPlayerProximity   p
                 movea.w #(PlayerObjectType-M68K_RAM),a0
                 move.w  $10(a0),d1
@@ -12,7 +12,7 @@ Physics_GetPlayerDelta:                                 ; CODE XREF: Object_Upda
                 move.w  d1,d0
                 bpl.s   Physics_GetPlayerDelta_AbsoluteX
                 neg.w   d0
-Physics_GetPlayerDelta_AbsoluteX:                       ; CODE XREF: Physics_GetPlayerDelta+E   j  ; was: loc_1B422
+Physics_GetPlayerDelta_AbsoluteX:                       ; was: loc_1B422
                 move.w  $14(a0),d2
                 sub.w   $14(a5),d2
                 moveq   #1,d3
@@ -30,7 +30,7 @@ Orphaned_CalculateAngleBetweenObjects:
                 rts
 ; End of function Orphaned_CalculateAngleBetweenObjects
 ; Calculates sine/cosine values in all four quadrants and stores in lookup tables
-Math_CalculateSineCosineTable:                          ; CODE XREF: Boss_SniperHoneyviperLoadInitialAssetsAfterBackgroundRows+26   j  ; was: sub_1B44C
+Math_CalculateSineCosineTable:                          ; was: sub_1B44C
                                         ; Boss_FlyingNeoInit+1C   p
                 movea.w a0,a1
                 adda.w  #$200,a1
@@ -45,7 +45,7 @@ Math_CalculateSineCosineTable:                          ; CODE XREF: Boss_Sniper
                 asl.w   #2,d0
                 move.w  #$3F,d7                         ; '?'
 ; Populates sine/cosine lookup table with calculated values
-Math_PopulateTrigTable:                                 ; CODE XREF: Math_CalculateSineCosineTable+34   j  ; was: loc_1B470
+Math_PopulateTrigTable:                                 ; was: loc_1B470
                 move.w  (a5)+,d1
                 muls.w  d0,d1
                 move.l  d1,(a0)+
@@ -65,7 +65,6 @@ Math_PopulateTrigTable:                                 ; CODE XREF: Math_Calcul
 ; End of function Math_CalculateSineCosineTable
 ; ---------------------------------------------------------------------------
 Math_QuarterSineTable:  dc.w    0, $192, $323, $4B5, $645, $7D5, $964, $AF1  ; was: word_1B494
-                                        ; DATA XREF: Math_LookupSineCosinePair   o
                                         ; Projectile_SpawnType1A8AtAngle+3A   r
                 dc.w    $C7C, $E05, $F8C, $1111, $1294, $1413, $158F, $1708
                 dc.w    $187D, $19EF, $1B5D, $1CC6, $1E2B, $1F8B, $20E7, $223D
@@ -78,7 +77,7 @@ Math_SineTable: binclude "data/other/word_1B514.bin"    ; was: word_1B514
 Math_SineTable_End:                                     ; was: word_1B514_End
 
 ; Unreferenced: marks $60-byte entity records for removal up to $DCA0
-Orphaned_MarkEntityRecordsExceptTwoTypes:               ; CODE XREF: Orphaned_MarkEntityRecordsExceptTwoTypes+C   j  ; was: sub_1B714
+Orphaned_MarkEntityRecordsExceptTwoTypes:               ; was: sub_1B714
                 bsr.w   Orphaned_MarkEntityRecordExceptTwoTypes
                 lea     $60(a0),a0
                 cmpa.w  #$DCA0,a0
@@ -86,7 +85,7 @@ Orphaned_MarkEntityRecordsExceptTwoTypes:               ; CODE XREF: Orphaned_Ma
                 rts
 ; End of function Orphaned_MarkEntityRecordsExceptTwoTypes
 ; Marks one record for removal unless its type is zero or one of two spared types
-Orphaned_MarkEntityRecordExceptTwoTypes:                ; CODE XREF: Orphaned_MarkEntityRecordsExceptTwoTypes   p  ; was: sub_1B726
+Orphaned_MarkEntityRecordExceptTwoTypes:                ; was: sub_1B726
                 cmpi.w  #0,(a0)
                 beq.w   Orphaned_MarkEntityRecordExceptTwoTypesReturn
                 cmp.w   (a0),d0
@@ -95,16 +94,16 @@ Orphaned_MarkEntityRecordExceptTwoTypes:                ; CODE XREF: Orphaned_Ma
                 beq.w   Orphaned_MarkEntityRecordExceptTwoTypesReturn
                 move.w  #$10,(a0)
                 move.w  #$1000,2(a0)
-Orphaned_MarkEntityRecordExceptTwoTypesReturn:          ; CODE XREF: Orphaned_MarkEntityRecordExceptTwoTypes+4   j  ; was: locret_1B744
+Orphaned_MarkEntityRecordExceptTwoTypesReturn:          ; was: locret_1B744
                                         ; Orphaned_MarkEntityRecordExceptTwoTypes+A   j
                 rts
 ; End of function Orphaned_MarkEntityRecordExceptTwoTypes
 ; Clears the complete entity object pool
-Sys_ClearEntityObjectPool:                              ; CODE XREF: EndingSequence_Initialize+44   p  ; was: sub_1B746
+Sys_ClearEntityObjectPool:                              ; was: sub_1B746
                                         ; EndingStarfield_FadeOutAndPreparePlanet+44   p
                 moveq   #0,d0
                 movea.w #(Entity_ObjectPool-M68K_RAM),a0
-Sys_ClearEntityObjectPool_Loop:                         ; CODE XREF: Sys_ClearEntityObjectPool+3A   j  ; was: loc_1B74C
+Sys_ClearEntityObjectPool_Loop:                         ; was: loc_1B74C
                 move.l  d0,(a0)+
                 move.l  d0,(a0)+
                 move.l  d0,(a0)+
@@ -134,10 +133,10 @@ Sys_ClearEntityObjectPool_Loop:                         ; CODE XREF: Sys_ClearEn
                 rts
 ; End of function Sys_ClearEntityObjectPool
 ; Queues VDP command for DMA
-VDP_QueueCommand:                                       ; CODE XREF: Scroll_UpdateSnakeBackground+64   p  ; was: sub_1B784
+VDP_QueueCommand:                                       ; was: sub_1B784
                 move.w  #$8F02,d3
                 movea.w (VDPStagingDataCursor).w,a0
-VDP_QueueCommand_Build:                                 ; CODE XREF: StageTransition_QueueShieldViperBackdropRow+32   j  ; was: loc_1B78C
+VDP_QueueCommand_Build:                                 ; was: loc_1B78C
                                         ; WeaponSetup_UpdateBackgroundEffect+190   j
                 movea.w (VDPCommandQueueHead).w,a1
                 move.w  d0,d1
@@ -169,11 +168,11 @@ VDP_QueueCommand_Build:                                 ; CODE XREF: StageTransi
                 rts
 ; End of function VDP_QueueCommand
 ; Halts the Z80, programs a DMA transfer to VDP memory, then restores both
-Gfx_DmaTransferWithZ80Halt:                             ; CODE XREF: Gfx_PrepareStage21And22ResampledTiles+54   j  ; was: sub_1B7DC
+Gfx_DmaTransferWithZ80Halt:                             ; was: sub_1B7DC
                 move.w  #$8F02,d3
                 move    sr,-(sp)
                 move    #$2700,sr
-Gfx_DmaTransferWithZ80Halt_RequestBus:                  ; CODE XREF: Gfx_DmaTransferWithZ80Halt+12   j  ; was: loc_1B7E6
+Gfx_DmaTransferWithZ80Halt_RequestBus:                  ; was: loc_1B7E6
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Gfx_DmaTransferWithZ80Halt_RequestBus
                 lea     (VDP_CTRL).l,a4
@@ -212,7 +211,7 @@ Gfx_DmaTransferWithZ80Halt_RequestBus:                  ; CODE XREF: Gfx_DmaTran
                 move.w  (VDPReg1Shadow).w,d0
                 bclr    #4,d0
                 move.w  d0,(a4)
-Gfx_DmaTransferWithZ80Halt_ReleaseBus:                  ; CODE XREF: Gfx_DmaTransferWithZ80Halt+90   j  ; was: loc_1B864
+Gfx_DmaTransferWithZ80Halt_ReleaseBus:                  ; was: loc_1B864
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Gfx_DmaTransferWithZ80Halt_ReleaseBus
                 move    (sp)+,sr
@@ -250,22 +249,22 @@ Orphaned_ClearGameplayStateBuffer:
                 movea.w #(GameplayStateBuffer-M68K_RAM),a0  ; was: sub_1B8A6
                 moveq   #0,d0
                 move.w  #$7FF,d7
-Orphaned_ClearGameplayStateBufferLoop:                  ; CODE XREF: Orphaned_ClearGameplayStateBuffer+C   j  ; was: loc_1B8B0
+Orphaned_ClearGameplayStateBufferLoop:                  ; was: loc_1B8B0
                 move.l  d0,(a0)+
                 dbf     d7,Orphaned_ClearGameplayStateBufferLoop
                 rts
 ; End of function Orphaned_ClearGameplayStateBuffer
 ; Queue the requested BGM ID, or stop playback when BGM is disabled
-Sound_QueueBGMOrStop:                                   ; CODE XREF: Stage13_UpdateSnakeIntroTransition+24   p  ; was: sub_1B8B8
+Sound_QueueBGMOrStop:                                   ; was: sub_1B8B8
                                         ; Stage13_StartPostBugmaxTransition+1C   p
                 btst    #1,(SoundDisableFlags+1).w
                 beq.s   Sound_QueueBGMOrStopSubmit
                 move.b  #4,d0
-Sound_QueueBGMOrStopSubmit:                             ; CODE XREF: Sound_QueueBGMOrStop+6   j  ; was: loc_1B8C4
+Sound_QueueBGMOrStopSubmit:                             ; was: loc_1B8C4
                 jmp     (Sound_QueueRequest).l
 ; End of function Sound_QueueBGMOrStop
 ; Queue the BGM selected for the current stage, or stop disabled playback
-Sound_QueueStageBGMOrStop:                              ; CODE XREF: StageReady_Initialize+56   j  ; was: sub_1B8CA
+Sound_QueueStageBGMOrStop:                              ; was: sub_1B8CA
                                         ; RetryPrompt_Update+22   j
                 btst    #1,(SoundDisableFlags+1).w
                 beq.s   Sound_SelectAndQueueStageBGM
@@ -273,7 +272,7 @@ Sound_QueueStageBGMOrStop:                              ; CODE XREF: StageReady_
                 jmp     (Sound_QueueRequest).l
 ; ---------------------------------------------------------------------------
 ; Select the current stage's BGM request and submit it to the sound queue
-Sound_SelectAndQueueStageBGM:                           ; CODE XREF: Sound_QueueStageBGMOrStop+6   j  ; was: loc_1B8DC
+Sound_SelectAndQueueStageBGM:                           ; was: loc_1B8DC
                 move.w  (StageTableIndex).w,d0
                 asr.w   #1,d0
                 move.b  Sound_StageBGMRequestTable(pc,d0.w),d0
@@ -281,6 +280,5 @@ Sound_SelectAndQueueStageBGM:                           ; CODE XREF: Sound_Queue
 ; End of function Sound_QueueStageBGMOrStop
 ; ---------------------------------------------------------------------------
 Sound_StageBGMRequestTable: dc.b    $81, $81, $81, $81, $81, $81, $81, $89, $89, $86  ; was: byte_1B8EC
-                                        ; DATA XREF: Sound_QueueStageBGMOrStop+18   r
                 dc.b    $86, $86, $89, $92, $92, $8B, $8B, $97, $97, 0
                 dc.b    $93, $93, $89, $8F, $9F, 0

@@ -1,4 +1,4 @@
-Segment_MissirayMain:                                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_54458
+Segment_MissirayMain:                                   ; was: sub_54458
                 move.b  $50(a5),d0
                 andi.w  #3,d0
                 add.w   d0,d0
@@ -8,29 +8,29 @@ Segment_MissirayMain:                                   ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function Segment_MissirayMain
 ; ---------------------------------------------------------------------------
-Segment_MissirayModeStates: dc.w    Segment_MissirayProjectileAttackDispatcher-*  ; DATA XREF: Segment_MissirayMain+C   o  ; was: off_5446C
+Segment_MissirayModeStates: dc.w    Segment_MissirayProjectileAttackDispatcher-*  ; was: off_5446C
                 dc.w    Segment_MissirayOffsetTransitionDispatcher-*
                 dc.w    Segment_MissirayDefeatDispatcher-*
 
 ; Dispatches the mode-one segment offset transition
-Segment_MissirayOffsetTransitionDispatcher:             ; DATA XREF: ROM:0005446E   o  ; was: sub_54472
+Segment_MissirayOffsetTransitionDispatcher:             ; was: sub_54472
                 move.w  4(a5),d0
                 lea     Segment_MissirayOffsetTransitionStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Segment_MissirayOffsetTransitionDispatcher
 ; ---------------------------------------------------------------------------
-Segment_MissirayOffsetTransitionStates: dc.w    Segment_MissirayInitializeOffsetTransition-*  ; DATA XREF: Segment_MissirayOffsetTransitionDispatcher+4   o  ; was: off_5447E
+Segment_MissirayOffsetTransitionStates: dc.w    Segment_MissirayInitializeOffsetTransition-*  ; was: off_5447E
                 dc.w    Segment_MissirayAdvanceOffsetArc-*
                 dc.w    Segment_MissirayMoveOffsetToTarget-*
 
 ; Clears the segment busy byte while the offset transition is idle
-Segment_MissirayInitializeOffsetTransition:             ; DATA XREF: ROM:Segment_MissirayOffsetTransitionStates   o  ; was: sub_54484
+Segment_MissirayInitializeOffsetTransition:             ; was: sub_54484
                 clr.b   $52(a5)
                 rts
 ; End of function Segment_MissirayInitializeOffsetTransition
 ; Advances the sine-derived offset arc and enters target movement at its end
-Segment_MissirayAdvanceOffsetArc:                       ; DATA XREF: ROM:00054480   o  ; was: sub_5448A
+Segment_MissirayAdvanceOffsetArc:                       ; was: sub_5448A
                 move.b  #1,$52(a5)
                 cmpi.w  #$10,(PrimaryEntityState).w
                 bcs.s   Segment_MissirayFinishOffsetArc
@@ -40,34 +40,34 @@ Segment_MissirayAdvanceOffsetArc:                       ; DATA XREF: ROM:0005448
                 andi.w  #$3F0,$48(a5)
                 cmpi.w  #$200,$48(a5)
                 bne.s   Segment_MissirayOffsetArcReturn
-Segment_MissirayFinishOffsetArc:                        ; CODE XREF: Segment_MissirayAdvanceOffsetArc+C   j  ; was: loc_544B4
+Segment_MissirayFinishOffsetArc:                        ; was: loc_544B4
                 bset    #6,$21(a5)
                 addq.w  #2,4(a5)
                 move.b  #$57,d0                         ; 'W'
                 jsr     (Sound_QueueSFXRequest).l
-Segment_MissirayOffsetArcReturn:                        ; CODE XREF: Segment_MissirayAdvanceOffsetArc+28   j  ; was: locret_544C8
+Segment_MissirayOffsetArcReturn:                        ; was: locret_544C8
                 rts
 ; End of function Segment_MissirayAdvanceOffsetArc
 ; Steps the current segment offset toward its mode-selected target
-Segment_MissirayMoveOffsetToTarget:                     ; DATA XREF: ROM:00054482   o  ; was: sub_544CA
+Segment_MissirayMoveOffsetToTarget:                     ; was: sub_544CA
                 bsr.s   Segment_MissirayStepOffsetTowardTarget
                 cmpi.w  #$10,(PrimaryEntityState).w
                 bcs.s   Segment_MissirayCheckOffsetTargetReached
                 bsr.s   Segment_MissirayStepOffsetTowardTarget
                 bsr.s   Segment_MissirayStepOffsetTowardTarget
                 bsr.s   Segment_MissirayStepOffsetTowardTarget
-Segment_MissirayCheckOffsetTargetReached:               ; CODE XREF: Segment_MissirayMoveOffsetToTarget+8   j  ; was: loc_544DA
+Segment_MissirayCheckOffsetTargetReached:               ; was: loc_544DA
                 move.w  $4C(a5),d0
                 cmp.w   $4E(a5),d0
                 bne.s   Segment_MissirayMoveOffsetToTargetReturn
                 bclr    #6,$21(a5)
                 clr.w   $4E(a5)
                 clr.w   4(a5)
-Segment_MissirayMoveOffsetToTargetReturn:               ; CODE XREF: Segment_MissirayMoveOffsetToTarget+18   j  ; was: locret_544F2
+Segment_MissirayMoveOffsetToTargetReturn:               ; was: locret_544F2
                 rts
 ; End of function Segment_MissirayMoveOffsetToTarget
 ; Moves field $4C by one unit toward target field $4E
-Segment_MissirayStepOffsetTowardTarget:                 ; CODE XREF: Segment_MissirayMoveOffsetToTarget   p  ; was: sub_544F4
+Segment_MissirayStepOffsetTowardTarget:                 ; was: sub_544F4
                                         ; Segment_MissirayMoveOffsetToTarget+A   p
                 move.w  $4E(a5),d0
                 sub.w   $4C(a5),d0
@@ -77,24 +77,24 @@ Segment_MissirayStepOffsetTowardTarget:                 ; CODE XREF: Segment_Mis
                 subq.w  #1,$4C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Segment_MissirayIncrementOffsetTowardTarget:            ; CODE XREF: Segment_MissirayStepOffsetTowardTarget+C   j  ; was: loc_54508
+Segment_MissirayIncrementOffsetTowardTarget:            ; was: loc_54508
                 addq.w  #1,$4C(a5)
-Segment_MissirayStepOffsetTowardTargetReturn:           ; CODE XREF: Segment_MissirayStepOffsetTowardTarget+8   j  ; was: locret_5450C
+Segment_MissirayStepOffsetTowardTargetReturn:           ; was: locret_5450C
                 rts
 ; End of function Segment_MissirayStepOffsetTowardTarget
 ; Advances the 15-entry palette-wave index used by Missiray fades
-Boss_MissirayAdvancePaletteWaveIndex:                   ; CODE XREF: Boss_MissirayShuffleSegmentActivationOrder   p  ; was: sub_5450E
+Boss_MissirayAdvancePaletteWaveIndex:                   ; was: sub_5450E
                                         ; Boss_MissirayActivateNextShuffledSegment   p
                 addq.w  #2,(SharedScratchLong4).w
                 cmpi.w  #$1E,(SharedScratchLong4).w
                 bne.s   Boss_MissirayStorePaletteWaveIndex
                 clr.w   (SharedScratchLong4).w
-Boss_MissirayStorePaletteWaveIndex:                     ; CODE XREF: Boss_MissirayAdvancePaletteWaveIndex+A   j  ; was: loc_5451E
+Boss_MissirayStorePaletteWaveIndex:                     ; was: loc_5451E
                 move.w  (SharedScratchLong4).w,d0
                 move.w  Boss_MissirayPaletteWaveIndices(pc,d0.w),(SharedScratchLong3+2).w
 ; End of function Boss_MissirayAdvancePaletteWaveIndex
 ; Applies one Missiray palette step to the 15-color range at PaletteActiveColor48
-Boss_MissirayApplyPaletteFadeStep:                      ; CODE XREF: Boss_MissirayInitializeSequentialSegmentAttack:Boss_MissirayFadeAndInitializeSegmentOrder   p  ; was: sub_54528
+Boss_MissirayApplyPaletteFadeStep:                      ; was: sub_54528
                                         ; Boss_MissirayFadePrimaryModePalette   p
                 move.w  (SharedScratchLong3+2).w,d0
                 andi.w  #$E,d0
@@ -105,29 +105,28 @@ Boss_MissirayApplyPaletteFadeStep:                      ; CODE XREF: Boss_Missir
 ; End of function Boss_MissirayApplyPaletteFadeStep
 ; ---------------------------------------------------------------------------
 Boss_MissirayPaletteWaveIndices:    dc.w    $E, $C, $A, 8, 6, 4, 2, 0, 2, 4, 6, 8, $A, $C, $E  ; was: word_54542
-                                        ; DATA XREF: Boss_MissirayAdvancePaletteWaveIndex+14   r
 
 ; Dispatches the ordinary segment projectile sequence
-Segment_MissirayProjectileAttackDispatcher:             ; DATA XREF: ROM:Segment_MissirayModeStates   o  ; was: sub_54560
+Segment_MissirayProjectileAttackDispatcher:             ; was: sub_54560
                 move.w  4(a5),d0
                 lea     Segment_MissirayProjectileAttackStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Segment_MissirayProjectileAttackDispatcher
 ; ---------------------------------------------------------------------------
-Segment_MissirayProjectileAttackStates: dc.w    Segment_MissirayProjectileAttackIdle-*  ; DATA XREF: Segment_MissirayProjectileAttackDispatcher+4   o  ; was: off_5456C
+Segment_MissirayProjectileAttackStates: dc.w    Segment_MissirayProjectileAttackIdle-*  ; was: off_5456C
                 dc.w    Segment_MissirayLaunchConfiguredProjectile-*
                 dc.w    Segment_MissirayAdvanceLargeOffsetArc-*
                 dc.w    Segment_MissirayAdvanceSmallOffsetArc-*
                 dc.w    Segment_MissirayWaitBeforeProjectileAttackReset-*
 
 ; Publishes that the projectile sequence is idle
-Segment_MissirayProjectileAttackIdle:                   ; DATA XREF: ROM:Segment_MissirayProjectileAttackStates   o  ; was: sub_54576
+Segment_MissirayProjectileAttackIdle:                   ; was: sub_54576
                 clr.b   $52(a5)
                 rts
 ; End of function Segment_MissirayProjectileAttackIdle
 ; Waits for the configured delay and initializes the reserved projectile
-Segment_MissirayLaunchConfiguredProjectile:             ; DATA XREF: ROM:0005456E   o  ; was: sub_5457C
+Segment_MissirayLaunchConfiguredProjectile:             ; was: sub_5457C
                 move.b  #1,$52(a5)
                 subq.w  #1,$48(a5)
                 bpl.s   Segment_MissirayLaunchConfiguredProjectileReturn
@@ -143,18 +142,18 @@ Segment_MissirayLaunchConfiguredProjectile:             ; DATA XREF: ROM:0005456
                 jsr     (Projectile_InitMissirayFallingShot).l
                 rts
 ; ---------------------------------------------------------------------------
-Segment_MissirayLaunchAlternateProjectile:              ; CODE XREF: Segment_MissirayLaunchConfiguredProjectile+1A   j  ; was: loc_545B8
+Segment_MissirayLaunchAlternateProjectile:              ; was: loc_545B8
                 movea.w $54(a5),a0
                 move.w  $10(a5),d0
                 move.w  $14(a5),d1
                 move.l  #$2800,d2
                 move.l  #$1000,d3
                 jsr     (Projectile_InitMissirayBullet).l
-Segment_MissirayLaunchConfiguredProjectileReturn:       ; CODE XREF: Segment_MissirayLaunchConfiguredProjectile+A   j  ; was: locret_545D6
+Segment_MissirayLaunchConfiguredProjectileReturn:       ; was: locret_545D6
                 rts
 ; End of function Segment_MissirayLaunchConfiguredProjectile
 ; Advances the first sine-offset arc with amplitude $40
-Segment_MissirayAdvanceLargeOffsetArc:                  ; DATA XREF: ROM:00054570   o  ; was: sub_545D8
+Segment_MissirayAdvanceLargeOffsetArc:                  ; was: sub_545D8
                 addi.w  #$10,$48(a5)
                 move.w  #$40,d0                         ; '@'
                 bsr.w   Segment_MissirayCalculateSineOffset
@@ -162,11 +161,11 @@ Segment_MissirayAdvanceLargeOffsetArc:                  ; DATA XREF: ROM:0005457
                 cmpi.w  #$100,$48(a5)
                 bne.s   Segment_MissirayLargeOffsetArcReturn
                 addq.w  #2,4(a5)
-Segment_MissirayLargeOffsetArcReturn:                   ; CODE XREF: Segment_MissirayAdvanceLargeOffsetArc+1A   j  ; was: locret_545F8
+Segment_MissirayLargeOffsetArcReturn:                   ; was: locret_545F8
                 rts
 ; End of function Segment_MissirayAdvanceLargeOffsetArc
 ; Samples the sine table, scales it by d0, and stores the segment offset
-Segment_MissirayCalculateSineOffset:                    ; CODE XREF: Segment_MissirayAdvanceOffsetArc+18   p  ; was: sub_545FA
+Segment_MissirayCalculateSineOffset:                    ; was: sub_545FA
                                         ; Segment_MissirayAdvanceLargeOffsetArc+A   p
                 move.w  $48(a5),d1
                 andi.w  #$1FE,d1
@@ -178,7 +177,7 @@ Segment_MissirayCalculateSineOffset:                    ; CODE XREF: Segment_Mis
                 rts
 ; End of function Segment_MissirayCalculateSineOffset
 ; Advances the second sine-offset arc with amplitude $20
-Segment_MissirayAdvanceSmallOffsetArc:                  ; DATA XREF: ROM:00054572   o  ; was: sub_54616
+Segment_MissirayAdvanceSmallOffsetArc:                  ; was: sub_54616
                 addi.w  #$10,$48(a5)
                 move.w  #$20,d0                         ; ' '
                 bsr.w   Segment_MissirayCalculateSineOffset
@@ -187,31 +186,31 @@ Segment_MissirayAdvanceSmallOffsetArc:                  ; DATA XREF: ROM:0005457
                 bne.s   Segment_MissiraySmallOffsetArcReturn
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
-Segment_MissiraySmallOffsetArcReturn:                   ; CODE XREF: Segment_MissirayAdvanceSmallOffsetArc+1A   j  ; was: locret_5463C
+Segment_MissiraySmallOffsetArcReturn:                   ; was: locret_5463C
                 rts
 ; End of function Segment_MissirayAdvanceSmallOffsetArc
 ; Holds the completed projectile sequence for $40 ticks before resetting
-Segment_MissirayWaitBeforeProjectileAttackReset:        ; DATA XREF: ROM:00054574   o  ; was: sub_5463E
+Segment_MissirayWaitBeforeProjectileAttackReset:        ; was: sub_5463E
                 subq.w  #1,$48(a5)
                 bne.s   Segment_MissirayProjectileAttackResetWaitReturn
                 clr.w   4(a5)
-Segment_MissirayProjectileAttackResetWaitReturn:        ; CODE XREF: Segment_MissirayWaitBeforeProjectileAttackReset+4   j  ; was: locret_54648
+Segment_MissirayProjectileAttackResetWaitReturn:        ; was: locret_54648
                 rts
 ; End of function Segment_MissirayWaitBeforeProjectileAttackReset
 ; Dispatches linked-segment defeat behavior
-Segment_MissirayDefeatDispatcher:                       ; DATA XREF: ROM:00054470   o  ; was: sub_5464A
+Segment_MissirayDefeatDispatcher:                       ; was: sub_5464A
                 move.w  4(a5),d0
                 lea     Segment_MissirayDefeatStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Segment_MissirayDefeatDispatcher
 ; ---------------------------------------------------------------------------
-Segment_MissirayDefeatStates:   dc.w    Segment_MissirayWaitForDefeatLaunch-*  ; DATA XREF: Segment_MissirayDefeatDispatcher+4   o  ; was: off_54656
+Segment_MissirayDefeatStates:   dc.w    Segment_MissirayWaitForDefeatLaunch-*  ; was: off_54656
                 dc.w    Segment_MissirayUpdateDefeatFlight-*
                 dc.w    Segment_MissirayDefeatNoOpState-*
 
 ; Waits for the per-segment defeat timer and optional shared motion gate
-Segment_MissirayWaitForDefeatLaunch:                    ; DATA XREF: ROM:Segment_MissirayDefeatStates   o  ; was: sub_5465C
+Segment_MissirayWaitForDefeatLaunch:                    ; was: sub_5465C
                 subq.w  #1,$48(a5)
                 bne.s   Segment_MissirayDefeatLaunchWaitReturn
                 addq.w  #2,4(a5)
@@ -220,12 +219,12 @@ Segment_MissirayWaitForDefeatLaunch:                    ; DATA XREF: ROM:Segment
                 tst.w   (SharedScratchLong2+2).w
                 bne.s   Segment_MissirayDefeatLaunchWaitReturn
                 move.l  #$FFFC0000,$1C(a5)
-Segment_MissirayDefeatLaunchWaitReturn:                 ; CODE XREF: Segment_MissirayWaitForDefeatLaunch+4   j  ; was: locret_5467A
+Segment_MissirayDefeatLaunchWaitReturn:                 ; was: locret_5467A
                                         ; Segment_MissirayWaitForDefeatLaunch+E   j
                 rts
 ; End of function Segment_MissirayWaitForDefeatLaunch
 ; Integrates defeat velocity, emits particles, and retires below Y $180
-Segment_MissirayUpdateDefeatFlight:                     ; DATA XREF: ROM:00054658   o  ; was: sub_5467C
+Segment_MissirayUpdateDefeatFlight:                     ; was: sub_5467C
                 addi.l  #$1000,$1C(a5)
                 cmpi.w  #$180,$14(a5)
                 bgt.s   Segment_MissirayRetireAfterDefeatFlight
@@ -233,15 +232,15 @@ Segment_MissirayUpdateDefeatFlight:                     ; DATA XREF: ROM:0005465
                 bpl.s   Segment_MissirayDefeatFlightReturn
                 bsr.w   Segment_MissiraySpawnDefeatParticle
                 move.w  #6,$48(a5)
-Segment_MissirayDefeatFlightReturn:                     ; CODE XREF: Segment_MissirayUpdateDefeatFlight+14   j  ; was: locret_5469C
+Segment_MissirayDefeatFlightReturn:                     ; was: locret_5469C
                 rts
 ; ---------------------------------------------------------------------------
-Segment_MissirayRetireAfterDefeatFlight:                ; CODE XREF: Segment_MissirayUpdateDefeatFlight+E   j  ; was: loc_5469E
+Segment_MissirayRetireAfterDefeatFlight:                ; was: loc_5469E
                 move.w  #$1000,2(a5)
                 rts
 ; End of function Segment_MissirayUpdateDefeatFlight
 ; Spawns a type-$160 defeat particle with a random animation pointer
-Segment_MissiraySpawnDefeatParticle:                    ; CODE XREF: Segment_MissirayUpdateDefeatFlight+16   p  ; was: sub_546A6
+Segment_MissiraySpawnDefeatParticle:                    ; was: sub_546A6
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Segment_MissiraySpawnDefeatParticleReturn
                 jsr     (RandomNumber).l
@@ -253,11 +252,11 @@ Segment_MissiraySpawnDefeatParticle:                    ; CODE XREF: Segment_Mis
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 ori.w   #$8000,$E(a0)
-Segment_MissiraySpawnDefeatParticleReturn:              ; CODE XREF: Segment_MissiraySpawnDefeatParticle+6   j  ; was: locret_546DC
+Segment_MissiraySpawnDefeatParticleReturn:              ; was: locret_546DC
                 rts
 ; End of function Segment_MissiraySpawnDefeatParticle
 ; ---------------------------------------------------------------------------
-Segment_MissirayDefeatParticleAnimations:   dc.l    SharedCombatSpriteAnimation00  ; DATA XREF: Segment_MissiraySpawnDefeatParticle+1E   r  ; was: off_546DE
+Segment_MissirayDefeatParticleAnimations:   dc.l    SharedCombatSpriteAnimation00  ; was: off_546DE
                 dc.l    SharedCombatSpriteAnimation03
                 dc.l    SharedCombatSpriteAnimation05
                 dc.l    SharedCombatSpriteAnimation18
@@ -266,7 +265,7 @@ Segment_MissirayDefeatParticleAnimations:   dc.l    SharedCombatSpriteAnimation0
                 dc.l    SharedCombatSpriteAnimation05
                 dc.l    SharedCombatSpriteAnimation20
 
-Segment_MissirayDefeatNoOpState:                        ; DATA XREF: ROM:0005465A   o  ; was: nullsub_125
+Segment_MissirayDefeatNoOpState:                        ; was: nullsub_125
                 rts
 ; End of function Segment_MissirayDefeatNoOpState
 
@@ -278,17 +277,17 @@ Orphaned_AdjustObjectVerticalPositionFromInput:
                 beq.s   Orphaned_CheckObjectVerticalPositionIncreaseInput
                 subq.w  #2,$14(a5)
                 move.w  $14(a5),$4E(a5)
-Orphaned_CheckObjectVerticalPositionIncreaseInput:      ; CODE XREF: Orphaned_AdjustObjectVerticalPositionFromInput+E   j  ; was: loc_5471A
+Orphaned_CheckObjectVerticalPositionIncreaseInput:      ; was: loc_5471A
                 btst    #1,(ControllerHeldState).w
                 beq.s   Orphaned_ObjectVerticalPositionAdjustmentReturn
                 addq.w  #2,$14(a5)
                 move.w  $14(a5),$4E(a5)
-Orphaned_ObjectVerticalPositionAdjustmentReturn:        ; CODE XREF: Orphaned_AdjustObjectVerticalPositionFromInput+6   j  ; was: locret_5472C
+Orphaned_ObjectVerticalPositionAdjustmentReturn:        ; was: locret_5472C
                                         ; Orphaned_AdjustObjectVerticalPositionFromInput+20   j
                 rts
 ; End of function Orphaned_AdjustObjectVerticalPositionFromInput
 ; Advances a proximity-gated cooldown and spawns a pair of attached shots
-Boss_MissirayTrySpawnProximityShotPair:                 ; CODE XREF: Boss_MissirayRunSelectedAttack   p  ; was: sub_5472E
+Boss_MissirayTrySpawnProximityShotPair:                 ; was: sub_5472E
                 tst.w   (SharedScratchLong2+2).w
                 bne.w   Boss_MissirayProximityShotPairReturn
                 tst.w   (SharedScratchLong3).w
@@ -298,21 +297,21 @@ Boss_MissirayTrySpawnProximityShotPair:                 ; CODE XREF: Boss_Missir
                 tst.w   (DifficultyMode).w
                 beq.s   Boss_MissirayCheckProximityThreshold
                 add.w   d1,d1
-Boss_MissirayCheckProximityThreshold:                   ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+1C   j  ; was: loc_5474E
+Boss_MissirayCheckProximityThreshold:                   ; was: loc_5474E
                 cmp.w   d1,d0
                 bhi.w   Boss_MissirayProximityShotPairReturn
                 subq.w  #1,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_MissirayPrepareProximityShotPair:                  ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+C   j  ; was: loc_5475A
+Boss_MissirayPrepareProximityShotPair:                  ; was: loc_5475A
                 tst.w   (SharedScratchLong1).w
                 beq.s   Boss_MissirayUseLongProximityShotCooldown
                 move.w  #$40,(SharedScratchLong3).w     ; '@'
                 bra.s   Boss_MissirayConfigureFirstProximityShot
 ; ---------------------------------------------------------------------------
-Boss_MissirayUseLongProximityShotCooldown:              ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+30   j  ; was: loc_54768
+Boss_MissirayUseLongProximityShotCooldown:              ; was: loc_54768
                 move.w  #$80,(SharedScratchLong3).w
-Boss_MissirayConfigureFirstProximityShot:               ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+38   j  ; was: loc_5476E
+Boss_MissirayConfigureFirstProximityShot:               ; was: loc_5476E
                 move.w  #$C,d5
                 add.w   $10(a5),d5
                 move.l  #$F010F804,d3
@@ -323,11 +322,11 @@ Boss_MissirayConfigureFirstProximityShot:               ; CODE XREF: Boss_Missir
                 move.w  #$18,d4
                 bra.s   Boss_MissiraySpawnFirstAndConfigureSecondShot
 ; ---------------------------------------------------------------------------
-Boss_MissirayConfigureAlternateFirstShotOffset:         ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+52   j  ; was: loc_54790
+Boss_MissirayConfigureAlternateFirstShotOffset:         ; was: loc_54790
                 move.w  #$20,d6                         ; ' '
                 add.w   $14(a5),d6
                 move.w  #8,d4
-Boss_MissiraySpawnFirstAndConfigureSecondShot:          ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+60   j  ; was: loc_5479C
+Boss_MissiraySpawnFirstAndConfigureSecondShot:          ; was: loc_5479C
                 jsr     Boss_MissiraySpawnAttachedProximityShot(pc)  ; (pc)
                 nop
                 move.w  #$FFF4,d5
@@ -340,21 +339,20 @@ Boss_MissiraySpawnFirstAndConfigureSecondShot:          ; CODE XREF: Boss_Missir
                 move.w  #$18,d4
                 bra.s   Boss_MissiraySpawnSecondProximityShot
 ; ---------------------------------------------------------------------------
-Boss_MissirayConfigureAlternateSecondShotOffset:        ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+86   j  ; was: loc_547C4
+Boss_MissirayConfigureAlternateSecondShotOffset:        ; was: loc_547C4
                 move.w  #$20,d6                         ; ' '
                 add.w   $14(a5),d6
                 move.w  #8,d4
-Boss_MissiraySpawnSecondProximityShot:                  ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+94   j  ; was: loc_547D0
+Boss_MissiraySpawnSecondProximityShot:                  ; was: loc_547D0
                 jsr     Boss_MissiraySpawnAttachedProximityShot(pc)  ; (pc)
                 nop
-Boss_MissirayProximityShotPairReturn:                   ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+4   j  ; was: locret_547D6
+Boss_MissirayProximityShotPairReturn:                   ; was: locret_547D6
                                         ; Boss_MissirayTrySpawnProximityShotPair+22   j
                 rts
 ; End of function Boss_MissirayTrySpawnProximityShotPair
 ; Allocates one type-$404 shot attached to Missiray for its initial delay
-Boss_MissiraySpawnAttachedProximityShot:                ; CODE XREF: Boss_MissiraySpawnFirstAndConfigureSecondShot   p  ; was: sub_547D8
+Boss_MissiraySpawnAttachedProximityShot:                ; was: sub_547D8
                                         ; Boss_MissiraySpawnSecondProximityShot   p
-                                        ; DATA XREF:
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_MissiraySpawnAttachedProximityShotReturn
                 move.w  #$404,(a0)
@@ -374,22 +372,22 @@ Boss_MissiraySpawnAttachedProximityShot:                ; CODE XREF: Boss_Missir
                 move.w  a5,$48(a0)
                 move.b  #$CE,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_MissiraySpawnAttachedProximityShotReturn:          ; CODE XREF: Boss_MissiraySpawnAttachedProximityShot+6   j  ; was: locret_54830
+Boss_MissiraySpawnAttachedProximityShotReturn:          ; was: locret_54830
                 rts
 ; End of function Boss_MissiraySpawnAttachedProximityShot
 ; Dispatches the two proximity-shot states
-Projectile_MissirayProximityShotMain:                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_54832
+Projectile_MissirayProximityShotMain:                   ; was: sub_54832
                 move.w  4(a5),d0
                 lea     Projectile_MissirayProximityShotStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Projectile_MissirayProximityShotMain
 ; ---------------------------------------------------------------------------
-Projectile_MissirayProximityShotStates: dc.w    Projectile_MissirayProximityShotTrackOwnerAndLaunch-*  ; DATA XREF: Projectile_MissirayProximityShotMain+4   o  ; was: off_5483E
+Projectile_MissirayProximityShotStates: dc.w    Projectile_MissirayProximityShotTrackOwnerAndLaunch-*  ; was: off_5483E
                 dc.w    Projectile_MissirayProximityShotAccelerateVertically-*
 
 ; Tracks the owner for $20 ticks, then replaces the anchor with a moving shot
-Projectile_MissirayProximityShotTrackOwnerAndLaunch:    ; DATA XREF: ROM:Projectile_MissirayProximityShotStates   o  ; was: sub_54842
+Projectile_MissirayProximityShotTrackOwnerAndLaunch:    ; was: sub_54842
                 movea.w $48(a5),a4
                 move.w  $10(a4),d0
                 add.w   $4A(a5),d0
@@ -420,15 +418,15 @@ Projectile_MissirayProximityShotTrackOwnerAndLaunch:    ; DATA XREF: ROM:Project
                 ori.w   #$1000,$E(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_MissirayProximityShotUseAlternateMotion:     ; CODE XREF: Projectile_MissirayProximityShotTrackOwnerAndLaunch+76   j  ; was: loc_548D2
+Projectile_MissirayProximityShotUseAlternateMotion:     ; was: loc_548D2
                 move.l  #$FFFFB9B0,$1C(a0)
                 move.l  #$FFFFE000,$48(a0)
-Projectile_MissirayProximityShotTrackReturn:            ; CODE XREF: Projectile_MissirayProximityShotTrackOwnerAndLaunch+20   j  ; was: locret_548E2
+Projectile_MissirayProximityShotTrackReturn:            ; was: locret_548E2
                                         ; Projectile_MissirayProximityShotTrackOwnerAndLaunch+2E   j
                 rts
 ; End of function Projectile_MissirayProximityShotTrackOwnerAndLaunch
 ; Adds the configured acceleration to vertical velocity
-Projectile_MissirayProximityShotAccelerateVertically:   ; DATA XREF: ROM:00054840   o  ; was: sub_548E4
+Projectile_MissirayProximityShotAccelerateVertically:   ; was: sub_548E4
                 move.l  $48(a5),d0
                 add.l   d0,$1C(a5)
                 rts

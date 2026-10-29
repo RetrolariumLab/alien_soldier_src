@@ -1,5 +1,5 @@
 ; Creates Jetsripper projectile with trajectory
-Boss_JetsripperSpawnProjectile:                         ; CODE XREF: Boss_JetsripperUpdateMovement+6A   p  ; was: sub_362CE
+Boss_JetsripperSpawnProjectile:                         ; was: sub_362CE
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_JetsripperSpawnProjectileReturn
                 move.w  #$1FC,(a0)
@@ -25,14 +25,14 @@ Boss_JetsripperSpawnProjectile:                         ; CODE XREF: Boss_Jetsri
                 neg.l   $48(a0)
                 neg.l   $4C(a0)
 ; Sets projectile velocity based on boss position
-Boss_JetsripperSetProjectileVelocity:                   ; CODE XREF: Boss_JetsripperSpawnProjectile+82   j  ; was: loc_3635A
+Boss_JetsripperSetProjectileVelocity:                   ; was: loc_3635A
                 move.l  $4C(a0),$18(a0)
                 move.l  $54(a0),$1C(a0)
-Boss_JetsripperSpawnProjectileReturn:                   ; CODE XREF: Boss_JetsripperSpawnProjectile+6   j  ; was: locret_36366
+Boss_JetsripperSpawnProjectileReturn:                   ; was: locret_36366
                 rts
 ; End of function Boss_JetsripperSpawnProjectile
 ; Updates projectile with bouncing logic
-Projectile_JetsripperMain:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_36368
+Projectile_JetsripperMain:                              ; was: sub_36368
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 cmpi.w  #$8B0,d0
@@ -41,12 +41,12 @@ Projectile_JetsripperMain:                              ; DATA XREF: ROM:Entity_
                 bmi.s   Boss_JetsripperProjectileDeactivate
                 tst.w   (StageSpawnCountdown).w
                 bmi.s   Boss_JetsripperProjectileHandleImpact
-Boss_JetsripperProjectileDeactivate:                    ; CODE XREF: Projectile_JetsripperMain+C   j  ; was: loc_36382
+Boss_JetsripperProjectileDeactivate:                    ; was: loc_36382
                                         ; Projectile_JetsripperMain+12   j
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JetsripperProjectileHandleImpact:                  ; CODE XREF: Projectile_JetsripperMain+18   j  ; was: loc_3638A
+Boss_JetsripperProjectileHandleImpact:                  ; was: loc_3638A
                 bclr    #7,$22(a5)
                 beq.s   Boss_JetsripperProjectileCheckBounce
                 bclr    #4,$22(a5)
@@ -56,18 +56,18 @@ Boss_JetsripperProjectileHandleImpact:                  ; CODE XREF: Projectile_
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 jsr     (Pickup_SpawnLarge).l
-Boss_JetsripperProjectileBurst:                         ; CODE XREF: Projectile_JetsripperMain+30   j  ; was: loc_363B4
+Boss_JetsripperProjectileBurst:                         ; was: loc_363B4
                                         ; Projectile_JetsripperMain+38   j
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 jmp     Enemy_SpawnQuadProjectiles
 ; ---------------------------------------------------------------------------
-Boss_JetsripperProjectileCheckBounce:                   ; CODE XREF: Projectile_JetsripperMain+28   j  ; was: loc_363C2
+Boss_JetsripperProjectileCheckBounce:                   ; was: loc_363C2
                 tst.w   $50(a5)
                 bmi.s   Boss_JetsripperProjectileCheckUpperBounce
                 cmpi.w  #$144,$14(a5)
                 bmi.s   Boss_JetsripperProjectileUpdateTrajectory
-Boss_JetsripperProjectileReverseBounce:                 ; CODE XREF: Projectile_JetsripperMain+8A   j  ; was: loc_363D0
+Boss_JetsripperProjectileReverseBounce:                 ; was: loc_363D0
                 move.l  $4C(a5),$18(a5)
                 neg.l   $54(a5)
                 neg.l   $50(a5)
@@ -75,10 +75,10 @@ Boss_JetsripperProjectileReverseBounce:                 ; CODE XREF: Projectile_
                 move.w  #9,$58(a5)
                 bra.s   Boss_JetsripperProjectileUpdateTrajectory
 ; ---------------------------------------------------------------------------
-Boss_JetsripperProjectileCheckUpperBounce:              ; CODE XREF: Projectile_JetsripperMain+5E   j  ; was: loc_363EC
+Boss_JetsripperProjectileCheckUpperBounce:              ; was: loc_363EC
                 cmpi.w  #$CC,$14(a5)
                 bmi.s   Boss_JetsripperProjectileReverseBounce
-Boss_JetsripperProjectileUpdateTrajectory:              ; CODE XREF: Projectile_JetsripperMain+66   j  ; was: loc_363F4
+Boss_JetsripperProjectileUpdateTrajectory:              ; was: loc_363F4
                                         ; Projectile_JetsripperMain+82   j
                 subq.w  #1,$58(a5)
                 bmi.s   Boss_JetsripperProjectileApplyPalette
@@ -87,7 +87,7 @@ Boss_JetsripperProjectileUpdateTrajectory:              ; CODE XREF: Projectile_
                 move.l  $50(a5),d0
                 sub.l   d0,$1C(a5)
 ; Applies the current global palette bits to the projectile
-Boss_JetsripperProjectileApplyPalette:                  ; CODE XREF: Projectile_JetsripperMain+90   j  ; was: loc_3640A
+Boss_JetsripperProjectileApplyPalette:                  ; was: loc_3640A
                 andi.w  #$E7FF,$E(a5)
                 move.w  (GlobalSpriteFlipBits).w,d0
                 or.w    d0,$E(a5)

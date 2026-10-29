@@ -9,12 +9,12 @@ Boss_MadamBarbarUpdatePaletteCycle:
                 clr.w   $A(a5)
                 bra.s   Boss_MadamBarbarApplyPaletteStep
 ; ---------------------------------------------------------------------------
-Boss_MadamBarbarDecreasePaletteStep:                    ; CODE XREF: Boss_MadamBarbarUpdatePaletteCycle+8   j  ; was: loc_3A102
+Boss_MadamBarbarDecreasePaletteStep:                    ; was: loc_3A102
                 subq.w  #1,d0
                 cmpi.w  #$FFF2,d0
                 bne.s   Boss_MadamBarbarApplyPaletteStep
                 addq.w  #1,$A(a5)
-Boss_MadamBarbarApplyPaletteStep:                       ; CODE XREF: Boss_MadamBarbarUpdatePaletteCycle+10   j  ; was: loc_3A10E
+Boss_MadamBarbarApplyPaletteStep:                       ; was: loc_3A10E
                                         ; Boss_MadamBarbarUpdatePaletteCycle+16   j
                 move.w  d0,8(a5)
                 movea.w #(PaletteActiveColor12-M68K_RAM),a0

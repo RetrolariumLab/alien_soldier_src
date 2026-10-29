@@ -1,5 +1,5 @@
 ; Sylpheed pose interpolation, part projection, and pose data
-Boss_RenderSylpheedPose:                                ; CODE XREF: Boss_RenderSylpheedInteractiveState2+6   j  ; was: sub_59A00
+Boss_RenderSylpheedPose:                                ; was: sub_59A00
                                         ; Boss_EnterSylpheedEntranceState12+56   j
                 bsr.w   Boss_UpdateSylpheedPoseScript
                 bsr.w   Boss_ApplySylpheedPoseToParts
@@ -7,7 +7,7 @@ Boss_RenderSylpheedPose:                                ; CODE XREF: Boss_Render
                 jmp     Sprite_BeginMetaspritePartTraversal
 ; End of function Boss_RenderSylpheedPose
 ; Project the interpolated pose channels into Sylpheed part angles
-Boss_ApplySylpheedPoseToParts:                          ; CODE XREF: Boss_RenderSylpheedPose+4   p  ; was: sub_59A10
+Boss_ApplySylpheedPoseToParts:                          ; was: sub_59A10
                 move.w  #$100,$416(a5)
                 moveq   #0,d0
                 move.b  (a0),d0
@@ -147,11 +147,11 @@ Boss_ApplySylpheedPoseToParts:                          ; CODE XREF: Boss_Render
                 rts
 ; End of function Boss_ApplySylpheedPoseToParts
 ; Interpret the current Sylpheed pose script
-Boss_UpdateSylpheedPoseScript:                          ; CODE XREF: Boss_RenderSylpheedPose   p  ; was: sub_59B72
+Boss_UpdateSylpheedPoseScript:                          ; was: sub_59B72
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_AdvanceSylpheedPoseInterpolation
-Boss_ReadSylpheedPoseScriptCommand:                     ; CODE XREF: Boss_UpdateSylpheedPoseScript+24   j  ; was: loc_59B7C
+Boss_ReadSylpheedPoseScriptCommand:                     ; was: loc_59B7C
                                         ; Boss_LoadSylpheedPoseFrame+E   j
                 move.w  $58(a5),d0
                 bmi.w   Boss_PrepareSylpheedPoseRender
@@ -161,7 +161,7 @@ Boss_ReadSylpheedPoseScriptCommand:                     ; CODE XREF: Boss_Update
                 addq.w  #2,$58(a5)
                 bra.s   Boss_ReadSylpheedPoseScriptCommand
 ; ---------------------------------------------------------------------------
-Boss_ProcessSylpheedPoseScriptEntry:                    ; CODE XREF: Boss_UpdateSylpheedPoseScript+18   j  ; was: loc_59B98
+Boss_ProcessSylpheedPoseScriptEntry:                    ; was: loc_59B98
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_LoadSylpheedPoseFrame
@@ -174,14 +174,14 @@ Boss_SylpheedPoseScriptUnreferencedReturn:              ; was: nullsub_135
 ; End of function Boss_SylpheedPoseScriptUnreferencedReturn
 
 ; Handle a pose loop command or begin a pose-frame interpolation
-Boss_LoadSylpheedPoseFrame:                             ; CODE XREF: Boss_UpdateSylpheedPoseScript+2E   j  ; was: sub_59BAC
+Boss_LoadSylpheedPoseFrame:                             ; was: sub_59BAC
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_StartSylpheedPoseFrame
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Boss_ReadSylpheedPoseScriptCommand
 ; ---------------------------------------------------------------------------
-Boss_StartSylpheedPoseFrame:                            ; CODE XREF: Boss_LoadSylpheedPoseFrame+4   j  ; was: loc_59BBC
+Boss_StartSylpheedPoseFrame:                            ; was: loc_59BBC
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -196,19 +196,19 @@ Boss_StartSylpheedPoseFrame:                            ; CODE XREF: Boss_LoadSy
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_PrepareSylpheedPoseRender
-Boss_AdvanceSylpheedPoseInterpolation:                  ; CODE XREF: Boss_UpdateSylpheedPoseScript+8   j  ; was: loc_59BEC
+Boss_AdvanceSylpheedPoseInterpolation:                  ; was: loc_59BEC
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$B,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_PrepareSylpheedPoseRender:                         ; CODE XREF: Boss_UpdateSylpheedPoseScript+E   j  ; was: loc_59BFC
+Boss_PrepareSylpheedPoseRender:                         ; was: loc_59BFC
                                         ; Boss_UpdateSylpheedPoseScript+34   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_LoadSylpheedPoseFrame
 ; Calculate interpolation deltas for the 12-channel pose buffer
-Boss_CalculateSylpheedPoseInterpolation:                ; CODE XREF: Boss_LoadSylpheedPoseFrame+24   p  ; was: sub_59C06
+Boss_CalculateSylpheedPoseInterpolation:                ; was: sub_59C06
                 movea.l $2FC(a5),a1
                 moveq   #$B,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
@@ -223,29 +223,20 @@ Boss_SylpheedInitializePoseChannels:                    ; was: sub_59C1A
 ; End of function Boss_SylpheedInitializePoseChannels
 ; ---------------------------------------------------------------------------
 Sylpheed_InteractiveState2Poses:    dc.w    $2020, $18, $2020, $24, $FFFF  ; was: word_59C26
-                                        ; DATA XREF: Boss_RenderSylpheedInteractiveState2   o
-Sylpheed_EntrancePoses: dc.w    $810, 0, $808, 0, $810, $C, $808, $C  ; was: word_59C30
-                                        ; DATA XREF: Boss_EnterSylpheedEntranceState12+50   o
+Sylpheed_EntrancePoses:             dc.w    $810, 0, $808, 0, $810, $C, $808, $C  ; was: word_59C30
                                         ; Boss_EnterSylpheedEntranceState12+8E   o
                 dc.w    $FFFF
 Sylpheed_AttackAndRecoveryPoses:    dc.w    $1060, $18, $3030, $18, $1060, $24, $3030, $24  ; was: word_59C42
-                                        ; DATA XREF: Boss_EnterSylpheedAttackLaunchState1A+4E   o
                                         ; Boss_EnterSylpheedAttackLaunchState1A+98   o
                 dc.w    $FFFF
 Sylpheed_DecisionPoses: dc.w    $1060, $30, $3030, $30, $1060, $3C, $3030, $3C  ; was: word_59C54
-                                        ; DATA XREF: Boss_EnterSylpheedDecisionState4+80   o
                 dc.w    $FFFF
-Sylpheed_ChargePoses:   dc.w    $808, $18, $FFFE        ; DATA XREF: Boss_EnterSylpheedDecisionState4+B2   o  ; was: word_59C66
+Sylpheed_ChargePoses:   dc.w    $808, $18, $FFFE        ; was: word_59C66
 Sylpheed_JumpRisePoses: dc.w    $810, $48, $2020, $48, $FFFE  ; was: word_59C6C
-                                        ; DATA XREF: Boss_UpdateSylpheedJumpRiseStateA+18   o
 Sylpheed_JumpFallPoses: dc.w    $640, $54, $C0E, $54, $E0E, $54, $FFFE  ; was: word_59C76
-                                        ; DATA XREF: Boss_UpdateSylpheedJumpFallStateC+18   o
-Sylpheed_DivePoses: dc.w    $810, $60, $2020, $60, $FFFE  ; was: word_59C84
-                                        ; DATA XREF: Boss_UpdateSylpheedDiveStateE+18   o
+Sylpheed_DivePoses:     dc.w    $810, $60, $2020, $60, $FFFE  ; was: word_59C84
 Sylpheed_ClimbPoses:    dc.w    $640, $6C, $C0E, $6C, $E0E, $6C, $FFFE  ; was: word_59C8E
-                                        ; DATA XREF: Boss_UpdateSylpheedClimbState10+18   o
-Sylpheed_PoseTable: dc.w    $70F0, $50F8, $C0D0, $F840, $1010, $8F8, $9010, $3008  ; was: word_59C9C
-                                        ; DATA XREF: Boss_InitSylpheed+30   o
+Sylpheed_PoseTable:     dc.w    $70F0, $50F8, $C0D0, $F840, $1010, $8F8, $9010, $3008  ; was: word_59C9C
                 dc.w    $C0B0, $840, $F0F0, $8F8, $B020, $60F8, $A0A0, $860
                 dc.w    $E014, $14EC, $A034, $5010, $A0B0, $F060, $E010, $EF2
                 dc.w    $9000, $3810, $A0C8, $F060, $F012, $10F0, $8010, $40F0

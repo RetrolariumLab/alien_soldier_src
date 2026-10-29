@@ -1,20 +1,20 @@
 ; Destroyer Proto main dispatcher, intro, and six-part polar geometry
 ; Dispatches type $3B8 through the subtype index stored at entity offset $48
-Entity_DispatchStoredSubtype:                           ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_314C2
+Entity_DispatchStoredSubtype:                           ; was: sub_314C2
                 move.w  $48(a5),d0
                 lea     Entity_StoredSubtypeHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Entity_DispatchStoredSubtype
 ; ---------------------------------------------------------------------------
-Entity_StoredSubtypeHandlers:   dc.w    Boss_DestroyerProtoMain-*  ; DATA XREF: Entity_DispatchStoredSubtype+4   o  ; was: off_314CE
+Entity_StoredSubtypeHandlers:   dc.w    Boss_DestroyerProtoMain-*  ; was: off_314CE
                 dc.w    Boss_DestroyerProtoPartMain-*
                 dc.w    Boss_DestroyerProtoAnimatedPartMain-*
                 dc.w    Projectile_DestroyerProtoMain-*
                 dc.w    Projectile_HitReactiveShotMain-*
 
 ; Updates the root palette/arena effects, defeat gate, and state dispatcher
-Boss_DestroyerProtoMain:                                ; DATA XREF: ROM:Entity_StoredSubtypeHandlers   o  ; was: sub_314D8
+Boss_DestroyerProtoMain:                                ; was: sub_314D8
                 jsr     (Gfx_ProcessDefaultColorFade).l
                 bsr.w   Boss_DestroyerProtoCycleArenaEffect
                 cmpi.w  #$2E,4(a5)                      ; '.'
@@ -24,7 +24,7 @@ Boss_DestroyerProtoMain:                                ; DATA XREF: ROM:Entity_
                 bset    #0,(StageTimerPauseFlag).w
                 move.w  #1,(SharedScratchLong5+2).w
                 move.w  #$2E,4(a5)                      ; '.'
-Boss_DestroyerProtoDispatchState:                       ; CODE XREF: Boss_DestroyerProtoMain+10   j  ; was: loc_31502
+Boss_DestroyerProtoDispatchState:                       ; was: loc_31502
                                         ; Boss_DestroyerProtoMain+16   j
                 move.w  4(a5),d0
                 lea     Boss_DestroyerProtoStates(pc,d0.w),a0
@@ -32,7 +32,7 @@ Boss_DestroyerProtoDispatchState:                       ; CODE XREF: Boss_Destro
                 jmp     (a0)
 ; End of function Boss_DestroyerProtoMain
 ; ---------------------------------------------------------------------------
-Boss_DestroyerProtoStates:  dc.w    Boss_DestroyerProtoInitializeIntro-*  ; DATA XREF: Boss_DestroyerProtoMain+2E   o  ; was: off_3150E
+Boss_DestroyerProtoStates:  dc.w    Boss_DestroyerProtoInitializeIntro-*  ; was: off_3150E
                 dc.w    Boss_DestroyerProtoIntroApproachState-*
                 dc.w    Boss_DestroyerProtoWaitForBattleStart-*
                 dc.w    Boss_DestroyerProtoChooseMovementTarget-*
@@ -59,7 +59,7 @@ Boss_DestroyerProtoStates:  dc.w    Boss_DestroyerProtoInitializeIntro-*  ; DATA
                 dc.w    Boss_DestroyerProtoUpdateDefeatExplosion-*
 
 ; Cycles two arena-effect words every fourth tick
-Boss_DestroyerProtoCycleArenaEffect:                    ; CODE XREF: Boss_DestroyerProtoMain+6   p  ; was: sub_31540
+Boss_DestroyerProtoCycleArenaEffect:                    ; was: sub_31540
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Entity_UpdateReturn
@@ -68,7 +68,7 @@ Boss_DestroyerProtoCycleArenaEffect:                    ; CODE XREF: Boss_Destro
                 cmpi.w  #$14,d0
                 bcs.s   Boss_DestroyerProtoStoreArenaEffectPhase
                 clr.w   d0
-Boss_DestroyerProtoStoreArenaEffectPhase:               ; CODE XREF: Boss_DestroyerProtoCycleArenaEffect+16   j  ; was: loc_3155A
+Boss_DestroyerProtoStoreArenaEffectPhase:               ; was: loc_3155A
                 move.w  d0,(SharedScratchLong0).w
                 move.w  Boss_DestroyerProtoArenaEffectValueATable(pc,d0.w),(PaletteActiveColor51).w
                 move.w  Boss_DestroyerProtoArenaEffectValueBTable(pc,d0.w),(PaletteActiveColor52).w
@@ -76,12 +76,10 @@ Boss_DestroyerProtoStoreArenaEffectPhase:               ; CODE XREF: Boss_Destro
 ; End of function Boss_DestroyerProtoCycleArenaEffect
 ; ---------------------------------------------------------------------------
 Boss_DestroyerProtoArenaEffectValueATable:  dc.w    $2C8, $A6, $84, $62, $40, $20, $40, $62, $84, $A6  ; was: word_3156C
-                                        ; DATA XREF: Boss_DestroyerProtoCycleArenaEffect+1E   r
 Boss_DestroyerProtoArenaEffectValueBTable:  dc.w    $64, $44, $42, $22, $20, 0, $20, $22, $42, $44  ; was: word_31580
-                                        ; DATA XREF: Boss_DestroyerProtoCycleArenaEffect+24   r
 
 ; Initializes the root and six linked parts for the intro
-Boss_DestroyerProtoInitializeIntro:                     ; DATA XREF: ROM:Boss_DestroyerProtoStates   o  ; was: sub_31594
+Boss_DestroyerProtoInitializeIntro:                     ; was: sub_31594
                 clr.w   (SharedScratchLong5+2).w
                 move.w  #$E0,$14(a5)
                 move.w  #$200,$10(a5)
@@ -101,7 +99,7 @@ Boss_DestroyerProtoInitializeIntro:                     ; DATA XREF: ROM:Boss_De
                 addq.w  #2,4(a5)
                 movea.w a5,a4
                 move.w  #5,d6
-Boss_DestroyerProtoInitializeNextPart:                  ; CODE XREF: Boss_DestroyerProtoInitializeIntro+DC   j  ; was: loc_315FA
+Boss_DestroyerProtoInitializeNextPart:                  ; was: loc_315FA
                 adda.w  #$60,a4                         ; '`'
                 move.w  $10(a5),$10(a4)
                 move.w  $14(a5),$14(a4)
@@ -130,20 +128,16 @@ Boss_DestroyerProtoInitializeNextPart:                  ; CODE XREF: Boss_Destro
 ; End of function Boss_DestroyerProtoInitializeIntro
 ; ---------------------------------------------------------------------------
 Boss_DestroyerProtoPartAngleTable:  dc.w    $40, $40, $40, $140, $140, $140  ; was: word_31676
-                                        ; DATA XREF: Boss_DestroyerProtoInitializeIntro+B2   r
 Boss_DestroyerProtoPartRadiusTable: dc.w    $A0, $40, $E0, $A0, $40, $E0  ; was: word_31682
-                                        ; DATA XREF: Boss_DestroyerProtoInitializeIntro+BE   r
                                         ; Boss_DestroyerProtoExpandPartRadii+4   o
 Boss_DestroyerProtoPartParentSlotTable: dc.w    $C800, $C7A0, $C620, $C6E0, $C680, $C620  ; was: word_3168E
-                                        ; DATA XREF: Boss_DestroyerProtoInitializeIntro+C4   r
-Boss_DestroyerProtoPartSubtypeTable:    dc.w    4, 2, 2, 4, 2, 2  ; DATA XREF: Boss_DestroyerProtoInitializeIntro+CA   r  ; was: word_3169A
-Boss_DestroyerProtoPartMappingTable:    dc.l    Boss_DestroyerProtoIntroPartFrame  ; DATA XREF: Boss_DestroyerProtoInitializeIntro+D6   r  ; was: off_316A6
+Boss_DestroyerProtoPartSubtypeTable:    dc.w    4, 2, 2, 4, 2, 2  ; was: word_3169A
+Boss_DestroyerProtoPartMappingTable:    dc.l    Boss_DestroyerProtoIntroPartFrame  ; was: off_316A6
                 dc.l    Boss_DestroyerProtoPartFrame01
 Boss_DestroyerProtoGraphicsLoadDescriptor:  dc.w    $4000, $2000, $303, $5051, $5253, $5455, $5657, $5859, $5A5B, $5C5D, $5E5F  ; was: word_316AE
-                                        ; DATA XREF: Boss_DestroyerProtoInitializeIntro+50   o
 
 ; Runs the circular intro approach until the boss reaches its battle X threshold
-Boss_DestroyerProtoIntroApproachState:                  ; DATA XREF: ROM:00031510   o  ; was: sub_316C4
+Boss_DestroyerProtoIntroApproachState:                  ; was: sub_316C4
                 bsr.w   Boss_DestroyerProtoUpdateCircularVelocity
                 move.w  #$C,d0
                 move.w  #$10,d1
@@ -158,7 +152,7 @@ Boss_DestroyerProtoIntroApproachState:                  ; DATA XREF: ROM:0003151
                 rts
 ; End of function Boss_DestroyerProtoIntroApproachState
 ; Advances the core angle and derives circular X/Y velocity
-Boss_DestroyerProtoUpdateCircularVelocity:              ; CODE XREF: Boss_DestroyerProtoIntroApproachState   p  ; was: sub_316F8
+Boss_DestroyerProtoUpdateCircularVelocity:              ; was: sub_316F8
                                         ; sub_317FE   p
                 addq.w  #8,$40(a5)
                 andi.w  #$1FE,$40(a5)
@@ -173,7 +167,7 @@ Boss_DestroyerProtoUpdateCircularVelocity:              ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoUpdateCircularVelocity
 ; Publishes position deltas from the arena's right and upper reference points
-Boss_DestroyerProtoUpdateViewportOffset:                ; CODE XREF: Boss_DestroyerProtoInitializeIntro+10   p  ; was: sub_3171C
+Boss_DestroyerProtoUpdateViewportOffset:                ; was: sub_3171C
                                         ; Boss_DestroyerProtoIntroApproachState+16   p
                 move.w  #$2C0,d0
                 sub.w   $10(a5),d0
@@ -184,7 +178,7 @@ Boss_DestroyerProtoUpdateViewportOffset:                ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoUpdateViewportOffset
 ; Advances the polar angles of all six linked parts
-Boss_DestroyerProtoUpdatePartAngles:                    ; CODE XREF: Boss_DestroyerProtoIntroApproachState+C   p  ; was: sub_31736
+Boss_DestroyerProtoUpdatePartAngles:                    ; was: sub_31736
                                         ; Boss_DestroyerProtoWaitForBattleStart+C   p
                 lea     (SecondaryEntityType).w,a4
                 bsr.w   Boss_DestroyerProtoAddOuterPartAngle
@@ -201,14 +195,14 @@ Boss_DestroyerProtoUpdatePartAngles:                    ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoUpdatePartAngles
 ; Advances one outer part angle by d0.w
-Boss_DestroyerProtoAddOuterPartAngle:                   ; CODE XREF: Boss_DestroyerProtoUpdatePartAngles+4   p  ; was: sub_31768
+Boss_DestroyerProtoAddOuterPartAngle:                   ; was: sub_31768
                                         ; Boss_DestroyerProtoUpdatePartAngles+C   p
                 add.w   d0,$40(a4)
                 andi.w  #$1FE,$40(a4)
                 rts
 ; End of function Boss_DestroyerProtoAddOuterPartAngle
 ; Advances both angle fields of one inner part by d1.w
-Boss_DestroyerProtoAddInnerPartAngles:                  ; CODE XREF: Boss_DestroyerProtoUpdatePartAngles+24   p  ; was: sub_31774
+Boss_DestroyerProtoAddInnerPartAngles:                  ; was: sub_31774
                                         ; Boss_DestroyerProtoUpdatePartAngles+2C   p
                 add.w   d1,$40(a4)
                 andi.w  #$1FE,$40(a4)
@@ -217,39 +211,39 @@ Boss_DestroyerProtoAddInnerPartAngles:                  ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoAddInnerPartAngles
 ; Contracts the radii of all six parts toward zero by eight per update
-Boss_DestroyerProtoContractPartRadii:                   ; CODE XREF: Boss_DestroyerProtoChooseAttack+4   p  ; was: sub_3178A
+Boss_DestroyerProtoContractPartRadii:                   ; was: sub_3178A
                                         ; Boss_DestroyerProtoRetreatAfterTwinShots+4   p
                 lea     (SecondaryEntityType).w,a4
                 move.w  #5,d0
-Boss_DestroyerProtoContractNextPartRadius:              ; CODE XREF: Boss_DestroyerProtoContractPartRadii+18   j  ; was: loc_31792
+Boss_DestroyerProtoContractNextPartRadius:              ; was: loc_31792
                 tst.w   $42(a4)
                 beq.s   Boss_DestroyerProtoContinueContractPartRadii
                 subi.w  #8,$42(a4)
-Boss_DestroyerProtoContinueContractPartRadii:           ; CODE XREF: Boss_DestroyerProtoContractPartRadii+C   j  ; was: loc_3179E
+Boss_DestroyerProtoContinueContractPartRadii:           ; was: loc_3179E
                 adda.w  #$60,a4                         ; '`'
                 dbf     d0,Boss_DestroyerProtoContractNextPartRadius
                 rts
 ; End of function Boss_DestroyerProtoContractPartRadii
 ; Expands all six part radii toward their configured values by eight per update
-Boss_DestroyerProtoExpandPartRadii:                     ; CODE XREF: Boss_DestroyerProtoMoveToTarget   p  ; was: sub_317A8
+Boss_DestroyerProtoExpandPartRadii:                     ; was: sub_317A8
                                         ; sub_3198C   p
                 lea     (SecondaryEntityType).w,a4
                 lea     Boss_DestroyerProtoPartRadiusTable(pc),a0
                 move.w  #5,d0
-Boss_DestroyerProtoExpandNextPartRadius:                ; CODE XREF: Boss_DestroyerProtoExpandPartRadii+24   j  ; was: loc_317B4
+Boss_DestroyerProtoExpandNextPartRadius:                ; was: loc_317B4
                 move.w  d0,d1
                 lsl.w   #1,d1
                 move.w  (a0,d1.w),d2
                 cmp.w   $42(a4),d2
                 beq.s   Boss_DestroyerProtoContinueExpandPartRadii
                 addi.w  #8,$42(a4)
-Boss_DestroyerProtoContinueExpandPartRadii:             ; CODE XREF: Boss_DestroyerProtoExpandPartRadii+18   j  ; was: loc_317C8
+Boss_DestroyerProtoContinueExpandPartRadii:             ; was: loc_317C8
                 adda.w  #$60,a4                         ; '`'
                 dbf     d0,Boss_DestroyerProtoExpandNextPartRadius
                 rts
 ; End of function Boss_DestroyerProtoExpandPartRadii
 ; Copies one base angle and its opposite across the six Destroyer Proto parts
-Boss_DestroyerProtoSynchronizePartAngles:               ; CODE XREF: Boss_DestroyerProtoRetreatAfterTwinShots+20   p  ; was: sub_317D2
+Boss_DestroyerProtoSynchronizePartAngles:               ; was: sub_317D2
                                         ; Boss_DestroyerProtoRetreatAfterSpread+20   p
                 move.w  (SecondaryEntityWork40).w,d2
                 move.w  d2,d3
@@ -265,7 +259,7 @@ Boss_DestroyerProtoSynchronizePartAngles:               ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoSynchronizePartAngles
 ; Maintains intro motion until the battle-start transition completes
-Boss_DestroyerProtoWaitForBattleStart:                  ; DATA XREF: ROM:00031512   o  ; was: sub_317FE
+Boss_DestroyerProtoWaitForBattleStart:                  ; was: sub_317FE
                 bsr.w   Boss_DestroyerProtoUpdateCircularVelocity
                 move.w  #$C,d0
                 move.w  #$10,d1

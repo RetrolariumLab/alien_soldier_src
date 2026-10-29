@@ -1,5 +1,5 @@
 ; Dispatches the current stage-transition state
-Stage_DispatchTransitionState:                          ; DATA XREF: ROM:0000FF42   o  ; was: sub_F0F0
+Stage_DispatchTransitionState:                          ; was: sub_F0F0
                 movea.w Stage_TransitionStateOffsets(pc,d0.w),a0
                 adda.l  #StageTransition_InitializeAsteroidField,a0
                 jmp     (a0)
@@ -86,7 +86,7 @@ Stage_TransitionStateOffsets:   dc.w    StageTransition_InitializeAsteroidField-
                 dc.w    StageTransition_SharedReturn-StageTransition_InitializeAsteroidField
 
 ; Transition graphics handler
-StageTransition_InitializeAsteroidField:                ; DATA XREF: Stage_DispatchTransitionState+4   o  ; was: sub_F19A
+StageTransition_InitializeAsteroidField:                ; was: sub_F19A
                                         ; ROM:Stage_TransitionStateOffsets   o
                 addq.w  #2,(StageStateOffset).w
                 move.b  #$80,(SceneSequenceFlags).w
@@ -103,7 +103,7 @@ StageTransition_InitializeAsteroidField:                ; DATA XREF: Stage_Dispa
                 move.w  #$3AC,(Entity_ObjectPool).w
                 clr.w   (PrimaryEntityState).w
 ; Handles graphics transition with scroll updates
-StageTransition_UpdateAsteroidFieldEntry:               ; DATA XREF: ROM:0000F0FE   o  ; was: loc_F1EC
+StageTransition_UpdateAsteroidFieldEntry:               ; was: loc_F1EC
                 bsr.w   StageTransition_FillAsteroidFieldVScroll
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll
                 subi.l  #$100,(AsteroidVScrollSpeed).w
@@ -115,7 +115,7 @@ StageTransition_UpdateAsteroidFieldEntry:               ; DATA XREF: ROM:0000F0F
                 rts
 ; End of function StageTransition_InitializeAsteroidField
 ; Transition to asteroids
-StageTransition_StartAsteroidFieldScroll:               ; DATA XREF: ROM:0000F100   o  ; was: sub_F218
+StageTransition_StartAsteroidFieldScroll:               ; was: sub_F218
                 bsr.w   StageTransition_FillAsteroidFieldVScroll
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll
                 tst.b   (AsteroidBoundaryFlag).w
@@ -127,7 +127,7 @@ StageTransition_StartAsteroidFieldScroll:               ; DATA XREF: ROM:0000F10
                 bra.w   StageTransition_RenderAsteroidField
 ; End of function StageTransition_StartAsteroidFieldScroll
 ; Asteroids scroll handler
-StageTransition_FinishAsteroidFieldScroll:              ; DATA XREF: ROM:0000F102   o  ; was: sub_F242
+StageTransition_FinishAsteroidFieldScroll:              ; was: sub_F242
                 bsr.w   StageTransition_FillAsteroidFieldVScroll
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll
                 cmpi.w  #$F600,(PrimaryCameraYPosition).w
@@ -138,7 +138,7 @@ StageTransition_FinishAsteroidFieldScroll:              ; DATA XREF: ROM:0000F10
                 jmp     Stage_TransitionToNextPhase
 ; End of function StageTransition_FinishAsteroidFieldScroll
 ; Transition to boss
-StageTransition_LoadDestroyerProtoAssets:               ; DATA XREF: ROM:0000F104   o  ; was: sub_F26C
+StageTransition_LoadDestroyerProtoAssets:               ; was: sub_F26C
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll
                 subq.w  #1,(StageSceneDelayTimer).w
                 bpl.w   StageTransition_SharedReturn
@@ -147,7 +147,7 @@ StageTransition_LoadDestroyerProtoAssets:               ; DATA XREF: ROM:0000F10
                 jmp     Boss_LoadAssetSet
 ; End of function StageTransition_LoadDestroyerProtoAssets
 ; Initializes the Destroyer Proto transition backdrop
-StageTransition_InitializeDestroyerProtoBackdrop:       ; DATA XREF: ROM:0000F106   o  ; was: sub_F288
+StageTransition_InitializeDestroyerProtoBackdrop:       ; was: sub_F288
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll
                 tst.w   (Entity_ObjectPool).w
                 bne.w   StageTransition_SharedReturn
@@ -156,7 +156,7 @@ StageTransition_InitializeDestroyerProtoBackdrop:       ; DATA XREF: ROM:0000F10
                 jsr     (Stage_StartPostBannerDelayAndPreloadNextPhase).l
                 lea     (DestroyerProtoIntroPaletteCommands).l,a0
                 jsr     (Gfx_LoadPaletteCommand).l
-StageTransition_ConfigureDestroyerProtoBackdrop:        ; CODE XREF: StageTransition_RestartDestroyerProtoBackdrop+14   j  ; was: loc_F2B0
+StageTransition_ConfigureDestroyerProtoBackdrop:        ; was: loc_F2B0
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$50,(RasterEffectIndex).w      ; 'P'
                 clr.w   (RasterEffectInitState).w
@@ -173,7 +173,7 @@ StageTransition_ConfigureDestroyerProtoBackdrop:        ; CODE XREF: StageTransi
                 rts
 ; End of function StageTransition_InitializeDestroyerProtoBackdrop
 ; Restarts the Destroyer Proto transition backdrop
-StageTransition_RestartDestroyerProtoBackdrop:          ; DATA XREF: ROM:0000F128   o  ; was: sub_F304
+StageTransition_RestartDestroyerProtoBackdrop:          ; was: sub_F304
                 move.w  #$C,(StageStateOffset).w
                 clr.w   (MessageSequenceState).w
                 clr.w   (BossBackdropFadeLevel).w
@@ -181,7 +181,7 @@ StageTransition_RestartDestroyerProtoBackdrop:          ; DATA XREF: ROM:0000F12
                 bra.w   StageTransition_ConfigureDestroyerProtoBackdrop
 ; End of function StageTransition_RestartDestroyerProtoBackdrop
 ; Updates the Destroyer Proto backdrop fade
-StageTransition_UpdateDestroyerProtoBackdropFade:       ; DATA XREF: ROM:0000F108   o  ; was: sub_F31C
+StageTransition_UpdateDestroyerProtoBackdropFade:       ; was: sub_F31C
                 move.l  #$2000000,(BackdropPositionA).w
                 bsr.w   StageTransition_UpdateBossBackdropPaletteFade
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
@@ -191,16 +191,16 @@ StageTransition_UpdateDestroyerProtoBackdropFade:       ; DATA XREF: ROM:0000F10
                 jsr     (Tilemap_QueueNextScrollingRow).l
                 bra.s   StageTransition_DestroyerProtoBackdropFadeReturn
 ; ---------------------------------------------------------------------------
-StageTransition_CompleteDestroyerProtoBackdropFade:     ; CODE XREF: StageTransition_UpdateDestroyerProtoBackdropFade+18   j  ; was: loc_F33E
+StageTransition_CompleteDestroyerProtoBackdropFade:     ; was: loc_F33E
                 addq.w  #2,(StageStateOffset).w
                 clr.b   (SceneSequenceFlags).w
                 clr.w   (StatusDisplayModeOffset).w
                 clr.b   (StageRouteFlags).w
-StageTransition_DestroyerProtoBackdropFadeReturn:       ; CODE XREF: StageTransition_UpdateDestroyerProtoBackdropFade+20   j  ; was: locret_F34E
+StageTransition_DestroyerProtoBackdropFadeReturn:       ; was: locret_F34E
                 rts
 ; End of function StageTransition_UpdateDestroyerProtoBackdropFade
 ; Updates the post-Destroyer Proto scroll transition
-StageTransition_UpdatePostDestroyerProtoScroll:         ; DATA XREF: ROM:0000F10A   o  ; was: sub_F350
+StageTransition_UpdatePostDestroyerProtoScroll:         ; was: sub_F350
                 bsr.w   StageTransition_UpdateBossBackdropPaletteFade
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
                 bsr.w   StageTransition_BuildBossBackdropRasterBuffers
@@ -214,12 +214,12 @@ StageTransition_UpdatePostDestroyerProtoScroll:         ; DATA XREF: ROM:0000F10
                 beq.s   StageTransition_CheckPostDestroyerProtoSecondarySpeed
                 subi.l  #$80,(BackdropVelocityB).w
                 addq.w  #1,d7
-StageTransition_CheckPostDestroyerProtoSecondarySpeed:  ; CODE XREF: StageTransition_UpdatePostDestroyerProtoScroll+28   j  ; was: loc_F384
+StageTransition_CheckPostDestroyerProtoSecondarySpeed:  ; was: loc_F384
                 cmpi.l  #$FFFF8000,(BackdropVelocityA).w
                 beq.s   StageTransition_CheckPostDestroyerProtoSpeedsComplete
                 subi.l  #$80,(BackdropVelocityA).w
                 addq.w  #1,d7
-StageTransition_CheckPostDestroyerProtoSpeedsComplete:  ; CODE XREF: StageTransition_UpdatePostDestroyerProtoScroll+3C   j  ; was: loc_F398
+StageTransition_CheckPostDestroyerProtoSpeedsComplete:  ; was: loc_F398
                 tst.w   d7
                 bne.s   StageTransition_PostDestroyerProtoScrollReturn
                 move.b  #1,(SceneSequenceFlags).w
@@ -228,19 +228,19 @@ StageTransition_CheckPostDestroyerProtoSpeedsComplete:  ; CODE XREF: StageTransi
                 move.w  #$166,(BackdropLinePhase).w
                 move.l  #$2000000,(BackdropPositionA).w
                 move.w  #$3C8,(Entity57Type).w
-StageTransition_AdvancePostDestroyerProtoScroll:        ; CODE XREF: StageTransition_UpdatePostDestroyerProtoScroll+1C   j  ; was: loc_F3C2
+StageTransition_AdvancePostDestroyerProtoScroll:        ; was: loc_F3C2
                 addi.l  #$10,(BackdropVelocityA).w
                 tst.w   (BackdropPositionA).w
                 bne.s   StageTransition_PostDestroyerProtoScrollReturn
                 addq.w  #2,(StageStateOffset).w
                 clr.l   (BackdropVelocityA).w
                 move.w  #$E0,(PrimaryCameraYPosition).w
-StageTransition_PostDestroyerProtoScrollReturn:         ; CODE XREF: StageTransition_UpdatePostDestroyerProtoScroll+4A   j  ; was: locret_F3DE
+StageTransition_PostDestroyerProtoScrollReturn:         ; was: locret_F3DE
                                         ; StageTransition_UpdatePostDestroyerProtoScroll+7E   j
                 rts
 ; End of function StageTransition_UpdatePostDestroyerProtoScroll
 ; Transition to boss
-StageTransition_WaitForShieldViperEntry:                ; DATA XREF: ROM:0000F10C   o  ; was: sub_F3E0
+StageTransition_WaitForShieldViperEntry:                ; was: sub_F3E0
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
                 bsr.w   StageTransition_BuildBossBackdropRasterBuffers
                 cmpi.w  #$FF80,(BackdropLinePhase).w
@@ -249,11 +249,11 @@ StageTransition_WaitForShieldViperEntry:                ; DATA XREF: ROM:0000F10
                 clr.w   (RasterEffectIndex).w
                 clr.w   (RasterEffectInitState).w
                 clr.w   (RasterLayoutOffset).w
-StageTransition_ShieldViperEntryWaitReturn:             ; CODE XREF: StageTransition_WaitForShieldViperEntry+E   j  ; was: locret_F400
+StageTransition_ShieldViperEntryWaitReturn:             ; was: locret_F400
                 rts
 ; End of function StageTransition_WaitForShieldViperEntry
 ; Loads the Shield Viper encounter assets
-StageTransition_LoadShieldViperAssets:                  ; DATA XREF: ROM:0000F10E   o  ; was: sub_F402
+StageTransition_LoadShieldViperAssets:                  ; was: sub_F402
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
                 bsr.w   StageTransition_UpdateShieldViperVScroll
                 move.b  #0,(SceneSequenceFlags).w
@@ -265,7 +265,7 @@ StageTransition_LoadShieldViperAssets:                  ; DATA XREF: ROM:0000F10
                 rts
 ; End of function StageTransition_LoadShieldViperAssets
 ; Builds the Shield Viper transition backdrop
-StageTransition_UpdateShieldViperBackdrop:              ; DATA XREF: ROM:0000F110   o  ; was: sub_F42C
+StageTransition_UpdateShieldViperBackdrop:              ; was: sub_F42C
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
                 bsr.w   StageTransition_UpdateShieldViperVScroll
                 bsr.w   StageTransition_QueueShieldViperBackdropRow
@@ -275,7 +275,7 @@ StageTransition_UpdateShieldViperBackdrop:              ; DATA XREF: ROM:0000F11
                 rts
 ; End of function StageTransition_UpdateShieldViperBackdrop
 ; Begins the Shield Viper transition fade
-StageTransition_BeginShieldViperFade:                   ; DATA XREF: ROM:0000F112   o  ; was: sub_F448
+StageTransition_BeginShieldViperFade:                   ; was: sub_F448
                 bsr.w   StageTransition_ApplySegmentedBackdropMotion
                 bsr.w   StageTransition_UpdateShieldViperVScroll
                 tst.w   (Entity_ObjectPool).w
@@ -290,7 +290,7 @@ StageTransition_BeginShieldViperFade:                   ; DATA XREF: ROM:0000F11
                 bra.w   StageTransition_ApplyBossBackdropPaletteFade
 ; End of function StageTransition_BeginShieldViperFade
 ; Completes the Shield Viper transition fade
-StageTransition_CompleteShieldViperFade:                ; DATA XREF: ROM:0000F114   o  ; was: sub_F484
+StageTransition_CompleteShieldViperFade:                ; was: sub_F484
                 bsr.w   StageTransition_ApplyBossBackdropPaletteFade
                 jsr     (Tilemap_QueueNextScrollingRow).l
                 tst.w   (TilemapRowCountdown).w
@@ -306,19 +306,19 @@ StageTransition_CompleteShieldViperFade:                ; DATA XREF: ROM:0000F11
                 bra.w   Gfx_AdjustTransitionTileIndexRows
 ; End of function StageTransition_CompleteShieldViperFade
 ; Waits for the Shield Viper transition VRAM transfer
-StageTransition_WaitForShieldViperVramTransfer:         ; DATA XREF: ROM:0000F116   o  ; was: sub_F4C6
+StageTransition_WaitForShieldViperVramTransfer:         ; was: sub_F4C6
                 bsr.w   StageTransition_ApplyBossBackdropPaletteFade
                 subq.w  #1,(StageTransitionTimer).w
                 bmi.s   StageTransition_UpdateShieldViperVramTransfer
                 rts
 ; ---------------------------------------------------------------------------
-StageTransition_UpdateShieldViperVramTransfer:          ; CODE XREF: StageTransition_WaitForShieldViperVramTransfer+8   j  ; was: loc_F4D2
+StageTransition_UpdateShieldViperVramTransfer:          ; was: loc_F4D2
                 cmpi.w  #$1B,(TilemapRowCountdown).w
                 bmi.s   StageTransition_CompleteShieldViperVramTransfer
                 jmp     Tilemap_QueueNextScrollingRow
 ; End of function StageTransition_WaitForShieldViperVramTransfer
 ; Completes the Shield Viper transition VRAM transfer
-StageTransition_CompleteShieldViperVramTransfer:        ; CODE XREF: StageTransition_WaitForShieldViperVramTransfer+12   j  ; was: sub_F4E0
+StageTransition_CompleteShieldViperVramTransfer:        ; was: sub_F4E0
                 move.w  #$6000,(TilemapTransferBase).w
                 clr.w   (TilemapRowXOrFillWord).w
                 jsr     (Tilemap_QueueNextConstantRow).l
@@ -335,7 +335,7 @@ StageTransition_CompleteShieldViperVramTransfer:        ; CODE XREF: StageTransi
                 jmp     Stage_StartTimeBonusAndPreloadNextPhase
 ; End of function StageTransition_CompleteShieldViperVramTransfer
 ; Waits for the Shield Viper exit conditions
-StageTransition_WaitForShieldViperExit:                 ; DATA XREF: ROM:0000F118   o  ; was: sub_F528
+StageTransition_WaitForShieldViperExit:                 ; was: sub_F528
                 bsr.w   StageTransition_ApplyBossBackdropPaletteFade
                 bsr.w   StageTransition_BuildBossBackdropRasterBuffers
                 tst.w   (BossBackdropFadeLevel).w
@@ -344,7 +344,7 @@ StageTransition_WaitForShieldViperExit:                 ; DATA XREF: ROM:0000F11
                 subq.w  #1,(BossBackdropFadeLevel).w
                 rts
 ; ---------------------------------------------------------------------------
-StageTransition_CheckShieldViperMessageComplete:        ; CODE XREF: StageTransition_WaitForShieldViperExit+C   j  ; was: loc_F53E
+StageTransition_CheckShieldViperMessageComplete:        ; was: loc_F53E
                                         ; StageTransition_WaitForShieldViperExit+E   j
                 tst.w   (MessageSequenceState).w
                 bne.s   StageTransition_ShieldViperExitWaitReturn
@@ -353,11 +353,11 @@ StageTransition_CheckShieldViperMessageComplete:        ; CODE XREF: StageTransi
                 addq.w  #2,(StageStateOffset).w
                 addq.w  #2,(StageTableIndex).w
                 move.l  #$10000,(WolfGaropaBackdropYVel).w
-StageTransition_ShieldViperExitWaitReturn:              ; CODE XREF: StageTransition_WaitForShieldViperExit+1A   j  ; was: locret_F55E
+StageTransition_ShieldViperExitWaitReturn:              ; was: locret_F55E
                 rts
 ; End of function StageTransition_WaitForShieldViperExit
 ; Transition to boss
-StageTransition_UpdateWolfGaropaApproach:               ; DATA XREF: ROM:0000F11A   o  ; was: sub_F560
+StageTransition_UpdateWolfGaropaApproach:               ; was: sub_F560
                 bsr.w   StageTransition_UpdateWolfGaropaBackdropCoordinates
                 bsr.w   StageTransition_BuildBossBackdropRasterBuffers
                 subi.l  #$8000,(BackdropPositionA).w
@@ -367,17 +367,17 @@ StageTransition_UpdateWolfGaropaApproach:               ; DATA XREF: ROM:0000F11
                 clr.w   (SecondaryCameraYPos+2).w
                 move.w  #$12,(PalettePrimaryIndex).w
                 bsr.w   StageTransition_InitializeWolfGaropaArenaBoundaries
-StageTransition_WolfGaropaApproachReturn:               ; CODE XREF: StageTransition_UpdateWolfGaropaApproach+18   j  ; was: locret_F58C
+StageTransition_WolfGaropaApproachReturn:               ; was: locret_F58C
                 rts
 ; End of function StageTransition_UpdateWolfGaropaApproach
 ; Updates the Wolf Garopa backdrop approach
-StageTransition_UpdateWolfGaropaBackdropApproach:       ; DATA XREF: ROM:0000F11C   o  ; was: sub_F58E
+StageTransition_UpdateWolfGaropaBackdropApproach:       ; was: sub_F58E
                 bsr.w   StageTransition_UpdateWolfGaropaBackdropCoordinates
                 move.w  (SecondaryCameraYPos).w,(PrimaryCameraYPosition).w
                 cmpi.w  #$F400,(SecondaryCameraYPos).w
                 bpl.s   StageTransition_CheckWolfGaropaBackdropPosition
                 subi.l  #$400,(WolfGaropaBackdropYVel).w
-StageTransition_CheckWolfGaropaBackdropPosition:        ; CODE XREF: StageTransition_UpdateWolfGaropaBackdropApproach+10   j  ; was: loc_F5A8
+StageTransition_CheckWolfGaropaBackdropPosition:        ; was: loc_F5A8
                 cmpi.w  #$F3E0,(SecondaryCameraYPos).w
                 bpl.w   StageTransition_SharedReturn
                 addq.w  #2,(StageStateOffset).w
@@ -395,7 +395,7 @@ StageTransition_CheckWolfGaropaBackdropPosition:        ; CODE XREF: StageTransi
                 bra.w   Gfx_AdjustTransitionTileIndexRows
 ; End of function StageTransition_UpdateWolfGaropaBackdropApproach
 ; Renders the Wolf Garopa transition backdrop
-StageTransition_RenderWolfGaropaBackdrop:               ; DATA XREF: ROM:0000F11E   o  ; was: sub_F5EE
+StageTransition_RenderWolfGaropaBackdrop:               ; was: sub_F5EE
                 move.l  (WolfGaropaScrollSpeed).w,d0
                 sub.l   d0,(SecondaryCameraXPos).w
                 move.w  (SecondaryCameraXPos).w,(PrimaryCameraXPosition).w
@@ -407,11 +407,11 @@ StageTransition_RenderWolfGaropaBackdrop:               ; DATA XREF: ROM:0000F11
                 move.w  #$6000,(TilemapTransferBase).w
                 move.w  #$1F,(TilemapRowCountdown).w
                 clr.w   (TilemapRowXOrFillWord).w
-StageTransition_WolfGaropaBackdropRenderReturn:         ; CODE XREF: StageTransition_RenderWolfGaropaBackdrop+1E   j  ; was: locret_F622
+StageTransition_WolfGaropaBackdropRenderReturn:         ; was: locret_F622
                 rts
 ; End of function StageTransition_RenderWolfGaropaBackdrop
 ; Finalizes the Wolf Garopa transition backdrop
-StageTransition_FinalizeWolfGaropaBackdrop:             ; DATA XREF: ROM:0000F120   o  ; was: sub_F624
+StageTransition_FinalizeWolfGaropaBackdrop:             ; was: sub_F624
                 bsr.w   StageTransition_UpdateWolfGaropaHorizontalScroll
                 move.w  (PrimaryCameraXPosition).w,(SecondaryCameraXPos).w
                 move.w  (PrimaryCameraYPosition).w,(SecondaryCameraYPos).w
@@ -425,11 +425,11 @@ StageTransition_FinalizeWolfGaropaBackdrop:             ; DATA XREF: ROM:0000F12
                 clr.w   (Entity57State).w
                 clr.w   (Entity57Flags).w
                 clr.b   (Entity57Status).w
-StageTransition_WolfGaropaBackdropFinalizeReturn:       ; CODE XREF: StageTransition_FinalizeWolfGaropaBackdrop+1A   j  ; was: locret_F660
+StageTransition_WolfGaropaBackdropFinalizeReturn:       ; was: locret_F660
                 rts
 ; End of function StageTransition_FinalizeWolfGaropaBackdrop
 ; Restarts Wolf Garopa backdrop finalization
-StageTransition_RestartWolfGaropaBackdropFinalize:      ; DATA XREF: ROM:0000F12A   o  ; was: sub_F662
+StageTransition_RestartWolfGaropaBackdropFinalize:      ; was: sub_F662
                 move.w  #$24,(StageStateOffset).w       ; '$'
                 move.l  #$FFF88000,(WolfGaropaScrollSpeed).w
                 bsr.w   StageTransition_InitializeWolfGaropaArenaBoundaries
@@ -437,12 +437,12 @@ StageTransition_RestartWolfGaropaBackdropFinalize:      ; DATA XREF: ROM:0000F12
                 rts
 ; End of function StageTransition_RestartWolfGaropaBackdropFinalize
 ; Advances after the Wolf Garopa backdrop
-StageTransition_AdvanceAfterWolfGaropaBackdrop:         ; DATA XREF: ROM:0000F122   o  ; was: sub_F67C
+StageTransition_AdvanceAfterWolfGaropaBackdrop:         ; was: sub_F67C
                 bsr.w   StageTransition_UpdateWolfGaropaHorizontalScroll
                 jmp     Stage_TransitionToNextPhase
 ; End of function StageTransition_AdvanceAfterWolfGaropaBackdrop
 ; Loads the Wolf Garopa encounter assets
-StageTransition_LoadWolfGaropaAssets:                   ; DATA XREF: ROM:0000F124   o  ; was: sub_F686
+StageTransition_LoadWolfGaropaAssets:                   ; was: sub_F686
                 bsr.w   StageTransition_DecelerateWolfGaropaScroll
                 tst.w   (MessageSequenceState).w
                 bne.w   StageTransition_SharedReturn
@@ -452,18 +452,18 @@ StageTransition_LoadWolfGaropaAssets:                   ; DATA XREF: ROM:0000F12
                 jmp     Boss_LoadAssetSet
 ; End of function StageTransition_LoadWolfGaropaAssets
 ; Waits for the Wolf Garopa object slots to clear
-StageTransition_WaitForWolfGaropaObjectClear:           ; DATA XREF: ROM:0000F126   o  ; was: sub_F6A6
+StageTransition_WaitForWolfGaropaObjectClear:           ; was: sub_F6A6
                 bsr.w   StageTransition_UpdateWolfGaropaHorizontalScroll
                 tst.w   (Entity_ObjectPool).w
                 bne.s   StageTransition_WolfGaropaObjectClearWaitReturn
                 move.w  #$30,(StageStateOffset).w       ; '0'
                 move.w  #$2E,(MessageSequenceState).w   ; '.'
                 move.w  #$80,(StageTransitionTimer).w
-StageTransition_WolfGaropaObjectClearWaitReturn:        ; CODE XREF: StageTransition_WaitForWolfGaropaObjectClear+8   j  ; was: locret_F6C2
+StageTransition_WolfGaropaObjectClearWaitReturn:        ; was: locret_F6C2
                 rts
 ; End of function StageTransition_WaitForWolfGaropaObjectClear
 ; Waits for the Wolf Garopa transition trigger
-StageTransition_WaitForWolfGaropaTransitionTrigger:     ; DATA XREF: ROM:0000F12C   o  ; was: sub_F6C4
+StageTransition_WaitForWolfGaropaTransitionTrigger:     ; was: sub_F6C4
                 bsr.w   StageTransition_UpdateWolfGaropaHorizontalScroll
                 tst.w   (MessageSequenceState).w
                 bne.s   StageTransition_WolfGaropaTriggerWaitReturn
@@ -477,21 +477,21 @@ StageTransition_WaitForWolfGaropaTransitionTrigger:     ; DATA XREF: ROM:0000F12
                 move.l  #StageTransitionMessageSequence_Shared,(StageMessageCursor).w
                 bra.w   Stage_StartInterstageTransition
 ; ---------------------------------------------------------------------------
-StageTransition_WolfGaropaTriggerWaitReturn:            ; CODE XREF: StageTransition_WaitForWolfGaropaTransitionTrigger+8   j  ; was: locret_F6F2
+StageTransition_WolfGaropaTriggerWaitReturn:            ; was: locret_F6F2
                                         ; StageTransition_WaitForWolfGaropaTransitionTrigger+E   j
                 rts
 ; End of function StageTransition_WaitForWolfGaropaTransitionTrigger
 ; Updates the Wolf Garopa transition scroll
-StageTransition_UpdateWolfGaropaScroll:                 ; DATA XREF: ROM:0000F12E   o  ; was: sub_F6F4
+StageTransition_UpdateWolfGaropaScroll:                 ; was: sub_F6F4
                 bsr.w   StageTransition_UpdateWolfGaropaHorizontalScroll
                 rts
 ; End of function StageTransition_UpdateWolfGaropaScroll
 ; Decelerates the Wolf Garopa transition scroll
-StageTransition_DecelerateWolfGaropaScroll:             ; CODE XREF: StageTransition_LoadWolfGaropaAssets   p  ; was: sub_F6FA
+StageTransition_DecelerateWolfGaropaScroll:             ; was: sub_F6FA
                 cmpi.l  #$FFFF0000,(StageMotionXDelta).w
                 beq.s   StageTransition_UpdateWolfGaropaCameraPosition
                 subi.l  #$800,(StageMotionXDelta).w
-StageTransition_UpdateWolfGaropaCameraPosition:         ; CODE XREF: StageTransition_DecelerateWolfGaropaScroll+8   j  ; was: loc_F70C
+StageTransition_UpdateWolfGaropaCameraPosition:         ; was: loc_F70C
                 move.l  (WolfGaropaScrollSpeed).w,d0
                 cmpi.l  #$FFF60000,d0
                 bmi.s   StageTransition_UpdateWolfGaropaHorizontalScroll
@@ -500,7 +500,7 @@ StageTransition_UpdateWolfGaropaCameraPosition:         ; CODE XREF: StageTransi
                 move.l  d0,(WolfGaropaScrollSpeed).w
 ; End of function StageTransition_DecelerateWolfGaropaScroll
 ; Updates the Wolf Garopa horizontal transition scroll
-StageTransition_UpdateWolfGaropaHorizontalScroll:       ; CODE XREF: StageTransition_FinalizeWolfGaropaBackdrop   p  ; was: sub_F724
+StageTransition_UpdateWolfGaropaHorizontalScroll:       ; was: sub_F724
                                         ; StageTransition_AdvanceAfterWolfGaropaBackdrop   p
                 move.l  (WolfGaropaScrollSpeed).w,d0
                 sub.l   d0,(PrimaryCameraXPosition).w
@@ -513,14 +513,14 @@ StageTransition_UpdateWolfGaropaHorizontalScroll:       ; CODE XREF: StageTransi
                 bmi.s   StageTransition_WolfGaropaHorizontalScrollReturn
                 clr.b   (WolfGaropaEffectActive).w
                 bsr.w   Gfx_LoadWolfGaropaTransitionTiles
-StageTransition_ClampWolfGaropaHorizontalScroll:        ; CODE XREF: StageTransition_UpdateWolfGaropaHorizontalScroll+C   j  ; was: loc_F74A
+StageTransition_ClampWolfGaropaHorizontalScroll:        ; was: loc_F74A
                 andi.w  #$3F,(PrimaryCameraXPosition).w  ; '?'
-StageTransition_WolfGaropaHorizontalScrollReturn:       ; CODE XREF: StageTransition_UpdateWolfGaropaHorizontalScroll+E   j  ; was: locret_F750
+StageTransition_WolfGaropaHorizontalScrollReturn:       ; was: locret_F750
                                         ; StageTransition_UpdateWolfGaropaHorizontalScroll+14   j
                 rts
 ; End of function StageTransition_UpdateWolfGaropaHorizontalScroll
 ; Loads the Wolf Garopa transition tiles
-Gfx_LoadWolfGaropaTransitionTiles:                      ; CODE XREF: StageTransition_UpdateWolfGaropaHorizontalScroll+22   p  ; was: sub_F752
+Gfx_LoadWolfGaropaTransitionTiles:                      ; was: sub_F752
                                         ; Effect_WolfGaropaBoundaryMain+28   p
                 lea     Gfx_WolfGaropaTransitionTileDmaDescriptor(pc),a0
                 nop
@@ -531,14 +531,12 @@ Gfx_LoadWolfGaropaTransitionTiles:                      ; CODE XREF: StageTransi
 ; End of function Gfx_LoadWolfGaropaTransitionTiles
 ; ---------------------------------------------------------------------------
 Gfx_WolfGaropaTransitionTileDmaDescriptor:  dc.b    $44, $58, $40, 0, 1, 3, $1F  ; was: byte_F76A
-                                        ; DATA XREF: Gfx_LoadWolfGaropaTransitionTiles   o
                 dc.b    $1E, $21, $20, $23, $22, $25, $24
 Gfx_WolfGaropaTransitionIndexedRowDescriptor:   dc.b    $4C, $50, $40, 0, 4, 1, $26, $27  ; was: byte_F778
-                                        ; DATA XREF: Gfx_LoadWolfGaropaTransitionTiles+C   o
                 dc.b    $26, $27, $26, $28, $29, $28, $29, $28
 
 ; Updates the Wolf Garopa transition backdrop coordinates
-StageTransition_UpdateWolfGaropaBackdropCoordinates:    ; CODE XREF: StageTransition_UpdateWolfGaropaApproach   p  ; was: sub_F788
+StageTransition_UpdateWolfGaropaBackdropCoordinates:    ; was: sub_F788
                                         ; StageTransition_UpdateWolfGaropaBackdropApproach   p
                 move.l  (WolfGaropaBackdropYVel).w,d0
                 sub.l   d0,(SecondaryCameraYPos).w
@@ -551,7 +549,7 @@ StageTransition_UpdateWolfGaropaBackdropCoordinates:    ; CODE XREF: StageTransi
                 bra.w   Tilemap_QueueRowFromDescriptor
 ; End of function StageTransition_UpdateWolfGaropaBackdropCoordinates
 ; Adjusts tile indices in the stage-transition rows
-Gfx_AdjustTransitionTileIndexRows:                      ; CODE XREF: StageTransition_CompleteShieldViperFade+3E   j  ; was: sub_F7AC
+Gfx_AdjustTransitionTileIndexRows:                      ; was: sub_F7AC
                                         ; StageTransition_UpdateWolfGaropaBackdropApproach+5C   j
                 movea.l #(LargeTilemapBuffer+$300),a0
                 moveq   #$30,d7                         ; '0'

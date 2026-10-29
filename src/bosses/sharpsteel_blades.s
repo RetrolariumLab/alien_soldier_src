@@ -1,6 +1,6 @@
 ; Sharpsteel complex-phase states, blade collision/graphics, and pose commands
 
-Boss_SharpsteelWaitForComplexAlignmentState:            ; DATA XREF: ROM:00047C88   o  ; was: sub_484E4
+Boss_SharpsteelWaitForComplexAlignmentState:            ; was: sub_484E4
                 move.w  $314(a5),d0
                 sub.w   (Entity57YPos).w,d0
                 cmpi.w  #$38,d0                         ; '8'
@@ -8,7 +8,7 @@ Boss_SharpsteelWaitForComplexAlignmentState:            ; DATA XREF: ROM:00047C8
                 bsr.w   Boss_SharpsteelUpdateBladeAnglesFromPose
                 bra.w   Boss_SharpsteelUpdateBladePresentation
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelInitializeComplexAcceleration:           ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+C   j
+Boss_SharpsteelInitializeComplexAcceleration:
                 addq.w  #2,4(a5)
                 move.w  #8,(PlaneAShakeLevel).w
                 move.w  #2,(PlaneBShakeLevel).w
@@ -21,8 +21,7 @@ Boss_SharpsteelInitializeComplexAcceleration:           ; CODE XREF: Boss_Sharps
                 neg.l   $18(a5)
                 neg.l   (Entity57XVel).w
 ; Advances the complex-phase motion until the blade animation trigger fires
-Boss_SharpsteelAccelerateComplexMotionState:            ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+46   j  ; was: loc_48534
-                                        ; DATA XREF: ROM:00047C8A   o
+Boss_SharpsteelAccelerateComplexMotionState:            ; was: loc_48534
                 addi.l  #$1200,$1C(a5)
                 btst    #0,$23E(a5)
                 bne.s   Boss_SharpsteelBeginComplexOscillation
@@ -33,7 +32,7 @@ Boss_SharpsteelAccelerateComplexMotionState:            ; CODE XREF: Boss_Sharps
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelBeginComplexOscillation:                 ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+5E   j
+Boss_SharpsteelBeginComplexOscillation:
                 addq.w  #2,4(a5)
                 bset    #1,(Entity57Work5A).w
                 clr.w   $11E(a5)
@@ -42,10 +41,10 @@ Boss_SharpsteelBeginComplexOscillation:                 ; CODE XREF: Boss_Sharps
                 tst.w   $18(a5)
                 bpl.s   Boss_SharpsteelApplyComplexHorizontalVelocity
                 neg.l   d0
-Boss_SharpsteelApplyComplexHorizontalVelocity:          ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+96   j
+Boss_SharpsteelApplyComplexHorizontalVelocity:
                 move.l  d0,$18(a5)
 ; Oscillates vertically until the blade pose supplies its completion trigger
-Boss_SharpsteelComplexOscillationState:                 ; DATA XREF: ROM:00047C8C   o  ; was: loc_48582
+Boss_SharpsteelComplexOscillationState:                 ; was: loc_48582
                 tst.w   $58(a5)
                 bmi.s   Boss_SharpsteelBeginBladeShotBurst
                 bsr.w   Boss_SharpsteelUpdateVerticalOscillation
@@ -53,35 +52,35 @@ Boss_SharpsteelComplexOscillationState:                 ; DATA XREF: ROM:00047C8
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelBeginBladeShotBurst:                     ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+A2   j
+Boss_SharpsteelBeginBladeShotBurst:
                 addq.w  #2,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 clr.w   $23E(a5)
                 move.w  #3,$11C(a5)
 ; Emits pose-triggered blade shots while steering toward the player
-Boss_SharpsteelBladeShotBurstState:                     ; DATA XREF: ROM:00047C8E   o  ; was: loc_485AE
+Boss_SharpsteelBladeShotBurstState:                     ; was: loc_485AE
                 btst    #1,$23E(a5)
                 beq.s   Boss_SharpsteelCheckBladeShotBurstRepeat
                 bsr.w   Boss_SharpsteelSpawnSixBladeShots
-Boss_SharpsteelCheckBladeShotBurstRepeat:               ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+D0   j
+Boss_SharpsteelCheckBladeShotBurstRepeat:
                 btst    #0,$23E(a5)
                 beq.s   Boss_SharpsteelUpdateBladeShotBurstMotion
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_SharpsteelFinishBladeShotBurst
-Boss_SharpsteelUpdateBladeShotBurstMotion:              ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+DC   j
+Boss_SharpsteelUpdateBladeShotBurstMotion:
                 bsr.w   Boss_SharpsteelSteerTowardPlayerX
                 bsr.w   Boss_SharpsteelUpdateVerticalOscillation
                 lea     Boss_SharpsteelComplexExitPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelFinishBladeShotBurst:                    ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+EC   j
+Boss_SharpsteelFinishBladeShotBurst:
                 addq.w  #2,4(a5)
 ; Falls to the lower bound before returning to the post-dive cycle selector
-Boss_SharpsteelComplexExitFallState:                    ; DATA XREF: ROM:00047C90   o  ; was: loc_485E8
+Boss_SharpsteelComplexExitFallState:                    ; was: loc_485E8
                 addi.l  #$2000,$1C(a5)
                 cmpi.w  #$200,$14(a5)
                 bpl.w   Boss_SharpsteelSelectPostDiveCycle
@@ -90,7 +89,7 @@ Boss_SharpsteelComplexExitFallState:                    ; DATA XREF: ROM:00047C9
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; End of function Boss_SharpsteelWaitForComplexAlignmentState
 ; Alternates vertical acceleration between the Y $170/$172 bounds
-Boss_SharpsteelUpdateVerticalOscillation:               ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+A4   p  ; was: sub_48604
+Boss_SharpsteelUpdateVerticalOscillation:               ; was: sub_48604
                                         ; Boss_SharpsteelWaitForComplexAlignmentState+F2   p
                 tst.w   $11E(a5)
                 bne.s   Boss_SharpsteelUpdateDownwardOscillation
@@ -100,30 +99,30 @@ Boss_SharpsteelUpdateVerticalOscillation:               ; CODE XREF: Boss_Sharps
                 bmi.s   Boss_SharpsteelToggleVerticalOscillationPhase
                 cmpi.l  #$FFFE8000,d0
                 bmi.s   Boss_SharpsteelUpdateVerticalOscillationReturn
-Boss_SharpsteelAccelerateOscillationUpward:             ; CODE XREF: Boss_SharpsteelUpdateVerticalOscillation+A   j
+Boss_SharpsteelAccelerateOscillationUpward:
                 subi.l  #$E00,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelUpdateDownwardOscillation:               ; CODE XREF: Boss_SharpsteelUpdateVerticalOscillation+4   j
+Boss_SharpsteelUpdateDownwardOscillation:
                 move.l  $1C(a5),d0
                 bmi.s   Boss_SharpsteelAccelerateOscillationDownward
                 cmpi.w  #$172,$14(a5)
                 bpl.s   Boss_SharpsteelToggleVerticalOscillationPhase
                 cmpi.l  #$18000,d0
                 bpl.s   Boss_SharpsteelUpdateVerticalOscillationReturn
-Boss_SharpsteelAccelerateOscillationDownward:           ; CODE XREF: Boss_SharpsteelUpdateVerticalOscillation+2A   j
+Boss_SharpsteelAccelerateOscillationDownward:
                 addi.l  #$E00,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelToggleVerticalOscillationPhase:          ; CODE XREF: Boss_SharpsteelUpdateVerticalOscillation+12   j
+Boss_SharpsteelToggleVerticalOscillationPhase:
                                         ; Boss_SharpsteelUpdateVerticalOscillation+32   j
                 eori.w  #2,$11E(a5)
-Boss_SharpsteelUpdateVerticalOscillationReturn:         ; CODE XREF: Boss_SharpsteelUpdateVerticalOscillation+1A   j
+Boss_SharpsteelUpdateVerticalOscillationReturn:
                                         ; Boss_SharpsteelUpdateVerticalOscillation+3A   j
                 rts
 ; End of function Boss_SharpsteelUpdateVerticalOscillation
 ; Accelerates horizontal velocity toward PlayerCenterX, with speed limits
-Boss_SharpsteelSteerTowardPlayerX:                      ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState:Boss_SharpsteelUpdateBladeShotBurstMotion   p  ; was: sub_48652
+Boss_SharpsteelSteerTowardPlayerX:                      ; was: sub_48652
                 move.w  (PlayerCenterX).w,d0
                 sub.w   $10(a5),d0
                 bpl.s   Boss_SharpsteelHandlePlayerRightOfRoot
@@ -131,26 +130,26 @@ Boss_SharpsteelSteerTowardPlayerX:                      ; CODE XREF: Boss_Sharps
                 bpl.s   Boss_SharpsteelAccelerateLeftTowardPlayer
                 cmpi.l  #$FFFD8000,$18(a5)
                 bmi.s   Boss_SharpsteelHorizontalSteeringReturn
-Boss_SharpsteelAccelerateLeftTowardPlayer:              ; CODE XREF: Boss_SharpsteelSteerTowardPlayerX+E   j
+Boss_SharpsteelAccelerateLeftTowardPlayer:
                 subi.l  #$3000,$18(a5)
-Boss_SharpsteelHorizontalSteeringReturn:                ; CODE XREF: Boss_SharpsteelSteerTowardPlayerX+18   j
+Boss_SharpsteelHorizontalSteeringReturn:
                                         ; Boss_SharpsteelSteerTowardPlayerX+32   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelHandlePlayerRightOfRoot:                 ; CODE XREF: Boss_SharpsteelSteerTowardPlayerX+8   j
+Boss_SharpsteelHandlePlayerRightOfRoot:
                 move.l  $18(a5),d0
                 bmi.s   Boss_SharpsteelAccelerateRightTowardPlayer
                 cmpi.l  #$28000,$18(a5)
                 bpl.s   Boss_SharpsteelHorizontalSteeringReturn
-Boss_SharpsteelAccelerateRightTowardPlayer:             ; CODE XREF: Boss_SharpsteelSteerTowardPlayerX+28   j
+Boss_SharpsteelAccelerateRightTowardPlayer:
                 addi.l  #$3000,$18(a5)
                 rts
 ; End of function Boss_SharpsteelSteerTowardPlayerX
 ; Runs blade pose commands, palette updates, core frames, and part rendering
-Boss_SharpsteelUpdateBladeAssembly:                     ; CODE XREF: Boss_SharpsteelRunBladeEntranceDelayState+A   j  ; was: sub_48690
+Boss_SharpsteelUpdateBladeAssembly:                     ; was: sub_48690
                                         ; Boss_SharpsteelWaitForPlayerAfterBladeEntranceState+A   j
                 bsr.w   Boss_SharpsteelRunBladePoseCommands
-Boss_SharpsteelUpdateBladePresentation:                 ; CODE XREF: Boss_SharpsteelManualControlState+40   j
+Boss_SharpsteelUpdateBladePresentation:
                                         ; Boss_SharpsteelWaitForComplexAlignmentState+12   j
                 bsr.w   Boss_SharpsteelUpdateBackgroundPaletteFade
                 bsr.w   Boss_SharpsteelUpdateCoreSpriteFrames
@@ -158,31 +157,31 @@ Boss_SharpsteelUpdateBladePresentation:                 ; CODE XREF: Boss_Sharps
                 jmp     Sprite_BeginMetaspritePartTraversal
 ; End of function Boss_SharpsteelUpdateBladeAssembly
 ; Clears the sprite-priority bit on all 18 embedded blade parts
-Boss_SharpsteelClearBladePartPriorityBits:              ; CODE XREF: Boss_SharpsteelInitializeFallingShotCycle+4E   p  ; was: sub_486A4
+Boss_SharpsteelClearBladePartPriorityBits:              ; was: sub_486A4
                                         ; Boss_SharpsteelInitializeAttackSelection+82   p
                 movea.w a5,a0
                 moveq   #7,d0
                 moveq   #$11,d7
-Boss_SharpsteelClearBladePartPriorityBitsLoop:          ; CODE XREF: Boss_SharpsteelClearBladePartPriorityBits+E   j
+Boss_SharpsteelClearBladePartPriorityBitsLoop:
                 bclr    d0,$E(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_SharpsteelClearBladePartPriorityBitsLoop
                 rts
 ; End of function Boss_SharpsteelClearBladePartPriorityBits
 ; Sets the sprite-priority bit on all 18 embedded blade parts
-Boss_SharpsteelSetBladePartPriorityBits:                ; CODE XREF: Boss_SharpsteelInitializeBladeEntrance+4A   p  ; was: sub_486B8
+Boss_SharpsteelSetBladePartPriorityBits:                ; was: sub_486B8
                                         ; Boss_SharpsteelOpeningVerticalTurnState+2C   p
                 movea.w a5,a0
                 moveq   #7,d0
                 moveq   #$11,d7
-Boss_SharpsteelSetBladePartPriorityBitsLoop:            ; CODE XREF: Boss_SharpsteelSetBladePartPriorityBits+E   j
+Boss_SharpsteelSetBladePartPriorityBitsLoop:
                 bset    d0,$E(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_SharpsteelSetBladePartPriorityBitsLoop
                 rts
 ; End of function Boss_SharpsteelSetBladePartPriorityBits
 ; Clears sprite priority on blade-part group A
-Boss_SharpsteelClearBladeGroupAPriorityBits:            ; CODE XREF: Boss_SharpsteelInitializeDiveAttack+46   p  ; was: sub_486CC
+Boss_SharpsteelClearBladeGroupAPriorityBits:            ; was: sub_486CC
                 bclr    #7,$24E(a5)
                 bclr    #7,$2AE(a5)
                 bclr    #7,$30E(a5)
@@ -190,7 +189,7 @@ Boss_SharpsteelClearBladeGroupAPriorityBits:            ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelClearBladeGroupAPriorityBits
 ; Sets sprite priority on blade-part group A
-Boss_SharpsteelSetBladeGroupAPriorityBits:              ; CODE XREF: Boss_SharpsteelAccelerateBladeAssemblyState+5E   p  ; was: sub_486E6
+Boss_SharpsteelSetBladeGroupAPriorityBits:              ; was: sub_486E6
                                         ; Boss_SharpsteelFarRangeBladeAttackState+10   p
                 bset    #7,$24E(a5)
                 bset    #7,$2AE(a5)
@@ -199,7 +198,7 @@ Boss_SharpsteelSetBladeGroupAPriorityBits:              ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelSetBladeGroupAPriorityBits
 ; Clears sprite priority on blade-part group B
-Boss_SharpsteelClearBladeGroupBPriorityBits:            ; CODE XREF: Boss_SharpsteelInitializeDiveAttack+4A   p  ; was: sub_48700
+Boss_SharpsteelClearBladeGroupBPriorityBits:            ; was: sub_48700
                 bclr    #7,$3CE(a5)
                 bclr    #7,$42E(a5)
                 bclr    #7,$48E(a5)
@@ -207,7 +206,7 @@ Boss_SharpsteelClearBladeGroupBPriorityBits:            ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelClearBladeGroupBPriorityBits
 ; Sets sprite priority on blade-part group B
-Boss_SharpsteelSetBladeGroupBPriorityBits:              ; CODE XREF: Boss_SharpsteelAccelerateBladeAssemblyState+5A   p  ; was: sub_4871A
+Boss_SharpsteelSetBladeGroupBPriorityBits:              ; was: sub_4871A
                 bset    #7,$3CE(a5)
                 bset    #7,$42E(a5)
                 bset    #7,$48E(a5)
@@ -224,14 +223,14 @@ Boss_SharpsteelEnableOuterBladeHitboxes:
                 bra.s   Boss_SharpsteelEnableLinkedBladeHitboxes
 ; End of function Boss_SharpsteelEnableOuterBladeHitboxes
 ; Enables collision and writes the collision value for the inner blade group
-Boss_SharpsteelEnableInnerBladeHitboxes:                ; CODE XREF: Boss_SharpsteelFarRangeBladeAttackState+18   p  ; was: sub_4874E
+Boss_SharpsteelEnableInnerBladeHitboxes:                ; was: sub_4874E
                                         ; Boss_SharpsteelCloseRangeBladeAttackState+18   p
                 bset    #6,$561(a5)
                 bset    #6,$621(a5)
                 move.w  d1,$566(a5)
                 move.w  d1,$626(a5)
                 movea.w #(SeventhEntityType-M68K_RAM),a0
-Boss_SharpsteelEnableLinkedBladeHitboxes:               ; CODE XREF: Boss_SharpsteelEnableOuterBladeHitboxes+18   j
+Boss_SharpsteelEnableLinkedBladeHitboxes:
                 moveq   #6,d0
                 bset    d0,$21(a0)
                 bset    d0,$81(a0)
@@ -251,12 +250,12 @@ Boss_SharpsteelDisableOuterBladeHitboxes:
                 bra.s   Boss_SharpsteelDisableLinkedBladeHitboxes
 ; End of function Boss_SharpsteelDisableOuterBladeHitboxes
 ; Disables collision for the inner blade group
-Boss_SharpsteelDisableInnerBladeHitboxes:               ; CODE XREF: Boss_SharpsteelFarRangeBladeAttackState+2E   p  ; was: sub_4879C
+Boss_SharpsteelDisableInnerBladeHitboxes:               ; was: sub_4879C
                                         ; Boss_SharpsteelCloseRangeBladeAttackState+2E   p
                 bclr    #6,$561(a5)
                 bclr    #6,$621(a5)
                 movea.w #(SeventhEntityType-M68K_RAM),a0
-Boss_SharpsteelDisableLinkedBladeHitboxes:              ; CODE XREF: Boss_SharpsteelDisableOuterBladeHitboxes+10   j
+Boss_SharpsteelDisableLinkedBladeHitboxes:
                 moveq   #6,d0
                 bclr    d0,$21(a0)
                 bclr    d0,$81(a0)
@@ -281,7 +280,7 @@ Boss_SharpsteelSetBladeCollisionValuesB:
                 rts
 ; End of function Boss_SharpsteelSetBladeCollisionValuesB
 ; Enables the two collision flags on all six core segments
-Boss_SharpsteelEnableCoreSegmentCollision:              ; CODE XREF: Boss_SharpsteelOpeningVerticalTurnState+30   p  ; was: sub_487E4
+Boss_SharpsteelEnableCoreSegmentCollision:              ; was: sub_487E4
                 move.w  #$50,d0                         ; 'P'
                 or.b    d0,$21(a5)
                 or.b    d0,$81(a5)
@@ -292,7 +291,7 @@ Boss_SharpsteelEnableCoreSegmentCollision:              ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelEnableCoreSegmentCollision
 ; Disables the two collision flags on all six core segments
-Boss_SharpsteelDisableCoreSegmentCollision:             ; CODE XREF: Boss_SharpsteelInitializeFallingShotCycle+30   p  ; was: sub_48802
+Boss_SharpsteelDisableCoreSegmentCollision:             ; was: sub_48802
                                         ; Boss_SharpsteelInitializeDiveAttack+42   p
                 move.w  #$FFAF,d0
                 and.b   d0,$21(a5)
@@ -304,7 +303,7 @@ Boss_SharpsteelDisableCoreSegmentCollision:             ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelDisableCoreSegmentCollision
 ; Updates the directional sprite frames of the two visible core objects
-Boss_SharpsteelUpdateCoreSpriteFrames:                  ; CODE XREF: Boss_SharpsteelUpdateBladeAssembly+8   p  ; was: sub_48820
+Boss_SharpsteelUpdateCoreSpriteFrames:                  ; was: sub_48820
                 lea     Boss_SharpsteelCoreDirectionalSpriteFrames(pc),a1
                 nop
                 movea.w #(TenthEntityType-M68K_RAM),a0
@@ -315,13 +314,13 @@ Boss_SharpsteelUpdateCoreSpriteFrames:                  ; CODE XREF: Boss_Sharps
                 jmp     Sprite_UpdateFourDirectionFrame
 ; End of function Boss_SharpsteelUpdateCoreSpriteFrames
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelCoreDirectionalSpriteFrames: dc.l    Boss_SharpsteelCoreDirectionalMapping0  ; DATA XREF: Boss_SharpsteelUpdateCoreSpriteFrames   o
+Boss_SharpsteelCoreDirectionalSpriteFrames: dc.l    Boss_SharpsteelCoreDirectionalMapping0
                 dc.l    Boss_SharpsteelCoreDirectionalMapping1
                 dc.l    Boss_SharpsteelCoreDirectionalMapping2
                 dc.l    Boss_SharpsteelCoreDirectionalMapping3
 
 ; Configures blade-part mappings and tile attributes for graphics set A
-Boss_SharpsteelConfigureBladeGraphicsSetA:              ; CODE XREF: Boss_SharpsteelInitializeState+46   p  ; was: sub_48856
+Boss_SharpsteelConfigureBladeGraphicsSetA:              ; was: sub_48856
                                         ; Boss_SharpsteelManualControlState+8   p
                 move.w  #$EB9C,$24E(a5)
                 move.w  #$B00,$248(a5)
@@ -336,13 +335,13 @@ Boss_SharpsteelConfigureBladeGraphicsSetA:              ; CODE XREF: Boss_Sharps
                 move.w  #$800,d1
                 eori.w  #$1800,$24E(a5)
                 eori.w  #$1800,$3CE(a5)
-Boss_SharpsteelSelectBladeGraphicsTableA:               ; CODE XREF: Boss_SharpsteelConfigureBladeGraphicsSetA+30   j
+Boss_SharpsteelSelectBladeGraphicsTableA:
                 lea     Boss_SharpsteelBladeGraphicsMappingsA(pc),a0
                 nop
                 bra.s   Boss_SharpsteelApplyBladeGraphicsSet
 ; End of function Boss_SharpsteelConfigureBladeGraphicsSetA
 ; Configures blade-part mappings and tile attributes for graphics set B
-Boss_SharpsteelConfigureBladeGraphicsSetB:              ; CODE XREF: Boss_SharpsteelManualControlState+14   p  ; was: sub_488A0
+Boss_SharpsteelConfigureBladeGraphicsSetB:              ; was: sub_488A0
                                         ; Boss_SharpsteelInitializeFallingShotCycle+4A   p
                 move.w  #$EB90,$24E(a5)
                 move.w  #$E00,$248(a5)
@@ -359,14 +358,14 @@ Boss_SharpsteelConfigureBladeGraphicsSetB:              ; CODE XREF: Boss_Sharps
                 move.w  #$1000,d1
                 eori.w  #$1800,$24E(a5)
                 eori.w  #$1800,$3CE(a5)
-Boss_SharpsteelSelectBladeGraphicsTableB:               ; CODE XREF: Boss_SharpsteelConfigureBladeGraphicsSetB+30   j
+Boss_SharpsteelSelectBladeGraphicsTableB:
                                         ; Boss_SharpsteelConfigureBladeGraphicsSetB+38   j
                 lea     Boss_SharpsteelBladeGraphicsMappingsB(pc),a0
                 nop
-Boss_SharpsteelApplyBladeGraphicsSet:                   ; CODE XREF: Boss_SharpsteelConfigureBladeGraphicsSetA+48   j
+Boss_SharpsteelApplyBladeGraphicsSet:
                 movea.w a5,a1
                 moveq   #5,d7
-Boss_SharpsteelApplyBladeGraphicsSetLoop:               ; CODE XREF: Boss_SharpsteelConfigureBladeGraphicsSetB+64   j
+Boss_SharpsteelApplyBladeGraphicsSetLoop:
                 and.w   d2,$E(a1)
                 or.w    d1,$E(a1)
                 move.l  (a0)+,8(a1)
@@ -375,13 +374,13 @@ Boss_SharpsteelApplyBladeGraphicsSetLoop:               ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelConfigureBladeGraphicsSetB
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelBladeGraphicsMappingsB:  dc.l    Boss_SharpsteelBladeGraphicsBMapping0  ; DATA XREF: Boss_SharpsteelConfigureBladeGraphicsSetB:Boss_SharpsteelSelectBladeGraphicsTableB   o
+Boss_SharpsteelBladeGraphicsMappingsB:  dc.l    Boss_SharpsteelBladeGraphicsBMapping0
                 dc.l    Boss_SharpsteelBladeGraphicsBMapping1
                 dc.l    Boss_SharpsteelBladeGraphicsBMapping2
                 dc.l    Boss_SharpsteelBladeGraphicsBMapping3
                 dc.l    Boss_SharpsteelBladeGraphicsBMapping4
                 dc.l    Boss_SharpsteelBladeGraphicsBMapping5
-Boss_SharpsteelBladeGraphicsMappingsA:  dc.l    Boss_SharpsteelBladeGraphicsAMapping0  ; DATA XREF: Boss_SharpsteelConfigureBladeGraphicsSetA:Boss_SharpsteelSelectBladeGraphicsTableA   o
+Boss_SharpsteelBladeGraphicsMappingsA:  dc.l    Boss_SharpsteelBladeGraphicsAMapping0
                 dc.l    Boss_SharpsteelBladeGraphicsAMapping1
                 dc.l    Boss_SharpsteelBladeGraphicsAMapping2
                 dc.l    Boss_SharpsteelBladeGraphicsAMapping3
@@ -389,22 +388,22 @@ Boss_SharpsteelBladeGraphicsMappingsA:  dc.l    Boss_SharpsteelBladeGraphicsAMap
                 dc.l    Boss_SharpsteelBladeGraphicsAMapping5
 
 ; Sets collision-box group sizes for the outer blade group
-Boss_SharpsteelSetOuterBladeGroupSizes:                 ; CODE XREF: Boss_SharpsteelCloseRangeBladeAttackState+32   p  ; was: sub_4893A
+Boss_SharpsteelSetOuterBladeGroupSizes:                 ; was: sub_4893A
                                         ; Boss_SharpsteelInitializeDiveAttack+52   p
                 moveq   #$18,d0
                 bsr.s   Boss_SharpsteelSelectOuterBladeGroup
                 moveq   #$18,d0
 ; End of function Boss_SharpsteelSetOuterBladeGroupSizes
 ; Sets collision-box group sizes for the inner blade group
-Boss_SharpsteelSetInnerBladeGroupSizes:                 ; CODE XREF: Boss_SharpsteelInitializeManualControl+32   p  ; was: sub_48940
+Boss_SharpsteelSetInnerBladeGroupSizes:                 ; was: sub_48940
                                         ; Boss_SharpsteelInitializeBladeEntrance+50   p
                 movea.w #(SeventhEntityType-M68K_RAM),a0
                 bra.s   Boss_SharpsteelStoreBladeGroupSizes
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelSelectOuterBladeGroup:                   ; CODE XREF: Boss_SharpsteelInitializeFallingShotCycle+5A   j
+Boss_SharpsteelSelectOuterBladeGroup:
                                         ; Boss_SharpsteelSetOuterBladeGroupSizes+2   p
                 movea.w #(EleventhEntityType-M68K_RAM),a0
-Boss_SharpsteelStoreBladeGroupSizes:                    ; CODE XREF: Boss_SharpsteelSetInnerBladeGroupSizes+4   j
+Boss_SharpsteelStoreBladeGroupSizes:
                 move.b  d0,$20(a0)
                 move.b  d0,$80(a0)
                 move.b  d0,$E0(a0)
@@ -418,7 +417,7 @@ Boss_SharpsteelUpdateFlashingPaletteColors:
                 btst    #0,(FrameCounter+1).w
                 bne.s   Boss_SharpsteelSelectFlashingPaletteTriplet
                 moveq   #0,d0
-Boss_SharpsteelSelectFlashingPaletteTriplet:            ; CODE XREF: Boss_SharpsteelUpdateFlashingPaletteColors+8   j
+Boss_SharpsteelSelectFlashingPaletteTriplet:
                 movea.w #(PaletteActiveColor51-M68K_RAM),a0
                 move.w  Boss_SharpsteelFlashingPaletteTriplets(pc,d0.w),(a0)+
                 move.w  Boss_SharpsteelFlashingPaletteTriplets+2(pc,d0.w),(a0)+
@@ -427,22 +426,21 @@ Boss_SharpsteelSelectFlashingPaletteTriplet:            ; CODE XREF: Boss_Sharps
 ; End of function Boss_SharpsteelUpdateFlashingPaletteColors
 ; ---------------------------------------------------------------------------
 Boss_SharpsteelFlashingPaletteTriplets: dc.w    $8C8, $664, $220, $EEE, $AAA, $888
-                                        ; DATA XREF: Boss_SharpsteelUpdateFlashingPaletteColors+10   r
                                         ; Boss_SharpsteelUpdateFlashingPaletteColors+14   r
 
 ; Controls background palette fade with limits
-Boss_SharpsteelUpdateBackgroundPaletteFade:             ; CODE XREF: Boss_SharpsteelUpdateBladeAssembly:Boss_SharpsteelUpdateBladePresentation   p  ; was: sub_48988
+Boss_SharpsteelUpdateBackgroundPaletteFade:             ; was: sub_48988
                 move.w  $3BE(a5),d0
                 bne.s   Boss_SharpsteelSelectBackgroundFadeStep
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelSelectBackgroundFadeStep:                ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+4   j
+Boss_SharpsteelSelectBackgroundFadeStep:
                 move.w  $3BC(a5),d7
                 bne.s   Boss_SharpsteelApplyBackgroundFadeMode
                 btst    #0,(FrameCounter+1).w
                 bne.s   Boss_SharpsteelApplyBackgroundFadeMode
                 moveq   #1,d7
-Boss_SharpsteelApplyBackgroundFadeMode:                 ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+C   j
+Boss_SharpsteelApplyBackgroundFadeMode:
                                         ; Boss_SharpsteelUpdateBackgroundPaletteFade+14   j
                 cmpi.w  #2,d0
                 beq.s   Boss_SharpsteelDecreaseBackgroundFade
@@ -453,13 +451,13 @@ Boss_SharpsteelApplyBackgroundFadeMode:                 ; CODE XREF: Boss_Sharps
                 moveq   #0,d0
                 bra.s   Boss_SharpsteelFinishBackgroundFade
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelClampIncreasingBackgroundFade:           ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+28   j
+Boss_SharpsteelClampIncreasingBackgroundFade:
                 cmpi.w  #$FFF8,d0
                 bpl.s   Boss_SharpsteelApplyBackgroundPalette
                 move.w  #$FFF8,d0
                 bra.s   Boss_SharpsteelApplyBackgroundPalette
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelDecreaseBackgroundFade:                  ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+1C   j
+Boss_SharpsteelDecreaseBackgroundFade:
                 move.w  $35E(a5),d0
                 sub.w   d7,d0
                 move.w  d0,$35E(a5)
@@ -467,13 +465,13 @@ Boss_SharpsteelDecreaseBackgroundFade:                  ; CODE XREF: Boss_Sharps
                 moveq   #0,d0
                 bra.s   Boss_SharpsteelApplyBackgroundPalette
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelClampDecreasingBackgroundFade:           ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+44   j
+Boss_SharpsteelClampDecreasingBackgroundFade:
                 cmpi.w  #$FFF8,d0
                 bpl.s   Boss_SharpsteelApplyBackgroundPalette
                 move.w  #$FFF8,d0
-Boss_SharpsteelFinishBackgroundFade:                    ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+2C   j
+Boss_SharpsteelFinishBackgroundFade:
                 clr.w   $3BE(a5)
-Boss_SharpsteelApplyBackgroundPalette:                  ; CODE XREF: Boss_SharpsteelUpdateBackgroundPaletteFade+32   j
+Boss_SharpsteelApplyBackgroundPalette:
                                         ; Boss_SharpsteelUpdateBackgroundPaletteFade+38   j
                 movea.w #(PaletteActiveColor50-M68K_RAM),a0
                 moveq   #$D,d5
@@ -481,12 +479,12 @@ Boss_SharpsteelApplyBackgroundPalette:                  ; CODE XREF: Boss_Sharps
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Boss_SharpsteelUpdateBackgroundPaletteFade
 ; Parses pose commands, interpolates pose bytes, and derives blade-part angles
-Boss_SharpsteelRunBladePoseCommands:                    ; CODE XREF: Boss_SharpsteelManualControlState+3C   p  ; was: sub_489F0
+Boss_SharpsteelRunBladePoseCommands:                    ; was: sub_489F0
                                         ; sub_48690   p
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_SharpsteelApplyBladePoseInterpolationStep
-Boss_SharpsteelParseBladePoseCommandLoop:               ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+24   j
+Boss_SharpsteelParseBladePoseCommandLoop:
                                         ; Boss_SharpsteelRunBladePoseCommands+44   j
                 move.w  $58(a5),d0
                 bmi.w   Boss_SharpsteelUpdateBladeAnglesFromPose
@@ -496,21 +494,21 @@ Boss_SharpsteelParseBladePoseCommandLoop:               ; CODE XREF: Boss_Sharps
                 addq.w  #2,$58(a5)
                 bra.s   Boss_SharpsteelParseBladePoseCommandLoop
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelReadBladePoseCommand:                    ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+18   j
+Boss_SharpsteelReadBladePoseCommand:
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_SharpsteelHandleBladePoseLoopCommand
                 move.w  d3,$58(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelHandleBladePoseLoopCommand:              ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+2E   j
+Boss_SharpsteelHandleBladePoseLoopCommand:
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_SharpsteelBeginBladePoseInterpolation
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Boss_SharpsteelParseBladePoseCommandLoop
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelBeginBladePoseInterpolation:             ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+3A   j
+Boss_SharpsteelBeginBladePoseInterpolation:
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -525,12 +523,12 @@ Boss_SharpsteelBeginBladePoseInterpolation:             ; CODE XREF: Boss_Sharps
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_SharpsteelUpdateBladeAnglesFromPose
-Boss_SharpsteelApplyBladePoseInterpolationStep:         ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+8   j
+Boss_SharpsteelApplyBladePoseInterpolationStep:
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #7,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_SharpsteelUpdateBladeAnglesFromPose:               ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+E   p
+Boss_SharpsteelUpdateBladeAnglesFromPose:
                                         ; Boss_SharpsteelRunBladePoseCommands+E   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
@@ -608,7 +606,7 @@ Boss_SharpsteelUpdateBladeAnglesFromPose:               ; CODE XREF: Boss_Sharps
                 move.l  d0,d2
                 divs.w  #3,d2
                 asr.w   #2,d4
-Boss_SharpsteelApplyBladePoseOffsets:                   ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+14E   j
+Boss_SharpsteelApplyBladePoseOffsets:
                 move.w  $B2(a5),d3
                 sub.w   d4,d3
                 move.w  d3,$B4(a5)
@@ -627,7 +625,7 @@ Boss_SharpsteelApplyBladePoseOffsets:                   ; CODE XREF: Boss_Sharps
                 rts
 ; End of function Boss_SharpsteelRunBladePoseCommands
 ; Calculates interpolation deltas from the current pose to a target pose
-Boss_SharpsteelInitializeBladePoseInterpolation:        ; CODE XREF: Boss_SharpsteelRunBladePoseCommands+5C   p  ; was: sub_48B84
+Boss_SharpsteelInitializeBladePoseInterpolation:        ; was: sub_48B84
                 movea.l #Boss_SharpsteelNeutralPose,a1
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
@@ -635,55 +633,41 @@ Boss_SharpsteelInitializeBladePoseInterpolation:        ; CODE XREF: Boss_Sharps
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_SharpsteelInitializeBladePoseInterpolation
 ; Initializes eight Sharpsteel blade pose channels from bytes at a0
-Boss_SharpsteelInitializeBladePoseChannels:             ; CODE XREF: Boss_SharpsteelInitializeComplexPhase+48   p  ; was: sub_48B9A
+Boss_SharpsteelInitializeBladePoseChannels:             ; was: sub_48B9A
                 movea.w #(SharedScratchLong0-M68K_RAM),a1
                 moveq   #7,d7
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_SharpsteelInitializeBladePoseChannels
 ; ---------------------------------------------------------------------------
 Boss_SharpsteelManualControlPoseCommands:   dc.b    $20, $20, 0, $10, $20, $20, 0, $18, $FF, $FF
-                                        ; DATA XREF: Boss_SharpsteelManualControlState+36   o
-Boss_SharpsteelHighSpeedPoseCommands:   dc.b    $C, $C, 0, $38, 7, $C, 0, $40, 7, 7, 0, $40, $C, $C, 0, $48
-                                        ; DATA XREF: Boss_SharpsteelUpdateHorizontalAttackMotion:Boss_SharpsteelUseHighSpeedBladePose   o
+Boss_SharpsteelHighSpeedPoseCommands:       dc.b    $C, $C, 0, $38, 7, $C, 0, $40, 7, 7, 0, $40, $C, $C, 0, $48
                 dc.b    7, $C, 0, $50, $80, 1, 7, 7, 0, $50, $FF, $FF
 Boss_SharpsteelRightwardPoseCommands:   dc.b    $A, $A, 0, $38, 5, $A, 0, $40, 5, 5, 0, $40, $A, $A, 0, $48
-                                        ; DATA XREF: Boss_SharpsteelUpdateHorizontalAttackMotion+64   o
                 dc.b    5, $A, 0, $50, $80, 1, 5, 5, 0, $50, $FF, $FF
 Boss_SharpsteelAssemblyTriggerPoses:    dc.b    $10, $18, 0, $58, 8, 8, 0, $58, $10, $14, 0, $60, $2C, $2C, 0, $60
-                                        ; DATA XREF: Boss_SharpsteelWaitForTwoBladeTriggersState+12   o
                 dc.b    $C, $14, 0, $68, $14, $14, 0, $68, $10, $12, 0, $70, $12, $12, 0, $70
                 dc.b    $FF, $FE
 Boss_SharpsteelAssemblyDelayPoses:  dc.b    5, $A, 0, 0, 8, 8, 0, 0, 5, $A, 0, 8, 8, 8, 0, 8
-                                        ; DATA XREF: Boss_SharpsteelAccelerateBladeAssemblyState+14   o
                                         ; Boss_SharpsteelAccelerateBladeAssemblyState+3E   o
                 dc.b    $80, 1, $FF, $FF
-Boss_SharpsteelOpeningTurnPoses:    dc.b    $A, $A, 0, $10, $10, $18, 0, $18, $C, $C, 0, $18, $FF, $FE
-                                        ; DATA XREF: Boss_SharpsteelOpeningVerticalTurnState+A   o
+Boss_SharpsteelOpeningTurnPoses:        dc.b    $A, $A, 0, $10, $10, $18, 0, $18, $C, $C, 0, $18, $FF, $FE
 Boss_SharpsteelAssemblyThresholdPoses:  dc.b    $32, $32, 0, $20, 8, $A, 0, $28, 8, 8, 0, $28, $FF, $FE
-                                        ; DATA XREF: Boss_SharpsteelOpeningVerticalTurnState+4A   o
-Boss_SharpsteelAssemblySweepPoses:  dc.b    5, 9, 0, $30, $12, $12, 0, $30, 6, $20, 0, $28, $11, $11, 0, $28
-                                        ; DATA XREF: Boss_SharpsteelOpeningVerticalTurnState+E0   o
+Boss_SharpsteelAssemblySweepPoses:      dc.b    5, 9, 0, $30, $12, $12, 0, $30, 6, $20, 0, $28, $11, $11, 0, $28
                 dc.b    $FF, $FE
 Boss_SharpsteelFarRangeAttackPoses: dc.b    $13, $1C, 0, $80, $C, $C, 0, $80, $C, $40, 0, $88, $80, 1, 9, $D
-                                        ; DATA XREF: Boss_SharpsteelFarRangeBladeAttackState+36   o
                 dc.b    0, $88, $A, $A, 0, $88, $80, 2, $18, $1C, 0, $78, 6, 6, 0, $78
                 dc.b    $FF, $FE
 Boss_SharpsteelCloseRangeAttackPoses:   dc.b    $13, $1C, 0, $90, $C, $C, 0, $90, $C, $40, 0, $98, $80, 1, 9, $D
-                                        ; DATA XREF: Boss_SharpsteelCloseRangeBladeAttackState+3A   o
                 dc.b    0, $98, $A, $A, 0, $98, $80, 2, $16, $1A, 0, $78, 6, 6, 0, $78
                 dc.b    $FF, $FE
-Boss_SharpsteelDivePoses:   dc.b    6, $20, 0, 0, $A, $A, 0, 0, $10, $10, 0, $18, $FF, $FE
-                                        ; DATA XREF: Boss_SharpsteelDiveAttackState:Boss_SharpsteelUpdateDiveAttackPose   o
+Boss_SharpsteelDivePoses:               dc.b    6, $20, 0, 0, $A, $A, 0, 0, $10, $10, 0, $18, $FF, $FE
 Boss_SharpsteelComplexOscillationPoses: dc.b    8, $10, 0, $A8, $20, $20, 0, $A8, $A, $30, 0, $B0, 4, 8, 0, $B0
-                                        ; DATA XREF: Boss_SharpsteelWaitForComplexAlignmentState+6C   o
                                         ; Boss_SharpsteelWaitForComplexAlignmentState+A8   o
                 dc.b    $80, 1, 2, 4, 0, $B0, $18, $18, 0, $B0, $FF, $FE
 Boss_SharpsteelComplexExitPoses:    dc.b    8, $10, 0, $B8, $20, $20, 0, $B8, $80, 2, $A, $30, 0, $C0, 4, 8
-                                        ; DATA XREF: Boss_SharpsteelWaitForComplexAlignmentState+F6   o
                                         ; Boss_SharpsteelWaitForComplexAlignmentState+116   o
                 dc.b    0, $C0, $80, 1, 2, 4, 0, $B8, $18, $18, 0, $B8, $FF, $FE
 Boss_SharpsteelBladePoseTable:  dc.b    0, $18, $C0, $30, $E8, $40, $D0, 3, 0, 8, $D8, $2C, $F8, $28, $D4, $18
-                                        ; DATA XREF: Boss_SharpsteelRunBladePoseCommands+54   o
                 dc.b    0, $10, $C0, $C8, $F0, $40, $38, $60, 0, 8, 4, 8, $F8, $FC, $F8, 0
                 dc.b    0, $20, $E0, 0, $E0, $20, 0, $23, 0, $18, $B4, 0, $E8, $4C, 0, $F8
                 dc.b    0, $20, 0, $D0, $E0, 0, $30, $48, $FC, 0, $7F, 8, $F0, $40, $C0, 3
@@ -694,6 +678,5 @@ Boss_SharpsteelBladePoseTable:  dc.b    0, $18, $C0, $30, $E8, $40, $D0, 3, 0, 8
                 dc.b    $F6, $30, $10, $28, $F0, $24, $20, $F8, $18, $10, $E0, $EA, $E0, $10, $14, $24
                 dc.b    $18, $10, $A0, $E0, $E0, $34, $38, $20, $F0, $20, $F0, 8, $E8, 8, $17, $FC
 Boss_SharpsteelComplexPhaseInitialPose: dc.b    0, $20, $10, $20, $E0, $20, 0, 3, $F0, $1C, $24, $1C, $20, $38, $B0, $50
-                                        ; DATA XREF: Boss_SharpsteelInitializeComplexPhase+42   o
                 dc.b    $12, $30, 0, $28, $E8, $30, $E0, $30, 0, $18, $C0, $30, $E8, $40, $D0, 3
                 dc.b    0, $18, $C0, $30, $E8, $40, $D0, 3

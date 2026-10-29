@@ -1,4 +1,4 @@
-Physics_CheckLowerTerrain:                              ; CODE XREF: Physics_LowerTerrainCheckWrapper+10   j  ; was: sub_146FC
+Physics_CheckLowerTerrain:                              ; was: sub_146FC
                                         ; Physics_FacingTerrainCheckWrapper+16   j
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -11,14 +11,14 @@ Physics_CheckLowerTerrain:                              ; CODE XREF: Physics_Low
                 bsr.w   Physics_HandleLowerLeftInnerTerrain
                 bra.s   Physics_CheckLowerTerrain_CheckCenter
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrain_CheckRightInner:              ; CODE XREF: Physics_CheckLowerTerrain+1A   j  ; was: loc_1471E
+Physics_CheckLowerTerrain_CheckRightInner:              ; was: loc_1471E
                 moveq   #8,d0
                 moveq   #$18,d1
                 bsr.w   Physics_GetTerrainTileData
                 move.w  d2,d2
                 beq.s   Physics_CheckLowerTerrain_CheckCenter
                 bsr.w   Physics_HandleLowerRightInnerTerrain
-Physics_CheckLowerTerrain_CheckCenter:                  ; CODE XREF: Physics_CheckLowerTerrain+20   j  ; was: loc_1472E
+Physics_CheckLowerTerrain_CheckCenter:                  ; was: loc_1472E
                                         ; Physics_CheckLowerTerrain+2C   j
                 moveq   #0,d0
                 moveq   #$20,d1                         ; ' '
@@ -27,7 +27,7 @@ Physics_CheckLowerTerrain_CheckCenter:                  ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckLowerTerrain_CheckLeftOuter
                 bra.w   Physics_HandleLowerCenterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrain_CheckLeftOuter:               ; CODE XREF: Physics_CheckLowerTerrain+3C   j  ; was: loc_1473E
+Physics_CheckLowerTerrain_CheckLeftOuter:               ; was: loc_1473E
                 moveq   #$FFFFFFF8,d0
                 moveq   #$20,d1                         ; ' '
                 bsr.w   Physics_GetTerrainTileData
@@ -35,7 +35,7 @@ Physics_CheckLowerTerrain_CheckLeftOuter:               ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckLowerTerrain_CheckRightOuter
                 bra.w   Physics_HandleLowerLeftOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrain_CheckRightOuter:              ; CODE XREF: Physics_CheckLowerTerrain+4C   j  ; was: loc_1474E
+Physics_CheckLowerTerrain_CheckRightOuter:              ; was: loc_1474E
                 moveq   #8,d0
                 moveq   #$20,d1                         ; ' '
                 bsr.w   Physics_GetTerrainTileData
@@ -43,11 +43,11 @@ Physics_CheckLowerTerrain_CheckRightOuter:              ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckLowerTerrain_Return
                 bra.w   Physics_HandleLowerRightOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrain_Return:                       ; CODE XREF: Physics_CheckLowerTerrain+5C   j  ; was: locret_1475E
+Physics_CheckLowerTerrain_Return:                       ; was: locret_1475E
                 rts
 ; End of function Physics_CheckLowerTerrain
 ; Probes lower terrain; only the centre and outer probes require descent
-Physics_CheckLowerTerrainWhenDescending:                ; CODE XREF: Physics_DescendingTerrainCheckWrapper+10   j  ; was: sub_14760
+Physics_CheckLowerTerrainWhenDescending:                ; was: sub_14760
                                         ; Enemy_MainStateMachine+13E   p
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -60,14 +60,14 @@ Physics_CheckLowerTerrainWhenDescending:                ; CODE XREF: Physics_Des
                 bsr.w   Physics_HandleLowerLeftInnerTerrain
                 bra.s   Physics_CheckLowerTerrainWhenDescending_CheckCenter
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrainWhenDescending_CheckRightInner:  ; CODE XREF: Physics_CheckLowerTerrainWhenDescending+1A   j  ; was: loc_14782
+Physics_CheckLowerTerrainWhenDescending_CheckRightInner:  ; was: loc_14782
                 moveq   #8,d0
                 moveq   #$18,d1
                 bsr.w   Physics_GetTerrainTileData
                 move.w  d2,d2
                 beq.s   Physics_CheckLowerTerrainWhenDescending_CheckCenter
                 bsr.w   Physics_HandleLowerRightInnerTerrain
-Physics_CheckLowerTerrainWhenDescending_CheckCenter:    ; CODE XREF: Physics_CheckLowerTerrainWhenDescending+20   j  ; was: loc_14792
+Physics_CheckLowerTerrainWhenDescending_CheckCenter:    ; was: loc_14792
                                         ; Physics_CheckLowerTerrainWhenDescending+2C   j
                 moveq   #0,d0
                 moveq   #$20,d1                         ; ' '
@@ -78,7 +78,7 @@ Physics_CheckLowerTerrainWhenDescending_CheckCenter:    ; CODE XREF: Physics_Che
                 bmi.s   Physics_CheckLowerTerrainWhenDescending_Return
                 bra.w   Physics_HandleLowerCenterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrainWhenDescending_CheckLeftOuter:  ; CODE XREF: Physics_CheckLowerTerrainWhenDescending+3C   j  ; was: loc_147A8
+Physics_CheckLowerTerrainWhenDescending_CheckLeftOuter:  ; was: loc_147A8
                 moveq   #$FFFFFFF8,d0
                 moveq   #$20,d1                         ; ' '
                 bsr.w   Physics_GetTerrainTileData
@@ -88,7 +88,7 @@ Physics_CheckLowerTerrainWhenDescending_CheckLeftOuter:  ; CODE XREF: Physics_Ch
                 bmi.s   Physics_CheckLowerTerrainWhenDescending_Return
                 bra.w   Physics_HandleLowerLeftOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrainWhenDescending_CheckRightOuter:  ; CODE XREF: Physics_CheckLowerTerrainWhenDescending+52   j  ; was: loc_147BE
+Physics_CheckLowerTerrainWhenDescending_CheckRightOuter:  ; was: loc_147BE
                 moveq   #8,d0
                 moveq   #$20,d1                         ; ' '
                 bsr.w   Physics_GetTerrainTileData
@@ -98,12 +98,12 @@ Physics_CheckLowerTerrainWhenDescending_CheckRightOuter:  ; CODE XREF: Physics_C
                 bmi.s   Physics_CheckLowerTerrainWhenDescending_Return
                 bra.w   Physics_HandleLowerRightOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckLowerTerrainWhenDescending_Return:         ; CODE XREF: Physics_CheckLowerTerrainWhenDescending+42   j  ; was: locret_147D4
+Physics_CheckLowerTerrainWhenDescending_Return:         ; was: locret_147D4
                                         ; Physics_CheckLowerTerrainWhenDescending+58   j
                 rts
 ; End of function Physics_CheckLowerTerrainWhenDescending
 ; Probes five points along the entity's upper terrain boundary
-Physics_CheckUpperTerrain:                              ; CODE XREF: Physics_UpperTerrainCheckWrapper+10   j  ; was: sub_147D6
+Physics_CheckUpperTerrain:                              ; was: sub_147D6
                                         ; Physics_FacingTerrainCheckWrapper+1A   j
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -116,14 +116,14 @@ Physics_CheckUpperTerrain:                              ; CODE XREF: Physics_Upp
                 bsr.w   Physics_HandleUpperLeftInnerTerrain
                 bra.s   Physics_CheckUpperTerrain_CheckCenter
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrain_CheckRightInner:              ; CODE XREF: Physics_CheckUpperTerrain+1A   j  ; was: loc_147F8
+Physics_CheckUpperTerrain_CheckRightInner:              ; was: loc_147F8
                 moveq   #8,d0
                 moveq   #$FFFFFFE8,d1
                 bsr.w   Physics_GetTerrainTileData
                 move.w  d2,d2
                 beq.s   Physics_CheckUpperTerrain_CheckCenter
                 bsr.w   Physics_HandleUpperRightInnerTerrain
-Physics_CheckUpperTerrain_CheckCenter:                  ; CODE XREF: Physics_CheckUpperTerrain+20   j  ; was: loc_14808
+Physics_CheckUpperTerrain_CheckCenter:                  ; was: loc_14808
                                         ; Physics_CheckUpperTerrain+2C   j
                 moveq   #0,d0
                 moveq   #$FFFFFFE0,d1
@@ -132,7 +132,7 @@ Physics_CheckUpperTerrain_CheckCenter:                  ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckUpperTerrain_CheckLeftOuter
                 bra.w   Physics_HandleUpperCenterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrain_CheckLeftOuter:               ; CODE XREF: Physics_CheckUpperTerrain+3C   j  ; was: loc_14818
+Physics_CheckUpperTerrain_CheckLeftOuter:               ; was: loc_14818
                 moveq   #$FFFFFFF8,d0
                 moveq   #$FFFFFFE0,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -140,7 +140,7 @@ Physics_CheckUpperTerrain_CheckLeftOuter:               ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckUpperTerrain_CheckRightOuter
                 bra.w   Physics_HandleUpperLeftOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrain_CheckRightOuter:              ; CODE XREF: Physics_CheckUpperTerrain+4C   j  ; was: loc_14828
+Physics_CheckUpperTerrain_CheckRightOuter:              ; was: loc_14828
                 moveq   #8,d0
                 moveq   #$FFFFFFE0,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -148,11 +148,11 @@ Physics_CheckUpperTerrain_CheckRightOuter:              ; CODE XREF: Physics_Che
                 beq.s   Physics_CheckUpperTerrain_Return
                 bra.w   Physics_HandleUpperRightOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrain_Return:                       ; CODE XREF: Physics_CheckUpperTerrain+5C   j  ; was: locret_14838
+Physics_CheckUpperTerrain_Return:                       ; was: locret_14838
                 rts
 ; End of function Physics_CheckUpperTerrain
 ; Probes upper terrain; only the centre and outer probes require ascent
-Physics_CheckUpperTerrainWhenRising:                    ; CODE XREF: Physics_RisingTerrainCheckWrapper+10   j  ; was: sub_1483A
+Physics_CheckUpperTerrainWhenRising:                    ; was: sub_1483A
                                         ; sub_2C71E:Enemy_MainStateMachine_CheckRisingTerrain   j
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -165,14 +165,14 @@ Physics_CheckUpperTerrainWhenRising:                    ; CODE XREF: Physics_Ris
                 bsr.w   Physics_HandleUpperLeftInnerTerrain
                 bra.s   Physics_CheckUpperTerrainWhenRising_CheckCenter
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrainWhenRising_CheckRightInner:    ; CODE XREF: Physics_CheckUpperTerrainWhenRising+1A   j  ; was: loc_1485C
+Physics_CheckUpperTerrainWhenRising_CheckRightInner:    ; was: loc_1485C
                 moveq   #8,d0
                 moveq   #$FFFFFFE8,d1
                 bsr.w   Physics_GetTerrainTileData
                 move.w  d2,d2
                 beq.s   Physics_CheckUpperTerrainWhenRising_CheckCenter
                 bsr.w   Physics_HandleUpperRightInnerTerrain
-Physics_CheckUpperTerrainWhenRising_CheckCenter:        ; CODE XREF: Physics_CheckUpperTerrainWhenRising+20   j  ; was: loc_1486C
+Physics_CheckUpperTerrainWhenRising_CheckCenter:        ; was: loc_1486C
                                         ; Physics_CheckUpperTerrainWhenRising+2C   j
                 moveq   #0,d0
                 moveq   #$FFFFFFE0,d1
@@ -183,7 +183,7 @@ Physics_CheckUpperTerrainWhenRising_CheckCenter:        ; CODE XREF: Physics_Che
                 bpl.s   Physics_CheckUpperTerrainWhenRising_Return
                 bra.w   Physics_HandleUpperCenterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrainWhenRising_CheckLeftOuter:     ; CODE XREF: Physics_CheckUpperTerrainWhenRising+3C   j  ; was: loc_14882
+Physics_CheckUpperTerrainWhenRising_CheckLeftOuter:     ; was: loc_14882
                 moveq   #$FFFFFFF8,d0
                 moveq   #$FFFFFFE0,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -193,7 +193,7 @@ Physics_CheckUpperTerrainWhenRising_CheckLeftOuter:     ; CODE XREF: Physics_Che
                 bpl.s   Physics_CheckUpperTerrainWhenRising_Return
                 bra.w   Physics_HandleUpperLeftOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrainWhenRising_CheckRightOuter:    ; CODE XREF: Physics_CheckUpperTerrainWhenRising+52   j  ; was: loc_14898
+Physics_CheckUpperTerrainWhenRising_CheckRightOuter:    ; was: loc_14898
                 moveq   #8,d0
                 moveq   #$FFFFFFE0,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -203,19 +203,19 @@ Physics_CheckUpperTerrainWhenRising_CheckRightOuter:    ; CODE XREF: Physics_Che
                 bpl.s   Physics_CheckUpperTerrainWhenRising_Return
                 bra.w   Physics_HandleUpperRightOuterTerrain
 ; ---------------------------------------------------------------------------
-Physics_CheckUpperTerrainWhenRising_Return:             ; CODE XREF: Physics_CheckUpperTerrainWhenRising+42   j  ; was: locret_148AE
+Physics_CheckUpperTerrainWhenRising_Return:             ; was: locret_148AE
                                         ; Physics_CheckUpperTerrainWhenRising+58   j
                 rts
 ; End of function Physics_CheckUpperTerrainWhenRising
 ; Resolves the lower-center terrain probe
-Physics_HandleLowerCenterTerrain:                       ; CODE XREF: Physics_CheckLowerTerrain+3E   j  ; was: sub_148B0
+Physics_HandleLowerCenterTerrain:                       ; was: sub_148B0
                                         ; Physics_CheckLowerTerrainWhenDescending+44   j
                 bset    #0,6(a5)
                 cmpi.w  #$80,d2
                 bpl.s   Physics_HandleLowerCenterTerrain_Dispatch
                 bset    #2,6(a5)
 ; Dispatches the lower-center response selected by terrain angle
-Physics_HandleLowerCenterTerrain_Dispatch:              ; CODE XREF: Physics_HandleLowerCenterTerrain+A   j  ; was: loc_148C2
+Physics_HandleLowerCenterTerrain_Dispatch:              ; was: loc_148C2
                 andi.w  #$7E,d2                         ; '~'
                 cmpi.w  #$40,d2                         ; '@'
                 bpl.w   Physics_SnapToLowerSurface
@@ -225,7 +225,6 @@ Physics_HandleLowerCenterTerrain_Dispatch:              ; CODE XREF: Physics_Han
 ; End of function Physics_HandleLowerCenterTerrain
 ; ---------------------------------------------------------------------------
 Physics_LowerCenterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftInnerTerrain  ; was: off_148DA
-                                        ; DATA XREF: Physics_HandleLowerCenterTerrain+1E   r
                 dc.w    Physics_SnapToLowerSurface-Physics_HandleLowerLeftInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftInnerTerrain
@@ -251,9 +250,8 @@ Physics_LowerCenterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_
                 dc.w    Physics_PrepareQuarterAddOffsetNegative1-Physics_HandleLowerLeftInnerTerrain
 
 ; Resolves the lower-left inner terrain probe
-Physics_HandleLowerLeftInnerTerrain:                    ; CODE XREF: Physics_CheckLowerTerrain+1C   p  ; was: sub_1490A
+Physics_HandleLowerLeftInnerTerrain:                    ; was: sub_1490A
                                         ; Physics_CheckLowerTerrainWhenDescending+1C   p
-                                        ; DATA XREF:
                 cmpi.w  #$10,d2
                 bmi.w   Physics_TerrainEmptyHandler
                 cmpi.w  #$C0,d2
@@ -269,7 +267,7 @@ Physics_HandleLowerLeftInnerTerrain:                    ; CODE XREF: Physics_Che
                 bpl.s   Physics_HandleLowerLeftInnerTerrain_Dispatch
                 bset    #2,6(a5)
 ; Dispatches the lower-left inner response selected by terrain angle
-Physics_HandleLowerLeftInnerTerrain_Dispatch:           ; CODE XREF: Physics_HandleLowerLeftInnerTerrain+22   j  ; was: loc_14940
+Physics_HandleLowerLeftInnerTerrain_Dispatch:           ; was: loc_14940
                                         ; Physics_HandleLowerLeftInnerTerrain+2E   j
                 movea.w Physics_LowerLeftInnerResponseTable(pc,d2.w),a4
                 adda.l  #Physics_HandleLowerRightInnerTerrain,a4
@@ -277,7 +275,6 @@ Physics_HandleLowerLeftInnerTerrain_Dispatch:           ; CODE XREF: Physics_Han
 ; End of function Physics_HandleLowerLeftInnerTerrain
 ; ---------------------------------------------------------------------------
 Physics_LowerLeftInnerResponseTable:    dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightInnerTerrain  ; was: off_1494C
-                                        ; DATA XREF: Physics_HandleLowerLeftInnerTerrain:Physics_HandleLowerLeftInnerTerrain_Dispatch   r
                 dc.w    Physics_ResolveLeftWallCollision-Physics_HandleLowerRightInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightInnerTerrain
@@ -303,9 +300,8 @@ Physics_LowerLeftInnerResponseTable:    dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_ApplyOffsetNegative1Sub6-Physics_HandleLowerRightInnerTerrain
 
 ; Resolves the lower-right inner terrain probe
-Physics_HandleLowerRightInnerTerrain:                   ; CODE XREF: Physics_CheckLowerTerrain+2E   p  ; was: sub_1497C
+Physics_HandleLowerRightInnerTerrain:                   ; was: sub_1497C
                                         ; Physics_CheckLowerTerrainWhenDescending+2E   p
-                                        ; DATA XREF:
                 cmpi.w  #$10,d2
                 bmi.w   Physics_TerrainEmptyHandler
                 cmpi.w  #$C0,d2
@@ -321,7 +317,7 @@ Physics_HandleLowerRightInnerTerrain:                   ; CODE XREF: Physics_Che
                 bpl.s   Physics_HandleLowerRightInnerTerrain_Dispatch
                 bset    #2,6(a5)
 ; Dispatches the lower-right inner response selected by terrain angle
-Physics_HandleLowerRightInnerTerrain_Dispatch:          ; CODE XREF: Physics_HandleLowerRightInnerTerrain+22   j  ; was: loc_149B2
+Physics_HandleLowerRightInnerTerrain_Dispatch:          ; was: loc_149B2
                                         ; Physics_HandleLowerRightInnerTerrain+2E   j
                 movea.w Physics_LowerRightInnerResponseTable(pc,d2.w),a4
                 adda.l  #Physics_HandleLowerLeftOuterTerrain,a4
@@ -329,7 +325,6 @@ Physics_HandleLowerRightInnerTerrain_Dispatch:          ; CODE XREF: Physics_Han
 ; End of function Physics_HandleLowerRightInnerTerrain
 ; ---------------------------------------------------------------------------
 Physics_LowerRightInnerResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftOuterTerrain  ; was: off_149BE
-                                        ; DATA XREF: Physics_HandleLowerRightInnerTerrain:Physics_HandleLowerRightInnerTerrain_Dispatch   r
                 dc.w    Physics_ResolveRightWallCollision-Physics_HandleLowerLeftOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerLeftOuterTerrain
@@ -355,15 +350,14 @@ Physics_LowerRightInnerResponseTable:   dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_ApplyOffsetNegative1Sub10-Physics_HandleLowerLeftOuterTerrain
 
 ; Resolves the lower-left outer terrain probe
-Physics_HandleLowerLeftOuterTerrain:                    ; CODE XREF: Physics_CheckLowerTerrain+4E   j  ; was: sub_149EE
+Physics_HandleLowerLeftOuterTerrain:                    ; was: sub_149EE
                                         ; Physics_CheckLowerTerrainWhenDescending+5A   j
-                                        ; DATA XREF:
                 bset    #0,6(a5)
                 cmpi.w  #$80,d2
                 bpl.s   Physics_HandleLowerLeftOuterTerrain_Dispatch
                 bset    #2,6(a5)
 ; Dispatches the lower-left outer response selected by terrain angle
-Physics_HandleLowerLeftOuterTerrain_Dispatch:           ; CODE XREF: Physics_HandleLowerLeftOuterTerrain+A   j  ; was: loc_14A00
+Physics_HandleLowerLeftOuterTerrain_Dispatch:           ; was: loc_14A00
                 andi.w  #$7E,d2                         ; '~'
                 cmpi.w  #$40,d2                         ; '@'
                 bpl.w   Physics_SnapToLowerSurface
@@ -373,7 +367,6 @@ Physics_HandleLowerLeftOuterTerrain_Dispatch:           ; CODE XREF: Physics_Han
 ; End of function Physics_HandleLowerLeftOuterTerrain
 ; ---------------------------------------------------------------------------
 Physics_LowerLeftOuterResponseTable:    dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightOuterTerrain  ; was: off_14A18
-                                        ; DATA XREF: Physics_HandleLowerLeftOuterTerrain+1E   r
                 dc.w    Physics_SnapToLowerSurface-Physics_HandleLowerRightOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleLowerRightOuterTerrain
@@ -399,15 +392,14 @@ Physics_LowerLeftOuterResponseTable:    dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_ApplyOffsetNegative1Add2-Physics_HandleLowerRightOuterTerrain
 
 ; Resolves the lower-right outer terrain probe
-Physics_HandleLowerRightOuterTerrain:                   ; CODE XREF: Physics_CheckLowerTerrain+5E   j  ; was: sub_14A48
+Physics_HandleLowerRightOuterTerrain:                   ; was: sub_14A48
                                         ; Physics_CheckLowerTerrainWhenDescending+70   j
-                                        ; DATA XREF:
                 bset    #0,6(a5)
                 cmpi.w  #$80,d2
                 bpl.s   Physics_HandleLowerRightOuterTerrain_Dispatch
                 bset    #2,6(a5)
 ; Dispatches the lower-right outer response selected by terrain angle
-Physics_HandleLowerRightOuterTerrain_Dispatch:          ; CODE XREF: Physics_HandleLowerRightOuterTerrain+A   j  ; was: loc_14A5A
+Physics_HandleLowerRightOuterTerrain_Dispatch:          ; was: loc_14A5A
                 andi.w  #$7E,d2                         ; '~'
                 cmpi.w  #$40,d2                         ; '@'
                 bpl.w   Physics_SnapToLowerSurface
@@ -417,7 +409,6 @@ Physics_HandleLowerRightOuterTerrain_Dispatch:          ; CODE XREF: Physics_Han
 ; End of function Physics_HandleLowerRightOuterTerrain
 ; ---------------------------------------------------------------------------
 Physics_LowerRightOuterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperCenterTerrain  ; was: off_14A72
-                                        ; DATA XREF: Physics_HandleLowerRightOuterTerrain+1E   r
                 dc.w    Physics_SnapToLowerSurface-Physics_HandleUpperCenterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperCenterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperCenterTerrain
@@ -443,9 +434,8 @@ Physics_LowerRightOuterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_ApplyOffsetNegative1Sub2-Physics_HandleUpperCenterTerrain
 
 ; Resolves the upper-center terrain probe
-Physics_HandleUpperCenterTerrain:                       ; CODE XREF: Physics_CheckUpperTerrain+3E   j  ; was: sub_14AA2
+Physics_HandleUpperCenterTerrain:                       ; was: sub_14AA2
                                         ; Physics_CheckUpperTerrainWhenRising+44   j
-                                        ; DATA XREF:
                 cmpi.w  #$80,d2
                 bmi.w   Physics_SetSolidTerrainFlag
                 bset    #1,6(a5)
@@ -458,7 +448,6 @@ Physics_HandleUpperCenterTerrain:                       ; CODE XREF: Physics_Che
 ; End of function Physics_HandleUpperCenterTerrain
 ; ---------------------------------------------------------------------------
 Physics_UpperCenterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftInnerTerrain  ; was: off_14AC8
-                                        ; DATA XREF: Physics_HandleUpperCenterTerrain+1A   r
                 dc.w    Physics_SnapToUpperSurface-Physics_HandleUpperLeftInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftInnerTerrain
@@ -484,28 +473,26 @@ Physics_UpperCenterResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_
                 dc.w    Physics_PrepareVerticalOffset8-Physics_HandleUpperLeftInnerTerrain
 
 ; Resolves the upper-left inner terrain probe
-Physics_HandleUpperLeftInnerTerrain:                    ; CODE XREF: Physics_CheckUpperTerrain+1C   p  ; was: sub_14AF8
+Physics_HandleUpperLeftInnerTerrain:                    ; was: sub_14AF8
                                         ; Physics_CheckUpperTerrainWhenRising+1C   p
-                                        ; DATA XREF:
                 cmpi.w  #$80,d2
                 bmi.s   Physics_HandleUpperLeftInnerTerrain_NormalizeAngle
                 cmpi.w  #$C0,d2
                 bmi.w   Physics_ResolveLeftWallCollision
-Physics_HandleUpperLeftInnerTerrain_NormalizeAngle:     ; CODE XREF: Physics_HandleUpperLeftInnerTerrain+4   j  ; was: loc_14B06
+Physics_HandleUpperLeftInnerTerrain_NormalizeAngle:     ; was: loc_14B06
                 andi.w  #$7E,d2                         ; '~'
                 subi.w  #$40,d2                         ; '@'
                 bmi.w   Physics_TerrainEmptyHandler
                 cmpi.w  #$10,d2
                 bmi.s   Physics_HandleUpperLeftInnerTerrain_Dispatch
                 bset    #1,6(a5)
-Physics_HandleUpperLeftInnerTerrain_Dispatch:           ; CODE XREF: Physics_HandleUpperLeftInnerTerrain+1E   j  ; was: loc_14B1E
+Physics_HandleUpperLeftInnerTerrain_Dispatch:           ; was: loc_14B1E
                 movea.w Physics_UpperLeftInnerResponseTable(pc,d2.w),a4
                 adda.l  #Physics_HandleUpperRightInnerTerrain,a4
                 jmp     (a4)
 ; End of function Physics_HandleUpperLeftInnerTerrain
 ; ---------------------------------------------------------------------------
 Physics_UpperLeftInnerResponseTable:    dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightInnerTerrain  ; was: off_14B2A
-                                        ; DATA XREF: Physics_HandleUpperLeftInnerTerrain:Physics_HandleUpperLeftInnerTerrain_Dispatch   r
                 dc.w    Physics_ResolveLeftWallCollision-Physics_HandleUpperRightInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightInnerTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightInnerTerrain
@@ -531,28 +518,26 @@ Physics_UpperLeftInnerResponseTable:    dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightInnerTerrain
 
 ; Resolves the upper-right inner terrain probe
-Physics_HandleUpperRightInnerTerrain:                   ; CODE XREF: Physics_CheckUpperTerrain+2E   p  ; was: sub_14B5A
+Physics_HandleUpperRightInnerTerrain:                   ; was: sub_14B5A
                                         ; Physics_CheckUpperTerrainWhenRising+2E   p
-                                        ; DATA XREF:
                 cmpi.w  #$80,d2
                 bmi.s   Physics_HandleUpperRightInnerTerrain_NormalizeAngle
                 cmpi.w  #$C0,d2
                 bmi.w   Physics_ResolveRightWallCollision
-Physics_HandleUpperRightInnerTerrain_NormalizeAngle:    ; CODE XREF: Physics_HandleUpperRightInnerTerrain+4   j  ; was: loc_14B68
+Physics_HandleUpperRightInnerTerrain_NormalizeAngle:    ; was: loc_14B68
                 andi.w  #$7E,d2                         ; '~'
                 subi.w  #$40,d2                         ; '@'
                 bmi.w   Physics_TerrainEmptyHandler
                 cmpi.w  #$10,d2
                 bmi.s   Physics_HandleUpperRightInnerTerrain_Dispatch
                 bset    #1,6(a5)
-Physics_HandleUpperRightInnerTerrain_Dispatch:          ; CODE XREF: Physics_HandleUpperRightInnerTerrain+1E   j  ; was: loc_14B80
+Physics_HandleUpperRightInnerTerrain_Dispatch:          ; was: loc_14B80
                 movea.w Physics_UpperRightInnerResponseTable(pc,d2.w),a4
                 adda.l  #Physics_HandleUpperLeftOuterTerrain,a4
                 jmp     (a4)
 ; End of function Physics_HandleUpperRightInnerTerrain
 ; ---------------------------------------------------------------------------
 Physics_UpperRightInnerResponseTable:   dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftOuterTerrain  ; was: off_14B8C
-                                        ; DATA XREF: Physics_HandleUpperRightInnerTerrain:Physics_HandleUpperRightInnerTerrain_Dispatch   r
                 dc.w    Physics_ResolveRightWallCollision-Physics_HandleUpperLeftOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftOuterTerrain
@@ -578,9 +563,8 @@ Physics_UpperRightInnerResponseTable:   dc.w    Physics_TerrainEmptyHandler-Phys
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperLeftOuterTerrain
 
 ; Resolves the upper-left outer terrain probe
-Physics_HandleUpperLeftOuterTerrain:                    ; CODE XREF: Physics_CheckUpperTerrain+4E   j  ; was: sub_14BBC
+Physics_HandleUpperLeftOuterTerrain:                    ; was: sub_14BBC
                                         ; Physics_CheckUpperTerrainWhenRising+5A   j
-                                        ; DATA XREF:
                 cmpi.w  #$80,d2
                 bmi.w   Physics_SetSolidTerrainFlag
                 bset    #1,6(a5)
@@ -593,7 +577,6 @@ Physics_HandleUpperLeftOuterTerrain:                    ; CODE XREF: Physics_Che
 ; End of function Physics_HandleUpperLeftOuterTerrain
 ; ---------------------------------------------------------------------------
 Physics_UpperLeftOuterResponseTable:    dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightOuterTerrain  ; was: off_14BE2
-                                        ; DATA XREF: Physics_HandleUpperLeftOuterTerrain+1A   r
                 dc.w    Physics_SnapToUpperSurface-Physics_HandleUpperRightOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightOuterTerrain
                 dc.w    Physics_TerrainEmptyHandler-Physics_HandleUpperRightOuterTerrain

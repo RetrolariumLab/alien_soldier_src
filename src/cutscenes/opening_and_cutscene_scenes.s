@@ -1,14 +1,14 @@
 ; Transitions into the story-screen state
-Frontend_EnterStoryScreen:                              ; DATA XREF: ROM:0001D298   o  ; was: sub_1D3C8
+Frontend_EnterStoryScreen:                              ; was: sub_1D3C8
                 jsr     (Sys_ClearEntityObjectPool).l
                 move.w  #$24,(GameModeIndex).w          ; '$'
                 clr.w   (GameSubstateIndex).w
-FrontendTransition_Return:                              ; CODE XREF: Frontend_EraseSegaScreenPattern+14   j  ; was: locret_1D3D8
+FrontendTransition_Return:                              ; was: locret_1D3D8
                                         ; Frontend_WaitAfterSegaPatternErase+4   j
                 rts
 ; End of function Frontend_EnterStoryScreen
 ; Initializes the intermediate transition scene in the frontend opening sequence
-Frontend_InitializeTransitionScene:                     ; DATA XREF: ROM:0001CF7A   o  ; was: sub_1D3DA
+Frontend_InitializeTransitionScene:                     ; was: sub_1D3DA
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
                 movea.l #FrontendTransitionAssetLoadList,a0
@@ -43,11 +43,11 @@ FrontendTransitionAssetLoadList:    dc.w    7           ; field_0  ; was: stru_1
 
 ; Attributes: thunk
 ; Frontend opening-state thunk that refreshes both scroll-plane buffers
-Frontend_PrepareTransitionScrollPlanes:                 ; DATA XREF: ROM:0001CF7C   o  ; was: sub_1D44A
+Frontend_PrepareTransitionScrollPlanes:                 ; was: sub_1D44A
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function Frontend_PrepareTransitionScrollPlanes
 ; Initializes cutscene with data loading
-Cutscene_InitializeScene:                               ; DATA XREF: ROM:0001CF7E   o  ; was: sub_1D450
+Cutscene_InitializeScene:                               ; was: sub_1D450
                 clr.w   (PrimaryCameraXPosition).w
                 clr.w   (PrimaryCameraYPosition).w
                 clr.b   (VDPReg17Shadow+1).w

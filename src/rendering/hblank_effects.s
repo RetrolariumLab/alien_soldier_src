@@ -1,4 +1,4 @@
-VBlank_Epsilon1ScrollEffect:                            ; DATA XREF: VBlank_DispatchRasterEffect+4A   o  ; was: sub_195C
+VBlank_Epsilon1ScrollEffect:                            ; was: sub_195C
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_Epsilon1ScrollEffect_Update
                 addq.w  #4,(RasterEffectInitState).w
@@ -8,7 +8,7 @@ VBlank_Epsilon1ScrollEffect:                            ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_Epsilon1ScrollEffect_Update:                     ; CODE XREF: VBlank_Epsilon1ScrollEffect+4   j  ; was: loc_198A
+VBlank_Epsilon1ScrollEffect_Update:                     ; was: loc_198A
                 move.w  (Epsilon1TransitionY).w,d1
                 neg.w   d1
                 add.w   (PlaneAShakeOffset).w,d1
@@ -19,7 +19,7 @@ VBlank_Epsilon1ScrollEffect_Update:                     ; CODE XREF: VBlank_Epsi
                 cmpi.w  #$E2,d1
                 bmi.s   VBlank_Epsilon1ScrollEffect_ApplyRegisters
                 move.w  #$E2,d1
-VBlank_Epsilon1ScrollEffect_ApplyRegisters:             ; CODE XREF: VBlank_Epsilon1ScrollEffect+48   j  ; was: loc_19AA
+VBlank_Epsilon1ScrollEffect_ApplyRegisters:             ; was: loc_19AA
                 andi.w  #$FF,d1
                 move.b  d1,(VDPReg10Shadow+1).w
                 move.w  (VDPReg10Shadow).w,(VDP_CTRL).l
@@ -29,11 +29,10 @@ VBlank_Epsilon1ScrollEffect_ApplyRegisters:             ; CODE XREF: VBlank_Epsi
 ; End of function VBlank_Epsilon1ScrollEffect
 ; ---------------------------------------------------------------------------
 HBlank_ApplyEpsilon1VScrollAndPlaneMode_InstallList:    dc.w    0  ; LoadFuncToRAM  ; was: stru_19CC
-                                        ; DATA XREF: VBlank_Epsilon1ScrollEffect+14   o
                 dc.l    HBlank_ApplyEpsilon1VScrollAndPlaneMode_CopyLength  ; ROM source
                 dc.w    $EE00                           ; RAM destination
                 dc.w    $FFFF                           ; end of list
-HBlank_ApplyEpsilon1VScrollAndPlaneMode_CopyLength: dc.w    $200  ; DATA XREF: ROM:HBlank_ApplyEpsilon1VScrollAndPlaneMode_InstallList   o  ; was: word_19D6
+HBlank_ApplyEpsilon1VScrollAndPlaneMode_CopyLength: dc.w    $200  ; was: word_19D6
 
 ; Writes the computed vertical scroll to VSRAM slot 2, then switches
 ; VDP register 11 and plane A's name-table base after a fixed delay
@@ -118,7 +117,7 @@ HBlank_ApplyEpsilon1VScrollAndPlaneMode:                ; was: sub_19D8
                 rte
 ; End of function HBlank_ApplyEpsilon1VScrollAndPlaneMode
 ; Installs an HBlank handler that streams buffered VDP control words
-VBlank_InitBufferedVDPControlEffect:                    ; DATA XREF: VBlank_DispatchRasterEffect+52   o  ; was: sub_1A8E
+VBlank_InitBufferedVDPControlEffect:                    ; was: sub_1A8E
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitBufferedVDPControlEffect_ApplyRegisters
                 addq.w  #4,(RasterEffectInitState).w
@@ -127,7 +126,7 @@ VBlank_InitBufferedVDPControlEffect:                    ; DATA XREF: VBlank_Disp
                 nop
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
-VBlank_InitBufferedVDPControlEffect_ApplyRegisters:     ; CODE XREF: VBlank_InitBufferedVDPControlEffect+4   j  ; was: loc_1AB2
+VBlank_InitBufferedVDPControlEffect_ApplyRegisters:     ; was: loc_1AB2
                 move.w  (VDPReg7Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg12Shadow).w,(VDP_CTRL).l
                 movea.w #(RasterStagingBuffer-M68K_RAM),a6
@@ -135,11 +134,10 @@ VBlank_InitBufferedVDPControlEffect_ApplyRegisters:     ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitBufferedVDPControlEffect
 ; ---------------------------------------------------------------------------
 HBlank_WriteVDPControl_InstallList: dc.w    0           ; field_0  ; was: stru_1AC8
-                                        ; DATA XREF: VBlank_InitBufferedVDPControlEffect+12   o
                 dc.l    HBlank_WriteVDPControl_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteVDPControl_CopyLength:  dc.w    $20         ; DATA XREF: ROM:HBlank_WriteVDPControl_InstallList   o  ; was: word_1AD2
+HBlank_WriteVDPControl_CopyLength:  dc.w    $20         ; was: word_1AD2
 
 ; Writes the next buffered word to the VDP control port
 HBlank_WriteVDPControl:                                 ; was: sub_1AD4
@@ -148,7 +146,7 @@ HBlank_WriteVDPControl:                                 ; was: sub_1AD4
 ; End of function HBlank_WriteVDPControl
 ; Installs Destroyer Proto's buffered VScroll-0 HBlank handler and selects
 ; the buffer at $FFFF9C00
-VBlank_InitDestroyerProtoVScrollEffect:                 ; DATA XREF: VBlank_DispatchRasterEffect+5A   o  ; was: sub_1ADC
+VBlank_InitDestroyerProtoVScrollEffect:                 ; was: sub_1ADC
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitDestroyerProtoVScrollEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -158,7 +156,7 @@ VBlank_InitDestroyerProtoVScrollEffect:                 ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitDestroyerProtoVScrollEffect_SelectBuffer:    ; CODE XREF: VBlank_InitDestroyerProtoVScrollEffect+4   j  ; was: loc_1B0E
+VBlank_InitDestroyerProtoVScrollEffect_SelectBuffer:    ; was: loc_1B0E
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg10Shadow).w,(VDP_CTRL).l
                 lea     (RasterStagingBuffer).w,a6
@@ -166,7 +164,7 @@ VBlank_InitDestroyerProtoVScrollEffect_SelectBuffer:    ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitDestroyerProtoVScrollEffect
 ; Installs Z-Leo's buffered raster-command handler and selects the command
 ; stream at $FFFF9E40
-VBlank_InitZLeoRasterEffect:                            ; DATA XREF: VBlank_DispatchRasterEffect+5E   o  ; was: sub_1B24
+VBlank_InitZLeoRasterEffect:                            ; was: sub_1B24
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitZLeoRasterEffect_UpdateRegisters
                 addq.w  #4,(RasterEffectInitState).w
@@ -176,7 +174,7 @@ VBlank_InitZLeoRasterEffect:                            ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitZLeoRasterEffect_UpdateRegisters:            ; CODE XREF: VBlank_InitZLeoRasterEffect+4   j  ; was: loc_1B50
+VBlank_InitZLeoRasterEffect_UpdateRegisters:            ; was: loc_1B50
                 move.w  (VDPReg11Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg2Shadow).w,(VDP_CTRL).l
                 lea     (ZLeoRasterCommands).w,a6
@@ -185,11 +183,10 @@ VBlank_InitZLeoRasterEffect_UpdateRegisters:            ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitZLeoRasterEffect
 ; ---------------------------------------------------------------------------
 HBlank_ApplyZLeoRasterCommands_InstallList: dc.w    0   ; LoadFuncToRAM  ; was: stru_1B6E
-                                        ; DATA XREF: VBlank_InitZLeoRasterEffect+12   o
                 dc.l    HBlank_ApplyZLeoRasterCommands_CopyLength  ; ROM source
                 dc.w    $EE00                           ; RAM destination
                 dc.w    $FFFF                           ; end of list
-HBlank_ApplyZLeoRasterCommands_CopyLength:  dc.w    $200  ; DATA XREF: ROM:HBlank_ApplyZLeoRasterCommands_InstallList   o  ; was: word_1B78
+HBlank_ApplyZLeoRasterCommands_CopyLength:  dc.w    $200  ; was: word_1B78
 
 ; Consumes Z-Leo's VDP-control and VScroll command stream after a fixed delay
 HBlank_ApplyZLeoRasterCommands:                         ; was: sub_1B7A
@@ -265,7 +262,7 @@ HBlank_ApplyZLeoRasterCommands:                         ; was: sub_1B7A
                 rte
 ; End of function HBlank_ApplyZLeoRasterCommands
 ; Installs the Seven Force intro's delayed window-position HBlank handler
-VBlank_InitSevenForceWindowEffect:                      ; DATA XREF: VBlank_DispatchRasterEffect+62   o  ; was: sub_1C1E
+VBlank_InitSevenForceWindowEffect:                      ; was: sub_1C1E
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitSevenForceWindowEffect_UpdateRegisters
                 addq.w  #4,(RasterEffectInitState).w
@@ -275,7 +272,7 @@ VBlank_InitSevenForceWindowEffect:                      ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitSevenForceWindowEffect_UpdateRegisters:      ; CODE XREF: VBlank_InitSevenForceWindowEffect+4   j  ; was: loc_1C4A
+VBlank_InitSevenForceWindowEffect_UpdateRegisters:      ; was: loc_1C4A
                 move.w  (VDPReg2Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg4Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg17Shadow).w,(VDP_CTRL).l
@@ -284,11 +281,10 @@ VBlank_InitSevenForceWindowEffect_UpdateRegisters:      ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitSevenForceWindowEffect
 ; ---------------------------------------------------------------------------
 HBlank_SetWindowPositionAfterDelay_InstallList: dc.w    0  ; LoadFuncToRAM  ; was: stru_1C6C
-                                        ; DATA XREF: VBlank_InitSevenForceWindowEffect+12   o
                 dc.l    HBlank_SetWindowPositionAfterDelay_CopyLength  ; ROM source
                 dc.w    $EE00                           ; RAM destination
                 dc.w    $FFFF                           ; end of list
-HBlank_SetWindowPositionAfterDelay_CopyLength:  dc.w    $200  ; DATA XREF: ROM:HBlank_SetWindowPositionAfterDelay_InstallList   o  ; was: word_1C76
+HBlank_SetWindowPositionAfterDelay_CopyLength:  dc.w    $200  ; was: word_1C76
 
 ; Writes VDP register 17 ($910A) and register 18 ($9200) after a fixed delay
 HBlank_SetWindowPositionAfterDelay:                     ; was: sub_1C78

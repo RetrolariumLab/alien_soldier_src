@@ -1,7 +1,7 @@
 ; Sniper Honeyviper destruction debris, line-scroll shaping, and angled effect spawning
 
 ; Spawns random debris particle sprites during boss destruction
-Boss_SniperHoneyviperSpawnDebris:                       ; CODE XREF: Boss_SniperHoneyviperUpdateDefeatEffectsAndMotion+6   p  ; was: sub_36FEE
+Boss_SniperHoneyviperSpawnDebris:                       ; was: sub_36FEE
                 move.w  #3,(PlaneAShakeLevel).w
                 jsr     (Projectile_PrepareImpactSpawn).l
                 bne.s   Boss_SniperHoneyviperSpawnDebrisReturn
@@ -23,23 +23,23 @@ Boss_SniperHoneyviperSpawnDebris:                       ; CODE XREF: Boss_Sniper
                 ext.l   d0
                 asl.l   #2,d0
                 move.l  d0,$18(a0)
-Boss_SniperHoneyviperSpawnDebrisReturn:                 ; CODE XREF: Boss_SniperHoneyviperSpawnDebris+C   j  ; was: locret_37046
+Boss_SniperHoneyviperSpawnDebrisReturn:                 ; was: locret_37046
                 rts
 ; End of function Boss_SniperHoneyviperSpawnDebris
 ; Rebuilds Sniper Honeyviper's line-scroll spans and derives its screen position
-Boss_SniperHoneyviperUpdatePositionAndLineScroll:       ; CODE XREF: Boss_SniperHoneyviperInitializeEncounterEntities+140   j  ; was: sub_37048
+Boss_SniperHoneyviperUpdatePositionAndLineScroll:       ; was: sub_37048
                                         ; Boss_SniperHoneyviperUpdateMotionPipeline   p
                 movea.w #(HScrollPlaneBRow32-M68K_RAM),a0
                 moveq   #$FFFFFF80,d0
                 move.w  #$BF,d7
-Boss_SniperHoneyviperScrollInitializeLineOffsets:       ; CODE XREF: Boss_SniperHoneyviperUpdatePositionAndLineScroll+E   j  ; was: loc_37052
+Boss_SniperHoneyviperScrollInitializeLineOffsets:       ; was: loc_37052
                 move.w  d0,(a0)
                 addq.w  #4,a0
                 dbf     d7,Boss_SniperHoneyviperScrollInitializeLineOffsets
                 move.w  $50(a5),d0
                 bmi.s   Boss_SniperHoneyviperScrollUpdateCoordinates
                 moveq   #0,d0
-Boss_SniperHoneyviperScrollUpdateCoordinates:           ; CODE XREF: Boss_SniperHoneyviperUpdatePositionAndLineScroll+16   j  ; was: loc_37062
+Boss_SniperHoneyviperScrollUpdateCoordinates:           ; was: loc_37062
                 add.w   $74(a5),d0
                 subi.w  #$3A,d0                         ; ':'
                 move.w  d0,$14(a5)
@@ -58,7 +58,7 @@ Boss_SniperHoneyviperScrollUpdateCoordinates:           ; CODE XREF: Boss_Sniper
                 addi.w  #-$1BFE,d2
                 movea.w d2,a1
                 moveq   #$32,d7                         ; '2'
-Boss_SniperHoneyviperScrollFillUpperSpan:               ; CODE XREF: Boss_SniperHoneyviperUpdatePositionAndLineScroll+5C   j  ; was: loc_370A0
+Boss_SniperHoneyviperScrollFillUpperSpan:               ; was: loc_370A0
                 move.w  d6,(a1)
                 subq.w  #4,a1
                 dbf     d7,Boss_SniperHoneyviperScrollFillUpperSpan
@@ -75,7 +75,7 @@ Boss_SniperHoneyviperScrollFillUpperSpan:               ; CODE XREF: Boss_Sniper
                 move.w  #0,d1
                 asr.l   #4,d1
                 subq.w  #1,d7
-Boss_SniperHoneyviperScrollInterpolateSpan:             ; CODE XREF: Boss_SniperHoneyviperUpdatePositionAndLineScroll+90   j  ; was: loc_370CE
+Boss_SniperHoneyviperScrollInterpolateSpan:             ; was: loc_370CE
                 move.w  d6,(a1)
                 subq.w  #4,a1
                 swap    d6
@@ -91,7 +91,7 @@ Boss_SniperHoneyviperScrollInterpolateSpan:             ; CODE XREF: Boss_Sniper
                 move.w  $10(a5),d6
                 subi.w  #$A8,d6
                 moveq   #$45,d7                         ; 'E'
-Boss_SniperHoneyviperScrollFillLowerSpan:               ; CODE XREF: Boss_SniperHoneyviperUpdatePositionAndLineScroll+B6   j  ; was: loc_370FA
+Boss_SniperHoneyviperScrollFillLowerSpan:               ; was: loc_370FA
                 move.w  d6,(a1)
                 subq.w  #4,a1
                 dbf     d7,Boss_SniperHoneyviperScrollFillLowerSpan
@@ -120,7 +120,7 @@ Orphaned_SpawnType94RandomAngle:                        ; was: sub_37104
                 move.b  #$40,$21(a0)                    ; '@'
                 move.l  #$F808F808,$2C(a0)
                 move.w  #$14,$26(a0)
-Orphaned_SpawnType94RandomAngleReturn:                  ; CODE XREF: Orphaned_SpawnType94RandomAngle+6   j  ; was: locret_3715E
+Orphaned_SpawnType94RandomAngleReturn:                  ; was: locret_3715E
                                         ; Orphaned_SpawnType94RandomAngle+E   j
                 rts
 ; End of function Orphaned_SpawnType94RandomAngle

@@ -1,4 +1,4 @@
-UI_InitOptionsScreen:                                   ; DATA XREF: Sys_DispatchGameState+72   o  ; was: sub_95CA
+UI_InitOptionsScreen:                                   ; was: sub_95CA
                 tst.w   (GameSubstateIndex).w
                 bne.s   UI_InitOptionsScreenLoadDisplay
                 jsr     (Sys_InitGameMode).l
@@ -14,7 +14,7 @@ UI_InitOptionsScreen:                                   ; DATA XREF: Sys_Dispatc
                 addq.w  #2,(GameSubstateIndex).w
                 jmp     Gfx_QueueLargeFontDMACommand81
 ; ---------------------------------------------------------------------------
-UI_InitOptionsScreenLoadDisplay:                        ; CODE XREF: UI_InitOptionsScreen+4   j  ; was: loc_9612
+UI_InitOptionsScreenLoadDisplay:                        ; was: loc_9612
                 cmpi.w  #4,(GameSubstateIndex).w
                 beq.w   UI_ActivateOptionsScreen
                 addq.w  #2,(GameSubstateIndex).w
@@ -72,7 +72,7 @@ UI_InitOptionsScreenLoadDisplay:                        ; CODE XREF: UI_InitOpti
                 move.w  #$4B14,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; ---------------------------------------------------------------------------
-UI_ActivateOptionsScreen:                               ; CODE XREF: UI_InitOptionsScreen+4E   j  ; was: loc_9728
+UI_ActivateOptionsScreen:                               ; was: loc_9728
                 move.w  #$20,(GameModeIndex).w          ; ' '
                 clr.w   (GameSubstateIndex).w
                 move.w  #$118,d0
@@ -96,14 +96,14 @@ UI_ActivateOptionsScreen:                               ; CODE XREF: UI_InitOpti
                 rts
 ; End of function UI_InitOptionsScreen
 ; Updates options screen with input handling and object processing
-UI_UpdateOptionsScreen:                                 ; DATA XREF: Sys_DispatchGameState+76   o  ; was: sub_9774
+UI_UpdateOptionsScreen:                                 ; was: sub_9774
                 bclr    #1,(PaletteFadeMaskStatus).w
                 beq.s   UI_UpdateOptionsScreenActive
                 move.w  #$14,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
                 jmp     UI_ResetPaletteAndMessageMode_Clear
 ; ---------------------------------------------------------------------------
-UI_UpdateOptionsScreenActive:                           ; CODE XREF: UI_UpdateOptionsScreen+6   j  ; was: loc_978C
+UI_UpdateOptionsScreenActive:                           ; was: loc_978C
                 tst.w   (PaletteFadeMode).w
                 bne.s   UI_UpdateOptionsScreenFrame
                 btst    #7,(ControllerPressedState).w
@@ -113,7 +113,7 @@ UI_UpdateOptionsScreenActive:                           ; CODE XREF: UI_UpdateOp
                 jsr     (Sound_QueueRequest).l
                 move.w  #2,(PaletteFadeMode).w
                 clr.w   (PaletteFadeColorOffset).w
-UI_UpdateOptionsScreenFrame:                            ; CODE XREF: UI_UpdateOptionsScreen+1C   j  ; was: loc_97B4
+UI_UpdateOptionsScreenFrame:                            ; was: loc_97B4
                                         ; UI_UpdateOptionsScreen+24   j
                 jsr     Frontend_AnimateMenuPalette(pc)  ; (pc)
                 nop
@@ -128,7 +128,7 @@ UI_UpdateOptionsScreenFrame:                            ; CODE XREF: UI_UpdateOp
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function UI_UpdateOptionsScreen
 ; Processes directional input and button presses in options menu
-UI_HandleOptionsInput:                                  ; CODE XREF: UI_UpdateOptionsScreen+5E   p  ; was: sub_97EE
+UI_HandleOptionsInput:                                  ; was: sub_97EE
                 bsr.w   FrontendCursor_UpdateFlash
                 btst    #0,(OptionsCursorMoving).w
                 bne.w   OptionsCursor_Animate
@@ -142,7 +142,7 @@ UI_HandleOptionsInput:                                  ; CODE XREF: UI_UpdateOp
                 subq.w  #2,(OptionsHandlerOffset).w
                 bpl.s   UI_HandleOptionsInputCheckDown
                 move.w  #$A,(OptionsHandlerOffset).w
-UI_HandleOptionsInputCheckDown:                         ; CODE XREF: UI_HandleOptionsInput+14   j  ; was: loc_982C
+UI_HandleOptionsInputCheckDown:                         ; was: loc_982C
                                         ; UI_HandleOptionsInput+36   j
                 btst    #1,(ControllerPressedState).w
                 beq.w   UI_HandleOptionsInputUpdateCurrentRow
@@ -155,10 +155,10 @@ UI_HandleOptionsInputCheckDown:                         ; CODE XREF: UI_HandleOp
                 cmpi.w  #$C,(OptionsHandlerOffset).w
                 bmi.s   UI_HandleOptionsInputReturn
                 clr.w   (OptionsHandlerOffset).w
-UI_HandleOptionsInputReturn:                            ; CODE XREF: UI_HandleOptionsInput+6E   j  ; was: locret_9862
+UI_HandleOptionsInputReturn:                            ; was: locret_9862
                 rts
 ; ---------------------------------------------------------------------------
-UI_HandleOptionsInputUpdateCurrentRow:                  ; CODE XREF: UI_HandleOptionsInput+44   j  ; was: loc_9864
+UI_HandleOptionsInputUpdateCurrentRow:                  ; was: loc_9864
                 move.b  (ControllerPressedState).w,(OptionsPressedCopy).w
                 move.b  (ControllerHeldState).w,(OptionsHeldCopy).w
                 move.b  (ControllerPressedState).w,d5
@@ -168,15 +168,15 @@ UI_HandleOptionsInputUpdateCurrentRow:                  ; CODE XREF: UI_HandleOp
                 move.b  #4,d0
                 jmp     (Sound_QueueRequest).l
 ; ---------------------------------------------------------------------------
-UI_HandleOptionsInputCheckHorizontal:                   ; CODE XREF: UI_HandleOptionsInput+8A   j  ; was: loc_988A
+UI_HandleOptionsInputCheckHorizontal:                   ; was: loc_988A
                 andi.b  #$60,d5                         ; '`'
-UI_ProcessSelectedOptionInput:                          ; CODE XREF: UI_HandleSecondaryOptionsInput+8A   j  ; was: loc_988E
+UI_ProcessSelectedOptionInput:                          ; was: loc_988E
                 move.b  (ControllerPressedState).w,d0
                 andi.b  #$C,d0
                 beq.s   UI_UpdateSelectedOptionRepeatDelay
                 move.b  #$AD,d0
                 jsr     (Sound_QueueRequest).l
-UI_UpdateSelectedOptionRepeatDelay:                     ; CODE XREF: UI_HandleOptionsInput+A8   j  ; was: loc_98A2
+UI_UpdateSelectedOptionRepeatDelay:                     ; was: loc_98A2
                 btst    #2,(ControllerHeldState).w
                 bne.s   UI_DecrementSelectedOptionRepeatDelay
                 btst    #3,(ControllerHeldState).w
@@ -184,12 +184,12 @@ UI_UpdateSelectedOptionRepeatDelay:                     ; CODE XREF: UI_HandleOp
                 move.w  #$20,(OptionsRepeatTimer).w     ; ' '
                 bra.s   UI_DispatchSelectedOption
 ; ---------------------------------------------------------------------------
-UI_DecrementSelectedOptionRepeatDelay:                  ; CODE XREF: UI_HandleOptionsInput+BA   j  ; was: loc_98BA
+UI_DecrementSelectedOptionRepeatDelay:                  ; was: loc_98BA
                                         ; UI_HandleOptionsInput+C2   j
                 tst.w   (OptionsRepeatTimer).w
                 beq.s   UI_DispatchSelectedOption
                 subq.w  #1,(OptionsRepeatTimer).w
-UI_DispatchSelectedOption:                              ; CODE XREF: UI_HandleOptionsInput+CA   j  ; was: loc_98C4
+UI_DispatchSelectedOption:                              ; was: loc_98C4
                                         ; UI_HandleOptionsInput+D0   j
                 move.w  (OptionsHandlerOffset).w,d0
                 movea.w UI_OptionHandlerOffsets(pc,d0.w),a0
@@ -205,8 +205,7 @@ UI_OptionHandlerOffsets:    dc.w    UI_UpdateDifficultyOption-UI_UpdateDifficult
                 dc.w    UI_UpdateVoiceTest-UI_UpdateDifficultyOption
 
 ; Renders first row of options with tile graphics
-UI_UpdateDifficultyOption:                              ; CODE XREF: UI_InitOptionsScreen+186   p  ; was: sub_98E0
-                                        ; DATA XREF: UI_HandleOptionsInput+DE   o
+UI_UpdateDifficultyOption:                              ; was: sub_98E0
                 lea     Options_SuperEasyLabelTiles(pc),a1
                 nop
                 lea     Options_SuperHardLabelTiles(pc),a2
@@ -216,8 +215,7 @@ UI_UpdateDifficultyOption:                              ; CODE XREF: UI_InitOpti
                 bra.w   Options_UpdateBit1Toggle
 ; End of function UI_UpdateDifficultyOption
 ; Update the BGM test entry, queue its request, and render its track label
-UI_UpdateBGMTest:                                       ; CODE XREF: UI_InitOptionsScreen+198   p  ; was: sub_98F8
-                                        ; DATA XREF: ROM:000098DA   o
+UI_UpdateBGMTest:                                       ; was: sub_98F8
                 movea.l #Options_BGMTestEntries,a1
                 moveq   #0,d0
                 move.b  (OptionsBGMIndex).w,d0
@@ -229,16 +227,16 @@ UI_UpdateBGMTest:                                       ; CODE XREF: UI_InitOpti
                 move.b  (a1),d0
                 jmp     (Sound_QueueRequest).l
 ; ---------------------------------------------------------------------------
-UI_RenderBGMTestEntry:                                  ; CODE XREF: UI_UpdateBGMTest+12   j  ; was: loc_991A
+UI_RenderBGMTestEntry:                                  ; was: loc_991A
                 movea.w (VDPStagingDataCursor).w,a0
                 adda.l  #2,a1
                 movea.l a1,a2
                 moveq   #$E,d7
-UI_CopyBGMTestEntryTopRow:                              ; CODE XREF: UI_UpdateBGMTest+32   j  ; was: loc_9928
+UI_CopyBGMTestEntryTopRow:                              ; was: loc_9928
                 move.w  (a1)+,(a0)+
                 dbf     d7,UI_CopyBGMTestEntryTopRow
                 moveq   #$E,d7
-UI_CopyBGMTestEntryBottomRow:                           ; CODE XREF: UI_UpdateBGMTest+3E   j  ; was: loc_9930
+UI_CopyBGMTestEntryBottomRow:                           ; was: loc_9930
                 move.w  (a2)+,d0
                 addq.w  #1,d0
                 move.w  d0,(a0)+
@@ -252,11 +250,11 @@ UI_CopyBGMTestEntryBottomRow:                           ; CODE XREF: UI_UpdateBG
                 move.b  #$14,d0
                 bra.s   UI_StoreAndRenderBGMTestSelection
 ; ---------------------------------------------------------------------------
-UI_DecrementBGMTestSelection:                           ; CODE XREF: UI_UpdateBGMTest+56   j  ; was: loc_9956
+UI_DecrementBGMTestSelection:                           ; was: loc_9956
                 subq.b  #1,d0
                 bra.s   UI_StoreAndRenderBGMTestSelection
 ; ---------------------------------------------------------------------------
-UI_CheckIncrementBGMTestSelection:                      ; CODE XREF: UI_UpdateBGMTest+4C   j  ; was: loc_995A
+UI_CheckIncrementBGMTestSelection:                      ; was: loc_995A
                 btst    #3,(OptionsPressedCopy).w
                 beq.s   UI_StoreAndRenderBGMTestSelection
                 move.w  #$A,(OptionsCursorFlashTimer).w
@@ -265,9 +263,9 @@ UI_CheckIncrementBGMTestSelection:                      ; CODE XREF: UI_UpdateBG
                 clr.b   d0
                 bra.s   UI_StoreAndRenderBGMTestSelection
 ; ---------------------------------------------------------------------------
-UI_IncrementBGMTestSelection:                           ; CODE XREF: UI_UpdateBGMTest+74   j  ; was: loc_9972
+UI_IncrementBGMTestSelection:                           ; was: loc_9972
                 addq.b  #1,d0
-UI_StoreAndRenderBGMTestSelection:                      ; CODE XREF: UI_UpdateBGMTest+5C   j  ; was: loc_9974
+UI_StoreAndRenderBGMTestSelection:                      ; was: loc_9974
                                         ; UI_UpdateBGMTest+60   j
                 move.b  d0,(OptionsBGMIndex).w
                 move.w  #$4726,d0
@@ -284,8 +282,7 @@ Options_BGMTestEntries: binclude "data/other/options_bgm_test_entries.bin"  ; wa
 Options_BGMTestEntries_End:                             ; was: word_998C_End
 
 ; Update the SFX test index and queue the selected low- or high-range SFX ID
-UI_UpdateSFXTest:                                       ; CODE XREF: UI_InitOptionsScreen+19E   p  ; was: sub_9C4C
-                                        ; DATA XREF: ROM:000098DC   o
+UI_UpdateSFXTest:                                       ; was: sub_9C4C
                 move.b  (OptionsSFXIndex).w,d0
                 tst.b   d5
                 beq.s   UI_UpdateSFXTestSelection
@@ -294,7 +291,7 @@ UI_UpdateSFXTest:                                       ; CODE XREF: UI_InitOpti
                 move.b  (a0,d0.w),d0
                 jmp     (Sound_QueueRequest).l
 ; ---------------------------------------------------------------------------
-UI_UpdateSFXTestSelection:                              ; CODE XREF: UI_UpdateSFXTest+6   j  ; was: loc_9C64
+UI_UpdateSFXTestSelection:                              ; was: loc_9C64
                 moveq   #1,d1
                 tst.w   (OptionsRepeatTimer).w
                 bne.s   UI_CheckSFXTestPrimaryInput
@@ -306,11 +303,11 @@ UI_UpdateSFXTestSelection:                              ; CODE XREF: UI_UpdateSF
                 bne.s   UI_SelectNextSFXTestIndex
                 bra.s   UI_StoreAndRenderSFXTestSelection
 ; ---------------------------------------------------------------------------
-UI_CheckSFXTestPrimaryInput:                            ; CODE XREF: UI_UpdateSFXTest+1E   j  ; was: loc_9C86
+UI_CheckSFXTestPrimaryInput:                            ; was: loc_9C86
                 btst    #2,(OptionsPressedCopy).w
                 beq.s   UI_CheckNextSFXTestInput
                 move.w  #6,(OptionsCursorFlashTimer).w
-UI_SelectPreviousSFXTestIndex:                          ; CODE XREF: UI_UpdateSFXTest+2E   j  ; was: loc_9C94
+UI_SelectPreviousSFXTestIndex:                          ; was: loc_9C94
                 movem.l d0,-(sp)
                 move.b  #4,d0
                 jsr     (Sound_QueueRequest).l
@@ -320,15 +317,15 @@ UI_SelectPreviousSFXTestIndex:                          ; CODE XREF: UI_UpdateSF
                 move.b  #$98,d0
                 bra.s   UI_StoreAndRenderSFXTestSelection
 ; ---------------------------------------------------------------------------
-UI_DecrementSFXTestSelection:                           ; CODE XREF: UI_UpdateSFXTest+5C   j  ; was: loc_9CB0
+UI_DecrementSFXTestSelection:                           ; was: loc_9CB0
                 subq.b  #1,d0
                 bra.s   UI_StoreAndRenderSFXTestSelection
 ; ---------------------------------------------------------------------------
-UI_CheckNextSFXTestInput:                               ; CODE XREF: UI_UpdateSFXTest+40   j  ; was: loc_9CB4
+UI_CheckNextSFXTestInput:                               ; was: loc_9CB4
                 btst    #3,(OptionsPressedCopy).w
                 beq.s   UI_StoreAndRenderSFXTestSelection
                 move.w  #6,(OptionsCursorFlashTimer).w
-UI_SelectNextSFXTestIndex:                              ; CODE XREF: UI_UpdateSFXTest+36   j  ; was: loc_9CC2
+UI_SelectNextSFXTestIndex:                              ; was: loc_9CC2
                 movem.l d0,-(sp)
                 move.b  #4,d0
                 jsr     (Sound_QueueRequest).l
@@ -338,9 +335,9 @@ UI_SelectNextSFXTestIndex:                              ; CODE XREF: UI_UpdateSF
                 clr.b   d0
                 bra.s   UI_StoreAndRenderSFXTestSelection
 ; ---------------------------------------------------------------------------
-UI_IncrementSFXTestSelection:                           ; CODE XREF: UI_UpdateSFXTest+8C   j  ; was: loc_9CDE
+UI_IncrementSFXTestSelection:                           ; was: loc_9CDE
                 addq.b  #1,d0
-UI_StoreAndRenderSFXTestSelection:                      ; CODE XREF: UI_UpdateSFXTest+26   j  ; was: loc_9CE0
+UI_StoreAndRenderSFXTestSelection:                      ; was: loc_9CE0
                                         ; UI_UpdateSFXTest+38   j
                 move.b  d0,(OptionsSFXIndex).w
                 lea     (Math_PackedBCDLookup).l,a0
@@ -351,8 +348,7 @@ UI_StoreAndRenderSFXTestSelection:                      ; CODE XREF: UI_UpdateSF
                 bra.w   Options_QueueThreeDigitBCD
 ; End of function UI_UpdateSFXTest
 ; Update the voice test index and queue the selected voice-DAC request ID
-UI_UpdateVoiceTest:                                     ; CODE XREF: UI_InitOptionsScreen+1A4   p  ; was: sub_9CFC
-                                        ; DATA XREF: ROM:000098DE   o
+UI_UpdateVoiceTest:                                     ; was: sub_9CFC
                 move.b  (OptionsVoiceIndex).w,d0
                 tst.b   d5
                 beq.s   UI_UpdateVoiceTestSelection
@@ -361,7 +357,7 @@ UI_UpdateVoiceTest:                                     ; CODE XREF: UI_InitOpti
                 move.b  (a0,d0.w),d0
                 jmp     (Sound_QueueRequest).l
 ; ---------------------------------------------------------------------------
-UI_UpdateVoiceTestSelection:                            ; CODE XREF: UI_UpdateVoiceTest+6   j  ; was: loc_9D14
+UI_UpdateVoiceTestSelection:                            ; was: loc_9D14
                 moveq   #1,d1
                 tst.w   (OptionsRepeatTimer).w
                 bne.s   UI_CheckVoiceTestPrimaryInput
@@ -373,33 +369,33 @@ UI_UpdateVoiceTestSelection:                            ; CODE XREF: UI_UpdateVo
                 bne.s   UI_SelectNextVoiceTestIndex
                 bra.s   UI_StoreAndRenderVoiceTestSelection
 ; ---------------------------------------------------------------------------
-UI_CheckVoiceTestPrimaryInput:                          ; CODE XREF: UI_UpdateVoiceTest+1E   j  ; was: loc_9D36
+UI_CheckVoiceTestPrimaryInput:                          ; was: loc_9D36
                 btst    #2,(OptionsPressedCopy).w
                 beq.s   UI_CheckNextVoiceTestInput
                 move.w  #6,(OptionsCursorFlashTimer).w
-UI_SelectPreviousVoiceTestIndex:                        ; CODE XREF: UI_UpdateVoiceTest+2E   j  ; was: loc_9D44
+UI_SelectPreviousVoiceTestIndex:                        ; was: loc_9D44
                 tst.b   d0
                 bne.s   UI_DecrementVoiceTestSelection
                 move.b  #$25,d0                         ; '%'
                 bra.s   UI_StoreAndRenderVoiceTestSelection
 ; ---------------------------------------------------------------------------
-UI_DecrementVoiceTestSelection:                         ; CODE XREF: UI_UpdateVoiceTest+4A   j  ; was: loc_9D4E
+UI_DecrementVoiceTestSelection:                         ; was: loc_9D4E
                 subq.w  #1,d0
                 bra.s   UI_StoreAndRenderVoiceTestSelection
 ; ---------------------------------------------------------------------------
-UI_CheckNextVoiceTestInput:                             ; CODE XREF: UI_UpdateVoiceTest+40   j  ; was: loc_9D52
+UI_CheckNextVoiceTestInput:                             ; was: loc_9D52
                 btst    #3,(OptionsPressedCopy).w
                 beq.s   UI_StoreAndRenderVoiceTestSelection
                 move.w  #6,(OptionsCursorFlashTimer).w
-UI_SelectNextVoiceTestIndex:                            ; CODE XREF: UI_UpdateVoiceTest+36   j  ; was: loc_9D60
+UI_SelectNextVoiceTestIndex:                            ; was: loc_9D60
                 cmpi.b  #$25,d0                         ; '%'
                 bne.s   UI_IncrementVoiceTestSelection
                 clr.b   d0
                 bra.s   UI_StoreAndRenderVoiceTestSelection
 ; ---------------------------------------------------------------------------
-UI_IncrementVoiceTestSelection:                         ; CODE XREF: UI_UpdateVoiceTest+68   j  ; was: loc_9D6A
+UI_IncrementVoiceTestSelection:                         ; was: loc_9D6A
                 addq.w  #1,d0
-UI_StoreAndRenderVoiceTestSelection:                    ; CODE XREF: UI_UpdateVoiceTest+26   j  ; was: loc_9D6C
+UI_StoreAndRenderVoiceTestSelection:                    ; was: loc_9D6C
                                         ; UI_UpdateVoiceTest+38   j
                 move.b  d0,(OptionsVoiceIndex).w
                 lea     (Math_PackedBCDLookup).l,a0
@@ -420,8 +416,7 @@ UI_UpdateMessageOption:
                 bra.w   Options_UpdateBit2Toggle
 ; End of function UI_UpdateMessageOption
 ; Update the BGM enable toggle in the shared sound-disable flags
-UI_UpdateBGMOption:                                     ; CODE XREF: UI_InitOptionsScreen+18C   p  ; was: sub_9DA0
-                                        ; DATA XREF: ROM:000098D6   o
+UI_UpdateBGMOption:                                     ; was: sub_9DA0
                 lea     Options_OnLabelTiles(pc),a1
                 nop
                 lea     Options_OffLabelTiles(pc),a2
@@ -431,8 +426,7 @@ UI_UpdateBGMOption:                                     ; CODE XREF: UI_InitOpti
                 bra.w   Options_UpdateBit1Toggle
 ; End of function UI_UpdateBGMOption
 ; Update the SFX enable toggle in the shared sound-disable flags
-UI_UpdateSFXOption:                                     ; CODE XREF: UI_InitOptionsScreen+192   p  ; was: sub_9DB8
-                                        ; DATA XREF: ROM:000098D8   o
+UI_UpdateSFXOption:                                     ; was: sub_9DB8
                 lea     Options_OnLabelTiles(pc),a1
                 nop
                 lea     Options_OffLabelTiles(pc),a2
@@ -442,7 +436,7 @@ UI_UpdateSFXOption:                                     ; CODE XREF: UI_InitOpti
                 bra.w   Options_UpdateBit2Toggle
 ; End of function UI_UpdateSFXOption
 ; Initialize the secondary options path that reuses the three sound-test rows
-UI_InitSecondaryOptionsMenu:                            ; DATA XREF: Sys_DispatchGameState+A2   o  ; was: sub_9DD0
+UI_InitSecondaryOptionsMenu:                            ; was: sub_9DD0
                 tst.w   (GameSubstateIndex).w
                 bne.s   UI_ActivateSecondaryOptionsMenu
                 jsr     (Sys_InitGameMode).l
@@ -457,7 +451,7 @@ UI_InitSecondaryOptionsMenu:                            ; DATA XREF: Sys_Dispatc
                 addq.w  #2,(GameSubstateIndex).w
                 jmp     Gfx_QueueLargeFontDMACommand81
 ; ---------------------------------------------------------------------------
-UI_ActivateSecondaryOptionsMenu:                        ; CODE XREF: UI_InitSecondaryOptionsMenu+4   j  ; was: loc_9E12
+UI_ActivateSecondaryOptionsMenu:                        ; was: loc_9E12
                 addq.w  #4,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
                 move.w  #$800,d0
@@ -484,14 +478,14 @@ UI_ActivateSecondaryOptionsMenu:                        ; CODE XREF: UI_InitSeco
                 clr.b   (OptionsHeldCopy).w
 ; End of function UI_InitSecondaryOptionsMenu
 ; Update the secondary options path and its shared sound-test handlers
-UI_UpdateSecondaryOptionsMenu:                          ; DATA XREF: Sys_DispatchGameState+A6   o  ; was: sub_9E88
+UI_UpdateSecondaryOptionsMenu:                          ; was: sub_9E88
                 bclr    #1,(PaletteFadeMaskStatus).w
                 beq.s   UI_UpdateSecondaryOptionsMenuActive
                 move.w  #$54,(GameModeIndex).w          ; 'T'
                 clr.w   (GameSubstateIndex).w
                 jmp     UI_ResetPaletteAndMessageMode_Clear
 ; ---------------------------------------------------------------------------
-UI_UpdateSecondaryOptionsMenuActive:                    ; CODE XREF: UI_UpdateSecondaryOptionsMenu+6   j  ; was: loc_9EA0
+UI_UpdateSecondaryOptionsMenuActive:                    ; was: loc_9EA0
                 tst.w   (PaletteFadeMode).w
                 bne.s   UI_UpdateSecondaryOptionsMenuFrame
                 btst    #7,(ControllerPressedState).w
@@ -500,7 +494,7 @@ UI_UpdateSecondaryOptionsMenuActive:                    ; CODE XREF: UI_UpdateSe
                 jsr     (Sound_QueueRequest).l
                 move.w  #2,(PaletteFadeMode).w
                 clr.w   (PaletteFadeColorOffset).w
-UI_UpdateSecondaryOptionsMenuFrame:                     ; CODE XREF: UI_UpdateSecondaryOptionsMenu+1C   j  ; was: loc_9EC2
+UI_UpdateSecondaryOptionsMenuFrame:                     ; was: loc_9EC2
                                         ; UI_UpdateSecondaryOptionsMenu+24   j
                 jsr     (Object_ApplyCameraMotion).l
                 jsr     (Sprite_InitializePriorityBuckets).l
@@ -513,7 +507,7 @@ UI_UpdateSecondaryOptionsMenuFrame:                     ; CODE XREF: UI_UpdateSe
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function UI_UpdateSecondaryOptionsMenu
 ; Processes D-pad input for options menu cursor
-UI_HandleSecondaryOptionsInput:                         ; CODE XREF: UI_UpdateSecondaryOptionsMenu+52   p  ; was: sub_9EF6
+UI_HandleSecondaryOptionsInput:                         ; was: sub_9EF6
                 bsr.w   FrontendCursor_UpdateFlash
                 btst    #0,(OptionsCursorMoving).w
                 bne.w   SecondaryOptionsCursor_Animate
@@ -526,7 +520,7 @@ UI_HandleSecondaryOptionsInput:                         ; CODE XREF: UI_UpdateSe
                 subq.w  #2,d0
                 bpl.s   UI_PlaySecondaryOptionsMoveSound
                 moveq   #0,d0
-UI_HandleSecondaryOptionsInputCheckDown:                ; CODE XREF: UI_HandleSecondaryOptionsInput+18   j  ; was: loc_9F28
+UI_HandleSecondaryOptionsInputCheckDown:                ; was: loc_9F28
                 btst    #1,(ControllerPressedState).w
                 beq.w   UI_StoreSecondaryOptionsSelection
                 bset    #0,(OptionsCursorMoving).w
@@ -538,13 +532,13 @@ UI_HandleSecondaryOptionsInputCheckDown:                ; CODE XREF: UI_HandleSe
                 moveq   #6,d0
                 bra.s   UI_StoreSecondaryOptionsSelection
 ; ---------------------------------------------------------------------------
-UI_PlaySecondaryOptionsMoveSound:                       ; CODE XREF: UI_HandleSecondaryOptionsInput+2E   j  ; was: loc_9F50
+UI_PlaySecondaryOptionsMoveSound:                       ; was: loc_9F50
                                         ; UI_HandleSecondaryOptionsInput+54   j
                 movem.l d0,-(sp)
                 move.b  #$DB,d0
                 jsr     (Sound_QueueRequest).l
                 movem.l (sp)+,d0
-UI_StoreSecondaryOptionsSelection:                      ; CODE XREF: UI_HandleSecondaryOptionsInput+38   j  ; was: loc_9F62
+UI_StoreSecondaryOptionsSelection:                      ; was: loc_9F62
                                         ; UI_HandleSecondaryOptionsInput+58   j
                 move.w  d0,(OptionsSelection).w
                 move.w  UI_SecondaryOptionsHandlerIndices(pc,d0.w),(OptionsHandlerOffset).w

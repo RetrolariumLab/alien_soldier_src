@@ -1,5 +1,5 @@
 ; Dispatches Xi-Tiger's Stage 8 train entrance sequence
-Cutscene_XiTigerTrainEntranceController:                ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2EF32
+Cutscene_XiTigerTrainEntranceController:                ; was: sub_2EF32
                 clr.w   6(a5)
                 move.w  4(a5),d0
                 lea     Cutscene_XiTigerTrainEntranceStateTable(pc,d0.w),a0
@@ -7,7 +7,7 @@ Cutscene_XiTigerTrainEntranceController:                ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function Cutscene_XiTigerTrainEntranceController
 ; ---------------------------------------------------------------------------
-Cutscene_XiTigerTrainEntranceStateTable:    dc.w    Cutscene_XiTigerTrainEntranceInit-*  ; DATA XREF: Cutscene_XiTigerTrainEntranceController+8   o  ; was: off_2EF42
+Cutscene_XiTigerTrainEntranceStateTable:    dc.w    Cutscene_XiTigerTrainEntranceInit-*  ; was: off_2EF42
                 dc.w    Cutscene_XiTigerTrainEntranceWait-*
                 dc.w    Cutscene_XiTigerTrainEntrancePrepareJump-*
                 dc.w    Cutscene_XiTigerTrainEntranceSwitchAirbornePose-*
@@ -15,7 +15,7 @@ Cutscene_XiTigerTrainEntranceStateTable:    dc.w    Cutscene_XiTigerTrainEntranc
                 dc.w    Cutscene_XiTigerTrainEntranceFinish-*
 
 ; Initializes Xi-Tiger above the Stage 8 train roof
-Cutscene_XiTigerTrainEntranceInit:                      ; DATA XREF: ROM:Cutscene_XiTigerTrainEntranceStateTable   o  ; was: sub_2EF4E
+Cutscene_XiTigerTrainEntranceInit:                      ; was: sub_2EF4E
                 addq.w  #2,4(a5)
                 move.w  #$80,$48(a5)
                 bsr.w   Cutscene_XiTigerActorSetup
@@ -28,7 +28,7 @@ Cutscene_XiTigerTrainEntranceInit:                      ; DATA XREF: ROM:Cutscen
                 rts
 ; End of function Cutscene_XiTigerTrainEntranceInit
 ; Loads the palette and common object parameters used by both entrances
-Cutscene_XiTigerActorSetup:                             ; CODE XREF: Cutscene_XiTigerTrainEntranceInit+A   p  ; was: sub_2EF7E
+Cutscene_XiTigerActorSetup:                             ; was: sub_2EF7E
                                         ; Cutscene_XiTigerBossEntranceInit+4   p
                 lea     (XiTigerCutscenePaletteCommand).l,a0
                 jsr     (Gfx_LoadPaletteCommand).l
@@ -42,14 +42,14 @@ Cutscene_XiTigerActorSetup:                             ; CODE XREF: Cutscene_Xi
                 rts
 ; End of function Cutscene_XiTigerActorSetup
 ; Keeps Xi-Tiger on the Stage 8 train roof while the vertical scroll changes
-Cutscene_XiTigerAlignToTrainRoof:                       ; CODE XREF: Cutscene_XiTigerTrainEntranceInit+1E   p  ; was: sub_2EFBA
+Cutscene_XiTigerAlignToTrainRoof:                       ; was: sub_2EFBA
                                         ; Cutscene_XiTigerTrainEntranceWait   p
                 move.w  (PrimaryCameraYPosition).w,$14(a5)
                 addi.w  #$A8,$14(a5)
                 rts
 ; End of function Cutscene_XiTigerAlignToTrainRoof
 ; Holds the opening pose, then starts the pre-jump delay
-Cutscene_XiTigerTrainEntranceWait:                      ; DATA XREF: ROM:0002EF44   o  ; was: sub_2EFC8
+Cutscene_XiTigerTrainEntranceWait:                      ; was: sub_2EFC8
                 bsr.w   Cutscene_XiTigerAlignToTrainRoof
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerTrainEntranceWait_Return
@@ -57,11 +57,11 @@ Cutscene_XiTigerTrainEntranceWait:                      ; DATA XREF: ROM:0002EF4
                 clr.w   $C(a5)
                 move.w  #$10,$48(a5)
                 addq.w  #2,4(a5)
-Cutscene_XiTigerTrainEntranceWait_Return:               ; CODE XREF: Cutscene_XiTigerTrainEntranceWait+8   j  ; was: locret_2EFE8
+Cutscene_XiTigerTrainEntranceWait_Return:               ; was: locret_2EFE8
                 rts
 ; End of function Cutscene_XiTigerTrainEntranceWait
 ; Waits in the second pose, then launches Xi-Tiger up and to the left
-Cutscene_XiTigerTrainEntrancePrepareJump:               ; DATA XREF: ROM:0002EF46   o  ; was: sub_2EFEA
+Cutscene_XiTigerTrainEntrancePrepareJump:               ; was: sub_2EFEA
                 bsr.w   Cutscene_XiTigerAlignToTrainRoof
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerTrainEntrancePrepareJump_Return
@@ -71,32 +71,32 @@ Cutscene_XiTigerTrainEntrancePrepareJump:               ; DATA XREF: ROM:0002EF4
                 move.w  #$FFFC,$18(a5)
                 move.w  #4,$48(a5)
                 addq.w  #2,4(a5)
-Cutscene_XiTigerTrainEntrancePrepareJump_Return:        ; CODE XREF: Cutscene_XiTigerTrainEntrancePrepareJump+8   j  ; was: locret_2F018
+Cutscene_XiTigerTrainEntrancePrepareJump_Return:        ; was: locret_2F018
                 rts
 ; End of function Cutscene_XiTigerTrainEntrancePrepareJump
 ; Changes to the airborne pose four frames after launch
-Cutscene_XiTigerTrainEntranceSwitchAirbornePose:        ; DATA XREF: ROM:0002EF48   o  ; was: sub_2F01A
+Cutscene_XiTigerTrainEntranceSwitchAirbornePose:        ; was: sub_2F01A
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerTrainEntranceSwitchAirbornePose_Return
                 move.l  #Cutscene_XiTigerEntranceAirborneMapping,8(a5)
                 clr.w   $C(a5)
                 addq.w  #2,4(a5)
-Cutscene_XiTigerTrainEntranceSwitchAirbornePose_Return:  ; CODE XREF: Cutscene_XiTigerTrainEntranceSwitchAirbornePose+4   j  ; was: locret_2F030
+Cutscene_XiTigerTrainEntranceSwitchAirbornePose_Return:  ; was: locret_2F030
                 rts
 ; End of function Cutscene_XiTigerTrainEntranceSwitchAirbornePose
 ; Applies gravity and detects Xi-Tiger landing after the train-roof jump
-Cutscene_XiTigerTrainEntranceUpdateJump:                ; DATA XREF: ROM:0002EF4A   o  ; was: sub_2F032
+Cutscene_XiTigerTrainEntranceUpdateJump:                ; was: sub_2F032
                 btst    #7,$1C(a5)
                 bne.s   Cutscene_XiTigerTrainEntranceApplyGravity
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
                 bne.s   Cutscene_XiTigerTrainEntranceOnLanding
-Cutscene_XiTigerTrainEntranceApplyGravity:              ; CODE XREF: Cutscene_XiTigerTrainEntranceUpdateJump+6   j  ; was: loc_2F048
+Cutscene_XiTigerTrainEntranceApplyGravity:              ; was: loc_2F048
                 addi.l  #$4000,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
 ; Stops the jump on landing and starts the departure delay
-Cutscene_XiTigerTrainEntranceOnLanding:                 ; CODE XREF: Cutscene_XiTigerTrainEntranceUpdateJump+14   j  ; was: loc_2F052
+Cutscene_XiTigerTrainEntranceOnLanding:                 ; was: loc_2F052
                 clr.l   $18(a5)
                 move.w  #$80,$48(a5)
                 move.l  #Cutscene_XiTigerEntranceGroundedMapping,8(a5)
@@ -105,7 +105,7 @@ Cutscene_XiTigerTrainEntranceOnLanding:                 ; CODE XREF: Cutscene_Xi
                 rts
 ; End of function Cutscene_XiTigerTrainEntranceUpdateJump
 ; Removes Xi-Tiger, releases the stage gate, and restores the stage palette
-Cutscene_XiTigerTrainEntranceFinish:                    ; DATA XREF: ROM:0002EF4C   o  ; was: sub_2F06E
+Cutscene_XiTigerTrainEntranceFinish:                    ; was: sub_2F06E
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerTrainEntranceFinish_Return
                 move.w  #$1000,2(a5)
@@ -113,11 +113,11 @@ Cutscene_XiTigerTrainEntranceFinish:                    ; DATA XREF: ROM:0002EF4
                 lea     (SharedStagePaletteCommand).l,a0
                 jmp     Gfx_LoadPaletteCommand
 ; ---------------------------------------------------------------------------
-Cutscene_XiTigerTrainEntranceFinish_Return:             ; CODE XREF: Cutscene_XiTigerTrainEntranceFinish+4   j  ; was: locret_2F08A
+Cutscene_XiTigerTrainEntranceFinish_Return:             ; was: locret_2F08A
                 rts
 ; End of function Cutscene_XiTigerTrainEntranceFinish
 ; Dispatches Xi-Tiger's entrance immediately before his boss encounter
-Cutscene_XiTigerBossEntranceController:                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2F08C
+Cutscene_XiTigerBossEntranceController:                 ; was: sub_2F08C
                 clr.w   6(a5)
                 move.w  4(a5),d0
                 lea     Cutscene_XiTigerBossEntranceStateTable(pc,d0.w),a0
@@ -125,7 +125,7 @@ Cutscene_XiTigerBossEntranceController:                 ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function Cutscene_XiTigerBossEntranceController
 ; ---------------------------------------------------------------------------
-Cutscene_XiTigerBossEntranceStateTable: dc.w    Cutscene_XiTigerBossEntranceInit-*  ; DATA XREF: Cutscene_XiTigerBossEntranceController+8   o  ; was: off_2F09C
+Cutscene_XiTigerBossEntranceStateTable: dc.w    Cutscene_XiTigerBossEntranceInit-*  ; was: off_2F09C
                 dc.w    Cutscene_XiTigerBossEntranceWaitForScroll-*
                 dc.w    Cutscene_XiTigerBossEntranceUpdateJump-*
                 dc.w    Cutscene_XiTigerBossEntranceLandingDelay-*
@@ -133,7 +133,7 @@ Cutscene_XiTigerBossEntranceStateTable: dc.w    Cutscene_XiTigerBossEntranceInit
                 dc.w    Cutscene_XiTigerBossEntranceHoldPose-*
 
 ; Initializes the boss-entrance actor below the current camera position
-Cutscene_XiTigerBossEntranceInit:                       ; DATA XREF: ROM:Cutscene_XiTigerBossEntranceStateTable   o  ; was: sub_2F0A8
+Cutscene_XiTigerBossEntranceInit:                       ; was: sub_2F0A8
                 addq.w  #2,4(a5)
                 bsr.w   Cutscene_XiTigerActorSetup
                 bsr.w   Cutscene_XiTigerBossEntranceUpdateY
@@ -141,14 +141,14 @@ Cutscene_XiTigerBossEntranceInit:                       ; DATA XREF: ROM:Cutscen
                 rts
 ; End of function Cutscene_XiTigerBossEntranceInit
 ; Keeps Xi-Tiger at the boss-entrance vertical offset from stage scroll
-Cutscene_XiTigerBossEntranceUpdateY:                    ; CODE XREF: Cutscene_XiTigerBossEntranceInit+8   p  ; was: sub_2F0BC
+Cutscene_XiTigerBossEntranceUpdateY:                    ; was: sub_2F0BC
                                         ; Cutscene_XiTigerBossEntranceWaitForScroll+6   p
                 move.w  (PrimaryCameraYPosition).w,$14(a5)
                 addi.w  #$128,$14(a5)
                 rts
 ; End of function Cutscene_XiTigerBossEntranceUpdateY
 ; Waits for the secondary camera X to go negative, then launches Xi-Tiger up
-Cutscene_XiTigerBossEntranceWaitForScroll:              ; DATA XREF: ROM:0002F09E   o  ; was: sub_2F0CA
+Cutscene_XiTigerBossEntranceWaitForScroll:              ; was: sub_2F0CA
                 move.w  #$60,$10(a5)                    ; '`'
                 bsr.w   Cutscene_XiTigerBossEntranceUpdateY
                 tst.w   (SecondaryCameraXPos).w
@@ -157,21 +157,21 @@ Cutscene_XiTigerBossEntranceWaitForScroll:              ; DATA XREF: ROM:0002F09
                 move.w  #2,$18(a5)
                 move.l  #Cutscene_XiTigerEntranceAirborneMapping,8(a5)
                 addq.w  #2,4(a5)
-Cutscene_XiTigerBossEntranceWaitForScroll_Return:       ; CODE XREF: Cutscene_XiTigerBossEntranceWaitForScroll+E   j  ; was: locret_2F0F4
+Cutscene_XiTigerBossEntranceWaitForScroll_Return:       ; was: locret_2F0F4
                 rts
 ; End of function Cutscene_XiTigerBossEntranceWaitForScroll
 ; Applies gravity and detects the boss-entrance landing
-Cutscene_XiTigerBossEntranceUpdateJump:                 ; DATA XREF: ROM:0002F0A0   o  ; was: sub_2F0F6
+Cutscene_XiTigerBossEntranceUpdateJump:                 ; was: sub_2F0F6
                 btst    #7,$1C(a5)
                 bne.s   Cutscene_XiTigerBossEntranceApplyGravity
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
                 bne.s   Cutscene_XiTigerBossEntranceOnLanding
-Cutscene_XiTigerBossEntranceApplyGravity:               ; CODE XREF: Cutscene_XiTigerBossEntranceUpdateJump+6   j  ; was: loc_2F10C
+Cutscene_XiTigerBossEntranceApplyGravity:               ; was: loc_2F10C
                 addi.l  #$4000,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Cutscene_XiTigerBossEntranceOnLanding:                  ; CODE XREF: Cutscene_XiTigerBossEntranceUpdateJump+14   j  ; was: loc_2F116
+Cutscene_XiTigerBossEntranceOnLanding:                  ; was: loc_2F116
                 clr.l   $18(a5)
                 move.l  #Cutscene_XiTigerEntrancePreJumpAndLandingMapping,8(a5)
                 clr.w   $C(a5)
@@ -180,7 +180,7 @@ Cutscene_XiTigerBossEntranceOnLanding:                  ; CODE XREF: Cutscene_Xi
                 rts
 ; End of function Cutscene_XiTigerBossEntranceUpdateJump
 ; Holds the landing pose, then starts the two-frame sound animation
-Cutscene_XiTigerBossEntranceLandingDelay:               ; DATA XREF: ROM:0002F0A2   o  ; was: sub_2F132
+Cutscene_XiTigerBossEntranceLandingDelay:               ; was: sub_2F132
                 bsr.w   Cutscene_XiTigerBossEntranceUpdateY
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerBossEntranceLandingDelay_Return
@@ -191,11 +191,11 @@ Cutscene_XiTigerBossEntranceLandingDelay:               ; DATA XREF: ROM:0002F0A
                 addq.w  #2,4(a5)
                 move.b  #$20,d0                         ; ' '
                 jsr     (Sound_QueueSFXRequest).l
-Cutscene_XiTigerBossEntranceLandingDelay_Return:        ; CODE XREF: Cutscene_XiTigerBossEntranceLandingDelay+8   j  ; was: locret_2F160
+Cutscene_XiTigerBossEntranceLandingDelay_Return:        ; was: locret_2F160
                 rts
 ; End of function Cutscene_XiTigerBossEntranceLandingDelay
 ; Plays the two landing frames and advances to the held pose
-Cutscene_XiTigerBossEntranceCycleLandingFrames:         ; DATA XREF: ROM:0002F0A4   o  ; was: sub_2F162
+Cutscene_XiTigerBossEntranceCycleLandingFrames:         ; was: sub_2F162
                 bsr.w   Cutscene_XiTigerBossEntranceUpdateY
                 subq.w  #1,$48(a5)
                 bne.s   Cutscene_XiTigerBossEntranceCycleLandingFrames_Return
@@ -208,16 +208,16 @@ Cutscene_XiTigerBossEntranceCycleLandingFrames:         ; DATA XREF: ROM:0002F0A
                 cmpi.w  #2,$4A(a5)
                 bne.s   Cutscene_XiTigerBossEntranceCycleLandingFrames_Return
                 addq.w  #2,4(a5)
-Cutscene_XiTigerBossEntranceCycleLandingFrames_Return:  ; CODE XREF: Cutscene_XiTigerBossEntranceCycleLandingFrames+8   j  ; was: locret_2F192
+Cutscene_XiTigerBossEntranceCycleLandingFrames_Return:  ; was: locret_2F192
                                         ; Cutscene_XiTigerBossEntranceCycleLandingFrames+2A   j
                 rts
 ; End of function Cutscene_XiTigerBossEntranceCycleLandingFrames
 ; ---------------------------------------------------------------------------
-Cutscene_XiTigerBossEntranceLandingFrameTable:  dc.l    Cutscene_XiTigerEntranceLandingMappingA  ; DATA XREF: Cutscene_XiTigerBossEntranceCycleLandingFrames+10   r  ; was: off_2F194
+Cutscene_XiTigerBossEntranceLandingFrameTable:  dc.l    Cutscene_XiTigerEntranceLandingMappingA  ; was: off_2F194
                 dc.l    Cutscene_XiTigerEntranceLandingMappingB
 
 ; Holds Xi-Tiger at the stage-relative boss-entrance position
-Cutscene_XiTigerBossEntranceHoldPose:                   ; DATA XREF: ROM:0002F0A6   o  ; was: sub_2F19C
+Cutscene_XiTigerBossEntranceHoldPose:                   ; was: sub_2F19C
                 bsr.w   Cutscene_XiTigerBossEntranceUpdateY
                 rts
 ; End of function Cutscene_XiTigerBossEntranceHoldPose

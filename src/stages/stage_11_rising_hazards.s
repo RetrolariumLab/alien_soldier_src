@@ -1,5 +1,5 @@
 ; Main handler for the Stage 11 submerged launcher
-Stage11_RisingHazardLauncherMain:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_30D90
+Stage11_RisingHazardLauncherMain:                       ; was: sub_30D90
                 cmpi.w  #$14,4(a5)
                 bcc.s   Stage11_RisingHazardLauncherDispatch
                 tst.w   $24(a5)
@@ -166,7 +166,7 @@ Stage11_RisingHazardLauncherFireUpward:                 ; was: sub_30F7E
                 rts
 ; End of function Stage11_RisingHazardLauncherFireUpward
 ; State dispatcher for a rising Stage 11 hazard
-Stage11_RisingHazardMain:                               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_30FA6
+Stage11_RisingHazardMain:                               ; was: sub_30FA6
                 move.w  4(a5),d0
                 lea     Stage11_RisingHazardStates(pc,d0.w),a0
                 adda.w  (a0),a0

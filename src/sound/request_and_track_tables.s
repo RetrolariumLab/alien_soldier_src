@@ -1,4 +1,4 @@
-Sound_BGMPointerTable:  dc.l    Sound_BGM_81            ; DATA XREF: Sound_LoadBGMRequest+16   o  ; was: off_84E78
+Sound_BGMPointerTable:  dc.l    Sound_BGM_81            ; was: off_84E78
                                         ; Sound_DriverInterfaceTable+8   o
                 dc.l    Sound_BGM_82
                 dc.l    Sound_BGM_83
@@ -31,7 +31,6 @@ Sound_BGMPointerTable:  dc.l    Sound_BGM_81            ; DATA XREF: Sound_LoadB
                 dc.l    Sound_BGM_81
                 dc.l    Sound_BGM_9F
 Sound_RequestPriorityTable: dc.b    $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF  ; was: byte_84EF4
-                                        ; DATA XREF: Sound_SelectPendingRequest   o
                                         ; Sound_DriverInterfaceTable   o
                 dc.b    $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
                 dc.b    $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
@@ -49,7 +48,7 @@ Sound_RequestPriorityTable: dc.b    $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF,
                 dc.b    $59, $54, $54, $5B, $5B, $5A, $5A, $54, $54, $54, $45, $52, $53, $53, $50, $5B
                 dc.b    $55, $55, $55, $5B, $5B, $5B, $5B, $5B, $FF, $FF, $FF, $FF, $FF, $FF
 ; Ordinary SFX pointer base shared by the $40-$7F and $A0-$F8 index paths
-Sound_OrdinarySFXPointerTableBase:  dc.l    Sound_SFX_A0  ; DATA XREF: Sound_LoadSFX:Sound_SelectLowRangeSFXPointerTable   o  ; was: off_84FF2
+Sound_OrdinarySFXPointerTableBase:  dc.l    Sound_SFX_A0  ; was: off_84FF2
                                         ; Sound_DriverInterfaceTable+$C   o
                                         ; Sound_LoadSFX:Sound_SelectHighRangeSFXPointerTable   o
                 dc.l    Sound_SFX_A1
@@ -140,13 +139,13 @@ Sound_OrdinarySFXPointerTableBase:  dc.l    Sound_SFX_A0  ; DATA XREF: Sound_Loa
                 dc.l    Sound_SFX_F6
                 dc.l    Sound_SFX_F7
                 dc.l    Sound_SFX_F8
-Sound_SpecialSFXPointerTable:   dc.l    Sound_SFX_F9    ; DATA XREF: Sound_LoadSpecialSFX:Sound_ResolveSpecialSFXHeader   o  ; was: off_85156
+Sound_SpecialSFXPointerTable:   dc.l    Sound_SFX_F9    ; was: off_85156
                                         ; Sound_DriverInterfaceTable+4   o
                 dc.l    Sound_SFX_FA
                 dc.l    Sound_SFX_FB
                 dc.l    Sound_SFX_FC
 ; Low-range table reached through the shared ordinary-SFX arithmetic base
-Sound_LowRangeSFXPointerTable:  dc.l    Sound_SFX_40    ; DATA XREF: Sound_DriverInterfaceTable+$20   o  ; was: off_85166
+Sound_LowRangeSFXPointerTable:  dc.l    Sound_SFX_40    ; was: off_85166
                 dc.l    Sound_SFX_41
                 dc.l    Sound_SFX_42
                 dc.l    Sound_SFX_43

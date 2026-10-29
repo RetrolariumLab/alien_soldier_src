@@ -1,10 +1,10 @@
-Debug_LambdaBunnyViewerMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_50FA6
+Debug_LambdaBunnyViewerMain:                            ; was: sub_50FA6
                 tst.w   4(a5)
                 beq.w   Debug_LambdaBunnyViewerDispatchState
                 tst.w   8(a5)
                 beq.s   Debug_LambdaBunnyViewerDispatchState
                 jsr     (Gfx_ProcessDefaultColorFade).l
-Debug_LambdaBunnyViewerDispatchState:                   ; CODE XREF: Debug_LambdaBunnyViewerMain+4   j  ; was: loc_50FBA
+Debug_LambdaBunnyViewerDispatchState:                   ; was: loc_50FBA
                                         ; Debug_LambdaBunnyViewerMain+C   j
                 move.w  4(a5),d0
                 movea.w Debug_LambdaBunnyViewerStateTable(pc,d0.w),a0
@@ -13,16 +13,15 @@ Debug_LambdaBunnyViewerDispatchState:                   ; CODE XREF: Debug_Lambd
 ; End of function Debug_LambdaBunnyViewerMain
 ; ---------------------------------------------------------------------------
 Debug_LambdaBunnyViewerStateTable:  dc.w    Debug_LambdaBunnyViewerInitialize-Debug_LambdaBunnyViewerIdle  ; was: off_50FCA
-                                        ; DATA XREF: Debug_LambdaBunnyViewerMain+18   r
                 dc.w    Debug_LambdaBunnyViewerUpdate-Debug_LambdaBunnyViewerIdle
 
-Debug_LambdaBunnyViewerIdle:                            ; CODE XREF: Debug_LambdaBunnyViewerInitialize+4   j  ; was: nullsub_119
+Debug_LambdaBunnyViewerIdle:                            ; was: nullsub_119
                                         ; Debug_LambdaBunnyViewerFaceLeft+4   j
                 rts
 ; End of function Debug_LambdaBunnyViewerIdle
 
 ; Initialize Lambda Bunny (entity type $3EC) as a pad-driven pose viewer
-Debug_LambdaBunnyViewerInitialize:                      ; DATA XREF: ROM:Debug_LambdaBunnyViewerStateTable   o  ; was: sub_50FD0
+Debug_LambdaBunnyViewerInitialize:                      ; was: sub_50FD0
                 tst.w   (DataLoaderControl).w
                 bmi.w   Debug_LambdaBunnyViewerIdle
                 move.w  #1,8(a5)
@@ -77,7 +76,7 @@ Debug_LambdaBunnyViewerInitialize:                      ; DATA XREF: ROM:Debug_L
                 bsr.w   Debug_LambdaBunnyViewerLoadLeftTiles
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerConfigureInteractiveState:       ; CODE XREF: Debug_LambdaBunnyViewerInitialize+106   j  ; was: loc_510DA
+Debug_LambdaBunnyViewerConfigureInteractiveState:       ; was: loc_510DA
                 move.w  #2,4(a5)
                 move.w  #$120,$10(a5)
                 move.w  #$E0,$14(a5)
@@ -90,33 +89,33 @@ Debug_LambdaBunnyViewerConfigureInteractiveState:       ; CODE XREF: Debug_Lambd
                 move.w  #$CF20,$4A(a5)
                 move.w  #$148,$914(a5)
 ; Interactive viewer update: facing, angle, pose, linked parts, and screen anchor
-Debug_LambdaBunnyViewerUpdate:                          ; DATA XREF: ROM:00050FCC   o  ; was: loc_51116
+Debug_LambdaBunnyViewerUpdate:                          ; was: loc_51116
                 tst.w   (MessageSequenceState).w
                 bne.s   Debug_LambdaBunnyViewerProcessFacingInput
                 move.b  #1,(SceneSequenceFlags).w
-Debug_LambdaBunnyViewerProcessFacingInput:              ; CODE XREF: Debug_LambdaBunnyViewerInitialize+14A   j  ; was: loc_51122
+Debug_LambdaBunnyViewerProcessFacingInput:              ; was: loc_51122
                 btst    #6,(ControllerHeldState).w
                 beq.s   Debug_LambdaBunnyViewerCheckFaceRightInput
                 bsr.w   Debug_LambdaBunnyViewerFaceLeft
-Debug_LambdaBunnyViewerCheckFaceRightInput:             ; CODE XREF: Debug_LambdaBunnyViewerInitialize+158   j  ; was: loc_5112E
+Debug_LambdaBunnyViewerCheckFaceRightInput:             ; was: loc_5112E
                 btst    #5,(ControllerHeldState).w
                 beq.s   Debug_LambdaBunnyViewerCheckAngleIncreaseInput
                 bsr.w   Debug_LambdaBunnyViewerFaceRight
-Debug_LambdaBunnyViewerCheckAngleIncreaseInput:         ; CODE XREF: Debug_LambdaBunnyViewerInitialize+164   j  ; was: loc_5113A
+Debug_LambdaBunnyViewerCheckAngleIncreaseInput:         ; was: loc_5113A
                 btst    #2,(ControllerHeldState).w
                 beq.s   Debug_LambdaBunnyViewerCheckAngleDecreaseInput
                 addq.b  #1,$29F(a5)
-Debug_LambdaBunnyViewerCheckAngleDecreaseInput:         ; CODE XREF: Debug_LambdaBunnyViewerInitialize+170   j  ; was: loc_51146
+Debug_LambdaBunnyViewerCheckAngleDecreaseInput:         ; was: loc_51146
                 btst    #3,(ControllerHeldState).w
                 beq.s   Debug_LambdaBunnyViewerPreparePoseUpdate
                 subq.b  #1,$29F(a5)
-Debug_LambdaBunnyViewerPreparePoseUpdate:               ; CODE XREF: Debug_LambdaBunnyViewerInitialize+17C   j  ; was: loc_51152
+Debug_LambdaBunnyViewerPreparePoseUpdate:               ; was: loc_51152
                 andi.w  #$1FE,$56(a5)
                 lea     Debug_LambdaBunnyViewerPoses(pc),a1
                 nop
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerUpdatePoseAndParts:              ; CODE XREF: Debug_LambdaBunnyViewerInitialize+18E   j  ; was: loc_51162
+Debug_LambdaBunnyViewerUpdatePoseAndParts:              ; was: loc_51162
                 bsr.w   Debug_LambdaBunnyViewerAdvancePoseScript
                 moveq   #$14,d7
                 jsr     (Sprite_SetMetaspriteTraversalPointers).l
@@ -125,7 +124,7 @@ Debug_LambdaBunnyViewerUpdatePoseAndParts:              ; CODE XREF: Debug_Lambd
                 tst.w   $54(a5)
                 beq.s   Debug_LambdaBunnyViewerPositionUpperPartPair
                 neg.w   d7
-Debug_LambdaBunnyViewerPositionUpperPartPair:           ; CODE XREF: Debug_LambdaBunnyViewerInitialize+1AA   j  ; was: loc_5117E
+Debug_LambdaBunnyViewerPositionUpperPartPair:           ; was: loc_5117E
                 move.w  d7,d0
                 add.w   $640(a5),d0
                 move.w  d0,$820(a5)
@@ -136,7 +135,7 @@ Debug_LambdaBunnyViewerPositionUpperPartPair:           ; CODE XREF: Debug_Lambd
                 cmpi.w  #4,d0
                 bmi.s   Debug_LambdaBunnyViewerStoreUpperPartPairPosition
                 move.l  #Debug_LambdaBunnyViewerPartPairMappingB,$7E8(a5)
-Debug_LambdaBunnyViewerStoreUpperPartPairPosition:      ; CODE XREF: Debug_LambdaBunnyViewerInitialize+1CE   j  ; was: loc_511A8
+Debug_LambdaBunnyViewerStoreUpperPartPairPosition:      ; was: loc_511A8
                 add.w   $644(a5),d0
                 addi.w  #$28,d0                         ; '('
                 move.w  d0,$824(a5)
@@ -151,7 +150,7 @@ Debug_LambdaBunnyViewerStoreUpperPartPairPosition:      ; CODE XREF: Debug_Lambd
                 cmpi.w  #4,d0
                 bmi.s   Debug_LambdaBunnyViewerStoreLowerPartPairPosition
                 move.l  #Debug_LambdaBunnyViewerPartPairMappingB,$8A8(a5)
-Debug_LambdaBunnyViewerStoreLowerPartPairPosition:      ; CODE XREF: Debug_LambdaBunnyViewerInitialize+208   j  ; was: loc_511E2
+Debug_LambdaBunnyViewerStoreLowerPartPairPosition:      ; was: loc_511E2
                 add.w   $7C4(a5),d0
                 addi.w  #$28,d0                         ; '('
                 move.w  d0,$8E4(a5)
@@ -164,7 +163,7 @@ Debug_LambdaBunnyViewerStoreLowerPartPairPosition:      ; CODE XREF: Debug_Lambd
                 tst.w   $54(a5)
                 beq.s   Debug_LambdaBunnyViewerPositionGun
                 neg.w   d5
-Debug_LambdaBunnyViewerPositionGun:                     ; CODE XREF: Debug_LambdaBunnyViewerInitialize+23C   j  ; was: loc_51210
+Debug_LambdaBunnyViewerPositionGun:                     ; was: loc_51210
                 add.w   $D0(a5),d5
                 move.w  $D4(a5),d6
                 addi.w  #-8,d6
@@ -178,7 +177,7 @@ Debug_LambdaBunnyViewerPositionGun:                     ; CODE XREF: Debug_Lambd
                 bsr.w   Debug_LambdaBunnyViewerUpdateGunMapping
                 bra.w   Debug_LambdaBunnyViewerUpdateScreenAnchor
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerPositionExtendedGun:             ; CODE XREF: Debug_LambdaBunnyViewerInitialize+254   j  ; was: loc_5123E
+Debug_LambdaBunnyViewerPositionExtendedGun:             ; was: loc_5123E
                 lea     (Math_SineTable).l,a0
                 move.l  #Debug_LambdaBunnyViewerExtendedGunMapping,$9C8(a5)
                 bset    #3,$9CE(a5)
@@ -187,7 +186,7 @@ Debug_LambdaBunnyViewerPositionExtendedGun:             ; CODE XREF: Debug_Lambd
                 beq.s   Debug_LambdaBunnyViewerCalculateExtendedGunOffsets
                 bclr    #3,$9CE(a5)
                 move.w  #$160,d7
-Debug_LambdaBunnyViewerCalculateExtendedGunOffsets:     ; CODE XREF: Debug_LambdaBunnyViewerInitialize+28A   j  ; was: loc_51266
+Debug_LambdaBunnyViewerCalculateExtendedGunOffsets:     ; was: loc_51266
                 move.w  -$80(a0,d7.w),d1
                 move.w  (a0,d7.w),d2
                 ext.w   d3
@@ -205,12 +204,12 @@ Debug_LambdaBunnyViewerCalculateExtendedGunOffsets:     ; CODE XREF: Debug_Lambd
                 addi.w  #-$C,d6
                 add.w   d5,$9D0(a5)
                 add.w   d6,$9D4(a5)
-Debug_LambdaBunnyViewerUpdateScreenAnchor:              ; CODE XREF: Debug_LambdaBunnyViewerInitialize+26A   j  ; was: loc_5129E
+Debug_LambdaBunnyViewerUpdateScreenAnchor:              ; was: loc_5129E
                 move.w  #$A7,d0
                 tst.w   $54(a5)
                 beq.s   Debug_LambdaBunnyViewerStoreScreenAnchor
                 move.w  #$97,d0
-Debug_LambdaBunnyViewerStoreScreenAnchor:               ; CODE XREF: Debug_LambdaBunnyViewerInitialize+2D6   j  ; was: loc_512AC
+Debug_LambdaBunnyViewerStoreScreenAnchor:               ; was: loc_512AC
                 sub.w   $70(a5),d0
                 move.w  $74(a5),d1
                 addi.w  #$3C,d1                         ; '<'
@@ -220,7 +219,7 @@ Debug_LambdaBunnyViewerStoreScreenAnchor:               ; CODE XREF: Debug_Lambd
                 rts
 ; End of function Debug_LambdaBunnyViewerInitialize
 ; Face the composite sprite left and load its left-facing tiles
-Debug_LambdaBunnyViewerFaceLeft:                        ; CODE XREF: Debug_LambdaBunnyViewerInitialize+15A   p  ; was: sub_512C8
+Debug_LambdaBunnyViewerFaceLeft:                        ; was: sub_512C8
                 tst.w   $54(a5)
                 beq.w   Debug_LambdaBunnyViewerIdle
                 clr.w   $54(a5)
@@ -239,7 +238,7 @@ Debug_LambdaBunnyViewerFaceLeft:                        ; CODE XREF: Debug_Lambd
                 bra.w   Debug_LambdaBunnyViewerLoadLeftTiles
 ; End of function Debug_LambdaBunnyViewerFaceLeft
 ; Face the composite sprite right and load its right-facing tiles
-Debug_LambdaBunnyViewerFaceRight:                       ; CODE XREF: Debug_LambdaBunnyViewerInitialize+166   p  ; was: sub_51306
+Debug_LambdaBunnyViewerFaceRight:                       ; was: sub_51306
                 tst.w   $54(a5)
                 bne.w   Debug_LambdaBunnyViewerIdle
                 move.w  #$100,$54(a5)
@@ -260,7 +259,7 @@ Debug_LambdaBunnyViewerFaceRight:                       ; CODE XREF: Debug_Lambd
                 jmp     Tilemap_QueueIndexedColumns
 ; End of function Debug_LambdaBunnyViewerFaceRight
 ; Load the viewer's left-facing tile set
-Debug_LambdaBunnyViewerLoadLeftTiles:                   ; CODE XREF: Debug_LambdaBunnyViewerInitialize+102   p  ; was: sub_5134E
+Debug_LambdaBunnyViewerLoadLeftTiles:                   ; was: sub_5134E
                                         ; Debug_LambdaBunnyViewerFaceLeft+3A   j
                 lea     Debug_LambdaBunnyViewerLeftHeadColumns(pc),a0
                 nop
@@ -268,12 +267,10 @@ Debug_LambdaBunnyViewerLoadLeftTiles:                   ; CODE XREF: Debug_Lambd
 ; End of function Debug_LambdaBunnyViewerLoadLeftTiles
 ; ---------------------------------------------------------------------------
 Debug_LambdaBunnyViewerRightHeadColumns:    dc.w    $6100, $2000, $102, $2829, $2A2B, $2C2D  ; was: word_5135A
-                                        ; DATA XREF: Debug_LambdaBunnyViewerFaceRight+3C   o
-Debug_LambdaBunnyViewerLeftHeadColumns: dc.w    $6100, $2000, $102, $8A89, $8C8B, $8E8D  ; was: word_51366
-                                        ; DATA XREF: Debug_LambdaBunnyViewerLoadLeftTiles   o
+Debug_LambdaBunnyViewerLeftHeadColumns:     dc.w    $6100, $2000, $102, $8A89, $8C8B, $8E8D  ; was: word_51366
 
 ; Copy the gun-part transform and select its mapping from the aiming angle
-Debug_LambdaBunnyViewerUpdateGunMapping:                ; CODE XREF: Debug_LambdaBunnyViewerInitialize+266   p  ; was: sub_51372
+Debug_LambdaBunnyViewerUpdateGunMapping:                ; was: sub_51372
                 move.w  $2B0(a5),$9D0(a5)
                 move.w  $2B4(a5),$9D4(a5)
                 move.w  $2AE(a5),$9CE(a5)
@@ -285,7 +282,7 @@ Debug_LambdaBunnyViewerUpdateGunMapping:                ; CODE XREF: Debug_Lambd
                 rts
 ; End of function Debug_LambdaBunnyViewerUpdateGunMapping
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerGunMappingTable: dc.l    Debug_LambdaBunnyViewerGunMapping0  ; DATA XREF: Debug_LambdaBunnyViewerUpdateGunMapping+20   r  ; was: off_5139A
+Debug_LambdaBunnyViewerGunMappingTable: dc.l    Debug_LambdaBunnyViewerGunMapping0  ; was: off_5139A
                 dc.l    Debug_LambdaBunnyViewerGunMapping1
                 dc.l    Debug_LambdaBunnyViewerGunMapping2
                 dc.l    Debug_LambdaBunnyViewerGunMapping3
@@ -295,11 +292,11 @@ Debug_LambdaBunnyViewerGunMappingTable: dc.l    Debug_LambdaBunnyViewerGunMappin
                 dc.l    Debug_LambdaBunnyViewerGunMapping7
 
 ; Interpret pose commands and update all sixteen composite-part values
-Debug_LambdaBunnyViewerAdvancePoseScript:               ; CODE XREF: Debug_LambdaBunnyViewerInitialize:Debug_LambdaBunnyViewerUpdatePoseAndParts   p  ; was: sub_513BA
+Debug_LambdaBunnyViewerAdvancePoseScript:               ; was: sub_513BA
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Debug_LambdaBunnyViewerTickPoseInterpolation
-Debug_LambdaBunnyViewerReadNextPoseCommand:             ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+24   j  ; was: loc_513C4
+Debug_LambdaBunnyViewerReadNextPoseCommand:             ; was: loc_513C4
                                         ; Debug_LambdaBunnyViewerAdvancePoseScript+44   j
                 move.w  $58(a5),d0
                 bmi.w   Debug_LambdaBunnyViewerStorePoseComponents
@@ -309,21 +306,21 @@ Debug_LambdaBunnyViewerReadNextPoseCommand:             ; CODE XREF: Debug_Lambd
                 addq.w  #2,$58(a5)
                 bra.s   Debug_LambdaBunnyViewerReadNextPoseCommand
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerCheckPoseControlCommand:         ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+18   j  ; was: loc_513E0
+Debug_LambdaBunnyViewerCheckPoseControlCommand:         ; was: loc_513E0
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Debug_LambdaBunnyViewerHandlePoseLoopCommand
                 move.w  d3,$58(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerHandlePoseLoopCommand:           ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+2E   j  ; was: loc_513F0
+Debug_LambdaBunnyViewerHandlePoseLoopCommand:           ; was: loc_513F0
                 cmpi.w  #$FFFF,d3
                 bne.s   Debug_LambdaBunnyViewerBeginPoseCommandInterpolation
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Debug_LambdaBunnyViewerReadNextPoseCommand
 ; ---------------------------------------------------------------------------
-Debug_LambdaBunnyViewerBeginPoseCommandInterpolation:   ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+3A   j  ; was: loc_51400
+Debug_LambdaBunnyViewerBeginPoseCommandInterpolation:   ; was: loc_51400
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -338,12 +335,12 @@ Debug_LambdaBunnyViewerBeginPoseCommandInterpolation:   ; CODE XREF: Debug_Lambd
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Debug_LambdaBunnyViewerStorePoseComponents
-Debug_LambdaBunnyViewerTickPoseInterpolation:           ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+8   j  ; was: loc_51432
+Debug_LambdaBunnyViewerTickPoseInterpolation:           ; was: loc_51432
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$10,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Debug_LambdaBunnyViewerStorePoseComponents:             ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+E   j  ; was: loc_51442
+Debug_LambdaBunnyViewerStorePoseComponents:             ; was: loc_51442
                                         ; Debug_LambdaBunnyViewerAdvancePoseScript+76   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
@@ -414,7 +411,7 @@ Debug_LambdaBunnyViewerStorePoseComponents:             ; CODE XREF: Debug_Lambd
                 rts
 ; End of function Debug_LambdaBunnyViewerAdvancePoseScript
 ; Initialize interpolation deltas for the next viewer pose command
-Debug_LambdaBunnyViewerBeginPoseInterpolation:          ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+5C   p  ; was: sub_51514
+Debug_LambdaBunnyViewerBeginPoseInterpolation:          ; was: sub_51514
                 lea     Debug_LambdaBunnyViewerPoseBaseValues(pc),a1
                 nop
                 moveq   #$10,d7
@@ -430,13 +427,10 @@ Debug_LambdaBunnyViewerInitializePoseChannels:          ; was: sub_5152A
 ; End of function Debug_LambdaBunnyViewerInitializePoseChannels
 ; ---------------------------------------------------------------------------
 Debug_LambdaBunnyViewerPoseBaseValues:  dc.b    $40, $C0, $80, $80, $A0, $80, $A0, $80, $80, $A0, $80, 0, $A0, $80, $80, $80  ; was: byte_51536
-                                        ; DATA XREF: Debug_LambdaBunnyViewerBeginPoseInterpolation   o
-Debug_LambdaBunnyViewerPoses:   dc.b    $10, $18, 0, 0, $10, $10, 0, 0, $10, $18, 0, $10, $20, $20, 0, $10  ; was: byte_51546
-                                        ; DATA XREF: Debug_LambdaBunnyViewerInitialize+188   o
+Debug_LambdaBunnyViewerPoses:           dc.b    $10, $18, 0, 0, $10, $10, 0, 0, $10, $18, 0, $10, $20, $20, 0, $10  ; was: byte_51546
                 dc.b    $FF, $FF, 8, $C, 0, $20, $12, $12, 0, $20, 2, 4, 0, $30, 9, 9
                 dc.b    0, $30, $10, $30, 0, $20, $FF, $FE
 Debug_LambdaBunnyViewerPoseTable:   dc.b    $BC, $4A, $11, $F, $2C, $98, $78, $A8, $E8, $36, 3, $90, $54, 4, 2, 3  ; was: byte_5156E
-                                        ; DATA XREF: Debug_LambdaBunnyViewerAdvancePoseScript+54   o
                 dc.b    $CA, $41, $E, $12, $30, $96, $78, $AC, $D8, $1A, $FC, $A0, $3A, $FC, $A, 0
                 dc.b    $C0, $46, $10, $12, 8, $F8, $50, $18, $E0, $50, 4, $A0, $20, 4, 0, 4
                 dc.b    $B8, $3C, $11, $F, $F8, $C8, $48, 8, $C0, $40, $FC, $A0, $14, 4, 0, 6

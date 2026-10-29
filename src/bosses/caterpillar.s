@@ -1,6 +1,6 @@
 ; Caterpillar wave controller, linked segments, and stage ship states
 
-Boss_CaterpillarMain:                                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D0AE
+Boss_CaterpillarMain:                                   ; was: sub_3D0AE
                 move.w  4(a5),d0
                 movea.w Boss_CaterpillarStateOffsets(pc,d0.w),a0
                 adda.l  #Boss_CaterpillarInit,a0
@@ -8,35 +8,34 @@ Boss_CaterpillarMain:                                   ; DATA XREF: ROM:Entity_
 ; End of function Boss_CaterpillarMain
 ; ---------------------------------------------------------------------------
 Boss_CaterpillarStateOffsets:   dc.w    Boss_CaterpillarInit-Boss_CaterpillarInit  ; was: off_3D0BE
-                                        ; DATA XREF: Boss_CaterpillarMain+4   r
                 dc.w    Boss_CaterpillarAnimateWave-Boss_CaterpillarInit
 
 ; Initializes caterpillar boss entity
-Boss_CaterpillarInit:                                   ; DATA XREF: Boss_CaterpillarMain+8   o  ; was: sub_3D0C2
+Boss_CaterpillarInit:                                   ; was: sub_3D0C2
                                         ; ROM:Boss_CaterpillarStateOffsets   o
                 addq.w  #2,4(a5)
                 bra.w   Boss_CaterpillarInitSegments
 ; End of function Boss_CaterpillarInit
 ; Animates wave pattern for caterpillar movement
-Boss_CaterpillarAnimateWave:                            ; DATA XREF: ROM:0003D0C0   o  ; was: sub_3D0CA
+Boss_CaterpillarAnimateWave:                            ; was: sub_3D0CA
                 addq.w  #4,$56(a5)
                 andi.w  #$1FE,$56(a5)
                 move.w  $56(a5),d0
                 movea.w #(CaterpillarPhaseTable-M68K_RAM),a0
                 move.w  #$FFDA,d1
                 moveq   #$A,d7
-Boss_CaterpillarWriteLeadingPhaseRamp:                  ; CODE XREF: Boss_CaterpillarAnimateWave+1C   j  ; was: loc_3D0E2
+Boss_CaterpillarWriteLeadingPhaseRamp:                  ; was: loc_3D0E2
                 move.w  d0,(a0)+
                 subq.w  #6,d0
                 dbf     d7,Boss_CaterpillarWriteLeadingPhaseRamp
                 subi.w  #$10,d0
                 moveq   #3,d7
-Boss_CaterpillarWritePhasePlateau:                      ; CODE XREF: Boss_CaterpillarAnimateWave+28   j  ; was: loc_3D0F0
+Boss_CaterpillarWritePhasePlateau:                      ; was: loc_3D0F0
                 move.w  d0,(a0)+
                 dbf     d7,Boss_CaterpillarWritePhasePlateau
                 add.w   d1,d0
                 moveq   #$17,d7
-Boss_CaterpillarWriteMiddlePhasePattern:                ; CODE XREF: Boss_CaterpillarAnimateWave+40   j  ; was: loc_3D0FA
+Boss_CaterpillarWriteMiddlePhasePattern:                ; was: loc_3D0FA
                 move.w  d0,(a0)+
                 subq.w  #6,d0
                 move.w  d0,(a0)+
@@ -47,7 +46,7 @@ Boss_CaterpillarWriteMiddlePhasePattern:                ; CODE XREF: Boss_Caterp
                 add.w   d1,d0
                 dbf     d7,Boss_CaterpillarWriteMiddlePhasePattern
                 moveq   #9,d7
-Boss_CaterpillarWriteTrailingPhaseRamp:                 ; CODE XREF: Boss_CaterpillarAnimateWave+4A   j  ; was: loc_3D110
+Boss_CaterpillarWriteTrailingPhaseRamp:                 ; was: loc_3D110
                 move.w  d0,(a0)+
                 addq.w  #6,d0
                 dbf     d7,Boss_CaterpillarWriteTrailingPhaseRamp
@@ -63,7 +62,7 @@ Boss_CaterpillarWriteTrailingPhaseRamp:                 ; CODE XREF: Boss_Caterp
                 move.w  #$1FE,d2
                 move.w  #$10,d3
                 moveq   #$13,d7
-Boss_CaterpillarWriteVisibleWaveOffsets:                ; CODE XREF: Boss_CaterpillarAnimateWave+8A   j  ; was: loc_3D142
+Boss_CaterpillarWriteVisibleWaveOffsets:                ; was: loc_3D142
                 move.w  (a0)+,d0
                 and.w   d2,d0
                 move.w  (a2,d0.w),d1
@@ -76,7 +75,7 @@ Boss_CaterpillarWriteVisibleWaveOffsets:                ; CODE XREF: Boss_Caterp
                 rts
 ; End of function Boss_CaterpillarAnimateWave
 ; Initializes caterpillar body segments from table
-Boss_CaterpillarInitSegments:                           ; CODE XREF: Boss_CaterpillarInit+4   j  ; was: sub_3D15A
+Boss_CaterpillarInitSegments:                           ; was: sub_3D15A
                 movea.w a5,a0
                 lea     Boss_CaterpillarSegmentDescriptors(pc),a1
                 nop
@@ -86,7 +85,7 @@ Boss_CaterpillarInitSegments:                           ; CODE XREF: Boss_Caterp
                 moveq   #$D,d7
 ; End of function Boss_CaterpillarInitSegments
 ; Initializes a caller-sized batch of consecutive segment records
-Boss_CaterpillarInitializeSegmentBatch:                 ; CODE XREF: Boss_CaterpillarInitSegments+A   p  ; was: sub_3D16C
+Boss_CaterpillarInitializeSegmentBatch:                 ; was: sub_3D16C
                                         ; Boss_CaterpillarInitializeSegmentBatch+28   j
                 lea     $60(a0),a0
                 move.w  #$C300,$E(a0)
@@ -101,7 +100,7 @@ Boss_CaterpillarInitializeSegmentBatch:                 ; CODE XREF: Boss_Caterp
                 rts
 ; End of function Boss_CaterpillarInitializeSegmentBatch
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarSegmentDescriptors: dc.w    $288, $3D8, $28  ; DATA XREF: Boss_CaterpillarInitSegments+2   o  ; was: word_3D19A
+Boss_CaterpillarSegmentDescriptors: dc.w    $288, $3D8, $28  ; was: word_3D19A
                 dc.w    $13C, $4D8, $48
                 dc.w    $144, $518, $50
                 dc.w    $13C, $558, $58
@@ -118,7 +117,7 @@ Boss_CaterpillarSegmentDescriptors: dc.w    $288, $3D8, $28  ; DATA XREF: Boss_C
                 dc.w    $140, $958, $D8
 
 ; Damageable body segment that periodically launches homing projectiles
-Boss_CaterpillarHomingProjectileSegment:                ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D1F4
+Boss_CaterpillarHomingProjectileSegment:                ; was: sub_3D1F4
                 tst.w   4(a5)
                 bne.s   Boss_CaterpillarUpdateHomingProjectileSegment
                 addq.w  #2,4(a5)
@@ -133,23 +132,23 @@ Boss_CaterpillarHomingProjectileSegment:                ; DATA XREF: ROM:Entity_
                 move.w  #3,$4A(a5)
                 clr.w   $4C(a5)
                 clr.w   $54(a5)
-Boss_CaterpillarUpdateHomingProjectileSegment:          ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+4   j  ; was: loc_3D23A
+Boss_CaterpillarUpdateHomingProjectileSegment:          ; was: loc_3D23A
                 tst.w   $24(a5)
                 bpl.s   Boss_CaterpillarPositionHomingProjectileSegment
                 jmp     Boss_CaterpillarSpawnExplosion
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarPositionHomingProjectileSegment:        ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+4A   j  ; was: loc_3D246
+Boss_CaterpillarPositionHomingProjectileSegment:        ; was: loc_3D246
                 bsr.w   Boss_CaterpillarPositionSegmentOnWave
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 cmpi.w  #$70,d0                         ; 'p'
                 bpl.s   Boss_CaterpillarTryHomingProjectileVolley
                 bset    #4,2(a5)
-Boss_CaterpillarHomingProjectileSegmentReturn:          ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+70   j  ; was: locret_3D25E
+Boss_CaterpillarHomingProjectileSegmentReturn:          ; was: locret_3D25E
                                         ; Boss_CaterpillarHomingProjectileSegment+76   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarTryHomingProjectileVolley:              ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+62   j  ; was: loc_3D260
+Boss_CaterpillarTryHomingProjectileVolley:              ; was: loc_3D260
                 tst.b   $21(a5)
                 beq.s   Boss_CaterpillarHomingProjectileSegmentReturn
                 subq.w  #1,$48(a5)
@@ -167,7 +166,7 @@ Boss_CaterpillarTryHomingProjectileVolley:              ; CODE XREF: Boss_Caterp
                 move.w  #$FFF8,$54(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarSpawnHomingProjectile:                  ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+88   j  ; was: loc_3D29C
+Boss_CaterpillarSpawnHomingProjectile:                  ; was: loc_3D29C
                 bsr.w   Boss_CaterpillarFindFreeHomingProjectileSlot
                 bne.s   Boss_CaterpillarHomingProjectileSegmentReturn
                 move.w  $54(a5),d7
@@ -176,7 +175,7 @@ Boss_CaterpillarSpawnHomingProjectile:                  ; CODE XREF: Boss_Caterp
                 cmpi.w  #$18,d7
                 bne.s   Boss_CaterpillarInitializeHomingProjectile
                 moveq   #8,d7
-Boss_CaterpillarInitializeHomingProjectile:             ; CODE XREF: Boss_CaterpillarHomingProjectileSegment+BC   j  ; was: loc_3D2B4
+Boss_CaterpillarInitializeHomingProjectile:             ; was: loc_3D2B4
                 move.w  d7,$54(a5)
                 move.w  Boss_CaterpillarHomingProjectileParameters(pc,d7.w),d6
                 move.w  Boss_CaterpillarHomingProjectileParameters+2(pc,d7.w),d0
@@ -189,11 +188,10 @@ Boss_CaterpillarInitializeHomingProjectile:             ; CODE XREF: Boss_Caterp
 ; End of function Boss_CaterpillarHomingProjectileSegment
 ; ---------------------------------------------------------------------------
 Boss_CaterpillarHomingProjectileParameters: dc.w    $C0, $FFF0, $E, 0, $80, 0, $10, 0, $40, $10, $E, 0  ; was: word_3D2E0
-                                        ; DATA XREF: Boss_CaterpillarHomingProjectileSegment+C4   r
                                         ; Boss_CaterpillarHomingProjectileSegment+C8   r
 
 ; Damageable body segment with a four-phase mapping cycle
-Boss_CaterpillarFourPhaseSegment:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D2F8
+Boss_CaterpillarFourPhaseSegment:                       ; was: sub_3D2F8
                 tst.w   4(a5)
                 bne.s   Boss_CaterpillarUpdateFourPhaseSegment
                 addq.w  #2,4(a5)
@@ -206,41 +204,41 @@ Boss_CaterpillarFourPhaseSegment:                       ; DATA XREF: ROM:Entity_
                 move.w  d0,$48(a5)
                 move.w  #8,$4A(a5)
                 clr.w   $4C(a5)
-Boss_CaterpillarUpdateFourPhaseSegment:                 ; CODE XREF: Boss_CaterpillarFourPhaseSegment+4   j  ; was: loc_3D332
+Boss_CaterpillarUpdateFourPhaseSegment:                 ; was: loc_3D332
                 tst.w   $24(a5)
                 bpl.s   Boss_CaterpillarPositionFourPhaseSegment
                 jmp     Boss_CaterpillarSpawnExplosion
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarPositionFourPhaseSegment:               ; CODE XREF: Boss_CaterpillarFourPhaseSegment+3E   j  ; was: loc_3D33E
+Boss_CaterpillarPositionFourPhaseSegment:               ; was: loc_3D33E
                 bsr.w   Boss_CaterpillarPositionSegmentOnWave
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 cmpi.w  #$70,d0                         ; 'p'
                 bpl.s   Boss_CaterpillarUpdateFourPhaseMapping
                 bset    #4,2(a5)
-Boss_CaterpillarFourPhaseSegmentReturn:                 ; CODE XREF: Boss_CaterpillarFourPhaseSegment+64   j  ; was: locret_3D356
+Boss_CaterpillarFourPhaseSegmentReturn:                 ; was: locret_3D356
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarUpdateFourPhaseMapping:                 ; CODE XREF: Boss_CaterpillarFourPhaseSegment+56   j  ; was: loc_3D358
+Boss_CaterpillarUpdateFourPhaseMapping:                 ; was: loc_3D358
                 tst.b   $21(a5)
                 beq.s   Boss_CaterpillarFourPhaseSegmentReturn
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_CaterpillarSelectFourPhaseMapping
                 move.w  #$80,$48(a5)
-Boss_CaterpillarSelectFourPhaseMapping:                 ; CODE XREF: Boss_CaterpillarFourPhaseSegment+6A   j  ; was: loc_3D36A
+Boss_CaterpillarSelectFourPhaseMapping:                 ; was: loc_3D36A
                 move.w  (FrameCounter).w,d0
                 andi.w  #$C,d0
                 move.l  Boss_CaterpillarFourPhaseSegmentMappings(pc,d0.w),8(a5)
                 rts
 ; End of function Boss_CaterpillarFourPhaseSegment
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarFourPhaseSegmentMappings:   dc.l    Boss_CaterpillarFourPhaseSegmentMappingA  ; DATA XREF: Boss_CaterpillarFourPhaseSegment+7A   r  ; was: off_3D37A
+Boss_CaterpillarFourPhaseSegmentMappings:   dc.l    Boss_CaterpillarFourPhaseSegmentMappingA  ; was: off_3D37A
                 dc.l    Boss_CaterpillarFourPhaseSegmentMappingB
                 dc.l    Boss_CaterpillarFourPhaseSegmentMappingC
                 dc.l    Boss_CaterpillarFourPhaseSegmentMappingB
 
 ; Damageable body segment with a two-phase mapping cycle
-Boss_CaterpillarTwoPhaseSegment:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D38A
+Boss_CaterpillarTwoPhaseSegment:                        ; was: sub_3D38A
                 tst.w   4(a5)
                 bne.s   Boss_CaterpillarUpdateTwoPhaseSegment
                 addq.w  #2,4(a5)
@@ -253,28 +251,28 @@ Boss_CaterpillarTwoPhaseSegment:                        ; DATA XREF: ROM:Entity_
                 move.w  d0,$48(a5)
                 move.w  #8,$4A(a5)
                 clr.w   $4C(a5)
-Boss_CaterpillarUpdateTwoPhaseSegment:                  ; CODE XREF: Boss_CaterpillarTwoPhaseSegment+4   j  ; was: loc_3D3C4
+Boss_CaterpillarUpdateTwoPhaseSegment:                  ; was: loc_3D3C4
                 tst.w   $24(a5)
                 bpl.s   Boss_CaterpillarPositionTwoPhaseSegment
                 jmp     Boss_CaterpillarSpawnExplosion
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarPositionTwoPhaseSegment:                ; CODE XREF: Boss_CaterpillarTwoPhaseSegment+3E   j  ; was: loc_3D3D0
+Boss_CaterpillarPositionTwoPhaseSegment:                ; was: loc_3D3D0
                 bsr.w   Boss_CaterpillarPositionSegmentOnWave
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 cmpi.w  #$70,d0                         ; 'p'
                 bpl.s   Boss_CaterpillarUpdateTwoPhaseMapping
                 bset    #4,2(a5)
-Boss_CaterpillarTwoPhaseSegmentReturn:                  ; CODE XREF: Boss_CaterpillarTwoPhaseSegment+64   j  ; was: locret_3D3E8
+Boss_CaterpillarTwoPhaseSegmentReturn:                  ; was: locret_3D3E8
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarUpdateTwoPhaseMapping:                  ; CODE XREF: Boss_CaterpillarTwoPhaseSegment+56   j  ; was: loc_3D3EA
+Boss_CaterpillarUpdateTwoPhaseMapping:                  ; was: loc_3D3EA
                 tst.b   $21(a5)
                 beq.s   Boss_CaterpillarTwoPhaseSegmentReturn
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_CaterpillarSelectTwoPhaseMapping
                 nop
-Boss_CaterpillarSelectTwoPhaseMapping:                  ; CODE XREF: Boss_CaterpillarTwoPhaseSegment+6A   j  ; was: loc_3D3F8
+Boss_CaterpillarSelectTwoPhaseMapping:                  ; was: loc_3D3F8
                 move.w  (FrameCounter).w,d0
                 asr.w   #1,d0
                 andi.w  #4,d0
@@ -282,11 +280,11 @@ Boss_CaterpillarSelectTwoPhaseMapping:                  ; CODE XREF: Boss_Caterp
                 rts
 ; End of function Boss_CaterpillarTwoPhaseSegment
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarTwoPhaseSegmentMappings:    dc.l    Boss_CaterpillarTwoPhaseSegmentMappingA  ; DATA XREF: Boss_CaterpillarTwoPhaseSegment+78   r  ; was: off_3D40A
+Boss_CaterpillarTwoPhaseSegmentMappings:    dc.l    Boss_CaterpillarTwoPhaseSegmentMappingA  ; was: off_3D40A
                 dc.l    Boss_CaterpillarTwoPhaseSegmentMappingB
 
 ; Timed wave segment that becomes the stage ship controller
-Boss_CaterpillarShipTransitionSegment:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D412
+Boss_CaterpillarShipTransitionSegment:                  ; was: sub_3D412
                 tst.w   4(a5)
                 bne.s   Boss_CaterpillarUpdateShipTransitionSegment
                 addq.w  #2,4(a5)
@@ -295,7 +293,7 @@ Boss_CaterpillarShipTransitionSegment:                  ; DATA XREF: ROM:Entity_
                 move.l  #$F010F010,$28(a5)
                 move.w  #$1FF,$5C(a5)
                 move.l  #Boss_CaterpillarShipTransitionSegmentMapping,8(a5)
-Boss_CaterpillarUpdateShipTransitionSegment:            ; CODE XREF: Boss_CaterpillarShipTransitionSegment+4   j  ; was: loc_3D43E
+Boss_CaterpillarUpdateShipTransitionSegment:            ; was: loc_3D43E
                 subq.w  #1,$5C(a5)
                 bpl.w   Boss_CaterpillarPositionSegmentOnWave
                 move.w  #$294,(a5)
@@ -303,7 +301,7 @@ Boss_CaterpillarUpdateShipTransitionSegment:            ; CODE XREF: Boss_Caterp
                 rts
 ; End of function Boss_CaterpillarShipTransitionSegment
 ; Positions a segment from its world-X anchor and phase-buffer offset
-Boss_CaterpillarPositionSegmentOnWave:                  ; CODE XREF: Boss_CaterpillarHomingProjectileSegment:Boss_CaterpillarPositionHomingProjectileSegment   p  ; was: sub_3D450
+Boss_CaterpillarPositionSegmentOnWave:                  ; was: sub_3D450
                                         ; Boss_CaterpillarFourPhaseSegment:Boss_CaterpillarPositionFourPhaseSegment   p
                 move.w  $58(a5),d0
                 sub.w   (SecondaryCameraXPos).w,d0
@@ -314,10 +312,10 @@ Boss_CaterpillarPositionSegmentOnWave:                  ; CODE XREF: Boss_Caterp
                 bmi.s   Boss_CaterpillarHideSegmentOutsideHorizontalRange
                 cmpi.w  #$1E0,$10(a5)
                 bmi.s   Boss_CaterpillarApplySegmentWaveHeight
-Boss_CaterpillarHideSegmentOutsideHorizontalRange:      ; CODE XREF: Boss_CaterpillarPositionSegmentOnWave+1E   j  ; was: loc_3D478
+Boss_CaterpillarHideSegmentOutsideHorizontalRange:      ; was: loc_3D478
                 bclr    #7,2(a5)
                 clr.b   $21(a5)
-Boss_CaterpillarApplySegmentWaveHeight:                 ; CODE XREF: Boss_CaterpillarPositionSegmentOnWave+26   j  ; was: loc_3D482
+Boss_CaterpillarApplySegmentWaveHeight:                 ; was: loc_3D482
                 movea.w #(CaterpillarPhaseTable-M68K_RAM),a0
                 adda.w  $5A(a5),a0
                 move.w  (a0)+,d0
@@ -333,12 +331,12 @@ Boss_CaterpillarApplySegmentWaveHeight:                 ; CODE XREF: Boss_Caterp
                 rts
 ; End of function Boss_CaterpillarPositionSegmentOnWave
 ; Searches primary and extended ranges for a free homing-projectile slot
-Boss_CaterpillarFindFreeHomingProjectileSlot:           ; CODE XREF: Boss_CaterpillarHomingProjectileSegment:Boss_CaterpillarSpawnHomingProjectile   p  ; was: sub_3D4AC
+Boss_CaterpillarFindFreeHomingProjectileSlot:           ; was: sub_3D4AC
                 movea.w #(ThirtyFourthEntityType-M68K_RAM),a0
                 jmp     Projectile_FindFreeSlotForward20
 ; End of function Boss_CaterpillarFindFreeHomingProjectileSlot
 ; Stage ship controller with position-history trail and state dispatch
-Boss_CaterpillarShipController:                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3D4B6
+Boss_CaterpillarShipController:                         ; was: sub_3D4B6
                 tst.w   4(a5)
                 beq.w   Boss_CaterpillarDispatchShipState
                 move.w  $10(a5),d0
@@ -352,7 +350,7 @@ Boss_CaterpillarShipController:                         ; DATA XREF: ROM:Entity_
                 bne.s   Boss_CaterpillarUpdateShipTrailHistory
                 move.b  #2,(BossColorEffectFlags).w
                 move.w  #$A,4(a5)
-Boss_CaterpillarUpdateShipTrailHistory:                 ; CODE XREF: Boss_CaterpillarShipController+1A   j  ; was: loc_3D4EC
+Boss_CaterpillarUpdateShipTrailHistory:                 ; was: loc_3D4EC
                                         ; Boss_CaterpillarShipController+22   j
                 lea     (SharedScratchLong8).w,a0
                 move.w  $10(a5),d0
@@ -360,10 +358,10 @@ Boss_CaterpillarUpdateShipTrailHistory:                 ; CODE XREF: Boss_Caterp
                 swap    d0
                 move.w  $14(a5),d0
                 move.w  #6,d7
-Boss_CaterpillarShiftNextShipTrailBlock:                ; CODE XREF: Boss_CaterpillarShipController+5C   j  ; was: loc_3D502
+Boss_CaterpillarShiftNextShipTrailBlock:                ; was: loc_3D502
                 move.w  (SharedScratchLong3+2).w,d6
                 subq.w  #1,d6
-Boss_CaterpillarShiftShipTrailHistory:                  ; CODE XREF: Boss_CaterpillarShipController+58   j  ; was: loc_3D508
+Boss_CaterpillarShiftShipTrailHistory:                  ; was: loc_3D508
                 move.l  (a0),d1
                 move.l  d0,(a0)+
                 move.l  d1,d0
@@ -375,7 +373,7 @@ Boss_CaterpillarShiftShipTrailHistory:                  ; CODE XREF: Boss_Caterp
                 move.w  (SharedScratchLong3+2).w,d6
                 add.w   d6,d6
                 add.w   d6,d6
-Boss_CaterpillarPositionShipTrailParts:                 ; CODE XREF: Boss_CaterpillarShipController+8C   j  ; was: loc_3D52A
+Boss_CaterpillarPositionShipTrailParts:                 ; was: loc_3D52A
                 lea     (a1,d6.w),a1
                 move.w  (a1),d0
                 sub.w   (PrimaryCameraXPosition).w,d0
@@ -383,14 +381,14 @@ Boss_CaterpillarPositionShipTrailParts:                 ; CODE XREF: Boss_Caterp
                 move.w  2(a1),$14(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_CaterpillarPositionShipTrailParts
-Boss_CaterpillarDispatchShipState:                      ; CODE XREF: Boss_CaterpillarShipController+4   j  ; was: loc_3D546
+Boss_CaterpillarDispatchShipState:                      ; was: loc_3D546
                 move.w  4(a5),d0
                 lea     Boss_CaterpillarShipStateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Boss_CaterpillarShipController
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarShipStateOffsets:   dc.w    Boss_CaterpillarShipInit-*  ; DATA XREF: Boss_CaterpillarShipController+94   o  ; was: off_3D552
+Boss_CaterpillarShipStateOffsets:   dc.w    Boss_CaterpillarShipInit-*  ; was: off_3D552
                 dc.w    Boss_CaterpillarShipBeginOscillationState-*
                 dc.w    Boss_CaterpillarShipOscillationState-*
                 dc.w    Boss_CaterpillarShipCenteringDelayState-*
@@ -400,7 +398,7 @@ Boss_CaterpillarShipStateOffsets:   dc.w    Boss_CaterpillarShipInit-*  ; DATA X
                 dc.w    Boss_CaterpillarShipDefeatCompleteState-*
 
 ; Initializes caterpillar ship with body parts
-Boss_CaterpillarShipInit:                               ; DATA XREF: ROM:Boss_CaterpillarShipStateOffsets   o  ; was: sub_3D562
+Boss_CaterpillarShipInit:                               ; was: sub_3D562
                 tst.b   (DataLoaderControl).w
                 bmi.w   Boss_CaterpillarShipInitReturn
                 addq.w  #2,4(a5)
@@ -421,7 +419,7 @@ Boss_CaterpillarShipInit:                               ; DATA XREF: ROM:Boss_Ca
                 move.b  #6,(BossColorEffectFlags).w
                 move.w  #6,d7
                 lea     $60(a5),a0
-Boss_CaterpillarInitializeShipTrailPart:                ; CODE XREF: Boss_CaterpillarShipInit+C8   j  ; was: loc_3D5D4
+Boss_CaterpillarInitializeShipTrailPart:                ; was: loc_3D5D4
                 move.w  #$10,(a0)
                 move.l  #Boss_CaterpillarShipTrailMappingA,8(a0)
                 move.w  #$E45A,$E(a0)
@@ -436,14 +434,14 @@ Boss_CaterpillarInitializeShipTrailPart:                ; CODE XREF: Boss_Caterp
                 move.b  #$50,$21(a0)                    ; 'P'
                 move.l  #$FE02FE02,$2C(a0)
                 move.l  #$F010F010,$28(a0)
-Boss_CaterpillarAdvanceShipTrailPart:                   ; CODE XREF: Boss_CaterpillarShipInit+AC   j  ; was: loc_3D626
+Boss_CaterpillarAdvanceShipTrailPart:                   ; was: loc_3D626
                 lea     $60(a0),a0
                 dbf     d7,Boss_CaterpillarInitializeShipTrailPart
-Boss_CaterpillarShipInitReturn:                         ; CODE XREF: Boss_CaterpillarShipInit+4   j  ; was: locret_3D62E
+Boss_CaterpillarShipInitReturn:                         ; was: locret_3D62E
                 rts
 ; End of function Boss_CaterpillarShipInit
 ; Enables the ship root and prepares its alternating horizontal targets
-Boss_CaterpillarShipBeginOscillationState:              ; DATA XREF: ROM:0003D554   o  ; was: sub_3D630
+Boss_CaterpillarShipBeginOscillationState:              ; was: sub_3D630
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 move.b  #$80,$23(a5)
                 clr.b   (BossColorEffectFlags).w
@@ -454,7 +452,7 @@ Boss_CaterpillarShipBeginOscillationState:              ; DATA XREF: ROM:0003D55
                 rts
 ; Alternates horizontal steering targets until the stage-scroll threshold
 ; is reached
-Boss_CaterpillarShipOscillationState:                   ; DATA XREF: ROM:0003D556   o  ; was: sub_3D654
+Boss_CaterpillarShipOscillationState:                   ; was: sub_3D654
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 cmpi.w  #$880,(SecondaryCameraXPos).w
                 bcc.s   Boss_CaterpillarBeginShipCenteringDelay
@@ -466,12 +464,12 @@ Boss_CaterpillarShipOscillationState:                   ; DATA XREF: ROM:0003D55
                 move.w  #$C0,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarSelectRightOscillationTarget:           ; CODE XREF: Boss_CaterpillarShipOscillationState+18   j  ; was: loc_3D67C
+Boss_CaterpillarSelectRightOscillationTarget:           ; was: loc_3D67C
                 move.w  #$100,$48(a5)
                 move.w  #$220,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarBeginShipCenteringDelay:                ; CODE XREF: Boss_CaterpillarShipOscillationState+A   j  ; was: loc_3D68A
+Boss_CaterpillarBeginShipCenteringDelay:                ; was: loc_3D68A
                 clr.w   (BossHealth).w
                 clr.w   (BossMaxHealth).w
                 clr.b   $21(a5)
@@ -480,10 +478,10 @@ Boss_CaterpillarBeginShipCenteringDelay:                ; CODE XREF: Boss_Caterp
                 bset    #1,$4C(a5)
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
-Boss_CaterpillarShipOscillationReturn:                  ; CODE XREF: Boss_CaterpillarShipOscillationState+10   j  ; was: locret_3D6B2
+Boss_CaterpillarShipOscillationReturn:                  ; was: locret_3D6B2
                 rts
 ; Steers toward the center target until the transition delay expires
-Boss_CaterpillarShipCenteringDelayState:                ; DATA XREF: ROM:0003D558   o  ; was: sub_3D6B4
+Boss_CaterpillarShipCenteringDelayState:                ; was: sub_3D6B4
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 subq.w  #1,$48(a5)
                 bne.s   Boss_CaterpillarShipCenteringDelayReturn
@@ -491,16 +489,16 @@ Boss_CaterpillarShipCenteringDelayState:                ; DATA XREF: ROM:0003D55
                 move.w  #$80,(SharedScratchLong2+2).w
                 addq.w  #2,4(a5)
                 addq.w  #3,(SharedScratchLong3).w
-Boss_CaterpillarShipCenteringDelayReturn:               ; CODE XREF: Boss_CaterpillarShipCenteringDelayState+8   j  ; was: locret_3D6D2
+Boss_CaterpillarShipCenteringDelayReturn:               ; was: locret_3D6D2
                 rts
 ; End of function Boss_CaterpillarShipCenteringDelayState
 ; Applies steering without an internal state transition
-Boss_CaterpillarShipRotationState:                      ; DATA XREF: ROM:0003D55A   o  ; was: sub_3D6D4
+Boss_CaterpillarShipRotationState:                      ; was: sub_3D6D4
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 rts
 ; End of function Boss_CaterpillarShipRotationState
 ; Starts the defeat sequence and optionally drops a pickup at the ship root
-Boss_CaterpillarShipBeginDefeatState:                   ; DATA XREF: ROM:0003D55C   o  ; was: sub_3D6DA
+Boss_CaterpillarShipBeginDefeatState:                   ; was: sub_3D6DA
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 jsr     (Effect_SpawnExplosionB).l
                 move.b  #$BC,d0
@@ -516,11 +514,11 @@ Boss_CaterpillarShipBeginDefeatState:                   ; DATA XREF: ROM:0003D55
                 jsr     (Pickup_SelectRandomSize).l
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-Boss_CaterpillarShipBeginDefeatReturn:                  ; CODE XREF: Boss_CaterpillarShipBeginDefeatState+32   j  ; was: locret_3D724
+Boss_CaterpillarShipBeginDefeatReturn:                  ; was: locret_3D724
                 rts
 ; End of function Boss_CaterpillarShipBeginDefeatState
 ; Converts one linked trail part at a time into an explosion and reward drop
-Boss_CaterpillarShipDismantlePartsState:                ; DATA XREF: ROM:0003D55E   o  ; was: sub_3D726
+Boss_CaterpillarShipDismantlePartsState:                ; was: sub_3D726
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 subq.w  #1,$48(a5)
                 bne.s   Boss_CaterpillarShipDismantlePartsReturn
@@ -542,20 +540,20 @@ Boss_CaterpillarShipDismantlePartsState:                ; DATA XREF: ROM:0003D55
                 move.w  $14(a4),$14(a0)
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_CaterpillarShipDismantlePartsReturn:               ; CODE XREF: Boss_CaterpillarShipDismantlePartsState+8   j  ; was: locret_3D782
+Boss_CaterpillarShipDismantlePartsReturn:               ; was: locret_3D782
                                         ; Boss_CaterpillarShipDismantlePartsState+3A   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarCompleteShipDefeat:                     ; CODE XREF: Boss_CaterpillarShipDismantlePartsState+26   j  ; was: loc_3D784
+Boss_CaterpillarCompleteShipDefeat:                     ; was: loc_3D784
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_CaterpillarShipDismantlePartsState
-Boss_CaterpillarShipDefeatCompleteState:                ; DATA XREF: ROM:0003D560   o  ; was: nullsub_79
+Boss_CaterpillarShipDefeatCompleteState:                ; was: nullsub_79
                 rts
 ; End of function Boss_CaterpillarShipDefeatCompleteState
 
 ; Steers the ship angle toward its target and derives polar velocity
-Boss_CaterpillarUpdateShipSteering:                     ; CODE XREF: Boss_CaterpillarShipBeginOscillationState   p  ; was: sub_3D78C
+Boss_CaterpillarUpdateShipSteering:                     ; was: sub_3D78C
                                         ; Boss_CaterpillarShipOscillationState   p
                 move.w  (FrameCounter).w,d0
                 andi.w  #$F,d0
@@ -577,9 +575,9 @@ Boss_CaterpillarUpdateShipSteering:                     ; CODE XREF: Boss_Caterp
                 move.w  #8,(SharedScratchLong0+2).w
                 bra.s   Boss_CaterpillarApplyShipPolarVelocity
 ; ---------------------------------------------------------------------------
-Boss_CaterpillarSetNegativeShipAngularStep:             ; CODE XREF: Boss_CaterpillarUpdateShipSteering+3C   j  ; was: loc_3D7D2
+Boss_CaterpillarSetNegativeShipAngularStep:             ; was: loc_3D7D2
                 move.w  #$FFF8,(SharedScratchLong0+2).w
-Boss_CaterpillarApplyShipPolarVelocity:                 ; CODE XREF: Boss_CaterpillarUpdateShipSteering+8   j  ; was: loc_3D7D8
+Boss_CaterpillarApplyShipPolarVelocity:                 ; was: loc_3D7D8
                                         ; Boss_CaterpillarUpdateShipSteering+36   j
                 move.w  (SharedScratchLong0+2).w,d0
                 add.w   d0,(SharedScratchLong0).w

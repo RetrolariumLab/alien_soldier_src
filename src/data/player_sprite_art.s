@@ -1,4 +1,4 @@
-Player_PhoenixDashAttackSpriteArtPiece06:       binclude "data/artunc/sprite_F2826.bin"  ; DATA XREF: ROM:000E86DC   o  ; was: sprite_F2826
+Player_PhoenixDashAttackSpriteArtPiece06:       binclude "data/artunc/sprite_F2826.bin"  ; was: sprite_F2826
 Player_PhoenixDashAttackSpriteArtPiece06_End:           ; was: sprite_F2826_End
 Player_PhoenixDashAttackSpriteArtPiece00:       binclude "data/artunc/sprite_F2A28.bin"  ; was: sprite_F2A28
 Player_PhoenixDashAttackSpriteArtPiece00_End:           ; was: sprite_F2A28_End

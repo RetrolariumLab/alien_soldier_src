@@ -1,5 +1,5 @@
 ; Updates boss metasprite parts
-Boss_DeepStriderUpdateParts:                            ; CODE XREF: Boss_DeepStriderIntroRise+C8   j  ; was: sub_3EED8
+Boss_DeepStriderUpdateParts:                            ; was: sub_3EED8
                                         ; Boss_DeepStriderIntroRise+DE   j
                 move.w  #$1FF,d0
                 and.w   d0,$56(a5)
@@ -11,7 +11,7 @@ Boss_DeepStriderUpdateParts:                            ; CODE XREF: Boss_DeepSt
                 move.w  $1DC(a5),d0
                 moveq   #2,d7
 ; Updates rotation angles for body parts
-Boss_DeepStriderShiftJointAngleHistory:                 ; CODE XREF: Boss_DeepStriderUpdateParts+28   j  ; was: loc_3EEFA
+Boss_DeepStriderShiftJointAngleHistory:                 ; was: loc_3EEFA
                 move.w  (a0),d1
                 move.w  d0,(a0)+
                 move.w  d1,d0
@@ -68,30 +68,30 @@ Boss_DeepStriderShiftJointAngleHistory:                 ; CODE XREF: Boss_DeepSt
                 jmp     Sprite_UpdateMetaspriteFourFrameRotationAndLoadCount
 ; End of function Boss_DeepStriderUpdateParts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderRotationFramesA:    dc.l    Boss_DeepStriderRotationMappingA0  ; DATA XREF: ROM:0003F00C   o  ; was: off_3EFAE
+Boss_DeepStriderRotationFramesA:    dc.l    Boss_DeepStriderRotationMappingA0  ; was: off_3EFAE
                 dc.l    Boss_DeepStriderRotationMappingA1
                 dc.l    Boss_DeepStriderRotationMappingA2
                 dc.l    Boss_DeepStriderRotationMappingA3
-Boss_DeepStriderRotationFramesB:    dc.l    Boss_DeepStriderRotationMappingB0  ; DATA XREF: ROM:0003F004   o  ; was: off_3EFBE
+Boss_DeepStriderRotationFramesB:    dc.l    Boss_DeepStriderRotationMappingB0  ; was: off_3EFBE
                                         ; ROM:0003F008   o
                 dc.l    Boss_DeepStriderRotationMappingB1
                 dc.l    Boss_DeepStriderRotationMappingB2
                 dc.l    Boss_DeepStriderRotationMappingB3
-Boss_DeepStriderRotationFramesC:    dc.l    Boss_DeepStriderRotationMappingC0  ; DATA XREF: ROM:0003F024   o  ; was: off_3EFCE
+Boss_DeepStriderRotationFramesC:    dc.l    Boss_DeepStriderRotationMappingC0  ; was: off_3EFCE
                                         ; ROM:0003F030   o
                 dc.l    Boss_DeepStriderRotationMappingC1
                 dc.l    Boss_DeepStriderRotationMappingC2
                 dc.l    Boss_DeepStriderRotationMappingC3
-Boss_DeepStriderRotationFramesD:    dc.l    Boss_DeepStriderRotationMappingC3  ; DATA XREF: ROM:0003F020   o  ; was: off_3EFDE
+Boss_DeepStriderRotationFramesD:    dc.l    Boss_DeepStriderRotationMappingC3  ; was: off_3EFDE
                                         ; ROM:0003F02C   o
                 dc.l    Boss_DeepStriderRotationMappingC2
                 dc.l    Boss_DeepStriderRotationMappingC1
                 dc.l    Boss_DeepStriderRotationMappingC0
-Boss_DeepStriderInlineSpriteDescriptorA:    dc.w    $6397, $A00, $F4F4  ; DATA XREF: ROM:0003F014   o  ; was: word_3EFEE
+Boss_DeepStriderInlineSpriteDescriptorA:    dc.w    $6397, $A00, $F4F4  ; was: word_3EFEE
                                         ; ROM:0003F028   o
-Boss_DeepStriderInlineSpriteDescriptorB:    dc.w    $63A0, $500, $F8F8  ; DATA XREF: ROM:0003F018   o  ; was: word_3EFF4
-Boss_DeepStriderInlineSpriteDescriptorC:    dc.w    $63A4, $500, $F8F8  ; DATA XREF: ROM:0003F01C   o  ; was: word_3EFFA
-Boss_DeepStriderMetaspriteDescriptors:      dc.l    Boss_DeepStriderRootMapping+$400000  ; DATA XREF: Boss_DeepStriderIntroRise+E   o  ; was: off_3F000
+Boss_DeepStriderInlineSpriteDescriptorB:    dc.w    $63A0, $500, $F8F8  ; was: word_3EFF4
+Boss_DeepStriderInlineSpriteDescriptorC:    dc.w    $63A4, $500, $F8F8  ; was: word_3EFFA
+Boss_DeepStriderMetaspriteDescriptors:      dc.l    Boss_DeepStriderRootMapping+$400000  ; was: off_3F000
                 dc.l    Boss_DeepStriderRotationFramesB
                 dc.l    Boss_DeepStriderRotationFramesB
                 dc.l    Boss_DeepStriderRotationFramesA
@@ -105,18 +105,17 @@ Boss_DeepStriderMetaspriteDescriptors:      dc.l    Boss_DeepStriderRootMapping+
                 dc.l    Boss_DeepStriderRotationFramesD+$28000000
                 dc.l    Boss_DeepStriderRotationFramesC
                 dc.l    0
-Boss_DeepStriderPartRadii:  dc.w    $15, $1210, $1410   ; DATA XREF: Boss_DeepStriderIntroRise+14   o  ; was: word_3F038
+Boss_DeepStriderPartRadii:  dc.w    $15, $1210, $1410   ; was: word_3F038
                 dc.w    $C0A, $C0C, $E10
                 dc.w    $1418
 Boss_DeepStriderPartLinks:  dc.w    $C007, $C006, $C065  ; was: word_3F046
-                                        ; DATA XREF: Boss_DeepStriderIntroRise+1A   o
                 dc.w    $C0C4, $C007, $C187
                 dc.w    $C1E7, $C247, $C2A7
                 dc.w    $C2A7, $C0C4, $C3C4
                 dc.w    $C067, 7
 
 ; Fires angled projectile from Deep Strider boss using sine table
-Boss_DeepStriderFireAngleProjectile:                    ; CODE XREF: Boss_DeepStriderBeginBattleCycle+230   p  ; was: sub_3F062
+Boss_DeepStriderFireAngleProjectile:                    ; was: sub_3F062
                 move.w  (FrameCounter).w,d0
                 andi.w  #7,d0
                 bne.w   Boss_DeepStriderFireAngleProjectileReturn
@@ -156,11 +155,11 @@ Boss_DeepStriderFireAngleProjectile:                    ; CODE XREF: Boss_DeepSt
                 sub.l   d1,$18(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderApplyPositiveProjectileFacing:          ; CODE XREF: Boss_DeepStriderFireAngleProjectile+94   j  ; was: loc_3F106
+Boss_DeepStriderApplyPositiveProjectileFacing:          ; was: loc_3F106
                 addq.w  #4,$10(a0)
                 add.l   d3,$18(a0)
                 add.l   d1,$18(a0)
-Boss_DeepStriderFireAngleProjectileReturn:              ; CODE XREF: Boss_DeepStriderFireAngleProjectile+8   j  ; was: locret_3F112
+Boss_DeepStriderFireAngleProjectileReturn:              ; was: locret_3F112
                                         ; Boss_DeepStriderFireAngleProjectile+12   j
                 rts
 ; End of function Boss_DeepStriderFireAngleProjectile

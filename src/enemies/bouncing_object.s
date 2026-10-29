@@ -1,5 +1,5 @@
 ; Shared bouncing object, pickup release, and effect conversion
-Enemy_UpdateBouncingObject:                             ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3F114
+Enemy_UpdateBouncingObject:                             ; was: sub_3F114
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Enemy_ResetBouncingObjectMotion
                 bclr    #7,$22(a5)
@@ -13,28 +13,28 @@ Enemy_UpdateBouncingObject:                             ; DATA XREF: ROM:Entity_
                 move.w  $14(a5),$14(a0)
                 bra.s   Enemy_ResetBouncingObjectMotion
 ; ---------------------------------------------------------------------------
-Enemy_CheckBouncingObjectFloor:                         ; CODE XREF: Enemy_UpdateBouncingObject+C   j  ; was: loc_3F146
+Enemy_CheckBouncingObjectFloor:                         ; was: loc_3F146
                 jsr     (Collision_GetEntityPosition).l
                 beq.s   Enemy_ApplyBouncingObjectGravity
-Enemy_ResetBouncingObjectMotion:                        ; CODE XREF: Enemy_UpdateBouncingObject+4   j  ; was: loc_3F14E
+Enemy_ResetBouncingObjectMotion:                        ; was: loc_3F14E
                                         ; Enemy_UpdateBouncingObject+14   j
                 neg.w   $18(a5)
                 move.w  #$FFFE,$1C(a5)
                 lea     (Projectile_SpawnSpriteFrames).l,a1  ; make offsets?
                 jmp     Sprite_InitCurrentFromTable
 ; ---------------------------------------------------------------------------
-Enemy_ApplyBouncingObjectGravity:                       ; CODE XREF: Enemy_UpdateBouncingObject+38   j  ; was: loc_3F164
+Enemy_ApplyBouncingObjectGravity:                       ; was: loc_3F164
                 addi.l  #$E00,$1C(a5)
                 bmi.s   Enemy_UpdateBouncingObjectReturn
                 cmpi.w  #$14C,$14(a5)
                 bmi.s   Enemy_UpdateBouncingObjectReturn
                 clr.l   $18(a5)
                 move.l  #$FFFC0000,$1C(a5)
-Projectile_ConvertCurrentToSharedEffect:                ; CODE XREF: Projectile_SharpsteelFallingShotMain+C0   p  ; was: loc_3F182
+Projectile_ConvertCurrentToSharedEffect:                ; was: loc_3F182
                 move.l  #SharedProjectileDuration4Animation,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 move.w  #$4000,$E(a5)
-Enemy_UpdateBouncingObjectReturn:                       ; CODE XREF: Enemy_UpdateBouncingObject+58   j  ; was: locret_3F196
+Enemy_UpdateBouncingObjectReturn:                       ; was: locret_3F196
                                         ; Enemy_UpdateBouncingObject+60   j
                 rts
 ; End of function Enemy_UpdateBouncingObject

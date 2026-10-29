@@ -1,5 +1,5 @@
 ; Initializes sprite and collision parameters for circling enemy families
-Enemy_InitCirclingSprite:                               ; CODE XREF: Enemy_CirclingApproachState+2   p  ; was: sub_2D27C
+Enemy_InitCirclingSprite:                               ; was: sub_2D27C
                                         ; Enemy_Stage9FlyInit+2   p
                 move.w  #$ED00,2(a5)
                 move.w  (CirclingEnemyTileAttr).w,d1
@@ -20,10 +20,10 @@ Enemy_InitCirclingSprite:                               ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_InitCirclingSprite
 ; ---------------------------------------------------------------------------
-Enemy_CirclingSpriteParameters: dc.w    $1802, $1100, $1802, $1100  ; DATA XREF: Enemy_InitCirclingSprite+2E   o  ; was: word_2D2CA
+Enemy_CirclingSpriteParameters: dc.w    $1802, $1100, $1802, $1100  ; was: word_2D2CA
 
 ; Updates the current circling-enemy animation mapping
-Enemy_UpdateCirclingAnimation:                          ; CODE XREF: Enemy_CirclingController+2C   j  ; was: sub_2D2D2
+Enemy_UpdateCirclingAnimation:                          ; was: sub_2D2D2
                                         ; Enemy_Stage9FlyController+2C   j
                 move.w  $5C(a5),d0
                 beq.s   Enemy_UpdateCirclingAnimation_Return
@@ -31,14 +31,14 @@ Enemy_UpdateCirclingAnimation:                          ; CODE XREF: Enemy_Circl
                 subq.w  #4,d0
                 move.l  Enemy_CirclingAnimationMappings(pc,d0.w),8(a5)
                 clr.w   $C(a5)
-Enemy_UpdateCirclingAnimation_Return:                   ; CODE XREF: Enemy_UpdateCirclingAnimation+4   j  ; was: locret_2D2EA
+Enemy_UpdateCirclingAnimation_Return:                   ; was: locret_2D2EA
                 rts
 ; End of function Enemy_UpdateCirclingAnimation
 ; ---------------------------------------------------------------------------
-Enemy_CirclingAnimationMappings:    dc.l    Enemy_CirclingLoopAnimation  ; DATA XREF: Enemy_UpdateCirclingAnimation+E   r  ; was: off_2D2EC
+Enemy_CirclingAnimationMappings:    dc.l    Enemy_CirclingLoopAnimation  ; was: off_2D2EC
 
 ; Selects sprite mapping and attributes from the current rotation angle
-Enemy_UpdateCirclingRotationSprite:                     ; CODE XREF: Enemy_CirclingOrbitState+E   p  ; was: sub_2D2F0
+Enemy_UpdateCirclingRotationSprite:                     ; was: sub_2D2F0
                                         ; Enemy_CirclingExitOrbitState+C   p
                 move.w  $4C(a5),d0
                 addi.w  #$10,d0
@@ -56,7 +56,7 @@ Enemy_UpdateCirclingRotationSprite:                     ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_UpdateCirclingRotationSprite
 ; ---------------------------------------------------------------------------
-Enemy_CirclingRotationMappings: dc.l    Enemy_CirclingRotationSpriteMapping0  ; DATA XREF: Enemy_UpdateCirclingRotationSprite+E   r  ; was: off_2D326
+Enemy_CirclingRotationMappings: dc.l    Enemy_CirclingRotationSpriteMapping0  ; was: off_2D326
                 dc.l    Enemy_CirclingRotationSpriteMapping1
                 dc.l    Enemy_CirclingRotationSpriteMapping2
                 dc.l    Enemy_CirclingRotationSpriteMapping3
@@ -73,11 +73,11 @@ Enemy_CirclingRotationMappings: dc.l    Enemy_CirclingRotationSpriteMapping0  ; 
                 dc.l    Enemy_CirclingRotationSpriteMapping2
                 dc.l    Enemy_CirclingRotationSpriteMapping1
 Enemy_CirclingRotationAttributes:
-                dc.w    $800, $1800, $1800, $1800, $1800, $1000, $1000, $1000  ; DATA XREF: Enemy_UpdateCirclingRotationSprite+26   r  ; was: word_2D366
+                dc.w    $800, $1800, $1800, $1800, $1800, $1000, $1000, $1000  ; was: word_2D366
                 dc.w    0, 0, 0, 0, $800, $800, $800, $800
 
 ; Updates circular velocity and periodically launches a homing projectile
-Enemy_UpdateCircularMotionAndFire:                      ; CODE XREF: Enemy_CirclingOrbitState+1A   p  ; was: sub_2D386
+Enemy_UpdateCircularMotionAndFire:                      ; was: sub_2D386
                                         ; Enemy_CirclingExitOrbitState+18   p
                 move.w  $4C(a5),d0
                 andi.w  #$1FE,d0
@@ -105,12 +105,12 @@ Enemy_UpdateCircularMotionAndFire:                      ; CODE XREF: Enemy_Circl
                 move.w  #$8004,d2
                 movea.w $56(a5),a0
                 jsr     (Projectile_InitializeDifficultyScaledTwoSpeedShot).l
-Enemy_UpdateCircularMotionAndFire_Return:               ; CODE XREF: Enemy_UpdateCircularMotionAndFire+2C   j  ; was: locret_2D3E6
+Enemy_UpdateCircularMotionAndFire_Return:               ; was: locret_2D3E6
                                         ; Enemy_UpdateCircularMotionAndFire+38   j
                 rts
 ; End of function Enemy_UpdateCircularMotionAndFire
 
-Enemy_CirclingController:                               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D3E8
+Enemy_CirclingController:                               ; was: sub_2D3E8
                 tst.w   4(a5)
                 beq.s   Enemy_CirclingController_UpdateState
                 tst.w   $24(a5)
@@ -122,12 +122,12 @@ Enemy_CirclingController:                               ; DATA XREF: ROM:Entity_
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
 ; Executes circular movement pattern and updates sprite
-Enemy_CirclingController_UpdateState:                   ; CODE XREF: Enemy_CirclingController+4   j  ; was: loc_2D412
+Enemy_CirclingController_UpdateState:                   ; was: loc_2D412
                 bsr.s   Enemy_DispatchCirclingState
                 bra.w   Enemy_UpdateCirclingAnimation
 ; End of function Enemy_CirclingController
 ; Dispatches to circle enemy state handlers
-Enemy_DispatchCirclingState:                            ; CODE XREF: Enemy_CirclingController:Enemy_CirclingController_UpdateState   p  ; was: sub_2D418
+Enemy_DispatchCirclingState:                            ; was: sub_2D418
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
                 lea     Enemy_CirclingStateOffsets(pc,d0.w),a0
@@ -135,27 +135,27 @@ Enemy_DispatchCirclingState:                            ; CODE XREF: Enemy_Circl
                 jmp     (a0)
 ; End of function Enemy_DispatchCirclingState
 ; ---------------------------------------------------------------------------
-Enemy_CirclingStateOffsets: dc.w    Enemy_CirclingApproachState-*  ; DATA XREF: Enemy_DispatchCirclingState+8   o  ; was: off_2D428
+Enemy_CirclingStateOffsets: dc.w    Enemy_CirclingApproachState-*  ; was: off_2D428
                 dc.w    Enemy_CirclingApproachState_CheckDistance-*
                 dc.w    Enemy_CirclingOrbitState-*
                 dc.w    Enemy_CirclingExitOrbitState-*
                 dc.w    Enemy_CirclingNoOpState-*
 
 ; Approach player until within distance threshold
-Enemy_CirclingApproachState:                            ; DATA XREF: ROM:Enemy_CirclingStateOffsets   o  ; was: sub_2D432
+Enemy_CirclingApproachState:                            ; was: sub_2D432
                 moveq   #0,d0
                 bsr.w   Enemy_InitCirclingSprite
                 move.w  #4,$5C(a5)
                 bsr.w   Enemy_CirclingInitApproachVelocity
                 addq.w  #2,4(a5)
 ; Calculate distance to player and determine next action
-Enemy_CirclingApproachState_CheckDistance:              ; DATA XREF: ROM:0002D42A   o  ; was: loc_2D446
+Enemy_CirclingApproachState_CheckDistance:              ; was: loc_2D446
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$60,d0                         ; '`'
                 bcs.s   Enemy_CirclingApproachState_BeginOrbit
                 bra.w   Enemy_CirclingSteerTowardTarget
 ; ---------------------------------------------------------------------------
-Enemy_CirclingApproachState_BeginOrbit:                 ; CODE XREF: Enemy_CirclingApproachState+1E   j  ; was: loc_2D456
+Enemy_CirclingApproachState_BeginOrbit:                 ; was: loc_2D456
                 move.w  #$180,$4C(a5)
                 move.w  #$10,$4A(a5)
                 move.w  #$10,$48(a5)
@@ -164,7 +164,7 @@ Enemy_CirclingApproachState_BeginOrbit:                 ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_CirclingApproachState
 ; Calculates velocity vector from random angle toward player
-Enemy_CirclingInitApproachVelocity:                     ; CODE XREF: Enemy_CirclingApproachState+C   p  ; was: sub_2D474
+Enemy_CirclingInitApproachVelocity:                     ; was: sub_2D474
                 move.w  $10(a5),$52(a5)
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   d0,$52(a5)
@@ -184,7 +184,7 @@ Enemy_CirclingInitApproachVelocity:                     ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_CirclingInitApproachVelocity
 ; Steers toward a randomized point around the stored target position
-Enemy_CirclingSteerTowardTarget:                        ; CODE XREF: Enemy_CirclingApproachState+20   j  ; was: sub_2D4B2
+Enemy_CirclingSteerTowardTarget:                        ; was: sub_2D4B2
                 move.w  $52(a5),d0
                 move.b  (RandomNumberState).w,d7
                 andi.w  #$3F,d7                         ; '?'
@@ -202,12 +202,12 @@ Enemy_CirclingSteerTowardTarget:                        ; CODE XREF: Enemy_Circl
                 move.l  #$FFFE0000,$18(a5)
                 bra.s   Enemy_CirclingSteerTowardTarget_UpdateVertical
 ; ---------------------------------------------------------------------------
-Enemy_CirclingSteerTowardTarget_AccelerateRight:        ; CODE XREF: Enemy_CirclingSteerTowardTarget+20   j  ; was: loc_2D4F0
+Enemy_CirclingSteerTowardTarget_AccelerateRight:        ; was: loc_2D4F0
                 addi.l  #$4000,$18(a5)
                 cmpi.l  #$20000,$18(a5)
                 ble.s   Enemy_CirclingSteerTowardTarget_UpdateVertical
                 move.l  #$20000,$18(a5)
-Enemy_CirclingSteerTowardTarget_UpdateVertical:         ; CODE XREF: Enemy_CirclingSteerTowardTarget+1C   j  ; was: loc_2D50A
+Enemy_CirclingSteerTowardTarget_UpdateVertical:         ; was: loc_2D50A
                                         ; Enemy_CirclingSteerTowardTarget+32   j
                 move.w  $54(a5),d0
                 move.b  (RandomNumberState+1).w,d7
@@ -225,17 +225,17 @@ Enemy_CirclingSteerTowardTarget_UpdateVertical:         ; CODE XREF: Enemy_Circl
                 rts
 ; ---------------------------------------------------------------------------
 ; Accelerates downward toward a lower target, capped at the positive speed limit
-Enemy_CirclingSteerTowardLowerTarget:                   ; CODE XREF: Enemy_CirclingSteerTowardTarget+72   j  ; was: loc_2D542
+Enemy_CirclingSteerTowardLowerTarget:                   ; was: loc_2D542
                 addi.l  #$4000,$1C(a5)
                 cmpi.l  #$20000,$1C(a5)
                 ble.s   Enemy_CirclingSteerTowardTarget_Return
                 move.l  #$20000,$1C(a5)
-Enemy_CirclingSteerTowardTarget_Return:                 ; CODE XREF: Enemy_CirclingSteerTowardTarget+6E   j  ; was: locret_2D55C
+Enemy_CirclingSteerTowardTarget_Return:                 ; was: locret_2D55C
                                         ; Enemy_CirclingSteerTowardTarget+84   j
                 rts
 ; End of function Enemy_CirclingSteerTowardTarget
 ; Circles player with adaptive rotation speed
-Enemy_CirclingOrbitState:                               ; DATA XREF: ROM:0002D42C   o  ; was: sub_2D55E
+Enemy_CirclingOrbitState:                               ; was: sub_2D55E
                 move.w  $4A(a5),d0
                 add.w   d0,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
@@ -253,7 +253,7 @@ Enemy_CirclingOrbitState:                               ; DATA XREF: ROM:0002D42
                 move.w  #$10,$48(a5)
                 bra.s   Enemy_CirclingOrbitState_UpdateLifetime
 ; ---------------------------------------------------------------------------
-Enemy_CirclingOrbitState_AdjustRotation:                ; CODE XREF: Enemy_CirclingOrbitState+30   j  ; was: loc_2D59E
+Enemy_CirclingOrbitState_AdjustRotation:                ; was: loc_2D59E
                 move.b  (RandomNumberState).w,d0
                 andi.w  #$1F,d0
                 move.w  d0,$48(a5)
@@ -266,9 +266,9 @@ Enemy_CirclingOrbitState_AdjustRotation:                ; CODE XREF: Enemy_Circl
                 move.w  #8,$4A(a5)
                 bra.s   Enemy_CirclingOrbitState_UpdateLifetime
 ; ---------------------------------------------------------------------------
-Enemy_CirclingOrbitState_RotateReverse:                 ; CODE XREF: Enemy_CirclingOrbitState+60   j  ; was: loc_2D5C8
+Enemy_CirclingOrbitState_RotateReverse:                 ; was: loc_2D5C8
                 move.w  #$FFF8,$4A(a5)
-Enemy_CirclingOrbitState_UpdateLifetime:                ; CODE XREF: Enemy_CirclingOrbitState+22   j  ; was: loc_2D5CE
+Enemy_CirclingOrbitState_UpdateLifetime:                ; was: loc_2D5CE
                                         ; Enemy_CirclingOrbitState+3E   j
                 subq.w  #1,$50(a5)
                 beq.s   Enemy_CirclingOrbitState_BeginExit
@@ -276,7 +276,7 @@ Enemy_CirclingOrbitState_UpdateLifetime:                ; CODE XREF: Enemy_Circl
                 bcc.s   Enemy_CirclingOrbitState_BeginExit
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_CirclingOrbitState_BeginExit:                     ; CODE XREF: Enemy_CirclingOrbitState+74   j  ; was: loc_2D5DE
+Enemy_CirclingOrbitState_BeginExit:                     ; was: loc_2D5DE
                                         ; Enemy_CirclingOrbitState+7C   j
                 move.w  #$CF00,2(a5)
                 andi.w  #$1F0,$4C(a5)
@@ -284,7 +284,7 @@ Enemy_CirclingOrbitState_BeginExit:                     ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_CirclingOrbitState
 ; Drives the orbit angle to $1C0 at a fixed rate, then hands over to the no-op state
-Enemy_CirclingExitOrbitState:                           ; DATA XREF: ROM:0002D42E   o  ; was: sub_2D5F0
+Enemy_CirclingExitOrbitState:                           ; was: sub_2D5F0
                 addi.w  #$10,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
                 bsr.w   Enemy_UpdateCirclingRotationSprite
@@ -294,15 +294,15 @@ Enemy_CirclingExitOrbitState:                           ; DATA XREF: ROM:0002D42
                 cmpi.w  #$1C0,$4C(a5)
                 bne.s   Enemy_CirclingExitOrbitState_Return
                 addq.w  #2,4(a5)
-Enemy_CirclingExitOrbitState_Return:                    ; CODE XREF: Enemy_CirclingExitOrbitState+22   j  ; was: locret_2D618
+Enemy_CirclingExitOrbitState_Return:                    ; was: locret_2D618
                 rts
 ; End of function Enemy_CirclingExitOrbitState
-Enemy_CirclingNoOpState:                                ; DATA XREF: ROM:0002D430   o  ; was: nullsub_62
+Enemy_CirclingNoOpState:                                ; was: nullsub_62
                 rts
 ; End of function Enemy_CirclingNoOpState
 
 ; Recycles the record as type $2A4 with its state, health and velocities cleared
-Enemy_ResetCirclingState:                               ; CODE XREF: Enemy_CirclingController+A   j  ; was: sub_2D61C
+Enemy_ResetCirclingState:                               ; was: sub_2D61C
                                         ; Enemy_CirclingController+14   j
                 clr.w   4(a5)
                 move.w  #$2A4,(a5)
@@ -315,7 +315,7 @@ Enemy_ResetCirclingState:                               ; CODE XREF: Enemy_Circl
                 rts
 ; End of function Enemy_ResetCirclingState
 ; Adds one directional projectile above the base difficulty, then fires the base pattern
-Enemy_SpawnDifficultyProjectilePattern:                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D640
+Enemy_SpawnDifficultyProjectilePattern:                 ; was: sub_2D640
                 tst.w   (DifficultyMode).w
                 beq.s   Enemy_SpawnDifficultyProjectilePattern_Base
                 jsr     (Projectile_FindFreeSlotForward).l
@@ -325,7 +325,7 @@ Enemy_SpawnDifficultyProjectilePattern:                 ; DATA XREF: ROM:Entity_
                 move.w  #$8004,d2
                 jsr     (Projectile_InitializeAimedDelayedCollisionShot).l
 ; Fires the base four-projectile pattern on every difficulty
-Enemy_SpawnDifficultyProjectilePattern_Base:            ; CODE XREF: Enemy_SpawnDifficultyProjectilePattern+4   j  ; was: loc_2D664
+Enemy_SpawnDifficultyProjectilePattern_Base:            ; was: loc_2D664
                                         ; Enemy_SpawnDifficultyProjectilePattern+C   j
                 jmp     Enemy_SpawnQuadProjectiles
 ; End of function Enemy_SpawnDifficultyProjectilePattern

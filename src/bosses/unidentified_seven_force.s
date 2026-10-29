@@ -1,5 +1,5 @@
 ; Main loop handler for the unidentified Seven Force form
-Boss_UnidentifiedSevenForceMain:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_58C62
+Boss_UnidentifiedSevenForceMain:                        ; was: sub_58C62
                 tst.w   4(a5)
                 beq.w   Boss_UnidentifiedSevenForceDispatchState
                 tst.w   8(a5)
@@ -8,7 +8,7 @@ Boss_UnidentifiedSevenForceMain:                        ; DATA XREF: ROM:Entity_
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #$18,d0
                 jsr     (Gfx_UpdateSevenForceBattlePalette).l
-Boss_UnidentifiedSevenForceDispatchState:               ; CODE XREF: Boss_UnidentifiedSevenForceMain+4   j  ; was: loc_58C84
+Boss_UnidentifiedSevenForceDispatchState:               ; was: loc_58C84
                                         ; Boss_UnidentifiedSevenForceMain+C   j
                 move.w  4(a5),d0
                 movea.w Boss_UnidentifiedSevenForceStateOffsets(pc,d0.w),a0
@@ -17,12 +17,11 @@ Boss_UnidentifiedSevenForceDispatchState:               ; CODE XREF: Boss_Uniden
 ; End of function Boss_UnidentifiedSevenForceMain
 ; ---------------------------------------------------------------------------
 Boss_UnidentifiedSevenForceStateOffsets:    dc.w    Boss_UnidentifiedSevenForceInit-Boss_UnidentifiedSevenForceInit  ; was: off_58C94
-                                        ; DATA XREF: Boss_UnidentifiedSevenForceMain+26   r
                 dc.w    Boss_UnidentifiedSevenForceInteractiveState2-Boss_UnidentifiedSevenForceInit
                 dc.w    Boss_UnidentifiedSevenForceRenderState4-Boss_UnidentifiedSevenForceInit
 
 ; Initialize the unidentified Seven Force composite and enter state 4
-Boss_UnidentifiedSevenForceInit:                        ; DATA XREF: Boss_UnidentifiedSevenForceMain+2A   o  ; was: sub_58C9A
+Boss_UnidentifiedSevenForceInit:                        ; was: sub_58C9A
                                         ; ROM:Boss_UnidentifiedSevenForceStateOffsets   o
                 move.w  #1,8(a5)
                 movea.w a5,a4
@@ -57,15 +56,15 @@ Boss_UnidentifiedSevenForceInitState2:
                 move.w  a5,$4A(a5)
 ; End of function Boss_UnidentifiedSevenForceInitState2
 ; Apply rotation input and render interactive state 2
-Boss_UnidentifiedSevenForceInteractiveState2:           ; DATA XREF: ROM:00058C96   o  ; was: sub_58D2C
+Boss_UnidentifiedSevenForceInteractiveState2:           ; was: sub_58D2C
                 btst    #2,(ControllerHeldState).w
                 beq.s   Boss_UnidentifiedSevenForceCheckReverseRotationInput
                 addq.w  #2,$56(a5)
-Boss_UnidentifiedSevenForceCheckReverseRotationInput:   ; CODE XREF: Boss_UnidentifiedSevenForceInteractiveState2+6   j  ; was: loc_58D38
+Boss_UnidentifiedSevenForceCheckReverseRotationInput:   ; was: loc_58D38
                 btst    #3,(ControllerHeldState).w
                 beq.s   Boss_UnidentifiedSevenForcePreparePoseUpdate
                 subq.w  #2,$56(a5)
-Boss_UnidentifiedSevenForcePreparePoseUpdate:           ; CODE XREF: Boss_UnidentifiedSevenForceInteractiveState2+12   j  ; was: loc_58D44
+Boss_UnidentifiedSevenForcePreparePoseUpdate:           ; was: loc_58D44
                 andi.w  #$1FE,$56(a5)
                 lea     Boss_UnidentifiedSevenForceSharedPoses(pc),a1
                 nop
@@ -90,12 +89,12 @@ Boss_UnidentifiedSevenForceInitTimedState4:
                 moveq   #8,d0
                 jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
-Boss_UnidentifiedSevenForceRenderTimedState4Frame:      ; CODE XREF: Boss_UnidentifiedSevenForceInitTimedState4+42   j  ; was: loc_58DA0
+Boss_UnidentifiedSevenForceRenderTimedState4Frame:      ; was: loc_58DA0
                 lea     Boss_UnidentifiedSevenForceSharedPoses(pc),a1
                 nop
                 bra.w   Boss_UnidentifiedSevenForceRenderFrame
 ; ---------------------------------------------------------------------------
-Boss_UnidentifiedSevenForceInitState4:                  ; CODE XREF: Boss_UnidentifiedSevenForceInit+62   j  ; was: loc_58DAA
+Boss_UnidentifiedSevenForceInitState4:                  ; was: loc_58DAA
                 move.w  #4,4(a5)
                 move.w  #$120,$10(a5)
                 move.w  #$E0,$14(a5)
@@ -104,12 +103,12 @@ Boss_UnidentifiedSevenForceInitState4:                  ; CODE XREF: Boss_Uniden
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
 ; Render dispatch state 4 with the shared pose
-Boss_UnidentifiedSevenForceRenderState4:                ; DATA XREF: ROM:00058C98   o  ; was: loc_58DCE
+Boss_UnidentifiedSevenForceRenderState4:                ; was: loc_58DCE
                 lea     Boss_UnidentifiedSevenForceSharedPoses(pc),a1
                 nop
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
-Boss_UnidentifiedSevenForceRenderFrame:                 ; CODE XREF: Boss_UnidentifiedSevenForceInteractiveState2+24   j  ; was: loc_58DD8
+Boss_UnidentifiedSevenForceRenderFrame:                 ; was: loc_58DD8
                                         ; Boss_UnidentifiedSevenForceRenderTimedState4Frame+6   j
                                         ; Boss_UnidentifiedSevenForceRenderState4+6   j
                 bsr.w   Boss_UnidentifiedSevenForceUpdatePose
@@ -118,7 +117,7 @@ Boss_UnidentifiedSevenForceRenderFrame:                 ; CODE XREF: Boss_Uniden
                 jmp     Sprite_BeginMetaspritePartTraversal
 ; End of function Boss_UnidentifiedSevenForceRenderFrame
 ; Project the 18-channel pose buffer into composite-part angles
-Boss_UnidentifiedSevenForceApplyInterpolatedPartAngles:  ; CODE XREF: Boss_UnidentifiedSevenForceRenderFrame+4   p  ; was: sub_58DE8
+Boss_UnidentifiedSevenForceApplyInterpolatedPartAngles:  ; was: sub_58DE8
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -219,11 +218,11 @@ Boss_UnidentifiedSevenForceApplyInterpolatedPartAngles:  ; CODE XREF: Boss_Unide
                 rts
 ; End of function Boss_UnidentifiedSevenForceApplyInterpolatedPartAngles
 ; Update the unidentified form's 18-channel pose stream
-Boss_UnidentifiedSevenForceUpdatePose:                  ; CODE XREF: Boss_UnidentifiedSevenForceRenderFrame   p  ; was: sub_58F0C
+Boss_UnidentifiedSevenForceUpdatePose:                  ; was: sub_58F0C
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_UnidentifiedSevenForceAdvancePoseInterpolation
-Boss_UnidentifiedSevenForceReadPoseCommand:             ; CODE XREF: Boss_UnidentifiedSevenForceUpdatePose+24   j  ; was: loc_58F16
+Boss_UnidentifiedSevenForceReadPoseCommand:             ; was: loc_58F16
                                         ; Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation+E   j
                 move.w  $58(a5),d0
                 bmi.w   Boss_UnidentifiedSevenForcePreparePartAngleProjection
@@ -233,7 +232,7 @@ Boss_UnidentifiedSevenForceReadPoseCommand:             ; CODE XREF: Boss_Uniden
                 addq.w  #2,$58(a5)
                 bra.s   Boss_UnidentifiedSevenForceReadPoseCommand
 ; ---------------------------------------------------------------------------
-Boss_UnidentifiedSevenForceHandlePoseControlWord:       ; CODE XREF: Boss_UnidentifiedSevenForceUpdatePose+18   j  ; was: loc_58F32
+Boss_UnidentifiedSevenForceHandlePoseControlWord:       ; was: loc_58F32
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation
@@ -245,14 +244,14 @@ Boss_UnidentifiedSevenForceNoOp:                        ; was: nullsub_133
 ; End of function Boss_UnidentifiedSevenForceNoOp
 
 ; Handle a pose loop command or begin an ordinary interpolation command
-Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation:  ; CODE XREF: Boss_UnidentifiedSevenForceUpdatePose+2E   j  ; was: sub_58F46
+Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation:  ; was: sub_58F46
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_UnidentifiedSevenForceBeginPoseInterpolation
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Boss_UnidentifiedSevenForceReadPoseCommand
 ; ---------------------------------------------------------------------------
-Boss_UnidentifiedSevenForceBeginPoseInterpolation:      ; CODE XREF: Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation+4   j  ; was: loc_58F56
+Boss_UnidentifiedSevenForceBeginPoseInterpolation:      ; was: loc_58F56
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -267,19 +266,19 @@ Boss_UnidentifiedSevenForceBeginPoseInterpolation:      ; CODE XREF: Boss_Uniden
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_UnidentifiedSevenForcePreparePartAngleProjection
-Boss_UnidentifiedSevenForceAdvancePoseInterpolation:    ; CODE XREF: Boss_UnidentifiedSevenForceUpdatePose+8   j  ; was: loc_58F86
+Boss_UnidentifiedSevenForceAdvancePoseInterpolation:    ; was: loc_58F86
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$11,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_UnidentifiedSevenForcePreparePartAngleProjection:  ; CODE XREF: Boss_UnidentifiedSevenForceUpdatePose+E   j  ; was: loc_58F96
+Boss_UnidentifiedSevenForcePreparePartAngleProjection:  ; was: loc_58F96
                                         ; Boss_UnidentifiedSevenForceUpdatePose+34   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation
 ; Calculate deltas for the unidentified form's 18-channel pose buffer
-Boss_UnidentifiedSevenForceCalculatePoseDeltas:         ; CODE XREF: Boss_UnidentifiedSevenForceHandlePoseLoopOrInterpolation+24   p  ; was: sub_58FA0
+Boss_UnidentifiedSevenForceCalculatePoseDeltas:         ; was: sub_58FA0
                 movea.l $2FC(a5),a1
                 moveq   #$11,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
@@ -294,11 +293,9 @@ Boss_UnidentifiedSevenForceInitializePoseChannels:
 ; End of function Boss_UnidentifiedSevenForceInitializePoseChannels
 ; ---------------------------------------------------------------------------
 Boss_UnidentifiedSevenForceSharedPoses: dc.w    $2020, 0, $2020, $12, $FFFF  ; was: word_58FC0
-                                        ; DATA XREF: Boss_UnidentifiedSevenForceInteractiveState2+1E   o
                                         ; Boss_UnidentifiedSevenForceRenderTimedState4Frame   o
                                         ; Boss_UnidentifiedSevenForceRenderState4   o
 Boss_UnidentifiedSevenForcePoseTable:   dc.w    $40F8, $C49A, $B80A, $E654, $E05E, $EE20, $2022, $12E0  ; was: word_58FCA
-                                        ; DATA XREF: Boss_UnidentifiedSevenForceInit+30   o
                 dc.w    $E000, $3E04, $C092, $C412, $F058, $D062, $E91C, $201E
                 dc.w    $17E4, $E002
 

@@ -1,5 +1,5 @@
 ; Initializes the two Wolf Garopa arena-boundary records
-StageTransition_InitializeWolfGaropaArenaBoundaries:    ; CODE XREF: StageTransition_UpdateWolfGaropaApproach+28   p  ; was: sub_FEA0
+StageTransition_InitializeWolfGaropaArenaBoundaries:    ; was: sub_FEA0
                                         ; StageTransition_RestartWolfGaropaBackdropFinalize+E   p
                 movea.w #(Entity58Type-M68K_RAM),a0
                 clr.w   $48(a0)
@@ -10,7 +10,7 @@ StageTransition_InitializeWolfGaropaArenaBoundaries:    ; CODE XREF: StageTransi
                 move.w  #$170,$10(a0)
 ; End of function StageTransition_InitializeWolfGaropaArenaBoundaries
 ; Initializes one Wolf Garopa arena-boundary record
-StageTransition_InitializeWolfGaropaArenaBoundary:      ; CODE XREF: StageTransition_InitializeWolfGaropaArenaBoundaries+E   p  ; was: sub_FEC0
+StageTransition_InitializeWolfGaropaArenaBoundary:      ; was: sub_FEC0
                 move.w  #$41C,(a0)
                 clr.w   2(a0)
                 move.b  #$80,$21(a0)
@@ -19,7 +19,7 @@ StageTransition_InitializeWolfGaropaArenaBoundary:      ; CODE XREF: StageTransi
                 rts
 ; End of function StageTransition_InitializeWolfGaropaArenaBoundary
 ; Updates one Wolf Garopa arena-boundary record
-Stage23_UpdateWolfGaropaArenaBoundary:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_FEDE
+Stage23_UpdateWolfGaropaArenaBoundary:                  ; was: sub_FEDE
                 move.b  #$80,$21(a5)
                 move.w  #$F3E0,d0
                 sub.w   (PrimaryCameraYPosition).w,d0
@@ -33,7 +33,7 @@ Stage23_UpdateWolfGaropaArenaBoundary:                  ; DATA XREF: ROM:Entity_
                 bpl.s   Stage23_WolfGaropaArenaBoundaryReturn
                 move.w  d1,(PlayerYPosition).w
                 subq.w  #1,(PlayerYPosition).w
-Stage23_WolfGaropaArenaBoundaryReturn:                  ; CODE XREF: Stage23_UpdateWolfGaropaArenaBoundary+1C   j  ; was: locret_FF0E
+Stage23_WolfGaropaArenaBoundaryReturn:                  ; was: locret_FF0E
                                         ; Stage23_UpdateWolfGaropaArenaBoundary+26   j
                 rts
 ; End of function Stage23_UpdateWolfGaropaArenaBoundary

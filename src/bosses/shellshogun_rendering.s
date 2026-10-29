@@ -1,4 +1,4 @@
-Boss_ShellshogunRenderSprites:                          ; CODE XREF: Boss_ShellshogunUpdateSlamAnimation+A   p  ; was: sub_39E5E
+Boss_ShellshogunRenderSprites:                          ; was: sub_39E5E
                                         ; Boss_ShellshogunDirectionalAttackWindupState+2A   p
                 moveq   #$16,d7
                 jsr     (Sprite_BeginMetaspritePartTraversal).l
@@ -8,19 +8,19 @@ Boss_ShellshogunRenderSprites:                          ; CODE XREF: Boss_Shells
                 bra.w   Boss_ShellshogunUpdateOrbitingParts
 ; End of function Boss_ShellshogunRenderSprites
 ; Updates facing and the zero-facing linked-part flag arrangement
-Boss_ShellshogunUpdateFacingPartFlags:                  ; CODE XREF: Boss_ShellshogunDecisionState+A   p  ; was: sub_39E76
+Boss_ShellshogunUpdateFacingPartFlags:                  ; was: sub_39E76
                                         ; Boss_ShellshogunJumpAttackWindupState+6   p
                 jsr     (Physics_GetPlayerDelta).l
                 clr.w   $54(a5)
                 tst.w   d1
                 bpl.s   Boss_ShellshogunApplyFacingPartFlags
                 move.w  #$100,$54(a5)
-Boss_ShellshogunApplyFacingPartFlags:                   ; CODE XREF: Boss_ShellshogunUpdateFacingPartFlags+C   j  ; was: loc_39E8A
+Boss_ShellshogunApplyFacingPartFlags:                   ; was: loc_39E8A
                 tst.w   $54(a5)
                 beq.s   Boss_ShellshogunSetZeroFacingPartFlags
 ; End of function Boss_ShellshogunUpdateFacingPartFlags
 ; Initializes the linked-part flag arrangement used during setup
-Boss_ShellshogunInitializePartFlags:                    ; CODE XREF: Boss_ShellshogunSetupPhase+140   p  ; was: sub_39E90
+Boss_ShellshogunInitializePartFlags:                    ; was: sub_39E90
                 moveq   #3,d7
                 bset    d7,$6E(a5)
                 bset    d7,$CE(a5)
@@ -30,7 +30,7 @@ Boss_ShellshogunInitializePartFlags:                    ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunInitializePartFlags
 ; Installs the linked-part flag arrangement used when facing is zero
-Boss_ShellshogunSetZeroFacingPartFlags:                 ; CODE XREF: Boss_ShellshogunUpdateFacingPartFlags+18   j  ; was: sub_39EA8
+Boss_ShellshogunSetZeroFacingPartFlags:                 ; was: sub_39EA8
                 moveq   #3,d7
                 bclr    d7,$6E(a5)
                 bclr    d7,$CE(a5)
@@ -40,7 +40,7 @@ Boss_ShellshogunSetZeroFacingPartFlags:                 ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunSetZeroFacingPartFlags
 ; Enables flag bit seven on eight linked-part records
-Boss_ShellshogunEnableLinkedPartFlag7:                  ; CODE XREF: Boss_ShellshogunSetupPhase+66   p  ; was: sub_39EC0
+Boss_ShellshogunEnableLinkedPartFlag7:                  ; was: sub_39EC0
                 moveq   #7,d0
                 bset    d0,$12E(a5)
                 bset    d0,$18E(a5)
@@ -53,7 +53,7 @@ Boss_ShellshogunEnableLinkedPartFlag7:                  ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunEnableLinkedPartFlag7
 ; Update Shellshogun sprite flipping based on rotation angle
-Boss_ShellshogunUpdateSpriteFlip:                       ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+A0   j  ; was: sub_39EE4
+Boss_ShellshogunUpdateSpriteFlip:                       ; was: sub_39EE4
                 lea     (Boss_ShellshogunRotationFramesF).l,a0
                 move.w  $29C(a5),d0
                 subi.w  #$110,d0
@@ -68,20 +68,20 @@ Boss_ShellshogunUpdateSpriteFlip:                       ; CODE XREF: Boss_Shells
                 cmpi.w  #$100,d1
                 bmi.s   Boss_ShellshogunUpdateSpriteFlipReturn
                 ori.w   #$1800,$E(a5)
-Boss_ShellshogunUpdateSpriteFlipReturn:                 ; CODE XREF: Boss_ShellshogunUpdateSpriteFlip+32   j  ; was: locret_39F1E
+Boss_ShellshogunUpdateSpriteFlipReturn:                 ; was: locret_39F1E
                 rts
 ; End of function Boss_ShellshogunUpdateSpriteFlip
 ; Selects the alternating Shellshogun body frame mapping
-Boss_ShellshogunSelectBodyFrameMapping:                 ; CODE XREF: Boss_ShellshogunRenderSprites+10   p  ; was: sub_39F20
+Boss_ShellshogunSelectBodyFrameMapping:                 ; was: sub_39F20
                 move.l  #Boss_ShellshogunSpriteMapping00,$68(a5)
                 btst    #3,(FrameCounter+1).w
                 bne.s   Boss_ShellshogunSelectBodyFrameMappingReturn
                 move.l  #Boss_ShellshogunSpriteMapping01,$68(a5)
-Boss_ShellshogunSelectBodyFrameMappingReturn:           ; CODE XREF: Boss_ShellshogunSelectBodyFrameMapping+E   j  ; was: locret_39F38
+Boss_ShellshogunSelectBodyFrameMappingReturn:           ; was: locret_39F38
                 rts
 ; End of function Boss_ShellshogunSelectBodyFrameMapping
 ; Publishes and clamps the boss-relative shared screen position
-Boss_ShellshogunPublishScreenPosition:                  ; CODE XREF: Boss_ShellshogunRenderSprites+8   p  ; was: sub_39F3A
+Boss_ShellshogunPublishScreenPosition:                  ; was: sub_39F3A
                 move.w  #$BC,d0
                 sub.w   $10(a5),d0
                 move.w  d0,(SecondaryCameraXPos).w
@@ -91,7 +91,7 @@ Boss_ShellshogunPublishScreenPosition:                  ; CODE XREF: Boss_Shells
                 jmp     Boss_ClampSharedScreenPosition
 ; End of function Boss_ShellshogunPublishScreenPosition
 ; Advances the phase and positions three orbiting auxiliary parts
-Boss_ShellshogunUpdateOrbitingParts:                    ; CODE XREF: Boss_ShellshogunRenderSprites+14   j  ; was: sub_39F58
+Boss_ShellshogunUpdateOrbitingParts:                    ; was: sub_39F58
                 move.w  $1DE(a5),d0
                 move.w  $23C(a5),d1
                 tst.w   $1DC(a5)
@@ -104,14 +104,14 @@ Boss_ShellshogunUpdateOrbitingParts:                    ; CODE XREF: Boss_Shells
                 addq.w  #1,$1DC(a5)
                 bra.s   Boss_ShellshogunStoreOrbitPhase
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunReverseOrbitPhase:                      ; CODE XREF: Boss_ShellshogunUpdateOrbitingParts+C   j  ; was: loc_39F7A
+Boss_ShellshogunReverseOrbitPhase:                      ; was: loc_39F7A
                 subq.w  #4,d0
                 subq.w  #1,d1
                 andi.w  #$1FC,d0
                 cmpi.w  #$1B0,d0
                 bne.s   Boss_ShellshogunStoreOrbitPhase
                 clr.w   $1DC(a5)
-Boss_ShellshogunStoreOrbitPhase:                        ; CODE XREF: Boss_ShellshogunUpdateOrbitingParts+1A   j  ; was: loc_39F8C
+Boss_ShellshogunStoreOrbitPhase:                        ; was: loc_39F8C
                                         ; Boss_ShellshogunUpdateOrbitingParts+20   j
                 move.w  d0,$1DE(a5)
                 move.w  d1,$23C(a5)
@@ -124,7 +124,7 @@ Boss_ShellshogunStoreOrbitPhase:                        ; CODE XREF: Boss_Shells
                 move.w  $1DE(a5),d2
                 move.w  #$1FE,d1
                 moveq   #2,d7
-Boss_ShellshogunUpdateNextOrbitingPart:                 ; CODE XREF: Boss_ShellshogunUpdateOrbitingParts+8C   j  ; was: loc_39FBA
+Boss_ShellshogunUpdateNextOrbitingPart:                 ; was: loc_39FBA
                 and.w   d1,d0
                 movea.w (a2)+,a3
                 move.w  -$80(a1,d0.w),d4
@@ -144,10 +144,9 @@ Boss_ShellshogunUpdateNextOrbitingPart:                 ; CODE XREF: Boss_Shells
 ; End of function Boss_ShellshogunUpdateOrbitingParts
 ; ---------------------------------------------------------------------------
 Boss_ShellshogunOrbitingPartSourcesAndRadii:    dc.w    $C620, $20, $CF20, 8, $CF80, 6  ; was: word_39FEA
-                                        ; DATA XREF: Boss_ShellshogunUpdateOrbitingParts+46   o
 
 ; Selects the linked part and derives its wrapped rotation from the pose
-Boss_ShellshogunUpdateLinkedPartRotation:               ; CODE XREF: Boss_ShellshogunSlamAttackInit:Boss_ShellshogunSlamPreparationState   p  ; was: sub_39FF6
+Boss_ShellshogunUpdateLinkedPartRotation:               ; was: sub_39FF6
                                         ; sub_39E5A   p
                 move.w  #$C860,$23E(a5)
                 move.w  $296(a5),d0
@@ -157,7 +156,7 @@ Boss_ShellshogunUpdateLinkedPartRotation:               ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunUpdateLinkedPartRotation
 ; Updates the rotating part's frame, flips, anchor, and optional trailing parts
-Boss_ShellshogunUpdateRotatingPart:                     ; CODE XREF: Boss_ShellshogunRenderSprites+C   p  ; was: sub_3A010
+Boss_ShellshogunUpdateRotatingPart:                     ; was: sub_3A010
                 move.w  $29C(a5),d0
                 add.w   $56(a5),d0
                 addi.w  #$20,d0                         ; ' '
@@ -166,19 +165,19 @@ Boss_ShellshogunUpdateRotatingPart:                     ; CODE XREF: Boss_Shells
                 cmpi.w  #$100,d0
                 bpl.s   Boss_ShellshogunUpdateRotatingPartVerticalFlip
                 bset    #4,$A2E(a5)
-Boss_ShellshogunUpdateRotatingPartVerticalFlip:         ; CODE XREF: Boss_ShellshogunUpdateRotatingPart+1A   j  ; was: loc_3A032
+Boss_ShellshogunUpdateRotatingPartVerticalFlip:         ; was: loc_3A032
                 bset    #3,$A2E(a5)
                 cmpi.w  #$180,d0
                 bpl.s   Boss_ShellshogunApplyRotatingPartFacing
                 cmpi.w  #$80,d0
                 bmi.s   Boss_ShellshogunApplyRotatingPartFacing
                 bclr    #3,$A2E(a5)
-Boss_ShellshogunApplyRotatingPartFacing:                ; CODE XREF: Boss_ShellshogunUpdateRotatingPart+2C   j  ; was: loc_3A04A
+Boss_ShellshogunApplyRotatingPartFacing:                ; was: loc_3A04A
                                         ; Boss_ShellshogunUpdateRotatingPart+32   j
                 tst.w   $54(a5)
                 beq.s   Boss_ShellshogunSelectRotatingPartFrame
                 eori.w  #$800,$A2E(a5)
-Boss_ShellshogunSelectRotatingPartFrame:                ; CODE XREF: Boss_ShellshogunUpdateRotatingPart+3E   j  ; was: loc_3A056
+Boss_ShellshogunSelectRotatingPartFrame:                ; was: loc_3A056
                 asr.w   #4,d0
                 andi.w  #$C,d0
                 move.l  Boss_ShellshogunRotatingPartFrameTable(pc,d0.w),$A28(a5)
@@ -191,7 +190,7 @@ Boss_ShellshogunSelectRotatingPartFrame:                ; CODE XREF: Boss_Shells
                 clr.b   $B01(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunPositionTrailingParts:                  ; CODE XREF: Boss_ShellshogunUpdateRotatingPart+66   j  ; was: loc_3A082
+Boss_ShellshogunPositionTrailingParts:                  ; was: loc_3A082
                 move.b  #$C0,$AA1(a5)
                 move.b  #$C0,$B01(a5)
                 lea     (Math_SineTable).l,a1
@@ -200,7 +199,7 @@ Boss_ShellshogunPositionTrailingParts:                  ; CODE XREF: Boss_Shells
                 tst.w   $54(a5)
                 bne.s   Boss_ShellshogunCalculateTrailingPartOffsets
                 neg.w   d0
-Boss_ShellshogunCalculateTrailingPartOffsets:           ; CODE XREF: Boss_ShellshogunUpdateRotatingPart+90   j  ; was: loc_3A0A4
+Boss_ShellshogunCalculateTrailingPartOffsets:           ; was: loc_3A0A4
                 andi.w  #$1FE,d0
                 move.w  -$80(a1,d0.w),d1
                 move.w  (a1,d0.w),d2
@@ -221,7 +220,7 @@ Boss_ShellshogunCalculateTrailingPartOffsets:           ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunUpdateRotatingPart
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunRotatingPartFrameTable: dc.l    Boss_ShellshogunSpriteMapping29  ; DATA XREF: Boss_ShellshogunUpdateRotatingPart+4C   r  ; was: off_3A0DA
+Boss_ShellshogunRotatingPartFrameTable: dc.l    Boss_ShellshogunSpriteMapping29  ; was: off_3A0DA
                 dc.l    Boss_ShellshogunSpriteMapping28
                 dc.l    Boss_ShellshogunSpriteMapping27
                 dc.l    Boss_ShellshogunSpriteMapping28

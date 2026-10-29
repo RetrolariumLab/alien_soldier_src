@@ -1,4 +1,4 @@
-Enemy_Stage9FlyController:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D66C
+Enemy_Stage9FlyController:                              ; was: sub_2D66C
                 tst.w   4(a5)
                 beq.s   Enemy_Stage9FlyController_UpdateState
                 tst.w   $24(a5)
@@ -9,12 +9,12 @@ Enemy_Stage9FlyController:                              ; DATA XREF: ROM:Entity_
                 bpl.w   Enemy_ResetCirclingState
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
-Enemy_Stage9FlyController_UpdateState:                  ; CODE XREF: Enemy_Stage9FlyController+4   j  ; was: loc_2D696
+Enemy_Stage9FlyController_UpdateState:                  ; was: loc_2D696
                 bsr.s   Enemy_DispatchStage9FlyState
                 bra.w   Enemy_UpdateCirclingAnimation
 ; End of function Enemy_Stage9FlyController
 ; Dispatches one Stage 9 fly's orbit state
-Enemy_DispatchStage9FlyState:                           ; CODE XREF: Enemy_Stage9FlyController:Enemy_Stage9FlyController_UpdateState   p  ; was: sub_2D69C
+Enemy_DispatchStage9FlyState:                           ; was: sub_2D69C
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
                 lea     Enemy_Stage9FlyStateOffsets(pc,d0.w),a0
@@ -22,12 +22,12 @@ Enemy_DispatchStage9FlyState:                           ; CODE XREF: Enemy_Stage
                 jmp     (a0)
 ; End of function Enemy_DispatchStage9FlyState
 ; ---------------------------------------------------------------------------
-Enemy_Stage9FlyStateOffsets:    dc.w    Enemy_Stage9FlyInit-*  ; DATA XREF: Enemy_DispatchStage9FlyState+8   o  ; was: off_2D6AC
+Enemy_Stage9FlyStateOffsets:    dc.w    Enemy_Stage9FlyInit-*  ; was: off_2D6AC
                 dc.w    Enemy_Stage9FlyOrbitState-*
                 dc.w    Enemy_Stage9FlyNoOpState-*
 
 ; Initializes one Stage 9 fly and selects its orbit direction
-Enemy_Stage9FlyInit:                                    ; DATA XREF: ROM:Enemy_Stage9FlyStateOffsets   o  ; was: sub_2D6B2
+Enemy_Stage9FlyInit:                                    ; was: sub_2D6B2
                 moveq   #0,d0
                 bsr.w   Enemy_InitCirclingSprite
                 move.w  #4,$5C(a5)
@@ -40,11 +40,10 @@ Enemy_Stage9FlyInit:                                    ; DATA XREF: ROM:Enemy_S
                 move.w  #8,$4A(a5)
                 bra.s   Enemy_Stage9FlyOrbitState
 ; ---------------------------------------------------------------------------
-Enemy_Stage9FlyInit_ReverseOrbit:                       ; CODE XREF: Enemy_Stage9FlyInit+26   j  ; was: loc_2D6E2
+Enemy_Stage9FlyInit_ReverseOrbit:                       ; was: loc_2D6E2
                 move.w  #$FFF8,$4A(a5)
 ; Advances the fly around its current target angle and selects the next orbit phase
-Enemy_Stage9FlyOrbitState:                              ; CODE XREF: Enemy_Stage9FlyInit+2E   j  ; was: loc_2D6E8
-                                        ; DATA XREF: ROM:0002D6AE   o
+Enemy_Stage9FlyOrbitState:                              ; was: loc_2D6E8
                 move.w  $4A(a5),d0
                 add.w   d0,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
@@ -63,35 +62,34 @@ Enemy_Stage9FlyOrbitState:                              ; CODE XREF: Enemy_Stage
                 move.w  Enemy_Stage9FlyForwardSpeedScales(pc,d0.w),$50(a5)
                 bra.s   Enemy_Stage9FlyOrbitState_AdvancePhase
 ; ---------------------------------------------------------------------------
-Enemy_Stage9FlyOrbitState_LoadReverseParameters:        ; CODE XREF: Enemy_Stage9FlyInit+66   j  ; was: loc_2D72E
+Enemy_Stage9FlyOrbitState_LoadReverseParameters:        ; was: loc_2D72E
                 move.w  Enemy_Stage9FlyReverseAngularSteps(pc,d0.w),$4A(a5)
                 move.w  Enemy_Stage9FlyReverseTargetAngles(pc,d0.w),$4E(a5)
                 move.w  Enemy_Stage9FlyReverseSpeedScales(pc,d0.w),$50(a5)
-Enemy_Stage9FlyOrbitState_AdvancePhase:                 ; CODE XREF: Enemy_Stage9FlyInit+7A   j  ; was: loc_2D740
+Enemy_Stage9FlyOrbitState_AdvancePhase:                 ; was: loc_2D740
                 addq.w  #2,$48(a5)
                 cmpi.w  #8,$48(a5)
                 bne.s   Enemy_Stage9FlyOrbitState_Return
                 move.w  #$CF00,2(a5)
                 addq.w  #2,4(a5)
-Enemy_Stage9FlyOrbitState_Return:                       ; CODE XREF: Enemy_Stage9FlyInit+5C   j  ; was: locret_2D756
+Enemy_Stage9FlyOrbitState_Return:                       ; was: locret_2D756
                                         ; Enemy_Stage9FlyInit+98   j
                 rts
 ; End of function Enemy_Stage9FlyInit
 ; ---------------------------------------------------------------------------
-Enemy_Stage9FlyForwardAngularSteps: dc.w    2, 4, 2     ; DATA XREF: Enemy_Stage9FlyInit+68   r  ; was: word_2D758
-Enemy_Stage9FlyForwardTargetAngles: dc.w    $100, $100, $160  ; DATA XREF: Enemy_Stage9FlyInit+6E   r  ; was: word_2D75E
-Enemy_Stage9FlyForwardSpeedScales:  dc.w    $10, 8, $10  ; DATA XREF: Enemy_Stage9FlyInit+74   r  ; was: word_2D764
+Enemy_Stage9FlyForwardAngularSteps: dc.w    2, 4, 2     ; was: word_2D758
+Enemy_Stage9FlyForwardTargetAngles: dc.w    $100, $100, $160  ; was: word_2D75E
+Enemy_Stage9FlyForwardSpeedScales:  dc.w    $10, 8, $10  ; was: word_2D764
 Enemy_Stage9FlyReverseAngularSteps: dc.w    $FFFE, $FFFC, $FFFE  ; was: word_2D76A
-                                        ; DATA XREF: Enemy_Stage9FlyInit:Enemy_Stage9FlyOrbitState_LoadReverseParameters   r
-Enemy_Stage9FlyReverseTargetAngles: dc.w    0, 0, $1A0  ; DATA XREF: Enemy_Stage9FlyInit+82   r  ; was: word_2D770
-Enemy_Stage9FlyReverseSpeedScales:  dc.w    $10, 8, $10  ; DATA XREF: Enemy_Stage9FlyInit+88   r  ; was: word_2D776
+Enemy_Stage9FlyReverseTargetAngles: dc.w    0, 0, $1A0  ; was: word_2D770
+Enemy_Stage9FlyReverseSpeedScales:  dc.w    $10, 8, $10  ; was: word_2D776
 
-Enemy_Stage9FlyNoOpState:                               ; DATA XREF: ROM:0002D6B0   o  ; was: nullsub_64
+Enemy_Stage9FlyNoOpState:                               ; was: nullsub_64
                 rts
 ; End of function Enemy_Stage9FlyNoOpState
 
 ; Updates a Viblack side shot until it leaves combat or begins its final burst
-Projectile_ViblackSideShotController:                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D77E
+Projectile_ViblackSideShotController:                   ; was: sub_2D77E
                 tst.w   4(a5)
                 beq.s   Projectile_ViblackSideShotController_UpdateState
                 tst.w   $24(a5)
@@ -103,12 +101,12 @@ Projectile_ViblackSideShotController:                   ; DATA XREF: ROM:Entity_
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
 ; Dispatches the side-shot state and applies its current animation mapping
-Projectile_ViblackSideShotController_UpdateState:       ; CODE XREF: Projectile_ViblackSideShotController+4   j  ; was: loc_2D7A8
+Projectile_ViblackSideShotController_UpdateState:       ; was: loc_2D7A8
                 bsr.s   Projectile_DispatchViblackSideShotState
                 bra.w   Enemy_UpdateCirclingAnimation
 ; End of function Projectile_ViblackSideShotController
 ; Dispatches the Viblack side shot's current state
-Projectile_DispatchViblackSideShotState:                ; CODE XREF: Projectile_ViblackSideShotController:Projectile_ViblackSideShotController_UpdateState   p  ; was: sub_2D7AE
+Projectile_DispatchViblackSideShotState:                ; was: sub_2D7AE
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
                 lea     Projectile_ViblackSideShotStateOffsets(pc,d0.w),a0
@@ -116,14 +114,14 @@ Projectile_DispatchViblackSideShotState:                ; CODE XREF: Projectile_
                 jmp     (a0)
 ; End of function Projectile_DispatchViblackSideShotState
 ; ---------------------------------------------------------------------------
-Projectile_ViblackSideShotStateOffsets: dc.w    Projectile_ViblackSideShotInitState-*  ; DATA XREF: Projectile_DispatchViblackSideShotState+8   o  ; was: off_2D7BE
+Projectile_ViblackSideShotStateOffsets: dc.w    Projectile_ViblackSideShotInitState-*  ; was: off_2D7BE
                 dc.w    Projectile_ViblackSideShotApproachState-*
                 dc.w    Projectile_ViblackSideShotBeginTurnState-*
                 dc.w    Projectile_ViblackSideShotTurnAndLaunchState-*
                 dc.w    Projectile_ViblackSideShotTrackAltitudeState-*
 
 ; Initializes the side shot's sprite, downward entry motion, and turn direction
-Projectile_ViblackSideShotInitState:                    ; DATA XREF: ROM:Projectile_ViblackSideShotStateOffsets   o  ; was: sub_2D7C8
+Projectile_ViblackSideShotInitState:                    ; was: sub_2D7C8
                 moveq   #0,d0
                 bsr.w   Enemy_InitCirclingSprite
                 move.b  #2,$25(a5)
@@ -137,12 +135,12 @@ Projectile_ViblackSideShotInitState:                    ; DATA XREF: ROM:Project
                 move.w  #$FFF8,$4E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ViblackSideShotInitState_SetPositiveTurn:    ; CODE XREF: Projectile_ViblackSideShotInitState+28   j  ; was: loc_2D7FA
+Projectile_ViblackSideShotInitState_SetPositiveTurn:    ; was: loc_2D7FA
                 move.w  #8,$4E(a5)
                 rts
 ; End of function Projectile_ViblackSideShotInitState
 ; Waits until the side shot sits at least $20 below the player centre
-Projectile_ViblackSideShotApproachState:                ; DATA XREF: ROM:0002D7C0   o  ; was: sub_2D802
+Projectile_ViblackSideShotApproachState:                ; was: sub_2D802
                 move.w  $14(a5),d0
                 sub.w   (PlayerCenterY).w,d0
                 tst.w   d0
@@ -161,19 +159,19 @@ Orphaned_ViblackSideShotWaitForLinkedObject:
                 tst.w   $1C(a1)
                 bne.s   Projectile_ViblackSideShotState_Return
                 addq.w  #2,4(a5)
-Projectile_ViblackSideShotState_Return:                 ; CODE XREF: Projectile_ViblackSideShotApproachState+A   j  ; was: locret_2D832
+Projectile_ViblackSideShotState_Return:                 ; was: locret_2D832
                                         ; Projectile_ViblackSideShotApproachState+10   j
                 rts
 ; End of function Orphaned_ViblackSideShotWaitForLinkedObject
 ; Stops the entry motion and starts the turn timer
-Projectile_ViblackSideShotBeginTurnState:               ; DATA XREF: ROM:0002D7C2   o  ; was: sub_2D834
+Projectile_ViblackSideShotBeginTurnState:               ; was: sub_2D834
                 clr.w   $1C(a5)
                 addq.w  #2,4(a5)
                 move.w  #$10,$48(a5)
                 rts
 ; End of function Projectile_ViblackSideShotBeginTurnState
 ; Rotates the shot for sixteen frames, then launches it horizontally
-Projectile_ViblackSideShotTurnAndLaunchState:           ; DATA XREF: ROM:0002D7C4   o  ; was: sub_2D844
+Projectile_ViblackSideShotTurnAndLaunchState:           ; was: sub_2D844
                 move.w  $4E(a5),d0
                 add.w   d0,$4C(a5)
                 bsr.w   Enemy_UpdateCirclingRotationSprite
@@ -185,21 +183,21 @@ Projectile_ViblackSideShotTurnAndLaunchState:           ; DATA XREF: ROM:0002D7C
                 btst    #7,$4E(a5)
                 bne.s   Projectile_ViblackSideShotTurnAndLaunchState_Return
                 neg.w   $18(a5)
-Projectile_ViblackSideShotTurnAndLaunchState_Return:    ; CODE XREF: Projectile_ViblackSideShotTurnAndLaunchState+10   j  ; was: locret_2D872
+Projectile_ViblackSideShotTurnAndLaunchState_Return:    ; was: locret_2D872
                                         ; Projectile_ViblackSideShotTurnAndLaunchState+28   j
                 rts
 ; End of function Projectile_ViblackSideShotTurnAndLaunchState
 ; Tracks the player altitude until the shot lifetime expires, then hides the shot
-Projectile_ViblackSideShotTrackAltitudeState:           ; DATA XREF: ROM:0002D7C6   o  ; was: sub_2D874
+Projectile_ViblackSideShotTrackAltitudeState:           ; was: sub_2D874
                 bsr.w   Projectile_ViblackSideShotSteerTowardPlayer
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_ViblackSideShotTrackAltitudeState_Return
                 bset    #4,2(a5)
-Projectile_ViblackSideShotTrackAltitudeState_Return:    ; CODE XREF: Projectile_ViblackSideShotTrackAltitudeState+8   j  ; was: locret_2D884
+Projectile_ViblackSideShotTrackAltitudeState_Return:    ; was: locret_2D884
                 rts
 ; End of function Projectile_ViblackSideShotTrackAltitudeState
 ; Accelerates vertically toward the player centre, capped at two pixels a frame
-Projectile_ViblackSideShotSteerTowardPlayer:            ; CODE XREF: Projectile_ViblackSideShotTrackAltitudeState   p  ; was: sub_2D886
+Projectile_ViblackSideShotSteerTowardPlayer:            ; was: sub_2D886
                 move.w  (PlayerCenterY).w,d0
                 sub.w   $14(a5),d0
                 beq.s   Projectile_ViblackSideShotSteerTowardPlayer_Return
@@ -212,17 +210,17 @@ Projectile_ViblackSideShotSteerTowardPlayer:            ; CODE XREF: Projectile_
                 rts
 ; ---------------------------------------------------------------------------
 ; Accelerates downward, capped at the positive vertical speed limit
-Projectile_ViblackSideShotSteerTowardPlayer_AccelerateDown:  ; CODE XREF: Projectile_ViblackSideShotSteerTowardPlayer+C   j  ; was: loc_2D8B0
+Projectile_ViblackSideShotSteerTowardPlayer_AccelerateDown:  ; was: loc_2D8B0
                 addi.l  #$2000,$1C(a5)
                 cmpi.l  #$20000,$1C(a5)
                 blt.s   Projectile_ViblackSideShotSteerTowardPlayer_Return
                 move.l  #$20000,$1C(a5)
-Projectile_ViblackSideShotSteerTowardPlayer_Return:     ; CODE XREF: Projectile_ViblackSideShotSteerTowardPlayer+8   j  ; was: locret_2D8CA
+Projectile_ViblackSideShotSteerTowardPlayer_Return:     ; was: locret_2D8CA
                                         ; Projectile_ViblackSideShotSteerTowardPlayer+1E   j
                 rts
 ; End of function Projectile_ViblackSideShotSteerTowardPlayer
 ; Clears the side shot's combat state and replaces it with the base projectile burst
-Projectile_ViblackSideShotBeginBurst:                   ; CODE XREF: Projectile_ViblackSideShotController+A   j  ; was: sub_2D8CC
+Projectile_ViblackSideShotBeginBurst:                   ; was: sub_2D8CC
                                         ; Projectile_ViblackSideShotController+14   j
                 clr.w   $24(a5)
                 clr.b   $21(a5)
@@ -237,20 +235,20 @@ Orphaned_ViblackSideShotNoOp:                           ; was: nullsub_65
 ; End of function Orphaned_ViblackSideShotNoOp
 
 ; Controls allocation and activation of the two Stage 9 fly waves
-Stage9_FlyFormationController:                          ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D8E8
+Stage9_FlyFormationController:                          ; was: sub_2D8E8
                 move.w  4(a5),d0
                 lea     Stage9_FlyFormationStateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Stage9_FlyFormationController
 ; ---------------------------------------------------------------------------
-Stage9_FlyFormationStateOffsets:    dc.w    Stage9_FlyFormationInitState-*  ; DATA XREF: Stage9_FlyFormationController+4   o  ; was: off_2D8F4
+Stage9_FlyFormationStateOffsets:    dc.w    Stage9_FlyFormationInitState-*  ; was: off_2D8F4
                 dc.w    Stage9_FlyFormationDelayState-*
                 dc.w    Stage9_FlyFormationAllocateSlotsState-*
                 dc.w    Stage9_FlyFormationActivateWaveState-*
 
 ; Positions the formation controller and starts its initial delay
-Stage9_FlyFormationInitState:                           ; DATA XREF: ROM:Stage9_FlyFormationStateOffsets   o  ; was: sub_2D8FC
+Stage9_FlyFormationInitState:                           ; was: sub_2D8FC
                 move.w  #$120,$10(a5)
                 move.w  #$90,$14(a5)
                 move.w  #$D00,2(a5)
@@ -259,16 +257,16 @@ Stage9_FlyFormationInitState:                           ; DATA XREF: ROM:Stage9_
                 rts
 ; End of function Stage9_FlyFormationInitState
 ; Waits before allocating the fly object slots
-Stage9_FlyFormationDelayState:                          ; DATA XREF: ROM:0002D8F6   o  ; was: sub_2D91A
+Stage9_FlyFormationDelayState:                          ; was: sub_2D91A
                 subq.w  #1,$48(a5)
                 bne.s   Stage9_FlyFormationDelayState_Return
                 clr.w   $4A(a5)
                 addq.w  #2,4(a5)
-Stage9_FlyFormationDelayState_Return:                   ; CODE XREF: Stage9_FlyFormationDelayState+4   j  ; was: locret_2D928
+Stage9_FlyFormationDelayState_Return:                   ; was: locret_2D928
                 rts
 ; End of function Stage9_FlyFormationDelayState
 ; Allocates eight dormant object slots for the next fly wave
-Stage9_FlyFormationAllocateSlotsState:                  ; DATA XREF: ROM:0002D8F8   o  ; was: sub_2D92A
+Stage9_FlyFormationAllocateSlotsState:                  ; was: sub_2D92A
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Stage9_FlyFormationAllocateSlotsState_Return
                 move.w  #$10,(a0)
@@ -279,12 +277,12 @@ Stage9_FlyFormationAllocateSlotsState:                  ; DATA XREF: ROM:0002D8F
                 cmpi.w  #$10,$48(a5)
                 bne.s   Stage9_FlyFormationAllocateSlotsState_Return
                 addq.w  #2,4(a5)
-Stage9_FlyFormationAllocateSlotsState_Return:           ; CODE XREF: Stage9_FlyFormationAllocateSlotsState+6   j  ; was: locret_2D952
+Stage9_FlyFormationAllocateSlotsState_Return:           ; was: locret_2D952
                                         ; Stage9_FlyFormationAllocateSlotsState+22   j
                 rts
 ; End of function Stage9_FlyFormationAllocateSlotsState
 ; Activates one staged fly at a time, then repeats from the alternate side
-Stage9_FlyFormationActivateWaveState:                   ; DATA XREF: ROM:0002D8FA   o  ; was: sub_2D954
+Stage9_FlyFormationActivateWaveState:                   ; was: sub_2D954
                 move.w  (FrameCounter).w,d7
                 andi.w  #$F,d7
                 bne.s   Stage9_FlyFormationActivateWaveState_Return
@@ -302,12 +300,12 @@ Stage9_FlyFormationActivateWaveState:                   ; DATA XREF: ROM:0002D8F
                 addi.w  #$100,$10(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Stage9_FlyFormationActivateWaveState_OffsetAlternateWave:  ; CODE XREF: Stage9_FlyFormationActivateWaveState+36   j  ; was: loc_2D994
+Stage9_FlyFormationActivateWaveState_OffsetAlternateWave:  ; was: loc_2D994
                 subi.w  #$80,$10(a0)
-Stage9_FlyFormationActivateWaveState_Return:            ; CODE XREF: Stage9_FlyFormationActivateWaveState+8   j  ; was: locret_2D99A
+Stage9_FlyFormationActivateWaveState_Return:            ; was: locret_2D99A
                 rts
 ; ---------------------------------------------------------------------------
-Stage9_FlyFormationActivateWaveState_CompleteWave:      ; CODE XREF: Stage9_FlyFormationActivateWaveState+E   j  ; was: loc_2D99C
+Stage9_FlyFormationActivateWaveState_CompleteWave:      ; was: loc_2D99C
                 tst.w   $4A(a5)
                 bne.s   Stage9_FlyFormationActivateWaveState_Finish
                 addq.w  #1,$4A(a5)
@@ -315,13 +313,12 @@ Stage9_FlyFormationActivateWaveState_CompleteWave:      ; CODE XREF: Stage9_FlyF
                 clr.w   $48(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage9_FlyFormationActivateWaveState_Finish:            ; CODE XREF: Stage9_FlyFormationActivateWaveState+4C   j  ; was: loc_2D9B2
+Stage9_FlyFormationActivateWaveState_Finish:            ; was: loc_2D9B2
                 bset    #4,2(a5)
                 rts
 ; End of function Stage9_FlyFormationActivateWaveState
 ; Initializes a Viblack side shot at the caller-selected horizontal position
-Projectile_InitViblackSideShot:                         ; CODE XREF: Boss_ViblackSpawnSideShot+36   j  ; was: sub_2D9BA
-                                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o
+Projectile_InitViblackSideShot:                         ; was: sub_2D9BA
                 move.w  #$2F4,(a0)
                 move.w  #$D80,2(a0)
                 move.w  #$80,$14(a0)
@@ -329,18 +326,18 @@ Projectile_InitViblackSideShot:                         ; CODE XREF: Boss_Viblac
                 rts
 ; End of function Projectile_InitViblackSideShot
 ; Dispatches a controller that creates four linked Viblack side shots in sequence
-Projectile_ViblackSideShotSequenceController:           ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D9D0
+Projectile_ViblackSideShotSequenceController:           ; was: sub_2D9D0
                 move.w  4(a5),d0
                 lea     Projectile_ViblackSideShotSequenceStateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Projectile_ViblackSideShotSequenceController
 ; ---------------------------------------------------------------------------
-Projectile_ViblackSideShotSequenceStateOffsets: dc.w    Projectile_ViblackSideShotSequenceSpawnState-*  ; DATA XREF: Projectile_ViblackSideShotSequenceController+4   o  ; was: off_2D9DC
+Projectile_ViblackSideShotSequenceStateOffsets: dc.w    Projectile_ViblackSideShotSequenceSpawnState-*  ; was: off_2D9DC
                 dc.w    Projectile_ViblackSideShotSequenceWaitState-*
 
 ; Creates the next linked Viblack side shot and starts the inter-shot delay
-Projectile_ViblackSideShotSequenceSpawnState:           ; DATA XREF: ROM:Projectile_ViblackSideShotSequenceStateOffsets   o  ; was: sub_2D9E0
+Projectile_ViblackSideShotSequenceSpawnState:           ; was: sub_2D9E0
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_ViblackSideShotSequenceSpawnState_Return
                 move.w  #$2F4,(a0)
@@ -352,21 +349,21 @@ Projectile_ViblackSideShotSequenceSpawnState:           ; DATA XREF: ROM:Project
                 move.w  a0,$4A(a5)
                 move.w  #$10,$48(a5)
                 addq.w  #2,4(a5)
-Projectile_ViblackSideShotSequenceSpawnState_Return:    ; CODE XREF: Projectile_ViblackSideShotSequenceSpawnState+6   j  ; was: locret_2DA18
+Projectile_ViblackSideShotSequenceSpawnState_Return:    ; was: locret_2DA18
                 rts
 ; End of function Projectile_ViblackSideShotSequenceSpawnState
 ; Waits between side shots and ends the sequence after four children
-Projectile_ViblackSideShotSequenceWaitState:            ; DATA XREF: ROM:0002D9DE   o  ; was: sub_2DA1A
+Projectile_ViblackSideShotSequenceWaitState:            ; was: sub_2DA1A
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_ViblackSideShotSequenceWaitState_Return
                 addq.w  #1,$5E(a5)
                 cmpi.w  #4,$5E(a5)
                 beq.s   Projectile_ViblackSideShotSequenceWaitState_Finish
                 subq.w  #2,4(a5)
-Projectile_ViblackSideShotSequenceWaitState_Return:     ; CODE XREF: Projectile_ViblackSideShotSequenceWaitState+4   j  ; was: locret_2DA30
+Projectile_ViblackSideShotSequenceWaitState_Return:     ; was: locret_2DA30
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ViblackSideShotSequenceWaitState_Finish:     ; CODE XREF: Projectile_ViblackSideShotSequenceWaitState+10   j  ; was: loc_2DA32
+Projectile_ViblackSideShotSequenceWaitState_Finish:     ; was: loc_2DA32
                 bset    #4,2(a5)
                 rts
 ; End of function Projectile_ViblackSideShotSequenceWaitState

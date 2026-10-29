@@ -1,4 +1,4 @@
-StageTransition_RenderAsteroidField:                    ; CODE XREF: StageTransition_StartAsteroidFieldScroll+26   j  ; was: sub_FB24
+StageTransition_RenderAsteroidField:                    ; was: sub_FB24
                                         ; StageTransition_FinishAsteroidFieldScroll+E   j
                 bsr.s   StageTransition_UpdateAsteroidFieldScroll
                 moveq   #0,d0
@@ -8,7 +8,7 @@ StageTransition_RenderAsteroidField:                    ; CODE XREF: StageTransi
                 bra.w   Tilemap_QueueRowFromDescriptor
 ; End of function StageTransition_RenderAsteroidField
 ; Advances both asteroid-field positions and detects a $100 boundary crossing
-StageTransition_UpdateAsteroidFieldScroll:              ; CODE XREF: StageTransition_InitializeAsteroidField+70   j  ; was: sub_FB3A
+StageTransition_UpdateAsteroidFieldScroll:              ; was: sub_FB3A
                                         ; StageTransition_StartAsteroidFieldScroll+C   j
                 move.l  (AsteroidFieldVelocity).w,d0
                 add.l   d0,(PrimaryCameraYPosition).w
@@ -21,7 +21,7 @@ StageTransition_UpdateAsteroidFieldScroll:              ; CODE XREF: StageTransi
                 addq.b  #1,(AsteroidBoundaryFlag).w
                 move.w  d0,(AsteroidBoundaryPhase).w
 ; Shared return for inactive or incomplete transition states
-StageTransition_SharedReturn:                           ; CODE XREF: StageTransition_LoadDestroyerProtoAssets+8   j  ; was: locret_FB60
+StageTransition_SharedReturn:                           ; was: locret_FB60
                                         ; StageTransition_InitializeDestroyerProtoBackdrop+8   j
                 rts
 ; End of function StageTransition_UpdateAsteroidFieldScroll
@@ -30,11 +30,11 @@ UnreferencedSetTransitionFlagFromInputBit6:
                 btst    #6,(ControllerHeldState).w      ; was: sub_FB62
                 beq.s   UnreferencedTransitionInputCheckReturn
                 bset    #0,(SceneSequenceFlags).w
-UnreferencedTransitionInputCheckReturn:                 ; CODE XREF: UnreferencedSetTransitionFlagFromInputBit6+6   j  ; was: locret_FB70
+UnreferencedTransitionInputCheckReturn:                 ; was: locret_FB70
                 rts
 ; End of function UnreferencedSetTransitionFlagFromInputBit6
 ; Integrates asteroid-field velocity and fills its vertical-scroll buffer
-StageTransition_FillAsteroidFieldVScroll:               ; CODE XREF: StageTransition_InitializeAsteroidField:StageTransition_UpdateAsteroidFieldEntry   p  ; was: sub_FB72
+StageTransition_FillAsteroidFieldVScroll:               ; was: sub_FB72
                                         ; StageTransition_StartAsteroidFieldScroll   p
                 move.l  (AsteroidVScrollPos).w,d0
                 add.l   (AsteroidVScrollSpeed).w,d0
@@ -42,7 +42,7 @@ StageTransition_FillAsteroidFieldVScroll:               ; CODE XREF: StageTransi
                 swap    d0
                 movea.w #(HScrollPlaneARow32-M68K_RAM),a0
                 move.w  #$BF,d7
-StageTransition_FillAsteroidFieldVScrollLoop:           ; CODE XREF: StageTransition_FillAsteroidFieldVScroll+1A   j  ; was: loc_FB88
+StageTransition_FillAsteroidFieldVScrollLoop:           ; was: loc_FB88
                 move.w  d0,(a0)
                 addq.w  #4,a0
                 dbf     d7,StageTransition_FillAsteroidFieldVScrollLoop
@@ -53,29 +53,29 @@ UnreferencedUpdateAndShiftTransitionVScroll:
                 bsr.w   StageTransition_UpdateSegmentedBackdropScroll  ; was: sub_FB92
                 movea.w #(HScrollPlaneARow32-M68K_RAM),a0
                 moveq   #$5F,d7                         ; '_'
-UnreferencedShiftTransitionVScrollLoop:                 ; CODE XREF: UnreferencedUpdateAndShiftTransitionVScroll+10   j  ; was: loc_FB9C
+UnreferencedShiftTransitionVScrollLoop:                 ; was: loc_FB9C
                 move.w  2(a0),(a0)
                 addq.w  #4,a0
                 dbf     d7,UnreferencedShiftTransitionVScrollLoop
                 rts
 ; End of function UnreferencedUpdateAndShiftTransitionVScroll
 ; Updates the segmented transition backdrop's motion and V-scroll pattern
-StageTransition_UpdateSegmentedBackdropScroll:          ; CODE XREF: StageTransition_InitializeAsteroidField+56   p  ; was: sub_FBA8
+StageTransition_UpdateSegmentedBackdropScroll:          ; was: sub_FBA8
                                         ; StageTransition_StartAsteroidFieldScroll+4   p
                 tst.w   (BackdropVelocityA).w
                 bpl.s   StageTransition_DampenFirstBackdropVelocity
                 cmpi.l  #$FFFF8080,(BackdropVelocityA).w
                 bmi.s   StageTransition_CheckSecondBackdropVelocity
-StageTransition_DampenFirstBackdropVelocity:            ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+4   j  ; was: loc_FBB8
+StageTransition_DampenFirstBackdropVelocity:            ; was: loc_FBB8
                 subi.l  #$40,(BackdropVelocityA).w      ; '@'
-StageTransition_CheckSecondBackdropVelocity:            ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+E   j  ; was: loc_FBC0
+StageTransition_CheckSecondBackdropVelocity:            ; was: loc_FBC0
                 tst.w   (BackdropVelocityB).w
                 bpl.s   StageTransition_DampenSecondBackdropVelocity
                 cmpi.l  #$FFFF8000,(BackdropVelocityB).w
                 bmi.s   StageTransition_ApplySegmentedBackdropMotion
-StageTransition_DampenSecondBackdropVelocity:           ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+1C   j  ; was: loc_FBD0
+StageTransition_DampenSecondBackdropVelocity:           ; was: loc_FBD0
                 subi.l  #$40,(BackdropVelocityB).w      ; '@'
-StageTransition_ApplySegmentedBackdropMotion:           ; CODE XREF: StageTransition_UpdateDestroyerProtoBackdropFade+C   p  ; was: loc_FBD8
+StageTransition_ApplySegmentedBackdropMotion:           ; was: loc_FBD8
                                         ; StageTransition_UpdatePostDestroyerProtoScroll+4   p
                 move.l  (BackdropVelocityA).w,d0
                 add.l   d0,(BackdropPositionA).w
@@ -98,7 +98,7 @@ StageTransition_ApplySegmentedBackdropMotion:           ; CODE XREF: StageTransi
                 asr.w   #6,d6
                 movea.w #(BackdropScrollPattern-M68K_RAM),a0
                 moveq   #1,d7
-StageTransition_BuildBackdropScrollPattern:             ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+70   j  ; was: loc_FC10
+StageTransition_BuildBackdropScrollPattern:             ; was: loc_FC10
                 move.w  d0,(a0)+
                 move.w  d1,(a0)+
                 move.w  d2,(a0)+
@@ -119,10 +119,10 @@ StageTransition_BuildBackdropScrollPattern:             ; CODE XREF: StageTransi
                 asr.w   #1,d1
                 asr.w   #1,d2
                 asr.w   #1,d3
-StageTransition_CheckBackdropScrollParity:              ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+92   j  ; was: loc_FC44
+StageTransition_CheckBackdropScrollParity:              ; was: loc_FC44
                 movea.w #(HScrollPlaneBRow32-M68K_RAM),a0
                 move.w  #$2F,d7                         ; '/'
-StageTransition_FillSegmentedBackdropVScroll:           ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+B4   j  ; was: loc_FC4C
+StageTransition_FillSegmentedBackdropVScroll:           ; was: loc_FC4C
                 move.w  d0,(a0)
                 addq.w  #4,a0
                 move.w  d1,(a0)
@@ -136,7 +136,7 @@ StageTransition_FillSegmentedBackdropVScroll:           ; CODE XREF: StageTransi
                 btst    #0,(FrameCounter+1).w
                 bne.s   StageTransition_StoreSegmentedBackdropOutput
                 asr.l   #1,d0
-StageTransition_StoreSegmentedBackdropOutput:           ; CODE XREF: StageTransition_UpdateSegmentedBackdropScroll+C2   j  ; was: loc_FC6E
+StageTransition_StoreSegmentedBackdropOutput:           ; was: loc_FC6E
                 move.l  d0,(SecondaryCameraYPos).w
                 rts
 ; End of function StageTransition_UpdateSegmentedBackdropScroll

@@ -1,5 +1,5 @@
 ; Initializes the ending sequence's credits assets, palette, music, and scroll state
-EndingSequence_Initialize:                              ; CODE XREF: EndingSequence_InitializeFromTransition+6   j  ; was: sub_7B30
+EndingSequence_Initialize:                              ; was: sub_7B30
                 bclr    #6,(VDPReg1Shadow+1).w
                 clr.b   (PaletteDMAHIntEnabled).w
                 jsr     (Sys_InitGameMode).l
@@ -40,7 +40,6 @@ EndingSequence_Initialize:                              ; CODE XREF: EndingSeque
 ; End of function EndingSequence_Initialize
 ; ---------------------------------------------------------------------------
 EndingSequence_AssetLoads:  dc.w    7                   ; field_0  ; was: stru_7BF2
-                                        ; DATA XREF: EndingSequence_Initialize+18   o
                 dc.l    EndingSequenceTileArt2000       ; field_2
                 dc.w    $2000                           ; field_6
                 dc.w    7                               ; field_0
@@ -61,7 +60,7 @@ EndingSequence_AssetLoads:  dc.w    7                   ; field_0  ; was: stru_7
                 dc.w    $FFFF
 
 ; Runs the palette effect and dispatches the complete credits-to-planet sequence
-EndingSequence_Dispatch:                                ; CODE XREF: EndingSequence_UpdateFromTransition+8   j  ; was: sub_7C24
+EndingSequence_Dispatch:                                ; was: sub_7C24
                 jsr     (TransitionEffect_UpdateBuffers).l
                 move.w  (EndingSequenceState).w,d0
                 lea     EndingSequence_States(pc,d0.w),a0
@@ -69,7 +68,7 @@ EndingSequence_Dispatch:                                ; CODE XREF: EndingSeque
                 jmp     (a0)
 ; End of function EndingSequence_Dispatch
 ; ---------------------------------------------------------------------------
-EndingSequence_States:  dc.w    EndingSequence_FadeInCredits-*  ; DATA XREF: EndingSequence_Dispatch+A   o  ; was: off_7C36
+EndingSequence_States:  dc.w    EndingSequence_FadeInCredits-*  ; was: off_7C36
                 dc.w    EndingSequence_HoldCredits-*
                 dc.w    EndingSequence_FadeOutCredits-*
                 dc.w    EndingSequence_WaitStarfieldDelay-*
@@ -84,7 +83,7 @@ EndingSequence_States:  dc.w    EndingSequence_FadeInCredits-*  ; DATA XREF: End
                 dc.w    EndingPlanet_FadeOutZoom-*
 
 ; Advances the credits palette fade every eighth frame until step zero
-EndingSequence_FadeInCredits:                           ; DATA XREF: ROM:EndingSequence_States   o  ; was: sub_7C50
+EndingSequence_FadeInCredits:                           ; was: sub_7C50
                 move.w  (FrameCounter).w,d0
                 andi.w  #7,d0
                 bne.w   Cutscene_Return
@@ -101,7 +100,7 @@ EndingSequence_FadeInCredits:                           ; DATA XREF: ROM:EndingS
                 rts
 ; End of function EndingSequence_FadeInCredits
 ; Holds the credits screen for $80 frames while animating its accent colors
-EndingSequence_HoldCredits:                             ; DATA XREF: ROM:00007C38   o  ; was: sub_7C92
+EndingSequence_HoldCredits:                             ; was: sub_7C92
                 bsr.w   EndingSequence_AnimateAccentColors
                 subq.w  #1,(CutsceneTimer).l
                 bne.w   Cutscene_Return
@@ -110,7 +109,7 @@ EndingSequence_HoldCredits:                             ; DATA XREF: ROM:00007C3
                 rts
 ; End of function EndingSequence_HoldCredits
 ; Alternates three accent palette words used throughout the ending sequence
-EndingSequence_AnimateAccentColors:                     ; CODE XREF: EndingSequence_HoldCredits   p  ; was: sub_7CAC
+EndingSequence_AnimateAccentColors:                     ; was: sub_7CAC
                                         ; EndingStarfield_Initialize:EndingStarfield_UpdateAndHold   p
                 lea     (PaletteActiveColor51).w,a1
                 move.w  (VBlankFrameCounter).w,d0
@@ -122,7 +121,7 @@ EndingSequence_AnimateAccentColors:                     ; CODE XREF: EndingSeque
                 move.l  (a0),(a1)
                 rts
 ; ---------------------------------------------------------------------------
-EndingSequence_UseOddAccentColors:                      ; CODE XREF: EndingSequence_AnimateAccentColors+C   j  ; was: loc_7CC6
+EndingSequence_UseOddAccentColors:                      ; was: loc_7CC6
                 lea     EndingSequence_OddAccentColors(pc),a0
                 nop
                 move.w  (a0)+,(a1)+
@@ -130,11 +129,11 @@ EndingSequence_UseOddAccentColors:                      ; CODE XREF: EndingSeque
                 rts
 ; End of function EndingSequence_AnimateAccentColors
 ; ---------------------------------------------------------------------------
-EndingSequence_EvenAccentColors:    dc.w    $EA8, $E86, $E64  ; DATA XREF: EndingSequence_AnimateAccentColors+E   o  ; was: word_7CD2
-EndingSequence_OddAccentColors:     dc.w    $A2A, $828, $626  ; DATA XREF: EndingSequence_AnimateAccentColors:EndingSequence_UseOddAccentColors   o  ; was: word_7CD8
+EndingSequence_EvenAccentColors:    dc.w    $EA8, $E86, $E64  ; was: word_7CD2
+EndingSequence_OddAccentColors:     dc.w    $A2A, $828, $626  ; was: word_7CD8
 
 ; Fades out the credits, loads starfield tiles, and seeds its first object
-EndingSequence_FadeOutCredits:                          ; DATA XREF: ROM:00007C3A   o  ; was: sub_7CDE
+EndingSequence_FadeOutCredits:                          ; was: sub_7CDE
                 move.w  (VBlankFrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Cutscene_Return
@@ -159,10 +158,9 @@ EndingSequence_FadeOutCredits:                          ; DATA XREF: ROM:00007C3
 ; End of function EndingSequence_FadeOutCredits
 ; ---------------------------------------------------------------------------
 EndingSequence_StarfieldTileLoad:   dc.b    $44, $20, $40, 0, 2, 2, $80, $84, $88, $84, $88, $80, $84, $80, $88, $FF  ; was: byte_7D48
-                                        ; DATA XREF: EndingSequence_FadeOutCredits+36   o
 
 ; Waits sixteen frames before advancing into starfield initialization
-EndingSequence_WaitStarfieldDelay:                      ; DATA XREF: ROM:00007C3C   o  ; was: sub_7D58
+EndingSequence_WaitStarfieldDelay:                      ; was: sub_7D58
                 subq.w  #1,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 addq.w  #2,(EndingSequenceState).w

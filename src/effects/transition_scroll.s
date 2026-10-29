@@ -9,7 +9,7 @@ Orphaned_ScrollSineTable1:
 ; Processes scroll effect using sine table at Effect_TransitionSineTable, interpolating 63 values based on TransitionProgress
 Orphaned_ScrollSineTable2:
                 move.l  #Effect_TransitionSineTable,d5  ; was: sub_26C62
-Orphaned_BuildSineScrollBuffer:                         ; CODE XREF: Orphaned_ScrollSineTable1+6   j  ; was: loc_26C68
+Orphaned_BuildSineScrollBuffer:                         ; was: loc_26C68
                 movea.w #(TransitionRampBuffer-M68K_RAM),a0
                 movea.w #(TransitionRampBuffer-M68K_RAM),a2
                 moveq   #$FFFFFFFE,d6
@@ -24,9 +24,9 @@ Orphaned_BuildSineScrollBuffer:                         ; CODE XREF: Orphaned_Sc
                 andi.l  #$FFFF,d3
                 asl.l   #1,d3
                 asl.l   #8,d3
-Orphaned_BuildSineScrollBuffer_BeginLoop:               ; CODE XREF: Orphaned_ScrollSineTable2+1E   j  ; was: loc_26C94
+Orphaned_BuildSineScrollBuffer_BeginLoop:               ; was: loc_26C94
                 moveq   #0,d2
-Orphaned_BuildSineScrollBuffer_Loop:                    ; CODE XREF: Orphaned_ScrollSineTable2+56   j  ; was: loc_26C96
+Orphaned_BuildSineScrollBuffer_Loop:                    ; was: loc_26C96
                 cmpi.l  #$FE0000,d2
                 bpl.s   Orphaned_BuildSineScrollBuffer_StoreSample
                 add.l   d3,d2
@@ -37,7 +37,7 @@ Orphaned_BuildSineScrollBuffer_Loop:                    ; CODE XREF: Orphaned_Sc
                 sub.l   d4,d0
                 and.l   d6,d0
                 movea.l d0,a1
-Orphaned_BuildSineScrollBuffer_StoreSample:             ; CODE XREF: Orphaned_ScrollSineTable2+3A   j  ; was: loc_26CAE
+Orphaned_BuildSineScrollBuffer_StoreSample:             ; was: loc_26CAE
                 move.w  (a1),d0
                 muls.w  d1,d0
                 swap    d0
@@ -50,14 +50,14 @@ Orphaned_BuildSineScrollBuffer_StoreSample:             ; CODE XREF: Orphaned_Sc
                 rts
 ; End of function Orphaned_ScrollSineTable2
 ; Fills scroll buffer starting at offset -6C00 with value from TransitionOriginXY+2, repeating TransitionMaskStep times
-Effect_FillScrollBuffer:                                ; CODE XREF: TransitionEffect_UpdateMode3Buffers+12   p  ; was: sub_26CCA
+Effect_FillScrollBuffer:                                ; was: sub_26CCA
                 move.w  (TransitionProgress).w,d0
                 andi.w  #$1FE,d0
                 addi.w  #-$6C00,d0
                 movea.w d0,a0
                 move.w  (TransitionOriginXY+2).w,d1
                 move.w  (TransitionMaskStep).w,d7
-Effect_FillScrollBuffer_Loop:                           ; CODE XREF: Effect_FillScrollBuffer+18   j  ; was: loc_26CE0
+Effect_FillScrollBuffer_Loop:                           ; was: loc_26CE0
                 move.w  d1,(a0)+
                 dbf     d7,Effect_FillScrollBuffer_Loop
                 movea.w #(TransitionPatternBuffer-M68K_RAM),a0
@@ -72,7 +72,7 @@ Orphaned_ProcessVerticalScroll:
                 move.w  #$FFFE,d3
                 move.w  #$120,d4
                 moveq   #$7E,d7                         ; '~'
-Orphaned_ProcessVerticalScroll_Loop:                    ; CODE XREF: Orphaned_ProcessVerticalScroll+56   j  ; was: loc_26D04
+Orphaned_ProcessVerticalScroll_Loop:                    ; was: loc_26D04
                 move.w  (a0)+,d0
                 asl.w   #1,d0
                 move.w  d4,d5
@@ -83,18 +83,18 @@ Orphaned_ProcessVerticalScroll_Loop:                    ; CODE XREF: Orphaned_Pr
                 add.w   d5,d0
                 bpl.s   Orphaned_ProcessVerticalScroll_ClampLow
                 moveq   #0,d0
-Orphaned_ProcessVerticalScroll_ClampLow:                ; CODE XREF: Orphaned_ProcessVerticalScroll+20   j  ; was: loc_26D18
+Orphaned_ProcessVerticalScroll_ClampLow:                ; was: loc_26D18
                 moveq   #0,d5
                 bra.s   Orphaned_ProcessVerticalScroll_Store
 ; ---------------------------------------------------------------------------
-Orphaned_ProcessVerticalScroll_CheckUpperBound:         ; CODE XREF: Orphaned_ProcessVerticalScroll+1A   j  ; was: loc_26D1C
+Orphaned_ProcessVerticalScroll_CheckUpperBound:         ; was: loc_26D1C
                 cmpi.w  #$140,d5
                 bmi.s   Orphaned_ProcessVerticalScroll_AdjustCenter
                 moveq   #0,d5
                 moveq   #0,d0
                 bra.s   Orphaned_ProcessVerticalScroll_Store
 ; ---------------------------------------------------------------------------
-Orphaned_ProcessVerticalScroll_AdjustCenter:            ; CODE XREF: Orphaned_ProcessVerticalScroll+2C   j  ; was: loc_26D28
+Orphaned_ProcessVerticalScroll_AdjustCenter:            ; was: loc_26D28
                 move.w  d0,d6
                 add.w   d5,d6
                 cmpi.w  #$A0,d6
@@ -104,7 +104,7 @@ Orphaned_ProcessVerticalScroll_AdjustCenter:            ; CODE XREF: Orphaned_Pr
                 bpl.s   Orphaned_ProcessVerticalScroll_Store
                 moveq   #0,d5
                 moveq   #0,d0
-Orphaned_ProcessVerticalScroll_Store:                   ; CODE XREF: Orphaned_ProcessVerticalScroll+26   j  ; was: loc_26D3E
+Orphaned_ProcessVerticalScroll_Store:                   ; was: loc_26D3E
                                         ; Orphaned_ProcessVerticalScroll+32   j
                 move.w  d5,(a3)+
                 move.w  d5,(a3)+
@@ -122,7 +122,7 @@ Orphaned_ProcessHorizontalScroll:
                 move.w  #$FFFE,d3
                 move.w  #$A0,d4
                 moveq   #$7E,d7                         ; '~'
-Orphaned_ProcessHorizontalScroll_Loop:                  ; CODE XREF: Orphaned_ProcessHorizontalScroll+2A   j  ; was: loc_26D60
+Orphaned_ProcessHorizontalScroll_Loop:                  ; was: loc_26D60
                 move.w  (a0),d0
                 sub.w   d1,d0
                 asl.w   #1,d0
@@ -140,12 +140,12 @@ Orphaned_ProcessHorizontalScroll_Loop:                  ; CODE XREF: Orphaned_Pr
                 rts
 ; End of function Orphaned_ProcessHorizontalScroll
 ; Processes scroll with conditional vertical calculation based on TransitionOriginXY flag, quadruples values if enabled
-Effect_ProcessConditionalScroll:                        ; CODE XREF: TransitionEffect_UpdateMode2Buffers+8   p  ; was: sub_26D80
+Effect_ProcessConditionalScroll:                        ; was: sub_26D80
                 moveq   #1,d1
                 move.w  #$FE,d2
                 move.w  #$A0,d4
                 moveq   #$7E,d7                         ; '~'
-Effect_ProcessConditionalScroll_Loop:                   ; CODE XREF: Effect_ProcessConditionalScroll+2E   j  ; was: loc_26D8C
+Effect_ProcessConditionalScroll_Loop:                   ; was: loc_26D8C
                 move.w  (a0)+,d0
                 sub.w   d1,d0
                 asl.w   #1,d0
@@ -159,18 +159,18 @@ Effect_ProcessConditionalScroll_Loop:                   ; CODE XREF: Effect_Proc
                 sub.w   d0,d3
                 move.w  d3,(a3)+
                 move.w  d3,(a3)+
-Effect_ProcessConditionalScroll_Next:                   ; CODE XREF: Effect_ProcessConditionalScroll+1A   j  ; was: loc_26DAC
+Effect_ProcessConditionalScroll_Next:                   ; was: loc_26DAC
                 addq.w  #1,d1
                 dbf     d7,Effect_ProcessConditionalScroll_Loop
                 rts
 ; End of function Effect_ProcessConditionalScroll
 ; Simple scroll processor that applies constant vertical offset from TransitionOriginXY to 127 horizontal scroll entries
-Effect_ProcessSimpleScroll:                             ; CODE XREF: TransitionEffect_UpdateMode3Buffers+16   j  ; was: sub_26DB4
+Effect_ProcessSimpleScroll:                             ; was: sub_26DB4
                 moveq   #1,d1
                 move.w  #$FE,d2
                 moveq   #$7E,d7                         ; '~'
                 move.w  (TransitionOriginXY).w,d6
-Effect_ProcessSimpleScroll_Loop:                        ; CODE XREF: Effect_ProcessSimpleScroll+1C   j  ; was: loc_26DC0
+Effect_ProcessSimpleScroll_Loop:                        ; was: loc_26DC0
                 move.w  (a0)+,d0
                 sub.w   d1,d0
                 asl.w   #1,d0
@@ -183,14 +183,14 @@ Effect_ProcessSimpleScroll_Loop:                        ; CODE XREF: Effect_Proc
                 rts
 ; End of function Effect_ProcessSimpleScroll
 ; Copies seven 32-byte blocks from the active output buffer into its working copy
-TransitionEffect_CopyWorkingBuffer:                     ; CODE XREF: TransitionEffect_UpdateMode1Buffers   p  ; was: sub_26DD6
+TransitionEffect_CopyWorkingBuffer:                     ; was: sub_26DD6
                                         ; TransitionEffect_UpdateMode2Buffers   p
                 movea.w #(TransitionWorkingBuffer-M68K_RAM),a0
                 movea.w #(TransitionHScrollBuffer-M68K_RAM),a1
                 moveq   #6,d7
 ; End of function TransitionEffect_CopyWorkingBuffer
 ; Copies d7+1 blocks of 32 bytes from a1 to a0
-Effect_Copy32ByteBlocks:                                ; CODE XREF: Effect_Copy32ByteBlocks+10   j  ; was: sub_26DE0
+Effect_Copy32ByteBlocks:                                ; was: sub_26DE0
                                         ; TransitionEffect_UpdateMode4Buffers+A   p
                 move.l  (a1)+,(a0)+
                 move.l  (a1)+,(a0)+
@@ -211,7 +211,7 @@ Orphaned_ApplySineWaveScroll:
                 moveq   #$7F,d7
                 move.w  (TransitionOriginXY).w,d1
                 andi.w  #$1FE,d1
-Orphaned_ApplySineWaveScroll_Loop:                      ; CODE XREF: Orphaned_ApplySineWaveScroll+2C   j  ; was: loc_26E10
+Orphaned_ApplySineWaveScroll_Loop:                      ; was: loc_26E10
                 move.w  (a0)+,d2
                 mulu.w  (a2,d1.w),d2
                 asl.l   #3,d2
@@ -229,7 +229,7 @@ Orphaned_ApplyLinearScroll:
                 moveq   #$7F,d7
                 moveq   #0,d0
                 move.l  (TransitionOriginXY).w,d1
-Orphaned_ApplyLinearScroll_Loop:                        ; CODE XREF: Orphaned_ApplyLinearScroll+1E   j  ; was: loc_26E3A
+Orphaned_ApplyLinearScroll_Loop:                        ; was: loc_26E3A
                 add.l   d1,d0
                 swap    d0
                 move.w  (a0)+,d2
@@ -241,7 +241,7 @@ Orphaned_ApplyLinearScroll_Loop:                        ; CODE XREF: Orphaned_Ap
 ; End of function Orphaned_ApplyLinearScroll
 ; Drives palette entry 62 in both the active and the shadow buffer: a white/blue
 ; strobe until TransitionProgress reaches $40, then a walk down the colour ramp
-Effect_UpdateTransitionColor62:                         ; CODE XREF: AlternateTransition_Update   p  ; was: sub_26E4C
+Effect_UpdateTransitionColor62:                         ; was: sub_26E4C
                                         ; TransitionEffect_Update   p
                 movea.w #(PaletteActiveColor62-M68K_RAM),a1
                 move.w  (TransitionProgress).w,d0
@@ -253,13 +253,13 @@ Effect_UpdateTransitionColor62:                         ; CODE XREF: AlternateTr
                 btst    #0,(RandomNumberState).w
                 bne.s   Effect_UpdateTransitionColor62_Store
                 move.w  #$8CE,d0
-Effect_UpdateTransitionColor62_Store:                   ; CODE XREF: Effect_UpdateTransitionColor62+18   j  ; was: loc_26E72
+Effect_UpdateTransitionColor62_Store:                   ; was: loc_26E72
                                         ; Effect_UpdateTransitionColor62+20   j
                 move.w  d0,$80(a1)
                 move.w  d0,(a1)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_UpdateTransitionColor62_SelectRampEntry:         ; CODE XREF: Effect_UpdateTransitionColor62+C   j  ; was: loc_26E7A
+Effect_UpdateTransitionColor62_SelectRampEntry:         ; was: loc_26E7A
                 asr.w   #1,d0
                 andi.w  #$1E,d0
                 move.w  Effect_TransitionColorRamp(pc,d0.w),$80(a1)
@@ -268,15 +268,14 @@ Effect_UpdateTransitionColor62_SelectRampEntry:         ; CODE XREF: Effect_Upda
 ; End of function Effect_UpdateTransitionColor62
 ; ---------------------------------------------------------------------------
 Effect_TransitionColorRamp: dc.w    $EEE, $CEE, $AEE, $8EE, $6EE, $4CE, $2AE, $8E, $6E, $4E, $2E, $E, $C, $A, 8, 6  ; was: word_26E8C
-                                        ; DATA XREF: Effect_UpdateTransitionColor62+34   r
                                         ; Effect_UpdateTransitionColor62+3A   r
 
 ; Clears 64 longwords of the transition pattern buffer
-Effect_ClearScrollBuffer:                               ; CODE XREF: TransitionEffect_UpdateMode3Buffers:TransitionEffect_UpdateMode3Buffers_Prepare   p  ; was: sub_26EAC
+Effect_ClearScrollBuffer:                               ; was: sub_26EAC
                 movea.w #(TransitionPatternBuffer-M68K_RAM),a0
                 moveq   #0,d0
                 moveq   #$3F,d7                         ; '?'
-Effect_ClearScrollBuffer_Loop:                          ; CODE XREF: Effect_ClearScrollBuffer+A   j  ; was: loc_26EB4
+Effect_ClearScrollBuffer_Loop:                          ; was: loc_26EB4
                 move.l  d0,(a0)+
                 dbf     d7,Effect_ClearScrollBuffer_Loop
                 rts
@@ -288,7 +287,7 @@ Effect_TransitionSineTable:     binclude "data/other/word_26FBC.bin"  ; was: wor
 Effect_TransitionSineTable_End:                         ; was: word_26FBC_End
 
 ; Generates the transition edge and scroll output buffers in RAM
-Effect_GenerateTransitionBuffers:                       ; CODE XREF: TransitionEffect_UpdateMode1Buffers+4   j  ; was: sub_271BC
+Effect_GenerateTransitionBuffers:                       ; was: sub_271BC
                 movea.w #(TransitionEdgeCenter1-M68K_RAM),a0
                 movea.w #(TransitionEdgeCenter1-M68K_RAM),a2
                 movea.l #Effect_TransitionSineTable,a1
@@ -306,9 +305,9 @@ Effect_GenerateTransitionBuffers:                       ; CODE XREF: TransitionE
                 andi.l  #$FFFF,d3
                 asl.l   #1,d3
                 asl.l   #8,d3
-Effect_GenerateTransitionBuffers_BeginEdgeLoop:         ; CODE XREF: Effect_GenerateTransitionBuffers+26   j  ; was: loc_271F4
+Effect_GenerateTransitionBuffers_BeginEdgeLoop:         ; was: loc_271F4
                 moveq   #0,d2
-Effect_GenerateTransitionBuffers_EdgeLoop:              ; CODE XREF: Effect_GenerateTransitionBuffers+5A   j  ; was: loc_271F6
+Effect_GenerateTransitionBuffers_EdgeLoop:              ; was: loc_271F6
                 sub.l   d3,d2
                 move.l  d2,d4
                 swap    d4
@@ -318,12 +317,12 @@ Effect_GenerateTransitionBuffers_EdgeLoop:              ; CODE XREF: Effect_Gene
                 moveq   #0,d0
                 bra.s   Effect_GenerateTransitionBuffers_StoreSample
 ; ---------------------------------------------------------------------------
-Effect_GenerateTransitionBuffers_ReadSample:            ; CODE XREF: Effect_GenerateTransitionBuffers+44   j  ; was: loc_27206
+Effect_GenerateTransitionBuffers_ReadSample:            ; was: loc_27206
                 move.w  (a1,d4.w),d0
                 mulu.w  d1,d0
                 swap    d0
                 andi.w  #$FFFE,d0
-Effect_GenerateTransitionBuffers_StoreSample:           ; CODE XREF: Effect_GenerateTransitionBuffers+48   j  ; was: loc_27212
+Effect_GenerateTransitionBuffers_StoreSample:           ; was: loc_27212
                 move.w  d0,-(a0)
                 move.w  d0,(a2)+
                 dbf     d7,Effect_GenerateTransitionBuffers_EdgeLoop
@@ -340,38 +339,38 @@ Effect_GenerateTransitionBuffers_StoreSample:           ; CODE XREF: Effect_Gene
                 moveq   #2,d1
                 move.w  #$FE,d2
                 moveq   #$7E,d7                         ; '~'
-Effect_GenerateTransitionBuffers_OutputLoop:            ; CODE XREF: Effect_GenerateTransitionBuffers+E6   j  ; was: loc_27246
+Effect_GenerateTransitionBuffers_OutputLoop:            ; was: loc_27246
                 move.w  (a0)+,d0
                 cmpa.w  #$9A02,a0
                 bmi.s   Effect_GenerateTransitionBuffers_ClearOutsideRange
                 cmpa.w  #$9C00,a0
                 bmi.s   Effect_GenerateTransitionBuffers_CheckOffset
-Effect_GenerateTransitionBuffers_ClearOutsideRange:     ; CODE XREF: Effect_GenerateTransitionBuffers+90   j  ; was: loc_27254
+Effect_GenerateTransitionBuffers_ClearOutsideRange:     ; was: loc_27254
                 moveq   #0,d0
-Effect_GenerateTransitionBuffers_CheckOffset:           ; CODE XREF: Effect_GenerateTransitionBuffers+96   j  ; was: loc_27256
+Effect_GenerateTransitionBuffers_CheckOffset:           ; was: loc_27256
                 move.w  d4,d5
                 sub.w   d0,d5
                 move.w  d5,d6
                 bmi.s   Effect_GenerateTransitionBuffers_AdjustOffset
                 cmpi.w  #4,d5
                 bpl.s   Effect_GenerateTransitionBuffers_ClampSample
-Effect_GenerateTransitionBuffers_AdjustOffset:          ; CODE XREF: Effect_GenerateTransitionBuffers+A0   j  ; was: loc_27264
+Effect_GenerateTransitionBuffers_AdjustOffset:          ; was: loc_27264
                 asr.w   #1,d5
                 add.w   d5,d0
                 bpl.s   Effect_GenerateTransitionBuffers_ZeroOffset
-Effect_GenerateTransitionBuffers_ClearSample:           ; CODE XREF: Effect_GenerateTransitionBuffers+C8   j  ; was: loc_2726A
+Effect_GenerateTransitionBuffers_ClearSample:           ; was: loc_2726A
                 moveq   #0,d0
-Effect_GenerateTransitionBuffers_ZeroOffset:            ; CODE XREF: Effect_GenerateTransitionBuffers+AC   j  ; was: loc_2726C
+Effect_GenerateTransitionBuffers_ZeroOffset:            ; was: loc_2726C
                 moveq   #0,d5
                 andi.w  #2,d6
                 add.w   d6,d5
                 bra.s   Effect_GenerateTransitionBuffers_StoreOutput
 ; ---------------------------------------------------------------------------
-Effect_GenerateTransitionBuffers_ClampSample:           ; CODE XREF: Effect_GenerateTransitionBuffers+A6   j  ; was: loc_27276
+Effect_GenerateTransitionBuffers_ClampSample:           ; was: loc_27276
                 cmpi.w  #$9E,d0
                 bmi.s   Effect_GenerateTransitionBuffers_CheckUpperBound
                 move.w  #$9E,d0
-Effect_GenerateTransitionBuffers_CheckUpperBound:       ; CODE XREF: Effect_GenerateTransitionBuffers+BE   j  ; was: loc_27280
+Effect_GenerateTransitionBuffers_CheckUpperBound:       ; was: loc_27280
                 cmpi.w  #$140,d5
                 bpl.s   Effect_GenerateTransitionBuffers_ClearSample
                 move.w  d5,d3
@@ -381,7 +380,7 @@ Effect_GenerateTransitionBuffers_CheckUpperBound:       ; CODE XREF: Effect_Gene
                 bmi.s   Effect_GenerateTransitionBuffers_StoreOutput
                 move.w  #$140,d0
                 sub.w   d5,d0
-Effect_GenerateTransitionBuffers_StoreOutput:           ; CODE XREF: Effect_GenerateTransitionBuffers+B8   j  ; was: loc_27298
+Effect_GenerateTransitionBuffers_StoreOutput:           ; was: loc_27298
                                         ; Effect_GenerateTransitionBuffers+D4   j
                 move.w  d5,(a3)+
                 sub.w   d1,d0
@@ -392,19 +391,19 @@ Effect_GenerateTransitionBuffers_StoreOutput:           ; CODE XREF: Effect_Gene
                 rts
 ; End of function Effect_GenerateTransitionBuffers
 ; Clears the transition pattern buffer and resets its progress counter
-Effect_ClearTransitionPatternBuffer:                    ; CODE XREF: AlternateTransition_InitializeObject+16   j  ; was: sub_272A8
+Effect_ClearTransitionPatternBuffer:                    ; was: sub_272A8
                                         ; TransitionEffect_InitializeObject+16   j
                 clr.w   (TransitionMaskStep).w
                 movea.w #(TransitionPatternBuffer-M68K_RAM),a0
                 moveq   #0,d0
                 moveq   #$17,d7
-Effect_ClearTransitionPatternBuffer_Loop:               ; CODE XREF: Effect_ClearTransitionPatternBuffer+E   j  ; was: loc_272B4
+Effect_ClearTransitionPatternBuffer_Loop:               ; was: loc_272B4
                 move.l  d0,(a0)+
                 dbf     d7,Effect_ClearTransitionPatternBuffer_Loop
                 bra.w   Effect_QueueTransitionVdpRegisters
 ; End of function Effect_ClearTransitionPatternBuffer
 ; Builds the base transition pattern in the shared effect buffer
-Effect_BuildTransitionPattern:                          ; CODE XREF: TransitionEffect_BuildInitialPattern+C   p  ; was: sub_272BE
+Effect_BuildTransitionPattern:                          ; was: sub_272BE
                                         ; TunnelTransition_BuildInitialPattern+C   p
                 moveq   #0,d0
                 move.l  #$EEEE0000,d1
@@ -412,10 +411,10 @@ Effect_BuildTransitionPattern:                          ; CODE XREF: TransitionE
                 move.l  d0,d3
                 move.l  d1,d4
                 move.l  d2,d5
-Effect_BuildTransitionPattern_Write:                    ; CODE XREF: Orphaned_ScrollMaskPattern1+38   j  ; was: loc_272D2
+Effect_BuildTransitionPattern_Write:                    ; was: loc_272D2
                 movea.w #(TransitionPatternBuffer-M68K_RAM),a0
                 moveq   #3,d7
-Effect_BuildTransitionPattern_PrefixLoop:               ; CODE XREF: Effect_BuildTransitionPattern+1E   j  ; was: loc_272D8
+Effect_BuildTransitionPattern_PrefixLoop:               ; was: loc_272D8
                 move.l  d2,(a0)+
                 move.l  d5,(a0)+
                 dbf     d7,Effect_BuildTransitionPattern_PrefixLoop
@@ -428,7 +427,7 @@ Effect_BuildTransitionPattern_PrefixLoop:               ; CODE XREF: Effect_Buil
                 move.l  d2,(a0)+
                 move.l  d5,(a0)+
                 moveq   #2,d7
-Effect_BuildTransitionPattern_SuffixLoop:               ; CODE XREF: Effect_BuildTransitionPattern+38   j  ; was: loc_272F2
+Effect_BuildTransitionPattern_SuffixLoop:               ; was: loc_272F2
                 move.l  d0,(a0)+
                 move.l  d3,(a0)+
                 dbf     d7,Effect_BuildTransitionPattern_SuffixLoop
@@ -437,12 +436,12 @@ Effect_BuildTransitionPattern_SuffixLoop:               ; CODE XREF: Effect_Buil
                 bra.w   Effect_QueueTransitionVdpRegisters
 ; End of function Effect_BuildTransitionPattern
 ; Initializes special scroll pattern with EEEEEEEE values for boss defeat effect, sets up 40 bytes of pattern
-Effect_InitDefeatScroll:                                ; CODE XREF: AlternateTransition_BuildInitialPattern+C   p  ; was: sub_27302
+Effect_InitDefeatScroll:                                ; was: sub_27302
                 moveq   #0,d0
                 move.l  #$EEEEEEEE,d2
                 movea.w #(TransitionPatternBuffer-M68K_RAM),a0
                 moveq   #7,d7
-Effect_InitDefeatScroll_PrefixLoop:                     ; CODE XREF: Effect_InitDefeatScroll+10   j  ; was: loc_27310
+Effect_InitDefeatScroll_PrefixLoop:                     ; was: loc_27310
                 move.l  d2,(a0)+
                 dbf     d7,Effect_InitDefeatScroll_PrefixLoop
                 move.l  d0,(a0)+
@@ -454,7 +453,7 @@ Effect_InitDefeatScroll_PrefixLoop:                     ; CODE XREF: Effect_Init
                 move.l  d2,(a0)+
                 move.l  d2,(a0)+
                 moveq   #7,d7
-Effect_InitDefeatScroll_SuffixLoop:                     ; CODE XREF: Effect_InitDefeatScroll+28   j  ; was: loc_27328
+Effect_InitDefeatScroll_SuffixLoop:                     ; was: loc_27328
                 move.l  d0,(a0)+
                 dbf     d7,Effect_InitDefeatScroll_SuffixLoop
                 bra.w   Effect_QueueTransitionVdpRegisters
@@ -469,7 +468,7 @@ Orphaned_MaskScrollByte:
                 cmpi.w  #$20,d0                         ; ' '
                 bmi.s   Orphaned_MaskScrollByte_SelectNibble
                 move.b  #$F0,d3
-Orphaned_MaskScrollByte_SelectNibble:                   ; CODE XREF: Orphaned_MaskScrollByte+16   j  ; was: loc_2734E
+Orphaned_MaskScrollByte_SelectNibble:                   ; was: loc_2734E
                 andi.w  #$1F,d0
                 moveq   #0,d2
                 move.b  (a1,d0.w),d2
@@ -482,7 +481,7 @@ Orphaned_MaskScrollByte_SelectNibble:                   ; CODE XREF: Orphaned_Ma
                 move.b  $40(a0,d2.w),d1
                 and.b   d3,d1
                 move.b  d1,$40(a0,d2.w)
-Effect_QueueTransitionVdpRegisters:                     ; CODE XREF: Effect_ClearTransitionPatternBuffer+12   j  ; was: loc_27376
+Effect_QueueTransitionVdpRegisters:                     ; was: loc_27376
                                         ; Effect_BuildTransitionPattern+40   j
                 movea.w (VDPCommandQueueHead).w,a1
                 move.w  #$82,-(a1)
@@ -496,10 +495,9 @@ Effect_QueueTransitionVdpRegisters:                     ; CODE XREF: Effect_Clea
 ; End of function Orphaned_MaskScrollByte
 ; ---------------------------------------------------------------------------
 Effect_TransitionMaskByteOffsets:   dc.w    $10, $111, $212, $313, $414, $515, $616, $717, $818, $919, $A1A, $B1B, $C1C, $D1D, $E1E, $F1F  ; was: word_2739C
-                                        ; DATA XREF: Orphaned_MaskScrollByte+4   o
 
 ; Applies the current transition mask to three pattern-buffer rows
-Effect_ApplyTransitionMask:                             ; CODE XREF: AlternateTransition_Update+1A   j  ; was: sub_273BC
+Effect_ApplyTransitionMask:                             ; was: sub_273BC
                                         ; TransitionEffect_Update+2C   j
                 lea     Effect_TransitionMaskPatternsA(pc),a1
                 nop
@@ -512,7 +510,7 @@ Effect_ApplyTransitionMask:                             ; CODE XREF: AlternateTr
                 movea.w #(TransitionPatternRow1-M68K_RAM),a1
                 movea.w #(TransitionPatternRow2-M68K_RAM),a2
                 moveq   #3,d7
-Effect_ApplyTransitionMask_Loop:                        ; CODE XREF: Effect_ApplyTransitionMask+4A   j  ; was: loc_273E2
+Effect_ApplyTransitionMask_Loop:                        ; was: loc_273E2
                 move.l  (a0),d2
                 move.l  (a1),d3
                 move.l  (a2),d4
@@ -536,7 +534,6 @@ Effect_ApplyTransitionMask_Loop:                        ; CODE XREF: Effect_Appl
 ; End of function Effect_ApplyTransitionMask
 ; ---------------------------------------------------------------------------
 Effect_TransitionMaskPatternsA: dc.l    $FFFFFFFF, $FFFFFFFF, $FFFFFFFF, $FFF0FFF  ; was: dword_2740E
-                                        ; DATA XREF: Effect_ApplyTransitionMask   o
                 dc.l    $F0F0F0F, $F0F0F0F, $F0F0F0F, $F000F
                 dc.l    $FFFFFFFF, $FFFFFFFF, $FFFFFFFF, $FFF0FFF0
                 dc.l    $F0F0F0F0, $F0F0F0F0, $F0F0F0F0, $F000F000
@@ -566,13 +563,12 @@ Orphaned_ScrollMaskPattern1:
 ; End of function Orphaned_ScrollMaskPattern1
 ; ---------------------------------------------------------------------------
 Effect_TransitionMaskPatternsB: dc.l    $FFFFFFFF, $FFFFFFF, $FFF0FFF, $F0F0FFF  ; was: dword_2748A
-                                        ; DATA XREF: Orphaned_ScrollMaskPattern1   o
                 dc.l    $F0F0F0F, $F0F0F, $F000F, $F
                 dc.l    $FFFFFFFF, $FFFFFFF0, $FFF0FFF0, $FFF0F0F0
                 dc.l    $F0F0F0F0, $F0F0F000, $F000F000, $F0000000
 
 ; Builds the denser transition output used by buffer mode four
-TransitionEffect_UpdateMode4Buffers:                    ; DATA XREF: ROM:00026BA4   o  ; was: sub_274CA
+TransitionEffect_UpdateMode4Buffers:                    ; was: sub_274CA
                 movea.w #(TransitionWorkingBuffer-M68K_RAM),a0
                 movea.w #(TransitionHScrollBuffer-M68K_RAM),a1
                 moveq   #3,d7
@@ -594,9 +590,9 @@ TransitionEffect_UpdateMode4Buffers:                    ; DATA XREF: ROM:00026BA
                 andi.l  #$FFFF,d3
                 asl.l   #1,d3
                 asl.l   #8,d3
-TransitionEffect_UpdateMode4Buffers_BeginEdgeLoop:      ; CODE XREF: TransitionEffect_UpdateMode4Buffers+34   j  ; was: loc_27510
+TransitionEffect_UpdateMode4Buffers_BeginEdgeLoop:      ; was: loc_27510
                 moveq   #0,d2
-TransitionEffect_UpdateMode4Buffers_EdgeLoop:           ; CODE XREF: TransitionEffect_UpdateMode4Buffers+68   j  ; was: loc_27512
+TransitionEffect_UpdateMode4Buffers_EdgeLoop:           ; was: loc_27512
                 sub.l   d3,d2
                 move.l  d2,d4
                 swap    d4
@@ -606,12 +602,12 @@ TransitionEffect_UpdateMode4Buffers_EdgeLoop:           ; CODE XREF: TransitionE
                 moveq   #0,d0
                 bra.s   TransitionEffect_UpdateMode4Buffers_StoreSample
 ; ---------------------------------------------------------------------------
-TransitionEffect_UpdateMode4Buffers_ReadSample:         ; CODE XREF: TransitionEffect_UpdateMode4Buffers+52   j  ; was: loc_27522
+TransitionEffect_UpdateMode4Buffers_ReadSample:         ; was: loc_27522
                 move.w  (a1,d4.w),d0
                 mulu.w  d1,d0
                 swap    d0
                 andi.w  #$FFFC,d0
-TransitionEffect_UpdateMode4Buffers_StoreSample:        ; CODE XREF: TransitionEffect_UpdateMode4Buffers+56   j  ; was: loc_2752E
+TransitionEffect_UpdateMode4Buffers_StoreSample:        ; was: loc_2752E
                 move.w  d0,-(a0)
                 move.w  d0,(a2)+
                 dbf     d7,TransitionEffect_UpdateMode4Buffers_EdgeLoop
@@ -629,38 +625,38 @@ TransitionEffect_UpdateMode4Buffers_StoreSample:        ; CODE XREF: TransitionE
                 moveq   #4,d1
                 move.w  #$FC,d2
                 moveq   #$3E,d7                         ; '>'
-TransitionEffect_UpdateMode4Buffers_OutputLoop:         ; CODE XREF: TransitionEffect_UpdateMode4Buffers+F6   j  ; was: loc_27564
+TransitionEffect_UpdateMode4Buffers_OutputLoop:         ; was: loc_27564
                 move.w  (a0)+,d0
                 cmpa.w  #$9A02,a0
                 bmi.s   TransitionEffect_UpdateMode4Buffers_ClearOutsideRange
                 cmpa.w  #$9B00,a0
                 bmi.s   TransitionEffect_UpdateMode4Buffers_CheckOffset
-TransitionEffect_UpdateMode4Buffers_ClearOutsideRange:  ; CODE XREF: TransitionEffect_UpdateMode4Buffers+A0   j  ; was: loc_27572
+TransitionEffect_UpdateMode4Buffers_ClearOutsideRange:  ; was: loc_27572
                 moveq   #0,d0
-TransitionEffect_UpdateMode4Buffers_CheckOffset:        ; CODE XREF: TransitionEffect_UpdateMode4Buffers+A6   j  ; was: loc_27574
+TransitionEffect_UpdateMode4Buffers_CheckOffset:        ; was: loc_27574
                 move.w  d4,d5
                 sub.w   d0,d5
                 move.w  d5,d6
                 bmi.s   TransitionEffect_UpdateMode4Buffers_AdjustOffset
                 cmpi.w  #8,d5
                 bpl.s   TransitionEffect_UpdateMode4Buffers_ClampSample
-TransitionEffect_UpdateMode4Buffers_AdjustOffset:       ; CODE XREF: TransitionEffect_UpdateMode4Buffers+B0   j  ; was: loc_27582
+TransitionEffect_UpdateMode4Buffers_AdjustOffset:       ; was: loc_27582
                 asr.w   #1,d5
                 add.w   d5,d0
                 bpl.s   TransitionEffect_UpdateMode4Buffers_ZeroOffset
-TransitionEffect_UpdateMode4Buffers_ClearSample:        ; CODE XREF: TransitionEffect_UpdateMode4Buffers+D8   j  ; was: loc_27588
+TransitionEffect_UpdateMode4Buffers_ClearSample:        ; was: loc_27588
                 moveq   #0,d0
-TransitionEffect_UpdateMode4Buffers_ZeroOffset:         ; CODE XREF: TransitionEffect_UpdateMode4Buffers+BC   j  ; was: loc_2758A
+TransitionEffect_UpdateMode4Buffers_ZeroOffset:         ; was: loc_2758A
                 moveq   #0,d5
                 andi.w  #4,d6
                 add.w   d6,d5
                 bra.s   TransitionEffect_UpdateMode4Buffers_StoreOutput
 ; ---------------------------------------------------------------------------
-TransitionEffect_UpdateMode4Buffers_ClampSample:        ; CODE XREF: TransitionEffect_UpdateMode4Buffers+B6   j  ; was: loc_27594
+TransitionEffect_UpdateMode4Buffers_ClampSample:        ; was: loc_27594
                 cmpi.w  #$9E,d0
                 bmi.s   TransitionEffect_UpdateMode4Buffers_CheckUpperBound
                 move.w  #$9E,d0
-TransitionEffect_UpdateMode4Buffers_CheckUpperBound:    ; CODE XREF: TransitionEffect_UpdateMode4Buffers+CE   j  ; was: loc_2759E
+TransitionEffect_UpdateMode4Buffers_CheckUpperBound:    ; was: loc_2759E
                 cmpi.w  #$140,d5
                 bpl.s   TransitionEffect_UpdateMode4Buffers_ClearSample
                 move.w  d5,d3
@@ -670,7 +666,7 @@ TransitionEffect_UpdateMode4Buffers_CheckUpperBound:    ; CODE XREF: TransitionE
                 bmi.s   TransitionEffect_UpdateMode4Buffers_StoreOutput
                 move.w  #$140,d0
                 sub.w   d5,d0
-TransitionEffect_UpdateMode4Buffers_StoreOutput:        ; CODE XREF: TransitionEffect_UpdateMode4Buffers+C8   j  ; was: loc_275B6
+TransitionEffect_UpdateMode4Buffers_StoreOutput:        ; was: loc_275B6
                                         ; TransitionEffect_UpdateMode4Buffers+E4   j
                 move.w  d5,(a3)+
                 sub.w   d1,d0

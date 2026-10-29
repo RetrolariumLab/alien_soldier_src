@@ -1,5 +1,5 @@
 ; RasterEffectIndex is a byte offset into the 23 longword handler addresses below
-VBlank_DispatchRasterEffect:                            ; CODE XREF: VBLANK:Int_VBlank_RunEffects   p  ; was: sub_1356
+VBlank_DispatchRasterEffect:                            ; was: sub_1356
                 move.w  (RasterEffectIndex).w,d0
                 movea.l VBlankRasterEffectHandlerTable(pc,d0.w),a0
                 jmp     (a0)
@@ -29,7 +29,7 @@ VBlankRasterEffectHandlerTable: dc.l    VBlank_DisableHBlankEffect  ; was: off_1
                 dc.l    VBlank_InitSevenForceWindowEffect
 ; End of function VBlank_DispatchRasterEffect
 ; Disables the installed HBlank effect and replaces its RAM entry with RTE
-VBlank_DisableHBlankEffect:                             ; DATA XREF: VBlank_DispatchRasterEffect:VBlankRasterEffectHandlerTable   o  ; was: sub_13BC
+VBlank_DisableHBlankEffect:                             ; was: sub_13BC
                                         ; VBlank_DispatchRasterEffect+1E   o
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_DisableHBlankEffect_Return
@@ -37,11 +37,11 @@ VBlank_DisableHBlankEffect:                             ; DATA XREF: VBlank_Disp
                 andi.b  #$EF,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
                 move.w  #$4E73,(HBlankRAMCode).w
-VBlank_DisableHBlankEffect_Return:                      ; CODE XREF: VBlank_DisableHBlankEffect+4   j  ; was: locret_13DC
+VBlank_DisableHBlankEffect_Return:                      ; was: locret_13DC
                 rts
 ; End of function VBlank_DisableHBlankEffect
 ; Installs the letters-screen HBlank VScroll writer and selects its per-line data buffer
-VBlank_InitLettersVScrollEffect:                        ; DATA XREF: VBlank_DispatchRasterEffect+46   o  ; was: sub_13DE
+VBlank_InitLettersVScrollEffect:                        ; was: sub_13DE
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitLettersVScrollEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -53,18 +53,17 @@ VBlank_InitLettersVScrollEffect:                        ; DATA XREF: VBlank_Disp
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
 ; Branch target that loads buffer address for letters effect after initialization
-VBlank_InitLettersVScrollEffect_SelectBuffer:           ; CODE XREF: VBlank_InitLettersVScrollEffect+4   j  ; was: loc_1412
+VBlank_InitLettersVScrollEffect_SelectBuffer:           ; was: loc_1412
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitLettersVScrollEffect
 ; ---------------------------------------------------------------------------
 HBlank_WriteVScroll0_InstallList:   dc.w    0           ; field_0  ; was: stru_1418
-                                        ; DATA XREF: VBlank_InitLettersVScrollEffect+1A   o
                                         ; VBlank_InitStage2DemoVScrollEffect+1A   o
                 dc.l    HBlank_WriteVScroll0_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteVScroll0_CopyLength:    dc.w    $20         ; DATA XREF: ROM:HBlank_WriteVScroll0_InstallList   o  ; was: word_1422
+HBlank_WriteVScroll0_CopyLength:    dc.w    $20         ; was: word_1422
 
 ; Writes the next buffered word to VSRAM address zero during HBlank
 HBlank_WriteVScroll0:                                   ; was: sub_1424
@@ -73,7 +72,7 @@ HBlank_WriteVScroll0:                                   ; was: sub_1424
                 rte
 ; End of function HBlank_WriteVScroll0
 ; Installs the Stage 2 demo VScroll writer and selects its per-line data buffer
-VBlank_InitStage2DemoVScrollEffect:                     ; DATA XREF: VBlank_DispatchRasterEffect+2A   o  ; was: sub_1436
+VBlank_InitStage2DemoVScrollEffect:                     ; was: sub_1436
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitStage2DemoVScrollEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -84,14 +83,14 @@ VBlank_InitStage2DemoVScrollEffect:                     ; DATA XREF: VBlank_Disp
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
 ; Applies the Stage 2 raster registers and selects the per-line data buffer
-VBlank_InitStage2DemoVScrollEffect_SelectBuffer:        ; CODE XREF: VBlank_InitStage2DemoVScrollEffect+4   j  ; was: loc_1468
+VBlank_InitStage2DemoVScrollEffect_SelectBuffer:        ; was: loc_1468
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg10Shadow).w,(VDP_CTRL).l
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitStage2DemoVScrollEffect
 ; Installs the Stage 9 fly-corridor HBlank VScroll0 writer
-VBlank_InitStage9FlyCorridorVScroll0Effect:             ; DATA XREF: VBlank_DispatchRasterEffect+36   o  ; was: sub_147E
+VBlank_InitStage9FlyCorridorVScroll0Effect:             ; was: sub_147E
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitStage9FlyCorridorVScroll0Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -101,12 +100,12 @@ VBlank_InitStage9FlyCorridorVScroll0Effect:             ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitStage9FlyCorridorVScroll0Effect_SelectBuffer:  ; CODE XREF: VBlank_InitStage9FlyCorridorVScroll0Effect+4   j  ; was: loc_14B0
+VBlank_InitStage9FlyCorridorVScroll0Effect_SelectBuffer:  ; was: loc_14B0
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitStage9FlyCorridorVScroll0Effect
 ; Initializes VBlank effect for Xi-Tiger cutscene
-VBlank_InitXiTigerEffect:                               ; DATA XREF: VBlank_DispatchRasterEffect+12   o  ; was: sub_14B6
+VBlank_InitXiTigerEffect:                               ; was: sub_14B6
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitXiTigerEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -116,12 +115,12 @@ VBlank_InitXiTigerEffect:                               ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitXiTigerEffect_SelectBuffer:                  ; CODE XREF: VBlank_InitXiTigerEffect+4   j  ; was: loc_14E8
+VBlank_InitXiTigerEffect_SelectBuffer:                  ; was: loc_14E8
                 lea     (XiTigerVScrollBuffer).w,a6
                 rts
 ; End of function VBlank_InitXiTigerEffect
 ; Installs a buffered HBlank writer for VSRAM address two
-VBlank_InitVScroll2Effect:                              ; DATA XREF: VBlank_DispatchRasterEffect+16   o  ; was: sub_14EE
+VBlank_InitVScroll2Effect:                              ; was: sub_14EE
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitVScroll2Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -132,18 +131,17 @@ VBlank_InitVScroll2Effect:                              ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitVScroll2Effect_SelectBuffer:                 ; CODE XREF: VBlank_InitVScroll2Effect+4   j  ; was: loc_1522
+VBlank_InitVScroll2Effect_SelectBuffer:                 ; was: loc_1522
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitVScroll2Effect
 ; ---------------------------------------------------------------------------
 HBlank_WriteVScroll2_InstallList:   dc.w    0           ; field_0  ; was: stru_1528
-                                        ; DATA XREF: VBlank_InitVScroll2Effect+1A   o
                                         ; VBlank_InitTransitionVScroll2Effect+1A   o
                 dc.l    HBlank_WriteVScroll2_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteVScroll2_CopyLength:    dc.w    $20         ; DATA XREF: ROM:HBlank_WriteVScroll2_InstallList   o  ; was: word_1532
+HBlank_WriteVScroll2_CopyLength:    dc.w    $20         ; was: word_1532
 
 ; Writes the next buffered word to VSRAM address two during HBlank
 HBlank_WriteVScroll2:                                   ; was: sub_1534
@@ -152,7 +150,7 @@ HBlank_WriteVScroll2:                                   ; was: sub_1534
                 rte
 ; End of function HBlank_WriteVScroll2
 ; Installs a one-shot split VScroll writer and updates its split position
-VBlank_InitSplitVScrollEffect:                          ; DATA XREF: VBlank_DispatchRasterEffect+2E   o  ; was: sub_1546
+VBlank_InitSplitVScrollEffect:                          ; was: sub_1546
                 move.w  (RasterEffectInitState).w,d0
                 bne.s   VBlank_InitSplitVScrollEffect_Update
                 addq.w  #4,(RasterEffectInitState).w
@@ -162,7 +160,7 @@ VBlank_InitSplitVScrollEffect:                          ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitSplitVScrollEffect_Update:                   ; CODE XREF: VBlank_InitSplitVScrollEffect+4   j  ; was: loc_1572
+VBlank_InitSplitVScrollEffect_Update:                   ; was: loc_1572
                 move.l  #$40020010,(VDP_CTRL).l
                 move.w  (VScrollPlaneAColumn1).w,(VDP_DATA).l
                 move.b  (PrimaryEntityWork4B).w,(VDPReg10Shadow+1).w
@@ -171,11 +169,10 @@ VBlank_InitSplitVScrollEffect_Update:                   ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitSplitVScrollEffect
 ; ---------------------------------------------------------------------------
 HBlank_WriteSplitVScroll2AndStop_InstallList:   dc.w    0  ; field_0  ; was: stru_1594
-                                        ; DATA XREF: VBlank_InitSplitVScrollEffect+12   o
                 dc.l    HBlank_WriteSplitVScroll2AndStop_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteSplitVScroll2AndStop_CopyLength:    dc.w    $20  ; DATA XREF: ROM:HBlank_WriteSplitVScroll2AndStop_InstallList   o  ; was: word_159E
+HBlank_WriteSplitVScroll2AndStop_CopyLength:    dc.w    $20  ; was: word_159E
 
 ; Writes the split value to VSRAM address two and postpones the next H interrupt
 HBlank_WriteSplitVScroll2AndStop:                       ; was: sub_15A0
@@ -185,7 +182,7 @@ HBlank_WriteSplitVScroll2AndStop:                       ; was: sub_15A0
                 rte
 ; End of function HBlank_WriteSplitVScroll2AndStop
 ; Installs the standard-transition HBlank VScroll2 writer
-VBlank_InitTransitionVScroll2Effect:                    ; DATA XREF: VBlank_DispatchRasterEffect+1A   o  ; was: sub_15BC
+VBlank_InitTransitionVScroll2Effect:                    ; was: sub_15BC
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitTransitionVScroll2Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -195,12 +192,12 @@ VBlank_InitTransitionVScroll2Effect:                    ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitTransitionVScroll2Effect_SelectBuffer:       ; CODE XREF: VBlank_InitTransitionVScroll2Effect+4   j  ; was: loc_15EE
+VBlank_InitTransitionVScroll2Effect_SelectBuffer:       ; was: loc_15EE
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitTransitionVScroll2Effect
 ; Installs the alternate-transition HBlank VScroll2 writer
-VBlank_InitAlternateTransitionVScroll2Effect:           ; DATA XREF: VBlank_DispatchRasterEffect+E   o  ; was: sub_15F4
+VBlank_InitAlternateTransitionVScroll2Effect:           ; was: sub_15F4
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitAlternateTransitionVScroll2Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -210,12 +207,12 @@ VBlank_InitAlternateTransitionVScroll2Effect:           ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitAlternateTransitionVScroll2Effect_SelectBuffer:  ; CODE XREF: VBlank_InitAlternateTransitionVScroll2Effect+4   j  ; was: loc_1626
+VBlank_InitAlternateTransitionVScroll2Effect_SelectBuffer:  ; was: loc_1626
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitAlternateTransitionVScroll2Effect
 ; Installs the Flying Neo HBlank VScroll2 writer
-VBlank_InitFlyingNeoVScroll2Effect:                     ; DATA XREF: VBlank_DispatchRasterEffect+32   o  ; was: sub_162C
+VBlank_InitFlyingNeoVScroll2Effect:                     ; was: sub_162C
                 move.w  (RasterEffectInitState).w,d0
                 bne.s   VBlank_InitFlyingNeoVScroll2Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -226,12 +223,12 @@ VBlank_InitFlyingNeoVScroll2Effect:                     ; DATA XREF: VBlank_Disp
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
 ; Loads buffer address for Flying Neo stage VBlank effect after initialization
-VBlank_InitFlyingNeoVScroll2Effect_SelectBuffer:        ; CODE XREF: VBlank_InitFlyingNeoVScroll2Effect+4   j  ; was: loc_165C
+VBlank_InitFlyingNeoVScroll2Effect_SelectBuffer:        ; was: loc_165C
                 lea     (ActiveRasterBuffer).w,a6
                 rts
 ; End of function VBlank_InitFlyingNeoVScroll2Effect
 ; Installs the Sunset Sting HBlank VScroll0 writer
-VBlank_InitSunsetStingVScroll0Effect:                   ; DATA XREF: VBlank_DispatchRasterEffect+3E   o  ; was: sub_1662
+VBlank_InitSunsetStingVScroll0Effect:                   ; was: sub_1662
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitSunsetStingVScroll0Effect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -241,12 +238,12 @@ VBlank_InitSunsetStingVScroll0Effect:                   ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitSunsetStingVScroll0Effect_SelectBuffer:      ; CODE XREF: VBlank_InitSunsetStingVScroll0Effect+4   j  ; was: loc_1694
+VBlank_InitSunsetStingVScroll0Effect_SelectBuffer:      ; was: loc_1694
                 lea     (RasterStagingBuffer).w,a6
                 rts
 ; End of function VBlank_InitSunsetStingVScroll0Effect
 ; Installs the story-screen HBlank plane/scroll updater
-VBlank_InitStoryDisplayEffect:                          ; DATA XREF: VBlank_DispatchRasterEffect+4E   o  ; was: sub_169A
+VBlank_InitStoryDisplayEffect:                          ; was: sub_169A
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitStoryDisplayEffect_PrepareHBlankPort
                 addq.w  #4,(RasterEffectInitState).w
@@ -259,18 +256,17 @@ VBlank_InitStoryDisplayEffect:                          ; DATA XREF: VBlank_Disp
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg18Shadow).w,(VDP_CTRL).l
 ; Branch target that sets VDP control register for story screen effect after initialization
-VBlank_InitStoryDisplayEffect_PrepareHBlankPort:        ; CODE XREF: VBlank_InitStoryDisplayEffect+4   j  ; was: loc_16D6
+VBlank_InitStoryDisplayEffect_PrepareHBlankPort:        ; was: loc_16D6
                 move.w  (VDPReg2Shadow).w,(VDP_CTRL).l
                 lea     (VDP_CTRL).l,a6
                 rts
 ; End of function VBlank_InitStoryDisplayEffect
 ; ---------------------------------------------------------------------------
 HBlank_UpdateStoryDisplay_InstallList:  dc.w    0       ; field_0  ; was: stru_16E6
-                                        ; DATA XREF: VBlank_InitStoryDisplayEffect+1A   o
                 dc.l    HBlank_UpdateStoryDisplay_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_UpdateStoryDisplay_CopyLength:   dc.w    $40     ; DATA XREF: ROM:HBlank_UpdateStoryDisplay_InstallList   o  ; was: word_16F0
+HBlank_UpdateStoryDisplay_CopyLength:   dc.w    $40     ; was: word_16F0
 
 ; Changes the story-screen plane A base and scroll values at a timed scanline
 HBlank_UpdateStoryDisplay:                              ; was: sub_16F2
@@ -280,14 +276,14 @@ HBlank_UpdateStoryDisplay:                              ; was: sub_16F2
                 move.l  #$70000003,(a6)
                 move.w  (StoryFontScrollY).l,(VDP_DATA).l
                 move.w  #$10,(StoryHBlankDelayCounter).l
-HBlank_UpdateStoryDisplay_DelayLoop:                    ; CODE XREF: HBlank_UpdateStoryDisplay+30   j  ; was: loc_171C
+HBlank_UpdateStoryDisplay_DelayLoop:                    ; was: loc_171C
                 subq.w  #1,(StoryHBlankDelayCounter).l
                 bne.s   HBlank_UpdateStoryDisplay_DelayLoop
                 move.w  #$8228,(a6)
                 rte
 ; End of function HBlank_UpdateStoryDisplay
 ; Installs the Game Over HBlank two-word VScroll writer
-VBlank_InitGameOverVScrollPairEffect:                   ; DATA XREF: VBlank_DispatchRasterEffect+56   o  ; was: sub_172A
+VBlank_InitGameOverVScrollPairEffect:                   ; was: sub_172A
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitGameOverVScrollPairEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -298,17 +294,16 @@ VBlank_InitGameOverVScrollPairEffect:                   ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitGameOverVScrollPairEffect_SelectBuffer:      ; CODE XREF: VBlank_InitGameOverVScrollPairEffect+4   j  ; was: loc_175E
+VBlank_InitGameOverVScrollPairEffect_SelectBuffer:      ; was: loc_175E
                 movea.w #(RasterVScrollPairBuffer-M68K_RAM),a6
                 rts
 ; End of function VBlank_InitGameOverVScrollPairEffect
 ; ---------------------------------------------------------------------------
 HBlank_WriteVScrollPair_InstallList:    dc.w    0       ; field_0  ; was: stru_1764
-                                        ; DATA XREF: VBlank_InitGameOverVScrollPairEffect+1A   o
                 dc.l    HBlank_WriteVScrollPair_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteVScrollPair_CopyLength: dc.w    $40         ; DATA XREF: ROM:HBlank_WriteVScrollPair_InstallList   o  ; was: word_176E
+HBlank_WriteVScrollPair_CopyLength: dc.w    $40         ; was: word_176E
 
 ; Writes the next buffered two-word vertical-scroll pair during HBlank
 HBlank_WriteVScrollPair:                                ; was: sub_1770
@@ -317,7 +312,7 @@ HBlank_WriteVScrollPair:                                ; was: sub_1770
                 rte
 ; End of function HBlank_WriteVScrollPair
 ; Initializes VBlank effect for Stage 10
-VBlank_InitStage10Effect:                               ; DATA XREF: VBlank_DispatchRasterEffect+3A   o  ; was: sub_1782
+VBlank_InitStage10Effect:                               ; was: sub_1782
                                         ; VBlank_DispatchRasterEffect+42   o
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitStage10Effect_RefreshScrollAndBuffer
@@ -330,7 +325,7 @@ VBlank_InitStage10Effect:                               ; DATA XREF: VBlank_Disp
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
 ; Recurring VBlank path updates display state and seeds the HBlank scroll buffer
-VBlank_InitStage10Effect_RefreshScrollAndBuffer:        ; CODE XREF: VBlank_InitStage10Effect+4   j  ; was: loc_17B6
+VBlank_InitStage10Effect_RefreshScrollAndBuffer:        ; was: loc_17B6
                 move.w  (VDPReg2Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg4Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg7Shadow).w,(VDP_CTRL).l
@@ -351,18 +346,17 @@ VBlank_InitStage10Effect_RefreshScrollAndBuffer:        ; CODE XREF: VBlank_Init
                 beq.s   VBlank_InitStage10Effect_StoreHBlankData
                 move.w  (HScrollBuffer).w,d0
 ; Branch target that sets scroll value for Stage 10 effect and prepares sprite buffer
-VBlank_InitStage10Effect_StoreHBlankData:               ; CODE XREF: VBlank_InitStage10Effect+AC   j  ; was: loc_1834
+VBlank_InitStage10Effect_StoreHBlankData:               ; was: loc_1834
                 move.w  d0,(a0)+
                 movea.w #(Stage10HBlankScrollData-M68K_RAM),a6
                 rts
 ; End of function VBlank_InitStage10Effect
 ; ---------------------------------------------------------------------------
 HBlank_UpdateStage10Display_InstallList:    dc.w    0   ; field_0  ; was: stru_183C
-                                        ; DATA XREF: VBlank_InitStage10Effect+1A   o
                 dc.l    HBlank_UpdateStage10Display_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_UpdateStage10Display_CopyLength: dc.w    $200    ; DATA XREF: ROM:HBlank_UpdateStage10Display_InstallList   o  ; was: word_1846
+HBlank_UpdateStage10Display_CopyLength: dc.w    $200    ; was: word_1846
 
 ; Applies Stage 10 scroll values and delayed plane/backdrop changes during HBlank
 HBlank_UpdateStage10Display:                            ; was: sub_1848
@@ -428,7 +422,7 @@ HBlank_UpdateStage10Display:                            ; was: sub_1848
                 rte
 ; End of function HBlank_UpdateStage10Display
 ; Installs a buffered HBlank writer for CRAM color index five
-VBlank_InitCRAMWriteEffect:                             ; DATA XREF: VBlank_DispatchRasterEffect+22   o  ; was: sub_1904
+VBlank_InitCRAMWriteEffect:                             ; was: sub_1904
                 move.w  (RasterEffectInitState).w,d0
                 bne.w   VBlank_InitCRAMWriteEffect_SelectBuffer
                 addq.w  #4,(RasterEffectInitState).w
@@ -437,7 +431,7 @@ VBlank_InitCRAMWriteEffect:                             ; DATA XREF: VBlank_Disp
                 nop
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
-VBlank_InitCRAMWriteEffect_SelectBuffer:                ; CODE XREF: VBlank_InitCRAMWriteEffect+4   j  ; was: loc_1928
+VBlank_InitCRAMWriteEffect_SelectBuffer:                ; was: loc_1928
                 move.w  (VDPReg10Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
                 lea     (CRAMWriteEffectBuffer).w,a6
@@ -445,11 +439,10 @@ VBlank_InitCRAMWriteEffect_SelectBuffer:                ; CODE XREF: VBlank_Init
 ; End of function VBlank_InitCRAMWriteEffect
 ; ---------------------------------------------------------------------------
 HBlank_WriteCRAMColor5_InstallList: dc.w    0           ; field_0  ; was: stru_193E
-                                        ; DATA XREF: VBlank_InitCRAMWriteEffect+12   o
                 dc.l    HBlank_WriteCRAMColor5_CopyLength  ; field_2
                 dc.w    $EE00                           ; field_6
                 dc.w    $FFFF
-HBlank_WriteCRAMColor5_CopyLength:  dc.w    $20         ; DATA XREF: ROM:HBlank_WriteCRAMColor5_InstallList   o  ; was: word_1948
+HBlank_WriteCRAMColor5_CopyLength:  dc.w    $20         ; was: word_1948
 
 ; Writes the next buffered word to CRAM color index five during HBlank
 HBlank_WriteCRAMColor5:                                 ; was: sub_194A

@@ -1,7 +1,7 @@
 ; Stage 12 yacht controller and the rescued teddy-bear pilot
 ; Pinned TAS evidence: controller entry at frame 23660, pilot entry at 23676
 
-Stage12_YachtControllerMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2F5C0
+Stage12_YachtControllerMain:                            ; was: sub_2F5C0
                 move.l  $54(a5),d0
                 add.l   d0,(SecondaryCameraXPos).w
                 move.w  4(a5),d0
@@ -11,7 +11,6 @@ Stage12_YachtControllerMain:                            ; DATA XREF: ROM:Entity_
 ; End of function Stage12_YachtControllerMain
 ; ---------------------------------------------------------------------------
 Stage12_YachtControllerStateTable:  dc.w    Stage12_YachtControllerInit-Stage12_YachtControllerInit
-                                        ; DATA XREF: Stage12_YachtControllerMain+C   r
                 dc.w    Stage12_YachtControllerIdle-Stage12_YachtControllerInit
                 dc.w    Stage12_YachtRevealPan-Stage12_YachtControllerInit
                 dc.w    Stage12_YachtBeginMotion-Stage12_YachtControllerInit
@@ -21,7 +20,7 @@ Stage12_YachtControllerStateTable:  dc.w    Stage12_YachtControllerInit-Stage12_
                 dc.w    Stage12_YachtDestructionState-Stage12_YachtControllerInit
 
 ; Initializes the invisible Stage 12 yacht controller
-Stage12_YachtControllerInit:                            ; DATA XREF: Stage12_YachtControllerMain+10   o  ; was: sub_2F5E8
+Stage12_YachtControllerInit:                            ; was: sub_2F5E8
                                         ; ROM:Stage12_YachtControllerStateTable   o
                 addq.w  #2,4(a5)
                 move.w  #$8D00,2(a5)
@@ -37,11 +36,11 @@ Stage12_YachtControllerInit:                            ; DATA XREF: Stage12_Yac
                 move.w  $10(a5),$4C(a5)
                 move.w  $14(a5),$4E(a5)
 ; Idle state used until the stage script advances the controller
-Stage12_YachtControllerIdle:                            ; DATA XREF: ROM:0002F5DA   o  ; was: locret_2F62C
+Stage12_YachtControllerIdle:                            ; was: locret_2F62C
                 rts
 ; End of function Stage12_YachtControllerInit
 ; Reveals the yacht by rendering with a temporary camera offset
-Stage12_YachtRevealPan:                                 ; DATA XREF: ROM:0002F5DC   o  ; was: sub_2F62E
+Stage12_YachtRevealPan:                                 ; was: sub_2F62E
                 move.l  (PrimaryCameraXPosition).w,-(sp)
                 move.w  $50(a5),d0
                 add.w   d0,(PrimaryCameraXPosition).w
@@ -58,15 +57,15 @@ Stage12_YachtRevealPan:                                 ; DATA XREF: ROM:0002F5D
                 jmp     Sound_QueueBGMOrStop
 ; End of function Stage12_YachtRevealPan
 ; Starts the yacht's active vertical-motion phase
-Stage12_YachtBeginMotion:                               ; DATA XREF: ROM:0002F5DE   o  ; was: sub_2F672
+Stage12_YachtBeginMotion:                               ; was: sub_2F672
                 move.b  #$55,d0                         ; 'U'
                 jsr     (Sound_QueueSFXRequest).l
-Stage12_YachtBeginVerticalBob:                          ; CODE XREF: Stage12_YachtBeginMotion+68   j
+Stage12_YachtBeginVerticalBob:
                 move.w  #2,$58(a5)
                 move.l  #$22000,$1C(a5)
                 move.w  #8,4(a5)
 ; Active yacht state: reacts to stage signals and updates motion and scroll
-Stage12_YachtActiveState:                               ; DATA XREF: ROM:0002F5E0   o  ; was: loc_2F690
+Stage12_YachtActiveState:                               ; was: loc_2F690
                 tst.w   $24(a5)
                 bmi.w   Stage12_YachtBeginDestruction
                 bclr    #1,$5A(a5)
@@ -79,35 +78,35 @@ Stage12_YachtActiveState:                               ; DATA XREF: ROM:0002F5E
                 bsr.w   Stage12_YachtUpdateScrollPreset
                 bra.w   Stage12_YachtUpdatePlaneOffsets
 ; ---------------------------------------------------------------------------
-Stage12_YachtBeginRecovery:                             ; CODE XREF: Stage12_YachtBeginMotion+2C   j
+Stage12_YachtBeginRecovery:
                                         ; Stage12_YachtBeginMotion+80   j
                 move.w  #$A,4(a5)
                 move.l  #$FFFEF000,$1C(a5)
 ; Applies the signalled vertical recovery motion
-Stage12_YachtRecoveryState:                             ; DATA XREF: ROM:0002F5E2   o  ; was: loc_2F6CA
+Stage12_YachtRecoveryState:                             ; was: loc_2F6CA
                 addi.l  #$210,$1C(a5)
                 bmi.s   Stage12_YachtUpdateRecovery
                 cmpi.w  #$12C,$14(a5)
                 bpl.s   Stage12_YachtBeginVerticalBob
-Stage12_YachtUpdateRecovery:                            ; CODE XREF: Stage12_YachtBeginMotion+60   j
+Stage12_YachtUpdateRecovery:
                 bsr.w   Stage12_YachtAccelerateScroll
                 bsr.w   Stage12_YachtUpdateScrollPreset
                 bra.w   Stage12_YachtUpdatePlaneOffsets
 ; ---------------------------------------------------------------------------
-Stage12_YachtAdvancePastSignal:                         ; CODE XREF: Stage12_YachtBeginMotion+34   j
+Stage12_YachtAdvancePastSignal:
                 addq.w  #4,4(a5)
 ; Post-signal state retaining yacht motion and plane-offset updates
-Stage12_YachtPostSignalState:                           ; DATA XREF: ROM:0002F5E4   o  ; was: loc_2F6EC
+Stage12_YachtPostSignalState:                           ; was: loc_2F6EC
                 bclr    #1,$5A(a5)
                 bne.s   Stage12_YachtBeginRecovery
                 bsr.w   Stage12_YachtAccelerateScroll
                 bsr.w   Stage12_YachtUpdateScrollPreset
                 bra.w   Stage12_YachtUpdatePlaneOffsets
 ; ---------------------------------------------------------------------------
-Stage12_YachtBeginDestruction:                          ; CODE XREF: Stage12_YachtBeginMotion+22   j
+Stage12_YachtBeginDestruction:
                 move.w  #$E,4(a5)
 ; Destruction state: palette cycling, debris, motion and plane offsets
-Stage12_YachtDestructionState:                          ; DATA XREF: ROM:0002F5E6   o  ; was: loc_2F706
+Stage12_YachtDestructionState:                          ; was: loc_2F706
                 lea     Stage12_YachtDestructionPaletteCycle(pc),a4
                 nop
                 jsr     (Gfx_UpdateRandomizedPaletteEntryList).l
@@ -119,10 +118,9 @@ Stage12_YachtDestructionState:                          ; DATA XREF: ROM:0002F5E
 ; End of function Stage12_YachtBeginMotion
 ; ---------------------------------------------------------------------------
 Stage12_YachtDestructionPaletteCycle:   dc.w    $A, $E322, $E324, $E326, $E328, $E32A, $E32C, $E32E, $E332, $E334, $E336, $E338
-                                        ; DATA XREF: Stage12_YachtBeginMotion:Stage12_YachtDestructionState   o
 
 ; Oscillates the yacht vertically between its two waterline limits
-Stage12_YachtUpdateVerticalBob:                         ; CODE XREF: Stage12_YachtBeginMotion+36   p  ; was: sub_2F73E
+Stage12_YachtUpdateVerticalBob:                         ; was: sub_2F73E
                                         ; Stage12_YachtBeginMotion+A8   p
                 tst.w   $58(a5)
                 bne.s   Stage12_YachtDescendingPhase
@@ -132,56 +130,56 @@ Stage12_YachtUpdateVerticalBob:                         ; CODE XREF: Stage12_Yac
                 bpl.s   Stage12_YachtAccelerateUp
                 cmpi.l  #$FFFF0000,d0
                 bmi.s   Stage12_YachtVerticalMotionReturn
-Stage12_YachtAccelerateUp:                              ; CODE XREF: Stage12_YachtUpdateVerticalBob+12   j
+Stage12_YachtAccelerateUp:
                 subi.l  #$2000,d0
                 move.l  d0,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage12_YachtDescendingPhase:                           ; CODE XREF: Stage12_YachtUpdateVerticalBob+4   j
+Stage12_YachtDescendingPhase:
                 cmpi.w  #$13C,$14(a5)
                 bpl.s   Stage12_YachtReverseVerticalDirection
                 move.l  $1C(a5),d0
                 bmi.s   Stage12_YachtAccelerateDown
                 cmpi.l  #$10000,d0
                 bpl.s   Stage12_YachtVerticalMotionReturn
-Stage12_YachtAccelerateDown:                            ; CODE XREF: Stage12_YachtUpdateVerticalBob+34   j
+Stage12_YachtAccelerateDown:
                 addi.l  #$2000,d0
                 move.l  d0,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage12_YachtReverseVerticalDirection:                  ; CODE XREF: Stage12_YachtUpdateVerticalBob+C   j
+Stage12_YachtReverseVerticalDirection:
                                         ; Stage12_YachtUpdateVerticalBob+2E   j
                 eori.w  #2,$58(a5)
-Stage12_YachtVerticalMotionReturn:                      ; CODE XREF: Stage12_YachtUpdateVerticalBob+1A   j
+Stage12_YachtVerticalMotionReturn:
                                         ; Stage12_YachtUpdateVerticalBob+3C   j
                 rts
 ; End of function Stage12_YachtUpdateVerticalBob
 ; Accelerates the stage scroll and derives camera compensation
-Stage12_YachtAccelerateScroll:                          ; CODE XREF: Stage12_YachtBeginMotion+3A   p  ; was: sub_2F790
+Stage12_YachtAccelerateScroll:                          ; was: sub_2F790
                                         ; sub_2F672:Stage12_YachtUpdateRecovery   p
                 cmpi.l  #$C000,(StageMotionYDelta).w
                 bpl.s   Stage12_YachtApplyScrollCompensation
                 addi.l  #$100,(StageMotionYDelta).w
-Stage12_YachtApplyScrollCompensation:                   ; CODE XREF: Stage12_YachtAccelerateScroll+8   j
+Stage12_YachtApplyScrollCompensation:
                 clr.l   (StageMotionXDelta).w
                 btst    #5,(PlayerActionStateFlags).w
                 bne.s   Stage12_YachtSetScrollCompensation
                 btst    #0,(PlayerActionStateFlags).w
                 beq.s   Stage12_YachtAccelerateScrollRate
-Stage12_YachtSetScrollCompensation:                     ; CODE XREF: Stage12_YachtAccelerateScroll+1C   j
+Stage12_YachtSetScrollCompensation:
                 move.l  $54(a5),d0
                 neg.l   d0
                 asr.l   #2,d0
                 move.l  d0,(StageMotionXDelta).w
-Stage12_YachtAccelerateScrollRate:                      ; CODE XREF: Stage12_YachtAccelerateScroll+24   j
+Stage12_YachtAccelerateScrollRate:
                 cmpi.l  #$B0000,$54(a5)
                 bpl.s   Stage12_YachtScrollAccelerationReturn
                 addi.l  #$400,$54(a5)
-Stage12_YachtScrollAccelerationReturn:                  ; CODE XREF: Stage12_YachtAccelerateScroll+3A   j
+Stage12_YachtScrollAccelerationReturn:
                 rts
 ; End of function Stage12_YachtAccelerateScroll
 ; Applies player-directed horizontal yacht steering
-Stage12_YachtApplySteering:                             ; CODE XREF: Stage12_YachtBeginMotion+3E   p  ; was: sub_2F7D6
+Stage12_YachtApplySteering:                             ; was: sub_2F7D6
                 tst.w   (PlayerDefeatPhase).w
                 bne.w   Stage12_YachtClampHorizontalVelocity
                 btst    #0,(PlayerActionStateFlags).w
@@ -190,27 +188,27 @@ Stage12_YachtApplySteering:                             ; CODE XREF: Stage12_Yac
                 beq.s   Stage12_YachtCheckSteerRight
                 cmpi.w  #$70,$10(a5)                    ; 'p'
                 bmi.s   Stage12_YachtEaseHorizontalVelocity
-Stage12_YachtSteerLeft:                                 ; CODE XREF: Stage12_YachtClampHorizontalVelocity+10   j
+Stage12_YachtSteerLeft:
                 cmpi.l  #$FFFD0000,$18(a5)
                 bmi.s   Stage12_YachtSteeringReturn
                 subi.l  #$2000,$18(a5)
-Stage12_YachtSteeringReturn:                            ; CODE XREF: Stage12_YachtApplySteering+28   j
+Stage12_YachtSteeringReturn:
                                         ; Stage12_YachtApplySteering+4C   j
                 rts
 ; ---------------------------------------------------------------------------
-Stage12_YachtCheckSteerRight:                           ; CODE XREF: Stage12_YachtApplySteering+16   j
+Stage12_YachtCheckSteerRight:
                 btst    #3,(ControllerHeldState).w
                 beq.s   Stage12_YachtClampHorizontalVelocity
                 cmpi.w  #$100,$10(a5)
                 bpl.s   Stage12_YachtEaseHorizontalVelocity
-Stage12_YachtSteerRight:                                ; CODE XREF: Stage12_YachtClampHorizontalVelocity+18   j
+Stage12_YachtSteerRight:
                 cmpi.l  #$30000,$18(a5)
                 bpl.s   Stage12_YachtSteeringReturn
                 addi.l  #$2000,$18(a5)
                 rts
 ; End of function Stage12_YachtApplySteering
 ; Eases or reverses yacht velocity at the horizontal limits
-Stage12_YachtClampHorizontalVelocity:                   ; CODE XREF: Stage12_YachtBeginMotion+A0   p  ; was: sub_2F82E
+Stage12_YachtClampHorizontalVelocity:                   ; was: sub_2F82E
                                         ; Stage12_YachtApplySteering+4   j
                 move.w  $10(a5),d0
                 subi.w  #$B0,d0
@@ -219,12 +217,12 @@ Stage12_YachtClampHorizontalVelocity:                   ; CODE XREF: Stage12_Yac
                 bmi.s   Stage12_YachtEaseHorizontalVelocity
                 bra.s   Stage12_YachtSteerLeft
 ; ---------------------------------------------------------------------------
-Stage12_YachtCheckLeftBoundary:                         ; CODE XREF: Stage12_YachtClampHorizontalVelocity+8   j
+Stage12_YachtCheckLeftBoundary:
                 cmpi.w  #$FFF0,d0
                 bpl.s   Stage12_YachtEaseHorizontalVelocity
                 bra.s   Stage12_YachtSteerRight
 ; ---------------------------------------------------------------------------
-Stage12_YachtEaseHorizontalVelocity:                    ; CODE XREF: Stage12_YachtApplySteering+1E   j
+Stage12_YachtEaseHorizontalVelocity:
                                         ; Stage12_YachtApplySteering+42   j
                 move.l  $18(a5),d0
                 bpl.s   Stage12_YachtEasePositiveVelocity
@@ -232,18 +230,18 @@ Stage12_YachtEaseHorizontalVelocity:                    ; CODE XREF: Stage12_Yac
                 bmi.s   Stage12_YachtStoreHorizontalVelocity
                 bra.s   Stage12_YachtZeroHorizontalVelocity
 ; ---------------------------------------------------------------------------
-Stage12_YachtEasePositiveVelocity:                      ; CODE XREF: Stage12_YachtClampHorizontalVelocity+1E   j
+Stage12_YachtEasePositiveVelocity:
                 subi.l  #$1800,d0
                 bpl.s   Stage12_YachtStoreHorizontalVelocity
-Stage12_YachtZeroHorizontalVelocity:                    ; CODE XREF: Stage12_YachtClampHorizontalVelocity+28   j
+Stage12_YachtZeroHorizontalVelocity:
                 moveq   #0,d0
-Stage12_YachtStoreHorizontalVelocity:                   ; CODE XREF: Stage12_YachtClampHorizontalVelocity+26   j
+Stage12_YachtStoreHorizontalVelocity:
                                         ; Stage12_YachtClampHorizontalVelocity+30   j
                 move.l  d0,$18(a5)
                 rts
 ; End of function Stage12_YachtClampHorizontalVelocity
 ; Alternates between two stage-scroll presets on selected frames
-Stage12_YachtUpdateScrollPreset:                        ; CODE XREF: Stage12_YachtBeginMotion+42   p  ; was: sub_2F868
+Stage12_YachtUpdateScrollPreset:                        ; was: sub_2F868
                                         ; Stage12_YachtBeginMotion+6E   p
                 btst    #0,(FrameCounter+1).w
                 beq.s   Stage12_YachtScrollPresetReturn
@@ -251,16 +249,16 @@ Stage12_YachtUpdateScrollPreset:                        ; CODE XREF: Stage12_Yac
                 beq.s   Stage12_YachtUseAlternateScrollPreset
                 move.l  #$4C705B01,d0
                 jsr     (Tilemap_QueueFourRowsFromPackedCommand).l
-Stage12_YachtScrollPresetReturn:                        ; CODE XREF: Stage12_YachtUpdateScrollPreset+6   j
+Stage12_YachtScrollPresetReturn:
                 rts
 ; ---------------------------------------------------------------------------
-Stage12_YachtUseAlternateScrollPreset:                  ; CODE XREF: Stage12_YachtUpdateScrollPreset+E   j
+Stage12_YachtUseAlternateScrollPreset:
                 move.l  #$4C705CA1,d0
                 jsr     (Tilemap_QueueFourRowsFromPackedCommand).l
                 rts
 ; End of function Stage12_YachtUpdateScrollPreset
 ; Projects yacht position into the two scrolling-plane offsets
-Stage12_YachtUpdatePlaneOffsets:                        ; CODE XREF: Stage12_YachtBeginMotion+46   j  ; was: sub_2F894
+Stage12_YachtUpdatePlaneOffsets:                        ; was: sub_2F894
                                         ; Stage12_YachtBeginMotion+72   j
                 move.w  #$40,d0                         ; '@'
                 sub.w   $10(a5),d0
@@ -272,11 +270,11 @@ Stage12_YachtUpdatePlaneOffsets:                        ; CODE XREF: Stage12_Yac
                 move.w  (PlaneAShakeOffset).w,d1
                 add.w   d1,d0
                 move.w  d0,(VScrollBuffer).w
-Stage12_YachtControllerReturn:                          ; CODE XREF: Stage12_YachtRevealPan+20   j
+Stage12_YachtControllerReturn:
                 rts
 ; End of function Stage12_YachtUpdatePlaneOffsets
 ; Spawns debris projectile with random offset
-Stage12_YachtSpawnDestructionDebris:                    ; CODE XREF: Stage12_YachtBeginMotion+A4   p  ; was: sub_2F8B8
+Stage12_YachtSpawnDestructionDebris:                    ; was: sub_2F8B8
                 jsr     (Projectile_PrepareImpactSpawnAfterDelay).l
                 bne.s   Stage12_YachtDestructionDebrisReturn
                 jsr     (Sprite_InitFromTable).l
@@ -297,11 +295,11 @@ Stage12_YachtSpawnDestructionDebris:                    ; CODE XREF: Stage12_Yac
                 ext.l   d0
                 asl.l   #2,d0
                 move.l  d0,$18(a0)
-Stage12_YachtDestructionDebrisReturn:                   ; CODE XREF: Stage12_YachtSpawnDestructionDebris+6   j
+Stage12_YachtDestructionDebrisReturn:
                 rts
 ; End of function Stage12_YachtSpawnDestructionDebris
 ; Main state dispatcher for the Stage 12 teddy bear
-Stage12_TeddyBearMain:                                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2F90E
+Stage12_TeddyBearMain:                                  ; was: sub_2F90E
                 move.w  4(a5),d0
                 movea.w Stage12_TeddyBearStateTable(pc,d0.w),a0
                 adda.l  #Stage12_TeddyBearInit,a0
@@ -309,7 +307,6 @@ Stage12_TeddyBearMain:                                  ; DATA XREF: ROM:Entity_
 ; End of function Stage12_TeddyBearMain
 ; ---------------------------------------------------------------------------
 Stage12_TeddyBearStateTable:    dc.w    Stage12_TeddyBearInit-Stage12_TeddyBearInit
-                                        ; DATA XREF: Stage12_TeddyBearMain+4   r
                 dc.w    Stage12_TeddyBearReturn-Stage12_TeddyBearInit
                 dc.w    Stage12_TeddyBearWaitForRescue-Stage12_TeddyBearInit
                 dc.w    Stage12_TeddyBearBeginDrop-Stage12_TeddyBearInit
@@ -327,7 +324,7 @@ Stage12_TeddyBearStateTable:    dc.w    Stage12_TeddyBearInit-Stage12_TeddyBearI
                 dc.w    Stage12_TeddyBearPilotFall-Stage12_TeddyBearInit
 
 ; Initializes the captive teddy bear and its collision state
-Stage12_TeddyBearInit:                                  ; DATA XREF: Stage12_TeddyBearMain+8   o  ; was: sub_2F93E
+Stage12_TeddyBearInit:                                  ; was: sub_2F93E
                                         ; ROM:Stage12_TeddyBearStateTable   o
                 addq.w  #4,4(a5)
                 move.w  #$ED00,2(a5)
@@ -340,11 +337,11 @@ Stage12_TeddyBearInit:                                  ; DATA XREF: Stage12_Ted
                 move.l  #$F60AF40C,$28(a5)
                 move.w  #$120,$14(a5)
 ; Waits for camera position to reach threshold before activation
-Stage12_TeddyBearWaitForRescue:                         ; DATA XREF: ROM:0002F922   o  ; was: loc_2F97A
+Stage12_TeddyBearWaitForRescue:                         ; was: loc_2F97A
                 cmpi.w  #$17A0,(PrimaryCameraXPosition).w
                 bmi.s   Stage12_TeddyBearRemainCaptive
                 movea.w #(Entity_ObjectPool-M68K_RAM),a0
-Stage12_TeddyBearScanObjects:                           ; CODE XREF: Stage12_TeddyBearInit+56   j
+Stage12_TeddyBearScanObjects:
                 cmpi.w  #$36C,(a0)
                 beq.s   Stage12_TeddyBearRemainCaptive
                 lea     $60(a0),a0
@@ -358,13 +355,13 @@ Stage12_TeddyBearScanObjects:                           ; CODE XREF: Stage12_Ted
                 clr.b   $21(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage12_TeddyBearRemainCaptive:                         ; CODE XREF: Stage12_TeddyBearInit+42   j
+Stage12_TeddyBearRemainCaptive:
                                         ; Stage12_TeddyBearInit+4C   j
                 tst.w   $24(a5)
                 bmi.s   Stage12_TeddyBearDisableCollision
                 bra.w   Stage12_TeddyBearFireDownwardShot
 ; ---------------------------------------------------------------------------
-Stage12_TeddyBearDisableCollision:                      ; CODE XREF: Stage12_TeddyBearInit+7E   j
+Stage12_TeddyBearDisableCollision:
                 clr.b   $21(a5)
                 move.w  #2,4(a5)
                 move.l  #Stage12_TeddyBearInitialPoseAnimation,8(a5)
@@ -373,12 +370,12 @@ Stage12_TeddyBearDisableCollision:                      ; CODE XREF: Stage12_Ted
                 rts
 ; End of function Stage12_TeddyBearInit
 ; Shared no-op state and early return for teddy-bear timing states
-Stage12_TeddyBearReturn:                                ; CODE XREF: Stage12_TeddyBearBeginDrop+4   j  ; was: nullsub_71
+Stage12_TeddyBearReturn:                                ; was: nullsub_71
                                         ; Stage12_TeddyBearBeginDrop+26   j
                 rts
 ; End of function Stage12_TeddyBearReturn
 ; Begins the teddy bear's drop to the floor
-Stage12_TeddyBearBeginDrop:                             ; DATA XREF: ROM:0002F924   o  ; was: sub_2F9E2
+Stage12_TeddyBearBeginDrop:                             ; was: sub_2F9E2
                 subq.w  #1,$48(a5)
                 bpl.s   Stage12_TeddyBearReturn
                 addq.w  #2,4(a5)
@@ -386,7 +383,7 @@ Stage12_TeddyBearBeginDrop:                             ; DATA XREF: ROM:0002F92
                 move.l  #Stage12_TeddyBearDropAndPilotAnimation,8(a5)
                 clr.w   $C(a5)
 ; Applies gravity until the teddy bear reaches floor position Y=$120
-Stage12_TeddyBearLand:                                  ; DATA XREF: ROM:0002F926   o  ; was: loc_2FA00
+Stage12_TeddyBearLand:                                  ; was: loc_2FA00
                 addi.l  #$3800,$1C(a5)
                 bmi.s   Stage12_TeddyBearReturn
                 cmpi.w  #$120,$14(a5)
@@ -402,7 +399,7 @@ Stage12_TeddyBearLand:                                  ; DATA XREF: ROM:0002F92
                 rts
 ; End of function Stage12_TeddyBearBeginDrop
 ; Faces the player during the delay before boarding
-Stage12_TeddyBearFacePlayerDelay:                       ; DATA XREF: ROM:0002F928   o  ; was: sub_2FA3E
+Stage12_TeddyBearFacePlayerDelay:                       ; was: sub_2FA3E
                 bsr.w   Stage12_TeddyBearFacePlayer
                 subq.w  #1,$48(a5)
                 bpl.s   Stage12_TeddyBearReturn
@@ -411,7 +408,7 @@ Stage12_TeddyBearFacePlayerDelay:                       ; DATA XREF: ROM:0002F92
                 move.l  #Stage12_TeddyBearPreBoardingAnimation,8(a5)
                 clr.w   $C(a5)
 ; Continues facing the player, then selects the boarding animation
-Stage12_TeddyBearWaitBeforeBoarding:                    ; DATA XREF: ROM:0002F92A   o  ; was: loc_2FA5E
+Stage12_TeddyBearWaitBeforeBoarding:                    ; was: loc_2FA5E
                 bsr.w   Stage12_TeddyBearFacePlayer
                 subq.w  #1,$48(a5)
                 bpl.w   Stage12_TeddyBearReturn
@@ -421,10 +418,10 @@ Stage12_TeddyBearWaitBeforeBoarding:                    ; DATA XREF: ROM:0002F92
                 move.l  #Stage12_TeddyBearBoardingDelayAnimation,8(a5)
                 clr.w   $C(a5)
 ; Waits before the teddy bear's boarding jump
-Stage12_TeddyBearBoardingDelay:                         ; DATA XREF: ROM:0002F92C   o  ; was: loc_2FA86
+Stage12_TeddyBearBoardingDelay:                         ; was: loc_2FA86
                 subq.w  #1,$48(a5)
                 bpl.w   Stage12_TeddyBearReturn
-Stage12_TeddyBearBeginBoardingJump:                     ; CODE XREF: Stage12_TeddyBearBeginDrop+56   j
+Stage12_TeddyBearBeginBoardingJump:
                 move.w  #$10,4(a5)
                 move.l  #Stage12_TeddyBearBoardingPilotLoopAnimation,8(a5)
                 clr.w   $C(a5)
@@ -432,7 +429,7 @@ Stage12_TeddyBearBeginBoardingJump:                     ; CODE XREF: Stage12_Ted
                 move.l  #$FFFF5000,$18(a5)
                 move.l  #$FFFA0000,$1C(a5)
 ; Applies the teddy bear's boarding-jump arc
-Stage12_TeddyBearBoardingJump:                          ; DATA XREF: ROM:0002F92E   o  ; was: loc_2FAB6
+Stage12_TeddyBearBoardingJump:                          ; was: loc_2FAB6
                 addi.l  #$4000,$1C(a5)
                 bmi.w   Stage12_TeddyBearReturn
                 bclr    #7,$E(a5)
@@ -442,7 +439,7 @@ Stage12_TeddyBearBoardingJump:                          ; DATA XREF: ROM:0002F92
                 move.w  #$20,$48(a5)                    ; ' '
                 move.w  #$E000,2(a5)
 ; Attaches the teddy bear to the yacht after the boarding delay
-Stage12_TeddyBearPilotAttachDelay:                      ; DATA XREF: ROM:0002F930   o  ; was: loc_2FAE4
+Stage12_TeddyBearPilotAttachDelay:                      ; was: loc_2FAE4
                 bsr.w   Stage12_TeddyBearAttachToYacht
                 subq.w  #1,$48(a5)
                 bpl.w   Stage12_TeddyBearReturn
@@ -454,7 +451,7 @@ Stage12_TeddyBearPilotAttachDelay:                      ; DATA XREF: ROM:0002F93
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Stage12_TeddyBearFacePlayerDelay
 ; Starts the teddy bear's piloting animation while attached to the yacht
-Stage12_TeddyBearPilotStart:                            ; DATA XREF: ROM:0002F932   o  ; was: sub_2FB10
+Stage12_TeddyBearPilotStart:                            ; was: sub_2FB10
                 bsr.w   Stage12_TeddyBearAttachToYacht
                 subq.w  #1,$48(a5)
                 bpl.w   Stage12_TeddyBearReturn
@@ -469,32 +466,32 @@ Stage12_TeddyBearPilotStart:                            ; DATA XREF: ROM:0002F93
                 rts
 ; End of function Stage12_TeddyBearPilotStart
 ; Tracks the player's OAM draw bucket while attached to the yacht
-Stage12_TeddyBearPilotTrackOamBucket:                   ; DATA XREF: ROM:0002F934   o  ; was: sub_2FB4A
+Stage12_TeddyBearPilotTrackOamBucket:                   ; was: sub_2FB4A
                 move.b  (PlayerOAMBucketOffset).w,$20(a5)
                 bra.w   Stage12_TeddyBearAttachToYacht
 ; End of function Stage12_TeddyBearPilotTrackOamBucket
 ; Selects the attached firing animation
-Stage12_TeddyBearPilotPrepareShot:                      ; DATA XREF: ROM:0002F936   o  ; was: sub_2FB54
+Stage12_TeddyBearPilotPrepareShot:                      ; was: sub_2FB54
                 addq.w  #2,4(a5)
                 move.l  #Stage12_TeddyBearBoardingPilotLoopAnimation,8(a5)
                 clr.w   $C(a5)
 ; Runs the teddy bear's periodic downward-shot helper
-Stage12_TeddyBearPilotFire:                             ; DATA XREF: ROM:0002F938   o  ; was: loc_2FB64
+Stage12_TeddyBearPilotFire:                             ; was: loc_2FB64
                 bra.w   Stage12_TeddyBearFireDownwardShot
 ; End of function Stage12_TeddyBearPilotPrepareShot
 ; Releases the teddy bear from the yacht attachment
-Stage12_TeddyBearPilotRelease:                          ; DATA XREF: ROM:0002F93A   o  ; was: sub_2FB68
+Stage12_TeddyBearPilotRelease:                          ; was: sub_2FB68
                 addq.w  #2,4(a5)
                 move.l  #Stage12_TeddyBearPilotReleasePoseAnimation,8(a5)
                 clr.w   $C(a5)
                 move.w  #$EE00,2(a5)
 ; Applies downward acceleration after release
-Stage12_TeddyBearPilotFall:                             ; DATA XREF: ROM:0002F93C   o  ; was: loc_2FB7E
+Stage12_TeddyBearPilotFall:                             ; was: loc_2FB7E
                 addi.l  #$2000,$1C(a5)
                 rts
 ; End of function Stage12_TeddyBearPilotRelease
 ; Periodically fires downward projectiles with sound effect
-Stage12_TeddyBearFireDownwardShot:                      ; CODE XREF: Stage12_TeddyBearInit+80   j  ; was: sub_2FB88
+Stage12_TeddyBearFireDownwardShot:                      ; was: sub_2FB88
                                         ; sub_2FB54:loc_2FB64   j
                 move.w  (FrameCounter).w,d0
                 andi.w  #$3F,d0                         ; '?'
@@ -515,12 +512,12 @@ Stage12_TeddyBearFireDownwardShot:                      ; CODE XREF: Stage12_Ted
                 move.w  $14(a5),$14(a0)
                 subi.w  #$10,$14(a0)
                 move.w  #$18,$48(a0)
-Stage12_TeddyBearShotReturn:                            ; CODE XREF: Stage12_TeddyBearFireDownwardShot+8   j
+Stage12_TeddyBearShotReturn:
                                         ; Stage12_TeddyBearFireDownwardShot+1A   j
                 rts
 ; End of function Stage12_TeddyBearFireDownwardShot
 ; Anchors the teddy bear to the yacht controller's position
-Stage12_TeddyBearAttachToYacht:                         ; CODE XREF: Stage12_TeddyBearFacePlayerDelay:Stage12_TeddyBearPilotAttachDelay   p  ; was: sub_2FBEA
+Stage12_TeddyBearAttachToYacht:                         ; was: sub_2FBEA
                                         ; sub_2FB10   p
                 bset    #3,$E(a5)
                 movea.w #(Entity57Type-M68K_RAM),a0
@@ -533,13 +530,13 @@ Stage12_TeddyBearAttachToYacht:                         ; CODE XREF: Stage12_Ted
                 rts
 ; End of function Stage12_TeddyBearAttachToYacht
 ; Updates horizontal sprite flip based on player X position
-Stage12_TeddyBearFacePlayer:                            ; CODE XREF: Stage12_TeddyBearFacePlayerDelay   p  ; was: sub_2FC0E
+Stage12_TeddyBearFacePlayer:                            ; was: sub_2FC0E
                                         ; sub_2FA3E:loc_2FA5E   p
                 bclr    #3,$E(a5)
                 move.w  (PlayerXPosition).w,d0
                 sub.w   $10(a5),d0
                 bpl.s   Stage12_TeddyBearFacePlayerReturn
                 bset    #3,$E(a5)
-Stage12_TeddyBearFacePlayerReturn:                      ; CODE XREF: Stage12_TeddyBearFacePlayer+E   j
+Stage12_TeddyBearFacePlayerReturn:
                 rts
 ; End of function Stage12_TeddyBearFacePlayer

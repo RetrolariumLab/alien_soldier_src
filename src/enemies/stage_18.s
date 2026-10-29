@@ -1,5 +1,5 @@
 ; Dormant oscillator: no constructor or pinned-TAS execution is known
-OrphanedFloatingOscillator:                             ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FCF6
+OrphanedFloatingOscillator:                             ; was: sub_2FCF6
                 tst.w   4(a5)
                 bne.s   OrphanedFloatingOscillator_Update
                 addq.w  #2,4(a5)
@@ -16,20 +16,20 @@ OrphanedFloatingOscillator:                             ; DATA XREF: ROM:Entity_
                 clr.w   $54(a5)
                 move.w  #$160,$10(a5)
                 move.w  #$110,$14(a5)
-OrphanedFloatingOscillator_Update:                      ; CODE XREF: OrphanedFloatingOscillator+4   j
+OrphanedFloatingOscillator_Update:
                 subq.w  #1,$54(a5)
                 bpl.s   OrphanedFloatingOscillator_ApplyHorizontalMotion
                 move.w  #9,$54(a5)
                 eori.w  #1,$52(a5)
-OrphanedFloatingOscillator_ApplyHorizontalMotion:       ; CODE XREF: OrphanedFloatingOscillator+58   j
+OrphanedFloatingOscillator_ApplyHorizontalMotion:
                 tst.w   $52(a5)
                 bne.s   OrphanedFloatingOscillator_MoveRight
                 subi.l  #$12000,$10(a5)
                 bra.s   OrphanedFloatingOscillator_UpdateVerticalMotion
 ; ---------------------------------------------------------------------------
-OrphanedFloatingOscillator_MoveRight:                   ; CODE XREF: OrphanedFloatingOscillator+6A   j
+OrphanedFloatingOscillator_MoveRight:
                 addi.l  #$12000,$10(a5)
-OrphanedFloatingOscillator_UpdateVerticalMotion:        ; CODE XREF: OrphanedFloatingOscillator+74   j
+OrphanedFloatingOscillator_UpdateVerticalMotion:
                 tst.w   $50(a5)
                 bne.s   OrphanedFloatingOscillator_MoveDown
                 move.l  #$FFFEDD00,$1C(a5)
@@ -38,18 +38,18 @@ OrphanedFloatingOscillator_UpdateVerticalMotion:        ; CODE XREF: OrphanedFlo
                 eori.w  #1,$50(a5)
                 bra.s   OrphanedFloatingOscillator_Return
 ; ---------------------------------------------------------------------------
-OrphanedFloatingOscillator_MoveDown:                    ; CODE XREF: OrphanedFloatingOscillator+82   j
+OrphanedFloatingOscillator_MoveDown:
                 move.l  #$12300,$1C(a5)
                 cmpi.w  #$140,$14(a5)
                 bmi.s   OrphanedFloatingOscillator_Return
                 eori.w  #1,$50(a5)
-OrphanedFloatingOscillator_Return:                      ; CODE XREF: OrphanedFloatingOscillator+92   j
+OrphanedFloatingOscillator_Return:
                                         ; OrphanedFloatingOscillator+9A   j
                 rts
 ; End of function OrphanedFloatingOscillator
 ; Stage 18 moving platform used before and during the Destroyer-Mk2 arena
 ; Pinned TAS evidence: active at frame 41500 with mapping Stage18And19_MovingPlatformSpriteMapping
-Object_MovingPlatform:                                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FDAA
+Object_MovingPlatform:                                  ; was: sub_2FDAA
                 bclr    #7,$E(a5)
                 move.w  (GlobalSpritePriorityBit).w,d0
                 or.w    d0,$E(a5)
@@ -63,14 +63,14 @@ Object_MovingPlatform:                                  ; DATA XREF: ROM:Entity_
                 bcc.s   Object_MovingPlatform_FinishInit
                 move.l  #Stage10And12_MovingPlatformSpriteMapping,8(a5)
                 move.w  #$4000,$E(a5)
-Object_MovingPlatform_FinishInit:                       ; CODE XREF: Object_MovingPlatform+34   j
+Object_MovingPlatform_FinishInit:
                 move.b  #$20,$21(a5)                    ; ' '
                 move.w  #2,$46(a5)
                 move.l  #$FFE00020,$28(a5)
                 move.w  $10(a5),$4C(a5)
                 move.w  $14(a5),$4E(a5)
                 move.w  $4E(a5),$52(a5)
-Object_MovingPlatform_Update:                           ; CODE XREF: Object_MovingPlatform+12   j
+Object_MovingPlatform_Update:
                 bclr    #0,6(a5)
                 bne.s   Object_MovingPlatform_ApplyCollisionBob
                 subq.w  #1,$50(a5)
@@ -78,11 +78,11 @@ Object_MovingPlatform_Update:                           ; CODE XREF: Object_Movi
                 clr.w   $50(a5)
                 bra.s   Object_MovingPlatform_UpdatePosition
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_ApplyCollisionBob:                ; CODE XREF: Object_MovingPlatform+70   j
+Object_MovingPlatform_ApplyCollisionBob:
                 cmpi.w  #6,$50(a5)
                 bpl.s   Object_MovingPlatform_UpdatePosition
                 addq.w  #1,$50(a5)
-Object_MovingPlatform_UpdatePosition:                   ; CODE XREF: Object_MovingPlatform+76   j
+Object_MovingPlatform_UpdatePosition:
                                         ; Object_MovingPlatform+7C   j
                 move.w  $50(a5),d0
                 add.w   $52(a5),d0
@@ -94,24 +94,24 @@ Object_MovingPlatform_UpdatePosition:                   ; CODE XREF: Object_Movi
                 move.w  d0,d5
                 bpl.s   Object_MovingPlatform_CheckHorizontalVelocity
                 neg.w   d0
-Object_MovingPlatform_CheckHorizontalVelocity:          ; CODE XREF: Object_MovingPlatform+AA   j
+Object_MovingPlatform_CheckHorizontalVelocity:
                 cmpi.w  #$10,d0
                 bpl.s   Object_MovingPlatform_AccelerateRight
                 move.l  $18(a5),d0
                 move.l  d0,d1
                 bpl.s   Object_MovingPlatform_StopIfSlow
                 neg.l   d0
-Object_MovingPlatform_StopIfSlow:                       ; CODE XREF: Object_MovingPlatform+BA   j
+Object_MovingPlatform_StopIfSlow:
                 cmpi.l  #$2000,d0
                 bpl.s   Object_MovingPlatform_SelectAcceleration
                 clr.l   $18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_SelectAcceleration:               ; CODE XREF: Object_MovingPlatform+C4   j
+Object_MovingPlatform_SelectAcceleration:
                 tst.l   d1
                 bmi.s   Object_MovingPlatform_IncreaseHorizontalVelocity
                 bpl.s   Object_MovingPlatform_DecreaseHorizontalVelocity
-Object_MovingPlatform_AccelerateRight:                  ; CODE XREF: Object_MovingPlatform+B2   j
+Object_MovingPlatform_AccelerateRight:
                 tst.w   d5
                 bmi.s   Object_MovingPlatform_AccelerateLeft
                 tst.w   $18(a5)
@@ -121,12 +121,12 @@ Object_MovingPlatform_AccelerateRight:                  ; CODE XREF: Object_Movi
                 move.l  #$20000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_IncreaseHorizontalVelocity:       ; CODE XREF: Object_MovingPlatform+CE   j
+Object_MovingPlatform_IncreaseHorizontalVelocity:
                                         ; Object_MovingPlatform+DA   j
                 addi.l  #$1200,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_AccelerateLeft:                   ; CODE XREF: Object_MovingPlatform+D4   j
+Object_MovingPlatform_AccelerateLeft:
                 tst.w   $18(a5)
                 bpl.s   Object_MovingPlatform_DecreaseHorizontalVelocity
                 cmpi.w  #$FFFE,$18(a5)
@@ -134,21 +134,21 @@ Object_MovingPlatform_AccelerateLeft:                   ; CODE XREF: Object_Movi
                 move.l  #$FFFE0000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_DecreaseHorizontalVelocity:       ; CODE XREF: Object_MovingPlatform+D0   j
+Object_MovingPlatform_DecreaseHorizontalVelocity:
                                         ; Object_MovingPlatform+FC   j
                 subi.l  #$1200,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Object_MovingPlatform_UpdateVisibility:                 ; CODE XREF: Object_MovingPlatform+9C   j
+Object_MovingPlatform_UpdateVisibility:
                 cmpi.w  #$70,$10(a5)                    ; 'p'
                 bpl.s   Object_MovingPlatform_Return
                 bset    #4,2(a5)
-Object_MovingPlatform_Return:                           ; CODE XREF: Object_MovingPlatform+120   j
+Object_MovingPlatform_Return:
                 rts
 ; End of function Object_MovingPlatform
 ; Dispatches the Stage 18 segmented-worm head and its linked segments
 ; Pinned TAS evidence: two twelve-segment chains are visible at frame 41220
-Stage18_SegmentedWormMain:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FED4
+Stage18_SegmentedWormMain:                              ; was: sub_2FED4
                 tst.w   $50(a5)
                 bne.w   Stage18_SegmentedWormSegmentDispatch
                 cmpi.w  #2,4(a5)
@@ -156,14 +156,14 @@ Stage18_SegmentedWormMain:                              ; DATA XREF: ROM:Entity_
                 move.w  $24(a5),d1
                 movea.w $44(a5),a0
                 move.w  #$B,d0
-Stage18_SegmentedWormSumHealth:                         ; CODE XREF: Stage18_SegmentedWormMain+24   j
+Stage18_SegmentedWormSumHealth:
                 add.w   $24(a0),d1
                 movea.w $44(a0),a0
                 dbf     d0,Stage18_SegmentedWormSumHealth
                 cmpi.w  #$CE0,d1
                 bcc.s   Stage18_SegmentedWormDispatch
                 move.w  #4,4(a5)
-Stage18_SegmentedWormDispatch:                          ; CODE XREF: Stage18_SegmentedWormMain+E   j
+Stage18_SegmentedWormDispatch:
                                         ; Stage18_SegmentedWormMain+2C   j
                 move.w  4(a5),d0
                 lea     Stage18_SegmentedWormHeadStateTable(pc,d0.w),a0
@@ -171,13 +171,13 @@ Stage18_SegmentedWormDispatch:                          ; CODE XREF: Stage18_Seg
                 jmp     (a0)
 ; End of function Stage18_SegmentedWormMain
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormHeadStateTable:    dc.w    Stage18_SegmentedWormSpawnSegments-*  ; DATA XREF: Stage18_SegmentedWormMain+38   o
+Stage18_SegmentedWormHeadStateTable:    dc.w    Stage18_SegmentedWormSpawnSegments-*
                 dc.w    Stage18_SegmentedWormUpdateHead-*
                 dc.w    Stage18_SegmentedWormScatterSegments-*
                 dc.w    Stage18_SegmentedWormUpdateFallingSegment-*
 
 ; Enemy spawner main handler
-Stage18_SegmentedWormSpawnSegments:                     ; DATA XREF: ROM:Stage18_SegmentedWormHeadStateTable   o  ; was: sub_2FF1C
+Stage18_SegmentedWormSpawnSegments:                     ; was: sub_2FF1C
                 bsr.w   Stage18_SegmentedWormInitCollision
                 move.w  #$D00,2(a5)
                 clr.b   $21(a5)
@@ -189,7 +189,7 @@ Stage18_SegmentedWormSpawnSegments:                     ; DATA XREF: ROM:Stage18
                 cmp.w   (PlayerXPosition).w,d0
                 bcc.w   Entity_UpdateReturn
                 move.w  #1,$5A(a5)
-Stage18_SegmentedWormCreateChain:                       ; CODE XREF: Stage18_SegmentedWormSpawnSegments+16   j
+Stage18_SegmentedWormCreateChain:
                 lea     Stage18_SegmentedWormInitialFrameTable(pc),a4
                 nop
                 lea     Stage18_SegmentedWormDelayTable(pc),a3
@@ -197,7 +197,7 @@ Stage18_SegmentedWormCreateChain:                       ; CODE XREF: Stage18_Seg
                 movea.w a5,a1
                 move.w  #$1000,2(a5)
                 move.w  #$B,d7
-Stage18_SegmentedWormCreateNextSegment:                 ; CODE XREF: Stage18_SegmentedWormSpawnSegments+8E   j
+Stage18_SegmentedWormCreateNextSegment:
                 jsr     (Projectile_FindFreeOrClearReusableSlot).l
                 bne.w   Entity_UpdateReturn
                 move.w  #$1000,2(a0)
@@ -218,7 +218,7 @@ Stage18_SegmentedWormCreateNextSegment:                 ; CODE XREF: Stage18_Seg
                 move.w  #$D00,2(a5)
                 movea.w a5,a0
                 move.w  #$B,d7
-Stage18_SegmentedWormEnableSegmentCollision:            ; CODE XREF: Stage18_SegmentedWormSpawnSegments+A8   j
+Stage18_SegmentedWormEnableSegmentCollision:
                 movea.w $44(a0),a0
                 move.w  #$CD00,2(a0)
                 dbf     d7,Stage18_SegmentedWormEnableSegmentCollision
@@ -229,12 +229,12 @@ Stage18_SegmentedWormEnableSegmentCollision:            ; CODE XREF: Stage18_Seg
                 bra.w   Stage18_SegmentedWormSetLaunchVelocity
 ; End of function Stage18_SegmentedWormSpawnSegments
 ; Advances a newly created worm segment from state zero to active state two
-Stage18_SegmentedWormActivateSegment:                   ; CODE XREF: Stage18_SegmentedWormSpawnSegments+B4   p  ; was: sub_2FFE0
+Stage18_SegmentedWormActivateSegment:                   ; was: sub_2FFE0
                                         ; sub_304A4   j
                 addq.w  #2,4(a5)
 ; End of function Stage18_SegmentedWormActivateSegment
 ; Initializes shared collision and display fields for a worm segment
-Stage18_SegmentedWormInitCollision:                     ; CODE XREF: Stage18_SegmentedWormSpawnSegments   p  ; was: sub_2FFE4
+Stage18_SegmentedWormInitCollision:                     ; was: sub_2FFE4
                 move.w  #$CD00,2(a5)
                 move.w  #$380,$E(a5)
                 move.b  #$20,$20(a5)                    ; ' '
@@ -249,7 +249,7 @@ Stage18_SegmentedWormInitCollision:                     ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormInitCollision
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormInitialFrameTable: dc.l    Stage18_SegmentedWormSpriteMapping08  ; DATA XREF: Stage18_SegmentedWormSpawnSegments:Stage18_SegmentedWormCreateChain   o
+Stage18_SegmentedWormInitialFrameTable: dc.l    Stage18_SegmentedWormSpriteMapping08
                 dc.l    Stage18_SegmentedWormSpriteMapping04
                 dc.l    Stage18_SegmentedWormSpriteMapping04
                 dc.l    Stage18_SegmentedWormSpriteMapping04
@@ -261,13 +261,12 @@ Stage18_SegmentedWormInitialFrameTable: dc.l    Stage18_SegmentedWormSpriteMappi
                 dc.l    Stage18_SegmentedWormSpriteMapping04
                 dc.l    Stage18_SegmentedWormSpriteMapping04
                 dc.l    Stage18_SegmentedWormSpriteMapping04
-Stage18_SegmentedWormDelayTable:    dc.l    $80004, $40004, $40004, $40004, $40004, $40004
-                                        ; DATA XREF: Stage18_SegmentedWormSpawnSegments+34   o
-Stage18_SegmentedWormDirectionFrameTables:  dc.l    Stage18_SegmentedWormDirectionFramesA  ; DATA XREF: Stage18_SegmentedWormAdvanceSpinFrame+4   o
+Stage18_SegmentedWormDelayTable:            dc.l    $80004, $40004, $40004, $40004, $40004, $40004
+Stage18_SegmentedWormDirectionFrameTables:  dc.l    Stage18_SegmentedWormDirectionFramesA
                                         ; Stage18_SegmentedWormUpdateFollower+10   o
                 dc.l    Stage18_SegmentedWormDirectionFramesB
                 dc.l    Stage18_SegmentedWormDirectionFramesC
-Stage18_SegmentedWormDirectionFramesA:  dc.l    Stage18_SegmentedWormSpriteMapping00  ; DATA XREF: ROM:Stage18_SegmentedWormDirectionFrameTables   o
+Stage18_SegmentedWormDirectionFramesA:  dc.l    Stage18_SegmentedWormSpriteMapping00
                                         ; Stage18_SegmentedWormUpdateHead+18   o
                 dc.l    Stage18_SegmentedWormSpriteMapping03
                 dc.l    Stage18_SegmentedWormSpriteMapping02
@@ -284,7 +283,7 @@ Stage18_SegmentedWormDirectionFramesA:  dc.l    Stage18_SegmentedWormSpriteMappi
                 dc.l    Stage18_SegmentedWormSpriteMapping01
                 dc.l    Stage18_SegmentedWormSpriteMapping02
                 dc.l    Stage18_SegmentedWormSpriteMapping03
-Stage18_SegmentedWormDirectionFramesB:  dc.l    Stage18_SegmentedWormSpriteMapping04  ; DATA XREF: ROM:00030074   o
+Stage18_SegmentedWormDirectionFramesB:  dc.l    Stage18_SegmentedWormSpriteMapping04
                 dc.l    Stage18_SegmentedWormSpriteMapping07
                 dc.l    Stage18_SegmentedWormSpriteMapping06
                 dc.l    Stage18_SegmentedWormSpriteMapping05
@@ -300,7 +299,7 @@ Stage18_SegmentedWormDirectionFramesB:  dc.l    Stage18_SegmentedWormSpriteMappi
                 dc.l    Stage18_SegmentedWormSpriteMapping05
                 dc.l    Stage18_SegmentedWormSpriteMapping06
                 dc.l    Stage18_SegmentedWormSpriteMapping07
-Stage18_SegmentedWormDirectionFramesC:  dc.l    Stage18_SegmentedWormSpriteMapping08  ; DATA XREF: ROM:00030078   o
+Stage18_SegmentedWormDirectionFramesC:  dc.l    Stage18_SegmentedWormSpriteMapping08
                 dc.l    Stage18_SegmentedWormSpriteMapping11
                 dc.l    Stage18_SegmentedWormSpriteMapping10
                 dc.l    Stage18_SegmentedWormSpriteMapping09
@@ -317,11 +316,10 @@ Stage18_SegmentedWormDirectionFramesC:  dc.l    Stage18_SegmentedWormSpriteMappi
                 dc.l    Stage18_SegmentedWormSpriteMapping10
                 dc.l    Stage18_SegmentedWormSpriteMapping11
 Stage18_SegmentedWormTileAttributes:    dc.w    $380, $380, $1B80, $1B80, $1B80, $1B80, $380, $380, $1380, $1380, $1380, $B80, $B80, $B80, $B80, $1380
-                                        ; DATA XREF: Stage18_SegmentedWormUpdateHead+1C   o
                                         ; Stage18_SegmentedWormAdvanceSpinFrame+24   o
 
 ; Updates the worm head and propagates motion through its linked segments
-Stage18_SegmentedWormUpdateHead:                        ; DATA XREF: ROM:0002FF16   o  ; was: sub_3015C
+Stage18_SegmentedWormUpdateHead:                        ; was: sub_3015C
                 bsr.w   Stage18_SegmentedWormEmitParticle
                 bsr.w   Stage18_SegmentedWormAdvanceFollower
                 addi.l  #$2000,$1C(a5)
@@ -340,13 +338,13 @@ Stage18_SegmentedWormUpdateHead:                        ; DATA XREF: ROM:0002FF1
                 bmi.s   Stage18_SegmentedWormRemoveChain
                 cmpi.w  #$200,$14(a5)
                 bcs.w   Entity_UpdateReturn
-Stage18_SegmentedWormRemoveChain:                       ; CODE XREF: Stage18_SegmentedWormUpdateHead+40   j
+Stage18_SegmentedWormRemoveChain:
                 move.w  #$1000,2(a5)
                 movea.w $44(a5),a4
                 tst.w   $44(a5)
                 beq.w   Entity_UpdateReturn
                 move.w  #$B,d6
-Stage18_SegmentedWormRemoveNextSegment:                 ; CODE XREF: Stage18_SegmentedWormUpdateHead+74   j
+Stage18_SegmentedWormRemoveNextSegment:
                 move.w  #$1000,2(a4)
                 tst.w   $44(a4)
                 beq.w   Entity_UpdateReturn
@@ -354,11 +352,11 @@ Stage18_SegmentedWormRemoveNextSegment:                 ; CODE XREF: Stage18_Seg
                 dbf     d6,Stage18_SegmentedWormRemoveNextSegment
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormBeginLaunch:                       ; CODE XREF: Stage18_SegmentedWormUpdateHead+3A   j
+Stage18_SegmentedWormBeginLaunch:
                 move.b  #$EC,d0
                 jsr     (Sound_QueueSFXRequest).l
                 jsr     (Physics_AlignToTerrain).l
-Stage18_SegmentedWormSetLaunchVelocity:                 ; CODE XREF: Stage18_SegmentedWormSpawnSegments+C0   j
+Stage18_SegmentedWormSetLaunchVelocity:
                 move.l  #$FFFB0000,$1C(a5)
                 move.l  $14(a5),$4C(a5)
                 move.w  #6,$52(a5)
@@ -372,14 +370,14 @@ Stage18_SegmentedWormSetLaunchVelocity:                 ; CODE XREF: Stage18_Seg
                 move.l  $18(a5),$48(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormLaunchLeft:                        ; CODE XREF: Stage18_SegmentedWormUpdateHead+AA   j
+Stage18_SegmentedWormLaunchLeft:
                                         ; Stage18_SegmentedWormUpdateHead+B2   j
                 move.l  #$FFFE0000,$18(a5)
                 move.l  $18(a5),$48(a5)
                 rts
 ; End of function Stage18_SegmentedWormUpdateHead
 ; Emits one randomized particle from a worm segment
-Stage18_SegmentedWormEmitParticle:                      ; CODE XREF: Stage18_SegmentedWormUpdateHead   p  ; was: sub_30230
+Stage18_SegmentedWormEmitParticle:                      ; was: sub_30230
                 tst.w   $52(a5)
                 beq.w   Entity_UpdateReturn
                 jsr     (Projectile_FindFreeSlotReverse).l
@@ -388,7 +386,7 @@ Stage18_SegmentedWormEmitParticle:                      ; CODE XREF: Stage18_Seg
                 movea.w a0,a4
                 jsr     (Projectile_InitType88).l
                 move.w  #$380,$E(a4)
-Stage18_SegmentedWormInitializeParticleVelocity:        ; CODE XREF: Stage18_SegmentedWormUpdateFallingSegment+42   p
+Stage18_SegmentedWormInitializeParticleVelocity:
                 move.l  $10(a5),$10(a4)
                 move.l  $14(a5),$14(a4)
                 jsr     (RandomNumber).l
@@ -404,7 +402,7 @@ Stage18_SegmentedWormInitializeParticleVelocity:        ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormEmitParticle
 ; Advances one following segment after its per-segment delay
-Stage18_SegmentedWormAdvanceFollower:                   ; CODE XREF: Stage18_SegmentedWormUpdateHead+4   p  ; was: sub_30288
+Stage18_SegmentedWormAdvanceFollower:                   ; was: sub_30288
                                         ; sub_304B0   p
                 tst.w   $52(a5)
                 beq.w   Entity_UpdateReturn
@@ -422,7 +420,7 @@ Stage18_SegmentedWormAdvanceFollower:                   ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormAdvanceFollower
 ; Scatters the twelve linked worm segments and emits reward particles
-Stage18_SegmentedWormScatterSegments:                   ; DATA XREF: ROM:0002FF18   o  ; was: sub_302CC
+Stage18_SegmentedWormScatterSegments:                   ; was: sub_302CC
                 bsr.w   Stage18_SegmentedWormGetRandomScatterVelocity
                 move.l  d0,$18(a5)
                 move.l  d1,$1C(a5)
@@ -433,14 +431,14 @@ Stage18_SegmentedWormScatterSegments:                   ; DATA XREF: ROM:0002FF1
                 move.w  #$A,d5
                 movea.w $44(a5),a4
                 move.w  #$B,d6
-Stage18_SegmentedWormScatterNextSegment:                ; CODE XREF: Stage18_SegmentedWormScatterSegments+6A   j
+Stage18_SegmentedWormScatterNextSegment:
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Stage18_SegmentedWormConfigureScatteredSegment
                 move.w  #$FF,d0
                 jsr     (Pickup_SelectRandomSize).l
                 move.w  $10(a4),$10(a0)
                 move.w  $14(a4),$14(a0)
-Stage18_SegmentedWormConfigureScatteredSegment:         ; CODE XREF: Stage18_SegmentedWormScatterSegments+30   j
+Stage18_SegmentedWormConfigureScatteredSegment:
                 bsr.w   Stage18_SegmentedWormGetRandomScatterVelocity
                 move.l  d0,$18(a4)
                 move.l  d1,$1C(a4)
@@ -456,7 +454,7 @@ Stage18_SegmentedWormConfigureScatteredSegment:         ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormScatterSegments
 ; Returns a randomized scatter velocity from the lower half of the angle table
-Stage18_SegmentedWormGetRandomScatterVelocity:          ; CODE XREF: Stage18_SegmentedWormScatterSegments   p  ; was: sub_3034A
+Stage18_SegmentedWormGetRandomScatterVelocity:          ; was: sub_3034A
                                         ; sub_302CC:Stage18_SegmentedWormConfigureScatteredSegment   p
                 jsr     (RandomNumber).l
                 andi.w  #$FE,d0
@@ -469,7 +467,7 @@ Stage18_SegmentedWormGetRandomScatterVelocity:          ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormGetRandomScatterVelocity
 ; Updates falling entity that periodically spawns projectiles
-Stage18_SegmentedWormUpdateFallingSegment:              ; DATA XREF: ROM:0002FF1A   o  ; was: sub_30366
+Stage18_SegmentedWormUpdateFallingSegment:              ; was: sub_30366
                                         ; ROM:000304A2   o
                 bsr.w   Stage18_SegmentedWormAdvanceSpinFrame
                 addi.l  #$2000,$1C(a5)
@@ -481,7 +479,7 @@ Stage18_SegmentedWormUpdateFallingSegment:              ; DATA XREF: ROM:0002FF1
                 move.w  $56(a5),d0
                 andi.w  #$1F,d0
                 bne.w   Entity_UpdateReturn
-Stage18_SegmentedWormEmitFallingParticle:               ; CODE XREF: Stage18_SegmentedWormUpdateFallingSegment+4E   j
+Stage18_SegmentedWormEmitFallingParticle:
                 jsr     (Projectile_FindFreeOrClearReusableSlot).l
                 bne.w   Entity_UpdateReturn
                 move.l  #SharedCombatSpriteAnimation00,8(a0)
@@ -490,12 +488,12 @@ Stage18_SegmentedWormEmitFallingParticle:               ; CODE XREF: Stage18_Seg
                 bsr.w   Stage18_SegmentedWormInitializeParticleVelocity
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormHideFallingSegment:                ; CODE XREF: Stage18_SegmentedWormUpdateFallingSegment+16   j
+Stage18_SegmentedWormHideFallingSegment:
                 move.w  #$1000,2(a5)
                 bra.w   Stage18_SegmentedWormEmitFallingParticle
 ; End of function Stage18_SegmentedWormUpdateFallingSegment
 ; Updates animation and graphics based on rotation counter
-Stage18_SegmentedWormAdvanceSpinFrame:                  ; CODE XREF: Stage18_SegmentedWormUpdateFallingSegment   p  ; was: sub_303B8
+Stage18_SegmentedWormAdvanceSpinFrame:                  ; was: sub_303B8
                 move.w  $54(a5),d0
                 lea     Stage18_SegmentedWormDirectionFrameTables(pc),a0
                 movea.l (a0,d0.w),a0
@@ -513,7 +511,7 @@ Stage18_SegmentedWormAdvanceSpinFrame:                  ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormAdvanceSpinFrame
 ; Selects a directional animation frame from the segment velocity
-Stage18_SegmentedWormGetDirectionFrame:                 ; CODE XREF: Stage18_SegmentedWormUpdateHead+10   p  ; was: sub_303F0
+Stage18_SegmentedWormGetDirectionFrame:                 ; was: sub_303F0
                                         ; Stage18_SegmentedWormUpdateFollower+18   p
                 bsr.w   Stage18_SegmentedWormClassifyVelocityDirection
                 tst.l   $18(a5)
@@ -522,7 +520,7 @@ Stage18_SegmentedWormGetDirectionFrame:                 ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Stage18_SegmentedWormGetDirectionFrame
 ; Classifies horizontal and vertical velocity into a directional frame index
-Stage18_SegmentedWormClassifyVelocityDirection:         ; CODE XREF: Stage18_SegmentedWormGetDirectionFrame   p  ; was: sub_30402
+Stage18_SegmentedWormClassifyVelocityDirection:         ; was: sub_30402
                 move.l  $1C(a5),d1
                 move.l  $18(a5),d0
                 bmi.s   Stage18_SegmentedWormClassifyLeftwardMotion
@@ -535,7 +533,7 @@ Stage18_SegmentedWormClassifyVelocityDirection:         ; CODE XREF: Stage18_Seg
                 bcc.s   Stage18_SegmentedWormFrameRightUp
                 bra.s   Stage18_SegmentedWormFrameRightLevel
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormClassifyRightwardDownMotion:       ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+C   j
+Stage18_SegmentedWormClassifyRightwardDownMotion:
                 cmpi.l  #$40000,d1
                 bcc.s   Stage18_SegmentedWormFrameSteepDown
                 cmpi.l  #$10000,d1
@@ -547,7 +545,7 @@ Stage18_SegmentedWormUnusedReturn:
 ; End of function Stage18_SegmentedWormUnusedReturn
 
 ; Classifies vertical motion when horizontal velocity is negative
-Stage18_SegmentedWormClassifyLeftwardMotion:            ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+8   j  ; was: sub_30438
+Stage18_SegmentedWormClassifyLeftwardMotion:            ; was: sub_30438
                 tst.l   d1
                 bpl.s   Stage18_SegmentedWormClassifyLeftwardDownMotion
                 neg.l   d1
@@ -557,74 +555,74 @@ Stage18_SegmentedWormClassifyLeftwardMotion:            ; CODE XREF: Stage18_Seg
                 bcc.s   Stage18_SegmentedWormFrameLeftUp
                 bra.s   Stage18_SegmentedWormFrameLeftLevel
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormClassifyLeftwardDownMotion:        ; CODE XREF: Stage18_SegmentedWormClassifyLeftwardMotion+2   j
+Stage18_SegmentedWormClassifyLeftwardDownMotion:
                 cmpi.l  #$40000,d1
                 bcc.s   Stage18_SegmentedWormFrameSteepDown
                 cmpi.l  #$10000,d1
                 bcc.s   Stage18_SegmentedWormFrameLeftDown
                 bra.s   Stage18_SegmentedWormFrameLeftLevel
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameRightLevel:                   ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+20   j
+Stage18_SegmentedWormFrameRightLevel:
                                         ; Stage18_SegmentedWormClassifyVelocityDirection+32   j
                 move.w  #0,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameRightDown:                    ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+30   j
+Stage18_SegmentedWormFrameRightDown:
                 move.w  #4,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameSteepDown:                    ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+28   j
+Stage18_SegmentedWormFrameSteepDown:
                                         ; Stage18_SegmentedWormClassifyLeftwardMotion+1E   j
                 move.w  #8,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameLeftDown:                     ; CODE XREF: Stage18_SegmentedWormClassifyLeftwardMotion+26   j
+Stage18_SegmentedWormFrameLeftDown:
                 move.w  #$C,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameLeftLevel:                    ; CODE XREF: Stage18_SegmentedWormClassifyLeftwardMotion+16   j
+Stage18_SegmentedWormFrameLeftLevel:
                                         ; Stage18_SegmentedWormClassifyLeftwardMotion+28   j
                 move.w  #$10,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameLeftUp:                       ; CODE XREF: Stage18_SegmentedWormClassifyLeftwardMotion+14   j
+Stage18_SegmentedWormFrameLeftUp:
                 move.w  #$14,d0
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormFrameSteepUp:                      ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+16   j
+Stage18_SegmentedWormFrameSteepUp:
                                         ; Stage18_SegmentedWormClassifyLeftwardMotion+C   j
                 move.w  #$18,d0
                 rts
 ; End of function Stage18_SegmentedWormClassifyLeftwardMotion
 ; Returns the rightward/upward directional frame index
-Stage18_SegmentedWormFrameRightUp:                      ; CODE XREF: Stage18_SegmentedWormClassifyVelocityDirection+1E   j  ; was: sub_3048C
+Stage18_SegmentedWormFrameRightUp:                      ; was: sub_3048C
                 move.w  #$1C,d0
                 rts
 ; End of function Stage18_SegmentedWormFrameRightUp
 ; Dispatches an active linked segment by its state
-Stage18_SegmentedWormSegmentDispatch:                   ; CODE XREF: Stage18_SegmentedWormMain+4   j  ; was: sub_30492
+Stage18_SegmentedWormSegmentDispatch:                   ; was: sub_30492
                 move.w  4(a5),d0
                 lea     Stage18_SegmentedWormSegmentStateTable(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Stage18_SegmentedWormSegmentDispatch
 ; ---------------------------------------------------------------------------
-Stage18_SegmentedWormSegmentStateTable: dc.w    Stage18_SegmentedWormSegmentInit-*  ; DATA XREF: Stage18_SegmentedWormSegmentDispatch+4   o
+Stage18_SegmentedWormSegmentStateTable: dc.w    Stage18_SegmentedWormSegmentInit-*
                 dc.w    Stage18_SegmentedWormSegmentFollow-*
                 dc.w    Stage18_SegmentedWormUpdateFallingSegment-*
 
 ; Attributes: thunk
 ; Initializes a linked worm segment
-Stage18_SegmentedWormSegmentInit:                       ; DATA XREF: ROM:Stage18_SegmentedWormSegmentStateTable   o  ; was: sub_304A4
+Stage18_SegmentedWormSegmentInit:                       ; was: sub_304A4
                 bra.w   Stage18_SegmentedWormActivateSegment
 ; End of function Stage18_SegmentedWormSegmentInit
 ; Skips follower propagation when horizontal velocity is zero
-Stage18_SegmentedWormSegmentFollow:                     ; DATA XREF: ROM:000304A0   o  ; was: sub_304A8
+Stage18_SegmentedWormSegmentFollow:                     ; was: sub_304A8
                 tst.l   $18(a5)
                 beq.w   Entity_UpdateReturn
 ; End of function Stage18_SegmentedWormSegmentFollow
 ; Propagates predecessor motion and updates the segment direction frame
-Stage18_SegmentedWormUpdateFollower:                    ; DATA XREF: ROM:OrphanedCrossStageEntityStateTable   o  ; was: sub_304B0
+Stage18_SegmentedWormUpdateFollower:                    ; was: sub_304B0
                 bsr.w   Stage18_SegmentedWormAdvanceFollower
                 addi.l  #$2000,$1C(a5)
                 move.w  $54(a5),d0

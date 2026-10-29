@@ -8,7 +8,7 @@ UnreferencedToggleFrameTimingMarkers:
                 btst    #5,d0
                 beq.w   UnreferencedToggleFrameTimingMarkers_Return
                 eori.b  #$80,(FrameTimingDebugFlag).w
-UnreferencedToggleFrameTimingMarkers_Return:            ; CODE XREF: UnreferencedToggleFrameTimingMarkers+4   j  ; was: locret_1CB58
+UnreferencedToggleFrameTimingMarkers_Return:            ; was: locret_1CB58
                                         ; UnreferencedToggleFrameTimingMarkers+C   j
                 rts
 ; End of function UnreferencedToggleFrameTimingMarkers

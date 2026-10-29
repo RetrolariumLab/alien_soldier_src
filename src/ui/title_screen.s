@@ -1,5 +1,5 @@
 ; Runs the two-phase title-screen initialization selected by GameSubstateIndex
-TitleScreen_Initialize:                                 ; DATA XREF: Sys_DispatchGameState+6A   o  ; was: sub_9322
+TitleScreen_Initialize:                                 ; was: sub_9322
                 tst.w   (GameSubstateIndex).w
                 bne.s   TitleScreen_FinalizeInitialization
                 jsr     (Sys_InitGameMode).l
@@ -17,7 +17,7 @@ TitleScreen_Initialize:                                 ; DATA XREF: Sys_Dispatc
                 jmp     Gfx_QueueLargeFontDMACommand81
 ; ---------------------------------------------------------------------------
 ; Builds the title planes, queues the menu copy, and enables the display
-TitleScreen_FinalizeInitialization:                     ; CODE XREF: TitleScreen_Initialize+4   j  ; was: loc_936C
+TitleScreen_FinalizeInitialization:                     ; was: loc_936C
                 move.w  #$18,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
                 movea.l #FlyingNeoTileAttrRangeA,a0
@@ -78,7 +78,7 @@ TitleScreen_FinalizeInitialization:                     ; CODE XREF: TitleScreen
 TitleScreen_UnreferencedData:   binclude "data/other/title_screen_unreferenced.bin"  ; was: unused_1
 
 ; Handles title navigation, the attract-demo trigger, confirmation, and rendering
-TitleScreen_Update:                                     ; DATA XREF: Sys_DispatchGameState+6E   o  ; was: sub_9478
+TitleScreen_Update:                                     ; was: sub_9478
                 tst.w   (PaletteFadeColorOffset).w
                 bne.w   TitleScreen_UpdateAndRender
                 move.b  (ControllerPressedState).w,d0
@@ -86,21 +86,21 @@ TitleScreen_Update:                                     ; DATA XREF: Sys_Dispatc
                 beq.s   TitleScreen_ReadSelection
                 move.b  #$DB,d0
                 jsr     (Sound_QueueRequest).l
-TitleScreen_ReadSelection:                              ; CODE XREF: TitleScreen_Update+10   j  ; was: loc_9494
+TitleScreen_ReadSelection:                              ; was: loc_9494
                 move.w  (TitleMenuSelection).w,d0
                 btst    #2,(ControllerPressedState).w
                 beq.s   TitleScreen_CheckMoveDown
                 subq.w  #2,d0
                 bpl.s   TitleScreen_StoreSelection
                 moveq   #0,d0
-TitleScreen_CheckMoveDown:                              ; CODE XREF: TitleScreen_Update+26   j  ; was: loc_94A6
+TitleScreen_CheckMoveDown:                              ; was: loc_94A6
                 btst    #3,(ControllerPressedState).w
                 beq.s   TitleScreen_StoreSelection
                 addq.w  #2,d0
                 cmpi.w  #6,d0
                 bmi.s   TitleScreen_StoreSelection
                 moveq   #4,d0
-TitleScreen_StoreSelection:                             ; CODE XREF: TitleScreen_Update+2A   j  ; was: loc_94B8
+TitleScreen_StoreSelection:                             ; was: loc_94B8
                                         ; TitleScreen_Update+34   j
                 andi.w  #6,d0
                 move.w  d0,(TitleMenuSelection).w
@@ -113,7 +113,7 @@ TitleScreen_StoreSelection:                             ; CODE XREF: TitleScreen
                 clr.w   (DemoPlaybackState).w
                 rts
 ; ---------------------------------------------------------------------------
-TitleScreen_CheckConfirm:                               ; CODE XREF: TitleScreen_Update+54   j  ; was: loc_94DA
+TitleScreen_CheckConfirm:                               ; was: loc_94DA
                 btst    #7,(ControllerPressedState).w
                 beq.s   TitleScreen_UpdateAndRender
                 move.b  #2,(SoundFadeOutDelay).w
@@ -127,7 +127,7 @@ TitleScreen_CheckConfirm:                               ; CODE XREF: TitleScreen
                 move.w  (DemoStageTableIndex).w,(StageTableIndex).w
                 rts
 ; ---------------------------------------------------------------------------
-TitleScreen_DispatchSelection:                          ; CODE XREF: TitleScreen_Update+82   j  ; was: loc_9510
+TitleScreen_DispatchSelection:                          ; was: loc_9510
                 move.w  (TitleMenuSelection).w,d0
                 beq.s   TitleScreen_OpenPassword
                 ; Duplicate zero test is unreachable but byte-significant
@@ -137,39 +137,39 @@ TitleScreen_DispatchSelection:                          ; CODE XREF: TitleScreen
                 move.w  #$1C,(GameModeIndex).w
                 rts
 ; ---------------------------------------------------------------------------
-TitleScreen_OpenPassword:                               ; CODE XREF: TitleScreen_Update+9C   j  ; was: loc_9524
+TitleScreen_OpenPassword:                               ; was: loc_9524
                 move.w  #$44,(GameModeIndex).w          ; 'D'
                 rts
 ; ---------------------------------------------------------------------------
-TitleScreen_StartGame:                                  ; CODE XREF: TitleScreen_Update+A2   j  ; was: loc_952C
+TitleScreen_StartGame:                                  ; was: loc_952C
                 move.w  #$70,(GameModeIndex).w          ; 'p'
                 jmp     Game_InitializeNewSession
 ; ---------------------------------------------------------------------------
-TitleScreen_UpdateAndRender:                            ; CODE XREF: TitleScreen_Update+4   j  ; was: loc_9538
+TitleScreen_UpdateAndRender:                            ; was: loc_9538
                                         ; TitleScreen_Update+68   j
                 addq.w  #1,(FrameCounter).w
                 cmpi.w  #$200,(FrameCounter).w
                 bne.s   TitleScreen_RenderMenu
                 move.b  #$10,d0
                 jsr     (Sound_QueueRequest).l
-TitleScreen_RenderMenu:                                 ; CODE XREF: TitleScreen_Update+CA   j  ; was: loc_954E
+TitleScreen_RenderMenu:                                 ; was: loc_954E
                 move.w  #$A300,d0
                 cmpi.w  #2,(TitleMenuSelection).w
                 beq.s   TitleScreen_DrawGameStart
                 move.w  #$C300,d0
-TitleScreen_DrawGameStart:                              ; CODE XREF: TitleScreen_Update+E0   j  ; was: loc_955E
+TitleScreen_DrawGameStart:                              ; was: loc_955E
                 bsr.w   TitleScreen_QueueGameStart
                 move.w  #$A300,d0
                 cmpi.w  #4,(TitleMenuSelection).w
                 beq.s   TitleScreen_DrawOptions
                 move.w  #$C300,d0
-TitleScreen_DrawOptions:                                ; CODE XREF: TitleScreen_Update+F4   j  ; was: loc_9572
+TitleScreen_DrawOptions:                                ; was: loc_9572
                 bsr.w   TitleScreen_QueueOptions
                 move.w  #$A300,d0
                 tst.w   (TitleMenuSelection).w
                 beq.s   TitleScreen_DrawPassword
                 move.w  #$C300,d0
-TitleScreen_DrawPassword:                               ; CODE XREF: TitleScreen_Update+106   j  ; was: loc_9584
+TitleScreen_DrawPassword:                               ; was: loc_9584
                 bsr.w   TitleScreen_QueuePassword
                 jsr     Frontend_AnimateMenuPalette(pc)  ; (pc)
                 nop
@@ -177,19 +177,19 @@ TitleScreen_DrawPassword:                               ; CODE XREF: TitleScreen
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function TitleScreen_Update
 ; Queues the GAME START string with the tile attributes already selected in d0
-TitleScreen_QueueGameStart:                             ; CODE XREF: TitleScreen_Update:TitleScreen_DrawGameStart   p  ; was: sub_959A
+TitleScreen_QueueGameStart:                             ; was: sub_959A
                 movea.l #Text_GameStart,a0
                 move.w  #$4A9E,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function TitleScreen_QueueGameStart
 ; Queues the OPTIONS string with the tile attributes already selected in d0
-TitleScreen_QueueOptions:                               ; CODE XREF: TitleScreen_Update:TitleScreen_DrawOptions   p  ; was: sub_95AA
+TitleScreen_QueueOptions:                               ; was: sub_95AA
                 movea.l #Text_Options,a0
                 move.w  #$4ABA,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function TitleScreen_QueueOptions
 ; Queues the PASSWORD string with the tile attributes already selected in d0
-TitleScreen_QueuePassword:                              ; CODE XREF: TitleScreen_Update:TitleScreen_DrawPassword   p  ; was: sub_95BA
+TitleScreen_QueuePassword:                              ; was: sub_95BA
                 movea.l #Text_Password,a0
                 move.w  #$4A86,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l

@@ -21,18 +21,18 @@ UnreferencedQueuePrimaryCameraColumnOffsetMinus58:      ; was: sub_106E4
                 bra.s   Tilemap_QueuePrimaryPlaneColumn
 ; End of function UnreferencedQueuePrimaryCameraColumnOffsetMinus58
 ; Queue a primary-plane column from the camera with a $158 X offset
-Tilemap_QueuePrimaryCameraColumnOffset158:              ; CODE XREF: Stage_InitTerobusterBoss+1E   p  ; was: sub_106F2
+Tilemap_QueuePrimaryCameraColumnOffset158:              ; was: sub_106F2
                                         ; Camera_UpdateAndRenderStageTilemap+4   j
                 move.w  (PrimaryCameraXPosition).w,d0
                 addi.w  #$158,d0
                 move.w  (PrimaryCameraYPosition).w,d1
 ; End of function Tilemap_QueuePrimaryCameraColumnOffset158
 ; Select the primary-plane descriptor and queue one streamed tilemap column
-Tilemap_QueuePrimaryPlaneColumn:                        ; CODE XREF: Stage12To13_UpdateTeleportFadeOut+4A   j  ; was: sub_106FE
+Tilemap_QueuePrimaryPlaneColumn:                        ; was: sub_106FE
                                         ; Stage_SevenForceUpdateMedusaCameraAndParallax+46   p
                 lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0
                 nop
-Tilemap_QueueColumnFromDescriptor:                      ; CODE XREF: Stage9_UpdateCaterpillarShipTraversal+52   p  ; was: loc_10704
+Tilemap_QueueColumnFromDescriptor:                      ; was: loc_10704
                                         ; Stage18_UpdateScrollAndRenderTilemap+1A   j
                 neg.w   d1
                 moveq   #8,d7
@@ -52,7 +52,7 @@ Tilemap_QueueColumnFromDescriptor:                      ; CODE XREF: Stage9_Upda
                 lsr.w   #2,d2
                 andi.w  #$7E,d2                         ; '~'
                 move.l  d2,(TilePlaneBufferOffset).w
-Tilemap_BuildColumnRowLoop:                             ; CODE XREF: Tilemap_QueuePrimaryPlaneColumn+17E   j  ; was: loc_10736
+Tilemap_BuildColumnRowLoop:                             ; was: loc_10736
                 movea.l (a0)+,a1
                 move.w  (TileCoarseLookupOffset).w,d2
                 move.w  d1,d3
@@ -96,7 +96,7 @@ Tilemap_BuildColumnRowLoop:                             ; CODE XREF: Tilemap_Que
                 subq.w  #8,d2
                 bmi.s   Tilemap_WritePartialColumnRow
                 move.w  $10(a1,d3.w),(a2)+
-Tilemap_WritePartialColumnRow:                          ; CODE XREF: Tilemap_QueuePrimaryPlaneColumn+96   j  ; was: loc_107AA
+Tilemap_WritePartialColumnRow:                          ; was: loc_107AA
                                         ; Tilemap_QueuePrimaryPlaneColumn+9E   j
                 tst.w   (a0)+
                 beq.s   Tilemap_QueueColumnTransfer
@@ -115,7 +115,7 @@ Tilemap_WritePartialColumnRow:                          ; CODE XREF: Tilemap_Que
                 subq.w  #8,d5
                 bmi.s   Tilemap_QueueColumnTransfer
                 move.w  $10(a1,d3.w),$100(a2)
-Tilemap_QueueColumnTransfer:                            ; CODE XREF: Tilemap_QueuePrimaryPlaneColumn+AE   j  ; was: loc_107DA
+Tilemap_QueueColumnTransfer:                            ; was: loc_107DA
                                         ; Tilemap_QueuePrimaryPlaneColumn+C2   j
                 move.w  d0,d2
                 lsr.w   #2,d2
@@ -138,7 +138,7 @@ Tilemap_QueueColumnTransfer:                            ; CODE XREF: Tilemap_Que
                 addi.w  #$40,(VDPStagingDataCursor).w   ; '@'
                 rts
 ; ---------------------------------------------------------------------------
-Tilemap_WriteFullColumnRow:                             ; CODE XREF: Tilemap_QueuePrimaryPlaneColumn+6C   j  ; was: loc_1081E
+Tilemap_WriteFullColumnRow:                             ; was: loc_1081E
                 move.w  d1,d2
                 move.w  (VDPStagingDataCursor).w,d3
                 lsr.w   #2,d2
@@ -164,7 +164,7 @@ Tilemap_WriteFullColumnRow:                             ; CODE XREF: Tilemap_Que
                 move.w  8(a1,d3.w),$80(a2)
                 move.w  $10(a1,d3.w),$100(a2)
                 move.w  $18(a1,d3.w),$180(a2)
-Tilemap_AdvanceColumnRow:                               ; CODE XREF: Tilemap_QueuePrimaryPlaneColumn+14A   j  ; was: loc_10872
+Tilemap_AdvanceColumnRow:                               ; was: loc_10872
                 suba.l  #$E,a0
                 addi.w  #$20,d1                         ; ' '
                 dbf     d7,Tilemap_BuildColumnRowLoop
@@ -179,12 +179,12 @@ UnreferencedPopulateUnqueuedColumnOffset1000:           ; was: sub_10882
                 bra.s   Tilemap_PopulateUnqueuedColumnFromDescriptor
 ; End of function UnreferencedPopulateUnqueuedColumnOffset1000
 ; Populate Stage 18 column rows without adding a second DMA command
-Tilemap_PopulateStage18UnqueuedColumn:                  ; CODE XREF: Stage18_UpdateScrollAndRenderTilemap:Stage18_RenderLockedTilemap   p  ; was: sub_10894
+Tilemap_PopulateStage18UnqueuedColumn:                  ; was: sub_10894
                 move.w  (PrimaryCameraXPosition).w,d0
                 addi.w  #$158,d0
                 move.w  (PrimaryCameraYPosition).w,d1
                 subi.w  #$1000,d1
-Tilemap_PopulateUnqueuedColumnFromDescriptor:           ; CODE XREF: Stage_SevenForceUpdateMedusaCameraAndParallax+62   p  ; was: loc_108A4
+Tilemap_PopulateUnqueuedColumnFromDescriptor:           ; was: loc_108A4
                                         ; UnreferencedPopulateUnqueuedColumnOffset1000+10   j
                 lea     Gfx_DefaultVRAMTransferParameters(pc),a0
                 nop
@@ -206,7 +206,7 @@ Tilemap_PopulateUnqueuedColumnFromDescriptor:           ; CODE XREF: Stage_Seven
                 lsr.w   #2,d2
                 andi.w  #$7E,d2                         ; '~'
                 move.l  d2,(TilePlaneBufferOffset).w
-Tilemap_BuildUnqueuedColumnRowLoop:                     ; CODE XREF: Tilemap_PopulateStage18UnqueuedColumn+10E   j  ; was: loc_108DC
+Tilemap_BuildUnqueuedColumnRowLoop:                     ; was: loc_108DC
                 movea.l (a0)+,a1
                 move.w  (TileCoarseLookupOffset).w,d2
                 move.w  d1,d3
@@ -257,11 +257,11 @@ Tilemap_BuildUnqueuedColumnRowLoop:                     ; CODE XREF: Tilemap_Pop
                 subq.w  #8,d5
                 bmi.s   Tilemap_UnqueuedPartialRowReturn
                 move.w  $10(a1,d3.w),$100(a2)
-Tilemap_UnqueuedPartialRowReturn:                       ; CODE XREF: Tilemap_PopulateStage18UnqueuedColumn+B8   j  ; was: locret_10966
+Tilemap_UnqueuedPartialRowReturn:                       ; was: locret_10966
                                         ; Tilemap_PopulateStage18UnqueuedColumn+C0   j
                 rts
 ; ---------------------------------------------------------------------------
-Tilemap_WriteFullUnqueuedColumnRow:                     ; CODE XREF: Tilemap_PopulateStage18UnqueuedColumn+7C   j  ; was: loc_10968
+Tilemap_WriteFullUnqueuedColumnRow:                     ; was: loc_10968
                 movea.l (a0)+,a1
                 move.w  (TilePatternOffset).w,d3
                 add.w   d4,d3

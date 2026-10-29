@@ -1,7 +1,7 @@
 ; Antroid charge, ram, and defeat states
 
 ; Initializes ram-attack state $1E and selects its horizontal direction
-Boss_AntroidBeginRamAttack:                             ; CODE XREF: Boss_AntroidMainHandler+22   j  ; was: sub_37D3A
+Boss_AntroidBeginRamAttack:                             ; was: sub_37D3A
                 move.w  #$1E,4(a5)
                 bset    #0,(StageTimerPauseFlag).w
                 move.b  #2,(BossColorEffectFlags).w
@@ -19,16 +19,16 @@ Boss_AntroidBeginRamAttack:                             ; CODE XREF: Boss_Antroi
                 bmi.w   Boss_AntroidBeginRamAttackUpdateFacing
                 neg.l   $18(a5)
                 clr.w   $54(a5)
-Boss_AntroidBeginRamAttackUpdateFacing:                 ; CODE XREF: Boss_AntroidBeginRamAttack+50   j  ; was: loc_37D96
+Boss_AntroidBeginRamAttackUpdateFacing:                 ; was: loc_37D96
                 bsr.w   Boss_AntroidFacePlayer
 ; End of function Boss_AntroidBeginRamAttack
 ; Boss ram attack with collision
-Boss_AntroidRamAttack:                                  ; DATA XREF: ROM:0003752C   o  ; was: sub_37D9A
+Boss_AntroidRamAttack:                                  ; was: sub_37D9A
                 cmpi.w  #$180,$56(a5)
                 beq.s   Boss_AntroidRamAttackUpdate
                 subq.w  #8,$56(a5)
                 andi.w  #$1FE,$56(a5)
-Boss_AntroidRamAttackUpdate:                            ; CODE XREF: Boss_AntroidRamAttack+6   j  ; was: loc_37DAC
+Boss_AntroidRamAttackUpdate:                            ; was: loc_37DAC
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 bsr.w   Boss_AntroidUpdateRamAttackPose
                 addi.l  #$4000,$1C(a5)
@@ -44,16 +44,16 @@ Boss_AntroidRamAttackUpdate:                            ; CODE XREF: Boss_Antroi
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 move.w  #$148,$14(a5)
-Boss_AntroidRamAttackReturn:                            ; CODE XREF: Boss_AntroidRamAttack+24   j  ; was: locret_37DF4
+Boss_AntroidRamAttackReturn:                            ; was: locret_37DF4
                                         ; Boss_AntroidRamAttack+2C   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_AntroidRamAttackRebound:                           ; CODE XREF: Boss_AntroidRamAttack+40   j  ; was: loc_37DF6
+Boss_AntroidRamAttackRebound:                           ; was: loc_37DF6
                 move.l  #$FFFE0000,$1C(a5)
                 rts
 ; End of function Boss_AntroidRamAttack
 ; Advances Antroid's defeat fade before entering the final delay state
-Boss_AntroidDefeatFadeState:                            ; DATA XREF: ROM:0003752E   o  ; was: sub_37E00
+Boss_AntroidDefeatFadeState:                            ; was: sub_37E00
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 addq.w  #1,$11C(a5)
                 move.w  $11C(a5),d0
@@ -62,12 +62,12 @@ Boss_AntroidDefeatFadeState:                            ; DATA XREF: ROM:0003752
                 subi.w  #$90,d0
                 bmi.s   Boss_AntroidDefeatFadeUpdateEffects
                 bsr.w   Boss_AntroidApplyDefeatPaletteFade
-Boss_AntroidDefeatFadeUpdateEffects:                    ; CODE XREF: Boss_AntroidDefeatFadeState+18   j  ; was: loc_37E1E
+Boss_AntroidDefeatFadeUpdateEffects:                    ; was: loc_37E1E
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #2,(PlaneBShakeLevel).w
 ; End of function Boss_AntroidDefeatFadeState
 ; Updates the ram-attack pose, debris, and alternating sprite flip
-Boss_AntroidUpdateRamAttackPose:                        ; CODE XREF: Boss_AntroidRamAttack+18   p  ; was: sub_37E2A
+Boss_AntroidUpdateRamAttackPose:                        ; was: sub_37E2A
                 bsr.w   Boss_AntroidSpawnRamDebris
                 lea     Boss_AntroidRamPoses(pc),a1
                 nop
@@ -80,7 +80,7 @@ Boss_AntroidUpdateRamAttackPose:                        ; CODE XREF: Boss_Antroi
                 rts
 ; End of function Boss_AntroidUpdateRamAttackPose
 ; Enters Antroid's final defeat delay and clears unrelated objects
-Boss_AntroidEnterDefeatDelayState:                      ; CODE XREF: Boss_AntroidDefeatFadeState+12   j  ; was: sub_37E54
+Boss_AntroidEnterDefeatDelayState:                      ; was: sub_37E54
                 addq.w  #2,4(a5)
                 clr.w   2(a5)
                 move.w  #$14,6(a5)
@@ -88,14 +88,14 @@ Boss_AntroidEnterDefeatDelayState:                      ; CODE XREF: Boss_Antroi
                 moveq   #0,d1
                 jsr     (Object_ClearEntityRecordsExceptTwoTypes).l
 ; Counts down Antroid's final defeat delay while updating the fade
-Boss_AntroidDefeatDelayState:                           ; DATA XREF: ROM:00037530   o  ; was: sub_37E6C
+Boss_AntroidDefeatDelayState:                           ; was: sub_37E6C
                 subq.w  #1,6(a5)
                 move.w  6(a5),d0
                 bpl.s   Boss_AntroidDefeatDelayUpdateFade
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_AntroidDefeatDelayUpdateFade:                      ; CODE XREF: Boss_AntroidDefeatDelayState+8   j  ; was: loc_37E7E
+Boss_AntroidDefeatDelayUpdateFade:                      ; was: loc_37E7E
                 cmpi.w  #$10,d0
                 bmi.w   Boss_AntroidApplyDefeatPaletteFade
                 moveq   #$10,d0

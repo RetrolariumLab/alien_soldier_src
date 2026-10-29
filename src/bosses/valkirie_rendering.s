@@ -1,5 +1,5 @@
 ; Map the current pose bytes to angle fields across all 25 body parts
-Anim_ApplyValkiriePoseToParts:                          ; CODE XREF: Entity_RenderValkirieBattleAnimation+4   p  ; was: sub_5605C
+Anim_ApplyValkiriePoseToParts:                          ; was: sub_5605C
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -105,11 +105,11 @@ Anim_ApplyValkiriePoseToParts:                          ; CODE XREF: Entity_Rend
                 rts
 ; End of function Anim_ApplyValkiriePoseToParts
 ; Interpret Valkirie pose commands, embedded event bytes, and frame delays
-Anim_UpdateValkiriePoseScript:                          ; CODE XREF: Entity_RenderValkirieBattleAnimation   p  ; was: sub_56190
+Anim_UpdateValkiriePoseScript:                          ; was: sub_56190
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Anim_AdvanceValkiriePoseInterpolation
-Anim_ReadValkiriePoseCommand:                           ; CODE XREF: Anim_UpdateValkiriePoseScript+24   j  ; was: loc_5619A
+Anim_ReadValkiriePoseCommand:                           ; was: loc_5619A
                                         ; Anim_ProcessValkiriePoseFrame+E   j
                 move.w  $58(a5),d0
                 bmi.w   Anim_PrepareValkiriePosePartTraversal
@@ -119,7 +119,7 @@ Anim_ReadValkiriePoseCommand:                           ; CODE XREF: Anim_Update
                 addq.w  #2,$58(a5)
                 bra.s   Anim_ReadValkiriePoseCommand
 ; ---------------------------------------------------------------------------
-Anim_CheckValkiriePoseStopMarker:                       ; CODE XREF: Anim_UpdateValkiriePoseScript+18   j  ; was: loc_561B6
+Anim_CheckValkiriePoseStopMarker:                       ; was: loc_561B6
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Anim_ProcessValkiriePoseFrame
@@ -131,14 +131,14 @@ Anim_ValkiriePoseNoOp:                                  ; was: nullsub_128
 ; End of function Anim_ValkiriePoseNoOp
 
 ; Decode a pose-frame command or restart the script at $FFFF
-Anim_ProcessValkiriePoseFrame:                          ; CODE XREF: Anim_UpdateValkiriePoseScript+2E   j  ; was: sub_561CA
+Anim_ProcessValkiriePoseFrame:                          ; was: sub_561CA
                 cmpi.w  #$FFFF,d3
                 bne.s   Anim_StartValkiriePoseFrame
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Anim_ReadValkiriePoseCommand
 ; ---------------------------------------------------------------------------
-Anim_StartValkiriePoseFrame:                            ; CODE XREF: Anim_ProcessValkiriePoseFrame+4   j  ; was: loc_561DA
+Anim_StartValkiriePoseFrame:                            ; was: loc_561DA
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -153,19 +153,19 @@ Anim_StartValkiriePoseFrame:                            ; CODE XREF: Anim_Proces
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Anim_PrepareValkiriePosePartTraversal
-Anim_AdvanceValkiriePoseInterpolation:                  ; CODE XREF: Anim_UpdateValkiriePoseScript+8   j  ; was: loc_5620A
+Anim_AdvanceValkiriePoseInterpolation:                  ; was: loc_5620A
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Anim_PrepareValkiriePosePartTraversal:                  ; CODE XREF: Anim_UpdateValkiriePoseScript+E   j  ; was: loc_5621A
+Anim_PrepareValkiriePosePartTraversal:                  ; was: loc_5621A
                                         ; Anim_UpdateValkiriePoseScript+34   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Anim_ProcessValkiriePoseFrame
 ; Calculate interpolation deltas for the next 19-angle pose frame
-Anim_CalculateValkiriePoseDeltas:                       ; CODE XREF: Anim_ProcessValkiriePoseFrame+24   p  ; was: sub_56224
+Anim_CalculateValkiriePoseDeltas:                       ; was: sub_56224
                 movea.l $2FC(a5),a1
                 moveq   #$12,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
@@ -179,37 +179,25 @@ Boss_ValkirieInitializePoseChannels:                    ; was: sub_56238
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ValkirieInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Valkirie_State2Poses:   dc.w    $A0F, $190, $606, $190, $1C1C, $1A4, $8002, $A0F, $1B8, $606, $1B8, $1C1C, $1CC, $8001, $FFFF  ; was: word_56244
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState2:Entity_RenderValkirieBattleState2   o
+Valkirie_State2Poses:       dc.w    $A0F, $190, $606, $190, $1C1C, $1A4, $8002, $A0F, $1B8, $606, $1B8, $1C1C, $1CC, $8001, $FFFF  ; was: word_56244
 Valkirie_State4To8Poses:    dc.w    $810, 0, $1010, 0, $8001, $810, $14, $1010, $14, $8001, $FFFF, $810, $140, $1010, $140, $8001  ; was: word_56262
-                                        ; DATA XREF: Entity_StartValkirieBattleState4:Entity_RenderValkirieBattleState4   o
                                         ; Entity_UpdateValkirieBattleState6:Entity_RenderValkirieBattleState6   o
                 dc.w    $810, $168, $1010, $168, $8001, $FFFF
 Valkirie_StateAAndCPoses:   dc.w    $E12, $154, $8001, $808, $154, $E12, $17C, $8001, $707, $17C, $FFFE  ; was: word_5628E
-                                        ; DATA XREF: Entity_UpdateValkirieBattleStateA:Entity_RenderValkirieBattleStateA   o
                                         ; Entity_UpdateValkirieBattleStateC+10   o
 Valkirie_State22Poses:  dc.w    $101C, $1CC, $808, $1CC, $8081, $50C, $190, $808, $190, $101C, $1A4, $707, $1A4, $8082, $80C, $1B8  ; was: word_562A4
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState22:Entity_RenderValkirieBattleState22   o
                 dc.w    $606, $1B8, $FFFF
 Valkirie_State14Poses:  dc.w    $840, $28, $1018, $1E0, $1818, $1E0, $840, $1F4, $8001, $A0E, $1F4, $606, $1F4, $8008, $507, $208  ; was: word_562CA
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState14:Entity_RenderValkirieBattleState14   o
                 dc.w    $808, $208, $FFFE
-Valkirie_State24Poses:  dc.w    $4058, $21C, $7070, $21C, $FFFF  ; was: word_562F0
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState24:Entity_RenderValkirieBattleState24   o
+Valkirie_State24Poses:      dc.w    $4058, $21C, $7070, $21C, $FFFF  ; was: word_562F0
 Valkirie_State18To1EPoses:  dc.w    $1020, $F0, $712, $244, $A0A, $244, $8001, $1258, $258, $608, $258, $8001, $3838, $258, $1870, $26C  ; was: word_562FA
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState18+8   o
                                         ; Entity_UpdateValkirieBattleState18+1E   o
                 dc.w    $8001, $3232, $26C, $FFFE
-Valkirie_State20Poses:  dc.w    $A10, $280, $1313, $280, $815, $26C, $FFFE  ; was: word_56322
-                                        ; DATA XREF: Entity_UpdateValkirieBattleState20+8   o
+Valkirie_State20Poses:              dc.w    $A10, $280, $1313, $280, $815, $26C, $FFFE  ; was: word_56322
 Valkirie_AirbornePattern00Poses:    dc.w    $1010, $3C, $210, $50, $8003, $204, $50, $505, $50, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56330
-                                        ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern00   o
 Valkirie_AirbornePattern01Poses:    dc.w    $1010, $3C, $210, $64, $8003, $204, $64, $404, $64, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56350
-                                        ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern01   o
 Valkirie_AirbornePattern02Poses:    dc.w    $1A1A, $78, $420, $8C, $8003, $508, $8C, $808, $8C, $8004, $101A, $78, $8008, $1212, $17C, $FFFE  ; was: word_56370
-                                        ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern02   o
-Valkirie_State12Poses:  dc.w    $408, $F0, $204, $F0, $303, $F0, $106, $12C, $8001, $204, $12C, $303, $12C, $8002, $306, $F0  ; was: word_56390
-                                        ; DATA XREF: Entity_StartValkirieBattleState12+46   o
+Valkirie_State12Poses:              dc.w    $408, $F0, $204, $F0, $303, $F0, $106, $12C, $8001, $204, $12C, $303, $12C, $8002, $306, $F0  ; was: word_56390
                                         ; Entity_UpdateValkirieBattleState12+54   o
                 dc.w    $204, $F0, $202, $F0, $106, $104, $8001, $204, $104, $303, $104, $8002, $106, $F0, $103, $F0
                 dc.w    $202, $F0, $106, $104, $8001, $204, $118, $303, $118, $8002, $FFFF
@@ -217,11 +205,11 @@ Valkirie_PoseTable: binclude "data/other/word_563E6.bin"  ; was: word_563E6
 Valkirie_PoseFrameDataEnd:                              ; was: word_563E6_End
 
 ; Create and initialize the six-object auxiliary Valkirie group
-Entity_InitValkirieAuxiliaryGroup:                      ; CODE XREF: Entity_InitValkirieBattleState0+52   p  ; was: sub_566B6
+Entity_InitValkirieAuxiliaryGroup:                      ; was: sub_566B6
                                         ; Entity_StartValkirieBattleState14+26   p
                 movea.w #(TwentySeventhEntityType-M68K_RAM),a0
                 moveq   #5,d7
-Entity_ClearValkirieAuxiliaryGroupLoop:                 ; CODE XREF: Entity_InitValkirieAuxiliaryGroup+C   j  ; was: loc_566BC
+Entity_ClearValkirieAuxiliaryGroupLoop:                 ; was: loc_566BC
                 jsr     (Object_ClearRecord96Bytes).l
                 dbf     d7,Entity_ClearValkirieAuxiliaryGroupLoop
                 movea.w #(TwentySeventhEntityType-M68K_RAM),a5
@@ -243,7 +231,7 @@ Entity_ClearValkirieAuxiliaryGroupLoop:                 ; CODE XREF: Entity_Init
                 rts
 ; End of function Entity_InitValkirieAuxiliaryGroup
 ; Update the auxiliary group while attached, launching, or tracking a target
-Entity_UpdateValkirieAuxiliaryGroup:                    ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_5671A
+Entity_UpdateValkirieAuxiliaryGroup:                    ; was: sub_5671A
                 btst    #1,(ValkirieAuxFlags).w
                 beq.w   Entity_UpdateDetachedValkirieAuxiliaryGroup
                 bclr    #4,(ValkirieAuxFlags).w
@@ -260,11 +248,11 @@ Entity_UpdateValkirieAuxiliaryGroup:                    ; DATA XREF: ROM:Entity_
                 bne.s   Entity_LaunchValkirieAuxiliaryGroup
                 neg.l   d0
                 move.w  #$100,$23C(a5)
-Entity_LaunchValkirieAuxiliaryGroup:                    ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+44   j  ; was: loc_56768
+Entity_LaunchValkirieAuxiliaryGroup:                    ; was: loc_56768
                 move.l  d0,$1F8(a5)
                 bra.w   Entity_UpdateValkirieAuxiliaryAnchors
 ; ---------------------------------------------------------------------------
-Entity_SyncValkirieAuxiliaryGroup:                      ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+10   j  ; was: loc_56770
+Entity_SyncValkirieAuxiliaryGroup:                      ; was: loc_56770
                                         ; Entity_UpdateValkirieAuxiliaryGroup+108   j
                 movea.w #(Entity_ObjectPool-M68K_RAM),a0
                 move.w  $54(a0),$54(a5)
@@ -288,7 +276,7 @@ Entity_SyncValkirieAuxiliaryGroup:                      ; CODE XREF: Entity_Upda
                 move.w  $176(a5),$1D6(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Entity_RotateValkirieAuxiliaryGroupForward:             ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+8E   j  ; was: loc_567D2
+Entity_RotateValkirieAuxiliaryGroupForward:             ; was: loc_567D2
                 cmpi.w  #$140,$B6(a5)
                 beq.w   Entity_UpdateValkirieAuxiliaryGroupReturn
                 add.w   d5,$B6(a5)
@@ -301,7 +289,7 @@ Entity_RotateValkirieAuxiliaryGroupForward:             ; CODE XREF: Entity_Upda
                 bne.w   Entity_UpdateValkirieAuxiliaryGroupReturn
                 rts
 ; ---------------------------------------------------------------------------
-Entity_UpdateDetachedValkirieAuxiliaryGroup:            ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+6   j  ; was: loc_56804
+Entity_UpdateDetachedValkirieAuxiliaryGroup:            ; was: loc_56804
                 bclr    #5,(ValkirieAuxFlags).w
                 beq.s   Entity_AdvanceValkirieAuxiliaryAngle
                 bset    #1,(ValkirieAuxFlags).w
@@ -310,7 +298,7 @@ Entity_UpdateDetachedValkirieAuxiliaryGroup:            ; CODE XREF: Entity_Upda
                 move.b  #$10,$203(a5)
                 bra.w   Entity_SyncValkirieAuxiliaryGroup
 ; ---------------------------------------------------------------------------
-Entity_AdvanceValkirieAuxiliaryAngle:                   ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+F0   j  ; was: loc_56826
+Entity_AdvanceValkirieAuxiliaryAngle:                   ; was: loc_56826
                 move.w  $56(a5),d1
                 addi.w  #$20,d1                         ; ' '
                 andi.w  #$1E0,d1
@@ -318,7 +306,7 @@ Entity_AdvanceValkirieAuxiliaryAngle:                   ; CODE XREF: Entity_Upda
                 bne.s   Entity_UpdateValkirieAuxiliaryFlashTimer
                 move.b  #$C6,d0
                 jsr     (Sound_QueueSFXRequest).l
-Entity_UpdateValkirieAuxiliaryFlashTimer:               ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+11C   j  ; was: loc_56842
+Entity_UpdateValkirieAuxiliaryFlashTimer:               ; was: loc_56842
                 move.w  #$100,d1
                 move.w  d1,$236(a5)
                 subq.w  #1,$5C(a5)
@@ -326,10 +314,10 @@ Entity_UpdateValkirieAuxiliaryFlashTimer:               ; CODE XREF: Entity_Upda
                 bset    #6,$21(a5)
                 bra.s   Entity_TrackValkirieAuxiliaryTarget
 ; ---------------------------------------------------------------------------
-Entity_ClampValkirieAuxiliaryFlashTimer:                ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+134   j  ; was: loc_56858
+Entity_ClampValkirieAuxiliaryFlashTimer:                ; was: loc_56858
                 bpl.s   Entity_TrackValkirieAuxiliaryTarget
                 move.w  #$FFFF,$5C(a5)
-Entity_TrackValkirieAuxiliaryTarget:                    ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+13C   j  ; was: loc_56860
+Entity_TrackValkirieAuxiliaryTarget:                    ; was: loc_56860
                                         ; Entity_UpdateValkirieAuxiliaryGroup:Entity_ClampValkirieAuxiliaryFlashTimer   j
                 bsr.w   Entity_UpdateValkirieAuxiliaryAnchors
                 move.w  (PrimaryCameraXPosition).w,d1
@@ -338,7 +326,7 @@ Entity_TrackValkirieAuxiliaryTarget:                    ; CODE XREF: Entity_Upda
                 btst    #7,(ValkirieAuxFlags).w
                 beq.s   Entity_AdjustValkirieAuxiliaryVelocity
                 bsr.w   Entity_AimValkirieAuxiliaryAtPlayer
-Entity_AdjustValkirieAuxiliaryVelocity:                 ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+15C   j  ; was: loc_5687C
+Entity_AdjustValkirieAuxiliaryVelocity:                 ; was: loc_5687C
                 lea     (Math_SineTable).l,a1
                 move.w  Math_QuarterSineTable-Math_SineTable(a1,d2.w),d0
                 move.w  (a1,d2.w),d1
@@ -357,13 +345,13 @@ Entity_AdjustValkirieAuxiliaryVelocity:                 ; CODE XREF: Entity_Upda
                 move.l  d2,$1FC(a5)
                 bra.s   Entity_AdjustValkirieAuxiliaryHorizontalVelocity
 ; ---------------------------------------------------------------------------
-Entity_AdjustValkirieAuxiliaryNegativeVerticalVelocity:  ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+17E   j  ; was: loc_568AC
+Entity_AdjustValkirieAuxiliaryNegativeVerticalVelocity:  ; was: loc_568AC
                 add.l   d0,$1FC(a5)
                 bpl.s   Entity_AdjustValkirieAuxiliaryHorizontalVelocity
                 cmp.l   $1FC(a5),d2
                 bmi.s   Entity_AdjustValkirieAuxiliaryHorizontalVelocity
                 move.l  d2,$1FC(a5)
-Entity_AdjustValkirieAuxiliaryHorizontalVelocity:       ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+184   j  ; was: loc_568BC
+Entity_AdjustValkirieAuxiliaryHorizontalVelocity:       ; was: loc_568BC
                                         ; Entity_UpdateValkirieAuxiliaryGroup+18A   j
                 tst.l   d3
                 bmi.s   Entity_AdjustValkirieAuxiliaryNegativeHorizontalVelocity
@@ -374,13 +362,13 @@ Entity_AdjustValkirieAuxiliaryHorizontalVelocity:       ; CODE XREF: Entity_Upda
                 move.l  d3,$1F8(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Entity_AdjustValkirieAuxiliaryNegativeHorizontalVelocity:  ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+1A4   j  ; was: loc_568D2
+Entity_AdjustValkirieAuxiliaryNegativeHorizontalVelocity:  ; was: loc_568D2
                 add.l   d1,$1F8(a5)
                 bpl.s   Entity_UpdateValkirieAuxiliaryGroupReturn
                 cmp.l   $1F8(a5),d3
                 bmi.s   Entity_UpdateValkirieAuxiliaryGroupReturn
                 move.l  d3,$1F8(a5)
-Entity_UpdateValkirieAuxiliaryGroupReturn:              ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+96   j  ; was: locret_568E2
+Entity_UpdateValkirieAuxiliaryGroupReturn:              ; was: locret_568E2
                                         ; Entity_UpdateValkirieAuxiliaryGroup+BE   j
                 rts
 ; End of function Entity_UpdateValkirieAuxiliaryGroup
@@ -391,7 +379,7 @@ Entity_SetValkirieAuxiliaryFastHorizontalVelocity:      ; was: sub_568E4
                 move.l  #$2C000,$1F8(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Entity_SetValkirieAuxiliaryFastNegativeVelocity:        ; CODE XREF: Entity_SetValkirieAuxiliaryFastHorizontalVelocity+4   j  ; was: loc_568F4
+Entity_SetValkirieAuxiliaryFastNegativeVelocity:        ; was: loc_568F4
                 move.l  #$FFFD4000,$1F8(a5)
                 rts
 ; End of function Entity_SetValkirieAuxiliaryFastHorizontalVelocity
@@ -404,18 +392,18 @@ Entity_SetValkirieAuxiliarySlowHorizontalVelocity:      ; was: sub_568FE
                 move.l  #$12000,$1F8(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Entity_SetValkirieAuxiliarySlowNegativeVelocity:        ; CODE XREF: Entity_SetValkirieAuxiliarySlowHorizontalVelocity+10   j  ; was: loc_5691A
+Entity_SetValkirieAuxiliarySlowNegativeVelocity:        ; was: loc_5691A
                 move.l  #$FFFEE000,$1F8(a5)
                 rts
 ; End of function Entity_SetValkirieAuxiliarySlowHorizontalVelocity
 ; Updates the five-part group between Valkirie's two anchor objects
-Entity_UpdateValkirieAuxiliaryAnchors:                  ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+52   j  ; was: sub_56924
+Entity_UpdateValkirieAuxiliaryAnchors:                  ; was: sub_56924
                                         ; Entity_UpdateValkirieAuxiliaryGroup+7E   p
                 moveq   #4,d7
                 jmp     Boss_ValkirieUpdateAnchoredMetasprite
 ; End of function Entity_UpdateValkirieAuxiliaryAnchors
 ; Calculate the direction from the auxiliary anchor to the player
-Entity_AimValkirieAuxiliaryAtPlayer:                    ; CODE XREF: Entity_UpdateValkirieAuxiliaryGroup+15E   p  ; was: sub_5692C
+Entity_AimValkirieAuxiliaryAtPlayer:                    ; was: sub_5692C
                 move.w  (FourteenthEntityXPos).w,d0
                 move.w  (FourteenthEntityYPos).w,d1
                 sub.w   $1F0(a5),d0
@@ -423,7 +411,7 @@ Entity_AimValkirieAuxiliaryAtPlayer:                    ; CODE XREF: Entity_Upda
                 jmp     (Math_CalculateDirectionIndex).l
 ; End of function Entity_AimValkirieAuxiliaryAtPlayer
 ; Restore the shared Seven Force colors or apply the caller-selected flash set
-Gfx_UpdateSevenForceBattlePalette:                      ; CODE XREF: Entity_UpdateValkirieBattle+3A   p  ; was: sub_56942
+Gfx_UpdateSevenForceBattlePalette:                      ; was: sub_56942
                                         ; Boss_UpdateMedusa+3A   p
                 btst    #0,(FrameCounter+1).w
                 bne.s   Gfx_ApplySevenForceBattleFlashPalette
@@ -432,7 +420,7 @@ Gfx_UpdateSevenForceBattlePalette:                      ; CODE XREF: Entity_Upda
                 move.w  (PaletteShadowColor63).w,(PaletteActiveColor63).w
                 rts
 ; ---------------------------------------------------------------------------
-Gfx_ApplySevenForceBattleFlashPalette:                  ; CODE XREF: Gfx_UpdateSevenForceBattlePalette+6   j  ; was: loc_5695E
+Gfx_ApplySevenForceBattleFlashPalette:                  ; was: loc_5695E
                 move.w  SevenForce_BattleFlashPaletteColors(pc,d0.w),(PaletteActiveColor61).w
                 move.w  SevenForce_BattleFlashPaletteColors+2(pc,d0.w),(PaletteActiveColor62).w
                 move.w  SevenForce_BattleFlashPaletteColors+4(pc,d0.w),(PaletteActiveColor63).w
@@ -440,7 +428,6 @@ Gfx_ApplySevenForceBattleFlashPalette:                  ; CODE XREF: Gfx_UpdateS
 ; End of function Gfx_UpdateSevenForceBattlePalette
 ; ---------------------------------------------------------------------------
 SevenForce_BattleFlashPaletteColors:    dc.w    $28A, $8EE, $CEE, $28A, $8EE, $CEE, $68  ; was: word_56972
-                                        ; DATA XREF: Gfx_UpdateSevenForceBattlePalette:Gfx_ApplySevenForceBattleFlashPalette   r
                                         ; Gfx_UpdateSevenForceBattlePalette+22   r
                 dc.w    $4CE, $6EC, $A8, $6E, $8AC, $28A, $8EE
                 dc.w    $CEE, $28A, $8EE, $CEE, $28A, $8EE, $CEE

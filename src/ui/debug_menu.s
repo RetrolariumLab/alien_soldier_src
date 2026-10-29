@@ -1,4 +1,4 @@
-DebugMenu_DispatchSelectedPageAction:                   ; CODE XREF: DebugMenu_UpdateActive+60   p  ; was: sub_1372A
+DebugMenu_DispatchSelectedPageAction:                   ; was: sub_1372A
                                         ; DebugMenu_UpdateActive+78   p
                 bsr.w   UI_QueuePendingWeaponStateIconTransfer
                 move.w  (DebugMenuPageOffset).w,d0
@@ -172,7 +172,7 @@ DebugMenu_UpdatePaletteColorSelection_WrapEntry:        ; was: loc_138CE
                 andi.w  #$1E,(DebugPaletteEntryOffset).w
                 rts
 ; End of function DebugMenu_UpdatePaletteColorSelection
-DebugMenu_RenderPaletteEntryCursor:                     ; CODE XREF: DebugMenu_UpdateActive+80   p  ; was: sub_138D6
+DebugMenu_RenderPaletteEntryCursor:                     ; was: sub_138D6
                 btst    #2,(VBlankFrameCounter+1).w
                 bne.s   DebugMenu_RenderPaletteEntryCursor_Return
                 move.w  (DebugPaletteEntryOffset).w,d0
@@ -182,7 +182,7 @@ DebugMenu_RenderPaletteEntryCursor:                     ; CODE XREF: DebugMenu_U
 DebugMenu_RenderPaletteEntryCursor_Return:              ; was: locret_138EC
                 rts
 ; End of function DebugMenu_RenderPaletteEntryCursor
-DebugMenu_RenderColorChannelCursor:                     ; CODE XREF: DebugMenu_UpdateActive+6C   p  ; was: sub_138EE
+DebugMenu_RenderColorChannelCursor:                     ; was: sub_138EE
                 tst.w   (DebugColorEditActive).w
                 beq.s   DebugMenu_RenderColorChannelCursor_Return
                 btst    #2,(VBlankFrameCounter+1).w
@@ -194,7 +194,7 @@ DebugMenu_RenderColorChannelCursor:                     ; CODE XREF: DebugMenu_U
 DebugMenu_RenderColorChannelCursor_Return:              ; was: locret_1390A
                 rts
 ; End of function DebugMenu_RenderColorChannelCursor
-DebugMenu_RenderHealthSelection:                        ; CODE XREF: DebugMenu_UpdateActive+64   p  ; was: sub_1390C
+DebugMenu_RenderHealthSelection:                        ; was: sub_1390C
                 move.b  (DebugHealthSelection).w,d0
                 cmpi.b  #$FF,d0
                 bne.s   DebugMenu_RenderHealthSelectionDigits
@@ -213,7 +213,7 @@ DebugMenu_RenderHealthSelectionDigits:                  ; was: loc_13924
                 move.w  d1,(DebugHealthHighTile).w
                 rts
 ; End of function DebugMenu_RenderHealthSelection
-DebugMenu_RenderSoundRequestNumber:                     ; CODE XREF: DebugMenu_UpdateActive+88   p  ; was: sub_13942
+DebugMenu_RenderSoundRequestNumber:                     ; was: sub_13942
                 move.b  (DebugSoundRequestId).w,d0
                 move.b  d0,d1
                 andi.w  #$F,d0
@@ -225,7 +225,7 @@ DebugMenu_RenderSoundRequestNumber:                     ; CODE XREF: DebugMenu_U
                 move.w  d1,(DebugSoundHighTile).w
                 rts
 ; End of function DebugMenu_RenderSoundRequestNumber
-DebugMenu_CopySelectedPalettePreviewTiles:              ; CODE XREF: DebugMenu_UpdateActive+68   p  ; was: sub_13964
+DebugMenu_CopySelectedPalettePreviewTiles:              ; was: sub_13964
                 moveq   #0,d0
                 move.w  (DebugPaletteLineOffset).w,d0
                 asl.w   #4,d0
@@ -238,7 +238,7 @@ DebugMenu_CopySelectedPalettePreviewTiles_NextWord:     ; was: loc_1397A
                 dbf     d7,DebugMenu_CopySelectedPalettePreviewTiles_NextWord
                 rts
 ; End of function DebugMenu_CopySelectedPalettePreviewTiles
-DebugMenu_RenderPaletteLineNumber:                      ; CODE XREF: DebugMenu_UpdateActive+7C   p  ; was: sub_13982
+DebugMenu_RenderPaletteLineNumber:                      ; was: sub_13982
                 move.w  (DebugPaletteLineOffset).w,d0
                 asr.w   #1,d0
                 addi.w  #-$383C,d0
@@ -255,7 +255,7 @@ DebugMenuPalettePreviewTiles:   dc.w    $87B4, $87B5, $87B6, $87B7, $87B8, $87B9
                 dc.w    $E7B4, $E7B5, $E7B6, $E7B7, $E7B8, $E7B9, $E7BA, $E7BB
                 dc.w    $E7BC, $E7BD, $E7BE, $E7BF, $E7C0, $E7C1, $E7C2, $E7C3
 
-DebugMenu_RenderSelectedColorValue:                     ; CODE XREF: DebugMenu_UpdateActive+84   p  ; was: sub_13A12
+DebugMenu_RenderSelectedColorValue:                     ; was: sub_13A12
                 move.w  (DebugPaletteLineOffset).w,d0
                 asl.w   #4,d0
                 add.w   (DebugPaletteEntryOffset).w,d0
@@ -277,7 +277,7 @@ DebugMenu_RenderSelectedColorValue:                     ; CODE XREF: DebugMenu_U
                 move.w  d2,(DebugColorBlueTile).w
                 rts
 ; End of function DebugMenu_RenderSelectedColorValue
-DebugMenu_UpdateSelectedPaletteColor:                   ; CODE XREF: DebugMenu_UpdatePaletteColorSelection+24   p  ; was: sub_13A52
+DebugMenu_UpdateSelectedPaletteColor:                   ; was: sub_13A52
                 move.w  (DebugPaletteLineOffset).w,d0
                 asl.w   #4,d0
                 add.w   (DebugPaletteEntryOffset).w,d0

@@ -1,7 +1,7 @@
 ; Palette transition stepping and selected-channel CRAM adjustments
 ; The selected-channel mask uses bits 15, 14, and 13 for red, green, and blue
 
-Gfx_FadePaletteTransition:                              ; CODE XREF: StoryScreen_MainLoop+50   p  ; was: sub_39AA
+Gfx_FadePaletteTransition:                              ; was: sub_39AA
                                         ; StoryScreen_WaitThenStartExitFade+20   p
                 move.w  (PaletteFadeMode).w,d0
                 beq.w   Gfx_FadePaletteTransition_Return
@@ -19,21 +19,21 @@ Gfx_FadePaletteTransition:                              ; CODE XREF: StoryScreen
                 moveq   #$FFFFFFFE,d5
                 bra.s   Gfx_FadePaletteTransition_ApplyStep
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_CheckForwardCompletion:       ; CODE XREF: Gfx_FadePaletteTransition+22   j  ; was: loc_39D8
+Gfx_FadePaletteTransition_CheckForwardCompletion:       ; was: loc_39D8
                 tst.w   (PaletteFadeColorOffset).w
                 bmi.s   Gfx_FadePaletteTransition_IncreaseFirstModeStep
-Gfx_FadePaletteTransition_FinishFirstMode:              ; CODE XREF: Gfx_FadePaletteTransition+1E   j  ; was: loc_39DE
+Gfx_FadePaletteTransition_FinishFirstMode:              ; was: loc_39DE
                                         ; Gfx_FadePaletteTransition+28   j
                 clr.w   (PaletteFadeColorOffset).w
                 clr.w   (PaletteFadeMode).w
                 bset    #0,(PaletteFadeMaskStatus).w
                 rts
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_IncreaseFirstModeStep:        ; CODE XREF: Gfx_FadePaletteTransition+32   j  ; was: loc_39EE
+Gfx_FadePaletteTransition_IncreaseFirstModeStep:        ; was: loc_39EE
                 moveq   #2,d5
                 bra.s   Gfx_FadePaletteTransition_ApplyStep
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_HandleSecondMode:             ; CODE XREF: Gfx_FadePaletteTransition+16   j  ; was: loc_39F2
+Gfx_FadePaletteTransition_HandleSecondMode:             ; was: loc_39F2
                 btst    #1,(PaletteFadeControlFlags).w
                 bne.s   Gfx_FadePaletteTransition_FinishSecondMode
                 tst.w   d0
@@ -44,28 +44,28 @@ Gfx_FadePaletteTransition_HandleSecondMode:             ; CODE XREF: Gfx_FadePal
                 beq.s   Gfx_FadePaletteTransition_IncreaseSecondModeStep
                 tst.w   d1
                 bne.s   Gfx_FadePaletteTransition_ApplyStep
-Gfx_FadePaletteTransition_IncreaseSecondModeStep:       ; CODE XREF: Gfx_FadePaletteTransition+62   j  ; was: loc_3A12
+Gfx_FadePaletteTransition_IncreaseSecondModeStep:       ; was: loc_3A12
                 moveq   #2,d5
                 bra.s   Gfx_FadePaletteTransition_ApplyStep
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_CheckReverseLimit:            ; CODE XREF: Gfx_FadePaletteTransition+52   j  ; was: loc_3A16
+Gfx_FadePaletteTransition_CheckReverseLimit:            ; was: loc_3A16
                 cmpi.w  #$FFF0,(PaletteFadeColorOffset).w
                 bpl.s   Gfx_FadePaletteTransition_ChooseReverseStep
-Gfx_FadePaletteTransition_FinishSecondMode:             ; CODE XREF: Gfx_FadePaletteTransition+4E   j  ; was: loc_3A1E
+Gfx_FadePaletteTransition_FinishSecondMode:             ; was: loc_3A1E
                                         ; Gfx_FadePaletteTransition+5A   j
                 move.w  #$FFF4,(PaletteFadeColorOffset).w
                 clr.w   (PaletteFadeMode).w
                 bset    #1,(PaletteFadeMaskStatus).w
                 rts
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_ChooseReverseStep:            ; CODE XREF: Gfx_FadePaletteTransition+72   j  ; was: loc_3A30
+Gfx_FadePaletteTransition_ChooseReverseStep:            ; was: loc_3A30
                 btst    #2,(PaletteFadeControlFlags).w
                 beq.s   Gfx_FadePaletteTransition_DecreaseSecondModeStep
                 tst.w   d1
                 bne.s   Gfx_FadePaletteTransition_ApplyStep
-Gfx_FadePaletteTransition_DecreaseSecondModeStep:       ; CODE XREF: Gfx_FadePaletteTransition+8C   j  ; was: loc_3A3C
+Gfx_FadePaletteTransition_DecreaseSecondModeStep:       ; was: loc_3A3C
                 moveq   #$FFFFFFFE,d5
-Gfx_FadePaletteTransition_ApplyStep:                    ; CODE XREF: Gfx_FadePaletteTransition+2C   j  ; was: loc_3A3E
+Gfx_FadePaletteTransition_ApplyStep:                    ; was: loc_3A3E
                                         ; Gfx_FadePaletteTransition+46   j
                 movea.w #(PaletteShadowBuffer-M68K_RAM),a0
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a1
@@ -80,7 +80,7 @@ Gfx_FadePaletteTransition_ApplyStep:                    ; CODE XREF: Gfx_FadePal
                 add.w   d5,d3
                 bra.s   Gfx_FadePaletteTransition_ApplyPalette
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_SelectGreenAndBlueChannels:   ; CODE XREF: Gfx_FadePaletteTransition+AE   j  ; was: loc_3A62
+Gfx_FadePaletteTransition_SelectGreenAndBlueChannels:   ; was: loc_3A62
                 cmpi.w  #$8000,d0
                 bne.s   Gfx_FadePaletteTransition_SelectAllColorChannels
                 move.w  #$C000,d0
@@ -88,25 +88,25 @@ Gfx_FadePaletteTransition_SelectGreenAndBlueChannels:   ; CODE XREF: Gfx_FadePal
                 add.w   d5,d2
                 bra.s   Gfx_FadePaletteTransition_ApplyPalette
 ; ---------------------------------------------------------------------------
-Gfx_FadePaletteTransition_SelectAllColorChannels:       ; CODE XREF: Gfx_FadePaletteTransition+BC   j  ; was: loc_3A72
+Gfx_FadePaletteTransition_SelectAllColorChannels:       ; was: loc_3A72
                 move.w  #$E000,d0
                 add.w   d5,d3
                 add.w   d5,d2
                 add.w   d5,d1
                 add.w   d5,(PaletteFadeColorOffset).w
-Gfx_FadePaletteTransition_ApplyPalette:                 ; CODE XREF: Gfx_FadePaletteTransition+B6   j  ; was: loc_3A80
+Gfx_FadePaletteTransition_ApplyPalette:                 ; was: loc_3A80
                                         ; Gfx_FadePaletteTransition+C6   j
                 move.w  d0,(PaletteFadeMaskStatus).w
                 asl.w   #4,d2
                 asl.w   #8,d3
                 move.w  #$E000,d0
                 moveq   #$3F,d5                         ; '?'
-Gfx_FadePaletteTransition_ColorLoop:                    ; CODE XREF: Gfx_FadePaletteTransition+EC   j  ; was: loc_3A8E
+Gfx_FadePaletteTransition_ColorLoop:                    ; was: loc_3A8E
                 move.w  (a0)+,d6
                 bsr.w   Gfx_AdjustSelectedColorChannels
                 move.w  d6,(a1)+
                 dbf     d5,Gfx_FadePaletteTransition_ColorLoop
-Gfx_FadePaletteTransition_Return:                       ; CODE XREF: Gfx_FadePaletteTransition+4   j  ; was: locret_3A9A
+Gfx_FadePaletteTransition_Return:                       ; was: locret_3A9A
                 rts
 ; End of function Gfx_FadePaletteTransition
 ; Unreferenced helper that applies one adjustment and mirrors it to the paired range
@@ -116,7 +116,7 @@ UnreferencedAdjustAndMirrorPaletteRange:                ; was: sub_3A9C
                 movea.w d1,a1
                 bsr.w   Gfx_ExpandColorAdjustmentToRGBChannels
                 move.w  d7,d0
-UnreferencedAdjustAndMirrorPaletteRange_ColorLoop:      ; CODE XREF: UnreferencedAdjustAndMirrorPaletteRange+18   j  ; was: loc_3AAA
+UnreferencedAdjustAndMirrorPaletteRange_ColorLoop:      ; was: loc_3AAA
                 move.w  (a0),d6
                 bsr.w   Gfx_AdjustSelectedColorChannels
                 move.w  d6,(a0)+
@@ -125,7 +125,7 @@ UnreferencedAdjustAndMirrorPaletteRange_ColorLoop:      ; CODE XREF: Unreference
                 rts
 ; End of function UnreferencedAdjustAndMirrorPaletteRange
 ; Applies a frame/RNG-selected color adjustment to active colors 49-63 except 54
-Gfx_UpdateRandomizedPaletteRange:                       ; CODE XREF: Boss_DestroyerProtoEmitDefeatParticle   p  ; was: sub_3ABA
+Gfx_UpdateRandomizedPaletteRange:                       ; was: sub_3ABA
                                         ; Boss_JetsripperDeathFade   p
                 bsr.s   Gfx_SelectRandomizedColorAdjustment
                 move.w  (PaletteShadowColor54).w,(PaletteColorPair).w
@@ -138,13 +138,13 @@ Gfx_UpdateRandomizedPaletteRange:                       ; CODE XREF: Boss_Destro
                 rts
 ; End of function Gfx_UpdateRandomizedPaletteRange
 ; Computes randomized channel deltas, then applies them to a counted palette-entry list
-Gfx_UpdateRandomizedPaletteEntryList:                   ; CODE XREF: Enemy_ShipSpawnCannons+9A   p  ; was: sub_3ADE
+Gfx_UpdateRandomizedPaletteEntryList:                   ; was: sub_3ADE
                                         ; Boss_ViblackUpdateDefeatEffectsAndParticles+6   p
                 bsr.s   Gfx_SelectRandomizedColorAdjustment
                 bra.w   Gfx_AdjustPaletteEntryList
 ; End of function Gfx_UpdateRandomizedPaletteEntryList
 ; Selects a signed color adjustment and channel mask from frame phase and RNG
-Gfx_SelectRandomizedColorAdjustment:                    ; CODE XREF: Gfx_UpdateRandomizedPaletteRange   p  ; was: sub_3AE4
+Gfx_SelectRandomizedColorAdjustment:                    ; was: sub_3AE4
                                         ; Gfx_UpdateRandomizedPaletteEntryList   p
                 moveq   #$E,d0
                 move.w  #$E000,d7
@@ -153,7 +153,7 @@ Gfx_SelectRandomizedColorAdjustment:                    ; CODE XREF: Gfx_UpdateR
                 bne.s   Gfx_SelectRandomizedColorAdjustment_UseRandomizedValues
                 btst    #2,(RandomNumberState+1).w
                 beq.s   Gfx_SelectRandomizedColorAdjustment_Return
-Gfx_SelectRandomizedColorAdjustment_UseRandomizedValues:  ; CODE XREF: Gfx_SelectRandomizedColorAdjustment+E   j  ; was: loc_3AFC
+Gfx_SelectRandomizedColorAdjustment_UseRandomizedValues:  ; was: loc_3AFC
                 move.b  (RandomNumberState+1).w,d0
                 andi.w  #3,d0
                 addq.w  #6,d0
@@ -167,25 +167,25 @@ Gfx_SelectRandomizedColorAdjustment_UseRandomizedValues:  ; CODE XREF: Gfx_Selec
                 neg.w   d0
                 subq.w  #2,d0
                 move.w  #$6000,d7
-Gfx_SelectRandomizedColorAdjustment_Return:             ; CODE XREF: Gfx_SelectRandomizedColorAdjustment+16   j  ; was: locret_3B26
+Gfx_SelectRandomizedColorAdjustment_Return:             ; was: locret_3B26
                                         ; Gfx_SelectRandomizedColorAdjustment+2E   j
                 rts
 ; End of function Gfx_SelectRandomizedColorAdjustment
 ; Applies a caller-provided adjustment to all 64 active-palette colors
-Gfx_ApplyFullActivePaletteFade:                         ; CODE XREF: Palette_UpdateMidgameFadeAndColors+16   p  ; was: sub_3B28
+Gfx_ApplyFullActivePaletteFade:                         ; was: sub_3B28
                                         ; Stage12To13_UpdateTeleportFadeIn:Stage12To13_ClampAndApplyTeleportFadeLevel   j
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a0
                 moveq   #$3F,d5                         ; '?'
                 move.w  #$E000,d7
 ; Falls through to Gfx_ApplyPaletteFade
 ; Applies fade to palette colors with RGB adjustment
-Gfx_ApplyPaletteFade:                                   ; CODE XREF: Gfx_UpdateRandomizedPaletteRange+14   p  ; was: sub_3B32
+Gfx_ApplyPaletteFade:                                   ; was: sub_3B32
                                         ; StoryScreen_FadeOutAndLoadTitleAssets+24   p
                 movea.w a0,a1
                 lea     $80(a1),a1
                 bsr.w   Gfx_ExpandColorAdjustmentToRGBChannels
                 move.w  d7,d0
-Gfx_ApplyPaletteFade_ColorLoop:                         ; CODE XREF: Gfx_ApplyPaletteFade+14   j  ; was: loc_3B3E
+Gfx_ApplyPaletteFade_ColorLoop:                         ; was: loc_3B3E
                 move.w  (a1)+,d6
                 bsr.w   Gfx_AdjustSelectedColorChannels
                 move.w  d6,(a0)+
@@ -193,12 +193,12 @@ Gfx_ApplyPaletteFade_ColorLoop:                         ; CODE XREF: Gfx_ApplyPa
                 rts
 ; End of function Gfx_ApplyPaletteFade
 ; Applies selected RGB deltas to a counted list of palette-entry addresses
-Gfx_AdjustPaletteEntryList:                             ; CODE XREF: Gfx_UpdateRandomizedPaletteEntryList+2   j  ; was: sub_3B4C
+Gfx_AdjustPaletteEntryList:                             ; was: sub_3B4C
                                         ; Gfx_BugmaxApplyWavePaletteOffset+36   j
                 move.w  (a4)+,d5
                 bsr.w   Gfx_ExpandColorAdjustmentToRGBChannels
                 move.w  d7,d0
-Gfx_AdjustPaletteEntryList_ColorLoop:                   ; CODE XREF: Gfx_AdjustPaletteEntryList+14   j  ; was: loc_3B54
+Gfx_AdjustPaletteEntryList_ColorLoop:                   ; was: loc_3B54
                 movea.w (a4)+,a0
                 move.w  $80(a0),d6
                 bsr.w   Gfx_AdjustSelectedColorChannels
@@ -207,7 +207,7 @@ Gfx_AdjustPaletteEntryList_ColorLoop:                   ; CODE XREF: Gfx_AdjustP
                 rts
 ; End of function Gfx_AdjustPaletteEntryList
 ; Expands one color adjustment into red, green, and blue CRAM channel positions
-Gfx_ExpandColorAdjustmentToRGBChannels:                 ; CODE XREF: UnreferencedAdjustAndMirrorPaletteRange+8   p  ; was: sub_3B66
+Gfx_ExpandColorAdjustmentToRGBChannels:                 ; was: sub_3B66
                                         ; Gfx_ApplyPaletteFade+6   p
                 move.w  d0,d1
                 move.w  d0,d2
@@ -236,7 +236,7 @@ UnreferencedAddWrappingColorAdjustmentToPairedEntry:    ; was: sub_3B72
                 rts
 ; End of function UnreferencedAddWrappingColorAdjustmentToPairedEntry
 ; Adjusts the selected red, green, and blue channels of one CRAM color word
-Gfx_AdjustSelectedColorChannels:                        ; CODE XREF: Gfx_FadePaletteTransition+E6   p  ; was: sub_3B9A
+Gfx_AdjustSelectedColorChannels:                        ; was: sub_3B9A
                                         ; UnreferencedAdjustAndMirrorPaletteRange+10   p
                 move.w  d6,d7
                 btst    #$F,d0
@@ -248,15 +248,15 @@ Gfx_AdjustSelectedColorChannels:                        ; CODE XREF: Gfx_FadePal
                 clr.w   d7
                 bra.s   Gfx_AdjustSelectedColorChannels_StoreRed
 ; ---------------------------------------------------------------------------
-Gfx_AdjustSelectedColorChannels_ClampRedMaximum:        ; CODE XREF: Gfx_AdjustSelectedColorChannels+10   j  ; was: loc_3BB0
+Gfx_AdjustSelectedColorChannels_ClampRedMaximum:        ; was: loc_3BB0
                 cmpi.w  #$F,d7
                 bmi.s   Gfx_AdjustSelectedColorChannels_StoreRed
                 moveq   #$E,d7
-Gfx_AdjustSelectedColorChannels_StoreRed:               ; CODE XREF: Gfx_AdjustSelectedColorChannels+14   j  ; was: loc_3BB8
+Gfx_AdjustSelectedColorChannels_StoreRed:               ; was: loc_3BB8
                                         ; Gfx_AdjustSelectedColorChannels+1A   j
                 andi.w  #$FFF0,d6
                 or.w    d7,d6
-Gfx_AdjustSelectedColorChannels_CheckGreen:             ; CODE XREF: Gfx_AdjustSelectedColorChannels+6   j  ; was: loc_3BBE
+Gfx_AdjustSelectedColorChannels_CheckGreen:             ; was: loc_3BBE
                 btst    #$E,d0
                 beq.s   Gfx_AdjustSelectedColorChannels_CheckBlue
                 move.w  d6,d7
@@ -266,15 +266,15 @@ Gfx_AdjustSelectedColorChannels_CheckGreen:             ; CODE XREF: Gfx_AdjustS
                 clr.w   d7
                 bra.s   Gfx_AdjustSelectedColorChannels_StoreGreen
 ; ---------------------------------------------------------------------------
-Gfx_AdjustSelectedColorChannels_ClampGreenMaximum:      ; CODE XREF: Gfx_AdjustSelectedColorChannels+32   j  ; was: loc_3BD2
+Gfx_AdjustSelectedColorChannels_ClampGreenMaximum:      ; was: loc_3BD2
                 cmpi.w  #$E1,d7
                 bmi.s   Gfx_AdjustSelectedColorChannels_StoreGreen
                 move.w  #$E0,d7
-Gfx_AdjustSelectedColorChannels_StoreGreen:             ; CODE XREF: Gfx_AdjustSelectedColorChannels+36   j  ; was: loc_3BDC
+Gfx_AdjustSelectedColorChannels_StoreGreen:             ; was: loc_3BDC
                                         ; Gfx_AdjustSelectedColorChannels+3C   j
                 andi.w  #$FF0F,d6
                 or.w    d7,d6
-Gfx_AdjustSelectedColorChannels_CheckBlue:              ; CODE XREF: Gfx_AdjustSelectedColorChannels+28   j  ; was: loc_3BE2
+Gfx_AdjustSelectedColorChannels_CheckBlue:              ; was: loc_3BE2
                 btst    #$D,d0
                 beq.s   Gfx_AdjustSelectedColorChannels_Return
                 move.w  d6,d7
@@ -284,14 +284,14 @@ Gfx_AdjustSelectedColorChannels_CheckBlue:              ; CODE XREF: Gfx_AdjustS
                 clr.w   d7
                 bra.s   Gfx_AdjustSelectedColorChannels_StoreBlue
 ; ---------------------------------------------------------------------------
-Gfx_AdjustSelectedColorChannels_ClampBlueMaximum:       ; CODE XREF: Gfx_AdjustSelectedColorChannels+56   j  ; was: loc_3BF6
+Gfx_AdjustSelectedColorChannels_ClampBlueMaximum:       ; was: loc_3BF6
                 cmpi.w  #$E01,d7
                 bmi.s   Gfx_AdjustSelectedColorChannels_StoreBlue
                 move.w  #$E00,d7
-Gfx_AdjustSelectedColorChannels_StoreBlue:              ; CODE XREF: Gfx_AdjustSelectedColorChannels+5A   j  ; was: loc_3C00
+Gfx_AdjustSelectedColorChannels_StoreBlue:              ; was: loc_3C00
                                         ; Gfx_AdjustSelectedColorChannels+60   j
                 andi.w  #$F0FF,d6
                 or.w    d7,d6
-Gfx_AdjustSelectedColorChannels_Return:                 ; CODE XREF: Gfx_AdjustSelectedColorChannels+4C   j  ; was: locret_3C06
+Gfx_AdjustSelectedColorChannels_Return:                 ; was: locret_3C06
                 rts
 ; End of function Gfx_AdjustSelectedColorChannels

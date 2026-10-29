@@ -38,7 +38,7 @@ UnreferencedCycleStatusDisplayMode:                     ; was: sub_134C6
 UnreferencedCycleStatusDisplayMode_Return:              ; was: locret_134E0
                 rts
 ; End of function UnreferencedCycleStatusDisplayMode
-DebugMenu_UpdateAndDispatch:                            ; CODE XREF: Debug_HandleDormantSoundAndMenuInput+52   j  ; was: sub_134E2
+DebugMenu_UpdateAndDispatch:                            ; was: sub_134E2
                 bsr.w   UI_QueuePendingWeaponStateIconTransfer
                 movea.w #(SpriteScratchEntry1-M68K_RAM),a0
                 movea.w #(SharedSpriteScratch-M68K_RAM),a1

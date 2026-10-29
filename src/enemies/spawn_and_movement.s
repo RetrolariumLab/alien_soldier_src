@@ -1,4 +1,4 @@
-EnemySpawn_UpdateDirector:                              ; CODE XREF: Sys_GameplayMainLoop:Sys_GameplayMainLoop_UpdateStageEffects   p  ; was: sub_2C33A
+EnemySpawn_UpdateDirector:                              ; was: sub_2C33A
                 tst.b   (GameplayControlFlags).w
                 bmi.s   EnemySpawn_DirectorReturn
                 movea.w #(PlayerObjectType-M68K_RAM),a5
@@ -9,24 +9,23 @@ EnemySpawn_UpdateDirector:                              ; CODE XREF: Sys_Gamepla
 ; End of function EnemySpawn_UpdateDirector
 ; ---------------------------------------------------------------------------
 EnemySpawn_DirectorHandlers:    dc.w    EnemySpawn_DirectorReturn-EnemySpawn_ResetDirectorState  ; was: off_2C354
-                                        ; DATA XREF: EnemySpawn_UpdateDirector+E   r
                 dc.w    EnemySpawn_StartDirectorTimer-EnemySpawn_ResetDirectorState
                 dc.w    EnemySpawn_UpdateDirectorTimer-EnemySpawn_ResetDirectorState
 
 ; Resets the enemy-spawn director state
-EnemySpawn_ResetDirectorState:                          ; DATA XREF: EnemySpawn_UpdateDirector+12   o  ; was: sub_2C35A
+EnemySpawn_ResetDirectorState:                          ; was: sub_2C35A
                                         ; ROM:EnemySpawn_DirectorHandlers   o
                 clr.w   (EnemySpawnDirectorState).w
-EnemySpawn_DirectorReturn:                              ; CODE XREF: EnemySpawn_UpdateDirector+4   j  ; was: locret_2C35E
+EnemySpawn_DirectorReturn:                              ; was: locret_2C35E
                                         ; EnemySpawn_StartDirectorTimer+E   j
                 rts
 ; End of function EnemySpawn_ResetDirectorState
 ; Starts a new randomized enemy-spawn delay
-EnemySpawn_StartDirectorTimer:                          ; DATA XREF: ROM:0002C356   o  ; was: sub_2C360
+EnemySpawn_StartDirectorTimer:                          ; was: sub_2C360
                 addq.w  #2,(EnemySpawnDirectorState).w
                 move.w  #$A0,(EnemySpawnDelayTimer).w
 ; Counts down the spawn delay and creates an enemy when space permits
-EnemySpawn_UpdateDirectorTimer:                         ; DATA XREF: ROM:0002C358   o  ; was: loc_2C36A
+EnemySpawn_UpdateDirectorTimer:                         ; was: loc_2C36A
                 subq.w  #1,(EnemySpawnDelayTimer).w
                 bpl.w   EnemySpawn_DirectorReturn
                 bsr.w   EnemySpawn_ResetDelay
@@ -52,7 +51,7 @@ Orphaned_EnemySpawnClearDirectorData:
                 rts
 ; End of function Orphaned_EnemySpawnClearDirectorData
 ; Chooses the next randomized spawn delay
-EnemySpawn_ResetDelay:                                  ; CODE XREF: EnemySpawn_StartDirectorTimer+12   p  ; was: sub_2C3BC
+EnemySpawn_ResetDelay:                                  ; was: sub_2C3BC
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$7F,d0
                 addi.w  #$20,d0                         ; ' '
@@ -60,7 +59,7 @@ EnemySpawn_ResetDelay:                                  ; CODE XREF: EnemySpawn_
                 rts
 ; End of function EnemySpawn_ResetDelay
 ; Selects the vertical origin for the terrain search
-EnemySpawn_SelectSearchOriginY:                         ; CODE XREF: EnemySpawn_StartDirectorTimer+1E   p  ; was: sub_2C3CE
+EnemySpawn_SelectSearchOriginY:                         ; was: sub_2C3CE
                 move.w  #$1D0,d0
                 tst.w   (DifficultyMode).w
                 beq.s   EnemySpawn_SelectSearchOriginY_Return
@@ -72,15 +71,15 @@ EnemySpawn_SelectSearchOriginY:                         ; CODE XREF: EnemySpawn_
                 andi.w  #3,d1
                 bne.s   EnemySpawn_SelectSearchOriginY_Return
                 move.w  #$70,d0                         ; 'p'
-EnemySpawn_SelectSearchOriginY_Return:                  ; CODE XREF: EnemySpawn_SelectSearchOriginY+8   j  ; was: locret_2C3F6
+EnemySpawn_SelectSearchOriginY_Return:                  ; was: locret_2C3F6
                                         ; EnemySpawn_SelectSearchOriginY+10   j
                 rts
 ; End of function EnemySpawn_SelectSearchOriginY
 ; Allocates and clears one of the four enemy object slots
-EnemySpawn_AllocateObjectSlot:                          ; CODE XREF: EnemySpawn_StartDirectorTimer+16   p  ; was: sub_2C3F8
+EnemySpawn_AllocateObjectSlot:                          ; was: sub_2C3F8
                 movea.w #(TwentySecondEntityType-M68K_RAM),a0
                 moveq   #3,d7
-EnemySpawn_AllocateObjectSlot_Loop:                     ; CODE XREF: EnemySpawn_AllocateObjectSlot+E   j  ; was: loc_2C3FE
+EnemySpawn_AllocateObjectSlot_Loop:                     ; was: loc_2C3FE
                 tst.w   (a0)
                 beq.s   EnemySpawn_AllocateObjectSlot_Initialize
                 lea     $60(a0),a0
@@ -88,14 +87,14 @@ EnemySpawn_AllocateObjectSlot_Loop:                     ; CODE XREF: EnemySpawn_
                 moveq   #1,d0
                 rts
 ; ---------------------------------------------------------------------------
-EnemySpawn_AllocateObjectSlot_Initialize:               ; CODE XREF: EnemySpawn_AllocateObjectSlot+8   j  ; was: loc_2C40E
+EnemySpawn_AllocateObjectSlot_Initialize:               ; was: loc_2C40E
                 jsr     (Sys_Clear96ByteBlock).l
                 suba.w  #$60,a0                         ; '`'
                 moveq   #0,d0
                 rts
 ; End of function EnemySpawn_AllocateObjectSlot
 ; Searches the terrain layout for a valid spawn position near the player
-EnemySpawn_FindTerrainPosition:                         ; CODE XREF: EnemySpawn_StartDirectorTimer+32   p  ; was: sub_2C41C
+EnemySpawn_FindTerrainPosition:                         ; was: sub_2C41C
                 lea     (M68K_RAM).l,a2
                 lea     (TerrainCollisionBuffer).l,a1
                 move.w  #$80,d7
@@ -108,7 +107,7 @@ EnemySpawn_FindTerrainPosition:                         ; CODE XREF: EnemySpawn_
                 subi.w  #$10,d2
                 bsr.w   EnemySpawn_CalculateLayoutOffset
                 moveq   #$17,d7
-EnemySpawn_FindTerrainPosition_Loop:                    ; CODE XREF: EnemySpawn_FindTerrainPosition+7A   j  ; was: loc_2C446
+EnemySpawn_FindTerrainPosition_Loop:                    ; was: loc_2C446
                 move.w  (a2,d2.w),d4
                 andi.w  #$7FF,d4
                 move.b  (a1,d4.w),d4
@@ -123,7 +122,7 @@ EnemySpawn_FindTerrainPosition_Loop:                    ; CODE XREF: EnemySpawn_
                 move.w  d1,d5
                 bra.s   EnemySpawn_FindTerrainPosition_NextRow
 ; ---------------------------------------------------------------------------
-EnemySpawn_FindTerrainPosition_CheckRun:                ; CODE XREF: EnemySpawn_FindTerrainPosition+3A   j  ; was: loc_2C470
+EnemySpawn_FindTerrainPosition_CheckRun:                ; was: loc_2C470
                                         ; EnemySpawn_FindTerrainPosition+4C   j
                 tst.w   d6
                 bmi.s   EnemySpawn_FindTerrainPosition_NextRow
@@ -133,7 +132,7 @@ EnemySpawn_FindTerrainPosition_CheckRun:                ; CODE XREF: EnemySpawn_
                 subq.w  #1,(EnemySpawnSearchPass).w
                 bmi.s   EnemySpawn_FindTerrainPosition_Found
                 moveq   #$FFFFFFFF,d6
-EnemySpawn_FindTerrainPosition_NextRow:                 ; CODE XREF: EnemySpawn_FindTerrainPosition+52   j  ; was: loc_2C484
+EnemySpawn_FindTerrainPosition_NextRow:                 ; was: loc_2C484
                                         ; EnemySpawn_FindTerrainPosition+56   j
                 subq.w  #8,d1
                 subi.w  #$80,d2
@@ -144,12 +143,12 @@ EnemySpawn_FindTerrainPosition_NextRow:                 ; CODE XREF: EnemySpawn_
                 moveq   #1,d7
                 rts
 ; ---------------------------------------------------------------------------
-EnemySpawn_FindTerrainPosition_Found:                   ; CODE XREF: EnemySpawn_FindTerrainPosition+64   j  ; was: loc_2C49E
+EnemySpawn_FindTerrainPosition_Found:                   ; was: loc_2C49E
                 moveq   #0,d7
                 rts
 ; End of function EnemySpawn_FindTerrainPosition
 ; Converts a player-relative coordinate into a terrain-layout offset
-EnemySpawn_CalculateLayoutOffset:                       ; CODE XREF: EnemySpawn_FindTerrainPosition+18   p  ; was: sub_2C4A2
+EnemySpawn_CalculateLayoutOffset:                       ; was: sub_2C4A2
                                         ; EnemySpawn_FindTerrainPosition+24   p
                 sub.w   d7,d2
                 add.w   (PrimaryCameraXPosition).w,d2
@@ -164,18 +163,18 @@ EnemySpawn_CalculateLayoutOffset:                       ; CODE XREF: EnemySpawn_
                 rts
 ; End of function EnemySpawn_CalculateLayoutOffset
 ; Stores the chosen enemy position and marks left-side spawns
-EnemySpawn_InitializeObjectPosition:                    ; CODE XREF: EnemySpawn_StartDirectorTimer+44   j  ; was: sub_2C4C0
+EnemySpawn_InitializeObjectPosition:                    ; was: sub_2C4C0
                 move.w  d0,$10(a0)
                 subi.w  #$20,d5                         ; ' '
                 move.w  d5,$14(a0)
                 cmpi.w  #$120,$10(a0)
                 bpl.s   EnemySpawn_InitializeObjectPosition_Return
                 bset    #7,$5F(a0)
-EnemySpawn_InitializeObjectPosition_Return:             ; CODE XREF: EnemySpawn_InitializeObjectPosition+12   j  ; was: locret_2C4DA
+EnemySpawn_InitializeObjectPosition_Return:             ; was: locret_2C4DA
                 rts
 ; End of function EnemySpawn_InitializeObjectPosition
 ; Sets up shared sprite properties for the spawned enemy family
-Enemy_SetupBehaviorSprite:                              ; CODE XREF: Enemy_MainStateMachine+2   p  ; was: sub_2C4DC
+Enemy_SetupBehaviorSprite:                              ; was: sub_2C4DC
                                         ; Enemy_BeginDestructionDelay+6   p
                 move.w  #$EF00,2(a5)
                 move.w  (SpawnedEnemyTileAttr).w,d1
@@ -185,7 +184,7 @@ Enemy_SetupBehaviorSprite:                              ; CODE XREF: Enemy_MainS
                 beq.s   Enemy_SetupBehaviorSprite_ApplyAttributes
                 bclr    #3,$E(a5)
 ; Applies shared sprite attributes and variant parameters
-Enemy_SetupBehaviorSprite_ApplyAttributes:              ; CODE XREF: Enemy_SetupBehaviorSprite+18   j  ; was: loc_2C4FC
+Enemy_SetupBehaviorSprite_ApplyAttributes:              ; was: loc_2C4FC
                 move.b  #$48,$20(a5)                    ; 'H'
                 move.b  #$C0,$21(a5)
                 move.l  #$F010F808,$2C(a5)
@@ -201,28 +200,28 @@ Enemy_SetupBehaviorSprite_ApplyAttributes:              ; CODE XREF: Enemy_Setup
                 rts
 ; End of function Enemy_SetupBehaviorSprite
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorSpriteParameters: dc.b    $18, 4, $11, 0  ; DATA XREF: Enemy_SetupBehaviorSprite+3C   o  ; was: byte_2C538
+Enemy_BehaviorSpriteParameters: dc.b    $18, 4, $11, 0  ; was: byte_2C538
 
 ; Updates animation pointer based on current state index
-Enemy_UpdateBehaviorAnimation:                          ; CODE XREF: Enemy_BehaviorController+52   j  ; was: sub_2C53C
+Enemy_UpdateBehaviorAnimation:                          ; was: sub_2C53C
                                         ; Enemy_DestructionDelayController+2   j
                 move.w  $5C(a5),d0
                 beq.s   Enemy_UpdateBehaviorAnimation_Return
                 subq.w  #4,d0
                 move.l  Enemy_BehaviorSpriteAnimationPointers(pc,d0.w),8(a5)
                 clr.w   $C(a5)
-Enemy_UpdateBehaviorAnimation_Return:                   ; CODE XREF: Enemy_UpdateBehaviorAnimation+4   j  ; was: locret_2C54E
+Enemy_UpdateBehaviorAnimation_Return:                   ; was: locret_2C54E
                 rts
 ; End of function Enemy_UpdateBehaviorAnimation
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorSpriteAnimationPointers:  dc.l    Enemy_BehaviorWaitSpriteAnimation  ; DATA XREF: Enemy_UpdateBehaviorAnimation+8   r  ; was: off_2C550
+Enemy_BehaviorSpriteAnimationPointers:  dc.l    Enemy_BehaviorWaitSpriteAnimation  ; was: off_2C550
                 dc.l    Enemy_BehaviorMovementSpriteAnimation
                 dc.l    Enemy_BehaviorGroundedSpriteAnimation
                 dc.l    Enemy_BehaviorAttackCooldownSpriteAnimation
                 dc.l    Enemy_BehaviorDefeatSpriteAnimation
 
 ; Applies horizontal acceleration with speed limits
-Enemy_AccelerateHorizontal:                             ; CODE XREF: Enemy_MainStateMachine:Enemy_MainStateMachine_Accelerate   p  ; was: sub_2C564
+Enemy_AccelerateHorizontal:                             ; was: sub_2C564
                 btst    #3,$E(a5)
                 bne.s   Enemy_AccelerateHorizontal_LeftFacing
                 move.l  $18(a5),d0
@@ -232,13 +231,13 @@ Enemy_AccelerateHorizontal:                             ; CODE XREF: Enemy_MainS
                 move.l  #$20000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_AccelerateHorizontal_Right:                       ; CODE XREF: Enemy_AccelerateHorizontal+C   j  ; was: loc_2C584
+Enemy_AccelerateHorizontal_Right:                       ; was: loc_2C584
                                         ; Enemy_AccelerateHorizontal+14   j
                 addi.l  #$2000,d0
                 move.l  d0,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_AccelerateHorizontal_LeftFacing:                  ; CODE XREF: Enemy_AccelerateHorizontal+6   j  ; was: loc_2C590
+Enemy_AccelerateHorizontal_LeftFacing:                  ; was: loc_2C590
                 move.l  $18(a5),d0
                 bpl.s   Enemy_AccelerateHorizontal_Left
                 cmpi.l  #$FFFE0000,d0
@@ -246,14 +245,14 @@ Enemy_AccelerateHorizontal_LeftFacing:                  ; CODE XREF: Enemy_Accel
                 move.l  #$FFFE0000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_AccelerateHorizontal_Left:                        ; CODE XREF: Enemy_AccelerateHorizontal+30   j  ; was: loc_2C5A8
+Enemy_AccelerateHorizontal_Left:                        ; was: loc_2C5A8
                                         ; Enemy_AccelerateHorizontal+38   j
                 subi.l  #$2000,d0
                 move.l  d0,$18(a5)
                 rts
 ; End of function Enemy_AccelerateHorizontal
 ; Applies horizontal deceleration and stops at threshold
-Enemy_DecelerateHorizontal:                             ; CODE XREF: Enemy_MainStateMachine+42   p  ; was: sub_2C5B4
+Enemy_DecelerateHorizontal:                             ; was: sub_2C5B4
                                         ; Enemy_MainStateMachine+17E   j
                 move.l  $18(a5),d0
                 beq.s   Enemy_DecelerateHorizontal_Return
@@ -262,28 +261,28 @@ Enemy_DecelerateHorizontal:                             ; CODE XREF: Enemy_MainS
                 bmi.s   Enemy_DecelerateHorizontal_Stop
                 subi.l  #$3800,d0
                 move.l  d0,$18(a5)
-Enemy_DecelerateHorizontal_Return:                      ; CODE XREF: Enemy_DecelerateHorizontal+4   j  ; was: locret_2C5CE
+Enemy_DecelerateHorizontal_Return:                      ; was: locret_2C5CE
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_DecelerateHorizontal_Negative:                    ; CODE XREF: Enemy_DecelerateHorizontal+6   j  ; was: loc_2C5D0
+Enemy_DecelerateHorizontal_Negative:                    ; was: loc_2C5D0
                 cmpi.l  #$FFFFC800,d0
                 bpl.s   Enemy_DecelerateHorizontal_Stop
                 addi.l  #$3800,d0
                 move.l  d0,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_DecelerateHorizontal_Stop:                        ; CODE XREF: Enemy_DecelerateHorizontal+E   j  ; was: loc_2C5E4
+Enemy_DecelerateHorizontal_Stop:                        ; was: loc_2C5E4
                                         ; Enemy_DecelerateHorizontal+22   j
                 clr.l   $18(a5)
                 rts
 ; End of function Enemy_DecelerateHorizontal
 ; Initializes homing projectile that tracks player with angle calculation
-Enemy_SpawnTrackedProjectile:                           ; CODE XREF: Enemy_MainStateMachine+1B6   j  ; was: sub_2C5EA
+Enemy_SpawnTrackedProjectile:                           ; was: sub_2C5EA
                 jsr     (Projectile_FindFreeSlotForward).l
                 beq.s   Enemy_SpawnTrackedProjectile_Initialize
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_SpawnTrackedProjectile_Initialize:                ; CODE XREF: Enemy_SpawnTrackedProjectile+6   j  ; was: loc_2C5F4
+Enemy_SpawnTrackedProjectile_Initialize:                ; was: loc_2C5F4
                 moveq   #$FFFFFFE8,d0
                 moveq   #$FFFFFFFA,d1
                 move.w  (GlobalSpritePriorityBit).w,d2
@@ -295,14 +294,14 @@ Enemy_SpawnTrackedProjectile_Initialize:                ; CODE XREF: Enemy_Spawn
                 moveq   #0,d6
                 neg.w   d0
 ; Completes tracked-projectile parameters and difficulty selection
-Enemy_SpawnTrackedProjectile_SetParameters:             ; CODE XREF: Enemy_SpawnTrackedProjectile+22   j  ; was: loc_2C612
+Enemy_SpawnTrackedProjectile_SetParameters:             ; was: loc_2C612
                 move.w  (DifficultyMode).w,d7
                 asr.w   #1,d7
                 addi.w  #9,d7
                 jmp     Projectile_InitializeTwoSpeedShot
 ; End of function Enemy_SpawnTrackedProjectile
 ; Converts a defeated enemy into the shared falling defeat object
-Enemy_ConvertToDefeatProjectile:                        ; CODE XREF: Enemy_BehaviorController+A   j  ; was: sub_2C622
+Enemy_ConvertToDefeatProjectile:                        ; was: sub_2C622
                                         ; Enemy_BehaviorController+12   j
                 move.w  #$1D4,(a5)
                 clr.w   $24(a5)
@@ -317,11 +316,11 @@ Enemy_ConvertToDefeatProjectile:                        ; CODE XREF: Enemy_Behav
                 btst    #3,$E(a5)
                 beq.s   Enemy_ConvertToDefeatProjectile_Return
                 neg.l   $18(a5)
-Enemy_ConvertToDefeatProjectile_Return:                 ; CODE XREF: Enemy_ConvertToDefeatProjectile+3C   j  ; was: locret_2C664
+Enemy_ConvertToDefeatProjectile_Return:                 ; was: locret_2C664
                 rts
 ; End of function Enemy_ConvertToDefeatProjectile
 ; Updates a falling defeat object, then removes it or drops a pickup
-Enemy_UpdateDefeatProjectile:                           ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2C666
+Enemy_UpdateDefeatProjectile:                           ; was: sub_2C666
                 addi.l  #$5C00,$1C(a5)
                 subq.w  #1,$48(a5)
                 bpl.s   Enemy_UpdateDefeatProjectile_ApplyBlink
@@ -331,17 +330,17 @@ Enemy_UpdateDefeatProjectile:                           ; DATA XREF: ROM:Entity_
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_UpdateDefeatProjectile_DropPickup:                ; CODE XREF: Enemy_UpdateDefeatProjectile+18   j  ; was: loc_2C68A
+Enemy_UpdateDefeatProjectile_DropPickup:                ; was: loc_2C68A
                 moveq   #7,d0
                 jmp     Pickup_SpawnRandomFromCurrentObject
 ; ---------------------------------------------------------------------------
 ; Applies the falling object's blink phase
-Enemy_UpdateDefeatProjectile_ApplyBlink:                ; CODE XREF: Enemy_UpdateDefeatProjectile+C   j  ; was: loc_2C692
+Enemy_UpdateDefeatProjectile_ApplyBlink:                ; was: loc_2C692
                 bset    #7,2(a5)
                 btst    #0,$49(a5)
                 bne.s   Enemy_UpdateDefeatProjectile_Return
                 bclr    #7,2(a5)
-Enemy_UpdateDefeatProjectile_Return:                    ; CODE XREF: Enemy_UpdateDefeatProjectile+38   j  ; was: locret_2C6A6
+Enemy_UpdateDefeatProjectile_Return:                    ; was: locret_2C6A6
                 rts
 ; End of function Enemy_UpdateDefeatProjectile
 ; Main AI controller for enemy behavior and state management

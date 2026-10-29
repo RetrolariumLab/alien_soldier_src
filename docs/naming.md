@@ -80,8 +80,9 @@ identity; a resolved name can coexist with unobserved artwork or entry paths.
   entrypoint owns its own CPU-specific includes; see
   [source layout](source_layout.md).
 - Source paths are lowercase and source files end with a newline.
-- Assembly lines are at most 200 characters. This accommodates imported XREF
-  comments without allowing generated annotations to grow without bound.
+- Assembly lines are at most 200 characters, comments included.
+- IDA's cross-reference comments are not kept: a caller is found by searching
+  for its label. The `; was:` provenance stays on every renamed definition.
 
 `make lint` enforces the layout; the rest is kept by review. Passing mechanical
 style checks never establishes semantic confidence in a label.

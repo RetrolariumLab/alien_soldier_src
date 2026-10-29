@@ -1,23 +1,23 @@
-VBLANK:                                                 ; DATA XREF: ROM:00000078   o
+VBLANK:
                 move    #$2700,sr
-Int_VBlank_AcquireZ80Bus:                               ; CODE XREF: VBLANK+C   j  ; was: loc_A7E
+Int_VBlank_AcquireZ80Bus:                               ; was: loc_A7E
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Int_VBlank_AcquireZ80Bus
                 move.b  #1,(Z80VBlankActive).l
-Int_VBlank_ReleaseZ80Bus:                               ; CODE XREF: VBLANK+1E   j  ; was: loc_A90
+Int_VBlank_ReleaseZ80Bus:                               ; was: loc_A90
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Int_VBlank_ReleaseZ80Bus
                 movem.l d0-d7/a0-a5,-(sp)
-Int_VBlank_WaitForBlanking:                             ; CODE XREF: VBLANK+2E   j  ; was: loc_A9E
+Int_VBlank_WaitForBlanking:                             ; was: loc_A9E
                 move.w  (VDP_CTRL).l,d0
                 andi.w  #8,d0
                 beq.s   Int_VBlank_WaitForBlanking
                 btst    #6,(ConsoleVersionFlags).w
                 beq.w   Int_VBlank_RunEffects
                 move.w  #$300,d0
-Int_VBlank_PalDelayLoop:                                ; CODE XREF: VBLANK:Int_VBlank_PalDelayLoop   j  ; was: loc_AB8
+Int_VBlank_PalDelayLoop:                                ; was: loc_AB8
                 dbf     d0,Int_VBlank_PalDelayLoop
-Int_VBlank_RunEffects:                                  ; CODE XREF: VBLANK+36   j  ; was: loc_ABC
+Int_VBlank_RunEffects:                                  ; was: loc_ABC
                 jsr     (VBlank_DispatchRasterEffect).l
                 bsr.w   Gfx_ApplyHInterruptState
                 tst.b   (SoundFadeOutDelay).w
@@ -25,22 +25,22 @@ Int_VBlank_RunEffects:                                  ; CODE XREF: VBLANK+36  
                 subq.b  #1,(SoundFadeOutDelay).w
                 bne.s   Int_VBlank_UpdateFrameDivider
                 move.b  #1,(SoundRequestQueue+3).w
-Int_VBlank_UpdateFrameDivider:                          ; CODE XREF: VBLANK+50   j  ; was: loc_AD8
+Int_VBlank_UpdateFrameDivider:                          ; was: loc_AD8
                                         ; VBLANK+56   j
                 subq.w  #1,(VBlankFrameDivider).w
                 bpl.s   Int_VBlank_CheckExtendedHandler
                 move.w  #4,d0
                 sub.w   (FrameSkipLevel).w,d0
                 move.w  d0,(VBlankFrameDivider).w
-Int_VBlank_CheckExtendedHandler:                        ; CODE XREF: VBLANK+62   j  ; was: loc_AEA
+Int_VBlank_CheckExtendedHandler:                        ; was: loc_AEA
                 tst.b   (VBlankUpdateReady).w
                 bne.s   Sys_VBlankHandler
-Int_VBlank_AcquireZ80BusForExit:                        ; CODE XREF: VBLANK+7E   j  ; was: loc_AF0
+Int_VBlank_AcquireZ80BusForExit:                        ; was: loc_AF0
                                         ; Sys_VBlankHandler+12   j
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Int_VBlank_AcquireZ80BusForExit
                 move.b  #0,(Z80VBlankActive).l
-Int_VBlank_ReleaseZ80BusForExit:                        ; CODE XREF: VBLANK+90   j  ; was: loc_B02
+Int_VBlank_ReleaseZ80BusForExit:                        ; was: loc_B02
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Int_VBlank_ReleaseZ80BusForExit
                 move    #$2300,sr
@@ -50,25 +50,25 @@ Int_VBlank_ReleaseZ80BusForExit:                        ; CODE XREF: VBLANK+90  
 ; End of function VBLANK
 
 ; Extended VBlank interrupt handler that manages sound Z80 bus acquisition VDP updates and input processing
-Sys_VBlankHandler:                                      ; CODE XREF: VBLANK+74   j  ; was: sub_B1A
+Sys_VBlankHandler:                                      ; was: sub_B1A
                 tst.w   (FrameSkipLevel).w
                 beq.s   Sys_VBlankHandler_RunUpdate
                 tst.b   (FrameControlFlags).w
                 bmi.s   Sys_VBlankHandler_RunUpdate
                 cmpi.w  #1,(VBlankFrameDivider).w
                 beq.s   Int_VBlank_AcquireZ80BusForExit
-Sys_VBlankHandler_RunUpdate:                            ; CODE XREF: Sys_VBlankHandler+4   j  ; was: loc_B2E
+Sys_VBlankHandler_RunUpdate:                            ; was: loc_B2E
                                         ; Sys_VBlankHandler+A   j
                 clr.b   (VBlankUpdateReady).w
                 bsr.w   Input_PollBothControllersWithZ80BusLock
                 bsr.w   Gfx_RunVBlankTransfers
                 bsr.w   Gfx_ApplyVDPRegisterShadows
                 jsr     (RasterBuffer_CopySelectedLayout).l
-Sys_VBlankHandler_AcquireZ80BusForExit:                 ; CODE XREF: Sys_VBlankHandler+32   j  ; was: loc_B44
+Sys_VBlankHandler_AcquireZ80BusForExit:                 ; was: loc_B44
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Sys_VBlankHandler_AcquireZ80BusForExit
                 move.b  #0,(Z80VBlankActive).l
-Sys_VBlankHandler_ReleaseZ80BusForExit:                 ; CODE XREF: Sys_VBlankHandler+44   j  ; was: loc_B56
+Sys_VBlankHandler_ReleaseZ80BusForExit:                 ; was: loc_B56
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Sys_VBlankHandler_ReleaseZ80BusForExit
                 move    #$2300,sr
@@ -81,7 +81,7 @@ Sys_VBlankHandler_ReleaseZ80BusForExit:                 ; CODE XREF: Sys_VBlankH
                 rte
 ; End of function Sys_VBlankHandler
 ; Toggles the pause flag and sound pause when Start is pressed on an enabled port
-Input_UpdatePauseFromStartButton:                       ; CODE XREF: Sys_VBlankHandler+4E   p  ; was: sub_B82
+Input_UpdatePauseFromStartButton:                       ; was: sub_B82
                 move.b  (GameplayControlFlags).w,d0
                 btst    #6,d0
                 beq.w   Input_UpdatePauseFromStartButton_Return
@@ -89,11 +89,11 @@ Input_UpdatePauseFromStartButton:                       ; CODE XREF: Sys_VBlankH
                 btst    #0,d0
                 beq.w   Input_UpdatePauseFromStartButton_CheckPort2
                 or.b    (ControllerPressedState).w,d1
-Input_UpdatePauseFromStartButton_CheckPort2:            ; CODE XREF: Input_UpdatePauseFromStartButton+12   j  ; was: loc_B9C
+Input_UpdatePauseFromStartButton_CheckPort2:            ; was: loc_B9C
                 btst    #1,d0
                 beq.w   Input_UpdatePauseFromStartButton_CheckStartPressed
                 or.b    (ControllerPressedState+1).w,d1
-Input_UpdatePauseFromStartButton_CheckStartPressed:     ; CODE XREF: Input_UpdatePauseFromStartButton+1E   j  ; was: loc_BA8
+Input_UpdatePauseFromStartButton_CheckStartPressed:     ; was: loc_BA8
                 tst.b   d1
                 bpl.w   Input_UpdatePauseFromStartButton_Return
                 tst.b   d0
@@ -103,16 +103,16 @@ Input_UpdatePauseFromStartButton_CheckStartPressed:     ; CODE XREF: Input_Updat
                 move.b  #1,(SoundPauseState).w
                 rts
 ; ---------------------------------------------------------------------------
-Input_UpdatePauseFromStartButton_Unpause:               ; CODE XREF: Input_UpdatePauseFromStartButton+2E   j  ; was: loc_BC4
+Input_UpdatePauseFromStartButton_Unpause:               ; was: loc_BC4
                 bclr    #7,d0
                 move.b  d0,(GameplayControlFlags).w
                 move.b  #$80,(SoundPauseState).w
-Input_UpdatePauseFromStartButton_Return:                ; CODE XREF: Input_UpdatePauseFromStartButton+8   j  ; was: locret_BD2
+Input_UpdatePauseFromStartButton_Return:                ; was: locret_BD2
                                         ; Input_UpdatePauseFromStartButton+28   j
                 rts
 ; End of function Input_UpdatePauseFromStartButton
 ; Handles timed events and callbacks during VBlank
-Sys_VBlankEventHandler:                                 ; CODE XREF: VBLANK+96   p  ; was: sub_BD4
+Sys_VBlankEventHandler:                                 ; was: sub_BD4
                                         ; Sys_VBlankHandler+4A   p
                 move.w  (VBlankSoundRequestDelay).w,d0
                 beq.w   Sys_VBlankEventHandler_CheckInput
@@ -120,13 +120,13 @@ Sys_VBlankEventHandler:                                 ; CODE XREF: VBLANK+96  
                 move.w  d0,(VBlankSoundRequestDelay).w
                 bra.w   Sys_VBlankEventHandler_UpdateSound
 ; ---------------------------------------------------------------------------
-Sys_VBlankEventHandler_CheckInput:                      ; CODE XREF: Sys_VBlankEventHandler+4   j  ; was: loc_BE6
+Sys_VBlankEventHandler_CheckInput:                      ; was: loc_BE6
                 move.b  (VBlankPendingSound).w,d0
                 beq.w   Sys_VBlankEventHandler_UpdateSound
                 jsr     (Sound_QueueRequest).l
                 beq.w   Sys_VBlankEventHandler_UpdateSound
                 clr.b   (VBlankPendingSound).w
-Sys_VBlankEventHandler_UpdateSound:                     ; CODE XREF: Sys_VBlankEventHandler+E   j  ; was: loc_BFC
+Sys_VBlankEventHandler_UpdateSound:                     ; was: loc_BFC
                                         ; Sys_VBlankEventHandler+16   j
                 tst.b   (SoundUpdateBusy).w
                 bne.w   Sys_VBlankEventHandler_Return
@@ -141,15 +141,15 @@ Sys_VBlankEventHandler_UpdateSound:                     ; CODE XREF: Sys_VBlankE
                 endif
 Sys_VBlankEventHandler_ClearSoundBusy:
                 clr.b   (SoundUpdateBusy).w
-Sys_VBlankEventHandler_Return:                          ; CODE XREF: Sys_VBlankEventHandler+2C   j  ; was: locret_C14
+Sys_VBlankEventHandler_Return:                          ; was: locret_C14
                 rts
 ; End of function Sys_VBlankEventHandler
 ; Updates the global countdown and advances the VBlank frame counter
-Sys_UpdateTimers:                                       ; CODE XREF: Sys_VBlankHandler+58   p  ; was: sub_C16
+Sys_UpdateTimers:                                       ; was: sub_C16
                 tst.w   (VBlankCountdown).w
                 beq.s   Sys_UpdateTimers_AdvanceFrame
                 subq.w  #1,(VBlankCountdown).w
-Sys_UpdateTimers_AdvanceFrame:                          ; CODE XREF: Sys_UpdateTimers+4   j  ; was: loc_C20
+Sys_UpdateTimers_AdvanceFrame:                          ; was: loc_C20
                 addq.w  #1,(VBlankFrameCounter).w
                 bra.s   Sys_DispatchGameState_Run
 ; End of function Sys_UpdateTimers
@@ -173,7 +173,7 @@ Sys_DispatchGameState:
                 clr.w   (GameSubstateIndex).w
                 rts
 ; ---------------------------------------------------------------------------
-Sys_DispatchGameState_Run:                              ; CODE XREF: Sys_UpdateTimers+E   j  ; was: loc_C6C
+Sys_DispatchGameState_Run:                              ; was: loc_C6C
                                         ; Sys_DispatchGameState+4   j
                 jsr     (Demo_PlaybackSystem).l
                 move.w  (GameModeIndex).w,d0

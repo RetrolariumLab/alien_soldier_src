@@ -9,34 +9,34 @@ WeaponSetup_HandleShootingModeInput:                    ; was: sub_1F1B2
                 btst    #2,(ControllerPressedState).w
                 beq.s   WeaponSetup_CheckMovingModeInput
                 moveq   #0,d1
-WeaponSetup_CheckMovingModeInput:                       ; CODE XREF: WeaponSetup_HandleShootingModeInput+14   j  ; was: loc_1F1D2
+WeaponSetup_CheckMovingModeInput:                       ; was: loc_1F1D2
                                         ; WeaponSetup_HandleShootingModeInput+1C   j
                 tst.w   d1
                 bne.s   WeaponSetup_CommitShootingModeInput
                 btst    #3,(ControllerPressedState).w
                 beq.s   WeaponSetup_CommitShootingModeInput
                 moveq   #2,d1
-WeaponSetup_CommitShootingModeInput:                    ; CODE XREF: WeaponSetup_HandleShootingModeInput+22   j  ; was: loc_1F1E0
+WeaponSetup_CommitShootingModeInput:                    ; was: loc_1F1E0
                                         ; WeaponSetup_HandleShootingModeInput+2A   j
                 cmp.w   (ShootingMode).w,d1
                 beq.s   WeaponSetup_CheckShootingModeAdvance
                 move.w  d1,(ShootingMode).w
                 move.b  #$DB,d0
                 jsr     (Sound_QueueSFXRequest).l
-WeaponSetup_CheckShootingModeAdvance:                   ; CODE XREF: WeaponSetup_HandleShootingModeInput+32   j  ; was: loc_1F1F4
+WeaponSetup_CheckShootingModeAdvance:                   ; was: loc_1F1F4
                 move.b  (ControllerPressedState).w,d0
                 btst    #1,d0
                 bne.s   WeaponSetup_AdvanceFromShootingMode
                 andi.b  #$E0,d0
                 beq.s   WeaponSetup_CheckShootingModeReturn
-WeaponSetup_AdvanceFromShootingMode:                    ; CODE XREF: WeaponSetup_HandleShootingModeInput+4A   j  ; was: loc_1F204
+WeaponSetup_AdvanceFromShootingMode:                    ; was: loc_1F204
                 addq.w  #2,(SetupTransitionIndex).w
                 subi.w  #$10,(WeaponSetupVScrollTarget).w
                 move.b  #$AD,d0
                 jsr     (Sound_QueueSFXRequest).l
                 bra.w   WeaponSetup_RenderShootingModeOptions
 ; ---------------------------------------------------------------------------
-WeaponSetup_CheckShootingModeReturn:                    ; CODE XREF: WeaponSetup_HandleShootingModeInput+50   j  ; was: loc_1F21C
+WeaponSetup_CheckShootingModeReturn:                    ; was: loc_1F21C
                 btst    #4,(ControllerPressedState).w
                 beq.w   WeaponSetup_RenderShootingModeOptions
                 subq.w  #2,(SetupTransitionIndex).w
@@ -45,7 +45,7 @@ WeaponSetup_CheckShootingModeReturn:                    ; CODE XREF: WeaponSetup
                 bra.w   WeaponSetup_RenderShootingModeOptions
 ; End of function WeaponSetup_HandleShootingModeInput
 ; Selects one of the 26 controller layouts and handles page navigation
-WeaponSetup_HandleControlTypeInput:                     ; DATA XREF: ROM:0001F142   o  ; was: sub_1F238
+WeaponSetup_HandleControlTypeInput:                     ; was: sub_1F238
                 bsr.w   WeaponSetup_RenderSlotSprites
                 bsr.w   WeaponSetup_UpdateHighlightPalette
                 bsr.w   WeaponSetup_UpdateVerticalScroll
@@ -56,27 +56,27 @@ WeaponSetup_HandleControlTypeInput:                     ; DATA XREF: ROM:0001F14
                 btst    #2,(ControllerPressedState).w
                 beq.s   WeaponSetup_CheckNextControlTypeInput
                 subq.w  #1,d1
-WeaponSetup_CheckNextControlTypeInput:                  ; CODE XREF: WeaponSetup_HandleControlTypeInput+18   j  ; was: loc_1F25C
+WeaponSetup_CheckNextControlTypeInput:                  ; was: loc_1F25C
                                         ; WeaponSetup_HandleControlTypeInput+20   j
                 cmpi.w  #$19,d1
                 bpl.s   WeaponSetup_CommitControlTypeInput
                 btst    #3,(ControllerPressedState).w
                 beq.s   WeaponSetup_CommitControlTypeInput
                 addq.w  #1,d1
-WeaponSetup_CommitControlTypeInput:                     ; CODE XREF: WeaponSetup_HandleControlTypeInput+28   j  ; was: loc_1F26C
+WeaponSetup_CommitControlTypeInput:                     ; was: loc_1F26C
                                         ; WeaponSetup_HandleControlTypeInput+30   j
                 cmp.w   (WeaponSetupControlIndex).w,d1
                 beq.s   WeaponSetup_CheckControlTypeAdvance
                 move.w  d1,(WeaponSetupControlIndex).w
                 move.b  #$DB,d0
                 jsr     (Sound_QueueSFXRequest).l
-WeaponSetup_CheckControlTypeAdvance:                    ; CODE XREF: WeaponSetup_HandleControlTypeInput+38   j  ; was: loc_1F280
+WeaponSetup_CheckControlTypeAdvance:                    ; was: loc_1F280
                 move.b  (ControllerPressedState).w,d0
                 btst    #1,d0
                 bne.s   WeaponSetup_AdvanceFromControlType
                 andi.b  #$E0,d0
                 beq.s   WeaponSetup_CheckControlTypeReturn
-WeaponSetup_AdvanceFromControlType:                     ; CODE XREF: WeaponSetup_HandleControlTypeInput+50   j  ; was: loc_1F290
+WeaponSetup_AdvanceFromControlType:                     ; was: loc_1F290
                 move.w  #$E,(WeaponSetupHighlight).w
                 addq.w  #2,(SetupTransitionIndex).w
                 subi.w  #$10,(WeaponSetupVScrollTarget).w
@@ -84,20 +84,20 @@ WeaponSetup_AdvanceFromControlType:                     ; CODE XREF: WeaponSetup
                 jsr     (Sound_QueueSFXRequest).l
                 bra.w   WeaponSetup_RenderControlTypePage
 ; ---------------------------------------------------------------------------
-WeaponSetup_CheckControlTypeReturn:                     ; CODE XREF: WeaponSetup_HandleControlTypeInput+56   j  ; was: loc_1F2AE
+WeaponSetup_CheckControlTypeReturn:                     ; was: loc_1F2AE
                 btst    #0,(ControllerPressedState).w
                 bne.s   WeaponSetup_ReturnFromControlType
                 btst    #4,(ControllerPressedState).w
                 beq.w   WeaponSetup_RenderControlTypePage
 ; Returns from the controller-layout page to the previous setup page
-WeaponSetup_ReturnFromControlType:                      ; CODE XREF: WeaponSetup_HandleControlTypeInput+7C   j  ; was: loc_1F2C0
+WeaponSetup_ReturnFromControlType:                      ; was: loc_1F2C0
                 move.w  #$E,(WeaponSetupHighlight).w
                 subq.w  #2,(SetupTransitionIndex).w
                 clr.w   (WeaponSetupVScrollTarget).w
                 bra.w   WeaponSetup_RenderControlTypePage
 ; End of function WeaponSetup_HandleControlTypeInput
 ; ---------------------------------------------------------------------------
-WeaponSetup_ControlTypeTextPointers:    dc.l    WeaponSetup_ControlType01Text  ; DATA XREF: WeaponSetup_RenderSelectedControlType+10   o  ; was: off_1F2D2
+WeaponSetup_ControlTypeTextPointers:    dc.l    WeaponSetup_ControlType01Text  ; was: off_1F2D2
                 dc.l    WeaponSetup_ControlType02Text
                 dc.l    WeaponSetup_ControlType03Text
                 dc.l    WeaponSetup_ControlType04Text
@@ -124,7 +124,6 @@ WeaponSetup_ControlTypeTextPointers:    dc.l    WeaponSetup_ControlType01Text  ;
                 dc.l    WeaponSetup_ControlType25Text
                 dc.l    WeaponSetup_ControlType26Text
 WeaponSetup_ControlTypeValues:  dc.b    0, 7, $38, 2, 4, 1, 6, 3  ; was: byte_1F33A
-                                        ; DATA XREF: WeaponSetup_FindControlTypeIndex   o
                                         ; WeaponSetup_RenderSelectedControlType+4   o
                 dc.b    5, $10, 8, $20, $18, $30, $28, $15
                 dc.b    $B, $26, $19, $34, $2A, $24, $22, 9
@@ -132,7 +131,7 @@ WeaponSetup_ControlTypeValues:  dc.b    0, 7, $38, 2, 4, 1, 6, 3  ; was: byte_1F
                 dc.b    $A, $14, $11, 0
 
 ; Handles advance and return input on the exit page
-WeaponSetup_HandleExitInput:                            ; DATA XREF: ROM:0001F144   o  ; was: sub_1F356
+WeaponSetup_HandleExitInput:                            ; was: sub_1F356
                 bsr.w   WeaponSetup_RenderSlotSprites
                 bsr.w   WeaponSetup_UpdateHighlightPalette
                 bsr.w   WeaponSetup_UpdateVerticalScroll
@@ -148,20 +147,20 @@ WeaponSetup_HandleExitInput:                            ; DATA XREF: ROM:0001F14
                 clr.w   (TilemapRowXOrFillWord).w
                 bra.w   WeaponSetup_RenderExitOption
 ; ---------------------------------------------------------------------------
-WeaponSetup_CheckExitReturn:                            ; CODE XREF: WeaponSetup_HandleExitInput+1C   j  ; was: loc_1F392
+WeaponSetup_CheckExitReturn:                            ; was: loc_1F392
                 btst    #0,(ControllerPressedState).w
                 bne.s   WeaponSetup_ReturnFromExit
                 btst    #4,(ControllerPressedState).w
                 beq.w   WeaponSetup_RenderExitOption
 ; Returns from the exit page to the controller-layout page
-WeaponSetup_ReturnFromExit:                             ; CODE XREF: WeaponSetup_HandleExitInput+42   j  ; was: loc_1F3A4
+WeaponSetup_ReturnFromExit:                             ; was: loc_1F3A4
                 move.w  #$E,(WeaponSetupHighlight).w
                 subq.w  #2,(SetupTransitionIndex).w
                 addi.w  #$10,(WeaponSetupVScrollTarget).w
                 bra.w   WeaponSetup_RenderExitOption
 ; End of function WeaponSetup_HandleExitInput
 ; Queues four constant tilemap rows per update until the exit-page fill completes
-WeaponSetup_UpdateExitTilemapFill:                      ; DATA XREF: ROM:0001F146   o  ; was: sub_1F3B8
+WeaponSetup_UpdateExitTilemapFill:                      ; was: sub_1F3B8
                 jsr     (Tilemap_QueueNextConstantRow).l
                 jsr     (Tilemap_QueueNextConstantRow).l
                 jsr     (Tilemap_QueueNextConstantRow).l
@@ -174,11 +173,11 @@ WeaponSetup_UpdateExitTilemapFill:                      ; DATA XREF: ROM:0001F14
                 rts
 ; End of function WeaponSetup_UpdateExitTilemapFill
 ; Renders the control-test instructions and loads their palette
-WeaponSetup_RenderControlTestRowsAndLoadPalette:        ; DATA XREF: ROM:0001F148   o  ; was: sub_1F3E6
+WeaponSetup_RenderControlTestRowsAndLoadPalette:        ; was: sub_1F3E6
                 addq.w  #2,(SetupTransitionIndex).w
                 clr.w   (WeaponSetupCursorOffset).w
 ; Renders the eight control-test instruction rows
-WeaponSetup_RenderControlTestTextLoop:                  ; CODE XREF: WeaponSetup_RenderControlTestRowsAndLoadPalette+30   j  ; was: loc_1F3EE
+WeaponSetup_RenderControlTestTextLoop:                  ; was: loc_1F3EE
                 lea     WeaponSetup_ControlTestTextLayout(pc),a1
                 nop
                 move.w  (WeaponSetupCursorOffset).w,d1
@@ -194,7 +193,6 @@ WeaponSetup_RenderControlTestTextLoop:                  ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_RenderControlTestRowsAndLoadPalette
 ; ---------------------------------------------------------------------------
 WeaponSetup_ControlTestTextLayout:  dc.w    $8100       ; field_0  ; was: stru_1F424
-                                        ; DATA XREF: WeaponSetup_RenderControlTestRowsAndLoadPalette:WeaponSetup_RenderControlTestTextLoop   o
                 dc.w    $629C                           ; field_2
                 dc.l    WeaponSetup_ControlTestText     ; field_4
                 dc.w    $A100                           ; field_0
@@ -220,14 +218,14 @@ WeaponSetup_ControlTestTextLayout:  dc.w    $8100       ; field_0  ; was: stru_1
                 dc.l    WeaponSetup_HoveringControlText  ; field_4
 
 ; Waits for confirmation before leaving the weapon-setup screen
-WeaponSetup_WaitForConfirmInput:                        ; DATA XREF: ROM:0001F14A   o  ; was: sub_1F464
+WeaponSetup_WaitForConfirmInput:                        ; was: sub_1F464
                 bsr.w   WeaponSetup_RenderConfirmPromptSprites
                 btst    #7,(ControllerPressedState).w
                 bne.s   WeaponSetup_ConfirmAndBeginFade
                 rts
 ; ---------------------------------------------------------------------------
 ; Confirms the setup and starts the screen fade
-WeaponSetup_ConfirmAndBeginFade:                        ; CODE XREF: WeaponSetup_WaitForConfirmInput+A   j  ; was: loc_1F472
+WeaponSetup_ConfirmAndBeginFade:                        ; was: loc_1F472
                 addq.w  #2,(SetupTransitionIndex).w
                 move.w  #2,(PaletteFadeMode).w
                 clr.w   (PaletteFadeColorOffset).w
@@ -237,11 +235,11 @@ WeaponSetup_ConfirmAndBeginFade:                        ; CODE XREF: WeaponSetup
                 bra.w   WeaponSetup_RefillAmmo
 ; End of function WeaponSetup_WaitForConfirmInput
 ; Empty UI menu state handler
-WeaponSetup_IdleState:                                  ; DATA XREF: ROM:0001F14C   o  ; was: nullsub_53
+WeaponSetup_IdleState:                                  ; was: nullsub_53
                 rts
 ; End of function WeaponSetup_IdleState
 ; Handles four-slot loadout selection and each slot's force direction
-WeaponSetup_HandleLoadoutInput:                         ; CODE XREF: WeaponSetup_HandleLoadoutState+1A   p  ; was: sub_1F496
+WeaponSetup_HandleLoadoutInput:                         ; was: sub_1F496
                 move.b  (ControllerPressedState).w,d0
                 andi.b  #$E0,d0
                 beq.s   WeaponSetup_CheckPreviousSlotInput
@@ -255,7 +253,7 @@ WeaponSetup_HandleLoadoutInput:                         ; CODE XREF: WeaponSetup
                 addq.w  #2,(SetupTransitionIndex).w
                 move.w  #$FFE0,(WeaponSetupVScrollTarget).w
                 move.w  #$14,(PlayerScriptStateOffset).w
-WeaponSetup_CheckPreviousSlotInput:                     ; CODE XREF: WeaponSetup_HandleLoadoutInput+8   j  ; was: loc_1F4D2
+WeaponSetup_CheckPreviousSlotInput:                     ; was: loc_1F4D2
                                         ; WeaponSetup_HandleLoadoutInput+24   j
                 tst.w   (WeaponSlotOffset).w
                 beq.s   WeaponSetup_HandleForceDirectionInput
@@ -267,7 +265,7 @@ WeaponSetup_CheckPreviousSlotInput:                     ; CODE XREF: WeaponSetup
                 subq.w  #2,(WeaponSlotOffset).w
                 bpl.s   WeaponSetup_LoadPreviousSlotSelection
                 clr.w   (WeaponSlotOffset).w
-WeaponSetup_LoadPreviousSlotSelection:                  ; CODE XREF: WeaponSetup_HandleLoadoutInput+5E   j  ; was: loc_1F4FA
+WeaponSetup_LoadPreviousSlotSelection:                  ; was: loc_1F4FA
                 movea.w (WeaponSlotOffset).w,a0
                 adda.w  #(WeaponSlotConfig0-M68K_RAM),a0
                 move.w  (a0),(WeaponSetupForceIndex).w
@@ -276,7 +274,7 @@ WeaponSetup_LoadPreviousSlotSelection:                  ; CODE XREF: WeaponSetup
                 jsr     (Weapon_AdvanceCurrentState).l
                 bra.w   WeaponSetup_RenderLoadout
 ; ---------------------------------------------------------------------------
-WeaponSetup_HandleForceDirectionInput:                  ; CODE XREF: WeaponSetup_HandleLoadoutInput+40   j  ; was: loc_1F51A
+WeaponSetup_HandleForceDirectionInput:                  ; was: loc_1F51A
                                         ; WeaponSetup_HandleLoadoutInput+48   j
                 move.w  (WeaponSlotOffset).w,(WeaponMenuSlotOffset).w
                 move.w  (WeaponSetupForceIndex).w,d0
@@ -290,7 +288,7 @@ WeaponSetup_HandleForceDirectionInput:                  ; CODE XREF: WeaponSetup
                 beq.s   WeaponSetup_CheckForceDownInput
                 subq.w  #4,d0
                 addq.w  #1,d2
-WeaponSetup_CheckForceDownInput:                        ; CODE XREF: WeaponSetup_HandleLoadoutInput+9E   j  ; was: loc_1F542
+WeaponSetup_CheckForceDownInput:                        ; was: loc_1F542
                                         ; WeaponSetup_HandleLoadoutInput+A6   j
                 cmpi.w  #8,d0
                 beq.s   WeaponSetup_CheckForceRightInput
@@ -298,7 +296,7 @@ WeaponSetup_CheckForceDownInput:                        ; CODE XREF: WeaponSetup
                 beq.s   WeaponSetup_CheckForceRightInput
                 addq.w  #4,d0
                 addq.w  #1,d2
-WeaponSetup_CheckForceRightInput:                       ; CODE XREF: WeaponSetup_HandleLoadoutInput+B0   j  ; was: loc_1F554
+WeaponSetup_CheckForceRightInput:                       ; was: loc_1F554
                                         ; WeaponSetup_HandleLoadoutInput+B8   j
                 tst.w   d1
                 bne.s   WeaponSetup_CheckForceLeftInput
@@ -306,7 +304,7 @@ WeaponSetup_CheckForceRightInput:                       ; CODE XREF: WeaponSetup
                 beq.s   WeaponSetup_CheckForceLeftInput
                 addq.w  #2,d1
                 addq.w  #1,d2
-WeaponSetup_CheckForceLeftInput:                        ; CODE XREF: WeaponSetup_HandleLoadoutInput+C0   j  ; was: loc_1F564
+WeaponSetup_CheckForceLeftInput:                        ; was: loc_1F564
                                         ; WeaponSetup_HandleLoadoutInput+C8   j
                 tst.w   d1
                 beq.s   WeaponSetup_CommitForceSelection
@@ -314,7 +312,7 @@ WeaponSetup_CheckForceLeftInput:                        ; CODE XREF: WeaponSetup
                 beq.s   WeaponSetup_CommitForceSelection
                 subq.w  #2,d1
                 addq.w  #1,d2
-WeaponSetup_CommitForceSelection:                       ; CODE XREF: WeaponSetup_HandleLoadoutInput+D0   j  ; was: loc_1F574
+WeaponSetup_CommitForceSelection:                       ; was: loc_1F574
                                         ; WeaponSetup_HandleLoadoutInput+D8   j
                 add.w   d0,d1
                 move.w  d1,(WeaponSetupForceIndex).w
@@ -331,10 +329,10 @@ WeaponSetup_CommitForceSelection:                       ; CODE XREF: WeaponSetup
                 jsr     (Sound_QueueSFXRequest).l
                 clr.w   (WeaponFireCooldown).w
                 jsr     (Weapon_AdvanceCurrentState).l
-WeaponSetup_RenderLoadout:                              ; CODE XREF: WeaponSetup_HandleShootingModeInput+8   j  ; was: loc_1F5AE
+WeaponSetup_RenderLoadout:                              ; was: loc_1F5AE
                                         ; WeaponSetup_HandleLoadoutInput+80   j
                 clr.w   (WeaponSetupCursorOffset).w
-WeaponSetup_RenderForceNameLoop:                        ; CODE XREF: WeaponSetup_HandleLoadoutInput+154   j  ; was: loc_1F5B2
+WeaponSetup_RenderForceNameLoop:                        ; was: loc_1F5B2
                 move.w  (WeaponSetupCursorOffset).w,d1
                 move.w  #$8100,d0
                 tst.w   (SetupTransitionIndex).w
@@ -343,7 +341,7 @@ WeaponSetup_RenderForceNameLoop:                        ; CODE XREF: WeaponSetup
                 bne.s   WeaponSetup_RenderForceName
                 move.w  #$E100,d0
 ; Renders one of the six force names in the loadout grid
-WeaponSetup_RenderForceName:                            ; CODE XREF: WeaponSetup_HandleLoadoutInput+128   j  ; was: loc_1F5CA
+WeaponSetup_RenderForceName:                            ; was: loc_1F5CA
                                         ; WeaponSetup_HandleLoadoutInput+12E   j
                 lea     WeaponSetup_ForceTextLayout(pc),a1
                 nop
@@ -358,7 +356,6 @@ WeaponSetup_RenderForceName:                            ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_HandleLoadoutInput
 ; ---------------------------------------------------------------------------
 WeaponSetup_ForceTextLayout:    dc.w    $640C, $6430, $650C, $6530, $660C, $6630  ; was: word_1F5EE
-                                        ; DATA XREF: WeaponSetup_InitializeTextAndTiles+10   o
                                         ; WeaponSetup_HandleLoadoutInput:WeaponSetup_RenderForceName   o
                 dc.l    WeaponSetup_BusterForceText
                 dc.l    WeaponSetup_RangerForceText
@@ -368,7 +365,7 @@ WeaponSetup_ForceTextLayout:    dc.w    $640C, $6430, $650C, $6530, $660C, $6630
                 dc.l    WeaponSetup_LancerForceText
 
 ; Renders the SETUP YOUR WEAPONS heading
-WeaponSetup_RenderHeading:                              ; CODE XREF: WeaponSetup_InitializeTextAndTiles   p  ; was: sub_1F612
+WeaponSetup_RenderHeading:                              ; was: sub_1F612
                 move.w  #$A100,d0
                 lea     WeaponSetup_HeadingText(pc),a0
                 nop
@@ -376,16 +373,16 @@ WeaponSetup_RenderHeading:                              ; CODE XREF: WeaponSetup
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function WeaponSetup_RenderHeading
 ; Renders and highlights the MOVING/FIX shooting-mode options
-WeaponSetup_RenderShootingModeOptions:                  ; CODE XREF: WeaponSetup_HandleShootingModeInput+66   j  ; was: sub_1F626
+WeaponSetup_RenderShootingModeOptions:                  ; was: sub_1F626
                                         ; WeaponSetup_HandleShootingModeInput+70   j
                 move.w  #$8100,d0
                 cmpi.w  #2,(SetupTransitionIndex).w
                 bne.s   WeaponSetup_SelectShootingModeLabelColor
                 btst    #1,(FrameCounter+1).w
                 bne.s   WeaponSetup_RenderShootingModeLabel
-WeaponSetup_SelectShootingModeLabelColor:               ; CODE XREF: WeaponSetup_RenderShootingModeOptions+A   j  ; was: loc_1F63A
+WeaponSetup_SelectShootingModeLabelColor:               ; was: loc_1F63A
                 move.w  #$A100,d0
-WeaponSetup_RenderShootingModeLabel:                    ; CODE XREF: WeaponSetup_RenderShootingModeOptions+12   j  ; was: loc_1F63E
+WeaponSetup_RenderShootingModeLabel:                    ; was: loc_1F63E
                 lea     WeaponSetup_ShootingModeText(pc),a0
                 nop
                 move.w  #$680E,d4
@@ -394,7 +391,7 @@ WeaponSetup_RenderShootingModeLabel:                    ; CODE XREF: WeaponSetup
                 tst.w   (ShootingMode).w
                 beq.s   WeaponSetup_RenderMovingModeOption
                 move.w  #$A100,d0
-WeaponSetup_RenderMovingModeOption:                     ; CODE XREF: WeaponSetup_RenderShootingModeOptions+30   j  ; was: loc_1F65C
+WeaponSetup_RenderMovingModeOption:                     ; was: loc_1F65C
                 lea     WeaponSetup_MovingModeText(pc),a0
                 nop
                 move.w  #$6830,d4
@@ -403,23 +400,23 @@ WeaponSetup_RenderMovingModeOption:                     ; CODE XREF: WeaponSetup
                 tst.w   (ShootingMode).w
                 bne.s   WeaponSetup_RenderFixedModeOption
                 move.w  #$A100,d0
-WeaponSetup_RenderFixedModeOption:                      ; CODE XREF: WeaponSetup_RenderShootingModeOptions+4E   j  ; was: loc_1F67A
+WeaponSetup_RenderFixedModeOption:                      ; was: loc_1F67A
                 lea     WeaponSetup_FixedModeText(pc),a0
                 nop
                 move.w  #$6840,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function WeaponSetup_RenderShootingModeOptions
 ; Begins the controller-layout page with its selected highlight color
-WeaponSetup_RenderControlTypePage:                      ; CODE XREF: WeaponSetup_HandleControlTypeInput+72   j  ; was: sub_1F68A
+WeaponSetup_RenderControlTypePage:                      ; was: sub_1F68A
                                         ; WeaponSetup_HandleControlTypeInput+84   j
                 move.w  #$E100,d0
                 cmpi.w  #2,(SetupTransitionIndex).w
                 beq.s   WeaponSetup_RenderStatusAndControlTypeWithColor
 ; End of function WeaponSetup_RenderControlTypePage
 ; Renders the STATUS WINDOW label and selected controller type
-WeaponSetup_RenderStatusAndControlType:                 ; CODE XREF: WeaponSetup_InitializeTextAndTiles+8   p  ; was: sub_1F696
+WeaponSetup_RenderStatusAndControlType:                 ; was: sub_1F696
                 move.w  #$8100,d0
-WeaponSetup_RenderStatusAndControlTypeWithColor:        ; CODE XREF: WeaponSetup_RenderControlTypePage+A   j  ; was: loc_1F69A
+WeaponSetup_RenderStatusAndControlTypeWithColor:        ; was: loc_1F69A
                 lea     WeaponSetup_StatusWindowText(pc),a0
                 nop
                 move.w  #$680E,d4
@@ -427,24 +424,24 @@ WeaponSetup_RenderStatusAndControlTypeWithColor:        ; CODE XREF: WeaponSetup
                 bra.s   WeaponSetup_RenderSelectedControlType
 ; End of function WeaponSetup_RenderStatusAndControlType
 ; Maps stored controller-layout flags to one of the 26 displayed types
-WeaponSetup_FindControlTypeIndex:                       ; CODE XREF: WeaponSetup_InitializeTextAndTiles+4   p  ; was: sub_1F6AC
+WeaponSetup_FindControlTypeIndex:                       ; was: sub_1F6AC
                 lea     WeaponSetup_ControlTypeValues(pc),a0
                 move.b  (ControlLayoutFlags).w,d0
                 moveq   #0,d1
                 moveq   #$19,d7
-WeaponSetup_FindControlTypeIndexLoop:                   ; CODE XREF: WeaponSetup_FindControlTypeIndex+12   j  ; was: loc_1F6B8
+WeaponSetup_FindControlTypeIndexLoop:                   ; was: loc_1F6B8
                 cmp.b   (a0)+,d0
                 beq.s   WeaponSetup_StoreControlTypeIndex
                 addq.w  #1,d1
                 dbf     d7,WeaponSetup_FindControlTypeIndexLoop
 ; A miss leaves D1=26, beyond the 26 text pointers; this path only resets the flag byte
                 move.b  #0,(ControlLayoutFlags).w
-WeaponSetup_StoreControlTypeIndex:                      ; CODE XREF: WeaponSetup_FindControlTypeIndex+E   j  ; was: loc_1F6C8
+WeaponSetup_StoreControlTypeIndex:                      ; was: loc_1F6C8
                 move.b  d1,(WeaponSetupControlIndex+1).w
                 rts
 ; End of function WeaponSetup_FindControlTypeIndex
 ; Renders the currently selected TYPE 1--26 controller layout
-WeaponSetup_RenderSelectedControlType:                  ; CODE XREF: WeaponSetup_RenderStatusAndControlType+14   j  ; was: sub_1F6CE
+WeaponSetup_RenderSelectedControlType:                  ; was: sub_1F6CE
                 move.w  (WeaponSetupControlIndex).w,d1
                 lea     WeaponSetup_ControlTypeValues(pc),a0
                 move.b  (a0,d1.w),(ControlLayoutFlags).w
@@ -455,28 +452,28 @@ WeaponSetup_RenderSelectedControlType:                  ; CODE XREF: WeaponSetup
                 cmpi.w  #2,(SetupTransitionIndex).w
                 beq.s   WeaponSetup_RenderSelectedControlTypeWithColor
                 move.w  #$8100,d0
-WeaponSetup_RenderSelectedControlTypeWithColor:         ; CODE XREF: WeaponSetup_RenderSelectedControlType+22   j  ; was: loc_1F6F6
+WeaponSetup_RenderSelectedControlTypeWithColor:         ; was: loc_1F6F6
                 move.w  #$6830,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function WeaponSetup_RenderSelectedControlType
 ; Begins the exit page with its selected highlight color
-WeaponSetup_RenderExitOption:                           ; CODE XREF: WeaponSetup_HandleExitInput+38   j  ; was: sub_1F700
+WeaponSetup_RenderExitOption:                           ; was: sub_1F700
                                         ; WeaponSetup_HandleExitInput+4A   j
                 move.w  #$E100,d0
                 cmpi.w  #4,(SetupTransitionIndex).w
                 beq.s   WeaponSetup_RenderExitTextWithColor
 ; End of function WeaponSetup_RenderExitOption
 ; Renders the EXIT option
-WeaponSetup_RenderExitText:                             ; CODE XREF: WeaponSetup_InitializeTextAndTiles+C   p  ; was: sub_1F70C
+WeaponSetup_RenderExitText:                             ; was: sub_1F70C
                 move.w  #$8100,d0
-WeaponSetup_RenderExitTextWithColor:                    ; CODE XREF: WeaponSetup_RenderExitOption+A   j  ; was: loc_1F710
+WeaponSetup_RenderExitTextWithColor:                    ; was: loc_1F710
                 lea     WeaponSetup_ExitText(pc),a0
                 nop
                 move.w  #$690E,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; End of function WeaponSetup_RenderExitText
 ; Moves the setup screen's secondary Y camera toward its target by four per call
-WeaponSetup_UpdateVerticalScroll:                       ; CODE XREF: WeaponSetup_HandleLoadoutState+8   p  ; was: sub_1F720
+WeaponSetup_UpdateVerticalScroll:                       ; was: sub_1F720
                                         ; WeaponSetup_HandleShootingModeInput+4   p
                 move.w  (SecondaryCameraYPos).w,d0
                 cmp.w   (WeaponSetupVScrollTarget).w,d0
@@ -486,20 +483,20 @@ WeaponSetup_UpdateVerticalScroll:                       ; CODE XREF: WeaponSetup
                 moveq   #1,d0
                 rts
 ; ---------------------------------------------------------------------------
-WeaponSetup_ApplyVerticalScrollStep:                    ; CODE XREF: WeaponSetup_UpdateVerticalScroll+A   j  ; was: loc_1F734
+WeaponSetup_ApplyVerticalScrollStep:                    ; was: loc_1F734
                 addq.w  #4,(SecondaryCameraYPos).w
                 moveq   #1,d0
-WeaponSetup_UpdateVerticalScrollReturn:                 ; CODE XREF: WeaponSetup_UpdateVerticalScroll+8   j  ; was: locret_1F73A
+WeaponSetup_UpdateVerticalScrollReturn:                 ; was: locret_1F73A
                 rts
 ; End of function WeaponSetup_UpdateVerticalScroll
 ; Renders three setup sprites while FrameCounter bit three is set
-WeaponSetup_RenderSlotSprites:                          ; CODE XREF: WeaponSetup_HandleLoadoutState   p  ; was: sub_1F73C
+WeaponSetup_RenderSlotSprites:                          ; was: sub_1F73C
                                         ; WeaponSetup_HandleShootingModeInput   p
                 btst    #3,(FrameCounter+1).w
                 bne.s   WeaponSetup_BuildSlotSprites
                 rts
 ; ---------------------------------------------------------------------------
-WeaponSetup_BuildSlotSprites:                           ; CODE XREF: WeaponSetup_RenderSlotSprites+6   j  ; was: loc_1F746
+WeaponSetup_BuildSlotSprites:                           ; was: loc_1F746
                 movea.w #(SharedSpriteScratch-M68K_RAM),a0
                 movea.w a0,a1
                 move.w  #$146,d0
@@ -519,12 +516,12 @@ WeaponSetup_BuildSlotSprites:                           ; CODE XREF: WeaponSetup
                 jmp     (Sprite_AppendOAMEntries).l
 ; End of function WeaponSetup_RenderSlotSprites
 ; Renders the two-sprite confirmation prompt while its input flag is set
-WeaponSetup_RenderConfirmPromptSprites:                 ; CODE XREF: WeaponSetup_WaitForConfirmInput   p  ; was: sub_1F784
+WeaponSetup_RenderConfirmPromptSprites:                 ; was: sub_1F784
                 btst    #3,(FrameCounter+1).w
                 bne.s   WeaponSetup_BuildConfirmPromptSprites
                 rts
 ; ---------------------------------------------------------------------------
-WeaponSetup_BuildConfirmPromptSprites:                  ; CODE XREF: WeaponSetup_RenderConfirmPromptSprites+6   j  ; was: loc_1F78E
+WeaponSetup_BuildConfirmPromptSprites:                  ; was: loc_1F78E
                 movea.w #(SharedSpriteScratch-M68K_RAM),a0
                 movea.w a0,a1
                 move.w  #$146,d0
@@ -540,7 +537,7 @@ WeaponSetup_BuildConfirmPromptSprites:                  ; CODE XREF: WeaponSetup
                 jmp     (Sprite_AppendOAMEntries).l
 ; End of function WeaponSetup_RenderConfirmPromptSprites
 ; Advances the weapon-setup highlight palette cycle
-WeaponSetup_UpdateHighlightPalette:                     ; CODE XREF: WeaponSetup_HandleLoadoutState+4   p  ; was: sub_1F7BE
+WeaponSetup_UpdateHighlightPalette:                     ; was: sub_1F7BE
                                         ; WeaponSetup_HandleControlTypeInput+4   p
                 move.w  (WeaponSetupHighlight).w,d0
                 bne.s   WeaponSetup_AdvanceHighlightPaletteCycle
@@ -549,10 +546,10 @@ WeaponSetup_UpdateHighlightPalette:                     ; CODE XREF: WeaponSetup
                 addq.w  #2,d0
                 bra.s   WeaponSetup_WriteHighlightPaletteColors
 ; ---------------------------------------------------------------------------
-WeaponSetup_AdvanceHighlightPaletteCycle:               ; CODE XREF: WeaponSetup_UpdateHighlightPalette+4   j  ; was: loc_1F7D0
+WeaponSetup_AdvanceHighlightPaletteCycle:               ; was: loc_1F7D0
                 subq.w  #2,(WeaponSetupHighlight).w
 ; Writes the selected highlight colors to the palette buffer
-WeaponSetup_WriteHighlightPaletteColors:                ; CODE XREF: WeaponSetup_UpdateHighlightPalette+C   j  ; was: loc_1F7D4
+WeaponSetup_WriteHighlightPaletteColors:                ; was: loc_1F7D4
                                         ; WeaponSetup_UpdateHighlightPalette+10   j
                 andi.w  #$E,d0
                 move.w  WeaponSetup_HighlightPaletteColor1Cycle(pc,d0.w),(PaletteActiveColor49).w
@@ -561,10 +558,6 @@ WeaponSetup_WriteHighlightPaletteColors:                ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_UpdateHighlightPalette
 ; ---------------------------------------------------------------------------
 WeaponSetup_HighlightPaletteColor1Cycle:    dc.w    $400, $400, $400, $400, $400, $200, 0, $600  ; was: word_1F7E6
-                                        ; DATA XREF: WeaponSetup_UpdateHighlightPalette+1A   r
 WeaponSetup_HighlightPaletteColor2Cycle:    dc.w    $EEE, $EEC, $ECA, $CA8, $A86, $864, $642, $EEE  ; was: word_1F7F6
-                                        ; DATA XREF: WeaponSetup_UpdateHighlightPalette+20   r
 WeaponSetup_BackgroundPaletteColor2Cycle:   dc.w    $200, $400, $622, $844, $A66, $C88, $CAA, $ACC, $8EE, $6CE  ; was: word_1F806
-                                        ; DATA XREF: WeaponSetup_UpdateBackgroundEffect+52   r
 WeaponSetup_BackgroundPaletteColor1Cycle:   dc.w    $48E, $24E, $2C, $A, 8, 6, 4, 2, 0, 0  ; was: word_1F81A
-                                        ; DATA XREF: WeaponSetup_UpdateBackgroundEffect+4C   r

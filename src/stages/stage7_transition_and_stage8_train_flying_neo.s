@@ -1,19 +1,19 @@
-Stage7_WaitForPlayerStage8Trigger:                      ; DATA XREF: ROM:0000C896   o  ; was: sub_CDFA
+Stage7_WaitForPlayerStage8Trigger:                      ; was: sub_CDFA
                 cmpi.w  #$140,(PlayerXPosition).w
                 bmi.s   Stage7_WaitForPlayerStage8Trigger_Return
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$40,(Stage7ExitDelay).w        ; '@'
-Stage7_WaitForPlayerStage8Trigger_Return:               ; CODE XREF: Stage7_WaitForPlayerStage8Trigger+6   j  ; was: locret_CE0C
+Stage7_WaitForPlayerStage8Trigger_Return:               ; was: locret_CE0C
                 rts
 ; End of function Stage7_WaitForPlayerStage8Trigger
 ; Wait for the Stage 7 exit delay, then start the Stage 8 transition
-Stage7_StartTransitionToStage8:                         ; DATA XREF: ROM:0000C898   o  ; was: sub_CE0E
+Stage7_StartTransitionToStage8:                         ; was: sub_CE0E
                 subq.w  #1,(Stage7ExitDelay).w
                 bmi.s   Stage7_StartTransitionToStage8_CheckReady
-Stage7_StartTransitionToStage8_Return:                  ; CODE XREF: Stage7_StartTransitionToStage8+C   j  ; was: locret_CE14
+Stage7_StartTransitionToStage8_Return:                  ; was: locret_CE14
                 rts
 ; ---------------------------------------------------------------------------
-Stage7_StartTransitionToStage8_CheckReady:              ; CODE XREF: Stage7_StartTransitionToStage8+4   j  ; was: loc_CE16
+Stage7_StartTransitionToStage8_CheckReady:              ; was: loc_CE16
                 tst.w   (GameplayExitMode).w
                 bne.s   Stage7_StartTransitionToStage8_Return
                 move.b  #$89,(PendingStageBGMRequest).w
@@ -21,7 +21,7 @@ Stage7_StartTransitionToStage8_CheckReady:              ; CODE XREF: Stage7_Star
                 bra.w   Stage_StartInterstageTransition
 ; End of function Stage7_StartTransitionToStage8
 ; Write six source bytes to three strided pairs in the Stage 8 control region
-Stage8_WriteStridedControlBytes:                        ; CODE XREF: Stage8_InitializeTrainSequence+38   p  ; was: sub_CE2E
+Stage8_WriteStridedControlBytes:                        ; was: sub_CE2E
                                         ; Stage8_InitializeFlyingNeoEncounter+1A   p
                 lea     (M68K_RAM_PHYSICAL+(Stage8StridedControl-M68K_RAM)).l,a0
                 move.b  (a1)+,(a0)
@@ -33,13 +33,11 @@ Stage8_WriteStridedControlBytes:                        ; CODE XREF: Stage8_Init
                 rts
 ; End of function Stage8_WriteStridedControlBytes
 ; ---------------------------------------------------------------------------
-Stage8_TrainStridedControlBytes:    dc.b    $19, $1A, $1E, $1F, $23, $24  ; was: byte_CE4C
-                                        ; DATA XREF: Stage8_InitializeTrainSequence+34   o
+Stage8_TrainStridedControlBytes:        dc.b    $19, $1A, $1E, $1F, $23, $24  ; was: byte_CE4C
 Stage8_FlyingNeoStridedControlBytes:    dc.b    $1C, $1D, $21, $22, $26, $27  ; was: byte_CE52
-                                        ; DATA XREF: Stage8_InitializeFlyingNeoEncounter+16   o
 
 ; Initialize the Stage 8 train sequence and Flying Neo composite
-Stage8_InitializeTrainSequence:                         ; DATA XREF: ROM:0000C89A   o  ; was: sub_CE58
+Stage8_InitializeTrainSequence:                         ; was: sub_CE58
                 move.w  #1,(MidgameLightningMode).w
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$730,(PrimaryCameraXPosition).w
@@ -56,16 +54,16 @@ Stage8_InitializeTrainSequence:                         ; DATA XREF: ROM:0000C89
                 move.w  #$45C,(Entity_ObjectPool).w
                 clr.w   (PrimaryEntityState).w
 ; Update the Stage 8 train until camera X reaches $EC0
-Stage8_UpdateTrainSequence:                             ; DATA XREF: ROM:0000C89C   o  ; was: loc_CEA6
+Stage8_UpdateTrainSequence:                             ; was: loc_CEA6
                 cmpi.w  #$EC0,(PrimaryCameraXPosition).w
                 bmi.s   Stage8_UpdateTrainSequence_UpdateScroll
                 move.w  #$16,(PlayerScriptStateOffset).w
                 bsr.w   Stage_TransitionToNextPhase
-Stage8_UpdateTrainSequence_UpdateScroll:                ; CODE XREF: Stage8_InitializeTrainSequence+54   j  ; was: loc_CEB8
+Stage8_UpdateTrainSequence_UpdateScroll:                ; was: loc_CEB8
                 bsr.w   Stage8_UpdateTrainScrollAndTilemap
 ; End of function Stage8_InitializeTrainSequence
 ; Update Stage 8 train lightning, parallax, and vertical oscillation
-Stage8_UpdateTrainEffectsAndVerticalOscillation:        ; CODE XREF: Stage8_InitializeFlyingNeoApproach+4   p  ; was: sub_CEBC
+Stage8_UpdateTrainEffectsAndVerticalOscillation:        ; was: sub_CEBC
                                         ; Stage8_UpdateFlyingNeoApproachEffects+E   j
                 move.l  #Stage8_TrainLightningPaletteEntryLists,(PaletteEntryLists).w
                 bsr.w   Midgame_UpdateRandomLightningEffect
@@ -78,17 +76,17 @@ Stage8_UpdateTrainEffectsAndVerticalOscillation:        ; CODE XREF: Stage8_Init
                 addq.w  #1,(MidgameVerticalPhase).w
                 bra.s   Stage8_UpdateTrainEffectsAndVerticalOscillation_Return
 ; ---------------------------------------------------------------------------
-Stage8_UpdateTrainEffectsAndVerticalOscillation_AccelerateDown:  ; CODE XREF: Stage8_UpdateTrainEffectsAndVerticalOscillation+16   j  ; was: loc_CEE4
+Stage8_UpdateTrainEffectsAndVerticalOscillation_AccelerateDown:  ; was: loc_CEE4
                 addi.l  #$1400,(PrimaryCameraYPosition).w
                 cmpi.w  #$18,(PrimaryCameraYPosition).w
                 bmi.s   Stage8_UpdateTrainEffectsAndVerticalOscillation_Return
                 clr.w   (MidgameVerticalPhase).w
-Stage8_UpdateTrainEffectsAndVerticalOscillation_Return:  ; CODE XREF: Stage8_UpdateTrainEffectsAndVerticalOscillation+14   j  ; was: locret_CEF8
+Stage8_UpdateTrainEffectsAndVerticalOscillation_Return:  ; was: locret_CEF8
                                         ; Stage8_UpdateTrainEffectsAndVerticalOscillation+20   j
                 rts
 ; End of function Stage8_UpdateTrainEffectsAndVerticalOscillation
 ; Update the four repeating Stage 8 train parallax values
-Midgame_UpdateTrainAndFlyCorridorParallaxRows:          ; CODE XREF: Stage8_UpdateTrainEffectsAndVerticalOscillation+C   p  ; was: sub_CEFA
+Midgame_UpdateTrainAndFlyCorridorParallaxRows:          ; was: sub_CEFA
                                         ; Stage8_UpdateFlyingNeoVerticalScrollAndEffects+2E   p
                 movea.w #(HorizontalScrollProfile-M68K_RAM),a5
                 subi.l  #$28000,(VerticalScrollProfile).w
@@ -117,7 +115,7 @@ Midgame_UpdateTrainAndFlyCorridorParallaxRows:          ; CODE XREF: Stage8_Upda
                 addq.w  #4,d0
                 movea.w #(HorizontalScrollProfile-M68K_RAM),a5
                 move.w  #$2F,d7                         ; '/'
-Midgame_UpdateTrainAndFlyCorridorParallaxRows_FillBuffer:  ; CODE XREF: Midgame_UpdateTrainAndFlyCorridorParallaxRows+6A   j  ; was: loc_CF5C
+Midgame_UpdateTrainAndFlyCorridorParallaxRows_FillBuffer:  ; was: loc_CF5C
                 move.w  d1,(a5)+
                 move.w  d2,(a5)+
                 move.w  d3,(a5)+
@@ -126,7 +124,7 @@ Midgame_UpdateTrainAndFlyCorridorParallaxRows_FillBuffer:  ; CODE XREF: Midgame_
                 rts
 ; End of function Midgame_UpdateTrainAndFlyCorridorParallaxRows
 ; Advance the train to the Flying Neo approach boundary
-Stage8_InitializeFlyingNeoApproach:                     ; DATA XREF: ROM:0000C89E   o  ; was: sub_CF6A
+Stage8_InitializeFlyingNeoApproach:                     ; was: sub_CF6A
                 bsr.w   Scroll_AdvanceTrainHorizontalAndRenderTilemap
                 bsr.w   Stage8_UpdateTrainEffectsAndVerticalOscillation
                 cmpi.w  #$F00,(PrimaryCameraXPosition).w
@@ -138,11 +136,11 @@ Stage8_InitializeFlyingNeoApproach:                     ; DATA XREF: ROM:0000C89
                 move.w  d0,(PrimaryCameraXPosition).w
                 move.w  d0,(CameraXLowerBound).w
                 move.w  d0,(CameraXUpperBound).w
-Stage8_InitializeFlyingNeoApproach_Return:              ; CODE XREF: Stage8_InitializeFlyingNeoApproach+E   j  ; was: locret_CF98
+Stage8_InitializeFlyingNeoApproach_Return:              ; was: locret_CF98
                 rts
 ; End of function Stage8_InitializeFlyingNeoApproach
 ; Wait for the Flying Neo approach delay and shared gate
-Stage8_UpdateFlyingNeoApproachDelay:                    ; DATA XREF: ROM:0000C8A0   o  ; was: sub_CF9A
+Stage8_UpdateFlyingNeoApproachDelay:                    ; was: sub_CF9A
                 subq.w  #1,(Stage8ApproachTimer).w
                 bpl.s   Stage8_UpdateFlyingNeoApproachEffects
                 tst.w   (ScriptedInputActive).w
@@ -150,14 +148,14 @@ Stage8_UpdateFlyingNeoApproachDelay:                    ; DATA XREF: ROM:0000C8A
                 addq.w  #2,(StageStateOffset).w
                 clr.l   (FlyingNeoYVelocity).w
                 bsr.w   Stage8_StartFlyingNeoCompositeAndQueueTiles
-Stage8_UpdateFlyingNeoApproachEffects:                  ; CODE XREF: Stage8_UpdateFlyingNeoApproachDelay+4   j  ; was: loc_CFB2
+Stage8_UpdateFlyingNeoApproachEffects:                  ; was: loc_CFB2
                                         ; Stage8_UpdateFlyingNeoApproachDelay+A   j
                 move.w  (PrimaryCameraXPosition).w,(SecondaryCameraXPos).w
                 move.w  (PrimaryCameraYPosition).w,(SecondaryCameraYPos).w
                 bra.w   Stage8_UpdateTrainEffectsAndVerticalOscillation
 ; End of function Stage8_UpdateFlyingNeoApproachDelay
 ; Decelerate the Flying Neo approach's vertical velocity
-Stage8_DecelerateFlyingNeoVerticalScroll:               ; DATA XREF: ROM:0000C8A4   o  ; was: sub_CFC2
+Stage8_DecelerateFlyingNeoVerticalScroll:               ; was: sub_CFC2
                 subi.l  #$1000,(FlyingNeoYVelocity).w
                 bpl.s   Stage8_UpdateFlyingNeoVerticalScrollAndEffects
                 addq.w  #2,(StageStateOffset).w
@@ -166,16 +164,16 @@ Stage8_DecelerateFlyingNeoVerticalScroll:               ; DATA XREF: ROM:0000C8A
                 bra.s   Stage8_UpdateFlyingNeoVerticalScrollAndEffects
 ; End of function Stage8_DecelerateFlyingNeoVerticalScroll
 ; Accelerate the Flying Neo approach's vertical velocity
-Stage8_AccelerateFlyingNeoVerticalScroll:               ; DATA XREF: ROM:0000C8A2   o  ; was: sub_CFDE
+Stage8_AccelerateFlyingNeoVerticalScroll:               ; was: sub_CFDE
                 cmpi.w  #5,(FlyingNeoYVelocity).w
                 bpl.s   Stage8_AccelerateFlyingNeoVerticalScroll_CheckPosition
                 addi.l  #$1000,(FlyingNeoYVelocity).w
-Stage8_AccelerateFlyingNeoVerticalScroll_CheckPosition:  ; CODE XREF: Stage8_AccelerateFlyingNeoVerticalScroll+6   j  ; was: loc_CFEE
+Stage8_AccelerateFlyingNeoVerticalScroll_CheckPosition:  ; was: loc_CFEE
                 cmpi.w  #$40,(PrimaryCameraYPosition).w  ; '@'
                 bmi.s   Stage8_UpdateFlyingNeoVerticalScrollAndEffects
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$1A,(PlayerScriptStateOffset).w
-Stage8_UpdateFlyingNeoVerticalScrollAndEffects:         ; CODE XREF: Stage8_DecelerateFlyingNeoVerticalScroll+8   j  ; was: loc_D000
+Stage8_UpdateFlyingNeoVerticalScrollAndEffects:         ; was: loc_D000
                                         ; Stage8_DecelerateFlyingNeoVerticalScroll+1A   j
                 move.l  (FlyingNeoYVelocity).w,d0
                 add.l   d0,(PrimaryCameraYPosition).w
@@ -186,7 +184,7 @@ Stage8_UpdateFlyingNeoVerticalScrollAndEffects:         ; CODE XREF: Stage8_Dece
                 rts
 ; End of function Stage8_AccelerateFlyingNeoVerticalScroll
 ; Submit Flying Neo's assets and initialize its encounter controls
-Stage8_InitializeFlyingNeoEncounter:                    ; DATA XREF: ROM:0000C8A6   o  ; was: sub_D01E
+Stage8_InitializeFlyingNeoEncounter:                    ; was: sub_D01E
                 subq.w  #1,(Stage8ApproachTimer).w
                 bpl.s   Stage8_UpdateFlyingNeoEncounterEffects
                 addq.w  #2,(StageStateOffset).w
@@ -195,7 +193,7 @@ Stage8_InitializeFlyingNeoEncounter:                    ; DATA XREF: ROM:0000C8A
                 lea     Stage8_FlyingNeoStridedControlBytes(pc),a1
                 bsr.w   Stage8_WriteStridedControlBytes
                 bsr.w   Midgame_LoadFlyingNeoPaletteCommands
-Stage8_UpdateFlyingNeoEncounterEffects:                 ; CODE XREF: Stage8_InitializeFlyingNeoEncounter+4   j  ; was: loc_D040
+Stage8_UpdateFlyingNeoEncounterEffects:                 ; was: loc_D040
                                         ; Stage8_UpdateFlyingNeoEncounter+4   j
                 move.l  #Stage8_FlyingNeoLightningPaletteEntryLists,(PaletteEntryLists).w
                 bsr.w   Midgame_UpdateRandomLightningEffect
@@ -208,11 +206,11 @@ Stage8_UpdateFlyingNeoEncounterEffects:                 ; CODE XREF: Stage8_Init
                 cmpi.w  #$60,(PrimaryCameraYPosition).w  ; '`'
                 bpl.s   Stage8_UpdateFlyingNeoEncounterEffects_Return
                 addq.w  #1,(MidgameVerticalPhase).w
-Stage8_UpdateFlyingNeoEncounterEffects_Return:          ; CODE XREF: Stage8_InitializeFlyingNeoEncounter+52   j  ; was: locret_D076
+Stage8_UpdateFlyingNeoEncounterEffects_Return:          ; was: locret_D076
                                         ; Stage8_InitializeFlyingNeoEncounter+68   j
                 rts
 ; ---------------------------------------------------------------------------
-Stage8_AdvanceFlyingNeoVerticalOscillation:             ; CODE XREF: Stage8_InitializeFlyingNeoEncounter+42   j  ; was: loc_D078
+Stage8_AdvanceFlyingNeoVerticalOscillation:             ; was: loc_D078
                 addi.l  #$4000,(PrimaryCameraYPosition).w
                 cmpi.w  #$80,(PrimaryCameraYPosition).w
                 bmi.s   Stage8_UpdateFlyingNeoEncounterEffects_Return
@@ -220,7 +218,7 @@ Stage8_AdvanceFlyingNeoVerticalOscillation:             ; CODE XREF: Stage8_Init
                 rts
 ; End of function Stage8_InitializeFlyingNeoEncounter
 ; Start the post-Flying-Neo transition after its message and shared gate clear
-Stage8_StartPostFlyingNeoTransition:                    ; DATA XREF: ROM:0000C8AA   o  ; was: sub_D08E
+Stage8_StartPostFlyingNeoTransition:                    ; was: sub_D08E
                 tst.w   (MessageSequenceState).w
                 bne.w   Stage8_UpdateFlyingNeoEncounter
                 tst.w   (GameplayExitMode).w
@@ -230,9 +228,8 @@ Stage8_StartPostFlyingNeoTransition:                    ; DATA XREF: ROM:0000C8A
                 beq.w   Stage_StartInterstageTransition
 ; End of function Stage8_StartPostFlyingNeoTransition
 ; Update the Flying Neo encounter camera and vertical oscillation
-Stage8_UpdateFlyingNeoEncounter:                        ; CODE XREF: Stage8_StartPostFlyingNeoTransition+4   j  ; was: sub_D0AC
+Stage8_UpdateFlyingNeoEncounter:                        ; was: sub_D0AC
                                         ; Stage8_StartPostFlyingNeoTransition+C   j
-                                        ; DATA XREF:
                 bsr.w   Camera_UpdateHorizontalTowardsPlayer
                 bra.w   Stage8_UpdateFlyingNeoEncounterEffects
 ; End of function Stage8_UpdateFlyingNeoEncounter

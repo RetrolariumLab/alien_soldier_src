@@ -4,13 +4,13 @@ UnreferencedClearStageScratchWord:
                 rts
 ; End of function UnreferencedClearStageScratchWord
 ; Dispatches the selected stage process while gameplay updates are active
-Stage_DispatchSelectedProcess:                          ; CODE XREF: Stage_UpdateGameplayEntry:Stage_EnterSelectedGameplayProcess   j  ; was: sub_FF16
+Stage_DispatchSelectedProcess:                          ; was: sub_FF16
                                         ; XiTigerStage_UpdateGameplayEntry+110   j
                 tst.b   (FrameControlFlags).w
                 bpl.s   Stage_RunSelectedProcess
                 rts
 ; ---------------------------------------------------------------------------
-Stage_RunSelectedProcess:                               ; CODE XREF: Stage_DispatchSelectedProcess+4   j  ; was: loc_FF1E
+Stage_RunSelectedProcess:                               ; was: loc_FF1E
                 jsr     Scroll_PreparePlaneBuffersAndRegisterShadows(pc)  ; (pc)
                 nop
                 movea.w #(PlayerObjectType-M68K_RAM),a5
@@ -27,12 +27,12 @@ Stage_ProcessHandlerTable:  dc.l    Stage_DispatchEarlyStageState  ; was: off_FF
                 dc.l    Stage_DispatchEarlyStageState
 
 ; Transitions stage to next phase or section
-Stage_TransitionToNextPhase:                            ; CODE XREF: Stage_UpdateLogic+14   j  ; was: sub_FF4A
+Stage_TransitionToNextPhase:                            ; was: sub_FF4A
                                         ; Camera_AutoScrollCheck+10   j
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$56,(MessageSequenceState).w   ; 'V'
 ; Initializes shared boss health and combat-counter values for the next phase
-Stage_InitializeBossHealthAndCounter:                   ; CODE XREF: Stage9_InitializeXiTigerEncounter   p  ; was: loc_FF54
+Stage_InitializeBossHealthAndCounter:                   ; was: loc_FF54
                 move.w  (StageTableIndex).w,d0
                 lea     Stage_BossHealthDefaults(pc),a0
                 nop
@@ -45,7 +45,7 @@ Stage_InitializeBossHealthAndCounter:                   ; CODE XREF: Stage9_Init
                 rts
 ; End of function Stage_TransitionToNextPhase
 ; ---------------------------------------------------------------------------
-Stage_BossHealthDefaults:   dc.w    $7000, $7000        ; DATA XREF: Stage_TransitionToNextPhase+E   o  ; was: word_FF7E
+Stage_BossHealthDefaults:   dc.w    $7000, $7000        ; was: word_FF7E
                 dc.w    $7000, $7000
                 dc.w    $7000, $7000
                 dc.w    $7000, $7000
@@ -66,7 +66,7 @@ Stage_BossHealthDefaults:   dc.w    $7000, $7000        ; DATA XREF: Stage_Trans
                 dc.w    $7000, $7000
                 dc.w    $7000, $7000
                 dc.w    $7000, $7000
-Stage_BossCombatCounterDefaults:    dc.w    $1E0, $1E0  ; DATA XREF: Stage_TransitionToNextPhase+14   o  ; was: word_FFD2
+Stage_BossCombatCounterDefaults:    dc.w    $1E0, $1E0  ; was: word_FFD2
                 dc.w    $1E0, $1E0
                 dc.w    $1E0, $1E0
                 dc.w    $1E0, $1E0

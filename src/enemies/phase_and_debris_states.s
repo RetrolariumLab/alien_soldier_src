@@ -1,4 +1,4 @@
-Enemy_PhasePatternController:                           ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D020
+Enemy_PhasePatternController:                           ; was: sub_2D020
                 tst.w   4(a5)
                 beq.s   Enemy_PhasePatternController_UpdateState
                 tst.w   $24(a5)
@@ -7,12 +7,12 @@ Enemy_PhasePatternController:                           ; DATA XREF: ROM:Entity_
                 bpl.w   Enemy_ResetPhasePattern
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
-Enemy_PhasePatternController_UpdateState:               ; CODE XREF: Enemy_PhasePatternController+4   j  ; was: loc_2D040
+Enemy_PhasePatternController_UpdateState:               ; was: loc_2D040
                 bsr.s   Enemy_DispatchPhasePatternState
                 bra.w   Enemy_ApplyPhasePatternAnimationSelector
 ; End of function Enemy_PhasePatternController
 ; Dispatches the phase-pattern enemy's current state
-Enemy_DispatchPhasePatternState:                        ; CODE XREF: Enemy_PhasePatternController:Enemy_PhasePatternController_UpdateState   p  ; was: sub_2D046
+Enemy_DispatchPhasePatternState:                        ; was: sub_2D046
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
                 lea     Enemy_PhasePatternStateOffsets(pc,d0.w),a0
@@ -20,7 +20,7 @@ Enemy_DispatchPhasePatternState:                        ; CODE XREF: Enemy_Phase
                 jmp     (a0)
 ; End of function Enemy_DispatchPhasePatternState
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternStateOffsets: dc.w    Enemy_PhasePatternInit-*  ; DATA XREF: Enemy_DispatchPhasePatternState+8   o  ; was: off_2D056
+Enemy_PhasePatternStateOffsets: dc.w    Enemy_PhasePatternInit-*  ; was: off_2D056
                 dc.w    Enemy_PhasePatternWaitState-*
                 dc.w    Enemy_PhasePatternAirborneState-*
                 dc.w    Enemy_PhasePattern_WaitBeforeAttack-*
@@ -29,14 +29,14 @@ Enemy_PhasePatternStateOffsets: dc.w    Enemy_PhasePatternInit-*  ; DATA XREF: E
                 dc.w    Enemy_PhasePattern_Restart-*
 
 ; Initializes the phase-pattern sprite and first wait interval
-Enemy_PhasePatternInit:                                 ; DATA XREF: ROM:Enemy_PhasePatternStateOffsets   o  ; was: sub_2D064
+Enemy_PhasePatternInit:                                 ; was: sub_2D064
                 moveq   #0,d0
                 bsr.w   Enemy_SetupPhasePatternSprite
                 move.w  #4,$5C(a5)
                 move.w  #$100,$48(a5)
                 addq.w  #2,4(a5)
 ; Waits, and leaps when the player presses the bit-5 button
-Enemy_PhasePatternWaitState:                            ; DATA XREF: ROM:0002D058   o  ; was: loc_2D07A
+Enemy_PhasePatternWaitState:                            ; was: loc_2D07A
                 subq.w  #1,$48(a5)
                 beq.s   Enemy_PhasePatternWaitState_Timeout
                 btst    #5,(ControllerPressedState).w
@@ -45,31 +45,31 @@ Enemy_PhasePatternWaitState:                            ; DATA XREF: ROM:0002D05
                 btst    #4,$E(a5)
                 bne.s   Enemy_PhasePatternWaitState_Return
                 move.l  #$FFFA0000,$1C(a5)
-Enemy_PhasePatternWaitState_Return:                     ; CODE XREF: Enemy_PhasePatternInit+22   j  ; was: locret_2D09C
+Enemy_PhasePatternWaitState_Return:                     ; was: locret_2D09C
                                         ; Enemy_PhasePatternInit+2E   j
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternWaitState_Timeout:                    ; CODE XREF: Enemy_PhasePatternInit+1A   j  ; was: loc_2D09E
+Enemy_PhasePatternWaitState_Timeout:                    ; was: loc_2D09E
                 move.w  #$20,$48(a5)                    ; ' '
                 move.w  #6,4(a5)
                 move.w  #$10,$5C(a5)
                 rts
 ; End of function Enemy_PhasePatternInit
 ; Applies gravity and returns the phase-pattern enemy to a surface on contact
-Enemy_PhasePatternAirborneState:                        ; DATA XREF: ROM:0002D05A   o  ; was: sub_2D0B2
+Enemy_PhasePatternAirborneState:                        ; was: sub_2D0B2
                 cmpi.l  #$80000,$1C(a5)
                 bge.s   Enemy_PhasePatternAirborneState_SelectProbe
                 addi.l  #$4000,$1C(a5)
-Enemy_PhasePatternAirborneState_SelectProbe:            ; CODE XREF: Enemy_PhasePatternAirborneState+8   j  ; was: loc_2D0C4
+Enemy_PhasePatternAirborneState_SelectProbe:            ; was: loc_2D0C4
                 moveq   #0,d0
                 tst.l   $1C(a5)
                 bmi.s   Enemy_PhasePatternAirborneState_ProbeCeiling
                 move.w  #$20,d1                         ; ' '
                 bra.s   Enemy_PhasePatternAirborneState_CheckTerrain
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternAirborneState_ProbeCeiling:           ; CODE XREF: Enemy_PhasePatternAirborneState+18   j  ; was: loc_2D0D2
+Enemy_PhasePatternAirborneState_ProbeCeiling:           ; was: loc_2D0D2
                 move.w  #$FFE4,d1
-Enemy_PhasePatternAirborneState_CheckTerrain:           ; CODE XREF: Enemy_PhasePatternAirborneState+1E   j  ; was: loc_2D0D6
+Enemy_PhasePatternAirborneState_CheckTerrain:           ; was: loc_2D0D6
                 jsr     (Collision_InitBufferPointers).l
                 move.w  d2,d2
                 beq.s   Enemy_PhasePatternAirborneState_Return
@@ -84,58 +84,58 @@ Enemy_PhasePatternAirborneState_CheckTerrain:           ; CODE XREF: Enemy_Phase
                 jsr     (Physics_AlignToTerrain).l
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternAirborneState_AlignCeiling:           ; CODE XREF: Enemy_PhasePatternAirborneState+44   j  ; was: loc_2D10C
+Enemy_PhasePatternAirborneState_AlignCeiling:           ; was: loc_2D10C
                 bset    #4,$E(a5)
                 moveq   #0,d0
                 move.w  #$FFE4,d1
                 jsr     (Physics_AlignToTerrainTop).l
-Enemy_PhasePatternAirborneState_Return:                 ; CODE XREF: Enemy_PhasePatternAirborneState+2C   j  ; was: locret_2D11E
+Enemy_PhasePatternAirborneState_Return:                 ; was: locret_2D11E
                 rts
 ; End of function Enemy_PhasePatternAirborneState
 ; Holds the landed pose, then selects animation $14 and advances
-Enemy_PhasePattern_WaitBeforeAttack:                    ; DATA XREF: ROM:0002D05C   o  ; was: sub_2D120
+Enemy_PhasePattern_WaitBeforeAttack:                    ; was: sub_2D120
                 subq.w  #1,$48(a5)
                 bne.s   Enemy_PhasePattern_WaitBeforeAttack_Return
                 move.w  #$14,$5C(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_WaitBeforeAttack_Return:             ; CODE XREF: Enemy_PhasePattern_WaitBeforeAttack+4   j  ; was: locret_2D136
+Enemy_PhasePattern_WaitBeforeAttack_Return:             ; was: locret_2D136
                 rts
 ; End of function Enemy_PhasePattern_WaitBeforeAttack
 ; Starts a one-unit leftward drift and selects animation $1C
-Enemy_PhasePattern_BeginHorizontalMotion:               ; DATA XREF: ROM:0002D05E   o  ; was: sub_2D138
+Enemy_PhasePattern_BeginHorizontalMotion:               ; was: sub_2D138
                 subq.w  #1,$48(a5)
                 bne.s   Enemy_PhasePattern_BeginHorizontalMotion_Return
                 move.w  #$1C,$5C(a5)
                 move.w  #$FFFF,$18(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_BeginHorizontalMotion_Return:        ; CODE XREF: Enemy_PhasePattern_BeginHorizontalMotion+4   j  ; was: locret_2D154
+Enemy_PhasePattern_BeginHorizontalMotion_Return:        ; was: locret_2D154
                 rts
 ; End of function Enemy_PhasePattern_BeginHorizontalMotion
 ; Stops the drift and selects animation $18
-Enemy_PhasePattern_StopHorizontalMotion:                ; DATA XREF: ROM:0002D060   o  ; was: sub_2D156
+Enemy_PhasePattern_StopHorizontalMotion:                ; was: sub_2D156
                 subq.w  #1,$48(a5)
                 bne.s   Enemy_PhasePattern_StopHorizontalMotion_Return
                 clr.w   $18(a5)
                 move.w  #$18,$5C(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_StopHorizontalMotion_Return:         ; CODE XREF: Enemy_PhasePattern_StopHorizontalMotion+4   j  ; was: locret_2D170
+Enemy_PhasePattern_StopHorizontalMotion_Return:         ; was: locret_2D170
                 rts
 ; End of function Enemy_PhasePattern_StopHorizontalMotion
 ; Rearms the long wait and returns to the waiting state
-Enemy_PhasePattern_Restart:                             ; DATA XREF: ROM:0002D062   o  ; was: sub_2D172
+Enemy_PhasePattern_Restart:                             ; was: sub_2D172
                 subq.w  #1,$48(a5)
                 bne.s   Enemy_PhasePattern_Restart_Return
                 move.w  #$100,$48(a5)
                 move.w  #4,$5C(a5)
                 move.w  #2,4(a5)
-Enemy_PhasePattern_Restart_Return:                      ; CODE XREF: Enemy_PhasePattern_Restart+4   j  ; was: locret_2D18A
+Enemy_PhasePattern_Restart_Return:                      ; was: locret_2D18A
                 rts
 ; End of function Enemy_PhasePattern_Restart
 ; Returns the object to type $290 and its initial state when the wave ends
-Enemy_ResetPhasePattern:                                ; CODE XREF: Enemy_PhasePatternController+A   j  ; was: sub_2D18C
+Enemy_ResetPhasePattern:                                ; was: sub_2D18C
                                         ; Enemy_PhasePatternController+12   j
                 clr.w   4(a5)
                 move.w  #$290,(a5)
@@ -147,14 +147,14 @@ Enemy_ResetPhasePattern:                                ; CODE XREF: Enemy_Phase
                 rts
 ; End of function Enemy_ResetPhasePattern
 ; Updates the bouncing defeat-debris object and emits randomized child particles
-Enemy_UpdateBouncingDebrisSpawner:                      ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2D1AC
+Enemy_UpdateBouncingDebrisSpawner:                      ; was: sub_2D1AC
                 bsr.w   Enemy_UpdateBlinkVisibility
                 tst.l   $1C(a5)
                 beq.s   Enemy_UpdateBouncingDebrisSpawner_SpawnParticle
                 cmpi.l  #$80000,$1C(a5)
                 bge.s   Enemy_UpdateBouncingDebrisSpawner_ApplyGravity
                 addi.l  #$4000,$1C(a5)
-Enemy_UpdateBouncingDebrisSpawner_ApplyGravity:         ; CODE XREF: Enemy_UpdateBouncingDebrisSpawner+12   j  ; was: loc_2D1C8
+Enemy_UpdateBouncingDebrisSpawner_ApplyGravity:         ; was: loc_2D1C8
                 moveq   #0,d0
                 move.w  #$20,d1                         ; ' '
                 jsr     (Collision_InitBufferPointers).l
@@ -164,7 +164,7 @@ Enemy_UpdateBouncingDebrisSpawner_ApplyGravity:         ; CODE XREF: Enemy_Updat
                 moveq   #0,d0
                 move.w  #$20,d1                         ; ' '
                 jsr     (Physics_AlignToTerrain).l
-Enemy_UpdateBouncingDebrisSpawner_SpawnParticle:        ; CODE XREF: Enemy_UpdateBouncingDebrisSpawner+8   j  ; was: loc_2D1EA
+Enemy_UpdateBouncingDebrisSpawner_SpawnParticle:        ; was: loc_2D1EA
                                         ; Enemy_UpdateBouncingDebrisSpawner+2A   j
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Enemy_UpdateBouncingDebrisSpawner_Return
@@ -173,7 +173,7 @@ Enemy_UpdateBouncingDebrisSpawner_SpawnParticle:        ; CODE XREF: Enemy_Updat
                 bne.s   Enemy_UpdateBouncingDebrisSpawner_InitParticle
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Enemy_UpdateBouncingDebrisSpawner_InitParticle:         ; CODE XREF: Enemy_UpdateBouncingDebrisSpawner+4E   j  ; was: loc_2D206
+Enemy_UpdateBouncingDebrisSpawner_InitParticle:         ; was: loc_2D206
                 bsr.s   Effect_SetRandomParticleMapping
                 jsr     (Projectile_InitType88).l
                 move.b  (RandomNumberState).w,d0
@@ -193,7 +193,7 @@ Enemy_UpdateBouncingDebrisSpawner_InitParticle:         ; CODE XREF: Enemy_Updat
                 moveq   #3,d0
                 jmp     Pickup_SpawnRandomFromCurrentObject
 ; ---------------------------------------------------------------------------
-Enemy_UpdateBouncingDebrisSpawner_Return:               ; CODE XREF: Enemy_UpdateBouncingDebrisSpawner+44   j  ; was: locret_2D254
+Enemy_UpdateBouncingDebrisSpawner_Return:               ; was: locret_2D254
                                         ; Enemy_UpdateBouncingDebrisSpawner+98   j
                 rts
 ; End of function Enemy_UpdateBouncingDebrisSpawner
@@ -202,7 +202,7 @@ Orphaned_SetRandomParticleMappingForSelf:
                 movea.w a5,a0                           ; was: sub_2D256
 ; End of function Orphaned_SetRandomParticleMappingForSelf
 ; Sets random animation pointer from 4-entry table based on random number bits 0-1
-Effect_SetRandomParticleMapping:                        ; CODE XREF: Enemy_UpdateBouncingDebrisSpawner:Enemy_UpdateBouncingDebrisSpawner_InitParticle   p  ; was: sub_2D258
+Effect_SetRandomParticleMapping:                        ; was: sub_2D258
                 move.w  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 add.w   d0,d0
@@ -211,7 +211,7 @@ Effect_SetRandomParticleMapping:                        ; CODE XREF: Enemy_Updat
                 rts
 ; End of function Effect_SetRandomParticleMapping
 ; ---------------------------------------------------------------------------
-Effect_RandomParticleMappings:  dc.l    SharedCombatSpriteAnimation00  ; DATA XREF: Effect_SetRandomParticleMapping+C   r  ; was: off_2D26C
+Effect_RandomParticleMappings:  dc.l    SharedCombatSpriteAnimation00  ; was: off_2D26C
                 dc.l    SharedCombatSpriteAnimation01
                 dc.l    SharedCombatSpriteAnimation02
                 dc.l    SharedCombatSpriteAnimation01

@@ -1,5 +1,5 @@
 ; Dispatch the late-game state selected by the shared stage-state offset
-Stage_DispatchLateGameState:                            ; DATA XREF: ROM:0000FF3E   o  ; was: sub_E42C
+Stage_DispatchLateGameState:                            ; was: sub_E42C
                 movea.w Stage_LateGameStateHandlerOffsets(pc,d0.w),a0
                 adda.l  #Stage_LateGameStateReturn,a0
                 jmp     (a0)

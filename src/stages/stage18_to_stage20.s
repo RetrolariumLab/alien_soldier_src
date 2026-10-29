@@ -1,20 +1,20 @@
-Stage_LateGameStateReturn:                              ; CODE XREF: Stage18_UpdateInitialScroll+16   j  ; was: nullsub_26
+Stage_LateGameStateReturn:                              ; was: nullsub_26
                                         ; Stage18_UpdateScrollToDestroyerMk2Approach+10   j
                 rts
 ; End of function Stage_LateGameStateReturn
 ; Update Stage 18's initial scroll to camera X $820
-Stage18_UpdateInitialScroll:                            ; DATA XREF: ROM:Stage_LateGameStateHandlerOffsets   o  ; was: sub_E4DE
+Stage18_UpdateInitialScroll:                            ; was: sub_E4DE
                 bset    #6,(PlayerRestrictionFlags).w
                 jsr     (Stage18_UpdateScrollAndRenderTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$820,(PrimaryCameraXPosition).w
                 bmi.s   Stage_LateGameStateReturn
                 addq.w  #2,(StageStateOffset).w
-Stage18And19_SharedReturn:                              ; CODE XREF: Stage_InitializeStage19+A   p  ; was: locret_E4FA
+Stage18And19_SharedReturn:                              ; was: locret_E4FA
                 rts
 ; End of function Stage18_UpdateInitialScroll
 ; Update Stage 18 to the Destroyer-Mk2 approach boundary
-Stage18_UpdateScrollToDestroyerMk2Approach:             ; DATA XREF: ROM:0000E43A   o  ; was: sub_E4FC
+Stage18_UpdateScrollToDestroyerMk2Approach:             ; was: sub_E4FC
                 jsr     (Stage18_UpdateScrollAndRenderTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$BF0,(PrimaryCameraXPosition).w
@@ -22,7 +22,7 @@ Stage18_UpdateScrollToDestroyerMk2Approach:             ; DATA XREF: ROM:0000E43
                 bra.w   Stage_TransitionToNextPhase
 ; End of function Stage18_UpdateScrollToDestroyerMk2Approach
 ; Clamp Stage 18 and submit Destroyer-Mk2's asset set
-Stage18_InitializeDestroyerMk2Encounter:                ; DATA XREF: ROM:0000E43C   o  ; was: sub_E512
+Stage18_InitializeDestroyerMk2Encounter:                ; was: sub_E512
                 jsr     (Stage18_UpdateDestroyerMk2Scroll).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$C70,(PrimaryCameraXPosition).w
@@ -38,22 +38,22 @@ Stage18_InitializeDestroyerMk2Encounter:                ; DATA XREF: ROM:0000E43
                 jmp     Boss_LoadAssetSet
 ; End of function Stage18_InitializeDestroyerMk2Encounter
 ; Wait for Destroyer-Mk2 to clear, then start the time bonus and preload
-Stage18_UpdateDestroyerMk2Encounter:                    ; DATA XREF: ROM:0000E43E   o  ; was: sub_E54E
+Stage18_UpdateDestroyerMk2Encounter:                    ; was: sub_E54E
                 tst.w   (Entity_ObjectPool).w
                 bne.s   Stage18_UpdateDestroyerMk2Encounter_UpdateCamera
                 bsr.w   Stage_StartTimeBonusAndPreloadNextPhase
-Stage18_UpdateDestroyerMk2Encounter_UpdateCamera:       ; CODE XREF: Stage18_UpdateDestroyerMk2Encounter+4   j  ; was: loc_E558
+Stage18_UpdateDestroyerMk2Encounter_UpdateCamera:       ; was: loc_E558
                 jsr     (Camera_UpdateHorizontalTowardsPlayer).l
                 bra.w   Stage18And19_UpdateHorizontalParallax
 ; End of function Stage18_UpdateDestroyerMk2Encounter
 ; Start the final Stage 18 post-Destroyer-Mk2 transition state
-Stage18_StartPostDestroyerMk2Transition:                ; DATA XREF: ROM:0000E440   o  ; was: sub_E562
+Stage18_StartPostDestroyerMk2Transition:                ; was: sub_E562
                 bsr.w   Stage_StartNextPhaseBanner
                 jsr     (Camera_UpdateHorizontalTowardsPlayer).l
                 bra.w   Stage18And19_UpdateHorizontalParallax
 ; End of function Stage18_StartPostDestroyerMk2Transition
 ; Update Stage 19's initial scroll and submit its tile assets
-Stage19_UpdateInitialScrollAndLoadTiles:                ; DATA XREF: ROM:0000E442   o  ; was: sub_E570
+Stage19_UpdateInitialScrollAndLoadTiles:                ; was: sub_E570
                 jsr     (Stage18_UpdateScrollAndRenderTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$D80,(PrimaryCameraXPosition).w
@@ -65,7 +65,6 @@ Stage19_UpdateInitialScrollAndLoadTiles:                ; DATA XREF: ROM:0000E44
 ; End of function Stage19_UpdateInitialScrollAndLoadTiles
 ; ---------------------------------------------------------------------------
 Stage19_InitialTileAssetLoadList:   dc.w    7           ; field_0  ; was: stru_E594
-                                        ; DATA XREF: Stage19_UpdateInitialScrollAndLoadTiles+18   o
                 dc.l    Stage19InitialTileArt0000       ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -80,7 +79,7 @@ Stage19_InitialTileAssetLoadList:   dc.w    7           ; field_0  ; was: stru_E
                 dc.w    $FFFF
 
 ; Update Stage 19 to the first Jampan approach boundary
-Stage19_UpdateScrollToJampanApproach:                   ; DATA XREF: ROM:0000E444   o  ; was: sub_E5B6
+Stage19_UpdateScrollToJampanApproach:                   ; was: sub_E5B6
                 jsr     (Camera_UpdateAndRenderStageTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$1120,(PrimaryCameraXPosition).w
@@ -89,7 +88,7 @@ Stage19_UpdateScrollToJampanApproach:                   ; DATA XREF: ROM:0000E44
                 rts
 ; End of function Stage19_UpdateScrollToJampanApproach
 ; Continue Stage 19 to Jampan's arena boundary
-Stage19_UpdateScrollToJampanArena:                      ; DATA XREF: ROM:0000E446   o  ; was: sub_E5D0
+Stage19_UpdateScrollToJampanArena:                      ; was: sub_E5D0
                 jsr     (Camera_UpdateAndRenderStageTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$1200,(PrimaryCameraXPosition).w
@@ -98,7 +97,7 @@ Stage19_UpdateScrollToJampanArena:                      ; DATA XREF: ROM:0000E44
                 rts
 ; End of function Stage19_UpdateScrollToJampanArena
 ; Enter the shared phase transition at Jampan's arena boundary
-Stage19_StartJampanEncounterTransition:                 ; DATA XREF: ROM:0000E448   o  ; was: sub_E5EA
+Stage19_StartJampanEncounterTransition:                 ; was: sub_E5EA
                 jsr     (Camera_UpdateAndRenderStageTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
                 cmpi.w  #$1200,(PrimaryCameraXPosition).w
@@ -106,7 +105,7 @@ Stage19_StartJampanEncounterTransition:                 ; DATA XREF: ROM:0000E44
                 bra.w   Stage_TransitionToNextPhase
 ; End of function Stage19_StartJampanEncounterTransition
 ; Clamp Stage 19 and submit Jampan's asset set
-Stage19_InitializeJampanEncounter:                      ; DATA XREF: ROM:0000E44A   o  ; was: sub_E602
+Stage19_InitializeJampanEncounter:                      ; was: sub_E602
                 jsr     (Camera_UpdateBossApproachAndRenderTilemap).l
                 cmpi.w  #$1280,(PrimaryCameraXPosition).w
                 bmi.w   Stage_LateGameStateReturn
@@ -120,24 +119,24 @@ Stage19_InitializeJampanEncounter:                      ; DATA XREF: ROM:0000E44
                 jmp     Boss_LoadAssetSet
 ; End of function Stage19_InitializeJampanEncounter
 ; Update the Jampan encounter camera until its completion flag is set
-Stage19_UpdateJampanEncounter:                          ; DATA XREF: ROM:0000E44C   o  ; was: sub_E636
+Stage19_UpdateJampanEncounter:                          ; was: sub_E636
                 tst.b   (SceneSequenceFlags).w
                 beq.s   Stage19_UpdateJampanEncounter_UpdateCamera
                 addq.w  #2,(StageStateOffset).w
-Stage19_UpdateJampanEncounter_UpdateCamera:             ; CODE XREF: Stage19_UpdateJampanEncounter+4   j  ; was: loc_E640
+Stage19_UpdateJampanEncounter_UpdateCamera:             ; was: loc_E640
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
 ; End of function Stage19_UpdateJampanEncounter
 ; Wait for the post-Jampan message, then initialize the next delay
-Stage19_UpdatePostJampanMessage:                        ; DATA XREF: ROM:0000E44E   o  ; was: sub_E644
+Stage19_UpdatePostJampanMessage:                        ; was: sub_E644
                 tst.w   (MessageSequenceState).w
                 bne.s   Stage19_UpdatePostJampanMessage_Return
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$32,(PlayerScriptStateOffset).w  ; '2'
-Stage19_UpdatePostJampanMessage_Return:                 ; CODE XREF: Stage19_UpdatePostJampanMessage+4   j  ; was: locret_E654
+Stage19_UpdatePostJampanMessage_Return:                 ; was: locret_E654
                 rts
 ; End of function Stage19_UpdatePostJampanMessage
 ; Start the post-Jampan interstage transition when both gates clear
-Stage19_StartPostJampanTransition:                      ; DATA XREF: ROM:0000E450   o  ; was: sub_E656
+Stage19_StartPostJampanTransition:                      ; was: sub_E656
                 bsr.w   Camera_UpdateHorizontalTowardsPlayer
                 tst.w   (GameplayExitMode).w
                 bne.s   Stage19_StartPostJampanTransition_Return
@@ -147,12 +146,12 @@ Stage19_StartPostJampanTransition:                      ; DATA XREF: ROM:0000E45
                 move.l  #StageTransitionMessageSequence_Shared,(StageMessageCursor).w
                 bra.w   Stage_StartInterstageTransition
 ; ---------------------------------------------------------------------------
-Stage19_StartPostJampanTransition_Return:               ; CODE XREF: Stage19_StartPostJampanTransition+8   j  ; was: locret_E678
+Stage19_StartPostJampanTransition_Return:               ; was: locret_E678
                                         ; Stage19_StartPostJampanTransition+E   j
                 rts
 ; End of function Stage19_StartPostJampanTransition
 ; Derive the shared Stage 18/19 horizontal parallax offset from camera X
-Stage18And19_UpdateHorizontalParallax:                  ; CODE XREF: Stage18_UpdateInitialScroll+C   p  ; was: sub_E67A
+Stage18And19_UpdateHorizontalParallax:                  ; was: sub_E67A
                                         ; Stage18_UpdateScrollToDestroyerMk2Approach+6   p
                 move.w  (PrimaryCameraXPosition).w,d0
                 asr.w   #3,d0
@@ -160,7 +159,7 @@ Stage18And19_UpdateHorizontalParallax:                  ; CODE XREF: Stage18_Upd
                 rts
 ; End of function Stage18And19_UpdateHorizontalParallax
 ; Unreferenced Stage 20 variant 1 entry using Jampan's asset set
-UnreferencedStage20Variant1_InitializeJampanPhase:      ; DATA XREF: ROM:0000E460   o  ; was: sub_E686
+UnreferencedStage20Variant1_InitializeJampanPhase:      ; was: sub_E686
                 bsr.w   Stage_TransitionToNextPhase
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$40,(CameraXLowerBound).w      ; '@'
@@ -170,15 +169,15 @@ UnreferencedStage20Variant1_InitializeJampanPhase:      ; DATA XREF: ROM:0000E46
                 jmp     Boss_LoadAssetSet
 ; End of function UnreferencedStage20Variant1_InitializeJampanPhase
 ; Wait for the variant 1 completion flag while updating the camera
-UnreferencedStage20Variant1_UpdateJampanPhase:          ; DATA XREF: ROM:0000E462   o  ; was: sub_E6AC
+UnreferencedStage20Variant1_UpdateJampanPhase:          ; was: sub_E6AC
                 tst.b   (SceneSequenceFlags).w
                 beq.s   UnreferencedStage20Variant1_UpdateJampanPhase_Camera
                 addq.w  #2,(StageStateOffset).w
-UnreferencedStage20Variant1_UpdateJampanPhase_Camera:   ; CODE XREF: UnreferencedStage20Variant1_UpdateJampanPhase+4   j  ; was: loc_E6B6
+UnreferencedStage20Variant1_UpdateJampanPhase_Camera:   ; was: loc_E6B6
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
 ; End of function UnreferencedStage20Variant1_UpdateJampanPhase
 ; Start the variant 1 transition after both shared gates clear
-UnreferencedStage20Variant1_StartTransition:            ; DATA XREF: ROM:0000E464   o  ; was: sub_E6BA
+UnreferencedStage20Variant1_StartTransition:            ; was: sub_E6BA
                 tst.w   (GameplayExitMode).w
                 bne.w   Stage_LateGameStateReturn
                 tst.w   (ScriptedInputActive).w
@@ -187,7 +186,7 @@ UnreferencedStage20Variant1_StartTransition:            ; DATA XREF: ROM:0000E46
                 bra.w   Stage_StartInterstageTransition
 ; End of function UnreferencedStage20Variant1_StartTransition
 ; Unreferenced Stage 20 variant 2 entry using entity type $3EC
-UnreferencedStage20Variant2_InitializeLambdaBunnyPhase:  ; DATA XREF: ROM:0000E468   o  ; was: sub_E6D6
+UnreferencedStage20Variant2_InitializeLambdaBunnyPhase:  ; was: sub_E6D6
                 bsr.w   Stage_TransitionToNextPhase
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$40,(CameraXLowerBound).w      ; '@'
@@ -197,15 +196,15 @@ UnreferencedStage20Variant2_InitializeLambdaBunnyPhase:  ; DATA XREF: ROM:0000E4
                 jmp     Boss_LoadAssetSet
 ; End of function UnreferencedStage20Variant2_InitializeLambdaBunnyPhase
 ; Wait for the variant 2 completion flag while updating the camera
-UnreferencedStage20Variant2_UpdateLambdaBunnyPhase:     ; DATA XREF: ROM:0000E46A   o  ; was: sub_E6FC
+UnreferencedStage20Variant2_UpdateLambdaBunnyPhase:     ; was: sub_E6FC
                 tst.b   (SceneSequenceFlags).w
                 beq.s   UnreferencedStage20Variant2_UpdateLambdaBunnyPhase_Camera
                 addq.w  #2,(StageStateOffset).w
-UnreferencedStage20Variant2_UpdateLambdaBunnyPhase_Camera:  ; CODE XREF: UnreferencedStage20Variant2_UpdateLambdaBunnyPhase+4   j  ; was: loc_E706
+UnreferencedStage20Variant2_UpdateLambdaBunnyPhase_Camera:  ; was: loc_E706
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
 ; End of function UnreferencedStage20Variant2_UpdateLambdaBunnyPhase
 ; Start the variant 2 transition after both shared gates clear
-UnreferencedStage20Variant2_StartTransition:            ; DATA XREF: ROM:0000E46C   o  ; was: sub_E70A
+UnreferencedStage20Variant2_StartTransition:            ; was: sub_E70A
                 tst.w   (GameplayExitMode).w
                 bne.w   Stage_LateGameStateReturn
                 tst.w   (ScriptedInputActive).w
@@ -215,7 +214,7 @@ UnreferencedStage20Variant2_StartTransition:            ; DATA XREF: ROM:0000E46
                 bra.w   Stage_StartInterstageTransition
 ; End of function UnreferencedStage20Variant2_StartTransition
 ; Unreferenced Stage 20 variant 3 entry using entity type $3F0
-UnreferencedStage20Variant3_InitializeEntity3F0Phase:   ; DATA XREF: ROM:0000E470   o  ; was: sub_E72C
+UnreferencedStage20Variant3_InitializeEntity3F0Phase:   ; was: sub_E72C
                 bsr.w   Stage_TransitionToNextPhase
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$40,(CameraXLowerBound).w      ; '@'
@@ -225,15 +224,15 @@ UnreferencedStage20Variant3_InitializeEntity3F0Phase:   ; DATA XREF: ROM:0000E47
                 jmp     Boss_LoadAssetSet
 ; End of function UnreferencedStage20Variant3_InitializeEntity3F0Phase
 ; Wait for the variant 3 completion flag while updating the camera
-UnreferencedStage20Variant3_UpdateEntity3F0Phase:       ; DATA XREF: ROM:0000E472   o  ; was: sub_E752
+UnreferencedStage20Variant3_UpdateEntity3F0Phase:       ; was: sub_E752
                 tst.b   (SceneSequenceFlags).w
                 beq.s   UnreferencedStage20Variant3_UpdateEntity3F0Phase_Camera
                 addq.w  #2,(StageStateOffset).w
-UnreferencedStage20Variant3_UpdateEntity3F0Phase_Camera:  ; CODE XREF: UnreferencedStage20Variant3_UpdateEntity3F0Phase+4   j  ; was: loc_E75C
+UnreferencedStage20Variant3_UpdateEntity3F0Phase_Camera:  ; was: loc_E75C
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
 ; End of function UnreferencedStage20Variant3_UpdateEntity3F0Phase
 ; Start the variant 3 transition after both shared gates clear
-UnreferencedStage20Variant3_StartTransition:            ; DATA XREF: ROM:0000E474   o  ; was: sub_E760
+UnreferencedStage20Variant3_StartTransition:            ; was: sub_E760
                 tst.w   (GameplayExitMode).w
                 bne.w   Stage_LateGameStateReturn
                 tst.w   (ScriptedInputActive).w
@@ -243,7 +242,7 @@ UnreferencedStage20Variant3_StartTransition:            ; DATA XREF: ROM:0000E47
                 bra.w   Stage_StartInterstageTransition
 ; End of function UnreferencedStage20Variant3_StartTransition
 ; Unreferenced Stage 20 variant 4 entry using entity type $3F4
-UnreferencedStage20Variant4_InitializeEntity3F4Phase:   ; DATA XREF: ROM:0000E478   o  ; was: sub_E782
+UnreferencedStage20Variant4_InitializeEntity3F4Phase:   ; was: sub_E782
                 bsr.w   Stage_TransitionToNextPhase
                 clr.b   (SceneSequenceFlags).w
                 move.w  #$40,(CameraXLowerBound).w      ; '@'
@@ -253,15 +252,15 @@ UnreferencedStage20Variant4_InitializeEntity3F4Phase:   ; DATA XREF: ROM:0000E47
                 jmp     Boss_LoadAssetSet
 ; End of function UnreferencedStage20Variant4_InitializeEntity3F4Phase
 ; Wait for the variant 4 completion flag while updating the camera
-UnreferencedStage20Variant4_UpdateEntity3F4Phase:       ; DATA XREF: ROM:0000E47A   o  ; was: sub_E7A8
+UnreferencedStage20Variant4_UpdateEntity3F4Phase:       ; was: sub_E7A8
                 tst.b   (SceneSequenceFlags).w
                 beq.s   UnreferencedStage20Variant4_UpdateEntity3F4Phase_Camera
                 addq.w  #2,(StageStateOffset).w
-UnreferencedStage20Variant4_UpdateEntity3F4Phase_Camera:  ; CODE XREF: UnreferencedStage20Variant4_UpdateEntity3F4Phase+4   j  ; was: loc_E7B2
+UnreferencedStage20Variant4_UpdateEntity3F4Phase_Camera:  ; was: loc_E7B2
                 bra.w   Camera_UpdateHorizontalTowardsPlayer
 ; End of function UnreferencedStage20Variant4_UpdateEntity3F4Phase
 ; Start the variant 4 transition after both shared gates clear
-UnreferencedStage20Variant4_StartTransition:            ; DATA XREF: ROM:0000E47C   o  ; was: sub_E7B6
+UnreferencedStage20Variant4_StartTransition:            ; was: sub_E7B6
                 tst.w   (GameplayExitMode).w
                 bne.w   Stage_LateGameStateReturn
                 tst.w   (ScriptedInputActive).w

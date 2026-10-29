@@ -4,11 +4,11 @@
 
 ; Unresolved entity dispatcher. Its first table target is not a code entry;
 ; the other two target Stage 15 fragment-emitter states
-OrphanedCrossStageEntityDispatch:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FC26
+OrphanedCrossStageEntityDispatch:                       ; was: sub_2FC26
                 cmpi.w  #$70,$10(a5)                    ; 'p'
                 bpl.s   OrphanedCrossStageEntitySelectState
                 move.w  #4,4(a5)
-OrphanedCrossStageEntitySelectState:                    ; CODE XREF: OrphanedCrossStageEntityDispatch+6   j
+OrphanedCrossStageEntitySelectState:
                 nop
                 move.w  4(a5),d0
                 movea.w OrphanedCrossStageEntityStateTable(pc,d0.w),a0  ; signed offset from the initializer base
@@ -17,13 +17,12 @@ OrphanedCrossStageEntitySelectState:                    ; CODE XREF: OrphanedCro
 ; End of function OrphanedCrossStageEntityDispatch
 ; ---------------------------------------------------------------------------
 OrphanedCrossStageEntityStateTable: dc.w    Stage18_SegmentedWormUpdateFollower+2-OrphanedTerrainTileAnimationInit
-                                        ; DATA XREF: OrphanedCrossStageEntityDispatch+14   r
                                         ; target $0304B2 is the displacement word of a bsr.w, not an entry
                 dc.w    Stage15_FragmentEmitterWaveSpawn-OrphanedTerrainTileAnimationInit
                 dc.w    Stage15_FragmentEmitterWaveCheckThreshold-OrphanedTerrainTileAnimationInit
 
 ; Orphaned companion initializer for the terrain-tile animation descriptor
-OrphanedTerrainTileAnimationInit:                       ; DATA XREF: OrphanedCrossStageEntityDispatch+18   o  ; was: sub_2FC4C
+OrphanedTerrainTileAnimationInit:                       ; was: sub_2FC4C
                                         ; ROM:OrphanedCrossStageEntityStateTable   o
                 addq.w  #2,4(a5)
                 move.w  #$100,2(a5)
@@ -35,9 +34,9 @@ OrphanedTerrainTileAnimationInit:                       ; DATA XREF: OrphanedCro
                 move.w  #$C4AC,$E(a5)
                 bra.s   OrphanedTerrainTileStoreDescriptor
 ; ---------------------------------------------------------------------------
-OrphanedTerrainTileUseAlternateTile:                    ; CODE XREF: OrphanedTerrainTileAnimationInit+22   j
+OrphanedTerrainTileUseAlternateTile:
                 move.w  #$C4B4,$E(a5)
-OrphanedTerrainTileStoreDescriptor:                     ; CODE XREF: OrphanedTerrainTileAnimationInit+2A   j
+OrphanedTerrainTileStoreDescriptor:
                 move.w  #$20,$4A(a5)                    ; ' '
                 move.w  #5,$4E(a5)
                 move.w  $5E(a5),d0
@@ -49,9 +48,8 @@ OrphanedTerrainTileStoreDescriptor:                     ; CODE XREF: OrphanedTer
 ; End of function OrphanedTerrainTileAnimationInit
 ; ---------------------------------------------------------------------------
 OrphanedTerrainLayoutBases: dc.w    $42E5, $4291, $42B5, $42E1, $4285, $42B1, $42D5, $4281
-                                        ; DATA XREF: OrphanedTerrainTileAnimationInit+42   r
 
-OrphanedTerrainTileAnimationReturn:                     ; CODE XREF: OrphanedTerrainTileAnimationReveal+4   j
+OrphanedTerrainTileAnimationReturn:
                 rts
 ; End of function OrphanedTerrainTileAnimationReturn
 
@@ -75,4 +73,3 @@ OrphanedTerrainTileAnimationTransfer:
 ; End of function OrphanedTerrainTileAnimationTransfer
 ; ---------------------------------------------------------------------------
 OrphanedTerrainTilePatterns:    dc.w    $878C, $888D, $898E, $8A8F, $8B90
-                                        ; DATA XREF: OrphanedTerrainTileAnimationTransfer+C   r

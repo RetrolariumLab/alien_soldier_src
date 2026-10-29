@@ -1,6 +1,6 @@
 ; Flying Neo linked-part orientation, facing graphics, and pose interpolation
 
-Boss_FlyingNeoUpdateOrbitAngularImpulse:                ; CODE XREF: Boss_FlyingNeoUpdateSprites+38   p  ; was: sub_3CDAE
+Boss_FlyingNeoUpdateOrbitAngularImpulse:                ; was: sub_3CDAE
                 clr.w   $23E(a5)
                 move.w  $536(a5),d0
                 andi.w  #$3FC,d0
@@ -13,41 +13,41 @@ Boss_FlyingNeoUpdateOrbitAngularImpulse:                ; CODE XREF: Boss_Flying
                 bmi.s   Boss_FlyingNeoSetNegativeOrbitAngularImpulse
                 cmpi.w  #$340,d0
                 bpl.s   Boss_FlyingNeoTryEnableOrbitImpulsePhase
-Boss_FlyingNeoEnableOrbitImpulsePhase:                  ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+32   j  ; was: loc_3CDD6
+Boss_FlyingNeoEnableOrbitImpulsePhase:                  ; was: loc_3CDD6
                 addq.w  #2,$17C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoTryEnableOrbitImpulsePhase:               ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+26   j  ; was: loc_3CDDC
+Boss_FlyingNeoTryEnableOrbitImpulsePhase:               ; was: loc_3CDDC
                 andi.w  #3,d1
                 beq.s   Boss_FlyingNeoEnableOrbitImpulsePhase
-Boss_FlyingNeoSetNegativeOrbitAngularImpulse:           ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+20   j  ; was: loc_3CDE2
+Boss_FlyingNeoSetNegativeOrbitAngularImpulse:           ; was: loc_3CDE2
                 move.w  #$FFE0,$23E(a5)
-Boss_FlyingNeoOrbitAngularImpulseReturn:                ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+14   j  ; was: locret_3CDE8
+Boss_FlyingNeoOrbitAngularImpulseReturn:                ; was: locret_3CDE8
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateEnabledOrbitImpulsePhase:           ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+1A   j  ; was: loc_3CDEA
+Boss_FlyingNeoUpdateEnabledOrbitImpulsePhase:           ; was: loc_3CDEA
                 cmpi.w  #$200,d0
                 bpl.s   Boss_FlyingNeoSetPositiveOrbitAngularImpulse
                 cmpi.w  #$C0,d0
                 bmi.s   Boss_FlyingNeoApplyLowAngleOrbitPhaseGate
-Boss_FlyingNeoDisableOrbitImpulsePhase:                 ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+5C   j  ; was: loc_3CDF6
+Boss_FlyingNeoDisableOrbitImpulsePhase:                 ; was: loc_3CDF6
                 clr.w   $17C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoApplyLowAngleOrbitPhaseGate:              ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+46   j  ; was: loc_3CDFC
+Boss_FlyingNeoApplyLowAngleOrbitPhaseGate:              ; was: loc_3CDFC
                 moveq   #3,d2
                 btst    #0,(FrameCounter).w
                 beq.s   Boss_FlyingNeoTestLowAngleOrbitPhaseGate
                 moveq   #7,d2
-Boss_FlyingNeoTestLowAngleOrbitPhaseGate:               ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+56   j  ; was: loc_3CE08
+Boss_FlyingNeoTestLowAngleOrbitPhaseGate:               ; was: loc_3CE08
                 and.w   d2,d1
                 beq.s   Boss_FlyingNeoDisableOrbitImpulsePhase
-Boss_FlyingNeoSetPositiveOrbitAngularImpulse:           ; CODE XREF: Boss_FlyingNeoUpdateOrbitAngularImpulse+40   j  ; was: loc_3CE0C
+Boss_FlyingNeoSetPositiveOrbitAngularImpulse:           ; was: loc_3CE0C
                 move.w  #$20,$23E(a5)                   ; ' '
                 rts
 ; End of function Boss_FlyingNeoUpdateOrbitAngularImpulse
 ; Applies the current facing to linked-part flags and loads its tile set
-Boss_FlyingNeoApplyFacingGraphics:                      ; CODE XREF: Boss_FlyingNeoSetup+130   p  ; was: sub_3CE14
+Boss_FlyingNeoApplyFacingGraphics:                      ; was: sub_3CE14
                                         ; Boss_FlyingNeoPlayerControlled+50   p
                 moveq   #3,d0
                 movea.w #(TwelfthEntityType-M68K_RAM),a0
@@ -62,7 +62,7 @@ Boss_FlyingNeoApplyFacingGraphics:                      ; CODE XREF: Boss_Flying
                 bset    d0,$2AE(a5)
                 bset    d0,$1EE(a5)
                 bset    d0,$36E(a5)
-Boss_FlyingNeoClearLinkedPartFlipBits:                  ; CODE XREF: Boss_FlyingNeoApplyFacingGraphics+3E   j  ; was: loc_3CE4A
+Boss_FlyingNeoClearLinkedPartFlipBits:                  ; was: loc_3CE4A
                 bclr    d0,$E(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_FlyingNeoClearLinkedPartFlipBits
@@ -70,7 +70,7 @@ Boss_FlyingNeoClearLinkedPartFlipBits:                  ; CODE XREF: Boss_Flying
                 nop
                 jmp     Tilemap_QueueIndexedRows
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoApplyNonzeroFacingGraphics:               ; CODE XREF: Boss_FlyingNeoApplyFacingGraphics+C   j  ; was: loc_3CE62
+Boss_FlyingNeoApplyNonzeroFacingGraphics:               ; was: loc_3CE62
                 move.l  #$E01CF040,$28(a5)
                 bclr    d0,$3CE(a5)
                 bset    d0,$6E(a5)
@@ -80,7 +80,7 @@ Boss_FlyingNeoApplyNonzeroFacingGraphics:               ; CODE XREF: Boss_Flying
                 bclr    d0,$1EE(a5)
                 bclr    d0,$36E(a5)
 ; Sets the flip bit on all linked parts and loads the nonzero-facing tiles
-Boss_FlyingNeoSetLinkedPartFlipBits:                    ; CODE XREF: Boss_FlyingNeoApplyFacingGraphics+7C   j  ; was: loc_3CE88
+Boss_FlyingNeoSetLinkedPartFlipBits:                    ; was: loc_3CE88
                 bset    d0,$E(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_FlyingNeoSetLinkedPartFlipBits
@@ -89,15 +89,12 @@ Boss_FlyingNeoSetLinkedPartFlipBits:                    ; CODE XREF: Boss_Flying
                 jmp     Tilemap_QueueIndexedRows
 ; End of function Boss_FlyingNeoApplyFacingGraphics
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoDefeatTileCommand:    dc.w    $6C0C, $4000, $301, $5656, $5656, $5656, $5656  ; was: word_3CEA0
-                                        ; DATA XREF: Boss_FlyingNeoDefeatParticleRainState+94   o
+Boss_FlyingNeoDefeatTileCommand:        dc.w    $6C0C, $4000, $301, $5656, $5656, $5656, $5656  ; was: word_3CEA0
 Boss_FlyingNeoZeroFacingTileCommand:    dc.w    $6C0C, $2000, $301, $3031, $3233, $3435, $3637  ; was: word_3CEAE
-                                        ; DATA XREF: Boss_FlyingNeoApplyFacingGraphics+42   o
 Boss_FlyingNeoNonzeroFacingTileCommand: dc.w    $6C0C, $2000, $301, $3839, $3A3B, $373D, $3E3F  ; was: word_3CEBC
-                                        ; DATA XREF: Boss_FlyingNeoApplyFacingGraphics+80   o
 
 ; Initializes consecutive auxiliary sprite records from six-byte descriptors
-Boss_FlyingNeoInitializeAuxiliarySprites:               ; CODE XREF: Boss_FlyingNeoSetup+9C   p  ; was: sub_3CECA
+Boss_FlyingNeoInitializeAuxiliarySprites:               ; was: sub_3CECA
                                         ; Boss_FlyingNeoSetup+A8   p
                 move.w  d0,(a0)
                 move.b  #$18,$20(a0)
@@ -111,25 +108,21 @@ Boss_FlyingNeoInitializeAuxiliarySprites:               ; CODE XREF: Boss_Flying
 ; End of function Boss_FlyingNeoInitializeAuxiliarySprites
 ; ---------------------------------------------------------------------------
 Boss_FlyingNeoAuxiliarySpriteDescriptorA:   dc.w    $6386, $A00, $F4F4  ; was: word_3CEF0
-                                        ; DATA XREF: Boss_FlyingNeoSetup+94   o
 Boss_FlyingNeoAuxiliarySpriteDescriptorB:   dc.w    $638F, $500, $F8F8  ; was: word_3CEF6
-                                        ; DATA XREF: Boss_FlyingNeoSetup+A0   o
 Boss_FlyingNeoAuxiliarySpriteDescriptorC:   dc.w    $6393, $500, $F8F8  ; was: word_3CEFC
-                                        ; DATA XREF: Boss_FlyingNeoSetup+AC   o
 Boss_FlyingNeoAuxiliarySpriteDescriptorD:   dc.w    $6397, 0, $FCFC  ; was: word_3CF02
-                                        ; DATA XREF: Boss_FlyingNeoSetup+B8   o
 
 Boss_FlyingNeoNoOp:                                     ; was: nullsub_78
                 rts
 ; End of function Boss_FlyingNeoNoOp
 
 ; Interprets pose commands, advances four interpolation channels, and publishes their angles
-Boss_FlyingNeoUpdatePoseAnimation:                      ; CODE XREF: Boss_FlyingNeoIntroDelayState+10   p  ; was: sub_3CF0A
+Boss_FlyingNeoUpdatePoseAnimation:                      ; was: sub_3CF0A
                                         ; Boss_FlyingNeoPlayerControlled+72   p
                 clr.w   $A(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_FlyingNeoAdvancePoseInterpolation
-Boss_FlyingNeoReadPoseCommand:                          ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+4A   j  ; was: loc_3CF14
+Boss_FlyingNeoReadPoseCommand:                          ; was: loc_3CF14
                 move.w  $58(a5),d0
                 bmi.w   Boss_FlyingNeoApplyPoseAngles
                 cmpi.b  #$80,(a1,d0.w)
@@ -138,21 +131,21 @@ Boss_FlyingNeoReadPoseCommand:                          ; CODE XREF: Boss_Flying
                 jsr     (Sound_QueueSFXRequest).l
                 addq.w  #2,$58(a5)
                 move.w  $58(a5),d0
-Boss_FlyingNeoDecodePoseCommand:                        ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+18   j  ; was: loc_3CF36
+Boss_FlyingNeoDecodePoseCommand:                        ; was: loc_3CF36
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_FlyingNeoCheckPoseLoopCommand
                 move.w  d3,$58(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoCheckPoseLoopCommand:                     ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+34   j  ; was: loc_3CF46
+Boss_FlyingNeoCheckPoseLoopCommand:                     ; was: loc_3CF46
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_FlyingNeoBeginPoseCommand
                 clr.w   $58(a5)
                 clr.w   6(a5)
                 bra.s   Boss_FlyingNeoReadPoseCommand
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoBeginPoseCommand:                         ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+40   j  ; was: loc_3CF56
+Boss_FlyingNeoBeginPoseCommand:                         ; was: loc_3CF56
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -168,12 +161,12 @@ Boss_FlyingNeoBeginPoseCommand:                         ; CODE XREF: Boss_Flying
                 addq.w  #1,$A(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_FlyingNeoApplyPoseAngles
-Boss_FlyingNeoAdvancePoseInterpolation:                 ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+8   j  ; was: loc_3CF8C
+Boss_FlyingNeoAdvancePoseInterpolation:                 ; was: loc_3CF8C
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #3,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_FlyingNeoApplyPoseAngles:                          ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+E   j  ; was: loc_3CF9C
+Boss_FlyingNeoApplyPoseAngles:                          ; was: loc_3CF9C
                                         ; Boss_FlyingNeoUpdatePoseAnimation+80   j
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.w  #$1FE,d7
@@ -202,7 +195,7 @@ Boss_FlyingNeoApplyPoseAngles:                          ; CODE XREF: Boss_Flying
                 rts
 ; End of function Boss_FlyingNeoUpdatePoseAnimation
 ; Begins interpolation from the current channels to the selected pose target
-Boss_FlyingNeoBeginPoseInterpolation:                   ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+62   p  ; was: sub_3CFE8
+Boss_FlyingNeoBeginPoseInterpolation:                   ; was: sub_3CFE8
                 movea.l #Boss_FlyingNeoNeutralPose,a1
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
@@ -217,25 +210,18 @@ Boss_FlyingNeoInitializePoseChannels:
 ; End of function Boss_FlyingNeoInitializePoseChannels
 ; ---------------------------------------------------------------------------
 Boss_FlyingNeoNeutralPoses: dc.w    $408, 0, $808, 0, $408, 4, $808, 4  ; was: word_3D00A
-                                        ; DATA XREF: Boss_FlyingNeoIntroDelayState+A   o
                                         ; Boss_FlyingNeoPlayerControlled:Boss_FlyingNeoApplyPlayerControlPose   o
                 dc.w    $FFFF
 Boss_FlyingNeoHorizontalSwoopPoses: dc.w    $612, 0, $1212, 0, $612, 4, $1212, 4  ; was: word_3D01C
-                                        ; DATA XREF: Boss_FlyingNeoHorizontalSwoopState:Boss_FlyingNeoUpdateSwoopPose   o
                 dc.w    $FFFF
 Boss_FlyingNeoPartAnchorPoses:  dc.w    $828, 8, $E0E, 8, $A10, $C, $A0A, $C  ; was: word_3D02E
-                                        ; DATA XREF: Boss_FlyingNeoHoverDecisionState+1F6   o
                 dc.w    $80AF, $828, $10, $E0E, $10, $A10, $14, $A0A
                 dc.w    $14, $80AF, $FFFF
 Boss_FlyingNeoRisingRetreatPoses:   dc.w    $70C, $18, $4040, $18, $FFFE  ; was: word_3D054
-                                        ; DATA XREF: Boss_FlyingNeoRisingRetreatState:Boss_FlyingNeoRenderRisingRetreat   o
-Boss_FlyingNeoDivingArcPoses:   dc.w    $210, $1C, $606, $1C, $220, $20, $808, $20  ; was: word_3D05E
-                                        ; DATA XREF: Boss_FlyingNeoDivingArcState:Boss_FlyingNeoSelectDivingArcPose   o
+Boss_FlyingNeoDivingArcPoses:       dc.w    $210, $1C, $606, $1C, $220, $20, $808, $20  ; was: word_3D05E
                 dc.w    $FFFF
 Boss_FlyingNeoRisingArcPoseCommands:    dc.w    $820, $1C, $1216, $1C, $820, $20, $1216, $20  ; was: word_3D070
-                                        ; DATA XREF: Boss_FlyingNeoRisingArcState:Boss_FlyingNeoSelectRisingArcPose   o
                 dc.w    $FFFF
 Boss_FlyingNeoPoseTable:    dc.w    $868, $1C70, $1C70, $868, $3010, $470, $1020, $501B  ; was: word_3D082
-                                        ; DATA XREF: Boss_FlyingNeoUpdatePoseAnimation+5A   o
                 dc.w    $470, $3010, $5020, $1020, $6850, $6850, $7800, $870
                 dc.w    $1860, $7008, $6C24, $878, $F860, $6024

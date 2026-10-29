@@ -1,5 +1,5 @@
 ; Stage 3 type-$190 boss controller with eight orbiting parts
-Boss_Stage3OrbitingFormationMain:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_33F30
+Boss_Stage3OrbitingFormationMain:                       ; was: sub_33F30
                 bsr.w   Boss_Stage3OrbitingFormationCheckDefeat
                 bsr.w   Boss_Stage3OrbitingFormationDispatchState
                 bsr.s   Boss_Stage3OrbitingFormationUpdateSpinSound
@@ -12,7 +12,7 @@ Boss_Stage3OrbitingFormationMain:                       ; DATA XREF: ROM:Entity_
                 rts
 ; End of function Boss_Stage3OrbitingFormationMain
 ; Plays the rotation sound at an interval selected by the current spin rate
-Boss_Stage3OrbitingFormationUpdateSpinSound:            ; CODE XREF: Boss_Stage3OrbitingFormationMain+8   p  ; was: sub_33F56
+Boss_Stage3OrbitingFormationUpdateSpinSound:            ; was: sub_33F56
                 tst.w   $50(a5)
                 beq.s   Boss_Stage3OrbitingFormationSpinSoundReturn
                 subq.w  #1,(SharedScratchLong0).w
@@ -22,16 +22,15 @@ Boss_Stage3OrbitingFormationUpdateSpinSound:            ; CODE XREF: Boss_Stage3
                 move.w  Boss_Stage3OrbitingFormationSpinSoundDelays(pc,d0.w),(SharedScratchLong0).w
                 move.b  #$54,d0                         ; 'T'
                 jsr     (Sound_QueueSFXRequest).l
-Boss_Stage3OrbitingFormationSpinSoundReturn:            ; CODE XREF: Boss_Stage3OrbitingFormationUpdateSpinSound+4   j  ; was: locret_33F78
+Boss_Stage3OrbitingFormationSpinSoundReturn:            ; was: locret_33F78
                                         ; Boss_Stage3OrbitingFormationUpdateSpinSound+A   j
                 rts
 ; End of function Boss_Stage3OrbitingFormationUpdateSpinSound
 ; ---------------------------------------------------------------------------
 Boss_Stage3OrbitingFormationSpinSoundDelays:    dc.w    0, $28, $20, $2C, $18  ; was: word_33F7A
-                                        ; DATA XREF: Boss_Stage3OrbitingFormationUpdateSpinSound+12   r
 
 ; Releases all eight parts and creates explosion rings when boss health reaches zero
-Boss_Stage3OrbitingFormationCheckDefeat:                ; CODE XREF: Boss_Stage3OrbitingFormationMain   p  ; was: sub_33F84
+Boss_Stage3OrbitingFormationCheckDefeat:                ; was: sub_33F84
                 cmpi.w  #2,4(a5)
                 bls.w   Boss_Stage3OrbitingFormationReturn
                 btst    #1,(BossColorEffectFlags).w
@@ -43,7 +42,7 @@ Boss_Stage3OrbitingFormationCheckDefeat:                ; CODE XREF: Boss_Stage3
                 clr.l   $1C(a5)
                 move.w  #7,d7
                 lea     (SecondaryEntityType).w,a0
-Boss_Stage3OrbitingFormationReleaseNextPart:            ; CODE XREF: Boss_Stage3OrbitingFormationCheckDefeat+6C   j  ; was: loc_33FB6
+Boss_Stage3OrbitingFormationReleaseNextPart:            ; was: loc_33FB6
                 move.w  SecondaryEntityWork4C-SecondaryEntityType(a0),d2
                 add.w   $4C(a5),d2
                 add.w   d2,d2
@@ -73,7 +72,7 @@ Boss_Stage3OrbitingFormationReleaseNextPart:            ; CODE XREF: Boss_Stage3
                 rts
 ; End of function Boss_Stage3OrbitingFormationCheckDefeat
 ; Converts the hit flag into a four-frame palette flash
-Boss_Stage3OrbitingFormationHandleHitFlash:             ; CODE XREF: Boss_Stage3OrbitingFormationMain+20   p  ; was: sub_34028
+Boss_Stage3OrbitingFormationHandleHitFlash:             ; was: sub_34028
                 bclr    #6,$22(a5)
                 beq.w   Boss_Stage3OrbitingFormationReturn
                 move.w  #4,(PlaneAShakeLevel).w
@@ -81,7 +80,7 @@ Boss_Stage3OrbitingFormationHandleHitFlash:             ; CODE XREF: Boss_Stage3
                 rts
 ; End of function Boss_Stage3OrbitingFormationHandleHitFlash
 ; Advances formation angles and horizontal motion
-Boss_Stage3OrbitingFormationUpdateMotion:               ; CODE XREF: Boss_Stage3OrbitingFormationMain+14   p  ; was: sub_34040
+Boss_Stage3OrbitingFormationUpdateMotion:               ; was: sub_34040
                 move.l  $50(a5),d0
                 add.l   d0,$4C(a5)
                 andi.l  #$FFFFFF,$4C(a5)
@@ -93,7 +92,7 @@ Boss_Stage3OrbitingFormationUpdateMotion:               ; CODE XREF: Boss_Stage3
                 move.w  $5E(a5),d0
                 add.w   d0,$5C(a5)
                 andi.w  #$FF,$5C(a5)
-Boss_Stage3OrbitingFormationApplyHorizontalMotion:      ; CODE XREF: Boss_Stage3OrbitingFormationUpdateMotion+24   j  ; was: loc_34074
+Boss_Stage3OrbitingFormationApplyHorizontalMotion:      ; was: loc_34074
                 cmpi.w  #$A,4(a5)
                 bcs.w   Boss_Stage3OrbitingFormationReturn
                 move.l  $50(a5),d0
@@ -101,7 +100,7 @@ Boss_Stage3OrbitingFormationApplyHorizontalMotion:      ; CODE XREF: Boss_Stage3
                 tst.l   $18(a5)
                 bpl.s   Boss_Stage3OrbitingFormationSetHorizontalVelocity
                 neg.l   d0
-Boss_Stage3OrbitingFormationSetHorizontalVelocity:      ; CODE XREF: Boss_Stage3OrbitingFormationUpdateMotion+48   j  ; was: loc_3408C
+Boss_Stage3OrbitingFormationSetHorizontalVelocity:      ; was: loc_3408C
                 move.l  d0,$18(a5)
                 cmpi.w  #$140,$10(a5)
                 bcs.s   Boss_Stage3OrbitingFormationReverseHorizontalMotion
@@ -109,7 +108,7 @@ Boss_Stage3OrbitingFormationSetHorizontalVelocity:      ; CODE XREF: Boss_Stage3
                 bhi.s   Boss_Stage3OrbitingFormationReverseHorizontalMotion
                 rts
 ; ---------------------------------------------------------------------------
-Boss_Stage3OrbitingFormationReverseHorizontalMotion:    ; CODE XREF: Boss_Stage3OrbitingFormationUpdateMotion+56   j  ; was: loc_340A2
+Boss_Stage3OrbitingFormationReverseHorizontalMotion:    ; was: loc_340A2
                                         ; Boss_Stage3OrbitingFormationUpdateMotion+5E   j
                 neg.l   $18(a5)
                 move.l  $18(a5),d0
@@ -117,7 +116,7 @@ Boss_Stage3OrbitingFormationReverseHorizontalMotion:    ; CODE XREF: Boss_Stage3
                 rts
 ; End of function Boss_Stage3OrbitingFormationUpdateMotion
 ; Applies vertical acceleration and reverses it at the velocity limits
-Boss_Stage3OrbitingFormationUpdateVerticalVelocity:     ; CODE XREF: Boss_Stage3OrbitingFormationMain+1C   p  ; was: sub_340B0
+Boss_Stage3OrbitingFormationUpdateVerticalVelocity:     ; was: sub_340B0
                 tst.l   (SecondaryEntityWork5C).w
                 beq.w   Boss_Stage3OrbitingFormationReturn
                 move.l  (SecondaryEntityWork5C).w,d0
@@ -126,17 +125,17 @@ Boss_Stage3OrbitingFormationUpdateVerticalVelocity:     ; CODE XREF: Boss_Stage3
                 tst.l   d0
                 bmi.s   Boss_Stage3OrbitingFormationCheckVerticalVelocityLimit
                 neg.l   d0
-Boss_Stage3OrbitingFormationCheckVerticalVelocityLimit:  ; CODE XREF: Boss_Stage3OrbitingFormationUpdateVerticalVelocity+16   j  ; was: loc_340CA
+Boss_Stage3OrbitingFormationCheckVerticalVelocityLimit:  ; was: loc_340CA
                 cmpi.l  #$FFFF8000,d0
                 bne.w   Boss_Stage3OrbitingFormationReturn
                 neg.l   (SecondaryEntityWork5C).w
                 rts
 ; End of function Boss_Stage3OrbitingFormationUpdateVerticalVelocity
 ; Recomputes all eight part positions from the formation rotations
-Boss_Stage3OrbitingFormationUpdateParts:                ; CODE XREF: Boss_Stage3OrbitingFormationMain+18   p  ; was: sub_340DA
+Boss_Stage3OrbitingFormationUpdateParts:                ; was: sub_340DA
                 move.w  #7,d7
                 lea     (SecondaryEntityType).w,a0
-Boss_Stage3OrbitingFormationUpdateNextPart:             ; CODE XREF: Boss_Stage3OrbitingFormationUpdateParts+98   j  ; was: loc_340E2
+Boss_Stage3OrbitingFormationUpdateNextPart:             ; was: loc_340E2
                 move.w  SecondaryEntityWork4C-SecondaryEntityType(a0),d0
                 add.w   $4C(a5),d0
                 andi.w  #$FF,d0
@@ -188,14 +187,14 @@ Boss_Stage3OrbitingFormationUpdateNextPart:             ; CODE XREF: Boss_Stage3
                 rts
 ; End of function Boss_Stage3OrbitingFormationUpdateParts
 ; Dispatches the formation's ten controller states
-Boss_Stage3OrbitingFormationDispatchState:              ; CODE XREF: Boss_Stage3OrbitingFormationMain+4   p  ; was: sub_34178
+Boss_Stage3OrbitingFormationDispatchState:              ; was: sub_34178
                 move.w  4(a5),d0
                 lea     Boss_Stage3OrbitingFormationStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Boss_Stage3OrbitingFormationDispatchState
 ; ---------------------------------------------------------------------------
-Boss_Stage3OrbitingFormationStates: dc.w    Boss_Stage3OrbitingFormationInit-*  ; DATA XREF: Boss_Stage3OrbitingFormationDispatchState+4   o  ; was: off_34184
+Boss_Stage3OrbitingFormationStates: dc.w    Boss_Stage3OrbitingFormationInit-*  ; was: off_34184
                 dc.w    Boss_Stage3OrbitingFormationRemove-*
                 dc.w    Boss_Stage3OrbitingFormationWaitForActivationSignal-*
                 dc.w    Boss_Stage3OrbitingFormationEnterBattle-*
@@ -207,7 +206,7 @@ Boss_Stage3OrbitingFormationStates: dc.w    Boss_Stage3OrbitingFormationInit-*  
                 dc.w    Boss_Stage3OrbitingFormationRestoreSpin-*
 
 ; Initializes the boss controller, its eight parts, and graphics request
-Boss_Stage3OrbitingFormationInit:                       ; DATA XREF: ROM:Boss_Stage3OrbitingFormationStates   o  ; was: sub_34198
+Boss_Stage3OrbitingFormationInit:                       ; was: sub_34198
                 move.l  #Boss_Stage3OrbitingFormationSpriteMapping00,8(a5)
                 move.w  #$B00,$E(a5)
                 move.w  #$CC00,2(a5)
@@ -224,7 +223,7 @@ Boss_Stage3OrbitingFormationInit:                       ; DATA XREF: ROM:Boss_St
                 move.w  #7,d7
                 clr.w   d6
                 lea     (SecondaryEntityType).w,a0
-Boss_Stage3OrbitingFormationInitNextPart:               ; CODE XREF: Boss_Stage3OrbitingFormationInit+9E   j  ; was: loc_341F2
+Boss_Stage3OrbitingFormationInitNextPart:               ; was: loc_341F2
                 move.w  #$10,(a0)
                 move.l  #Boss_Stage3OrbitingFormationSpriteMapping01,8(a0)
                 move.w  #$B00,$E(a0)
@@ -250,18 +249,17 @@ Boss_Stage3OrbitingFormationInitNextPart:               ; CODE XREF: Boss_Stage3
 ; End of function Boss_Stage3OrbitingFormationInit
 ; ---------------------------------------------------------------------------
 Boss_Stage3OrbitingFormationTileLoadRequest:    dc.w    7  ; field_0  ; was: stru_34266
-                                        ; DATA XREF: Boss_Stage3OrbitingFormationInit+BC   o
                 dc.l    Boss_Stage3OrbitingFormationTileArt  ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    $FFFF
 
 ; Removes the controller after the defeat transition
-Boss_Stage3OrbitingFormationRemove:                     ; DATA XREF: ROM:00034186   o  ; was: sub_34270
+Boss_Stage3OrbitingFormationRemove:                     ; was: sub_34270
                 clr.w   (a5)
                 rts
 ; End of function Boss_Stage3OrbitingFormationRemove
 ; Waits for the Stage 3 activation signal, then starts arena entry motion
-Boss_Stage3OrbitingFormationWaitForActivationSignal:    ; DATA XREF: ROM:00034188   o  ; was: sub_34274
+Boss_Stage3OrbitingFormationWaitForActivationSignal:    ; was: sub_34274
                 tst.w   (DataLoaderControl).w
                 bmi.w   Boss_Stage3OrbitingFormationReturn
                 move.w  #$C0,$54(a5)
@@ -272,7 +270,7 @@ Boss_Stage3OrbitingFormationWaitForActivationSignal:    ; DATA XREF: ROM:0003418
                 rts
 ; End of function Boss_Stage3OrbitingFormationWaitForActivationSignal
 ; Arms boss health when the formation reaches the battle-entry X position
-Boss_Stage3OrbitingFormationEnterBattle:                ; DATA XREF: ROM:0003418A   o  ; was: sub_3429E
+Boss_Stage3OrbitingFormationEnterBattle:                ; was: sub_3429E
                 cmpi.w  #$1C0,$10(a5)
                 bcc.w   Boss_Stage3OrbitingFormationReturn
                 move.w  #$1E00,(BossMaxHealth).w
@@ -282,7 +280,7 @@ Boss_Stage3OrbitingFormationEnterBattle:                ; DATA XREF: ROM:0003418
                 rts
 ; End of function Boss_Stage3OrbitingFormationEnterBattle
 ; Waits for the attack X position, then enables vertical formation rotation
-Boss_Stage3OrbitingFormationWaitForAttackPosition:      ; DATA XREF: ROM:0003418C   o  ; was: sub_342BE
+Boss_Stage3OrbitingFormationWaitForAttackPosition:      ; was: sub_342BE
                 cmpi.w  #$180,$10(a5)
                 bcc.w   Boss_Stage3OrbitingFormationReturn
                 move.l  #$8000,$58(a5)
@@ -290,7 +288,7 @@ Boss_Stage3OrbitingFormationWaitForAttackPosition:      ; DATA XREF: ROM:0003418
                 rts
 ; End of function Boss_Stage3OrbitingFormationWaitForAttackPosition
 ; Selects a random delay for the next aimed homing shot
-Boss_Stage3OrbitingFormationPrepareHomingShot:          ; DATA XREF: ROM:0003418E   o  ; was: sub_342D6
+Boss_Stage3OrbitingFormationPrepareHomingShot:          ; was: sub_342D6
                 addq.w  #2,4(a5)
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$3F,d0                         ; '?'
@@ -301,7 +299,7 @@ Boss_Stage3OrbitingFormationPrepareHomingShot:          ; DATA XREF: ROM:0003418
                 rts
 ; End of function Boss_Stage3OrbitingFormationPrepareHomingShot
 ; Fires an aimed homing shot, then waits for the formation to align
-Boss_Stage3OrbitingFormationFireHomingShot:             ; DATA XREF: ROM:00034190   o  ; was: sub_342F6
+Boss_Stage3OrbitingFormationFireHomingShot:             ; was: sub_342F6
                 subq.w  #1,$48(a5)
                 bpl.w   Boss_Stage3OrbitingFormationWaitForOrbitAlignment
                 jsr     (Math_CalculateAngleToPlayer).l
@@ -313,7 +311,7 @@ Boss_Stage3OrbitingFormationFireHomingShot:             ; DATA XREF: ROM:0003419
                 move.w  #$8004,d2
                 jsr     (Projectile_InitializeDifficultyScaledTwoSpeedShot).l
                 move.w  #$A,4(a5)
-Boss_Stage3OrbitingFormationWaitForOrbitAlignment:      ; CODE XREF: Boss_Stage3OrbitingFormationFireHomingShot+4   j  ; was: loc_34326
+Boss_Stage3OrbitingFormationWaitForOrbitAlignment:      ; was: loc_34326
                 tst.l   $54(a5)
                 bne.w   Boss_Stage3OrbitingFormationReturn
                 eori.b  #1,$4A(a5)
@@ -322,7 +320,7 @@ Boss_Stage3OrbitingFormationWaitForOrbitAlignment:      ; CODE XREF: Boss_Stage3
                 rts
 ; End of function Boss_Stage3OrbitingFormationFireHomingShot
 ; Stops the spin and fires one radial shot from each orbiting part
-Boss_Stage3OrbitingFormationFirePartRadialShots:        ; DATA XREF: ROM:00034192   o  ; was: sub_34340
+Boss_Stage3OrbitingFormationFirePartRadialShots:        ; was: sub_34340
                 subi.l  #$800,$50(a5)
                 bne.w   Boss_Stage3OrbitingFormationReturn
                 addq.w  #2,4(a5)
@@ -332,7 +330,7 @@ Boss_Stage3OrbitingFormationFirePartRadialShots:        ; DATA XREF: ROM:0003419
                 movem.w a5,-(sp)
                 lea     (SecondaryEntityType).w,a5
                 move.w  #7,d4
-Boss_Stage3OrbitingFormationFireFromNextPart:           ; CODE XREF: Boss_Stage3OrbitingFormationFirePartRadialShots+52   j  ; was: loc_3436A
+Boss_Stage3OrbitingFormationFireFromNextPart:           ; was: loc_3436A
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Stage3OrbitingFormationFinishPartRadialShots
                 clr.w   d0
@@ -345,25 +343,25 @@ Boss_Stage3OrbitingFormationFireFromNextPart:           ; CODE XREF: Boss_Stage3
                 jsr     (Projectile_InitializeDifficultyScaledTwoSpeedShot).l
                 adda.w  #$60,a5                         ; '`'
                 dbf     d4,Boss_Stage3OrbitingFormationFireFromNextPart
-Boss_Stage3OrbitingFormationFinishPartRadialShots:      ; CODE XREF: Boss_Stage3OrbitingFormationFirePartRadialShots+30   j  ; was: loc_34396
+Boss_Stage3OrbitingFormationFinishPartRadialShots:      ; was: loc_34396
                 movem.w (sp)+,a5
                 rts
 ; End of function Boss_Stage3OrbitingFormationFirePartRadialShots
 ; Waits between the radial volley and spin recovery
-Boss_Stage3OrbitingFormationWaitBetweenAttacks:         ; DATA XREF: ROM:00034194   o  ; was: sub_3439C
+Boss_Stage3OrbitingFormationWaitBetweenAttacks:         ; was: sub_3439C
                 subq.w  #1,$48(a5)
                 bpl.w   Boss_Stage3OrbitingFormationReturn
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_Stage3OrbitingFormationWaitBetweenAttacks
 ; Restores the formation spin rate before returning to the aimed-shot cycle
-Boss_Stage3OrbitingFormationRestoreSpin:                ; DATA XREF: ROM:00034196   o  ; was: sub_343AA
+Boss_Stage3OrbitingFormationRestoreSpin:                ; was: sub_343AA
                 addi.l  #$800,$50(a5)
                 cmpi.l  #$40000,$50(a5)
                 bcs.w   Boss_Stage3OrbitingFormationReturn
                 move.l  #$8000,$58(a5)
                 move.w  #$A,4(a5)
-Boss_Stage3OrbitingFormationReturn:                     ; CODE XREF: Boss_Stage3OrbitingFormationMain+10   j  ; was: locret_343CC
+Boss_Stage3OrbitingFormationReturn:                     ; was: locret_343CC
                                         ; Boss_Stage3OrbitingFormationCheckDefeat+6   j
                 rts
 ; End of function Boss_Stage3OrbitingFormationRestoreSpin

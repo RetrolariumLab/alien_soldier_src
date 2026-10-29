@@ -2,7 +2,7 @@
 UnreferencedInitializeNineAuxiliarySprites:             ; was: sub_548EE
                 move.w  #8,d7
                 lea     $360(a5),a0
-UnreferencedInitializeNineAuxiliarySpritesLoop:         ; CODE XREF: UnreferencedInitializeNineAuxiliarySprites+28   j  ; was: loc_548F6
+UnreferencedInitializeNineAuxiliarySpritesLoop:         ; was: loc_548F6
                 move.w  #$10,(a0)
                 move.l  #SharedCombatSpriteAnimation12,8(a0)
                 clr.w   $C(a0)

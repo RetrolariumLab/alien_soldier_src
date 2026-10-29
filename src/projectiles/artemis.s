@@ -1,5 +1,5 @@
 ; Create the type-$488 Artemis radial-emitter entity
-Boss_SpawnArtemisRadialEmitter:                         ; CODE XREF: Boss_EnterArtemisState14+4E   p  ; was: sub_589E8
+Boss_SpawnArtemisRadialEmitter:                         ; was: sub_589E8
                 tst.w   $54(a5)
                 beq.s   Boss_InitArtemisRadialEmitter
                 move.w  #$100,d1
@@ -7,7 +7,7 @@ Boss_SpawnArtemisRadialEmitter:                         ; CODE XREF: Boss_EnterA
                 move.w  d1,d7
                 andi.w  #$1FE,d7
                 neg.l   d5
-Boss_InitArtemisRadialEmitter:                          ; CODE XREF: Boss_SpawnArtemisRadialEmitter+4   j  ; was: loc_589FC
+Boss_InitArtemisRadialEmitter:                          ; was: loc_589FC
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_SpawnArtemisRadialEmitterReturn
                 move.w  #$488,(a0)
@@ -30,14 +30,14 @@ Boss_InitArtemisRadialEmitter:                          ; CODE XREF: Boss_SpawnA
                 bne.s   Boss_StoreArtemisEmitterAcceleration
                 moveq   #0,d4
                 moveq   #0,d5
-Boss_StoreArtemisEmitterAcceleration:                   ; CODE XREF: Boss_SpawnArtemisRadialEmitter+66   j  ; was: loc_58A54
+Boss_StoreArtemisEmitterAcceleration:                   ; was: loc_58A54
                 move.l  d5,$4C(a0)
                 move.l  d4,$50(a0)
-Boss_SpawnArtemisRadialEmitterReturn:                   ; CODE XREF: Boss_SpawnArtemisRadialEmitter+1A   j  ; was: locret_58A5C
+Boss_SpawnArtemisRadialEmitterReturn:                   ; was: locret_58A5C
                 rts
 ; End of function Boss_SpawnArtemisRadialEmitter
 ; Update the type-$488 Artemis radial-emitter lifecycle
-Projectile_UpdateArtemisRadialEmitter:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_58A5E
+Projectile_UpdateArtemisRadialEmitter:                  ; was: sub_58A5E
                 tst.w   $48(a5)
                 bmi.s   Projectile_UpdateArtemisEmitterFlight
                 subq.w  #1,$48(a5)
@@ -52,7 +52,7 @@ Projectile_UpdateArtemisRadialEmitter:                  ; DATA XREF: ROM:Entity_
                 move.w  #$C7,$26(a5)
                 bra.s   Projectile_UpdateArtemisEmitterFlight
 ; ---------------------------------------------------------------------------
-Projectile_UpdateArtemisEmitterAnchorJitter:            ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+A   j  ; was: loc_58A9C
+Projectile_UpdateArtemisEmitterAnchorJitter:            ; was: loc_58A9C
                 move.b  (RandomNumberState).w,d0
                 andi.w  #$F,d0
                 subq.w  #8,d0
@@ -69,7 +69,7 @@ Projectile_UpdateArtemisEmitterAnchorJitter:            ; CODE XREF: Projectile_
                 bclr    #7,2(a5)
                 bra.w   Projectile_SpawnArtemisRadialShot
 ; ---------------------------------------------------------------------------
-Projectile_UpdateArtemisEmitterFlight:                  ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+4   j  ; was: loc_58ADA
+Projectile_UpdateArtemisEmitterFlight:                  ; was: loc_58ADA
                                         ; Projectile_UpdateArtemisRadialEmitter+3C   j
                 move.w  (PrimaryCameraYPosition).w,d0
                 subi.w  #$E200,d0
@@ -80,7 +80,7 @@ Projectile_UpdateArtemisEmitterFlight:                  ; CODE XREF: Projectile_
                 move.l  #$FFFC0000,$1C(a5)
                 bra.w   Projectile_InitArtemisEmitterEffect
 ; ---------------------------------------------------------------------------
-Projectile_CheckArtemisEmitterHorizontalBounds:         ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+8C   j  ; was: loc_58AFC
+Projectile_CheckArtemisEmitterHorizontalBounds:         ; was: loc_58AFC
                 cmpi.w  #$80,$14(a5)
                 bmi.s   Projectile_RemoveArtemisEmitterOutsideBounds
                 move.w  (PrimaryCameraXPosition).w,d0
@@ -89,12 +89,12 @@ Projectile_CheckArtemisEmitterHorizontalBounds:         ; CODE XREF: Projectile_
                 bpl.s   Projectile_RemoveArtemisEmitterOutsideBounds
                 cmpi.w  #$94,d0
                 bpl.s   Projectile_HandleArtemisEmitterCollision
-Projectile_RemoveArtemisEmitterOutsideBounds:           ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+A4   j  ; was: loc_58B18
+Projectile_RemoveArtemisEmitterOutsideBounds:           ; was: loc_58B18
                                         ; Projectile_UpdateArtemisRadialEmitter+B2   j
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_HandleArtemisEmitterCollision:               ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+B8   j  ; was: loc_58B20
+Projectile_HandleArtemisEmitterCollision:               ; was: loc_58B20
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Projectile_ConvertArtemisEmitterToEffect
                 bclr    #7,$22(a5)
@@ -106,7 +106,7 @@ Projectile_HandleArtemisEmitterCollision:               ; CODE XREF: Projectile_
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 jsr     (Pickup_SelectLargeSize).l
-Projectile_ConvertArtemisEmitterToEffect:               ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+C6   j  ; was: loc_58B50
+Projectile_ConvertArtemisEmitterToEffect:               ; was: loc_58B50
                                         ; Projectile_UpdateArtemisRadialEmitter+D6   j
                 move.l  $18(a5),d0
                 asr.l   #1,d0
@@ -116,12 +116,12 @@ Projectile_ConvertArtemisEmitterToEffect:               ; CODE XREF: Projectile_
                 asr.l   #1,d0
                 neg.l   d0
                 move.l  d0,$1C(a5)
-Projectile_InitArtemisEmitterEffect:                    ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+9A   j  ; was: loc_58B68
+Projectile_InitArtemisEmitterEffect:                    ; was: loc_58B68
                 move.w  #3,(PlaneAShakeLevel).w
                 move.l  #SharedCombatSpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_ReflectArtemisEmitter:                       ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+CE   j  ; was: loc_58B7C
+Projectile_ReflectArtemisEmitter:                       ; was: loc_58B7C
                 move.w  (FrameCounter).w,d0
                 asl.w   #1,d0
                 andi.w  #6,d0
@@ -138,10 +138,9 @@ Projectile_ArtemisEmitterUnreferencedReturn:            ; was: nullsub_132
 ; End of function Projectile_ArtemisEmitterUnreferencedReturn
 ; ---------------------------------------------------------------------------
 Projectile_ArtemisEmitterSpriteAttributes:  dc.w    $4489, $4492, $449B, $4492  ; was: word_58BA2
-                                        ; DATA XREF: Projectile_UpdateArtemisRadialEmitter+128   r
 
 ; Spawn a projectile in a phase-selected radial direction from the emitter
-Projectile_SpawnArtemisRadialShot:                      ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+6E   j  ; was: sub_58BAA
+Projectile_SpawnArtemisRadialShot:                      ; was: sub_58BAA
                                         ; Projectile_UpdateArtemisRadialEmitter+78   j
                 move.w  (FrameCounter).w,d0
                 andi.w  #7,d0
@@ -164,11 +163,11 @@ Projectile_SpawnArtemisRadialShot:                      ; CODE XREF: Projectile_
                 asl.l   #5,d1
                 move.l  d0,$1C(a0)
                 move.l  d1,$18(a0)
-Projectile_SpawnArtemisRadialShotReturn:                ; CODE XREF: Projectile_SpawnArtemisRadialShot+8   j  ; was: locret_58C00
+Projectile_SpawnArtemisRadialShotReturn:                ; was: locret_58C00
                                         ; Projectile_SpawnArtemisRadialShot+10   j
                 rts
 ; Spawn a projectile with the emitter's velocity reversed
-Projectile_SpawnArtemisReflectedShot:                   ; CODE XREF: Projectile_UpdateArtemisRadialEmitter+13E   j  ; was: sub_58C02
+Projectile_SpawnArtemisReflectedShot:                   ; was: sub_58C02
                 btst    #0,(FrameCounter+1).w
                 bne.s   Projectile_SpawnArtemisReflectedShotReturn
                 jsr     (Projectile_FindFreeSlotReverse).l
@@ -192,7 +191,7 @@ Projectile_SpawnArtemisReflectedShot:                   ; CODE XREF: Projectile_
                 move.l  $1C(a5),d0
                 neg.l   d0
                 move.l  d0,$1C(a0)
-Projectile_SpawnArtemisReflectedShotReturn:             ; CODE XREF: Projectile_SpawnArtemisReflectedShot+6   j  ; was: locret_58C60
+Projectile_SpawnArtemisReflectedShotReturn:             ; was: locret_58C60
                                         ; Projectile_SpawnArtemisReflectedShot+E   j
                 rts
 ; End of function Projectile_SpawnArtemisReflectedShot

@@ -1,13 +1,13 @@
 ; Victor main controller, initialization, and twelve-part ring attacks
 ; Dispatches Victor entities by the subtype stored at offset $48
-Entity_VictorSubtypeDispatcher:                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_323E2
+Entity_VictorSubtypeDispatcher:                         ; was: sub_323E2
                 move.w  $48(a5),d0
                 lea     Entity_VictorSubtypeHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Entity_VictorSubtypeDispatcher
 ; ---------------------------------------------------------------------------
-Entity_VictorSubtypeHandlers:   dc.w    Boss_VictorMain-*  ; DATA XREF: Entity_VictorSubtypeDispatcher+4   o  ; was: off_323EE
+Entity_VictorSubtypeHandlers:   dc.w    Boss_VictorMain-*  ; was: off_323EE
                 dc.w    Boss_VictorOrbitingPartAimAtPlayer-*
                 dc.w    Boss_VictorOrbitingPartTrackPlayer-*
                 dc.w    Boss_VictorOrbitingPartRadialMain-*
@@ -15,7 +15,7 @@ Entity_VictorSubtypeHandlers:   dc.w    Boss_VictorMain-*  ; DATA XREF: Entity_V
                 dc.w    Boss_VictorOrbitingPartCollisionMain-*
 
 ; Updates Victor's palette fade and dispatches the current main state
-Boss_VictorMain:                                        ; DATA XREF: ROM:Entity_VictorSubtypeHandlers   o  ; was: sub_323FA
+Boss_VictorMain:                                        ; was: sub_323FA
                 jsr     (Gfx_ProcessDefaultColorFade).l
                 cmpi.w  #$1E,4(a5)
                 bcc.s   Boss_VictorDispatchState
@@ -24,7 +24,7 @@ Boss_VictorMain:                                        ; DATA XREF: ROM:Entity_
                 move.w  #1,(SharedScratchLong5+2).w
                 bset    #0,(StageTimerPauseFlag).w
                 move.w  #$1E,4(a5)
-Boss_VictorDispatchState:                               ; CODE XREF: Boss_VictorMain+C   j  ; was: loc_32420
+Boss_VictorDispatchState:                               ; was: loc_32420
                                         ; Boss_VictorMain+12   j
                 move.w  4(a5),d0
                 lea     Boss_VictorStates(pc,d0.w),a0
@@ -32,7 +32,7 @@ Boss_VictorDispatchState:                               ; CODE XREF: Boss_Victor
                 jmp     (a0)
 ; End of function Boss_VictorMain
 ; ---------------------------------------------------------------------------
-Boss_VictorStates:  dc.w    Boss_VictorInit-*           ; DATA XREF: Boss_VictorMain+2A   o  ; was: off_3242C
+Boss_VictorStates:  dc.w    Boss_VictorInit-*           ; was: off_3242C
                 dc.w    Boss_VictorFlyIn-*
                 dc.w    Boss_VictorWaitForArenaReady-*
                 dc.w    Boss_VictorChooseAttack-*
@@ -51,7 +51,7 @@ Boss_VictorStates:  dc.w    Boss_VictorInit-*           ; DATA XREF: Boss_Victor
                 dc.w    Boss_VictorUpdateDefeatExplosion-*
 
 ; Initializes Victor, its two core parts, and eight orbiting parts
-Boss_VictorInit:                                        ; DATA XREF: ROM:Boss_VictorStates   o  ; was: sub_3244E
+Boss_VictorInit:                                        ; was: sub_3244E
                 clr.w   (SharedScratchLong5+2).w
                 move.w  #$100,$14(a5)
                 move.w  #$200,$10(a5)
@@ -98,7 +98,7 @@ Boss_VictorInit:                                        ; DATA XREF: ROM:Boss_Vi
                 move.w  a5,$44(a4)
                 adda.w  #$60,a4                         ; '`'
                 move.w  #7,d6
-Boss_VictorInitNextOrbitingPart:                        ; CODE XREF: Boss_VictorInit+130   j  ; was: loc_3254C
+Boss_VictorInitNextOrbitingPart:                        ; was: loc_3254C
                 adda.w  #$60,a4                         ; '`'
                 bsr.w   Boss_VictorInitPart
                 move.w  #6,$48(a4)
@@ -114,7 +114,7 @@ Boss_VictorInitNextOrbitingPart:                        ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorInit
 ; Flying enemy main handler
-Boss_VictorInitPart:                                    ; CODE XREF: Boss_VictorInit+9A   p  ; was: sub_32584
+Boss_VictorInitPart:                                    ; was: sub_32584
                                         ; Boss_VictorInit+CA   p
                 move.w  #$8C00,2(a4)
                 move.w  #$6300,$E(a4)
@@ -129,7 +129,7 @@ Boss_VictorInitPart:                                    ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorInitPart
 ; Initializes flying enemy
-Boss_VictorUpdateViewportOffset:                        ; CODE XREF: Boss_VictorInit+10   p  ; was: sub_325C0
+Boss_VictorUpdateViewportOffset:                        ; was: sub_325C0
                                         ; Boss_VictorFlyIn+4   p
                 move.w  #$2A8,d0
                 sub.w   $10(a5),d0
@@ -140,7 +140,7 @@ Boss_VictorUpdateViewportOffset:                        ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorUpdateViewportOffset
 ; Updates boss animation frames by loading compressed tile data on timer
-Boss_VictorUpdateAnimation:                             ; CODE XREF: Boss_VictorFlyIn+8   p  ; was: sub_325DA
+Boss_VictorUpdateAnimation:                             ; was: sub_325DA
                                         ; Boss_VictorWaitForArenaReady+8   p
                 subq.w  #1,(SharedScratchLong1).w
                 bne.w   Entity_UpdateReturn
@@ -148,7 +148,7 @@ Boss_VictorUpdateAnimation:                             ; CODE XREF: Boss_Victor
                 tst.w   (a0)
                 bpl.s   Boss_VictorRestartAnimationScript
                 movea.l #Boss_VictorAnimationTimingScript,a0
-Boss_VictorRestartAnimationScript:                      ; CODE XREF: Boss_VictorUpdateAnimation+E   j  ; was: loc_325F0
+Boss_VictorRestartAnimationScript:                      ; was: loc_325F0
                 move.w  (a0)+,(SharedScratchLong1).w
                 move.w  (a0)+,d0
                 move.l  a0,(SharedScratchLong0).w
@@ -157,28 +157,22 @@ Boss_VictorRestartAnimationScript:                      ; CODE XREF: Boss_Victor
 ; End of function Boss_VictorUpdateAnimation
 ; ---------------------------------------------------------------------------
 Boss_VictorAnimationTimingScript:   dc.w    8, 8, 8, $C, 8, 8, $40, 4  ; was: word_32604
-                                        ; DATA XREF: Boss_VictorInit+1C   o
                                         ; Boss_VictorUpdateAnimation+10   o
                 dc.w    8, 8, 8, $C, 8, 8, 8, 4
                 dc.w    8, 8, 8, $C, 8, 8, $40, 4
                 dc.w    $FFFF
-Boss_VictorAnimationGraphicsTable:  dc.l    Boss_VictorAnimationGraphicsFrame0  ; DATA XREF: Boss_VictorUpdateAnimation+20   r  ; was: off_32636
+Boss_VictorAnimationGraphicsTable:  dc.l    Boss_VictorAnimationGraphicsFrame0  ; was: off_32636
                 dc.l    Boss_VictorAnimationGraphicsFrame1
                 dc.l    Boss_VictorAnimationGraphicsFrame2
                 dc.l    Boss_VictorAnimationGraphicsFrame3
-Boss_VictorAnimationGraphicsFrame0: dc.w    $6206, $2000, 0, $5EFF  ; was: word_32646
-                                        ; DATA XREF: ROM:Boss_VictorAnimationGraphicsTable   o
-Boss_VictorAnimationGraphicsFrame1: dc.w    $6206, $2000, 0, $5CFF  ; was: word_3264E
-                                        ; DATA XREF: ROM:0003263A   o
-Boss_VictorAnimationGraphicsFrame2: dc.w    $6206, $2000, 0, $60FF  ; was: word_32656
-                                        ; DATA XREF: ROM:0003263E   o
-Boss_VictorAnimationGraphicsFrame3: dc.w    $6206, $2000, 0, $64FF  ; was: word_3265E
-                                        ; DATA XREF: ROM:00032642   o
+Boss_VictorAnimationGraphicsFrame0:         dc.w    $6206, $2000, 0, $5EFF  ; was: word_32646
+Boss_VictorAnimationGraphicsFrame1:         dc.w    $6206, $2000, 0, $5CFF  ; was: word_3264E
+Boss_VictorAnimationGraphicsFrame2:         dc.w    $6206, $2000, 0, $60FF  ; was: word_32656
+Boss_VictorAnimationGraphicsFrame3:         dc.w    $6206, $2000, 0, $64FF  ; was: word_3265E
 Boss_VictorInitialGraphicsLoadDescriptor:   dc.w    $6000, $2000, $202, $595A, $5B5D, $5E5F, $6162, $63FF  ; was: word_32666
-                                        ; DATA XREF: Boss_VictorInit+76   o
 
 ; Handles boss flying in until X position reaches threshold
-Boss_VictorFlyIn:                                       ; DATA XREF: ROM:0003242E   o  ; was: sub_32676
+Boss_VictorFlyIn:                                       ; was: sub_32676
                 bsr.w   Boss_VictorSetPaletteRGBAdjustment
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
@@ -191,7 +185,7 @@ Boss_VictorFlyIn:                                       ; DATA XREF: ROM:0003242
                 rts
 ; End of function Boss_VictorFlyIn
 ; Holds Victor's entrance until the dark arena is ready
-Boss_VictorWaitForArenaReady:                           ; DATA XREF: ROM:00032430   o  ; was: sub_326A0
+Boss_VictorWaitForArenaReady:                           ; was: sub_326A0
                 bsr.w   Boss_VictorSetPaletteRGBAdjustment
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
@@ -203,7 +197,7 @@ Boss_VictorWaitForArenaReady:                           ; DATA XREF: ROM:0003243
                 rts
 ; End of function Boss_VictorWaitForArenaReady
 ; Configures Victor's entrance RGB palette adjustment
-Boss_VictorSetPaletteRGBAdjustment:                     ; CODE XREF: Boss_VictorFlyIn   p  ; was: sub_326C4
+Boss_VictorSetPaletteRGBAdjustment:                     ; was: sub_326C4
                                         ; sub_326A0   p
                 move.w  #$E0,(PaletteRGBAdjustLevel).w
                 move.b  #$20,(PaletteRGBChannelMask).w  ; ' '
@@ -211,7 +205,7 @@ Boss_VictorSetPaletteRGBAdjustment:                     ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorSetPaletteRGBAdjustment
 ; Randomly selects the next ring, launched-part, or split-shot sequence
-Boss_VictorChooseAttack:                                ; DATA XREF: ROM:00032432   o  ; was: sub_326D8
+Boss_VictorChooseAttack:                                ; was: sub_326D8
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
                 jsr     (RandomNumber).l
@@ -222,23 +216,23 @@ Boss_VictorChooseAttack:                                ; DATA XREF: ROM:0003243
                 addq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_VictorSelectPartLaunchAttack:                      ; CODE XREF: Boss_VictorChooseAttack+12   j  ; was: loc_326F8
+Boss_VictorSelectPartLaunchAttack:                      ; was: loc_326F8
                 move.w  #$10,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_VictorSelectSplitShotAttack:                       ; CODE XREF: Boss_VictorChooseAttack+18   j  ; was: loc_32700
+Boss_VictorSelectSplitShotAttack:                       ; was: loc_32700
                 move.w  #$18,4(a5)
                 rts
 ; End of function Boss_VictorChooseAttack
 ; Builds a linked ring of twelve orbiting parts around Victor
-Boss_VictorDeployRing:                                  ; DATA XREF: ROM:00032434   o  ; was: sub_32708
+Boss_VictorDeployRing:                                  ; was: sub_32708
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
                 lea     (TwentiethEntityType).w,a4
                 lea     (Entity_ObjectPool).w,a0
                 bsr.w   Boss_VictorConfigureRingPattern
                 move.w  #$B,d6
-Boss_VictorInitNextRingSegment:                         ; CODE XREF: Boss_VictorDeployRing+5C   j  ; was: loc_32720
+Boss_VictorInitNextRingSegment:                         ; was: loc_32720
                 adda.w  #$60,a4                         ; '`'
                 bsr.w   Boss_VictorInitPart
                 move.b  #$54,$20(a4)                    ; 'T'
@@ -260,7 +254,7 @@ Boss_VictorInitNextRingSegment:                         ; CODE XREF: Boss_Victor
                 tst.w   (SharedScratchLong2).w
                 bpl.s   Boss_VictorFinishRingDeployment
                 ori.w   #$1000,$E(a4)
-Boss_VictorFinishRingDeployment:                        ; CODE XREF: Boss_VictorDeployRing+78   j  ; was: loc_32788
+Boss_VictorFinishRingDeployment:                        ; was: loc_32788
                 move.w  #3,(TwentyFirstEntityWork4C).w
                 move.b  #$4B,d0                         ; 'K'
                 jsr     (Sound_QueueSFXRequest).l
@@ -269,7 +263,7 @@ Boss_VictorFinishRingDeployment:                        ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorDeployRing
 ; Chooses the ring's angle origin, direction, and horizontal target
-Boss_VictorConfigureRingPattern:                        ; CODE XREF: Boss_VictorDeployRing+10   p  ; was: sub_327A4
+Boss_VictorConfigureRingPattern:                        ; was: sub_327A4
                 jsr     (RandomNumber).l
                 cmpi.w  #$120,$10(a5)
                 bcc.s   Boss_VictorConfigureRightRing
@@ -282,7 +276,7 @@ Boss_VictorConfigureRingPattern:                        ; CODE XREF: Boss_Victor
                 move.w  #$180,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_VictorConfigureLeftClockwiseRing:                  ; CODE XREF: Boss_VictorConfigureRingPattern+12   j  ; was: loc_327D6
+Boss_VictorConfigureLeftClockwiseRing:                  ; was: loc_327D6
                 move.w  #4,d5
                 move.w  #4,(SharedScratchLong1+2).w
                 move.w  #2,(SharedScratchLong2+2).w
@@ -290,7 +284,7 @@ Boss_VictorConfigureLeftClockwiseRing:                  ; CODE XREF: Boss_Victor
                 move.w  #$180,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_VictorConfigureRightRing:                          ; CODE XREF: Boss_VictorConfigureRingPattern+C   j  ; was: loc_327F4
+Boss_VictorConfigureRightRing:                          ; was: loc_327F4
                 andi.w  #1,d0
                 bne.s   Boss_VictorConfigureRightCounterclockwiseRing
                 move.w  #$104,d5
@@ -300,7 +294,7 @@ Boss_VictorConfigureRightRing:                          ; CODE XREF: Boss_Victor
                 move.w  #$C0,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_VictorConfigureRightCounterclockwiseRing:          ; CODE XREF: Boss_VictorConfigureRingPattern+54   j  ; was: loc_32818
+Boss_VictorConfigureRightCounterclockwiseRing:          ; was: loc_32818
                 move.w  #$FC,d5
                 move.w  #$FC,(SharedScratchLong1+2).w
                 move.w  #$FFFE,(SharedScratchLong2+2).w
@@ -309,7 +303,7 @@ Boss_VictorConfigureRightCounterclockwiseRing:          ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorConfigureRingPattern
 ; Reverses and relinks the twelve-part ring
-Boss_VictorReverseRing:                                 ; DATA XREF: ROM:00032436   o  ; was: sub_32836
+Boss_VictorReverseRing:                                 ; was: sub_32836
                 move.w  #$E0,(PaletteRGBAdjustLevel).w
                 move.b  #$80,(PaletteRGBChannelMask).w
                 move.b  #8,(PaletteRGBAdjustStep).w
@@ -322,7 +316,7 @@ Boss_VictorReverseRing:                                 ; DATA XREF: ROM:0003243
                 jsr     (Sound_QueueSFXRequest).l
                 lea     (TwentyFirstEntityType).w,a4
                 move.w  #$B,d6
-Boss_VictorLinkNextRingSegment:                         ; CODE XREF: Boss_VictorReverseRing+5E   j  ; was: loc_32870
+Boss_VictorLinkNextRingSegment:                         ; was: loc_32870
                 move.w  #$40,$42(a4)                    ; '@'
                 movea.w a4,a3
                 adda.w  #$60,a3                         ; '`'
@@ -344,7 +338,7 @@ Boss_VictorLinkNextRingSegment:                         ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorReverseRing
 ; Pulls the ring inward and relinks it in reverse slot order
-Boss_VictorRetractRing:                                 ; DATA XREF: ROM:00032438   o  ; was: sub_328C0
+Boss_VictorRetractRing:                                 ; was: sub_328C0
                 move.w  #$E0,(PaletteRGBAdjustLevel).w
                 move.b  #$80,(PaletteRGBChannelMask).w
                 move.b  #8,(PaletteRGBAdjustStep).w
@@ -360,14 +354,14 @@ Boss_VictorRetractRing:                                 ; DATA XREF: ROM:0003243
                 move.w  #$C0,$10(a5)
                 bra.s   Boss_VictorLinkRingForRetraction
 ; ---------------------------------------------------------------------------
-Boss_VictorClampRetractionFromRight:                    ; CODE XREF: Boss_VictorRetractRing+2E   j  ; was: loc_32902
+Boss_VictorClampRetractionFromRight:                    ; was: loc_32902
                 cmpi.w  #$180,$10(a5)
                 bcs.w   Entity_UpdateReturn
                 move.w  #$180,$10(a5)
-Boss_VictorLinkRingForRetraction:                       ; CODE XREF: Boss_VictorRetractRing+40   j  ; was: loc_32912
+Boss_VictorLinkRingForRetraction:                       ; was: loc_32912
                 lea     (ThirtySecondEntityType).w,a4
                 move.w  #$A,d6
-Boss_VictorLinkPreviousRingSegment:                     ; CODE XREF: Boss_VictorRetractRing+84   j  ; was: loc_3291A
+Boss_VictorLinkPreviousRingSegment:                     ; was: loc_3291A
                 movea.w a4,a3
                 suba.w  #$60,a3                         ; '`'
                 move.w  a3,$44(a4)
@@ -391,7 +385,7 @@ Boss_VictorLinkPreviousRingSegment:                     ; CODE XREF: Boss_Victor
                 rts
 ; End of function Boss_VictorRetractRing
 ; Returns Victor's Y coordinate to the arena centerline
-Boss_VictorReturnToCenterline:                          ; DATA XREF: ROM:0003243A   o  ; was: sub_3297A
+Boss_VictorReturnToCenterline:                          ; was: sub_3297A
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
                 cmpi.w  #$100,$14(a5)
@@ -400,9 +394,9 @@ Boss_VictorReturnToCenterline:                          ; DATA XREF: ROM:0003243
                 subq.w  #1,$14(a5)
                 bra.s   Boss_VictorWaitAfterRingRetraction
 ; ---------------------------------------------------------------------------
-Boss_VictorMoveDownToCenterline:                        ; CODE XREF: Boss_VictorReturnToCenterline+10   j  ; was: loc_32992
+Boss_VictorMoveDownToCenterline:                        ; was: loc_32992
                 addq.w  #1,$14(a5)
-Boss_VictorWaitAfterRingRetraction:                     ; CODE XREF: Boss_VictorReturnToCenterline+E   j  ; was: loc_32996
+Boss_VictorWaitAfterRingRetraction:                     ; was: loc_32996
                                         ; Boss_VictorReturnToCenterline+16   j
                 subq.w  #1,$4A(a5)
                 bne.w   Entity_UpdateReturn

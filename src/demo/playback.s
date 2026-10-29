@@ -1,4 +1,4 @@
-Demo_PlaybackSystem:                                    ; CODE XREF: Sys_DispatchGameState:Sys_DispatchGameState_Run   p  ; was: sub_23CBA
+Demo_PlaybackSystem:                                    ; was: sub_23CBA
                 tst.w   (DemoPlaybackActive).w
                 beq.w   Demo_PlaybackSystem_Return
                 move.w  #0,(DemoRecordingMode).w
@@ -30,32 +30,32 @@ Demo_PlaybackSystem:                                    ; CODE XREF: Sys_Dispatc
                 beq.w   Demo_PlaybackSystem_Return
                 clr.w   (DemoRecordingOffset).w
                 clr.w   (DemoInputRunFrames).w
-Demo_PlaybackSystem_Return:                             ; CODE XREF: Demo_PlaybackSystem+4   j  ; was: locret_23D46
+Demo_PlaybackSystem_Return:                             ; was: locret_23D46
                                         ; Demo_PlaybackSystem+80   j
                 rts
 ; ---------------------------------------------------------------------------
-Demo_PlaybackSystem_Update:                             ; CODE XREF: Demo_PlaybackSystem+12   j  ; was: loc_23D48
+Demo_PlaybackSystem_Update:                             ; was: loc_23D48
                 tst.w   (DataLoaderControl).w
                 bmi.w   Demo_PlaybackSystem_CheckFramesRemaining
                 btst    #7,(ControllerPressedState).w
                 bne.w   Demo_PlaybackSystem_Exit
-Demo_PlaybackSystem_CheckFramesRemaining:               ; CODE XREF: Demo_PlaybackSystem+92   j  ; was: loc_23D5A
+Demo_PlaybackSystem_CheckFramesRemaining:               ; was: loc_23D5A
                 tst.w   (DemoFramesRemaining).w
                 beq.w   Demo_PlaybackSystem_Exit
                 cmpi.w  #$80,(DemoFramesRemaining).w
                 bne.s   Demo_PlaybackSystem_ProcessInput
                 move.b  #1,(SoundFadeOutDelay).w
-Demo_PlaybackSystem_ProcessInput:                       ; CODE XREF: Demo_PlaybackSystem+AE   j  ; was: loc_23D70
+Demo_PlaybackSystem_ProcessInput:                       ; was: loc_23D70
                 bsr.w   Demo_HandlePlaybackInput
                 tst.w   (DemoRecordingMode).w
                 bne.s   Demo_PlaybackSystem_DecrementTimer
                 move.b  (DemoPlaybackInputWord).w,(ControllerHeldState).w
                 move.b  (DemoPlaybackInputWord+1).w,(ControllerPressedState).w
-Demo_PlaybackSystem_DecrementTimer:                     ; CODE XREF: Demo_PlaybackSystem+BE   j  ; was: loc_23D86
+Demo_PlaybackSystem_DecrementTimer:                     ; was: loc_23D86
                 subq.w  #1,(DemoFramesRemaining).w
                 rts
 ; ---------------------------------------------------------------------------
-Demo_PlaybackSystem_Exit:                               ; CODE XREF: Demo_PlaybackSystem+9C   j  ; was: loc_23D8C
+Demo_PlaybackSystem_Exit:                               ; was: loc_23D8C
                                         ; Demo_PlaybackSystem+A4   j
                 clr.b   (SoundPauseState).w
                 move.w  #$14,(GameModeIndex).w
@@ -72,7 +72,7 @@ Demo_PlaybackSystem_Exit:                               ; CODE XREF: Demo_Playba
                 lea     (PaletteActiveBuffer).w,a0
                 moveq   #0,d0
                 move.w  #$3F,d1                         ; '?'
-Demo_PlaybackSystem_ClearPaletteBufferLoop:             ; CODE XREF: Demo_PlaybackSystem+11A   j  ; was: loc_23DD2
+Demo_PlaybackSystem_ClearPaletteBufferLoop:             ; was: loc_23DD2
                 move.l  d0,(a0)+
                 dbf     d1,Demo_PlaybackSystem_ClearPaletteBufferLoop
                 bclr    #6,(VDPReg1Shadow+1).w
@@ -87,7 +87,7 @@ Demo_PlaybackSystem_ClearPaletteBufferLoop:             ; CODE XREF: Demo_Playba
                 rts
 ; End of function Demo_PlaybackSystem
 ; Handles demo playback mode with input recording and frame timing
-Demo_HandlePlaybackInput:                               ; CODE XREF: Demo_PlaybackSystem:Demo_PlaybackSystem_ProcessInput   p  ; was: sub_23E16
+Demo_HandlePlaybackInput:                               ; was: sub_23E16
                 tst.w   (DemoRecordingMode).w
                 bne.w   Demo_HandlePlaybackInput_Record
                 move.w  (DemoCurrentInputWord).w,(DemoPlaybackInputWord).w
@@ -99,7 +99,7 @@ Demo_HandlePlaybackInput:                               ; CODE XREF: Demo_Playba
                 move.l  a0,(DemoInputStreamPtr).w
                 rts
 ; ---------------------------------------------------------------------------
-Demo_HandlePlaybackInput_Record:                        ; CODE XREF: Demo_HandlePlaybackInput+4   j  ; was: loc_23E3E
+Demo_HandlePlaybackInput_Record:                        ; was: loc_23E3E
                 move.b  (ControllerHeldState).w,d0
                 lsl.w   #8,d0
                 move.b  (ControllerPressedState).w,d0
@@ -108,7 +108,7 @@ Demo_HandlePlaybackInput_Record:                        ; CODE XREF: Demo_Handle
                 addq.w  #1,(DemoInputRunFrames).w
                 rts
 ; ---------------------------------------------------------------------------
-Demo_HandlePlaybackInput_AppendRecord:                  ; CODE XREF: Demo_HandlePlaybackInput+36   j  ; was: loc_23E54
+Demo_HandlePlaybackInput_AppendRecord:                  ; was: loc_23E54
                 lea     ($FFFC0000).l,a1
                 movea.w (DemoRecordingOffset).w,a0
                 move.w  (DemoInputRunFrames).w,(a1,a0.w)
@@ -120,20 +120,19 @@ Demo_HandlePlaybackInput_AppendRecord:                  ; CODE XREF: Demo_Handle
                 rts
 ; End of function Demo_HandlePlaybackInput
 ; Returns appropriate input data pointer for demo playback or recording
-Demo_GetInputPointer:                                   ; CODE XREF: Demo_PlaybackSystem+64   p  ; was: sub_23E82
-                                        ; DATA XREF: Demo_PlaybackSystem+64   o
+Demo_GetInputPointer:                                   ; was: sub_23E82
                 tst.w   (DemoRecordingMode).w
                 bne.s   Demo_GetInputPointer_UseRecordingBuffer
                 movea.l Demo_InputStreamPointers(pc,d0.w),a0
                 rts
 ; ---------------------------------------------------------------------------
-Demo_GetInputPointer_UseRecordingBuffer:                ; CODE XREF: Demo_GetInputPointer+4   j  ; was: loc_23E8E
+Demo_GetInputPointer_UseRecordingBuffer:                ; was: loc_23E8E
                 lea     ($FFFC0000).l,a0
                 rts
 ; End of function Demo_GetInputPointer
 ; ---------------------------------------------------------------------------
-Demo_StageIndexTable:       dc.w    2, $E, $12, $1E     ; DATA XREF: Demo_PlaybackSystem+56   o  ; was: word_23E96
-Demo_InputStreamPointers:   dc.l    Demo_InputStream0   ; DATA XREF: Demo_GetInputPointer+6   r  ; was: off_23E9E
+Demo_StageIndexTable:       dc.w    2, $E, $12, $1E     ; was: word_23E96
+Demo_InputStreamPointers:   dc.l    Demo_InputStream0   ; was: off_23E9E
                 dc.l    Demo_InputStream1
                 dc.l    Demo_InputStream2
                 dc.l    Demo_InputStream3

@@ -1,4 +1,4 @@
-XiTigerCutscene_DisplayObjectSpriteMapping: dc.w    $4818, $300, $F3EB  ; DATA XREF: XiTigerCutscene_InitializeDisplayObject+10   o  ; was: word_1198D2
+XiTigerCutscene_DisplayObjectSpriteMapping: dc.w    $4818, $300, $F3EB  ; was: word_1198D2
                 dc.w    $4810, $D00, $3F3
                 dc.w    $C800, $F00, $E3F3
 XiTigerCutsceneTileArt: binclude "data/artcomp/tiles_1198E4.bin"  ; was: tiles_1198E4
@@ -6,7 +6,6 @@ XiTigerCutsceneTileArt_End:                             ; was: tiles_1198E4_End
 ; Type-6 compressed byte indices for the direct tilemap transfer's second source
 XiTigerCutsceneTilemapBlockIndices: dc.b    0, $27, $31, 0, 1, $12, $13, $84, $14, $12, $14, $15, $16, $17, $18, $19, $1A, $1B, $1C, $1D, $1E, $1F, $20, $21, $22, $23, $24, $25, $26, $20, 1, 2
                                         ; was: byte_11A61A
-                                        ; DATA XREF: ROM:0001E8B4   o
                 dc.b    $27, $28, $29, $84, $2F, $80, 7, $A4, $34, $FF
 ; Type-6 compressed words for the direct tilemap transfer's third source
 XiTigerCutsceneTilemapWordSource:   binclude "data/mappings/byte_11A644.bin"  ; was: byte_11A644

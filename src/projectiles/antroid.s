@@ -1,7 +1,7 @@
 ; Antroid randomized wait-state projectile
 
 ; Spawns a type $158 shot with randomized launch velocity
-Boss_AntroidSpawnWaitProjectile:                        ; CODE XREF: Boss_AntroidWaitState:Boss_AntroidWaitSpawnProjectileAndAnimate   p  ; was: sub_37FEC
+Boss_AntroidSpawnWaitProjectile:                        ; was: sub_37FEC
                 btst    #0,(FrameCounter+1).w
                 bne.w   Boss_AntroidSpawnWaitProjectileReturn
                 jsr     (Projectile_FindFreeSlotForward).l
@@ -44,13 +44,13 @@ Boss_AntroidSpawnWaitProjectile:                        ; CODE XREF: Boss_Antroi
                 neg.l   $18(a0)
                 neg.l   $4C(a0)
                 subi.w  #$10,$10(a0)
-Boss_AntroidSpawnWaitProjectileReturn:                  ; CODE XREF: Boss_AntroidSpawnWaitProjectile+6   j  ; was: locret_380A2
+Boss_AntroidSpawnWaitProjectileReturn:                  ; was: locret_380A2
                                         ; Boss_AntroidSpawnWaitProjectile+10   j
                 rts
 ; End of function Boss_AntroidSpawnWaitProjectile
 
 ; Updates type $158 motion, rebound, palette steps, and removal
-Projectile_AntroidUpdate:                               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_380A4
+Projectile_AntroidUpdate:                               ; was: sub_380A4
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Projectile_AntroidDeactivate
                 bclr    #7,$22(a5)
@@ -60,7 +60,7 @@ Projectile_AntroidUpdate:                               ; DATA XREF: ROM:Entity_
                 move.w  #3,d0
                 jmp     Pickup_SpawnRandomFromCurrentObject
 ; ---------------------------------------------------------------------------
-Projectile_AntroidApplyMotion:                          ; CODE XREF: Projectile_AntroidUpdate+C   j  ; was: loc_380C4
+Projectile_AntroidApplyMotion:                          ; was: loc_380C4
                 move.l  $4C(a5),d0
                 sub.l   d0,$18(a5)
                 addi.l  #$6000,$1C(a5)
@@ -69,26 +69,25 @@ Projectile_AntroidApplyMotion:                          ; CODE XREF: Projectile_
                 bmi.s   Projectile_AntroidAdvancePalette
                 move.l  #$FFFD8000,$1C(a5)
                 clr.b   $21(a5)
-Projectile_AntroidAdvancePalette:                       ; CODE XREF: Projectile_AntroidUpdate+30   j  ; was: loc_380EA
+Projectile_AntroidAdvancePalette:                       ; was: loc_380EA
                                         ; Projectile_AntroidUpdate+38   j
                 subq.w  #1,$48(a5)
                 bpl.s   Projectile_AntroidReturn
                 move.w  $4A(a5),d0
                 cmpi.w  #6,d0
                 bmi.s   Projectile_AntroidApplyNextPalette
-Projectile_AntroidDeactivate:                           ; CODE XREF: Projectile_AntroidUpdate+4   j  ; was: loc_380FA
+Projectile_AntroidDeactivate:                           ; was: loc_380FA
                                         ; Projectile_AntroidUpdate+14   j
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
 ; Advances through the three palette attributes after each delay
-Projectile_AntroidApplyNextPalette:                     ; CODE XREF: Projectile_AntroidUpdate+54   j  ; was: loc_38102
+Projectile_AntroidApplyNextPalette:                     ; was: loc_38102
                 move.w  Projectile_AntroidPaletteStages(pc,d0.w),$E(a5)
                 move.w  #6,$48(a5)
                 addq.w  #2,$4A(a5)
-Projectile_AntroidReturn:                               ; CODE XREF: Projectile_AntroidUpdate+4A   j  ; was: locret_38112
+Projectile_AntroidReturn:                               ; was: locret_38112
                 rts
 ; End of function Projectile_AntroidUpdate
 ; ---------------------------------------------------------------------------
 Projectile_AntroidPaletteStages:    dc.w    $C3C7, $C3CB, $C3CF  ; was: word_38114
-                                        ; DATA XREF: Projectile_AntroidUpdate:Projectile_AntroidApplyNextPalette   r

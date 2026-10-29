@@ -1,4 +1,4 @@
-CreditsGlyphSequence_Dispatch:                          ; CODE XREF: Credits_ScrollWithColorCycle   p  ; was: sub_21A5C
+CreditsGlyphSequence_Dispatch:                          ; was: sub_21A5C
                                         ; sub_20C88   p
                 move.w  (SharedSequenceState).l,d0
                 lea     CreditsGlyphSequence_StateOffsets(pc,d0.w),a0
@@ -6,20 +6,20 @@ CreditsGlyphSequence_Dispatch:                          ; CODE XREF: Credits_Scr
                 jmp     (a0)
 ; End of function CreditsGlyphSequence_Dispatch
 ; ---------------------------------------------------------------------------
-CreditsGlyphSequence_StateOffsets:  dc.w    CreditsGlyphSequence_Initialize-*  ; DATA XREF: CreditsGlyphSequence_Dispatch+6   o  ; was: off_21A6A
+CreditsGlyphSequence_StateOffsets:  dc.w    CreditsGlyphSequence_Initialize-*  ; was: off_21A6A
                 dc.w    CreditsGlyphSequence_SpawnNextRecord-*
                 dc.w    CreditsGlyphSequence_WaitForGlyphs-*
                 dc.w    CreditsGlyphSequence_Delay-*
                 dc.w    CreditsGlyphSequence_Idle-*
 
 ; Initializes the animated credits-glyph record sequence
-CreditsGlyphSequence_Initialize:                        ; DATA XREF: ROM:CreditsGlyphSequence_StateOffsets   o  ; was: sub_21A74
+CreditsGlyphSequence_Initialize:                        ; was: sub_21A74
                 move.w  #$222,(PaletteActiveColor01).w
                 move.w  #$EEE,(PaletteActiveColor02).w
                 move.l  #CreditsGlyphSequenceData,(SharedSequenceCursor).l
                 addq.w  #2,(SharedSequenceState).l
 ; Parses and spawns the next two-row credits-glyph record
-CreditsGlyphSequence_SpawnNextRecord:                   ; DATA XREF: ROM:00021A6C   o  ; was: loc_21A90
+CreditsGlyphSequence_SpawnNextRecord:                   ; was: loc_21A90
                 lea     (QuaternaryEntityType).w,a0
                 movea.l (SharedSequenceCursor).l,a1
                 moveq   #0,d0
@@ -43,7 +43,7 @@ CreditsGlyphSequence_SpawnNextRecord:                   ; DATA XREF: ROM:00021A6
                 sub.w   d1,d5
                 move.w  d0,d7
                 subq.w  #1,d7
-CreditsGlyphSequence_SpawnUpperRowLoop:                 ; CODE XREF: CreditsGlyphSequence_Initialize+94   j  ; was: loc_21AD4
+CreditsGlyphSequence_SpawnUpperRowLoop:                 ; was: loc_21AD4
                 move.b  (a1)+,d0
                 cmpi.b  #0,d0
                 beq.s   CreditsGlyphSequence_AdvanceUpperSlot
@@ -55,12 +55,12 @@ CreditsGlyphSequence_SpawnUpperRowLoop:                 ; CODE XREF: CreditsGlyp
                 move.w  d4,$14(a0)
                 move.w  d5,$4C(a0)
                 move.w  (SharedSequenceTimer).l,$46(a0)
-CreditsGlyphSequence_AdvanceUpperSlot:                  ; CODE XREF: CreditsGlyphSequence_Initialize+66   j  ; was: loc_21AFE
+CreditsGlyphSequence_AdvanceUpperSlot:                  ; was: loc_21AFE
                 addq.w  #8,d3
                 addi.w  #$20,d5                         ; ' '
                 lea     $60(a0),a0
                 dbf     d7,CreditsGlyphSequence_SpawnUpperRowLoop
-CreditsGlyphSequence_ReadLowerRow:                      ; CODE XREF: CreditsGlyphSequence_Initialize+38   j  ; was: loc_21B0C
+CreditsGlyphSequence_ReadLowerRow:                      ; was: loc_21B0C
                 moveq   #0,d0
                 move.b  (a1)+,d0
                 add.w   d0,d0
@@ -81,7 +81,7 @@ CreditsGlyphSequence_ReadLowerRow:                      ; CODE XREF: CreditsGlyp
                 move.w  d1,d5
                 move.w  d0,d7
                 subq.w  #1,d7
-CreditsGlyphSequence_SpawnLowerRowLoop:                 ; CODE XREF: CreditsGlyphSequence_Initialize+102   j  ; was: loc_21B42
+CreditsGlyphSequence_SpawnLowerRowLoop:                 ; was: loc_21B42
                 move.b  (a1)+,d0
                 cmpi.b  #0,d0
                 beq.s   CreditsGlyphSequence_AdvanceLowerSlot
@@ -93,39 +93,39 @@ CreditsGlyphSequence_SpawnLowerRowLoop:                 ; CODE XREF: CreditsGlyp
                 move.w  d4,$14(a0)
                 move.w  d5,$4C(a0)
                 move.w  (SharedSequenceTimer).l,$46(a0)
-CreditsGlyphSequence_AdvanceLowerSlot:                  ; CODE XREF: CreditsGlyphSequence_Initialize+D4   j  ; was: loc_21B6C
+CreditsGlyphSequence_AdvanceLowerSlot:                  ; was: loc_21B6C
                 addq.w  #8,d3
                 subi.w  #$20,d5                         ; ' '
                 lea     $60(a0),a0
                 dbf     d7,CreditsGlyphSequence_SpawnLowerRowLoop
-CreditsGlyphSequence_CommitRecord:                      ; CODE XREF: CreditsGlyphSequence_Initialize+A6   j  ; was: loc_21B7A
+CreditsGlyphSequence_CommitRecord:                      ; was: loc_21B7A
                 move.l  a1,(SharedSequenceCursor).l
                 addq.w  #2,(SharedSequenceState).l
                 rts
 ; ---------------------------------------------------------------------------
-CreditsGlyphSequence_Finish:                            ; CODE XREF: CreditsGlyphSequence_Initialize+2A   j  ; was: loc_21B88
+CreditsGlyphSequence_Finish:                            ; was: loc_21B88
                 move.w  #8,(SharedSequenceState).l
                 rts
 ; End of function CreditsGlyphSequence_Initialize
 ; Wait for menu animation to complete
-CreditsGlyphSequence_WaitForGlyphs:                     ; DATA XREF: ROM:00021A6E   o  ; was: sub_21B92
+CreditsGlyphSequence_WaitForGlyphs:                     ; was: sub_21B92
                 lea     (QuaternaryEntityType).w,a0
                 cmpi.w  #$464,(a0)
                 beq.s   CreditsGlyphSequence_WaitReturn
                 move.w  #$10,(SharedSequenceTimer).l
                 addq.w  #2,(SharedSequenceState).l
-CreditsGlyphSequence_WaitReturn:                        ; CODE XREF: CreditsGlyphSequence_WaitForGlyphs+8   j  ; was: locret_21BAA
+CreditsGlyphSequence_WaitReturn:                        ; was: locret_21BAA
                 rts
 ; End of function CreditsGlyphSequence_WaitForGlyphs
 ; Delay timer for menu state transitions
-CreditsGlyphSequence_Delay:                             ; DATA XREF: ROM:00021A70   o  ; was: sub_21BAC
+CreditsGlyphSequence_Delay:                             ; was: sub_21BAC
                 subq.w  #1,(SharedSequenceTimer).l
                 bpl.s   CreditsGlyphSequence_DelayReturn
                 move.w  #2,(SharedSequenceState).l
-CreditsGlyphSequence_DelayReturn:                       ; CODE XREF: CreditsGlyphSequence_Delay+6   j  ; was: locret_21BBC
+CreditsGlyphSequence_DelayReturn:                       ; was: locret_21BBC
                 rts
 ; End of function CreditsGlyphSequence_Delay
-CreditsGlyphSequence_Idle:                              ; DATA XREF: ROM:00021A72   o  ; was: nullsub_55
+CreditsGlyphSequence_Idle:                              ; was: nullsub_55
                 rts
 ; End of function CreditsGlyphSequence_Idle
 ; ---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ CreditsGlyphSequenceData:   binclude "data/credits/animated_glyph_sequence.bin" 
 CreditsGlyphSequenceData_End:                           ; was: word_21BC0_End
 
 ; Initializes one animated credits-glyph object
-CreditsGlyph_InitializeObject:                          ; CODE XREF: CreditsGlyphSequence_SpawnNextRecord+68   p  ; was: sub_21F2A
+CreditsGlyph_InitializeObject:                          ; was: sub_21F2A
                                         ; CreditsGlyphSequence_SpawnNextRecord+D6   p
                 move.w  #$464,(a0)
                 move.w  #$4000,2(a0)
@@ -145,17 +145,16 @@ CreditsGlyph_InitializeObject:                          ; CODE XREF: CreditsGlyp
 ; End of function CreditsGlyph_InitializeObject
 ; ---------------------------------------------------------------------------
 CreditsGlyph_SpriteData:    dc.b    $83, 0, 1, 0, $F8, $FC  ; was: byte_21F4A
-                                        ; DATA XREF: CreditsGlyph_InitializeObject+E   o
 
 ; Dispatches the six animated credits-glyph states
-CreditsGlyph_Dispatch:                                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_21F50
+CreditsGlyph_Dispatch:                                  ; was: sub_21F50
                 move.w  4(a5),d0
                 lea     CreditsGlyph_StateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function CreditsGlyph_Dispatch
 ; ---------------------------------------------------------------------------
-CreditsGlyph_StateOffsets:  dc.w    CreditsGlyph_InitializeMotion-*  ; DATA XREF: CreditsGlyph_Dispatch+4   o  ; was: off_21F5C
+CreditsGlyph_StateOffsets:  dc.w    CreditsGlyph_InitializeMotion-*  ; was: off_21F5C
                 dc.w    CreditsGlyph_ExpandOrbit-*
                 dc.w    CreditsGlyph_ContractOrbit-*
                 dc.w    CreditsGlyph_CollapseOrbitAndSetHold-*
@@ -163,7 +162,7 @@ CreditsGlyph_StateOffsets:  dc.w    CreditsGlyph_InitializeMotion-*  ; DATA XREF
                 dc.w    CreditsGlyph_ApplyUpwardAcceleration-*
 
 ; Initializes the glyph's fixed-point center, direction, and orbit phase
-CreditsGlyph_InitializeMotion:                          ; DATA XREF: ROM:CreditsGlyph_StateOffsets   o  ; was: sub_21F68
+CreditsGlyph_InitializeMotion:                          ; was: sub_21F68
                 addq.w  #2,4(a5)
                 move.l  $10(a5),$50(a5)
                 move.l  $14(a5),$54(a5)
@@ -185,8 +184,7 @@ CreditsGlyph_InitializeMotion:                          ; DATA XREF: ROM:Credits
                 rts
 ; End of function CreditsGlyph_InitializeMotion
 ; Expands the glyph's orbit in eight integration steps per update
-CreditsGlyph_ExpandOrbit:                               ; CODE XREF: CreditsGlyph_ExpandOrbit+24   j  ; was: sub_21FB4
-                                        ; DATA XREF: ROM:00021F5E   o
+CreditsGlyph_ExpandOrbit:                               ; was: sub_21FB4
                 addq.w  #1,$48(a5)
                 addi.w  #4,$4C(a5)
                 addi.w  #2,$4E(a5)
@@ -201,7 +199,7 @@ CreditsGlyph_ExpandOrbit:                               ; CODE XREF: CreditsGlyp
                 move.w  #8,$4A(a5)
                 rts
 ; ---------------------------------------------------------------------------
-CreditsGlyph_BeginOrbitReturn:                          ; CODE XREF: CreditsGlyph_ExpandOrbit+2C   j  ; was: loc_21FEA
+CreditsGlyph_BeginOrbitReturn:                          ; was: loc_21FEA
                 bsr.w   CreditsGlyph_ProjectOrbitPosition
                 neg.l   $18(a5)
                 neg.l   $1C(a5)
@@ -210,7 +208,7 @@ CreditsGlyph_BeginOrbitReturn:                          ; CODE XREF: CreditsGlyp
                 rts
 ; End of function CreditsGlyph_ExpandOrbit
 ; Projects the current angle and radius around the moving fixed-point center
-CreditsGlyph_ProjectOrbitPosition:                      ; CODE XREF: CreditsGlyph_ExpandOrbit:CreditsGlyph_BeginOrbitReturn   p  ; was: sub_22002
+CreditsGlyph_ProjectOrbitPosition:                      ; was: sub_22002
                                         ; CreditsGlyph_ContractOrbit+16   p
                 move.w  $4C(a5),d0
                 andi.w  #$1FE,d0
@@ -227,7 +225,7 @@ CreditsGlyph_ProjectOrbitPosition:                      ; CODE XREF: CreditsGlyp
                 rts
 ; End of function CreditsGlyph_ProjectOrbitPosition
 ; Retraces the orbit with reversed center velocity until its phase reaches zero
-CreditsGlyph_ContractOrbit:                             ; DATA XREF: ROM:00021F60   o  ; was: sub_22034
+CreditsGlyph_ContractOrbit:                             ; was: sub_22034
                 subi.w  #4,$4C(a5)
                 move.l  $18(a5),d0
                 add.l   d0,$50(a5)
@@ -238,7 +236,7 @@ CreditsGlyph_ContractOrbit:                             ; DATA XREF: ROM:00021F6
                 bne.s   CreditsGlyph_ContractOrbitReturn
                 andi.w  #$FFFE,$4E(a5)
                 addq.w  #2,4(a5)
-CreditsGlyph_ContractOrbitReturn:                       ; CODE XREF: CreditsGlyph_ContractOrbit+1E   j  ; was: locret_2205E
+CreditsGlyph_ContractOrbitReturn:                       ; was: locret_2205E
                 rts
 ; End of function CreditsGlyph_ContractOrbit
 ; Unreferenced helper that maps the first glyph's phase to a gray palette ramp
@@ -249,15 +247,14 @@ UnreferencedCreditsGlyph_UpdatePaletteRamp:             ; was: sub_22060
                 lsr.w   #4,d0
                 add.w   d0,d0
                 move.w  CreditsGlyph_PaletteRamp(pc,d0.w),(PaletteActiveColor01).w
-UnreferencedCreditsGlyph_UpdatePaletteRampReturn:       ; CODE XREF: UnreferencedCreditsGlyph_UpdatePaletteRamp+4   j  ; was: locret_22074
+UnreferencedCreditsGlyph_UpdatePaletteRampReturn:       ; was: locret_22074
                 rts
 ; End of function UnreferencedCreditsGlyph_UpdatePaletteRamp
 ; ---------------------------------------------------------------------------
 CreditsGlyph_PaletteRamp:   dc.w    $222, $444, $666, $888, $AAA, $CCC, $EEE  ; was: word_22076
-                                        ; DATA XREF: UnreferencedCreditsGlyph_UpdatePaletteRamp+E   r
 
 ; Collapses the orbit radius, then derives the hold timer from the record delay
-CreditsGlyph_CollapseOrbitAndSetHold:                   ; DATA XREF: ROM:00021F62   o  ; was: sub_22084
+CreditsGlyph_CollapseOrbitAndSetHold:                   ; was: sub_22084
                 subi.w  #$10,$4C(a5)
                 bsr.w   CreditsGlyph_ProjectOrbitPosition
                 subq.w  #2,$4E(a5)
@@ -266,22 +263,22 @@ CreditsGlyph_CollapseOrbitAndSetHold:                   ; DATA XREF: ROM:00021F6
                 addi.w  #$20,d0                         ; ' '
                 move.w  d0,$48(a5)
                 addq.w  #2,4(a5)
-CreditsGlyph_CollapseOrbitReturn:                       ; CODE XREF: CreditsGlyph_CollapseOrbitAndSetHold+E   j  ; was: locret_220A4
+CreditsGlyph_CollapseOrbitReturn:                       ; was: locret_220A4
                 rts
 ; End of function CreditsGlyph_CollapseOrbitAndSetHold
 ; Waits for the record delay, then enables motion with positive Y velocity
-CreditsGlyph_WaitAndStartFall:                          ; DATA XREF: ROM:00021F64   o  ; was: sub_220A6
+CreditsGlyph_WaitAndStartFall:                          ; was: sub_220A6
                 subq.w  #1,$48(a5)
                 bne.s   CreditsGlyph_WaitAndStartFallReturn
                 bset    #1,2(a5)
                 bset    #2,2(a5)
                 move.l  #$10000,$1C(a5)
                 addq.w  #2,4(a5)
-CreditsGlyph_WaitAndStartFallReturn:                    ; CODE XREF: CreditsGlyph_WaitAndStartFall+4   j  ; was: locret_220C4
+CreditsGlyph_WaitAndStartFallReturn:                    ; was: locret_220C4
                 rts
 ; End of function CreditsGlyph_WaitAndStartFall
 ; Applies upward acceleration to the glyph's vertical velocity
-CreditsGlyph_ApplyUpwardAcceleration:                   ; DATA XREF: ROM:00021F66   o  ; was: sub_220C6
+CreditsGlyph_ApplyUpwardAcceleration:                   ; was: sub_220C6
                 subi.l  #$800,$1C(a5)
                 rts
 ; End of function CreditsGlyph_ApplyUpwardAcceleration

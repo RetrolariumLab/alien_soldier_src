@@ -1,5 +1,5 @@
 ; Spawn an orbit-centered star particle while the orb charges
-Boss_WolfGaropaSpawnOrbitStar:                          ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+EC   j  ; was: sub_50B7E
+Boss_WolfGaropaSpawnOrbitStar:                          ; was: sub_50B7E
                                         ; Boss_WolfGaropaUpdateBattleStartWait+118   j
                 btst    #0,(FrameCounter+1).w
                 bne.w   Boss_WolfGaropaOrbitStarReturn
@@ -32,12 +32,12 @@ Boss_WolfGaropaSpawnOrbitStar:                          ; CODE XREF: Boss_WolfGa
                 asl.l   #2,d6
                 move.l  d5,$1C(a0)
                 move.l  d6,$18(a0)
-Boss_WolfGaropaOrbitStarReturn:                         ; CODE XREF: Boss_WolfGaropaSpawnOrbitStar+6   j  ; was: locret_50BEA
+Boss_WolfGaropaOrbitStarReturn:                         ; was: locret_50BEA
                                         ; Boss_WolfGaropaSpawnOrbitStar+10   j
                 rts
 ; End of function Boss_WolfGaropaSpawnOrbitStar
 ; Spawn a smaller randomized spark at the orbit emitter
-Boss_WolfGaropaSpawnOrbitSpark:                         ; CODE XREF: Boss_WolfGaropaUpdateMetaspriteAndOrb+8   p  ; was: sub_50BEC
+Boss_WolfGaropaSpawnOrbitSpark:                         ; was: sub_50BEC
                 tst.w   $5FC(a5)
                 bmi.w   Boss_WolfGaropaOrbitSparkReturn
                 subq.w  #1,$5FC(a5)
@@ -65,12 +65,12 @@ Boss_WolfGaropaSpawnOrbitSpark:                         ; CODE XREF: Boss_WolfGa
                 move.l  d5,$1C(a0)
                 subi.l  #$30000,d6
                 move.l  d6,$18(a0)
-Boss_WolfGaropaOrbitSparkReturn:                        ; CODE XREF: Boss_WolfGaropaSpawnOrbitSpark+4   j  ; was: locret_50C5A
+Boss_WolfGaropaOrbitSparkReturn:                        ; was: locret_50C5A
                                         ; Boss_WolfGaropaSpawnOrbitSpark+12   j
                 rts
 ; End of function Boss_WolfGaropaSpawnOrbitSpark
 ; Calculate the current orbit-emitter position and radial vector
-Boss_WolfGaropaCalculateOrbEmitterPosition:             ; CODE XREF: Boss_WolfGaropaSpawnOrbitStar+2C   p  ; was: sub_50C5C
+Boss_WolfGaropaCalculateOrbEmitterPosition:             ; was: sub_50C5C
                                         ; Boss_WolfGaropaSpawnOrbitSpark+38   p
                 lea     (Math_SineTable).l,a2
                 move.w  $A76(a5),d0
@@ -89,8 +89,7 @@ Boss_WolfGaropaCalculateOrbEmitterPosition:             ; CODE XREF: Boss_WolfGa
                 rts
 ; End of function Boss_WolfGaropaCalculateOrbEmitterPosition
 ; Spawn a type-$188 explosion effect at the auxiliary orb position
-Boss_WolfGaropaSpawnOrbExplosion:                       ; CODE XREF: Boss_WolfGaropaApproachOrbAngleC0AndExplode+1E   p  ; was: sub_50C88
-                                        ; DATA XREF: Boss_WolfGaropaApproachOrbAngleC0AndExplode+1E   o
+Boss_WolfGaropaSpawnOrbExplosion:                       ; was: sub_50C88
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_WolfGaropaOrbExplosionReturn
                 move.l  #SharedCombatSpriteAnimation07,8(a0)
@@ -106,7 +105,7 @@ Boss_WolfGaropaSpawnOrbExplosion:                       ; CODE XREF: Boss_WolfGa
                 addq.w  #8,d1
                 move.w  d0,$10(a0)
                 move.w  d1,$14(a0)
-Boss_WolfGaropaOrbExplosionReturn:                      ; CODE XREF: Boss_WolfGaropaSpawnOrbExplosion+6   j  ; was: locret_50CD2
+Boss_WolfGaropaOrbExplosionReturn:                      ; was: locret_50CD2
                 rts
 ; End of function Boss_WolfGaropaSpawnOrbExplosion
 ; Initializes pair of screen objects for Valkirie boss with different parameters based on direction flag

@@ -1,4 +1,4 @@
-Stage17_InitializeEpsilon1Transition:                   ; DATA XREF: ROM:0000D9C6   o  ; was: sub_E11C
+Stage17_InitializeEpsilon1Transition:                   ; was: sub_E11C
                 tst.w   (GameplayExitMode).w
                 bne.s   Stage17_InitializeEpsilon1Transition_Return
                 move.l  #StageTransitionMessageSequence_Shared,(StageMessageCursor).w
@@ -8,7 +8,7 @@ Stage17_InitializeEpsilon1Transition:                   ; DATA XREF: ROM:0000D9C
                 move.w  #$E000,(PaletteFadeMaskStatus).w
                 move.b  #$80,(GameplayControlFlags).w
                 move.b  #$8B,(PendingStageBGMRequest).w
-Stage17_InitializeEpsilon1Transition_Return:            ; CODE XREF: Stage17_InitializeEpsilon1Transition+4   j  ; was: locret_E14C
+Stage17_InitializeEpsilon1Transition_Return:            ; was: locret_E14C
                 rts
 ; End of function Stage17_InitializeEpsilon1Transition
 
@@ -17,11 +17,11 @@ UnreferencedUpdateIndexedPaletteWord:
                 btst    #0,(ControllerHeldState).w      ; was: sub_E14E
                 beq.s   UnreferencedUpdateIndexedPaletteWord_CheckDecrease
                 addq.w  #2,(PaletteTestSelector).w
-UnreferencedUpdateIndexedPaletteWord_CheckDecrease:     ; CODE XREF: UnreferencedUpdateIndexedPaletteWord+6   j  ; was: loc_E15A
+UnreferencedUpdateIndexedPaletteWord_CheckDecrease:     ; was: loc_E15A
                 btst    #1,(ControllerHeldState).w
                 beq.s   UnreferencedUpdateIndexedPaletteWord_Select
                 subq.w  #2,(PaletteTestSelector).w
-UnreferencedUpdateIndexedPaletteWord_Select:            ; CODE XREF: UnreferencedUpdateIndexedPaletteWord+12   j  ; was: loc_E166
+UnreferencedUpdateIndexedPaletteWord_Select:            ; was: loc_E166
                 move.w  (PaletteTestSelector).w,d0
                 move.w  d0,d1
                 asr.w   #2,d0
@@ -31,7 +31,7 @@ UnreferencedUpdateIndexedPaletteWord_Select:            ; CODE XREF: Unreference
                 movea.w d0,a0
                 andi.w  #6,d1
                 move.w  UnreferencedIndexedPaletteWords(pc,d1.w),(a0)
-UnreferencedUpdateIndexedPaletteWord_Return:            ; CODE XREF: UnreferencedUpdateIndexedPaletteWord+24   j  ; was: locret_E182
+UnreferencedUpdateIndexedPaletteWord_Return:            ; was: locret_E182
                 rts
 ; End of function UnreferencedUpdateIndexedPaletteWord
 ; ---------------------------------------------------------------------------
@@ -49,12 +49,12 @@ UnreferencedCreateType308AndUpdateStage17Parallax:
                 addq.w  #2,(StageStateOffset).w
                 clr.w   (PlayerScriptStateOffset).w
                 bclr    #0,(SceneSequenceFlags).w
-UnreferencedCreateType308AndUpdateStage17Parallax_Return:  ; CODE XREF: UnreferencedCreateType308AndUpdateStage17Parallax+1E   j  ; was: locret_E1BE
+UnreferencedCreateType308AndUpdateStage17Parallax_Return:  ; was: locret_E1BE
                 rts
 ; End of function UnreferencedCreateType308AndUpdateStage17Parallax
 
 ; Update the Stage 17 pre-Epsilon-1 transition and its parallax
-Stage17_UpdatePreEpsilon1Transition:                    ; DATA XREF: ROM:0000D9C8   o  ; was: sub_E1C0
+Stage17_UpdatePreEpsilon1Transition:                    ; was: sub_E1C0
                                         ; ROM:0000D9CA   o
                 move.w  #$18,(Epsilon1TransitionY).w
                 bsr.w   Stage17_UpdateEpsilon1Parallax
@@ -62,12 +62,12 @@ Stage17_UpdatePreEpsilon1Transition:                    ; DATA XREF: ROM:0000D9C
                 bne.s   Stage17_UpdatePreEpsilon1Transition_Return
                 bra.w   Stage_TransitionToNextPhase
 ; ---------------------------------------------------------------------------
-Stage17_UpdatePreEpsilon1Transition_Return:             ; CODE XREF: Stage17_UpdatePreEpsilon1Transition+E   j  ; was: locret_E1D4
+Stage17_UpdatePreEpsilon1Transition_Return:             ; was: locret_E1D4
                 rts
 ; End of function Stage17_UpdatePreEpsilon1Transition
 
 ; Submit Epsilon 1's assets and enter the encounter state
-Stage17_InitializeEpsilon1Encounter:                    ; DATA XREF: ROM:0000D9CC   o  ; was: sub_E1D6
+Stage17_InitializeEpsilon1Encounter:                    ; was: sub_E1D6
                 bsr.w   Stage17_UpdateEpsilon1Parallax
                 addq.w  #2,(StageStateOffset).w
                 lea     (Boss_Epsilon1AssetSet).l,a1
@@ -75,20 +75,20 @@ Stage17_InitializeEpsilon1Encounter:                    ; DATA XREF: ROM:0000D9C
 ; End of function Stage17_InitializeEpsilon1Encounter
 
 ; Wait for Epsilon 1 to clear, then enter the planet-transition state
-Stage17_UpdateEpsilon1Encounter:                        ; DATA XREF: ROM:0000D9CE   o  ; was: sub_E1E8
+Stage17_UpdateEpsilon1Encounter:                        ; was: sub_E1E8
                 tst.w   (Entity_ObjectPool).w
                 bne.s   Stage17_UpdateEpsilon1Parallax
                 addq.w  #2,(StageStateOffset).w
 ; End of function Stage17_UpdateEpsilon1Encounter
 
 ; Update Stage 17's vertical position and eight parallax rows
-Stage17_UpdateEpsilon1Parallax:                         ; CODE XREF: UnreferencedCreateType308AndUpdateStage17Parallax+16   p  ; was: sub_E1F2
+Stage17_UpdateEpsilon1Parallax:                         ; was: sub_E1F2
                                         ; Stage17_UpdatePreEpsilon1Transition+6   p
                 btst    #0,(SceneSequenceFlags).w
                 beq.s   Stage17_UpdateEpsilon1Parallax_Active
                 rts
 ; ---------------------------------------------------------------------------
-Stage17_UpdateEpsilon1Parallax_Active:                  ; CODE XREF: Stage17_UpdateEpsilon1Parallax+6   j  ; was: loc_E1FC
+Stage17_UpdateEpsilon1Parallax_Active:                  ; was: loc_E1FC
                 move.w  (Epsilon1TransitionY).w,d0
                 subi.w  #$28,d0                         ; '('
                 neg.w   d0
@@ -118,7 +118,7 @@ Stage17_UpdateEpsilon1Parallax_Active:                  ; CODE XREF: Stage17_Upd
 ; End of function Stage17_UpdateEpsilon1Parallax
 
 ; Start the post-Epsilon-1 planet transition
-Stage17_StartPlanetTransition:                          ; DATA XREF: ROM:0000D9D0   o  ; was: sub_E256
+Stage17_StartPlanetTransition:                          ; was: sub_E256
                 tst.w   (GameplayExitMode).w
                 bne.w   Stage17_UpdateEpsilon1Parallax
                 move.w  #$8002,(PaletteFadeMode).w

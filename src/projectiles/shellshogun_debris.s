@@ -6,7 +6,7 @@ Boss_ShellshogunSpawnFallingDebris:
                 tst.w   (DifficultyMode).w
                 beq.s   Boss_ShellshogunSpawnFallingDebrisNext
                 moveq   #2,d7
-Boss_ShellshogunSpawnFallingDebrisNext:                 ; CODE XREF: Boss_ShellshogunSpawnFallingDebris+6   j  ; was: loc_3716A
+Boss_ShellshogunSpawnFallingDebrisNext:                 ; was: loc_3716A
                                         ; Boss_ShellshogunSpawnFallingDebris+82   j
                 jsr     (RandomNumber).l
                 movea.w #(FortySixthEntityType-M68K_RAM),a0
@@ -32,6 +32,6 @@ Boss_ShellshogunSpawnFallingDebrisNext:                 ; CODE XREF: Boss_Shells
                 add.w   (PlayerXPosition).w,d0
                 move.w  d0,$10(a0)
                 dbf     d7,Boss_ShellshogunSpawnFallingDebrisNext
-Boss_ShellshogunSpawnFallingDebrisReturn:               ; CODE XREF: Boss_ShellshogunSpawnFallingDebris+1A   j  ; was: locret_371E6
+Boss_ShellshogunSpawnFallingDebrisReturn:               ; was: locret_371E6
                 rts
 ; End of function Boss_ShellshogunSpawnFallingDebris

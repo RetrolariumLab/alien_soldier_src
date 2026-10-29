@@ -1,4 +1,4 @@
-Boss_Epsilon1Main:                                      ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_45AD0
+Boss_Epsilon1Main:                                      ; was: sub_45AD0
                 cmpi.w  #6,4(a5)
                 bls.w   Boss_Epsilon1DispatchAndPublishScroll
                 btst    #6,(PlayerActionStateFlags).w
@@ -6,7 +6,7 @@ Boss_Epsilon1Main:                                      ; DATA XREF: ROM:Entity_
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$C,d0
                 bhi.s   Boss_Epsilon1UpdatePeriodicSharedOffset
-Boss_Epsilon1UpdateProximityTimer:                      ; CODE XREF: Boss_Epsilon1Main+10   j  ; was: loc_45AEE
+Boss_Epsilon1UpdateProximityTimer:                      ; was: loc_45AEE
                 tst.w   (Epsilon1ProximityFlag).w
                 bne.s   Boss_Epsilon1UpdatePeriodicSharedOffset
                 addq.w  #1,(Epsilon1ProximityTimer).w
@@ -15,13 +15,13 @@ Boss_Epsilon1UpdateProximityTimer:                      ; CODE XREF: Boss_Epsilo
                 move.w  #$80,d0
                 bra.s   Boss_Epsilon1CheckProximityLimit
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1UseShortProximityLimit:                    ; CODE XREF: Boss_Epsilon1Main+2C   j  ; was: loc_45B04
+Boss_Epsilon1UseShortProximityLimit:                    ; was: loc_45B04
                 move.w  #$40,d0                         ; '@'
-Boss_Epsilon1CheckProximityLimit:                       ; CODE XREF: Boss_Epsilon1Main+32   j  ; was: loc_45B08
+Boss_Epsilon1CheckProximityLimit:                       ; was: loc_45B08
                 cmp.w   (Epsilon1ProximityTimer).w,d0
                 bhi.s   Boss_Epsilon1UpdatePeriodicSharedOffset
                 move.w  #1,(Epsilon1ProximityFlag).w
-Boss_Epsilon1UpdatePeriodicSharedOffset:                ; CODE XREF: Boss_Epsilon1Main+1C   j  ; was: loc_45B14
+Boss_Epsilon1UpdatePeriodicSharedOffset:                ; was: loc_45B14
                                         ; Boss_Epsilon1Main+22   j
                 btst    #1,$4C(a5)
                 bne.s   Boss_Epsilon1UpdatePresentation
@@ -31,7 +31,7 @@ Boss_Epsilon1UpdatePeriodicSharedOffset:                ; CODE XREF: Boss_Epsilo
                 move.w  $50(a5),d0
                 beq.s   Boss_Epsilon1UpdatePresentation
                 sub.w   d0,(BossCombatCounter).w
-Boss_Epsilon1UpdatePresentation:                        ; CODE XREF: Boss_Epsilon1Main+4A   j  ; was: loc_45B30
+Boss_Epsilon1UpdatePresentation:                        ; was: loc_45B30
                                         ; Boss_Epsilon1Main+54   j
                 jsr     (Gfx_ProcessDefaultColorFade).l
                 move.w  (SecondaryEntityXPos).w,d0
@@ -69,7 +69,7 @@ Boss_Epsilon1UpdatePresentation:                        ; CODE XREF: Boss_Epsilo
                 bset    #0,(StageTimerPauseFlag).w
                 bra.w   Boss_Epsilon1UpdateLinkedParts
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1UpdateBodyAndAngleHistory:                 ; CODE XREF: Boss_Epsilon1Main+BE   j  ; was: loc_45BC4
+Boss_Epsilon1UpdateBodyAndAngleHistory:                 ; was: loc_45BC4
                                         ; Boss_Epsilon1Main+CE   j
                 move.w  (SharedScratchLong3).w,d2
                 move.w  (SharedScratchLong3+2).w,d3
@@ -88,7 +88,7 @@ Boss_Epsilon1UpdateBodyAndAngleHistory:                 ; CODE XREF: Boss_Epsilo
                 andi.w  #$1FE,d0
                 lea     (Epsilon1AngleHistory).w,a0
                 move.w  #$2F,d7                         ; '/'
-Boss_Epsilon1ShiftAngleHistoryLoop:                     ; CODE XREF: Boss_Epsilon1Main+13E   j  ; was: loc_45C08
+Boss_Epsilon1ShiftAngleHistoryLoop:                     ; was: loc_45C08
                 move.w  (a0),d1
                 move.w  d0,(a0)+
                 move.w  d1,d0
@@ -96,9 +96,9 @@ Boss_Epsilon1ShiftAngleHistoryLoop:                     ; CODE XREF: Boss_Epsilo
                 lea     (Epsilon1AngleHistory).w,a0
                 lea     (SharedScratchLong0).w,a1
                 move.w  #5,d7
-Boss_Epsilon1SampleAngleHistoryLoop:                    ; CODE XREF: Boss_Epsilon1Main+15A   j  ; was: loc_45C1E
+Boss_Epsilon1SampleAngleHistoryLoop:                    ; was: loc_45C1E
                 move.w  (SharedScratchLong5+2).w,d6
-Boss_Epsilon1AdvanceAngleHistorySample:                 ; CODE XREF: Boss_Epsilon1Main+154   j  ; was: loc_45C22
+Boss_Epsilon1AdvanceAngleHistorySample:                 ; was: loc_45C22
                 move.w  (a0)+,d0
                 dbf     d6,Boss_Epsilon1AdvanceAngleHistorySample
                 move.w  d0,(a1)+
@@ -108,14 +108,14 @@ Boss_Epsilon1AdvanceAngleHistorySample:                 ; CODE XREF: Boss_Epsilo
                 cmpi.w  #$12,4(a5)
                 bcs.s   Boss_Epsilon1CheckForcedStateSignal
                 bsr.w   Boss_Epsilon1CyclePaletteColor
-Boss_Epsilon1CheckForcedStateSignal:                    ; CODE XREF: Boss_Epsilon1Main+16C   j  ; was: loc_45C42
+Boss_Epsilon1CheckForcedStateSignal:                    ; was: loc_45C42
                 bclr    #2,(CombatHitFlags).w
                 beq.s   Boss_Epsilon1UpdateLinkedParts
                 btst    #2,$4C(a5)
                 bne.s   Boss_Epsilon1UpdateLinkedParts
                 bset    #2,$4C(a5)
                 move.w  #$4E,4(a5)                      ; 'N'
-Boss_Epsilon1UpdateLinkedParts:                         ; CODE XREF: Boss_Epsilon1Main+C6   j  ; was: loc_45C5E
+Boss_Epsilon1UpdateLinkedParts:                         ; was: loc_45C5E
                                         ; Boss_Epsilon1Main+F0   j
                 lea     (Math_SineTable).l,a2
                 move.w  (SharedScratchLong3).w,d2
@@ -150,7 +150,7 @@ Boss_Epsilon1UpdateLinkedParts:                         ; CODE XREF: Boss_Epsilo
                 move.w  d0,$10(a1)
                 move.w  d1,$14(a1)
                 bsr.w   Boss_Epsilon1UpdateLinkedPart
-Boss_Epsilon1DispatchAndPublishScroll:                  ; CODE XREF: Boss_Epsilon1Main+6   j  ; was: loc_45CD4
+Boss_Epsilon1DispatchAndPublishScroll:                  ; was: loc_45CD4
                 bsr.w   Boss_Epsilon1DispatchState
                 move.w  (SecondaryCameraXPos).w,d0
                 neg.w   d0
@@ -158,14 +158,14 @@ Boss_Epsilon1DispatchAndPublishScroll:                  ; CODE XREF: Boss_Epsilo
                 rts
 ; End of function Boss_Epsilon1Main
 ; Dispatches the controller's ROM-ordered state table
-Boss_Epsilon1DispatchState:                             ; CODE XREF: Boss_Epsilon1Main:Boss_Epsilon1DispatchAndPublishScroll   p  ; was: sub_45CE4
+Boss_Epsilon1DispatchState:                             ; was: sub_45CE4
                 move.w  4(a5),d0
                 lea     Boss_Epsilon1States(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Boss_Epsilon1DispatchState
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1States:    dc.w    Boss_Epsilon1WaitForBattleStartState-*  ; DATA XREF: Boss_Epsilon1DispatchState+4   o ; was: off_45CF0
+Boss_Epsilon1States:    dc.w    Boss_Epsilon1WaitForBattleStartState-*  ; was: off_45CF0
                 dc.w    Boss_Epsilon1BattleStartDelayState-*
                 dc.w    Boss_Epsilon1InitializeBattleObjectsState-*
                 dc.w    Boss_Epsilon1InitialTileLoadState-*
@@ -231,26 +231,26 @@ Boss_Epsilon1States:    dc.w    Boss_Epsilon1WaitForBattleStartState-*  ; DATA X
                 dc.w    Boss_Epsilon1FinalDespawnState-*
 
 ; Waits for the stage gate, then starts the battle-entry delay and sound
-Boss_Epsilon1WaitForBattleStartState:                   ; DATA XREF: ROM:Boss_Epsilon1States   o  ; was: sub_45D70
+Boss_Epsilon1WaitForBattleStartState:                   ; was: sub_45D70
                 tst.b   (DataLoaderControl).w
                 bmi.w   Boss_Epsilon1WaitForBattleStartReturn
                 addq.w  #2,4(a5)
                 move.w  #$80,$48(a5)
                 move.b  #1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_Epsilon1WaitForBattleStartReturn:                  ; CODE XREF: Boss_Epsilon1WaitForBattleStartState+4   j  ; was: locret_45D8C
+Boss_Epsilon1WaitForBattleStartReturn:                  ; was: locret_45D8C
                 rts
 ; End of function Boss_Epsilon1WaitForBattleStartState
 ; Counts down the battle-entry delay
-Boss_Epsilon1BattleStartDelayState:                     ; DATA XREF: ROM:00045CF2   o  ; was: sub_45D8E
+Boss_Epsilon1BattleStartDelayState:                     ; was: sub_45D8E
                 subq.w  #1,$48(a5)
                 bne.s   Boss_Epsilon1BattleStartDelayReturn
                 addq.w  #2,4(a5)
-Boss_Epsilon1BattleStartDelayReturn:                    ; CODE XREF: Boss_Epsilon1BattleStartDelayState+4   j  ; was: locret_45D98
+Boss_Epsilon1BattleStartDelayReturn:                    ; was: locret_45D98
                 rts
 ; End of function Boss_Epsilon1BattleStartDelayState
 ; Clears encounter buffers and initializes the controller, linked parts, and twelve ring objects
-Boss_Epsilon1InitializeBattleObjectsState:              ; DATA XREF: ROM:00045CF4   o  ; was: sub_45D9A
+Boss_Epsilon1InitializeBattleObjectsState:              ; was: sub_45D9A
                 bsr.w   Boss_Epsilon1ApplyTimedPaletteFade
                 btst    #0,(FrameCounter+1).w
                 bne.w   Boss_Epsilon1InitializeBattleObjectsReturn
@@ -275,9 +275,9 @@ Boss_Epsilon1InitializeBattleObjectsState:              ; DATA XREF: ROM:00045CF
                 moveq   #0,d0
                 lea     (Epsilon1AngleHistory).w,a0
                 move.w  #5,d7
-Boss_Epsilon1ClearAngleHistoryRowsLoop:                 ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+70   j  ; was: loc_45E00
+Boss_Epsilon1ClearAngleHistoryRowsLoop:                 ; was: loc_45E00
                 move.w  (SharedScratchLong5+2).w,d6
-Boss_Epsilon1ClearAngleHistoryRowLoop:                  ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+6C   j  ; was: loc_45E04
+Boss_Epsilon1ClearAngleHistoryRowLoop:                  ; was: loc_45E04
                 move.w  d0,(a0)+
                 dbf     d6,Boss_Epsilon1ClearAngleHistoryRowLoop
                 dbf     d7,Boss_Epsilon1ClearAngleHistoryRowsLoop
@@ -346,7 +346,7 @@ Boss_Epsilon1ClearAngleHistoryRowLoop:                  ; CODE XREF: Boss_Epsilo
                 move.w  #$FFB0,d4
                 move.w  #$50,d5                         ; 'P'
                 move.w  #5,d7
-Boss_Epsilon1InitializeRingObjectPairsLoop:             ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+276   j  ; was: loc_45F7C
+Boss_Epsilon1InitializeRingObjectPairsLoop:             ; was: loc_45F7C
                 move.w  #$284,(a0)
                 move.w  #$C80,2(a0)
                 move.w  #$4308,$E(a0)
@@ -376,12 +376,12 @@ Boss_Epsilon1InitializeRingObjectPairsLoop:             ; CODE XREF: Boss_Epsilo
                 lea     $60(a0),a0
                 lea     $60(a1),a1
                 dbf     d7,Boss_Epsilon1InitializeRingObjectPairsLoop
-Boss_Epsilon1InitializeBattleObjectsReturn:             ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+A   j  ; was: locret_46014
+Boss_Epsilon1InitializeBattleObjectsReturn:             ; was: locret_46014
                                         ; Boss_Epsilon1InitializeBattleObjectsState+14   j
                 rts
 ; End of function Boss_Epsilon1InitializeBattleObjectsState
 ; Applies palette fade effect
-Boss_Epsilon1ApplyPaletteFade:                          ; CODE XREF: Boss_Epsilon1InitialTileLoadState   p  ; was: sub_46016
+Boss_Epsilon1ApplyPaletteFade:                          ; was: sub_46016
                                         ; sub_461A6   p
                 move.w  #$E,d0
                 andi.w  #$E,d0
@@ -392,7 +392,7 @@ Boss_Epsilon1ApplyPaletteFade:                          ; CODE XREF: Boss_Epsilo
                 rts
 ; End of function Boss_Epsilon1ApplyPaletteFade
 ; Applies the opening fade while alternating initial tile-load groups
-Boss_Epsilon1InitialTileLoadState:                      ; DATA XREF: ROM:00045CF6   o  ; was: sub_46032
+Boss_Epsilon1InitialTileLoadState:                      ; was: sub_46032
                 bsr.w   Boss_Epsilon1ApplyPaletteFade
                 tst.w   (DataLoaderControl).w
                 bmi.s   Boss_Epsilon1InitialTileLoadReturn
@@ -405,19 +405,19 @@ Boss_Epsilon1InitialTileLoadState:                      ; DATA XREF: ROM:00045CF
                 adda.w  (a0),a0
                 jmp     (a0)
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1InitialTileLoadGroups: dc.w    Gfx_LoadEpsilon1FourTileBands-*  ; DATA XREF: Boss_Epsilon1InitialTileLoadState+18   o ; was: off_46052
+Boss_Epsilon1InitialTileLoadGroups: dc.w    Gfx_LoadEpsilon1FourTileBands-*  ; was: off_46052
                 dc.w    Gfx_LoadEpsilon1WideTileBands-*
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1AdvanceFromInitialTileLoad:                ; CODE XREF: Boss_Epsilon1InitialTileLoadState+E   j  ; was: loc_46056
+Boss_Epsilon1AdvanceFromInitialTileLoad:                ; was: loc_46056
                 tst.w   (DataLoaderControl).w
                 bmi.s   Boss_Epsilon1InitialTileLoadReturn
                 addq.w  #2,4(a5)
-Boss_Epsilon1InitialTileLoadReturn:                     ; CODE XREF: Boss_Epsilon1InitialTileLoadState+8   j  ; was: locret_46060
+Boss_Epsilon1InitialTileLoadReturn:                     ; was: locret_46060
                                         ; Boss_Epsilon1InitialTileLoadState+28   j
                 rts
 ; End of function Boss_Epsilon1InitialTileLoadState
 ; Loads all four tile sets for Epsilon1 graphics
-Gfx_LoadEpsilon1FourTileBands:                          ; DATA XREF: Boss_Epsilon1InitialTileLoadState:Boss_Epsilon1InitialTileLoadGroups   o  ; was: sub_46062
+Gfx_LoadEpsilon1FourTileBands:                          ; was: sub_46062
                 bsr.w   Gfx_LoadEpsilon1TileBand4
                 bsr.w   Gfx_LoadEpsilon1TileBand3
                 bsr.w   Gfx_LoadEpsilon1TileBand2
@@ -425,13 +425,13 @@ Gfx_LoadEpsilon1FourTileBands:                          ; DATA XREF: Boss_Epsilo
                 rts
 ; End of function Gfx_LoadEpsilon1FourTileBands
 ; Loads the two wider Epsilon 1 tile bands
-Gfx_LoadEpsilon1WideTileBands:                          ; DATA XREF: Boss_Epsilon1InitialTileLoadState+22   o  ; was: sub_46074
+Gfx_LoadEpsilon1WideTileBands:                          ; was: sub_46074
                 bsr.w   Gfx_LoadEpsilon1WideTileBand2
                 bsr.w   Gfx_LoadEpsilon1WideTileBand1
                 rts
 ; End of function Gfx_LoadEpsilon1WideTileBands
 ; Loads the first vertical tile band
-Gfx_LoadEpsilon1TileBand1:                              ; CODE XREF: Gfx_LoadEpsilon1FourTileBands+C   p  ; was: sub_4607E
+Gfx_LoadEpsilon1TileBand1:                              ; was: sub_4607E
                                         ; Boss_Epsilon1UpdateVisibleTileBands+58   p
                 lea     Gfx_Epsilon1TileBand1LoadCommand(pc),a0
                 nop
@@ -439,10 +439,9 @@ Gfx_LoadEpsilon1TileBand1:                              ; CODE XREF: Gfx_LoadEps
 ; End of function Gfx_LoadEpsilon1TileBand1
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand1LoadCommand:   dc.w    $4130, $2000, $300, $A1A2, $A3A8  ; was: word_4608A
-                                        ; DATA XREF: Gfx_LoadEpsilon1TileBand1   o
 
 ; Clears the first vertical tile band
-Gfx_ClearEpsilon1TileBand1:                             ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands:Boss_Epsilon1ClearFirstTileBand   p  ; was: sub_46094
+Gfx_ClearEpsilon1TileBand1:                             ; was: sub_46094
                                         ; Boss_Epsilon1UpdateVisibleTileBands:Boss_Epsilon1ClearAllTileBands   p
                 lea     Gfx_Epsilon1TileBand1ClearCommand(pc),a0
                 nop
@@ -450,10 +449,9 @@ Gfx_ClearEpsilon1TileBand1:                             ; CODE XREF: Boss_Epsilo
 ; End of function Gfx_ClearEpsilon1TileBand1
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand1ClearCommand:  dc.w    $4130, $2000, $300, 0, 0  ; was: word_460A0
-                                        ; DATA XREF: Gfx_ClearEpsilon1TileBand1   o
 
 ; Loads the second vertical tile band
-Gfx_LoadEpsilon1TileBand2:                              ; CODE XREF: Gfx_LoadEpsilon1FourTileBands+8   p  ; was: sub_460AA
+Gfx_LoadEpsilon1TileBand2:                              ; was: sub_460AA
                                         ; Boss_Epsilon1UpdateVisibleTileBands+72   p
                 lea     Gfx_Epsilon1TileBand2LoadCommand(pc),a0
                 nop
@@ -461,10 +459,9 @@ Gfx_LoadEpsilon1TileBand2:                              ; CODE XREF: Gfx_LoadEps
 ; End of function Gfx_LoadEpsilon1TileBand2
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand2LoadCommand:   dc.w    $4330, $2000, $300, $A5A6, $A7AC  ; was: word_460B6
-                                        ; DATA XREF: Gfx_LoadEpsilon1TileBand2   o
 
 ; Clears the second vertical tile band
-Gfx_ClearEpsilon1TileBand2:                             ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands:Boss_Epsilon1ClearSecondTileBand   p  ; was: sub_460C0
+Gfx_ClearEpsilon1TileBand2:                             ; was: sub_460C0
                                         ; Boss_Epsilon1UpdateVisibleTileBands+B6   p
                 lea     Gfx_Epsilon1TileBand2ClearCommand(pc),a0
                 nop
@@ -472,10 +469,9 @@ Gfx_ClearEpsilon1TileBand2:                             ; CODE XREF: Boss_Epsilo
 ; End of function Gfx_ClearEpsilon1TileBand2
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand2ClearCommand:  dc.w    $4330, $2000, $300, 0, 0  ; was: word_460CC
-                                        ; DATA XREF: Gfx_ClearEpsilon1TileBand2   o
 
 ; Loads the third vertical tile band
-Gfx_LoadEpsilon1TileBand3:                              ; CODE XREF: Gfx_LoadEpsilon1FourTileBands+4   p  ; was: sub_460D6
+Gfx_LoadEpsilon1TileBand3:                              ; was: sub_460D6
                                         ; Boss_Epsilon1UpdateVisibleTileBands+8C   p
                 lea     Gfx_Epsilon1TileBand3LoadCommand(pc),a0
                 nop
@@ -483,10 +479,9 @@ Gfx_LoadEpsilon1TileBand3:                              ; CODE XREF: Gfx_LoadEps
 ; End of function Gfx_LoadEpsilon1TileBand3
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand3LoadCommand:   dc.w    $4530, $2000, $300, $A9AA, $ABAD  ; was: word_460E2
-                                        ; DATA XREF: Gfx_LoadEpsilon1TileBand3   o
 
 ; Clears the third vertical tile band
-Gfx_ClearEpsilon1TileBand3:                             ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands:Boss_Epsilon1ClearThirdTileBand   p  ; was: sub_460EC
+Gfx_ClearEpsilon1TileBand3:                             ; was: sub_460EC
                                         ; Boss_Epsilon1UpdateVisibleTileBands+BA   p
                 lea     Gfx_Epsilon1TileBand3ClearCommand(pc),a0
                 nop
@@ -494,10 +489,9 @@ Gfx_ClearEpsilon1TileBand3:                             ; CODE XREF: Boss_Epsilo
 ; End of function Gfx_ClearEpsilon1TileBand3
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand3ClearCommand:  dc.w    $4530, $2000, $300, 0, 0  ; was: word_460F8
-                                        ; DATA XREF: Gfx_ClearEpsilon1TileBand3   o
 
 ; Loads the fourth vertical tile band
-Gfx_LoadEpsilon1TileBand4:                              ; CODE XREF: Gfx_LoadEpsilon1FourTileBands   p  ; was: sub_46102
+Gfx_LoadEpsilon1TileBand4:                              ; was: sub_46102
                                         ; Boss_Epsilon1UpdateVisibleTileBands+A6   p
                 lea     Gfx_Epsilon1TileBand4LoadCommand(pc),a0
                 nop
@@ -505,10 +499,9 @@ Gfx_LoadEpsilon1TileBand4:                              ; CODE XREF: Gfx_LoadEps
 ; End of function Gfx_LoadEpsilon1TileBand4
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand4LoadCommand:   dc.w    $4730, $2000, $300, $AE, $AF00  ; was: word_4610E
-                                        ; DATA XREF: Gfx_LoadEpsilon1TileBand4   o
 
 ; Clears the fourth vertical tile band
-Gfx_ClearEpsilon1TileBand4:                             ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands:Boss_Epsilon1ClearFourthTileBand   p  ; was: sub_46118
+Gfx_ClearEpsilon1TileBand4:                             ; was: sub_46118
                                         ; Boss_Epsilon1UpdateVisibleTileBands+BE   p
                 lea     Gfx_Epsilon1TileBand4ClearCommand(pc),a0
                 nop
@@ -516,17 +509,15 @@ Gfx_ClearEpsilon1TileBand4:                             ; CODE XREF: Boss_Epsilo
 ; End of function Gfx_ClearEpsilon1TileBand4
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1TileBand4ClearCommand:  dc.w    $4730, $2000, $300, 0, 0  ; was: word_46124
-                                        ; DATA XREF: Gfx_ClearEpsilon1TileBand4   o
 
 ; Loads the first wider tile band
-Gfx_LoadEpsilon1WideTileBand1:                          ; CODE XREF: Gfx_LoadEpsilon1WideTileBands+4   p  ; was: sub_4612E
+Gfx_LoadEpsilon1WideTileBand1:                          ; was: sub_4612E
                 lea     Gfx_Epsilon1WideTileBand1LoadCommand(pc),a0
                 nop
                 jmp     Tilemap_QueueIndexedRows
 ; End of function Gfx_LoadEpsilon1WideTileBand1
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1WideTileBand1LoadCommand:   dc.w    $4180, $2000, $501, $9A9A, $9A9A, $9A9A, $9E9E, $9E9E, $9E9E  ; was: word_4613A
-                                        ; DATA XREF: Gfx_LoadEpsilon1WideTileBand1   o
 
 ; Clears the first wider tile band
 Gfx_ClearEpsilon1WideTileBand1:
@@ -536,17 +527,15 @@ Gfx_ClearEpsilon1WideTileBand1:
 ; End of function Gfx_ClearEpsilon1WideTileBand1
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1WideTileBand1ClearCommand:  dc.w    $4180, $2000, $501, 0, 0, 0, 0, 0, 0  ; was: word_46158
-                                        ; DATA XREF: Gfx_ClearEpsilon1WideTileBand1   o
 
 ; Loads the second wider tile band
-Gfx_LoadEpsilon1WideTileBand2:                          ; CODE XREF: Gfx_LoadEpsilon1WideTileBands   p  ; was: sub_4616A
+Gfx_LoadEpsilon1WideTileBand2:                          ; was: sub_4616A
                 lea     Gfx_Epsilon1WideTileBand2LoadCommand(pc),a0
                 nop
                 jmp     Tilemap_QueueIndexedRows
 ; End of function Gfx_LoadEpsilon1WideTileBand2
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1WideTileBand2LoadCommand:   dc.w    $41D0, $2000, $501, $9A9A, $9A9A, $9A9A, $9E9E, $9E9E, $9E9E  ; was: word_46176
-                                        ; DATA XREF: Gfx_LoadEpsilon1WideTileBand2   o
 
 ; Clears the second wider tile band
 Gfx_ClearEpsilon1WideTileBand2:
@@ -556,6 +545,5 @@ Gfx_ClearEpsilon1WideTileBand2:
 ; End of function Gfx_ClearEpsilon1WideTileBand2
 ; ---------------------------------------------------------------------------
 Gfx_Epsilon1WideTileBand2ClearCommand:  dc.w    $41D0, $2000, $501, 0, 0, 0, 0, 0, 0  ; was: word_46194
-                                        ; DATA XREF: Gfx_ClearEpsilon1WideTileBand2   o
 
 ; Attack phase 1 initialization

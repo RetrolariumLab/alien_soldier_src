@@ -8,7 +8,7 @@ StageTransition_LoadStageAfterOptionalBGM:              ; was: loc_1E260
 ; End of function StageTransition_QueuePendingBGMAndLoadStage
 
 ; Initializes the interstage route or resumes its message-screen setup
-StageTransition_Initialize:                             ; DATA XREF: Sys_DispatchGameState+8A   o  ; was: sub_1E264
+StageTransition_Initialize:                             ; was: sub_1E264
                 tst.w   (GameSubstateIndex).w
                 bne.s   StageTransition_ResumeSetup
                 jsr     (Sys_InitGameMode).l
@@ -27,7 +27,7 @@ UnreferencedStageTransition_PrepareGraphics:            ; was: sub_1E27A
                 jmp     (Data_ProcessPointer).l
 ; End of function UnreferencedStageTransition_PrepareGraphics
 ; Resumes pending font transfer and activates the interstage message screen
-StageTransition_ResumeSetup:                            ; CODE XREF: StageTransition_Initialize+4   j  ; was: sub_1E2A6
+StageTransition_ResumeSetup:                            ; was: sub_1E2A6
                 cmpi.w  #4,(GameSubstateIndex).w
                 beq.s   StageTransition_ResumeSetup_ActivateMessageScreen
                 tst.b   (DataLoaderControl).w
@@ -37,13 +37,13 @@ StageTransition_ResumeSetup:                            ; CODE XREF: StageTransi
                 addq.w  #2,(GameSubstateIndex).w
                 rts
 ; ---------------------------------------------------------------------------
-StageTransition_ResumeSetup_ActivateMessageScreen:      ; CODE XREF: StageTransition_ResumeSetup+6   j  ; was: loc_1E2C6
+StageTransition_ResumeSetup_ActivateMessageScreen:      ; was: loc_1E2C6
                 move.w  #$38,(GameModeIndex).w          ; '8'
                 clr.w   (GameSubstateIndex).w
                 move.b  (PendingStageBGMRequest).w,d0
                 beq.s   StageTransition_ResumeSetup_LoadPaletteAndText
                 jsr     (Sound_QueueBGMOrStop).l
-StageTransition_ResumeSetup_LoadPaletteAndText:         ; CODE XREF: StageTransition_ResumeSetup+2E   j  ; was: loc_1E2DC
+StageTransition_ResumeSetup_LoadPaletteAndText:         ; was: loc_1E2DC
                 lea     StageTransitionPaletteBlockPointers(pc),a0
                 nop
                 jsr     (Palette_LoadFourOptionalBlocks).l
@@ -64,17 +64,16 @@ StageTransition_ResumeSetup_LoadPaletteAndText:         ; CODE XREF: StageTransi
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function StageTransition_ResumeSetup
 ; ---------------------------------------------------------------------------
-StageTransitionPaletteBlockPointers:    dc.l    StageTransitionPaletteBlock  ; DATA XREF: StageTransition_ResumeSetup:StageTransition_ResumeSetup_LoadPaletteAndText   o  ; was: off_1E334
+StageTransitionPaletteBlockPointers:    dc.l    StageTransitionPaletteBlock  ; was: off_1E334
                 dc.l    StageTransitionPaletteBlock
                 dc.l    StageTransitionPaletteBlock
                 dc.l    StageTransitionPaletteBlock
 StageTransitionPaletteBlock:    dc.l    0, $CAA0A88, $8660644, 0  ; was: dword_1E344
-                                        ; DATA XREF: ROM:StageTransitionPaletteBlockPointers   o
                                         ; ROM:0001E338   o
                 dc.l    0, $8660644, $4220000, 0
 
 ; Advances interstage message text, confirmation, and palette fades
-StageTransition_UpdateMessageScreen:                    ; DATA XREF: Sys_DispatchGameState+8E   o  ; was: sub_1E364
+StageTransition_UpdateMessageScreen:                    ; was: sub_1E364
                 tst.b   (DataLoaderControl).w
                 bmi.w   StageTransition_UpdateMessageScreen_Return
                 tst.w   (GameSubstateIndex).w
@@ -85,7 +84,7 @@ StageTransition_UpdateMessageScreen:                    ; DATA XREF: Sys_Dispatc
                 move.w  #2,(PaletteFadeMode).w
                 clr.w   (PaletteFadeColorOffset).w
                 move.w  #$E000,(PaletteFadeMaskStatus).w
-StageTransition_UpdateMessageScreen_RenderText:         ; CODE XREF: StageTransition_UpdateMessageScreen+C   j  ; was: loc_1E38E
+StageTransition_UpdateMessageScreen_RenderText:         ; was: loc_1E38E
                                         ; StageTransition_UpdateMessageScreen+14   j
                 move.l  (StageMessageCursor).w,d0
                 beq.s   StageTransition_UpdateMessageScreen_UpdateFade
@@ -104,21 +103,21 @@ StageTransition_UpdateMessageScreen_RenderText:         ; CODE XREF: StageTransi
                 cmpi.b  #$FD,(a0)
                 bne.s   StageTransition_UpdateMessageScreen_UpdateFade
                 clr.l   (StageMessageCursor).w
-StageTransition_UpdateMessageScreen_UpdateFade:         ; CODE XREF: StageTransition_UpdateMessageScreen+2E   j  ; was: loc_1E3C2
+StageTransition_UpdateMessageScreen_UpdateFade:         ; was: loc_1E3C2
                                         ; StageTransition_UpdateMessageScreen+58   j
                 jsr     (Gfx_FadePaletteTransition).l
                 bclr    #0,(PaletteFadeMaskStatus).w
                 beq.s   StageTransition_UpdateMessageScreen_FinishFadeOut
                 addq.w  #2,(GameSubstateIndex).w
-StageTransition_UpdateMessageScreen_Return:             ; CODE XREF: StageTransition_UpdateMessageScreen+4   j  ; was: locret_1E3D4
+StageTransition_UpdateMessageScreen_Return:             ; was: locret_1E3D4
                                         ; StageTransition_UpdateMessageScreen+78   j
                 rts
 ; ---------------------------------------------------------------------------
-StageTransition_UpdateMessageScreen_FinishFadeOut:      ; CODE XREF: StageTransition_UpdateMessageScreen+6A   j  ; was: loc_1E3D6
+StageTransition_UpdateMessageScreen_FinishFadeOut:      ; was: loc_1E3D6
                 bclr    #1,(PaletteFadeMaskStatus).w
                 beq.s   StageTransition_UpdateMessageScreen_Return
 ; Commits the interstage transition and starts loading the selected stage
-StageTransition_LoadStage:                              ; CODE XREF: StageTransition_QueuePendingBGMAndLoadStage:StageTransition_LoadStageAfterOptionalBGM   j  ; was: loc_1E3DE
+StageTransition_LoadStage:                              ; was: loc_1E3DE
                                         ; EndingSequence_UpdateFromTransition+32   j
                 move.w  #$C,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
@@ -129,12 +128,12 @@ StageTransition_LoadStage:                              ; CODE XREF: StageTransi
                 move.b  StageIntroSoundRequestByStage(pc,d0.w),(StageIntroSoundRequest).w
                 clr.b   (StageTimerPauseFlag).w
                 jsr     (Stage_LoadAssetsForCurrentTableIndex).l
-StageTransition_LoadOrSetupReturn:                      ; CODE XREF: StageTransition_ResumeSetup+C   j  ; was: locret_1E40A
+StageTransition_LoadOrSetupReturn:                      ; was: locret_1E40A
                                         ; StageTransition_ResumeSetup+16   j
                 rts
 ; End of function StageTransition_UpdateMessageScreen
 ; Per-stage SFX request consumed when the STAGE-number banner reaches its cue
-StageIntroSoundRequestByStage:  dc.b    $18, 0, 0       ; DATA XREF: StageTransition_LoadStage+28   r  ; was: byte_1E40C
+StageIntroSoundRequestByStage:  dc.b    $18, 0, 0       ; was: byte_1E40C
                 dc.b    0, $18, 0
                 dc.b    0, $18, 0
                 dc.b    $18, 0, 0
@@ -148,7 +147,7 @@ StageIntroSoundRequestByStage:  dc.b    $18, 0, 0       ; DATA XREF: StageTransi
                 dc.b    0, 0, 0
 
 ; Renders the static PRESS START prompt
-StageTransition_RenderPressStart:                       ; CODE XREF: StageTransition_ResumeSetup+74   p  ; was: sub_1E430
+StageTransition_RenderPressStart:                       ; was: sub_1E430
                 lea     (Text_PressStart).l,a0
                 move.w  #$C100,d0
                 move.w  #$4B9E,d4
@@ -156,7 +155,6 @@ StageTransition_RenderPressStart:                       ; CODE XREF: StageTransi
 ; End of function StageTransition_RenderPressStart
 ; ---------------------------------------------------------------------------
 StageTransitionMessageSequence_StageZero:   dc.b    3, $DA, 0, $58, $79, $42, $36, $3F, $34, $43, $39, 0, $3E, $3B, $42, $D8  ; was: byte_1E444
-                                        ; DATA XREF: WeaponSetup_UpdateScreen+7A   o
                 dc.b    $D8, $D8, 0, $DA, $FF, 6, $31, $4E, $D8, $30, $31, $3C, $6F, $36, 0, $9E  ; text?
                 dc.b    $84, $AB, $3D, $31, $63, $5C, $3F, $40, $5D, $30, $6E, $44, $31, $DB, $DB, $FF
                 dc.b    8, $61, $37, $30, $37, $4A, $6B, $32, $48, $91, $A6, $A3, $8B, $92, $AE, $A4
@@ -168,7 +166,6 @@ StageTransitionMessageSequence_StageZero:   dc.b    3, $DA, 0, $58, $79, $42, $3
                 dc.b    $A4, $B2, $C5, $DA, $DB, $DB, 0, $30, $6C, $56, $42, $39, $31, $DB, $DB, $FF
                 dc.b    $FD
 StageTransitionMessageSequence_Shared:  dc.b    3, $DA, 0, $3B, $48, $6D, $5A, $55, $6D, $78, $32, $4E, 0, $58, $5D, $42  ; was: byte_1E4E5
-                                        ; DATA XREF: Stage_CheckTransitionReady+E   o
                                         ; Stage9_UpdatePostXiTigerTransition+16   o
                 dc.b    $D8, $D8, $D8, 0, $DA, $FF, 6, $3F, $3F, $35, $31, $49, $D8, $9E, $84, $AB
                 dc.b    $39, $37, $3A, $31, $37, $32, $39, $32, $4C, $43, $FF, 8, $3E, $48, $BD, $8E
@@ -183,7 +180,6 @@ StageTransitionMessageSequence_Shared:  dc.b    3, $DA, 0, $3B, $48, $6D, $5A, $
 StageTransitionMessageSequence_TrainAndBugmax:  binclude "data/other/stage_transition_message_sequence_train_and_bugmax.bin"  ; was: byte_1E587
 StageTransitionMessageSequence_TrainAndBugmax_End:      ; was: byte_1E587_End
 StageTransitionMessageSequence_PostFlyingNeo:   dc.b    3, $DA, 0, $39, $32, $6B, $31, $40, $4E, $5C, $A0, $DA, $92, $A4, $48, 0  ; was: byte_1E6C6
-                                        ; DATA XREF: Stage8_StartPostFlyingNeoTransition+E   o
                 dc.b    $A7, $BF, $81, 0, $DA, $FF, 6, $3A, $7A, $D8, $48, $39, $55, $49, 0, $7F
                 dc.b    $94, $9D, $A4, $AD, $C5, $AB, $AE, $48, $BA, $AB, $D8, $FF, 8, $AA, $AB, $B6
                 dc.b    $BB, $E2, 0, $3F, $34, $3C, $67, $38, $DB, $DB, $FF, $B, $63, $6B, $32, $3E

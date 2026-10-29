@@ -1,5 +1,5 @@
 ; Destroyer Proto defeat scatter, arena effects, and animated part helpers
-Boss_DestroyerProtoBeginDefeatScatter:                  ; DATA XREF: ROM:0003153C   o  ; was: sub_31D9A
+Boss_DestroyerProtoBeginDefeatScatter:                  ; was: sub_31D9A
                 clr.b   $21(a5)
                 movea.w a5,a4
                 lea     Projectile_DestroyerProtoVelocityXTable(pc),a0
@@ -7,7 +7,7 @@ Boss_DestroyerProtoBeginDefeatScatter:                  ; DATA XREF: ROM:0003153
                 lea     Projectile_DestroyerProtoVelocityYTable(pc),a1
                 nop
                 move.w  #5,d7
-Boss_DestroyerProtoScatterNextPart:                     ; CODE XREF: Boss_DestroyerProtoBeginDefeatScatter+3A   j  ; was: loc_31DB0
+Boss_DestroyerProtoScatterNextPart:                     ; was: loc_31DB0
                 adda.w  #$60,a4                         ; '`'
                 jsr     (RandomNumber).l
                 andi.w  #$3C,d0                         ; '<'
@@ -25,7 +25,7 @@ Boss_DestroyerProtoScatterNextPart:                     ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoBeginDefeatScatter
 ; Emits one randomized defeat particle around the boss
-Boss_DestroyerProtoEmitDefeatParticle:                  ; CODE XREF: Boss_DestroyerProtoUpdateDefeatExplosion   p  ; was: sub_31DF6
+Boss_DestroyerProtoEmitDefeatParticle:                  ; was: sub_31DF6
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
@@ -61,7 +61,7 @@ Boss_DestroyerProtoEmitDefeatParticle:                  ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoEmitDefeatParticle
 ; ---------------------------------------------------------------------------
-Boss_DestroyerProtoDefeatParticleMappingTable:  dc.l    SharedCombatSpriteAnimation00  ; DATA XREF: Boss_DestroyerProtoEmitDefeatParticle+78   r  ; was: off_31E7C
+Boss_DestroyerProtoDefeatParticleMappingTable:  dc.l    SharedCombatSpriteAnimation00  ; was: off_31E7C
                 dc.l    SharedCombatSpriteAnimation03
                 dc.l    SharedCombatSpriteAnimation01
                 dc.l    SharedCombatSpriteAnimation04
@@ -71,7 +71,7 @@ Boss_DestroyerProtoDefeatParticleMappingTable:  dc.l    SharedCombatSpriteAnimat
                 dc.l    SharedCombatSpriteAnimation06
 
 ; Runs the defeat particle, palette, and arena-rotation effects until removal
-Boss_DestroyerProtoUpdateDefeatExplosion:               ; DATA XREF: ROM:0003153E   o  ; was: sub_31E9C
+Boss_DestroyerProtoUpdateDefeatExplosion:               ; was: sub_31E9C
                 bsr.w   Boss_DestroyerProtoEmitDefeatParticle
                 jsr     Boss_DestroyerProtoApplyDefeatPaletteFade(pc)  ; (pc)
                 nop
@@ -86,11 +86,9 @@ Boss_DestroyerProtoUpdateDefeatExplosion:               ; DATA XREF: ROM:0003153
 ; End of function Boss_DestroyerProtoUpdateDefeatExplosion
 ; ---------------------------------------------------------------------------
 Boss_DestroyerProtoDefeatGraphicsLoadDescriptor:    dc.w    $4000, $4000, $303, 0, 0, 0, 0, 0, 0, 0, 0  ; was: word_31EC8
-                                        ; DATA XREF: Boss_DestroyerProtoUpdateDefeatExplosion+18   o
 
 ; Rotates selected entries in the arena effect buffer during defeat
-Boss_DestroyerProtoRotateArenaEffectEntries:            ; CODE XREF: Boss_DestroyerProtoUpdateDefeatExplosion+A   p  ; was: sub_31EDE
-                                        ; DATA XREF: Boss_DestroyerProtoUpdateDefeatExplosion+A   o
+Boss_DestroyerProtoRotateArenaEffectEntries:            ; was: sub_31EDE
                 move.w  $4A(a5),d0
                 cmpi.w  #$40,d0                         ; '@'
                 bcc.w   Entity_UpdateReturn
@@ -101,17 +99,17 @@ Boss_DestroyerProtoRotateArenaEffectEntries:            ; CODE XREF: Boss_Destro
                 nop
                 clr.w   d1
                 move.w  #$BF,d0
-Boss_DestroyerProtoRotateNextArenaEffectEntry:          ; CODE XREF: Boss_DestroyerProtoRotateArenaEffectEntries+44   j  ; was: loc_31F02
+Boss_DestroyerProtoRotateNextArenaEffectEntry:          ; was: loc_31F02
                 move.w  (a0),d2
                 andi.w  #$1FF,d2
                 cmpi.w  #$140,d2
                 bcs.s   Boss_DestroyerProtoApplyArenaEffectRotation
                 cmpi.w  #$180,d2
                 bcs.s   Boss_DestroyerProtoAdvanceArenaEffectEntry
-Boss_DestroyerProtoApplyArenaEffectRotation:            ; CODE XREF: Boss_DestroyerProtoRotateArenaEffectEntries+2E   j  ; was: loc_31F14
+Boss_DestroyerProtoApplyArenaEffectRotation:            ; was: loc_31F14
                 add.w   (a1,d1.w),d2
                 move.w  d2,(a0)
-Boss_DestroyerProtoAdvanceArenaEffectEntry:             ; CODE XREF: Boss_DestroyerProtoRotateArenaEffectEntries+34   j  ; was: loc_31F1A
+Boss_DestroyerProtoAdvanceArenaEffectEntry:             ; was: loc_31F1A
                 addq.w  #4,a0
                 addq.w  #2,d1
                 andi.w  #$1E,d1
@@ -119,7 +117,7 @@ Boss_DestroyerProtoAdvanceArenaEffectEntry:             ; CODE XREF: Boss_Destro
                 rts
 ; End of function Boss_DestroyerProtoRotateArenaEffectEntries
 ; ---------------------------------------------------------------------------
-Boss_DestroyerProtoArenaEffectRotationTable:    dc.w    1, $FFFF  ; DATA XREF: Boss_DestroyerProtoRotateArenaEffectEntries+18   o  ; was: word_31F28
+Boss_DestroyerProtoArenaEffectRotationTable:    dc.w    1, $FFFF  ; was: word_31F28
                 dc.w    5, $FFFB
                 dc.w    7, $FFF9
                 dc.w    3, $FFFD
@@ -129,7 +127,7 @@ Boss_DestroyerProtoArenaEffectRotationTable:    dc.w    1, $FFFF  ; DATA XREF: B
                 dc.w    4, $FFFC
 
 ; Applies palette fade effect based on timer and fade direction
-Boss_DestroyerProtoApplyPaletteFade:                    ; CODE XREF: Boss_DestroyerProtoLaunchTwinShots+4   p  ; was: sub_31F48
+Boss_DestroyerProtoApplyPaletteFade:                    ; was: sub_31F48
                                         ; Boss_DestroyerProtoFadeTwinShots+4   p
                 move.w  $4A(a5),d0
                 andi.w  #$E,d0
@@ -138,8 +136,7 @@ Boss_DestroyerProtoApplyPaletteFade:                    ; CODE XREF: Boss_Destro
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Boss_DestroyerProtoApplyPaletteFade
 ; Applies the short defeat palette fade
-Boss_DestroyerProtoApplyDefeatPaletteFade:              ; CODE XREF: Boss_DestroyerProtoUpdateDefeatExplosion+4   p  ; was: sub_31F5E
-                                        ; DATA XREF: Boss_DestroyerProtoUpdateDefeatExplosion+4   o
+Boss_DestroyerProtoApplyDefeatPaletteFade:              ; was: sub_31F5E
                 cmpi.w  #$E,$4A(a5)
                 bcc.w   Entity_UpdateReturn
                 move.w  #$E000,d7
@@ -151,12 +148,12 @@ Boss_DestroyerProtoApplyDefeatPaletteFade:              ; CODE XREF: Boss_Destro
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Boss_DestroyerProtoApplyDefeatPaletteFade
 ; Updates an ordinary linked part, or culls it after scatter activation
-Boss_DestroyerProtoPartMain:                            ; DATA XREF: ROM:000314D0   o  ; was: sub_31F86
+Boss_DestroyerProtoPartMain:                            ; was: sub_31F86
                 tst.w   4(a5)
                 bne.w   Entity_RemoveOutsideArena
 ; End of function Boss_DestroyerProtoPartMain
 ; Recomputes an entity's position from its parent, polar angle, and radius
-Entity_UpdatePolarPositionFromParent:                   ; CODE XREF: EntityType390_BeginAttackCycle   p  ; was: sub_31F8E
+Entity_UpdatePolarPositionFromParent:                   ; was: sub_31F8E
                                         ; EntityType390_TerminalBeginAttackCycle   p
                 movea.w $44(a5),a4
                 move.w  $40(a5),d0
@@ -171,11 +168,11 @@ Entity_UpdatePolarPositionFromParent:                   ; CODE XREF: EntityType3
                 rts
 ; End of function Entity_UpdatePolarPositionFromParent
 ; Updates an animated linked part and selects its angle-dependent frame
-Boss_DestroyerProtoAnimatedPartMain:                    ; DATA XREF: ROM:000314D2   o  ; was: sub_31FB4
+Boss_DestroyerProtoAnimatedPartMain:                    ; was: sub_31FB4
                 tst.w   4(a5)
                 bne.w   Boss_DestroyerProtoAnimatedPartAdvance
                 bsr.w   Entity_UpdatePolarPositionFromParent
-Boss_DestroyerProtoAnimatedPartSelectFrame:             ; CODE XREF: Boss_DestroyerProtoAnimatedPartMain+3C   p  ; was: loc_31FC0
+Boss_DestroyerProtoAnimatedPartSelectFrame:             ; was: loc_31FC0
                 move.w  $46(a5),d0
                 addi.w  #$10,d0
                 andi.w  #$1E0,d0
@@ -189,7 +186,7 @@ Boss_DestroyerProtoAnimatedPartSelectFrame:             ; CODE XREF: Boss_Destro
                 move.w  (a0,d0.w),$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_DestroyerProtoAnimatedPartAdvance:                 ; CODE XREF: Boss_DestroyerProtoAnimatedPartMain+4   j  ; was: loc_31FEA
+Boss_DestroyerProtoAnimatedPartAdvance:                 ; was: loc_31FEA
                 addi.w  #$20,$46(a5)                    ; ' '
                 bsr.w   Boss_DestroyerProtoAnimatedPartSelectFrame
                 bra.w   Entity_RemoveOutsideArena

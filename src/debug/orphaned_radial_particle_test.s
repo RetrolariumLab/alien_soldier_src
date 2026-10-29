@@ -7,11 +7,11 @@ Debug_RadialParticleTestController:                     ; was: sub_2F1A2
                 jmp     (a0)
 ; End of function Debug_RadialParticleTestController
 ; ---------------------------------------------------------------------------
-Debug_RadialParticleTestStateTable: dc.w    Debug_RadialParticleTestInit-*  ; DATA XREF: Debug_RadialParticleTestController+8   o  ; was: off_2F1B2
+Debug_RadialParticleTestStateTable: dc.w    Debug_RadialParticleTestInit-*  ; was: off_2F1B2
                 dc.w    Debug_RadialParticleTestPrepareBurstState-*
 
 ; Initializes the test controller at a fixed screen position and radius
-Debug_RadialParticleTestInit:                           ; DATA XREF: ROM:Debug_RadialParticleTestStateTable   o  ; was: sub_2F1B6
+Debug_RadialParticleTestInit:                           ; was: sub_2F1B6
                 move.w  #$C00,2(a5)
                 move.w  #$18,$50(a5)
                 move.w  #$120,$10(a5)
@@ -20,9 +20,9 @@ Debug_RadialParticleTestInit:                           ; DATA XREF: ROM:Debug_R
                 rts
 ; End of function Debug_RadialParticleTestInit
 ; Prepares motion data for up to eight free slots using randomized angles
-Debug_RadialParticleTestPrepareBurstState:              ; DATA XREF: ROM:0002F1B4   o  ; was: sub_2F1D4
+Debug_RadialParticleTestPrepareBurstState:              ; was: sub_2F1D4
                 move.w  #7,d7
-Debug_RadialParticleTestPrepareBurstLoop:               ; CODE XREF: Debug_RadialParticleTestPrepareBurstState:Debug_RadialParticleTestNextBurstSlot   j  ; was: loc_2F1D8
+Debug_RadialParticleTestPrepareBurstLoop:               ; was: loc_2F1D8
                 jsr     (RandomNumber).l
                 move.b  (RandomNumberState).w,d0
                 andi.w  #$1FF,d0
@@ -66,7 +66,7 @@ Debug_RadialParticleTestPrepareBurstLoop:               ; CODE XREF: Debug_Radia
                 move.w  #$1000,2(a0)
                 bra.w   Debug_RadialParticleTestNextBurstSlot
 ; ---------------------------------------------------------------------------
-Debug_RadialParticleTestStoreSlotMotion:                ; CODE XREF: Debug_RadialParticleTestPrepareBurstState+94   j  ; was: loc_2F278
+Debug_RadialParticleTestStoreSlotMotion:                ; was: loc_2F278
                                         ; Debug_RadialParticleTestPrepareBurstState+98   j
                 move.w  a5,$4A(a0)
                 move.w  $54(a5),$58(a0)
@@ -77,12 +77,12 @@ Debug_RadialParticleTestStoreSlotMotion:                ; CODE XREF: Debug_Radia
                 asr.l   #4,d3
                 move.l  d2,$50(a0)
                 move.l  d3,$54(a0)
-Debug_RadialParticleTestNextBurstSlot:                  ; CODE XREF: Debug_RadialParticleTestPrepareBurstState+A0   j  ; was: loc_2F29C
+Debug_RadialParticleTestNextBurstSlot:                  ; was: loc_2F29C
                 dbf     d7,Debug_RadialParticleTestPrepareBurstLoop
-Debug_RadialParticleTestPrepareBurstReturn:             ; CODE XREF: Debug_RadialParticleTestPrepareBurstState+3C   j  ; was: locret_2F2A0
+Debug_RadialParticleTestPrepareBurstReturn:             ; was: locret_2F2A0
                 rts
 ; End of function Debug_RadialParticleTestPrepareBurstState
-Debug_RadialParticleTestEmptySlotSetupHook:             ; CODE XREF: Debug_RadialParticleTestPrepareBurstState+40   p  ; was: nullsub_69
+Debug_RadialParticleTestEmptySlotSetupHook:             ; was: nullsub_69
                 rts
 ; End of function Debug_RadialParticleTestEmptySlotSetupHook
 
@@ -98,15 +98,15 @@ Debug_SetupRadialTestParticleSprite:                    ; was: sub_2F2A4
                 rts
 ; End of function Debug_SetupRadialTestParticleSprite
 ; Lets held left/right input decrease or increase the test radius
-Debug_AdjustRadialParticleRadius:                       ; CODE XREF: Debug_RadialParticleTestController   p  ; was: sub_2F2D2
+Debug_AdjustRadialParticleRadius:                       ; was: sub_2F2D2
                 btst    #3,(ControllerHeldState).w
                 beq.s   Debug_AdjustRadialParticleRadius_CheckLeft
                 addq.w  #1,$50(a5)
-Debug_AdjustRadialParticleRadius_CheckLeft:             ; CODE XREF: Debug_AdjustRadialParticleRadius+6   j  ; was: loc_2F2DE
+Debug_AdjustRadialParticleRadius_CheckLeft:             ; was: loc_2F2DE
                 btst    #2,(ControllerHeldState).w
                 beq.s   Debug_AdjustRadialParticleRadius_Return
                 subq.w  #1,$50(a5)
-Debug_AdjustRadialParticleRadius_Return:                ; CODE XREF: Debug_AdjustRadialParticleRadius+12   j  ; was: locret_2F2EA
+Debug_AdjustRadialParticleRadius_Return:                ; was: locret_2F2EA
                 rts
 ; End of function Debug_AdjustRadialParticleRadius
 ; Applies particle velocity and dispatches its two-state lifecycle
@@ -121,21 +121,21 @@ Debug_RadialTestParticleController:                     ; was: sub_2F2EC
                 jmp     (a0)
 ; End of function Debug_RadialTestParticleController
 ; ---------------------------------------------------------------------------
-Debug_RadialTestParticleStateTable: dc.w    Debug_RadialTestParticleInitialMotionState-*  ; DATA XREF: Debug_RadialTestParticleController+14   o  ; was: off_2F308
+Debug_RadialTestParticleStateTable: dc.w    Debug_RadialTestParticleInitialMotionState-*  ; was: off_2F308
                 dc.w    Debug_RadialTestParticleFollowParentState-*
 
 ; Keeps the initial velocity for eight frames, then enables parent following
-Debug_RadialTestParticleInitialMotionState:             ; DATA XREF: ROM:Debug_RadialTestParticleStateTable   o  ; was: sub_2F30C
+Debug_RadialTestParticleInitialMotionState:             ; was: sub_2F30C
                 subq.w  #1,$48(a5)
                 bne.s   Debug_RadialTestParticleInitialMotionState_Return
                 bset    #7,2(a5)
                 move.w  #$80,$48(a5)
                 addq.w  #2,4(a5)
-Debug_RadialTestParticleInitialMotionState_Return:      ; CODE XREF: Debug_RadialTestParticleInitialMotionState+4   j  ; was: locret_2F322
+Debug_RadialTestParticleInitialMotionState_Return:      ; was: locret_2F322
                 rts
 ; End of function Debug_RadialTestParticleInitialMotionState
 ; Recomputes particle motion when either parent angle changes, then expires it
-Debug_RadialTestParticleFollowParentState:              ; DATA XREF: ROM:0002F30A   o  ; was: sub_2F324
+Debug_RadialTestParticleFollowParentState:              ; was: sub_2F324
                 movea.w $4A(a5),a0
                 move.w  $4C(a0),d0
                 cmp.w   $5C(a5),d0
@@ -150,7 +150,7 @@ Debug_RadialTestParticleFollowParentState:              ; DATA XREF: ROM:0002F30
                 move.l  d2,$18(a5)
                 asr.l   #4,d2
                 move.l  d2,$50(a5)
-Debug_RadialTestParticleFollowParentState_UpdateY:      ; CODE XREF: Debug_RadialTestParticleFollowParentState+C   j  ; was: loc_2F356
+Debug_RadialTestParticleFollowParentState_UpdateY:      ; was: loc_2F356
                 move.w  $4E(a0),d0
                 cmp.w   $5E(a5),d0
                 beq.w   Debug_RadialTestParticleFollowParentState_CheckLifetime
@@ -164,11 +164,11 @@ Debug_RadialTestParticleFollowParentState_UpdateY:      ; CODE XREF: Debug_Radia
                 move.l  d3,$1C(a5)
                 asr.l   #4,d3
                 move.l  d3,$54(a5)
-Debug_RadialTestParticleFollowParentState_CheckLifetime:  ; CODE XREF: Debug_RadialTestParticleFollowParentState+3A   j  ; was: loc_2F386
+Debug_RadialTestParticleFollowParentState_CheckLifetime:  ; was: loc_2F386
                 subq.w  #1,$48(a5)
                 bne.s   Debug_RadialTestParticleFollowParentState_Return
                 move.w  #$1000,2(a5)
-Debug_RadialTestParticleFollowParentState_Return:       ; CODE XREF: Debug_RadialTestParticleFollowParentState+66   j  ; was: locret_2F392
+Debug_RadialTestParticleFollowParentState_Return:       ; was: locret_2F392
                 rts
 ; End of function Debug_RadialTestParticleFollowParentState
 Debug_RadialParticleTestTrailingNoOp:                   ; was: nullsub_70

@@ -1,5 +1,5 @@
 ; Updates a type-$B8 converted defeat part with repeated bounces and optional rotation frames
-Effect_TerobusterDefeatPartUpdate:                      ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_390F0
+Effect_TerobusterDefeatPartUpdate:                      ; was: sub_390F0
                 jsr     (RandomNumber).l
                 tst.w   4(a5)
                 bne.s   Effect_TerobusterDefeatPartUpdateBounce
@@ -8,12 +8,12 @@ Effect_TerobusterDefeatPartUpdate:                      ; DATA XREF: ROM:Entity_
                 tst.l   $4C(a5)
                 bne.s   Effect_TerobusterDefeatPartInitialize
                 move.w  #$8F00,2(a5)
-Effect_TerobusterDefeatPartInitialize:                  ; CODE XREF: Effect_TerobusterDefeatPartUpdate+1A   j  ; was: loc_39112
+Effect_TerobusterDefeatPartInitialize:                  ; was: loc_39112
                 move.w  #1,$48(a5)
                 move.w  (RandomNumberState+2).w,$56(a5)
                 bra.s   Effect_TerobusterDefeatPartLaunchBounce
 ; ---------------------------------------------------------------------------
-Effect_TerobusterDefeatPartUpdateBounce:                ; CODE XREF: Effect_TerobusterDefeatPartUpdate+A   j  ; was: loc_39120
+Effect_TerobusterDefeatPartUpdateBounce:                ; was: loc_39120
                 btst    #0,(FrameCounter+1).w
                 beq.s   Effect_TerobusterDefeatPartApplyGravity
                 tst.w   $54(a5)
@@ -23,11 +23,11 @@ Effect_TerobusterDefeatPartUpdateBounce:                ; CODE XREF: Effect_Tero
                 addq.w  #1,$54(a5)
                 bra.s   Effect_TerobusterDefeatPartApplyGravity
 ; ---------------------------------------------------------------------------
-Effect_TerobusterDefeatPartDecreaseRotationStep:        ; CODE XREF: Effect_TerobusterDefeatPartUpdateBounce+10   j  ; was: loc_3913C
+Effect_TerobusterDefeatPartDecreaseRotationStep:        ; was: loc_3913C
                 cmpi.w  #1,$54(a5)
                 beq.s   Effect_TerobusterDefeatPartApplyGravity
                 subq.w  #1,$54(a5)
-Effect_TerobusterDefeatPartApplyGravity:                ; CODE XREF: Effect_TerobusterDefeatPartUpdateBounce+2   j  ; was: loc_39148
+Effect_TerobusterDefeatPartApplyGravity:                ; was: loc_39148
                                         ; Effect_TerobusterDefeatPartUpdateBounce+14   j
                 addi.l  #$4000,$1C(a5)
                 bmi.s   Effect_TerobusterDefeatPartUpdateAnimation
@@ -36,7 +36,7 @@ Effect_TerobusterDefeatPartApplyGravity:                ; CODE XREF: Effect_Tero
                 cmpi.w  #$140,$14(a5)
                 bmi.s   Effect_TerobusterDefeatPartUpdateAnimation
                 clr.w   $48(a5)
-Effect_TerobusterDefeatPartLaunchBounce:                ; CODE XREF: Effect_TerobusterDefeatPartInitialize+E   j  ; was: loc_39164
+Effect_TerobusterDefeatPartLaunchBounce:                ; was: loc_39164
                 move.l  #$FFFCF000,$1C(a5)
                 moveq   #0,d0
                 move.w  (RandomNumberState).w,d0
@@ -49,9 +49,9 @@ Effect_TerobusterDefeatPartLaunchBounce:                ; CODE XREF: Effect_Tero
                 move.w  #8,$54(a5)
                 bra.s   Effect_TerobusterDefeatPartUpdateAnimation
 ; ---------------------------------------------------------------------------
-Effect_TerobusterDefeatPartSetNegativeRotationStep:     ; CODE XREF: Effect_TerobusterDefeatPartLaunchBounce+2C   j  ; was: loc_39190
+Effect_TerobusterDefeatPartSetNegativeRotationStep:     ; was: loc_39190
                 move.w  #$FFF8,$54(a5)
-Effect_TerobusterDefeatPartUpdateAnimation:             ; CODE XREF: Effect_TerobusterDefeatPartApplyGravity+6   j  ; was: loc_39196
+Effect_TerobusterDefeatPartUpdateAnimation:             ; was: loc_39196
                                         ; Effect_TerobusterDefeatPartApplyGravity+C   j
                 move.l  $4C(a5),d1
                 beq.s   Effect_TerobusterDefeatPartReturn
@@ -64,9 +64,9 @@ Effect_TerobusterDefeatPartUpdateAnimation:             ; CODE XREF: Effect_Tero
                 cmpi.w  #$20,d0                         ; ' '
                 bmi.s   Effect_TerobusterDefeatPartSelectFrame
                 bset    #3,$E(a5)
-Effect_TerobusterDefeatPartSelectFrame:                 ; CODE XREF: Effect_TerobusterDefeatPartUpdateAnimation+2A   j  ; was: loc_391C0
+Effect_TerobusterDefeatPartSelectFrame:                 ; was: loc_391C0
                 andi.w  #$1C,d0
                 move.l  (a0,d0.w),8(a5)
-Effect_TerobusterDefeatPartReturn:                      ; CODE XREF: Effect_TerobusterDefeatPartUpdateAnimation+4   j  ; was: locret_391CA
+Effect_TerobusterDefeatPartReturn:                      ; was: locret_391CA
                 rts
 ; End of function Effect_TerobusterDefeatPartUpdate

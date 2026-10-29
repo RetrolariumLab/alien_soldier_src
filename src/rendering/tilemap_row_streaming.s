@@ -16,15 +16,15 @@ UnreferencedTilemapQueuePrimaryCameraRowOffset60F8:
                 bra.s   Tilemap_SelectPrimaryRowDescriptor
 ; End of function UnreferencedTilemapQueuePrimaryCameraRowOffset60F8
 ; Queues one tilemap row from the primary camera, offset left by $60
-Tilemap_QueuePrimaryCameraRowOffset60:                  ; CODE XREF: Stage16_StartPostViblackTransition+24   p  ; was: sub_109CE
+Tilemap_QueuePrimaryCameraRowOffset60:                  ; was: sub_109CE
                                         ; Scroll_UpdateAndRenderSylpheedBackdrop+4   j
                 move.w  (PrimaryCameraXPosition).w,d0
                 subi.w  #$60,d0                         ; '`'
                 move.w  (PrimaryCameraYPosition).w,d1
-Tilemap_SelectPrimaryRowDescriptor:                     ; CODE XREF: UnreferencedTilemapQueuePrimaryCameraRowOffset60F8+10   j  ; was: loc_109DA
+Tilemap_SelectPrimaryRowDescriptor:                     ; was: loc_109DA
                 lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0
                 nop
-Tilemap_QueueRowFromDescriptor:                         ; CODE XREF: Stage_SevenForceUpdateSylpheedPrimaryPlane+4A   j  ; was: loc_109E0
+Tilemap_QueueRowFromDescriptor:                         ; was: loc_109E0
                                         ; Stage_SevenForceUpdateSylpheedSecondaryPlane+20   j
                 neg.w   d1
                 moveq   #$F,d7
@@ -44,7 +44,7 @@ Tilemap_QueueRowFromDescriptor:                         ; CODE XREF: Stage_Seven
                 lsl.w   #4,d2
                 andi.w  #$1F80,d2
                 move.l  d2,(TilePlaneBufferOffset).w
-Tilemap_BuildQueuedRowLoop:                             ; CODE XREF: Tilemap_QueuePrimaryCameraRowOffset60+C4   j  ; was: loc_10A14
+Tilemap_BuildQueuedRowLoop:                             ; was: loc_10A14
                 movea.l (a0)+,a1
                 move.w  d0,d2
                 move.w  (TileCoarseLookupOffset).w,d3
@@ -85,7 +85,7 @@ Tilemap_BuildQueuedRowLoop:                             ; CODE XREF: Tilemap_Que
                 move.w  2(a1,d3.w),(a2)+
                 move.w  4(a1,d3.w),(a2)+
                 move.w  6(a1,d3.w),(a2)+
-Tilemap_AdvanceQueuedRowSegment:                        ; CODE XREF: Tilemap_QueuePrimaryCameraRowOffset60+9E   j  ; was: loc_10A88
+Tilemap_AdvanceQueuedRowSegment:                        ; was: loc_10A88
                 suba.l  #$E,a0
                 addi.w  #$20,d0                         ; ' '
                 dbf     d7,Tilemap_BuildQueuedRowLoop
@@ -111,34 +111,34 @@ Tilemap_AdvanceQueuedRowSegment:                        ; CODE XREF: Tilemap_Que
                 rts
 ; End of function Tilemap_QueuePrimaryCameraRowOffset60
 ; Starts a full direct tilemap transfer at the secondary-camera coordinates
-Tilemap_DirectTransferFromSecondaryCamera:              ; CODE XREF: XiTigerCutscene_InitializeReveal+72   j  ; was: sub_10ADC
+Tilemap_DirectTransferFromSecondaryCamera:              ; was: sub_10ADC
                 move.w  (SecondaryCameraXPos).w,d0
                 move.w  (SecondaryCameraYPos).w,d1
 ; End of function Tilemap_DirectTransferFromSecondaryCamera
 ; Starts a full direct tilemap transfer with the alternate frontend descriptor
-Tilemap_DirectTransferWithAlternateDescriptor:          ; CODE XREF: Frontend_ActivateSegaSequence+18   p  ; was: sub_10AE4
+Tilemap_DirectTransferWithAlternateDescriptor:          ; was: sub_10AE4
                 lea     Gfx_FrontendAlternateVRAMTransferParameters(pc),a0
                 nop
                 bra.s   Tilemap_TransferFullMapDirectToVRAM
 ; End of function Tilemap_DirectTransferWithAlternateDescriptor
 ; Starts a full direct tilemap transfer at the primary-camera coordinates
-Tilemap_DirectTransferFromPrimaryCamera:                ; CODE XREF: XiTigerCutscene_InitializeReveal+66   p  ; was: sub_10AEC
+Tilemap_DirectTransferFromPrimaryCamera:                ; was: sub_10AEC
                                         ; ZLeoEnding_InitializeScene+3C   p
                 move.w  (PrimaryCameraXPosition).w,d0
                 move.w  (PrimaryCameraYPosition).w,d1
 ; End of function Tilemap_DirectTransferFromPrimaryCamera
 ; Starts a full direct tilemap transfer with the primary descriptor
-Tilemap_DirectTransferWithPrimaryDescriptor:            ; CODE XREF: UI_InitSecondaryOptionsMenu+50   p  ; was: sub_10AF4
+Tilemap_DirectTransferWithPrimaryDescriptor:            ; was: sub_10AF4
                                         ; PasswordMenu_Initialize+5A   p
                 lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0
                 nop
 ; End of function Tilemap_DirectTransferWithPrimaryDescriptor
 ; Transfers all 32 tilemap rows directly to VRAM while holding the Z80 bus
-Tilemap_TransferFullMapDirectToVRAM:                    ; CODE XREF: EndingSequence_Initialize+58   p  ; was: sub_10AFA
+Tilemap_TransferFullMapDirectToVRAM:                    ; was: sub_10AFA
                                         ; TitleScreen_Initialize+90   p
                 move    sr,-(sp)
                 move    #$2700,sr
-Tilemap_WaitForZ80BusRequest:                           ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+E   j  ; was: loc_10B00
+Tilemap_WaitForZ80BusRequest:                           ; was: loc_10B00
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Tilemap_WaitForZ80BusRequest
                 lea     (VDP_CTRL).l,a4
@@ -147,9 +147,9 @@ Tilemap_WaitForZ80BusRequest:                           ; CODE XREF: Tilemap_Tra
                 move.w  d2,(a4)
                 neg.w   d1
                 moveq   #$1F,d6
-Tilemap_DirectTransferRowLoop:                          ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+102   j  ; was: loc_10B1E
+Tilemap_DirectTransferRowLoop:                          ; was: loc_10B1E
                 moveq   #$F,d7
-Tilemap_BuildDirectTransferRowLoop:                     ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+C4   j  ; was: loc_10B20
+Tilemap_BuildDirectTransferRowLoop:                     ; was: loc_10B20
                 movea.l (a0)+,a1
                 move.w  d0,d2
                 move.w  d1,d3
@@ -186,7 +186,7 @@ Tilemap_BuildDirectTransferRowLoop:                     ; CODE XREF: Tilemap_Tra
                 cmpi.w  #$FF,d5
                 bne.s   Tilemap_WriteDirectTransferRowSegment
                 moveq   #0,d3
-Tilemap_WriteDirectTransferRowSegment:                  ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+7E   j  ; was: loc_10B7C
+Tilemap_WriteDirectTransferRowSegment:                  ; was: loc_10B7C
                 move.w  (a1,d3.w),(a2)+
                 move.w  2(a1,d3.w),(a2)+
                 move.w  4(a1,d3.w),(a2)+
@@ -203,7 +203,7 @@ Tilemap_WriteDirectTransferRowSegment:                  ; CODE XREF: Tilemap_Tra
                 move.w  2(a1,d3.w),(a2)+
                 move.w  4(a1,d3.w),(a2)+
                 move.w  6(a1,d3.w),(a2)+
-Tilemap_AdvanceDirectTransferRowSegment:                ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+94   j  ; was: loc_10BB4
+Tilemap_AdvanceDirectTransferRowSegment:                ; was: loc_10BB4
                 suba.l  #$E,a0
                 addi.w  #$20,d0                         ; ' '
                 dbf     d7,Tilemap_BuildDirectTransferRowLoop
@@ -226,21 +226,21 @@ Tilemap_AdvanceDirectTransferRowSegment:                ; CODE XREF: Tilemap_Tra
                 move.w  (VDPReg1Shadow).w,d0
                 bclr    #4,d0
                 move.w  d0,(a4)
-Tilemap_WaitForZ80BusRelease:                           ; CODE XREF: Tilemap_TransferFullMapDirectToVRAM+118   j  ; was: loc_10C0A
+Tilemap_WaitForZ80BusRelease:                           ; was: loc_10C0A
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Tilemap_WaitForZ80BusRelease
                 move    (sp)+,sr
                 rts
 ; End of function Tilemap_TransferFullMapDirectToVRAM
 ; Builds and queues the next row of a staged scrolling tilemap transfer
-Tilemap_QueueNextScrollingRow:                          ; CODE XREF: StoryScreen_WaitForScrollAndLoadPalette+16   p  ; was: sub_10C18
+Tilemap_QueueNextScrollingRow:                          ; was: sub_10C18
                                         ; StoryScreen_WaitForScrollAndLoadPalette+1C   p
                 movea.l (TilemapTransferBase).w,a0
                 move.w  (TilemapRowXOrFillWord).w,d0
                 move.w  (TilemapRowYPosition).w,d1
                 neg.w   d1
                 moveq   #$F,d7
-Tilemap_BuildScrollingRowLoop:                          ; CODE XREF: Tilemap_QueueNextScrollingRow+AC   j  ; was: loc_10C28
+Tilemap_BuildScrollingRowLoop:                          ; was: loc_10C28
                 movea.l (a0)+,a1
                 move.w  d0,d2
                 move.w  d1,d3
@@ -277,7 +277,7 @@ Tilemap_BuildScrollingRowLoop:                          ; CODE XREF: Tilemap_Que
                 cmpi.w  #$FF,d5
                 bne.s   Tilemap_WriteScrollingRowSegment
                 moveq   #0,d3
-Tilemap_WriteScrollingRowSegment:                       ; CODE XREF: Tilemap_QueueNextScrollingRow+66   j  ; was: loc_10C82
+Tilemap_WriteScrollingRowSegment:                       ; was: loc_10C82
                 move.w  (a1,d3.w),(a2)+
                 move.w  2(a1,d3.w),(a2)+
                 move.w  4(a1,d3.w),(a2)+
@@ -294,7 +294,7 @@ Tilemap_WriteScrollingRowSegment:                       ; CODE XREF: Tilemap_Que
                 move.w  2(a1,d3.w),(a2)+
                 move.w  4(a1,d3.w),(a2)+
                 move.w  6(a1,d3.w),(a2)+
-Tilemap_AdvanceScrollingRowSegment:                     ; CODE XREF: Tilemap_QueueNextScrollingRow+7C   j  ; was: loc_10CBA
+Tilemap_AdvanceScrollingRowSegment:                     ; was: loc_10CBA
                 suba.l  #$E,a0
                 addi.w  #$20,d0                         ; ' '
                 dbf     d7,Tilemap_BuildScrollingRowLoop

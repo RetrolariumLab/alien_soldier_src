@@ -1,4 +1,4 @@
-Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Projectile_ProcessVisiblePool+12   r  ; was: off_5DC
+Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                                         ; Sys_ProcessVisibleObjects+10   r
                 dc.l    Entity_NullUpdateHandler4
                 dc.l    Player_Update
@@ -296,6 +296,6 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Projectile_ZLeoHorizontalLaserMain
 
 ; Fourth no-op entity update handler in the global dispatch table
-Entity_NullUpdateHandler4:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: nullsub_4
+Entity_NullUpdateHandler4:                              ; was: nullsub_4
                 rts
 ; End of function Entity_NullUpdateHandler4

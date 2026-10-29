@@ -1,4 +1,4 @@
-Stage_LoadAssetsForCurrentTableIndex:                   ; CODE XREF: StageReady_Initialize+16   p  ; was: sub_11722
+Stage_LoadAssetsForCurrentTableIndex:                   ; was: sub_11722
                                         ; RetryPrompt_Initialize+10   p
                 bsr.w   Stage_LoadSharedMappings
                 move.w  (StageTableIndex).w,d0
@@ -8,7 +8,6 @@ Stage_LoadAssetsForCurrentTableIndex:                   ; CODE XREF: StageReady_
 ; End of function Stage_LoadAssetsForCurrentTableIndex
 ; ---------------------------------------------------------------------------
 Stage_AssetLoaderOffsets:   dc.w    Stage_LoadStage1To4Assets-Stage_LoadSharedMappings  ; was: off_11736
-                                        ; DATA XREF: Stage_LoadAssetsForCurrentTableIndex+8   r
                 dc.w    Stage_LoadStage1To4Assets-Stage_LoadSharedMappings
                 dc.w    Stage_LoadStage1To4Assets-Stage_LoadSharedMappings
                 dc.w    Stage_LoadStage4Assets-Stage_LoadSharedMappings
@@ -36,22 +35,19 @@ Stage_AssetLoaderOffsets:   dc.w    Stage_LoadStage1To4Assets-Stage_LoadSharedMa
                 dc.w    Stage_LoadStage26Assets-Stage_LoadSharedMappings
 
 ; Loads the shared type-7 mappings record used by every table-index entry
-Stage_LoadSharedMappings:                               ; CODE XREF: Stage_LoadAssetsForCurrentTableIndex   p  ; was: sub_1176A
-                                        ; DATA XREF: Stage_LoadAssetsForCurrentTableIndex+C   o
+Stage_LoadSharedMappings:                               ; was: sub_1176A
                 lea     Stage_SharedMappingsLoadList(pc),a0
                 nop
                 jmp     (LoadObjData).l
 ; End of function Stage_LoadSharedMappings
 ; ---------------------------------------------------------------------------
 Stage_SharedMappingsLoadList:   dc.w    7               ; field_0  ; was: stru_11776
-                                        ; DATA XREF: Stage_LoadSharedMappings   o
                 dc.l    SharedGameplayTileArtD000       ; field_2
                 dc.w    $D000                           ; field_6
                 dc.w    $FFFF
 
 ; Loads the base Stage 1 (Xi-Tiger) asset list
-Stage_LoadStage1To4Assets:                              ; CODE XREF: Stage_LoadStage4Assets+4   p  ; was: sub_11780
-                                        ; DATA XREF: ROM:Stage_AssetLoaderOffsets   o
+Stage_LoadStage1To4Assets:                              ; was: sub_11780
                 clr.w   (StageProcessTableOffset).w
                 lea     Stage1To4AssetLoadList(pc),a0
                 nop
@@ -61,7 +57,6 @@ Stage_LoadStage1To4Assets:                              ; CODE XREF: Stage_LoadS
 ; End of function Stage_LoadStage1To4Assets
 ; ---------------------------------------------------------------------------
 Stage1To4AssetLoadList: dc.w    7                       ; field_0  ; was: stru_11790
-                                        ; DATA XREF: Stage_LoadStage1To4Assets+4   o
                 dc.l    Stage1To4TileArt0               ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -94,7 +89,7 @@ Stage1To4AssetLoadList: dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads initial object set for Stage 4
-Stage_LoadStage4Assets:                                 ; DATA XREF: ROM:0001173C   o  ; was: sub_117E2
+Stage_LoadStage4Assets:                                 ; was: sub_117E2
                 clr.w   (StageProcessTableOffset).w
                 bsr.w   Stage_LoadStage1To4Assets
                 lea     Stage4AssetLoadList(pc),a0
@@ -105,7 +100,6 @@ Stage_LoadStage4Assets:                                 ; DATA XREF: ROM:0001173
 ; End of function Stage_LoadStage4Assets
 ; ---------------------------------------------------------------------------
 Stage4AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_117F6
-                                        ; DATA XREF: Stage_LoadStage4Assets+8   o
                 dc.l    Stage3And4TileArt               ; field_2
                 dc.w    $2B80                           ; field_6
                 dc.w    7                               ; field_0
@@ -122,7 +116,6 @@ Stage4AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $9000                           ; field_6
                 dc.w    $FFFF
 Boss_ShellshogunAssetLoadList:  dc.w    7               ; field_0  ; was: stru_11820
-                                        ; DATA XREF: Camera_ShellshogunBossInit+26   o
                 dc.l    Stage3And4TileArt               ; field_2
                 dc.w    $2B80                           ; field_6
                 dc.w    7                               ; field_0
@@ -137,7 +130,7 @@ Boss_ShellshogunAssetLoadList:  dc.w    7               ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads object set for Stages 5 to 7
-Stage_LoadStage5To7Assets:                              ; DATA XREF: ROM:0001173E   o  ; was: sub_11842
+Stage_LoadStage5To7Assets:                              ; was: sub_11842
                                         ; ROM:00011740   o
                 clr.w   (StageProcessTableOffset).w
                 lea     Stage5To7AssetLoadList(pc),a0
@@ -148,7 +141,6 @@ Stage_LoadStage5To7Assets:                              ; DATA XREF: ROM:0001173
 ; End of function Stage_LoadStage5To7Assets
 ; ---------------------------------------------------------------------------
 Stage5To7AssetLoadList: dc.w    7                       ; field_0  ; was: stru_11852
-                                        ; DATA XREF: Stage_LoadStage5To7Assets+4   o
                 dc.l    Stage5To7TileArt0               ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -172,7 +164,7 @@ Stage5To7AssetLoadList: dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads assets for Stage 8 (train/Flying-Neo)
-Stage_LoadStage8Assets:                                 ; DATA XREF: ROM:00011744   o  ; was: sub_1188C
+Stage_LoadStage8Assets:                                 ; was: sub_1188C
                 clr.w   (StageProcessTableOffset).w
                 lea     Stage8AssetLoadList(pc),a0
                 nop
@@ -182,7 +174,6 @@ Stage_LoadStage8Assets:                                 ; DATA XREF: ROM:0001174
 ; End of function Stage_LoadStage8Assets
 ; ---------------------------------------------------------------------------
 Stage8AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_1189C
-                                        ; DATA XREF: Stage_LoadStage8Assets+4   o
                 dc.l    Stage8And9TileArt0              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -206,7 +197,7 @@ Stage8AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads object set for Stage 9
-Stage_LoadStage9Assets:                                 ; DATA XREF: ROM:00011746   o  ; was: sub_118D6
+Stage_LoadStage9Assets:                                 ; was: sub_118D6
                 clr.w   (StageProcessTableOffset).w
                 lea     Stage9AssetLoadList(pc),a0
                 nop
@@ -216,7 +207,6 @@ Stage_LoadStage9Assets:                                 ; DATA XREF: ROM:0001174
 ; End of function Stage_LoadStage9Assets
 ; ---------------------------------------------------------------------------
 Stage9AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_118E6
-                                        ; DATA XREF: Stage_LoadStage9Assets+4   o
                 dc.l    Stage8And9TileArt0              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -249,7 +239,7 @@ Stage9AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads Stage 10 enemy configuration
-Stage_LoadStage10To12Assets:                            ; DATA XREF: ROM:00011748   o  ; was: sub_11938
+Stage_LoadStage10To12Assets:                            ; was: sub_11938
                                         ; ROM:0001174A   o
                 move.w  #4,(StageProcessTableOffset).w
                 lea     Stage10To12AssetLoadList(pc),a0
@@ -263,7 +253,6 @@ Stage_LoadStage10To12Assets:                            ; DATA XREF: ROM:0001174
 ; End of function Stage_LoadStage10To12Assets
 ; ---------------------------------------------------------------------------
 Stage10To12AssetLoadList:   dc.w    7                   ; field_0  ; was: stru_1195A
-                                        ; DATA XREF: Stage_LoadStage10To12Assets+6   o
                 dc.l    Stage10To13TileArt0000          ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -301,12 +290,10 @@ Stage10To12AssetLoadList:   dc.w    7                   ; field_0  ; was: stru_1
                 dc.w    $9000                           ; field_6
                 dc.w    $FFFF
 Stage10To12TileBlockAdjustmentDescriptor:   dc.b    $40, 0, $D1, $D2, $D3, $D5, $D6, $D7, $DC, $E4  ; was: byte_119BC
-                                        ; DATA XREF: Stage_LoadStage10To12Assets+12   o
                 dc.b    $FF, 0
 
 ; Loads the teleport-scene asset list and initializes its tile-loop parameters
-Stage_LoadStage13Assets:                                ; CODE XREF: Stage12To13_UpdateTeleportFadeIn+64   p  ; was: sub_119C8
-                                        ; DATA XREF: ROM:0001174E   o
+Stage_LoadStage13Assets:                                ; was: sub_119C8
                 move.w  #4,(StageProcessTableOffset).w
                 lea     TeleportAssetLoadList(pc),a0
                 nop
@@ -320,7 +307,6 @@ Stage_LoadStage13Assets:                                ; CODE XREF: Stage12To13
 ; End of function Stage_LoadStage13Assets
 ; ---------------------------------------------------------------------------
 TeleportAssetLoadList:  dc.w    7                       ; field_0  ; was: stru_119FA
-                                        ; DATA XREF: Stage_LoadStage13Assets+6   o
                 dc.l    Stage10To13TileArt0000          ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0

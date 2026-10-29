@@ -1,5 +1,5 @@
 ; Update the type-$48 proximity object and convert it to a temporary burst
-Object_UpdateProximityPickupEmitterType48:              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2B6D4
+Object_UpdateProximityPickupEmitterType48:              ; was: sub_2B6D4
                 tst.w   4(a5)
                 bne.w   Object_UpdateProximityPickupEmitterType48_UpdateVerticalOscillation
                 move.w  $14(a5),$48(a5)
@@ -10,10 +10,10 @@ Object_UpdateProximityPickupEmitterType48:              ; DATA XREF: ROM:Entity_
                 btst    #1,$5F(a5)
                 beq.s   Object_UpdateProximityPickupEmitterType48_StoreSpriteAttributes
                 bset    #$C,d0
-Object_UpdateProximityPickupEmitterType48_StoreSpriteAttributes:  ; CODE XREF: Object_UpdateProximityPickupEmitterType48+2A   j  ; was: loc_2B704
+Object_UpdateProximityPickupEmitterType48_StoreSpriteAttributes:  ; was: loc_2B704
                 move.w  d0,$E(a5)
                 move.b  #$10,$20(a5)
-Object_UpdateProximityPickupEmitterType48_UpdateVerticalOscillation:  ; CODE XREF: Object_UpdateProximityPickupEmitterType48+4   j  ; was: loc_2B70E
+Object_UpdateProximityPickupEmitterType48_UpdateVerticalOscillation:  ; was: loc_2B70E
                 btst    #0,$5F(a5)
                 beq.s   Object_UpdateProximityPickupEmitterType48_CheckPlayerProximity
                 move.w  (FrameCounter).w,d0
@@ -23,7 +23,7 @@ Object_UpdateProximityPickupEmitterType48_UpdateVerticalOscillation:  ; CODE XRE
                 ext.w   d0
                 add.w   $48(a5),d0
                 move.w  d0,$14(a5)
-Object_UpdateProximityPickupEmitterType48_CheckPlayerProximity:  ; CODE XREF: Object_UpdateProximityPickupEmitterType48+40   j  ; was: loc_2B72E
+Object_UpdateProximityPickupEmitterType48_CheckPlayerProximity:  ; was: loc_2B72E
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$10,d0
                 bpl.s   Object_UpdateProximityPickupEmitterType48_Return
@@ -36,22 +36,22 @@ Object_UpdateProximityPickupEmitterType48_CheckPlayerProximity:  ; CODE XREF: Ob
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
 ; Convert the proximity object to its temporary type-$C4 burst
-Object_ConvertProximityPickupEmitterToBurst:            ; CODE XREF: Object_UpdateProximityPickupEmitterType48+6E   j  ; was: loc_2B75E
+Object_ConvertProximityPickupEmitterToBurst:            ; was: loc_2B75E
                                         ; Object_UpdateProximityPickupEmitterType48+76   j
                 move.w  #$9C,$26(a5)
                 jsr     (Effect_ConvertCurrentToTypeC4Burst).l
                 btst    #0,$5F(a5)
                 beq.s   Object_UpdateProximityPickupEmitterType48_Return
                 clr.l   $1C(a5)
-Object_UpdateProximityPickupEmitterType48_Return:       ; CODE XREF: Object_UpdateProximityPickupEmitterType48+64   j  ; was: locret_2B776
+Object_UpdateProximityPickupEmitterType48_Return:       ; was: locret_2B776
                                         ; Object_UpdateProximityPickupEmitterType48+9C   j
                 rts
 ; End of function Object_UpdateProximityPickupEmitterType48
 ; ---------------------------------------------------------------------------
-Object_ProximityPickupEmitterVerticalOffsets:   dc.b    $FF, 0, 1, 0  ; DATA XREF: Object_UpdateProximityPickupEmitterType48+4C   r  ; was: byte_2B778
+Object_ProximityPickupEmitterVerticalOffsets:   dc.b    $FF, 0, 1, 0  ; was: byte_2B778
 
 ; Update the type-$2B4 oscillating contact hazard and its impact conversion
-Projectile_UpdateOscillatingContactHazardType2B4:       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2B77C
+Projectile_UpdateOscillatingContactHazardType2B4:       ; was: sub_2B77C
                 tst.w   4(a5)
                 bne.w   Projectile_UpdateOscillatingContactHazardType2B4_UpdateVerticalOscillation
                 move.w  $14(a5),$48(a5)
@@ -63,7 +63,7 @@ Projectile_UpdateOscillatingContactHazardType2B4:       ; DATA XREF: ROM:Entity_
                 move.w  #$500,8(a5)
                 move.w  #$F8F8,$A(a5)
                 move.b  #$10,$20(a5)
-Projectile_UpdateOscillatingContactHazardType2B4_UpdateVerticalOscillation:  ; CODE XREF: Projectile_UpdateOscillatingContactHazardType2B4+4   j  ; was: loc_2B7BA
+Projectile_UpdateOscillatingContactHazardType2B4_UpdateVerticalOscillation:  ; was: loc_2B7BA
                 move.w  (FrameCounter).w,d0
                 asr.w   #2,d0
                 andi.w  #3,d0
@@ -77,22 +77,22 @@ Projectile_UpdateOscillatingContactHazardType2B4_UpdateVerticalOscillation:  ; C
                 beq.w   Projectile_UpdateOscillatingContactHazardType2B4_Detonate
                 jmp     Projectile_FragmentBeginDeflectedFall
 ; ---------------------------------------------------------------------------
-Projectile_UpdateOscillatingContactHazardType2B4_CheckPlayerProximity:  ; CODE XREF: Projectile_UpdateOscillatingContactHazardType2B4+5C   j  ; was: loc_2B7EA
+Projectile_UpdateOscillatingContactHazardType2B4_CheckPlayerProximity:  ; was: loc_2B7EA
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$C,d0
                 bpl.s   Projectile_UpdateOscillatingContactHazardType2B4_Return
-Projectile_UpdateOscillatingContactHazardType2B4_Detonate:  ; CODE XREF: Projectile_UpdateOscillatingContactHazardType2B4+64   j  ; was: loc_2B7F6
+Projectile_UpdateOscillatingContactHazardType2B4_Detonate:  ; was: loc_2B7F6
                 move.w  #$64,$26(a5)                    ; 'd'
                 jsr     (Effect_InitSharedExplosionFromCurrent).l
                 clr.l   $1C(a5)
-Projectile_UpdateOscillatingContactHazardType2B4_Return:  ; CODE XREF: Projectile_UpdateOscillatingContactHazardType2B4+78   j  ; was: locret_2B806
+Projectile_UpdateOscillatingContactHazardType2B4_Return:  ; was: locret_2B806
                 rts
 ; End of function Projectile_UpdateOscillatingContactHazardType2B4
 ; ---------------------------------------------------------------------------
-Projectile_OscillatingContactHazardVerticalOffsets: dc.b    $FF, 0, 1, 0  ; DATA XREF: Projectile_UpdateOscillatingContactHazardType2B4+48   r  ; was: byte_2B808
+Projectile_OscillatingContactHazardVerticalOffsets: dc.b    $FF, 0, 1, 0  ; was: byte_2B808
 
 ; Spawn a type-$84 arc projectile aimed horizontally toward the player
-Projectile_SpawnAimedArcFromEnemy:                      ; CODE XREF: Enemy_UpdatePeriodicShots+1E   p  ; was: sub_2B80C
+Projectile_SpawnAimedArcFromEnemy:                      ; was: sub_2B80C
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_SpawnAimedArcFromEnemy_Return
                 add.w   $10(a5),d5
@@ -120,15 +120,15 @@ Projectile_SpawnAimedArcFromEnemy:                      ; CODE XREF: Enemy_Updat
                 bmi.s   Projectile_StoreAimedArcVelocity
                 neg.l   d0
 ; Store the selected horizontal direction and randomized arc velocity
-Projectile_StoreAimedArcVelocity:                       ; CODE XREF: Projectile_SpawnAimedArcFromEnemy+68   j  ; was: loc_2B878
+Projectile_StoreAimedArcVelocity:                       ; was: loc_2B878
                 move.l  d0,$18(a1)
                 move.w  #$FFFA,$1C(a1)
                 move.w  (RandomNumberState).w,$1E(a1)
-Projectile_SpawnAimedArcFromEnemy_Return:               ; CODE XREF: Projectile_SpawnAimedArcFromEnemy+6   j  ; was: locret_2B888
+Projectile_SpawnAimedArcFromEnemy_Return:               ; was: locret_2B888
                 rts
 ; End of function Projectile_SpawnAimedArcFromEnemy
 ; Apply gravity to type $84 and bounce or deflect it on impact
-Projectile_UpdateGravityBounceType84:                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2B88A
+Projectile_UpdateGravityBounceType84:                   ; was: sub_2B88A
                 addi.l  #$3000,$1C(a5)
                 btst    #7,$22(a5)
                 beq.s   Projectile_UpdateGravityBounceType84_CheckTerrain
@@ -136,17 +136,17 @@ Projectile_UpdateGravityBounceType84:                   ; DATA XREF: ROM:Entity_
                 beq.w   Projectile_UpdateGravityBounceType84_BounceAndConvertToType88
                 jmp     Projectile_FragmentBeginDeflectedFall
 ; ---------------------------------------------------------------------------
-Projectile_UpdateGravityBounceType84_CheckTerrain:      ; CODE XREF: Projectile_UpdateGravityBounceType84+E   j  ; was: loc_2B8AA
+Projectile_UpdateGravityBounceType84_CheckTerrain:      ; was: loc_2B8AA
                 jsr     (Collision_GetEntityPosition).l
                 beq.s   Projectile_UpdateGravityBounceType84_Return
                 cmpi.w  #2,d2
                 bne.s   Projectile_UpdateGravityBounceType84_BounceAndConvertToType88
                 tst.l   $1C(a5)
                 bpl.s   Projectile_UpdateGravityBounceType84_BounceAndConvertToType88
-Projectile_UpdateGravityBounceType84_Return:            ; CODE XREF: Projectile_UpdateGravityBounceType84+26   j  ; was: locret_2B8BE
+Projectile_UpdateGravityBounceType84_Return:            ; was: locret_2B8BE
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_UpdateGravityBounceType84_BounceAndConvertToType88:  ; CODE XREF: Projectile_UpdateGravityBounceType84+16   j  ; was: loc_2B8C0
+Projectile_UpdateGravityBounceType84_BounceAndConvertToType88:  ; was: loc_2B8C0
                                         ; Projectile_UpdateGravityBounceType84+2C   j
                 move.l  $18(a5),d0
                 asr.l   #1,d0
@@ -156,7 +156,7 @@ Projectile_UpdateGravityBounceType84_BounceAndConvertToType88:  ; CODE XREF: Pro
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Projectile_UpdateGravityBounceType84
 ; Spawn a type-$1D0 arc hazard with the caller's horizontal velocity
-Projectile_SpawnTrailingArcHazardType1D0:               ; CODE XREF: Enemy_ProjectileAttackGroundState:Enemy_ProjectileAttackGroundState_SpawnProjectile   p  ; was: sub_2B8E0
+Projectile_SpawnTrailingArcHazardType1D0:               ; was: sub_2B8E0
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_SpawnTrailingArcHazardType1D0_Return
                 add.w   $10(a5),d5
@@ -174,11 +174,11 @@ Projectile_SpawnTrailingArcHazardType1D0:               ; CODE XREF: Enemy_Proje
                 move.l  #$FC04FC04,$2C(a0)
                 move.l  d7,$18(a0)
                 move.l  #$FFFFA000,$1C(a0)
-Projectile_SpawnTrailingArcHazardType1D0_Return:        ; CODE XREF: Projectile_SpawnTrailingArcHazardType1D0+6   j  ; was: locret_2B93C
+Projectile_SpawnTrailingArcHazardType1D0_Return:        ; was: locret_2B93C
                 rts
 ; End of function Projectile_SpawnTrailingArcHazardType1D0
 ; Update type $1D0, emitting a trail until impact converts it to type $88
-Projectile_UpdateTrailingArcHazardType1D0:              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2B93E
+Projectile_UpdateTrailingArcHazardType1D0:              ; was: sub_2B93E
                 addq.w  #1,$48(a5)
                 move.w  $48(a5),d0
                 andi.w  #3,d0
@@ -198,7 +198,7 @@ Projectile_UpdateTrailingArcHazardType1D0:              ; DATA XREF: ROM:Entity_
                 add.w   d0,$14(a0)
                 move.w  #7,$48(a0)
                 jsr     (Effect_SpawnExplosionType188).l
-Projectile_UpdateTrailingArcHazardType1D0_ApplyGravityAndCheckImpact:  ; CODE XREF: Projectile_UpdateTrailingArcHazardType1D0+C   j  ; was: loc_2B990
+Projectile_UpdateTrailingArcHazardType1D0_ApplyGravityAndCheckImpact:  ; was: loc_2B990
                                         ; Projectile_UpdateTrailingArcHazardType1D0+14   j
                 addi.l  #$3800,$1C(a5)
                 btst    #7,$22(a5)
@@ -207,7 +207,7 @@ Projectile_UpdateTrailingArcHazardType1D0_ApplyGravityAndCheckImpact:  ; CODE XR
                 bne.s   Projectile_UpdateTrailingArcHazardType1D0_ConvertToType88
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_UpdateTrailingArcHazardType1D0_ConvertToType88:  ; CODE XREF: Projectile_UpdateTrailingArcHazardType1D0+60   j  ; was: loc_2B9AA
+Projectile_UpdateTrailingArcHazardType1D0_ConvertToType88:  ; was: loc_2B9AA
                                         ; Projectile_UpdateTrailingArcHazardType1D0+68   j
                 clr.l   $18(a5)
                 move.l  #$FFFF0000,$1C(a5)
@@ -215,13 +215,13 @@ Projectile_UpdateTrailingArcHazardType1D0_ConvertToType88:  ; CODE XREF: Project
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Projectile_UpdateTrailingArcHazardType1D0
 ; Update type-$104 controller and emit type-$108 hazards from above the screen
-Hazard_UpdateTopFallingSpawnerType104:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2B9C4
+Hazard_UpdateTopFallingSpawnerType104:                  ; was: sub_2B9C4
                 tst.w   (StageSpawnCountdown).w
                 bmi.s   Hazard_UpdateTopFallingSpawnerType104_Tick
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Hazard_UpdateTopFallingSpawnerType104_Tick:             ; CODE XREF: Hazard_UpdateTopFallingSpawnerType104+4   j  ; was: loc_2B9D2
+Hazard_UpdateTopFallingSpawnerType104_Tick:             ; was: loc_2B9D2
                 subq.w  #1,$48(a5)
                 bpl.s   Hazard_UpdateTopFallingSpawnerType104_Return
                 lea     Hazard_TopFallingSpawnerDifficultyBaseDelays(pc),a0
@@ -250,23 +250,23 @@ Hazard_UpdateTopFallingSpawnerType104_Tick:             ; CODE XREF: Hazard_Upda
                 addi.w  #$120,d0
                 move.w  d0,$10(a0)
                 moveq   #0,d0
-Hazard_UpdateTopFallingSpawnerType104_Return:           ; CODE XREF: Hazard_UpdateTopFallingSpawnerType104+12   j  ; was: locret_2BA56
+Hazard_UpdateTopFallingSpawnerType104_Return:           ; was: locret_2BA56
                                         ; Hazard_UpdateTopFallingSpawnerType104+34   j
                 rts
 ; End of function Hazard_UpdateTopFallingSpawnerType104
 ; ---------------------------------------------------------------------------
-Hazard_TopFallingSpawnerDifficultyBaseDelays:   dc.w    $40, $28, $10  ; DATA XREF: Hazard_UpdateTopFallingSpawnerType104+14   o  ; was: word_2BA58
+Hazard_TopFallingSpawnerDifficultyBaseDelays:   dc.w    $40, $28, $10  ; was: word_2BA58
 
 ; Update a type-$108 falling hazard and resolve terrain or deflection impact
-Projectile_UpdateTopFallingHazardType108:               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2BA5E
+Projectile_UpdateTopFallingHazardType108:               ; was: sub_2BA5E
                 tst.w   (StageSpawnCountdown).w
                 bmi.s   Projectile_UpdateTopFallingHazardType108_CheckTerrain
-Projectile_UpdateTopFallingHazardType108_ConvertToType88:  ; CODE XREF: Projectile_UpdateTopFallingHazardType108+4A   j  ; was: loc_2BA64
+Projectile_UpdateTopFallingHazardType108_ConvertToType88:  ; was: loc_2BA64
                 move.l  #SharedCombatSpriteAnimation02,8(a5)
                 move.l  #$FFFF0000,$1C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_UpdateTopFallingHazardType108_CheckTerrain:  ; CODE XREF: Projectile_UpdateTopFallingHazardType108+4   j  ; was: loc_2BA7A
+Projectile_UpdateTopFallingHazardType108_CheckTerrain:  ; was: loc_2BA7A
                 jsr     (Collision_GetEntityPosition).l
                 beq.s   Projectile_UpdateTopFallingHazardType108_CheckDeflection
                 clr.l   $18(a5)
@@ -274,13 +274,13 @@ Projectile_UpdateTopFallingHazardType108_CheckTerrain:  ; CODE XREF: Projectile_
                 move.w  #$62,$26(a5)                    ; 'b'
                 jmp     Effect_InitSharedExplosionFromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_UpdateTopFallingHazardType108_CheckDeflection:  ; CODE XREF: Projectile_UpdateTopFallingHazardType108+22   j  ; was: loc_2BA9A
+Projectile_UpdateTopFallingHazardType108_CheckDeflection:  ; was: loc_2BA9A
                 btst    #7,$22(a5)
                 beq.s   Projectile_UpdateTopFallingHazardType108_Return
                 btst    #4,$22(a5)
                 beq.w   Projectile_UpdateTopFallingHazardType108_ConvertToType88
                 jmp     Projectile_FragmentBeginDeflectedFall
 ; ---------------------------------------------------------------------------
-Projectile_UpdateTopFallingHazardType108_Return:        ; CODE XREF: Projectile_UpdateTopFallingHazardType108+42   j  ; was: locret_2BAB2
+Projectile_UpdateTopFallingHazardType108_Return:        ; was: locret_2BAB2
                 rts
 ; End of function Projectile_UpdateTopFallingHazardType108

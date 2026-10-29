@@ -1,5 +1,5 @@
 ; Mirrors one row at Y-$1000, then queues the next row of the active scrolling transfer
-Tilemap_MirrorOffsetRowAndQueueScrollingRow:            ; CODE XREF: Stage_StreamGameplayEntryPrimaryPlane_Rows+82   p  ; was: sub_10D16
+Tilemap_MirrorOffsetRowAndQueueScrollingRow:            ; was: sub_10D16
                                         ; Stage_StreamGameplayEntryPrimaryPlane_Rows+88   p
                 movea.l (TilemapTransferBase).w,a0
                 move.w  (TilemapRowXOrFillWord).w,d0
@@ -7,7 +7,7 @@ Tilemap_MirrorOffsetRowAndQueueScrollingRow:            ; CODE XREF: Stage_Strea
                 subi.w  #$1000,d1
                 neg.w   d1
                 moveq   #$F,d7
-Tilemap_BuildOffsetMirrorRowLoop:                       ; CODE XREF: Tilemap_MirrorOffsetRowAndQueueScrollingRow+94   j  ; was: loc_10D2A
+Tilemap_BuildOffsetMirrorRowLoop:                       ; was: loc_10D2A
                 movea.l (a0)+,a1
                 move.w  d0,d2
                 move.w  d1,d3
@@ -41,7 +41,7 @@ Tilemap_BuildOffsetMirrorRowLoop:                       ; CODE XREF: Tilemap_Mir
                 cmpi.w  #$FF,d5
                 bne.s   Tilemap_WriteOffsetMirrorRowSegment
                 moveq   #0,d3
-Tilemap_WriteOffsetMirrorRowSegment:                    ; CODE XREF: Tilemap_MirrorOffsetRowAndQueueScrollingRow+62   j  ; was: loc_10D7C
+Tilemap_WriteOffsetMirrorRowSegment:                    ; was: loc_10D7C
                 tst.w   (a0)+
                 movea.l #M68K_RAM,a2
                 move.w  d1,d4
@@ -59,14 +59,14 @@ Tilemap_WriteOffsetMirrorRowSegment:                    ; CODE XREF: Tilemap_Mir
                 bra.w   Tilemap_QueueNextScrollingRow
 ; End of function Tilemap_MirrorOffsetRowAndQueueScrollingRow
 ; Queues the next 64-word tilemap row filled with one constant value
-Tilemap_QueueNextConstantRow:                           ; CODE XREF: Stage_InitTerobusterBoss+10   p  ; was: sub_10DB2
+Tilemap_QueueNextConstantRow:                           ; was: sub_10DB2
                                         ; Stage9_UpdateCaterpillarShipExit+4   p
                 tst.w   (TilemapRowCountdown).w
                 bmi.w   Tilemap_ConstantRowQueueReturn
                 movea.w (VDPStagingDataCursor).w,a0
                 move.w  (TilemapRowXOrFillWord).w,d0
                 moveq   #$3F,d7                         ; '?'
-Tilemap_FillConstantRowLoop:                            ; CODE XREF: Tilemap_QueueNextConstantRow+14   j  ; was: loc_10DC4
+Tilemap_FillConstantRowLoop:                            ; was: loc_10DC4
                 move.w  d0,(a0)+
                 dbf     d7,Tilemap_FillConstantRowLoop
                 movea.w (VDPCommandQueueHead).w,a1
@@ -89,15 +89,15 @@ Tilemap_FillConstantRowLoop:                            ; CODE XREF: Tilemap_Que
                 move.w  a1,(VDPCommandQueueHead).w
                 addi.w  #$80,(VDPStagingDataCursor).w
                 subq.w  #1,(TilemapRowCountdown).w
-Tilemap_ConstantRowQueueReturn:                         ; CODE XREF: Tilemap_QueueNextConstantRow+4   j  ; was: locret_10E12
+Tilemap_ConstantRowQueueReturn:                         ; was: locret_10E12
                 rts
 ; End of function Tilemap_QueueNextConstantRow
 ; Fills all 2,048 words of a tilemap plane and transfers them directly to VRAM
-Tilemap_FillPlaneDirectToVRAM:                          ; CODE XREF: StoryTitle_SetupLogoReveal+3E   p  ; was: sub_10E14
+Tilemap_FillPlaneDirectToVRAM:                          ; was: sub_10E14
                                         ; StoryTitle_SetupLogoReveal+50   p
                 move    sr,-(sp)
                 move    #$2700,sr
-Tilemap_WaitForPlaneFillZ80BusRequest:                  ; CODE XREF: Tilemap_FillPlaneDirectToVRAM+E   j  ; was: loc_10E1A
+Tilemap_WaitForPlaneFillZ80BusRequest:                  ; was: loc_10E1A
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Tilemap_WaitForPlaneFillZ80BusRequest
                 lea     (VDP_CTRL).l,a4
@@ -107,7 +107,7 @@ Tilemap_WaitForPlaneFillZ80BusRequest:                  ; CODE XREF: Tilemap_Fil
                 movea.l #EndingStarYVelocities,a0
                 move.w  (TilemapRowXOrFillWord).w,d0
                 move.w  #$7FF,d7
-Tilemap_FillPlaneStagingLoop:                           ; CODE XREF: Tilemap_FillPlaneDirectToVRAM+30   j  ; was: loc_10E42
+Tilemap_FillPlaneStagingLoop:                           ; was: loc_10E42
                 move.w  d0,(a0)+
                 dbf     d7,Tilemap_FillPlaneStagingLoop
                 move.w  #$8F02,(a4)
@@ -121,7 +121,7 @@ Tilemap_FillPlaneStagingLoop:                           ; CODE XREF: Tilemap_Fil
                 move.w  (VDPReg1Shadow).w,d0
                 bclr    #4,d0
                 move.w  d0,(a4)
-Tilemap_WaitForPlaneFillZ80BusRelease:                  ; CODE XREF: Tilemap_FillPlaneDirectToVRAM+6A   j  ; was: loc_10E76
+Tilemap_WaitForPlaneFillZ80BusRelease:                  ; was: loc_10E76
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Tilemap_WaitForPlaneFillZ80BusRelease
                 move    (sp)+,sr
@@ -150,14 +150,14 @@ UnreferencedTilemapCopy4x4BlockAndQueueRows:            ; was: sub_10E84
                 bra.s   Tilemap_QueueFourRowsFromEncodedAddresses
 ; End of function UnreferencedTilemapCopy4x4BlockAndQueueRows
 ; Decodes packed source and destination addresses and queues four tilemap rows
-Tilemap_QueueFourRowsFromPackedCommand:                 ; CODE XREF: Stage_ShipDestructionCheckInput+16   p  ; was: sub_10EC6
+Tilemap_QueueFourRowsFromPackedCommand:                 ; was: sub_10EC6
                                         ; Stage_ShipDestructionCheckInput+24   p
                 move.l  d0,d1
                 swap    d1
-Tilemap_QueueFourRowsFromEncodedAddresses:              ; CODE XREF: UnreferencedTilemapCopy4x4BlockAndQueueRows+40   j  ; was: loc_10ECA
+Tilemap_QueueFourRowsFromEncodedAddresses:              ; was: loc_10ECA
                 movea.w (VDPCommandQueueHead).w,a0
                 moveq   #3,d7
-Tilemap_QueuePackedRowLoop:                             ; CODE XREF: Tilemap_QueueFourRowsFromPackedCommand+36   j  ; was: loc_10ED0
+Tilemap_QueuePackedRowLoop:                             ; was: loc_10ED0
                 move.w  #$83,-(a0)
                 move.w  d1,-(a0)
                 move.w  d0,d2
@@ -180,7 +180,7 @@ Tilemap_QueuePackedRowLoop:                             ; CODE XREF: Tilemap_Que
 UnreferencedTilemapQueueFourRowsFromLongSource:         ; was: sub_10F06
                 movea.w (VDPCommandQueueHead).w,a0
                 moveq   #3,d7
-Tilemap_QueueLongSourceRowLoop:                         ; CODE XREF: UnreferencedTilemapQueueFourRowsFromLongSource+3E   j  ; was: loc_10F0C
+Tilemap_QueueLongSourceRowLoop:                         ; was: loc_10F0C
                 move.w  #$83,-(a0)
                 move.w  d1,-(a0)
                 move.l  d0,d2
@@ -203,7 +203,7 @@ Tilemap_QueueLongSourceRowLoop:                         ; CODE XREF: Unreference
                 rts
 ; End of function UnreferencedTilemapQueueFourRowsFromLongSource
 ; Stages indexed tile blocks by rows and queues their horizontal DMA transfers
-Tilemap_QueueIndexedRows:                               ; CODE XREF: EndingSequence_FadeOutCredits+3C   p  ; was: sub_10F4E
+Tilemap_QueueIndexedRows:                               ; was: sub_10F4E
                                         ; ShipSequence_LoadTileBatch1+6   p
                 move.w  (VDPStagingDataCursor).w,(IndexedStagingStart).w
                 move.l  #$94009300,(IndexedDMACommand).w
@@ -223,15 +223,15 @@ Tilemap_QueueIndexedRows:                               ; CODE XREF: EndingSeque
                 moveq   #0,d4
                 moveq   #0,d7
                 move.b  5(a0),d7
-Tilemap_QueueIndexedRowGroupLoop:                       ; CODE XREF: Tilemap_QueueIndexedRows+AE   j  ; was: loc_10F8E
+Tilemap_QueueIndexedRowGroupLoop:                       ; was: loc_10F8E
                 moveq   #0,d1
                 moveq   #3,d6
-Tilemap_StageIndexedRowLoop:                            ; CODE XREF: Tilemap_QueueIndexedRows+A6   j  ; was: loc_10F92
+Tilemap_StageIndexedRowLoop:                            ; was: loc_10F92
                 moveq   #0,d5
                 move.b  4(a0),d5
                 moveq   #$FFFFFFFF,d0
                 moveq   #0,d2
-Tilemap_CopyIndexedTilesIntoRowLoop:                    ; CODE XREF: Tilemap_QueueIndexedRows+68   j  ; was: loc_10F9C
+Tilemap_CopyIndexedTilesIntoRowLoop:                    ; was: loc_10F9C
                 move.w  #0,d0
                 move.b  (a1,d2.w),d0
                 lsl.w   #5,d0
@@ -278,30 +278,30 @@ Tilemap_CopyIndexedTilesIntoRowLoop:                    ; CODE XREF: Tilemap_Que
                 moveq   #0,d5
                 move.b  (IndexedDMALowByte).w,d5
                 subq.w  #1,d5
-Tilemap_MirrorQueuedRowsLoop:                           ; CODE XREF: Tilemap_QueueIndexedRows+F2   j  ; was: loc_1102E
+Tilemap_MirrorQueuedRowsLoop:                           ; was: loc_1102E
                 moveq   #0,d0
                 move.w  d5,d7
-Tilemap_MirrorQueuedRowWordsLoop:                       ; CODE XREF: Tilemap_QueueIndexedRows+EA   j  ; was: loc_11032
+Tilemap_MirrorQueuedRowWordsLoop:                       ; was: loc_11032
                 move.w  (a1)+,(a2,d0.w)
                 addq.w  #2,d0
                 dbf     d7,Tilemap_MirrorQueuedRowWordsLoop
                 adda.w  #$80,a2
                 dbf     d6,Tilemap_MirrorQueuedRowsLoop
-Tilemap_IndexedRowsReturn:                              ; CODE XREF: Tilemap_QueueIndexedRows+BC   j  ; was: locret_11044
+Tilemap_IndexedRowsReturn:                              ; was: locret_11044
                 rts
 ; End of function Tilemap_QueueIndexedRows
 ; Rewrites the high VDP command word in consecutive queued transfers
-VDPQueue_SetCommandHighWord:                            ; CODE XREF: Stage_InitializeStage17Boss+98   p  ; was: sub_11046
+VDPQueue_SetCommandHighWord:                            ; was: sub_11046
                                         ; Boss_ZLeoLoadInitialTilesAndSetCommand81+12   j
                 movea.w (VDPCommandQueueHead).w,a0
-VDPQueue_SetCommandHighWordLoop:                        ; CODE XREF: VDPQueue_SetCommandHighWord+C   j  ; was: loc_1104A
+VDPQueue_SetCommandHighWordLoop:                        ; was: loc_1104A
                 move.w  d0,$E(a0)
                 lea     $10(a0),a0
                 dbf     d7,VDPQueue_SetCommandHighWordLoop
                 rts
 ; End of function VDPQueue_SetCommandHighWord
 ; Stages indexed tile blocks by columns and queues their vertical DMA transfers
-Tilemap_QueueIndexedColumns:                            ; CODE XREF: Stage8_StartFlyingNeoCompositeAndQueueTiles+24   j  ; was: sub_11058
+Tilemap_QueueIndexedColumns:                            ; was: sub_11058
                                         ; Gfx_LoadWolfGaropaTransitionTiles+6   p
                 move.w  (VDPStagingDataCursor).w,(IndexedStagingStart).w
                 move.l  #$94009300,(IndexedDMACommand).w
@@ -320,10 +320,10 @@ Tilemap_QueueIndexedColumns:                            ; CODE XREF: Stage8_Star
                 moveq   #0,d4
                 moveq   #0,d7
                 move.b  4(a0),d7
-Tilemap_QueueIndexedColumnGroupLoop:                    ; CODE XREF: Tilemap_QueueIndexedColumns+B8   j  ; was: loc_11096
+Tilemap_QueueIndexedColumnGroupLoop:                    ; was: loc_11096
                 moveq   #0,d1
                 moveq   #3,d6
-Tilemap_StageIndexedColumnLoop:                         ; CODE XREF: Tilemap_QueueIndexedColumns+B2   j  ; was: loc_1109A
+Tilemap_StageIndexedColumnLoop:                         ; was: loc_1109A
                 moveq   #0,d5
                 move.b  5(a0),d5
                 moveq   #$FFFFFFFF,d0
@@ -331,7 +331,7 @@ Tilemap_StageIndexedColumnLoop:                         ; CODE XREF: Tilemap_Que
                 moveq   #0,d3
                 move.b  4(a0),d3
                 addq.w  #1,d3
-Tilemap_CopyIndexedTilesIntoColumnLoop:                 ; CODE XREF: Tilemap_QueueIndexedColumns+76   j  ; was: loc_110AC
+Tilemap_CopyIndexedTilesIntoColumnLoop:                 ; was: loc_110AC
                 move.w  #0,d0
                 move.b  (a1,d2.w),d0
                 lsl.w   #5,d0
@@ -380,16 +380,16 @@ Tilemap_CopyIndexedTilesIntoColumnLoop:                 ; CODE XREF: Tilemap_Que
                 moveq   #0,d5
                 move.b  (IndexedDMALowByte).w,d5
                 subq.w  #1,d5
-Tilemap_MirrorQueuedColumnsLoop:                        ; CODE XREF: Tilemap_QueueIndexedColumns+FC   j  ; was: loc_11142
+Tilemap_MirrorQueuedColumnsLoop:                        ; was: loc_11142
                 moveq   #0,d0
                 move.w  d5,d7
-Tilemap_MirrorQueuedColumnWordsLoop:                    ; CODE XREF: Tilemap_QueueIndexedColumns+F6   j  ; was: loc_11146
+Tilemap_MirrorQueuedColumnWordsLoop:                    ; was: loc_11146
                 move.w  (a1)+,(a2,d0.w)
                 addi.w  #$80,d0
                 dbf     d7,Tilemap_MirrorQueuedColumnWordsLoop
                 addq.w  #2,a2
                 dbf     d6,Tilemap_MirrorQueuedColumnsLoop
-Tilemap_IndexedColumnsReturn:                           ; CODE XREF: Tilemap_QueueIndexedColumns+C6   j  ; was: locret_11158
+Tilemap_IndexedColumnsReturn:                           ; was: locret_11158
                 rts
 ; End of function Tilemap_QueueIndexedColumns
 ; ---------------------------------------------------------------------------

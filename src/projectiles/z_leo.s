@@ -1,5 +1,5 @@
 ; Spawn orb projectile
-Boss_ZLeoSpawnOrb:                                      ; CODE XREF: Boss_ZLeoWaitForOrbAttackCue+1A   p  ; was: sub_52F32
+Boss_ZLeoSpawnOrb:                                      ; was: sub_52F32
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Boss_ZLeoSpawnOrbReturn
@@ -11,7 +11,7 @@ Boss_ZLeoSpawnOrb:                                      ; CODE XREF: Boss_ZLeoWa
                 btst    #0,(RandomNumberState).w
                 bne.s   Boss_ZLeoFinishOrbVelocitySelection
                 move.w  #$8000,$59E(a5)
-Boss_ZLeoFinishOrbVelocitySelection:                    ; CODE XREF: Boss_ZLeoSpawnOrb+2E   j  ; was: loc_52F68
+Boss_ZLeoFinishOrbVelocitySelection:                    ; was: loc_52F68
                 move.w  #3,$59C(a5)
                 movea.l #Weapon_SharedShotInitialSpriteFrame,a1
                 jsr     (Sprite_InitFromTable).l
@@ -59,48 +59,47 @@ Boss_ZLeoFinishOrbVelocitySelection:                    ; CODE XREF: Boss_ZLeoSp
                 move.w  #$C489,$E(a0)
                 move.w  #$A00,8(a0)
                 move.w  #$F4F4,$A(a0)
-Boss_ZLeoSpawnOrbReturn:                                ; CODE XREF: Boss_ZLeoSpawnOrb+8   j  ; was: locret_53038
+Boss_ZLeoSpawnOrbReturn:                                ; was: locret_53038
                                         ; Boss_ZLeoSpawnOrb+1E   j
                 rts
 ; End of function Boss_ZLeoSpawnOrb
 ; ---------------------------------------------------------------------------
 Boss_ZLeoOrbSpawnOffsetTable:   dc.w    0, $20, $18, $18, $20, 0, $18, $FFE8, 0, $FFE0, $FFE8, $FFE8, $FFE0, 0, $FFE8, $18  ; was: word_5303A
-                                        ; DATA XREF: Boss_ZLeoSpawnOrb+BC   r
                                         ; Boss_ZLeoSpawnOrb+C0   r
 
 ; Orb projectile main
-Projectile_ZLeoOrbMain:                                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_5305A
+Projectile_ZLeoOrbMain:                                 ; was: sub_5305A
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Projectile_ZLeoOrbTrySpawnRemovalPickup
                 btst    #7,$22(a5)
                 beq.s   Projectile_ZLeoOrbCheckBounds
                 btst    #4,$22(a5)
                 beq.s   Projectile_ZLeoOrbReflectVelocity
-Projectile_ZLeoOrbTrySpawnRemovalPickup:                ; CODE XREF: Projectile_ZLeoOrbMain+4   j  ; was: loc_53070
+Projectile_ZLeoOrbTrySpawnRemovalPickup:                ; was: loc_53070
                 move.w  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 bne.s   Projectile_ZLeoOrbRemove
                 jmp     Pickup_SpawnSmallFromCurrentObject
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoOrbReflectVelocity:                      ; CODE XREF: Projectile_ZLeoOrbMain+14   j  ; was: loc_53080
+Projectile_ZLeoOrbReflectVelocity:                      ; was: loc_53080
                 neg.l   $18(a5)
                 neg.l   $1C(a5)
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoOrbCheckBounds:                          ; CODE XREF: Projectile_ZLeoOrbMain+C   j  ; was: loc_53096
+Projectile_ZLeoOrbCheckBounds:                          ; was: loc_53096
                 cmpi.w  #$1C0,$10(a5)
                 bpl.s   Projectile_ZLeoOrbRemove
                 cmpi.w  #$80,$10(a5)
                 bmi.s   Projectile_ZLeoOrbRemove
                 cmpi.w  #$70,$14(a5)                    ; 'p'
                 bpl.s   Projectile_ZLeoOrbBounceAtStageBoundary
-Projectile_ZLeoOrbRemove:                               ; CODE XREF: Projectile_ZLeoOrbMain+1E   j  ; was: loc_530AE
+Projectile_ZLeoOrbRemove:                               ; was: loc_530AE
                                         ; Projectile_ZLeoOrbMain+42   j
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoOrbBounceAtStageBoundary:                ; CODE XREF: Projectile_ZLeoOrbMain+52   j  ; was: loc_530B6
+Projectile_ZLeoOrbBounceAtStageBoundary:                ; was: loc_530B6
                 move.w  (Entity57YPos).w,d0
                 cmp.w   $14(a5),d0
                 bpl.s   Projectile_ZLeoOrbSelectFlashFrame
@@ -109,14 +108,14 @@ Projectile_ZLeoOrbBounceAtStageBoundary:                ; CODE XREF: Projectile_
                 move.b  #$37,d0                         ; '7'
                 jsr     (Sound_QueueSFXRequest).l
                 neg.l   $1C(a5)
-Projectile_ZLeoOrbSelectFlashFrame:                     ; CODE XREF: Projectile_ZLeoOrbMain+64   j  ; was: loc_530D4
+Projectile_ZLeoOrbSelectFlashFrame:                     ; was: loc_530D4
                                         ; Projectile_ZLeoOrbMain+6A   j
                 btst    #0,(FrameCounter+1).w
                 bne.s   Projectile_ZLeoOrbUseAlternateFlashFrame
                 move.w  #$E489,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoOrbUseAlternateFlashFrame:               ; CODE XREF: Projectile_ZLeoOrbMain+80   j  ; was: loc_530E4
+Projectile_ZLeoOrbUseAlternateFlashFrame:               ; was: loc_530E4
                 move.w  #$C489,$E(a5)
                 rts
 ; End of function Projectile_ZLeoOrbMain
@@ -125,7 +124,7 @@ Projectile_ZLeoOrbNoOpState:                            ; was: nullsub_122
 ; End of function Projectile_ZLeoOrbNoOpState
 
 ; Spawn the expanding-orbit laser projectile
-Boss_ZLeoSpawnExpandingOrbitLaser:                      ; CODE XREF: Boss_ZLeoBeginAttackSelection+58   p  ; was: sub_530EE
+Boss_ZLeoSpawnExpandingOrbitLaser:                      ; was: sub_530EE
                 move.w  (RandomNumberState).w,d7
                 andi.w  #$100,d7
                 jsr     (Projectile_FindFreeSlotReverse).l
@@ -152,32 +151,32 @@ Boss_ZLeoSpawnExpandingOrbitLaser:                      ; CODE XREF: Boss_ZLeoBe
                 move.w  #$10,$48(a0)
                 move.w  #4,$50(a0)
                 move.w  d7,$56(a0)
-Boss_ZLeoSpawnExpandingOrbitLaserReturn:                ; CODE XREF: Boss_ZLeoSpawnExpandingOrbitLaser+E   j  ; was: locret_53180
+Boss_ZLeoSpawnExpandingOrbitLaserReturn:                ; was: locret_53180
                 rts
 ; End of function Boss_ZLeoSpawnExpandingOrbitLaser
 ; Expand the laser's orbit and resolve its collision-driven state change
-Projectile_ZLeoExpandingOrbitLaserMain:                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_53182
+Projectile_ZLeoExpandingOrbitLaserMain:                 ; was: sub_53182
                 cmpi.w  #$180,$14(a5)
                 bpl.s   Projectile_ZLeoLaserRemoveOutsideVerticalBounds
                 cmpi.w  #$80,$14(a5)
                 bpl.s   Projectile_ZLeoLaserResolveOrbitState
-Projectile_ZLeoLaserRemoveOutsideVerticalBounds:        ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+6   j  ; was: loc_53192
+Projectile_ZLeoLaserRemoveOutsideVerticalBounds:        ; was: loc_53192
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoLaserResolveOrbitState:                  ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+E   j  ; was: loc_5319A
+Projectile_ZLeoLaserResolveOrbitState:                  ; was: loc_5319A
                 tst.w   (StageSpawnCountdown).w
                 bpl.s   Projectile_ZLeoLaserConvertToParticle
                 bclr    #7,$22(a5)
                 beq.s   Projectile_ZLeoLaserUpdateExpandingOrbit
                 bclr    #4,$22(a5)
                 bne.w   Projectile_ZLeoLaserLaunchHorizontal
-Projectile_ZLeoLaserConvertToParticle:                  ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+1C   j  ; was: loc_531B2
+Projectile_ZLeoLaserConvertToParticle:                  ; was: loc_531B2
                 move.w  #3,(PlaneAShakeLevel).w
                 move.l  #SharedCombatSpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoLaserUpdateExpandingOrbit:               ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+24   j  ; was: loc_531C6
+Projectile_ZLeoLaserUpdateExpandingOrbit:               ; was: loc_531C6
                 addi.w  #6,$56(a5)
                 addq.w  #5,$50(a5)
                 lea     (Math_SineTable).l,a0
@@ -211,9 +210,8 @@ Projectile_ZLeoLaserUpdateExpandingOrbit:               ; CODE XREF: Projectile_
                 rts
 ; ---------------------------------------------------------------------------
 Projectile_ZLeoLaserOrbitSpriteAttributes:  dc.w    $C56C, $C50B, $C54B, $C51B  ; was: word_5323A
-                                        ; DATA XREF: Projectile_ZLeoExpandingOrbitLaserMain+A6   r
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoLaserLaunchHorizontal:                   ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+2C   j  ; was: loc_53242
+Projectile_ZLeoLaserLaunchHorizontal:                   ; was: loc_53242
                 move.b  #$7C,d0                         ; '|'
                 jsr     (Sound_QueueSFXRequest).l
                 move.w  #$498,(a5)
@@ -228,8 +226,7 @@ Projectile_ZLeoLaserLaunchHorizontal:                   ; CODE XREF: Projectile_
                 bne.s   Projectile_ZLeoHorizontalLaserMain
                 neg.l   $18(a5)
 ; Update the launched horizontal laser, converting impacts and emitting its trail
-Projectile_ZLeoHorizontalLaserMain:                     ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+FA   j  ; was: loc_53282
-                                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o
+Projectile_ZLeoHorizontalLaserMain:                     ; was: loc_53282
                 bclr    #7,$22(a5)
                 beq.s   Projectile_ZLeoHorizontalLaserTrySpawnTrail
                 move.b  #$BC,d0
@@ -240,11 +237,11 @@ Projectile_ZLeoHorizontalLaserMain:                     ; CODE XREF: Projectile_
                 move.l  #SharedCombatSpriteAnimation32,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoHorizontalLaserTrySpawnTrail:            ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+106   j  ; was: loc_532B0
+Projectile_ZLeoHorizontalLaserTrySpawnTrail:            ; was: loc_532B0
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.s   Projectile_ZLeoLaserReturn
-Projectile_ZLeoLaserSpawnTrailParticle:                 ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+B2   j  ; was: loc_532BA
+Projectile_ZLeoLaserSpawnTrailParticle:                 ; was: loc_532BA
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Projectile_ZLeoLaserReturn
                 move.l  #SharedCombatSpriteAnimation00,8(a0)
@@ -267,12 +264,12 @@ Projectile_ZLeoLaserSpawnTrailParticle:                 ; CODE XREF: Projectile_
                 move.l  $1C(a5),d0
                 neg.l   d0
                 move.l  d0,$1C(a0)
-Projectile_ZLeoLaserReturn:                             ; CODE XREF: Projectile_ZLeoExpandingOrbitLaserMain+136   j  ; was: locret_53316
+Projectile_ZLeoLaserReturn:                             ; was: locret_53316
                                         ; Projectile_ZLeoExpandingOrbitLaserMain+13E   j
                 rts
 ; End of function Projectile_ZLeoExpandingOrbitLaserMain
 ; Spawn the two scrolling-attack laser objects from the selected anchor
-Boss_ZLeoCreateScrollingLaserPair:                      ; CODE XREF: Boss_ZLeoRunScrollingLaserEntryPose+60   p  ; was: sub_53318
+Boss_ZLeoCreateScrollingLaserPair:                      ; was: sub_53318
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_ZLeoCreateScrollingLaserPairReturn
                 move.w  #$188,(a0)
@@ -302,24 +299,23 @@ Boss_ZLeoCreateScrollingLaserPair:                      ; CODE XREF: Boss_ZLeoRu
                 move.b  #$EA,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_ZLeoCreateScrollingLaserPairReturn:                ; CODE XREF: Boss_ZLeoCreateScrollingLaserPair+6   j  ; was: locret_533BC
+Boss_ZLeoCreateScrollingLaserPairReturn:                ; was: locret_533BC
                                         ; Boss_ZLeoCreateScrollingLaserPair+4E   j
                 rts
 ; End of function Boss_ZLeoCreateScrollingLaserPair
 ; Count down the beam lifetime while accelerating it upward
-Projectile_ZLeoVerticalBeamMain:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_533BE
+Projectile_ZLeoVerticalBeamMain:                        ; was: sub_533BE
                 subq.w  #1,$48(a5)
                 bpl.s   Projectile_ZLeoVerticalBeamApplyUpwardAcceleration
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoVerticalBeamApplyUpwardAcceleration:     ; CODE XREF: Projectile_ZLeoVerticalBeamMain+4   j  ; was: loc_533CC
+Projectile_ZLeoVerticalBeamApplyUpwardAcceleration:     ; was: loc_533CC
                 subi.l  #$80000,$1C(a5)
                 rts
 ; End of function Projectile_ZLeoVerticalBeamMain
 ; Spawn the paired drop-attack objects and select horizontal velocity by position
-Boss_ZLeoSpawnDropAttackPair:                           ; CODE XREF: Boss_ZLeoRunScrollingLaserEntryPose+1A2   p  ; was: sub_533D6
-                                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o
+Boss_ZLeoSpawnDropAttackPair:                           ; was: sub_533D6
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_ZLeoSpawnDropAttackPairReturn
                 move.w  #$6000,$4DE(a5)
@@ -362,14 +358,14 @@ Boss_ZLeoSpawnDropAttackPair:                           ; CODE XREF: Boss_ZLeoRu
                 move.l  #$60000,$18(a3)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ZLeoUseNegativeDropAttackBeamVelocity:             ; CODE XREF: Boss_ZLeoSpawnDropAttackPair+C0   j  ; was: loc_534A2
+Boss_ZLeoUseNegativeDropAttackBeamVelocity:             ; was: loc_534A2
                 move.l  #$FFFA0000,$18(a3)
-Boss_ZLeoSpawnDropAttackPairReturn:                     ; CODE XREF: Boss_ZLeoSpawnDropAttackPair+6   j  ; was: locret_534AA
+Boss_ZLeoSpawnDropAttackPairReturn:                     ; was: locret_534AA
                                         ; Boss_ZLeoSpawnDropAttackPair+70   j
                 rts
 ; End of function Boss_ZLeoSpawnDropAttackPair
 ; Move upward to Y=$F0, pause, then continue upward until leaving the screen
-Projectile_ZLeoDropAttackBeamMain:                      ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_534AC
+Projectile_ZLeoDropAttackBeamMain:                      ; was: sub_534AC
                 move.w  #1,(ZLeoDropProjectileFlag).w
                 move.l  $56(a5),d0
                 add.l   d0,$10(a5)
@@ -383,17 +379,17 @@ Projectile_ZLeoDropAttackBeamMain:                      ; DATA XREF: ROM:Entity_
                 move.w  #$10,$4A(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_ZLeoDropAttackBeamCheckPause:                ; CODE XREF: Projectile_ZLeoDropAttackBeamMain+12   j  ; was: loc_534E0
+Projectile_ZLeoDropAttackBeamCheckPause:                ; was: loc_534E0
                 cmpi.w  #4,d0
                 beq.s   Projectile_ZLeoDropAttackBeamAdvanceFinalRise
                 subq.w  #1,$4A(a5)
                 bpl.s   Projectile_ZLeoDropAttackBeamReturn
                 addq.w  #2,4(a5)
-Projectile_ZLeoDropAttackBeamAdvanceFinalRise:          ; CODE XREF: Projectile_ZLeoDropAttackBeamMain+38   j  ; was: loc_534F0
+Projectile_ZLeoDropAttackBeamAdvanceFinalRise:          ; was: loc_534F0
                 subi.w  #$20,$14(a5)                    ; ' '
                 bpl.s   Projectile_ZLeoDropAttackBeamReturn
                 bset    #4,2(a5)
-Projectile_ZLeoDropAttackBeamReturn:                    ; CODE XREF: Projectile_ZLeoDropAttackBeamMain+20   j  ; was: locret_534FE
+Projectile_ZLeoDropAttackBeamReturn:                    ; was: locret_534FE
                                         ; Projectile_ZLeoDropAttackBeamMain+3E   j
                 rts
 ; End of function Projectile_ZLeoDropAttackBeamMain

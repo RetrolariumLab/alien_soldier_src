@@ -1,4 +1,4 @@
-Frontend_InitializeSegaSequence:                        ; DATA XREF: Sys_DispatchGameState+5A   o  ; was: sub_1CE7E
+Frontend_InitializeSegaSequence:                        ; was: sub_1CE7E
                 tst.w   (GameSubstateIndex).w
                 bne.s   Frontend_ActivateSegaSequence
                 jsr     (Sys_InitGameMode).l
@@ -42,7 +42,7 @@ FrontendSegaSequenceAssetLoadList:  dc.w    7           ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Main game loop update with object processing
-Frontend_UpdateOpeningSequence:                         ; DATA XREF: Sys_DispatchGameState+5E   o  ; was: sub_1CF16
+Frontend_UpdateOpeningSequence:                         ; was: sub_1CF16
                 tst.w   (DataLoaderControl).w
                 bmi.s   Frontend_UpdateOpeningSequence_RunFrame
                 cmpi.w  #4,(GameSubstateIndex).w

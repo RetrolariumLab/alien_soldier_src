@@ -1,7 +1,7 @@
-Password_CharacterCursorSpriteMapping:  dc.w    $C101, $600, $F4F8  ; DATA XREF: PasswordMenu_HandleInput+5C   o  ; was: word_A394
-Password_ConfirmCursorSpriteMapping:    dc.w    $C101, $E00, $F4F0  ; DATA XREF: PasswordMenu_HandleInput:PasswordInput_HandleConfirmField   o  ; was: word_A39A
+Password_CharacterCursorSpriteMapping:  dc.w    $C101, $600, $F4F8  ; was: word_A394
+Password_ConfirmCursorSpriteMapping:    dc.w    $C101, $E00, $F4F0  ; was: word_A39A
 ; Starts the title-menu password editor and its fade-out setup
-PasswordMenu_Initialize:                                ; DATA XREF: Sys_DispatchGameState+9A   o  ; was: sub_A3A0
+PasswordMenu_Initialize:                                ; was: sub_A3A0
                 tst.w   (GameSubstateIndex).w
                 bne.s   PasswordMenu_Activate
                 jsr     (Sys_InitGameMode).l
@@ -18,7 +18,7 @@ PasswordMenu_Initialize:                                ; DATA XREF: Sys_Dispatc
                 jmp     Gfx_QueueLargeFontDMACommand81
 ; ---------------------------------------------------------------------------
 ; Loads the password editor display, cursor, text buffers, and palette overrides
-PasswordMenu_Activate:                                  ; CODE XREF: PasswordMenu_Initialize+4   j  ; was: loc_A3EA
+PasswordMenu_Activate:                                  ; was: loc_A3EA
                 move.w  #$48,(GameModeIndex).w          ; 'H'
                 clr.w   (GameSubstateIndex).w
                 move.w  #$400,d0
@@ -69,17 +69,16 @@ PasswordMenu_Activate:                                  ; CODE XREF: PasswordMen
 ; End of function PasswordMenu_Initialize
 ; ---------------------------------------------------------------------------
 PasswordMenu_PaletteOverrides:  dc.w    $20, $AEC, $8CA, $6A8, $486  ; was: word_A4AC
-                                        ; DATA XREF: PasswordMenu_Initialize+88   o
 
 ; Updates the title-menu password editor
-PasswordMenu_Update:                                    ; DATA XREF: Sys_DispatchGameState+9E   o  ; was: sub_A4B6
+PasswordMenu_Update:                                    ; was: sub_A4B6
                 bclr    #1,(PaletteFadeMaskStatus).w
                 beq.s   PasswordMenu_CheckExitRequest
                 move.w  #$14,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
                 jmp     UI_ResetPaletteAndMessageMode_Clear
 ; ---------------------------------------------------------------------------
-PasswordMenu_CheckExitRequest:                          ; CODE XREF: PasswordMenu_Update+6   j  ; was: loc_A4CE
+PasswordMenu_CheckExitRequest:                          ; was: loc_A4CE
                 tst.w   (PaletteFadeMode).w
                 bne.s   PasswordMenu_UpdateFrame
                 btst    #7,(ControllerPressedState).w
@@ -87,7 +86,7 @@ PasswordMenu_CheckExitRequest:                          ; CODE XREF: PasswordMen
                 move.w  #2,(PaletteFadeMode).w
                 clr.w   (PaletteFadeColorOffset).w
                 move.w  #$E000,(PaletteFadeMaskStatus).w
-PasswordMenu_UpdateFrame:                               ; CODE XREF: PasswordMenu_Update+1C   j  ; was: loc_A4EC
+PasswordMenu_UpdateFrame:                               ; was: loc_A4EC
                                         ; PasswordMenu_Update+24   j
                 jsr     (FrontendCursor_UpdateFlash).l
                 jsr     (Frontend_AnimateMenuPalette).l
@@ -110,7 +109,7 @@ PasswordMenu_UpdateFrame:                               ; CODE XREF: PasswordMen
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function PasswordMenu_Update
 ; Handles field navigation, digit editing, and password validation
-PasswordMenu_HandleInput:                               ; CODE XREF: PasswordMenu_Update+54   p  ; was: sub_A550
+PasswordMenu_HandleInput:                               ; was: sub_A550
                 tst.w   (PasswordCursorMoveFlag).w
                 bne.w   PasswordCursor_AnimateToSelection
                 move.w  (PasswordCursorOffset).w,d0
@@ -124,7 +123,7 @@ PasswordMenu_HandleInput:                               ; CODE XREF: PasswordMen
                 moveq   #0,d0
                 bra.s   PasswordInput_StoreSelection
 ; ---------------------------------------------------------------------------
-PasswordInput_CheckMoveRight:                           ; CODE XREF: PasswordMenu_HandleInput+14   j  ; was: loc_A576
+PasswordInput_CheckMoveRight:                           ; was: loc_A576
                 btst    #3,(ControllerPressedState).w
                 beq.s   PasswordInput_StoreSelection
                 moveq   #2,d1
@@ -135,13 +134,13 @@ PasswordInput_CheckMoveRight:                           ; CODE XREF: PasswordMen
                 moveq   #8,d0
                 bra.s   PasswordInput_StoreSelection
 ; ---------------------------------------------------------------------------
-PasswordInput_PlayMoveSound:                            ; CODE XREF: PasswordMenu_HandleInput+20   j  ; was: loc_A592
+PasswordInput_PlayMoveSound:                            ; was: loc_A592
                                         ; PasswordMenu_HandleInput+3C   j
                 movem.l d0-d1,-(sp)
                 move.b  #$DB,d0
                 jsr     (Sound_QueueRequest).l
                 movem.l (sp)+,d0-d1
-PasswordInput_StoreSelection:                           ; CODE XREF: PasswordMenu_HandleInput+24   j  ; was: loc_A5A4
+PasswordInput_StoreSelection:                           ; was: loc_A5A4
                                         ; PasswordMenu_HandleInput+2C   j
                 move.w  d0,(PasswordCursorOffset).w
                 move.w  d1,(PasswordCursorMoveFlag).w
@@ -159,10 +158,10 @@ PasswordInput_StoreSelection:                           ; CODE XREF: PasswordMen
                 subq.w  #1,(PasswordRepeatTimer).w
                 bra.s   PasswordInput_SelectRepeatSource
 ; ---------------------------------------------------------------------------
-PasswordInput_ResetRepeatDelay:                         ; CODE XREF: PasswordMenu_HandleInput+86   j  ; was: loc_A5DE
+PasswordInput_ResetRepeatDelay:                         ; was: loc_A5DE
                 move.b  d0,(PasswordHeldNibble).w
                 move.w  #$18,(PasswordRepeatTimer).w
-PasswordInput_SelectRepeatSource:                       ; CODE XREF: PasswordMenu_HandleInput+8C   j  ; was: loc_A5E8
+PasswordInput_SelectRepeatSource:                       ; was: loc_A5E8
                 moveq   #0,d0
                 movea.w #(ControllerPressedState-M68K_RAM),a1
                 tst.w   (PasswordRepeatTimer).w
@@ -171,7 +170,7 @@ PasswordInput_SelectRepeatSource:                       ; CODE XREF: PasswordMen
                 movea.w #(ControllerHeldState-M68K_RAM),a1
                 btst    #0,(VBlankFrameCounter+1).w
                 beq.s   PasswordInput_ApplyDigitDelta
-PasswordInput_CheckDecrease:                            ; CODE XREF: PasswordMenu_HandleInput+A2   j  ; was: loc_A606
+PasswordInput_CheckDecrease:                            ; was: loc_A606
                 btst    #0,(a1)
                 beq.s   PasswordInput_CheckIncrease
                 moveq   #$FFFFFFFF,d0
@@ -180,18 +179,18 @@ PasswordInput_CheckDecrease:                            ; CODE XREF: PasswordMen
                 move.w  #$A,(PasswordCursorFlash).w
                 bra.s   PasswordInput_ApplyDigitDelta
 ; ---------------------------------------------------------------------------
-PasswordInput_CheckIncrease:                            ; CODE XREF: PasswordMenu_HandleInput+BA   j  ; was: loc_A61C
+PasswordInput_CheckIncrease:                            ; was: loc_A61C
                 btst    #1,(a1)
                 beq.s   PasswordInput_ApplyDigitDelta
                 moveq   #1,d0
                 cmpa.w  #$F708,a1
                 bne.s   PasswordInput_ApplyDigitDelta
                 move.w  #$A,(PasswordCursorFlash).w
-PasswordInput_ApplyDigitDelta:                          ; CODE XREF: PasswordMenu_HandleInput+B4   j  ; was: loc_A630
+PasswordInput_ApplyDigitDelta:                          ; was: loc_A630
                                         ; PasswordMenu_HandleInput+C2   j
                 move.w  (PasswordCursorOffset).w,d4
                 movea.w #(SoundDisableFlags+1-M68K_RAM),a0
-PasswordInput_SelectDigitAddress:                       ; CODE XREF: PasswordMenu_HandleInput+EC   j  ; was: loc_A638
+PasswordInput_SelectDigitAddress:                       ; was: loc_A638
                 addq.w  #1,a0
                 subq.w  #2,d4
                 bpl.s   PasswordInput_SelectDigitAddress
@@ -202,38 +201,38 @@ PasswordInput_SelectDigitAddress:                       ; CODE XREF: PasswordMen
                 move.b  (a0),d0
                 bne.s   PasswordInput_ClampFirstDigitMaximum
                 moveq   #1,d0
-PasswordInput_ClampFirstDigitMaximum:                   ; CODE XREF: PasswordMenu_HandleInput+FA   j  ; was: loc_A64E
+PasswordInput_ClampFirstDigitMaximum:                   ; was: loc_A64E
                 cmpi.b  #$A,d0
                 bmi.s   PasswordInput_StoreFirstDigit
                 moveq   #$A,d0
-PasswordInput_StoreFirstDigit:                          ; CODE XREF: PasswordMenu_HandleInput+102   j  ; was: loc_A656
+PasswordInput_StoreFirstDigit:                          ; was: loc_A656
                 move.b  d0,(a0)+
                 move.b  (a0),d1
                 bne.s   PasswordInput_ClampSecondDigitMaximum
                 moveq   #1,d1
-PasswordInput_ClampSecondDigitMaximum:                  ; CODE XREF: PasswordMenu_HandleInput+10A   j  ; was: loc_A65E
+PasswordInput_ClampSecondDigitMaximum:                  ; was: loc_A65E
                 cmpi.b  #$A,d1
                 bmi.s   PasswordInput_StoreSecondDigit
                 moveq   #$A,d1
-PasswordInput_StoreSecondDigit:                         ; CODE XREF: PasswordMenu_HandleInput+112   j  ; was: loc_A666
+PasswordInput_StoreSecondDigit:                         ; was: loc_A666
                 move.b  d1,(a0)+
                 move.b  (a0),d2
                 bne.s   PasswordInput_ClampThirdDigitMaximum
                 moveq   #1,d2
-PasswordInput_ClampThirdDigitMaximum:                   ; CODE XREF: PasswordMenu_HandleInput+11A   j  ; was: loc_A66E
+PasswordInput_ClampThirdDigitMaximum:                   ; was: loc_A66E
                 cmpi.b  #$A,d2
                 bmi.s   PasswordInput_StoreThirdDigit
                 moveq   #$A,d2
-PasswordInput_StoreThirdDigit:                          ; CODE XREF: PasswordMenu_HandleInput+122   j  ; was: loc_A676
+PasswordInput_StoreThirdDigit:                          ; was: loc_A676
                 move.b  d2,(a0)+
                 move.b  (a0),d3
                 bne.s   PasswordInput_ClampFourthDigitMaximum
                 moveq   #1,d3
-PasswordInput_ClampFourthDigitMaximum:                  ; CODE XREF: PasswordMenu_HandleInput+12A   j  ; was: loc_A67E
+PasswordInput_ClampFourthDigitMaximum:                  ; was: loc_A67E
                 cmpi.b  #$A,d3
                 bmi.s   PasswordInput_RenderDigits
                 moveq   #$A,d3
-PasswordInput_RenderDigits:                             ; CODE XREF: PasswordMenu_HandleInput+132   j  ; was: loc_A686
+PasswordInput_RenderDigits:                             ; was: loc_A686
                 move.b  d3,(a0)+
                 movea.w #(PasswordDigitTextBuffer-M68K_RAM),a0
                 move.b  d0,(a0)+
@@ -255,7 +254,7 @@ PasswordInput_RenderDigits:                             ; CODE XREF: PasswordMen
                 move.w  #$451C,d4
                 jmp     (Text_QueueDoubleHeightStringWrapped).l
 ; ---------------------------------------------------------------------------
-PasswordCursor_AnimateToSelection:                      ; CODE XREF: PasswordMenu_HandleInput+4   j  ; was: loc_A6CE
+PasswordCursor_AnimateToSelection:                      ; was: loc_A6CE
                 movea.l #PasswordCursor_TargetXPositions,a0
                 movea.w #(Entity_ObjectPool-M68K_RAM),a1
                 move.w  (PasswordCursorOffset).w,d0
@@ -268,23 +267,22 @@ PasswordCursor_AnimateToSelection:                      ; CODE XREF: PasswordMen
                 addq.w  #4,$10(a1)
                 rts
 ; ---------------------------------------------------------------------------
-PasswordCursor_MoveLeftOrSnap:                          ; CODE XREF: PasswordMenu_HandleInput+196   j  ; was: loc_A6F4
+PasswordCursor_MoveLeftOrSnap:                          ; was: loc_A6F4
                 cmpi.w  #$FFFC,d1
                 bmi.s   PasswordCursor_MoveLeftFourPixels
-PasswordCursor_SnapToTarget:                            ; CODE XREF: PasswordMenu_HandleInput+19C   j  ; was: loc_A6FA
+PasswordCursor_SnapToTarget:                            ; was: loc_A6FA
                 move.w  (a0,d0.w),$10(a1)
                 clr.w   (PasswordCursorMoveFlag).w
                 rts
 ; ---------------------------------------------------------------------------
-PasswordCursor_MoveLeftFourPixels:                      ; CODE XREF: PasswordMenu_HandleInput+1A8   j  ; was: loc_A706
+PasswordCursor_MoveLeftFourPixels:                      ; was: loc_A706
                 subq.w  #4,$10(a1)
-PasswordInput_Return:                                   ; CODE XREF: PasswordMenu_HandleInput+1DE   j  ; was: locret_A70A
+PasswordInput_Return:                                   ; was: locret_A70A
                 rts
 ; ---------------------------------------------------------------------------
 PasswordCursor_TargetXPositions:    dc.w    $F4, $104, $114, $124, $14C  ; was: word_A70C
-                                        ; DATA XREF: PasswordMenu_HandleInput:PasswordCursor_AnimateToSelection   o
 ; ---------------------------------------------------------------------------
-PasswordInput_HandleConfirmField:                       ; CODE XREF: PasswordMenu_HandleInput+68   j  ; was: loc_A716
+PasswordInput_HandleConfirmField:                       ; was: loc_A716
                 move.l  #Password_ConfirmCursorSpriteMapping,(PrimaryEntityMapping).w
                 move.b  #$F,(PasswordHeldNibble).w
                 move.w  #$18,(PasswordRepeatTimer).w
@@ -295,7 +293,7 @@ PasswordInput_HandleConfirmField:                       ; CODE XREF: PasswordMen
                 moveq   #1,d5
                 lea     Password_StageCodeTable(pc),a0
                 nop
-PasswordValidation_CheckNextStage:                      ; CODE XREF: PasswordMenu_HandleInput+204   j  ; was: loc_A73E
+PasswordValidation_CheckNextStage:                      ; was: loc_A73E
                 addq.b  #1,d4
                 cmpi.w  #$FFFF,(a0)
                 beq.w   PasswordValidation_RenderError
@@ -306,7 +304,7 @@ PasswordValidation_CheckNextStage:                      ; CODE XREF: PasswordMen
                 cmp.l   (a0)+,d0
                 beq.s   PasswordValidation_HandleMatch
                 bne.s   PasswordValidation_CheckNextStage
-PasswordValidation_HandleMatch:                         ; CODE XREF: PasswordMenu_HandleInput+1FC   j  ; was: loc_A756
+PasswordValidation_HandleMatch:                         ; was: loc_A756
                                         ; PasswordMenu_HandleInput+202   j
                 move.w  d3,(PasswordDifficulty).w
                 move.w  d4,(PasswordStageNumber).w
@@ -316,7 +314,7 @@ PasswordValidation_HandleMatch:                         ; CODE XREF: PasswordMen
                 beq.s   PasswordValidation_RenderMatch
                 lea     PasswordText_HardStage(pc),a0
                 nop
-PasswordValidation_RenderMatch:                         ; CODE XREF: PasswordMenu_HandleInput+218   j  ; was: loc_A770
+PasswordValidation_RenderMatch:                         ; was: loc_A770
                 bsr.w   PasswordText_CopyToPrimaryBuffer
                 lea     PasswordText_ConfirmPrompt(pc),a0
                 nop
@@ -346,11 +344,11 @@ PasswordValidation_RenderMatch:                         ; CODE XREF: PasswordMen
                 clr.w   (GameSubstateIndex).w
                 jmp     Password_InitializeSelectedStage
 ; ---------------------------------------------------------------------------
-PasswordInput_WaitForConfirm:                           ; CODE XREF: PasswordMenu_HandleInput+25C   j  ; was: locret_A7DA
+PasswordInput_WaitForConfirm:                           ; was: locret_A7DA
                                         ; PasswordMenu_HandleInput+2A0   j
                 rts
 ; ---------------------------------------------------------------------------
-PasswordValidation_RenderError:                         ; CODE XREF: PasswordMenu_HandleInput+1F4   j  ; was: loc_A7DC
+PasswordValidation_RenderError:                         ; was: loc_A7DC
                 lea     PasswordText_Error(pc),a0
                 nop
                 bsr.w   PasswordText_CopyToPrimaryBuffer
@@ -361,20 +359,20 @@ PasswordValidation_RenderError:                         ; CODE XREF: PasswordMen
                 jmp     (Sound_QueueRequest).l
 ; End of function PasswordMenu_HandleInput
 ; Copies the next terminated text record to the primary password row
-PasswordText_CopyToPrimaryBuffer:                       ; CODE XREF: PasswordMenu_HandleInput+72   p  ; was: sub_A7FC
+PasswordText_CopyToPrimaryBuffer:                       ; was: sub_A7FC
                                         ; PasswordMenu_HandleInput:PasswordValidation_RenderMatch   p
                 movea.w #(PasswordPrimaryBuffer-M68K_RAM),a1
                 bra.s   PasswordText_ClearBuffer
 ; End of function PasswordText_CopyToPrimaryBuffer
 ; Copies the next terminated text record to the secondary password row
-PasswordText_CopyToSecondaryBuffer:                     ; CODE XREF: PasswordMenu_HandleInput+76   p  ; was: sub_A802
+PasswordText_CopyToSecondaryBuffer:                     ; was: sub_A802
                                         ; PasswordMenu_HandleInput+22A   p
                 movea.w #(PasswordSecondaryBuffer-M68K_RAM),a1
-PasswordText_ClearBuffer:                               ; CODE XREF: PasswordText_CopyToPrimaryBuffer+4   j  ; was: loc_A806
+PasswordText_ClearBuffer:                               ; was: loc_A806
                 movea.w a1,a2
                 moveq   #0,d0
                 moveq   #$17,d7
-PasswordText_ClearNextByte:                             ; CODE XREF: PasswordText_CopyToSecondaryBuffer+C   j  ; was: loc_A80C
+PasswordText_ClearNextByte:                             ; was: loc_A80C
                 move.b  d0,(a2)+
                 dbf     d7,PasswordText_ClearNextByte
                 move.b  #$FF,(a2)
@@ -382,19 +380,18 @@ PasswordText_ClearNextByte:                             ; CODE XREF: PasswordTex
                 move.b  (a0)+,d0
                 adda.w  d0,a1
 ; Copies one password-message character at a time until terminator $FF
-PasswordText_CopyNextCharacter:                         ; CODE XREF: PasswordText_CopyToSecondaryBuffer+24   j  ; was: loc_A81C
+PasswordText_CopyNextCharacter:                         ; was: loc_A81C
                 move.b  (a0)+,d0
                 cmpi.b  #$FF,d0
                 beq.s   PasswordText_CopyComplete
                 move.b  d0,(a1)+
                 bra.s   PasswordText_CopyNextCharacter
 ; ---------------------------------------------------------------------------
-PasswordText_CopyComplete:                              ; CODE XREF: PasswordText_CopyToSecondaryBuffer+20   j  ; was: locret_A828
+PasswordText_CopyComplete:                              ; was: locret_A828
                 rts
 ; End of function PasswordText_CopyToSecondaryBuffer
 ; ---------------------------------------------------------------------------
 Password_StageCodeTable:    dc.w    $20A, $906, $20A, $906, $407, $A09, $407, $A09, $103, $608  ; was: word_A82A
-                                        ; DATA XREF: PasswordMenu_HandleInput+1E8   o
                                         ; Continue_RenderPassword+1A   o
                 dc.w    $103, $608, $408, $506, $408, $506, $806, $602, $806, $602
                 dc.w    $908, $A01, $908, $A01, $602, $A07, $602, $A07, $506, $70A
@@ -407,25 +404,20 @@ Password_StageCodeTable:    dc.w    $20A, $906, $20A, $906, $407, $A09, $407, $A
                 dc.w    $309, $603, $805, $107, $805, $107, $603, $90A, $603, $90A
                 dc.w    $FFFF, $FFFF
 PasswordText_InputPrompt:   dc.b    3, $13, $18, $1A, $1F, $1E, 0, $1A, $B  ; was: byte_A8F6
-                                        ; DATA XREF: PasswordMenu_HandleInput+6C   o
                 dc.b    $1D, $1D, $21, $19, $1C, $E, $FF, 3, 0
                 dc.b    $FF
 PasswordText_Error: dc.b    3, $1A, $B, $1D, $1D, $21, $19, $1C, $E  ; was: byte_A909
-                                        ; DATA XREF: PasswordMenu_HandleInput:PasswordValidation_RenderError   o
                 dc.b    0, $F, $1C, $1C, $19, $1C, $FF, 0, 0
                 dc.b    $FF
 PasswordText_EasyStage: dc.b    0, $1D, $1E, $B, $11, $F, $2E, 0, 0  ; was: byte_A91C
-                                        ; DATA XREF: PasswordMenu_HandleInput+20E   o
                 dc.b    0, 0, $16, $F, $20, $F, $16, $2E, $F
                 dc.b    $B, $1D, $23, $FF
 PasswordText_ConfirmPrompt: dc.b    3, $1A, $1C, $F, $1D, $1D, 0, $D, 0, $C  ; was: byte_A932
-                                        ; DATA XREF: PasswordMenu_HandleInput+224   o
                 dc.b    $1F, $1E, $1E, $19, $18, $FF
 PasswordText_NormalStage:   dc.b    0, $1D, $1E, $B     ; was: unlabeled_A942
                 dc.b    $11, $F, $2E, 0, 0, 0, 0, $16, $F, $20
                 dc.b    $F, $16, $2E, $18, $19, $1C, $17, $B, $16, $FF
 PasswordText_HardStage: dc.b    0, $1D, $1E, $B, $11, $F, $2E, 0, 0  ; was: byte_A95A
-                                        ; DATA XREF: PasswordMenu_HandleInput+21A   o
                 dc.b    0, 0, $16, $F, $20, $F, $16, $2E, $12
                 dc.b    $B, $1C, $E, $FF
 

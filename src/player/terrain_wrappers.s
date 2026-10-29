@@ -1,19 +1,19 @@
 ; Runs the simple wall check unless terrain collisions are disabled
-Physics_WallCheckWrapper:                               ; CODE XREF: Player_GroundIdleState   p  ; was: sub_16CC8
+Physics_WallCheckWrapper:                               ; was: sub_16CC8
                                         ; sub_152CA   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
                 jmp     Physics_EntityWallCheck
 ; End of function Physics_WallCheckWrapper
 ; Runs the extended wall check unless terrain collisions are disabled
-Physics_ExtendedWallCheckWrapper:                       ; CODE XREF: Player_AirCounterForceState+8   p  ; was: sub_16CD8
+Physics_ExtendedWallCheckWrapper:                       ; was: sub_16CD8
                                         ; sub_15B8C   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
                 jmp     Physics_EntityExtendedWallCheck
 ; End of function Physics_ExtendedWallCheckWrapper
 ; Checks moving platforms, then probes the entity's lower terrain boundary
-Physics_LowerTerrainCheckWrapper:                       ; CODE XREF: Player_GroundIdleState+6   p  ; was: sub_16CE8
+Physics_LowerTerrainCheckWrapper:                       ; was: sub_16CE8
                                         ; Player_GroundCounterForceState+6   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -21,7 +21,7 @@ Physics_LowerTerrainCheckWrapper:                       ; CODE XREF: Player_Grou
                 jmp     Physics_CheckLowerTerrain
 ; End of function Physics_LowerTerrainCheckWrapper
 ; Checks moving platforms, then resolves lower terrain while descending
-Physics_DescendingTerrainCheckWrapper:                  ; CODE XREF: Player_AirCounterForceState+14   p  ; was: sub_16CFE
+Physics_DescendingTerrainCheckWrapper:                  ; was: sub_16CFE
                                         ; Player_DashKickState+E   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -29,7 +29,7 @@ Physics_DescendingTerrainCheckWrapper:                  ; CODE XREF: Player_AirC
                 jmp     Physics_CheckLowerTerrainWhenDescending
 ; End of function Physics_DescendingTerrainCheckWrapper
 ; Checks moving platforms, then probes the entity's upper terrain boundary
-Physics_UpperTerrainCheckWrapper:                       ; CODE XREF: Player_CeilingIdleState+6   p  ; was: sub_16D14
+Physics_UpperTerrainCheckWrapper:                       ; was: sub_16D14
                                         ; Player_CeilingCounterForceState+6   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -37,7 +37,7 @@ Physics_UpperTerrainCheckWrapper:                       ; CODE XREF: Player_Ceil
                 jmp     Physics_CheckUpperTerrain
 ; End of function Physics_UpperTerrainCheckWrapper
 ; Checks moving platforms, then resolves upper terrain while rising
-Physics_RisingTerrainCheckWrapper:                      ; CODE XREF: Player_AirCounterForceState+28   p  ; was: sub_16D2A
+Physics_RisingTerrainCheckWrapper:                      ; was: sub_16D2A
                                         ; Player_HandleFallingState+5A   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -45,7 +45,7 @@ Physics_RisingTerrainCheckWrapper:                      ; CODE XREF: Player_AirC
                 jmp     Physics_CheckUpperTerrainWhenRising
 ; End of function Physics_RisingTerrainCheckWrapper
 ; Selects the lower- or upper-boundary terrain probe from entity facing
-Physics_FacingTerrainCheckWrapper:                      ; CODE XREF: Player_PhoenixAttackUpdate+86   p  ; was: sub_16D40
+Physics_FacingTerrainCheckWrapper:                      ; was: sub_16D40
                                         ; sub_159E0:Player_DashAttackState_Finish   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -55,7 +55,7 @@ Physics_FacingTerrainCheckWrapper:                      ; CODE XREF: Player_Phoe
                 jmp     Physics_CheckUpperTerrain
 ; End of function Physics_FacingTerrainCheckWrapper
 ; Runs the extended wall check with a facing-selected vertical probe offset
-Physics_FacingExtendedWallCheckWrapper:                 ; CODE XREF: Player_PhoenixAttackUpdate+82   p  ; was: sub_16D60
+Physics_FacingExtendedWallCheckWrapper:                 ; was: sub_16D60
                                         ; Player_ApplyHorizontalMovement+4   p
                 btst    #5,(PlayerRestrictionFlags).w
                 bne.w   Physics_TerrainCheckWrappers_Return
@@ -65,12 +65,12 @@ Physics_FacingExtendedWallCheckWrapper:                 ; CODE XREF: Player_Phoe
                 moveq   #$18,d6
                 jmp     Physics_EntityExtendedWallCheck_Begin
 ; ---------------------------------------------------------------------------
-Physics_TerrainCheckWrappers_Return:                    ; CODE XREF: Physics_WallCheckWrapper+6   j  ; was: locret_16D7E
+Physics_TerrainCheckWrappers_Return:                    ; was: locret_16D7E
                                         ; Physics_ExtendedWallCheckWrapper+6   j
                 rts
 ; End of function Physics_FacingExtendedWallCheckWrapper
 ; Processes D-pad input for character facing direction
-Input_ProcessDirectionInput:                            ; CODE XREF: Player_Update+58   p  ; was: sub_16D80
+Input_ProcessDirectionInput:                            ; was: sub_16D80
                                         ; Player_UpdateSevenForceBattle+6   p
                 tst.w   (PlayerScriptStateOffset).w
                 bne.w   Input_ProcessDirectionInput_Return
@@ -81,12 +81,12 @@ Input_ProcessDirectionInput:                            ; CODE XREF: Player_Upda
                 bne.s   Input_ProcessDirectionInput_ApplyHorizontalInput
                 rts
 ; ---------------------------------------------------------------------------
-Input_ProcessDirectionInput_CheckAlternateGate:         ; CODE XREF: Input_ProcessDirectionInput+10   j  ; was: loc_16D9C
+Input_ProcessDirectionInput_CheckAlternateGate:         ; was: loc_16D9C
                 btst    #4,$6A(a5)
                 bne.s   Input_ProcessDirectionInput_ApplyHorizontalInput
                 rts
 ; ---------------------------------------------------------------------------
-Input_ProcessDirectionInput_ApplyHorizontalInput:       ; CODE XREF: Input_ProcessDirectionInput+18   j  ; was: loc_16DA6
+Input_ProcessDirectionInput_ApplyHorizontalInput:       ; was: loc_16DA6
                                         ; Input_ProcessDirectionInput+22   j
                 btst    #2,d1
                 beq.s   Input_ProcessDirectionInput_CheckRightInput
@@ -94,12 +94,12 @@ Input_ProcessDirectionInput_ApplyHorizontalInput:       ; CODE XREF: Input_Proce
                 bclr    #3,d1
                 bra.s   Input_ProcessDirectionInput_DecodeDirection
 ; ---------------------------------------------------------------------------
-Input_ProcessDirectionInput_CheckRightInput:            ; CODE XREF: Input_ProcessDirectionInput+2A   j  ; was: loc_16DB8
+Input_ProcessDirectionInput_CheckRightInput:            ; was: loc_16DB8
                 btst    #3,d1
                 beq.s   Input_ProcessDirectionInput_DecodeDirection
                 bset    #3,$E(a5)
                 bclr    #2,d1
-Input_ProcessDirectionInput_DecodeDirection:            ; CODE XREF: Input_ProcessDirectionInput+36   j  ; was: loc_16DC8
+Input_ProcessDirectionInput_DecodeDirection:            ; was: loc_16DC8
                                         ; Input_ProcessDirectionInput+3C   j
                 andi.w  #$F,d1
                 bne.s   Input_ProcessDirectionInput_LookupDirection
@@ -109,21 +109,20 @@ Input_ProcessDirectionInput_DecodeDirection:            ; CODE XREF: Input_Proce
                 moveq   #0,d0
                 bra.s   Input_StoreDirectionByte
 ; ---------------------------------------------------------------------------
-Input_ProcessDirectionInput_LookupDirection:            ; CODE XREF: Input_ProcessDirectionInput+4C   j  ; was: loc_16DDC
+Input_ProcessDirectionInput_LookupDirection:            ; was: loc_16DDC
                 move.b  Input_DirectionIndexTable(pc,d1.w),d0
 ; Stores processed direction input byte to player entity
-Input_StoreDirectionByte:                               ; CODE XREF: Input_ProcessDirectionInput+56   j  ; was: loc_16DE0
+Input_StoreDirectionByte:                               ; was: loc_16DE0
                                         ; Input_ProcessDirectionInput+5A   j
                 move.b  d0,$9E(a5)
-Input_ProcessDirectionInput_Return:                     ; CODE XREF: Input_ProcessDirectionInput+4   j  ; was: locret_16DE4
+Input_ProcessDirectionInput_Return:                     ; was: locret_16DE4
                 rts
 ; End of function Input_ProcessDirectionInput
 ; ---------------------------------------------------------------------------
 Input_DirectionIndexTable:  dc.b    0, 6, 2, 0, 4, 5, 3, 0, 0, 7, 1, 0, 0, 0, 0, 0  ; was: byte_16DE6
-                                        ; DATA XREF: Input_ProcessDirectionInput:Input_ProcessDirectionInput_LookupDirection   r
 
 ; Auto-flips player direction based on weapon aim angle constraints
-Player_AutoFlipDirection:                               ; CODE XREF: Player_InitGroundIdleState+2A   j  ; was: sub_16DF6
+Player_AutoFlipDirection:                               ; was: sub_16DF6
                                         ; Player_InitGroundCrouchState+2E   j
                 tst.w   (ShootingMode).w
                 bne.s   Player_AutoFlipDirection_Return
@@ -138,22 +137,22 @@ Player_AutoFlipDirection:                               ; CODE XREF: Player_Init
                 bmi.s   Player_AutoFlipDirection_Flip
                 rts
 ; ---------------------------------------------------------------------------
-Player_AutoFlipDirection_CheckLeftFacing:               ; CODE XREF: Player_AutoFlipDirection+18   j  ; was: loc_16E1E
+Player_AutoFlipDirection_CheckLeftFacing:               ; was: loc_16E1E
                 cmpi.b  #2,d0
                 bmi.s   Player_AutoFlipDirection_Flip
                 cmpi.b  #7,d0
                 bpl.s   Player_AutoFlipDirection_Flip
                 rts
 ; ---------------------------------------------------------------------------
-Player_AutoFlipDirection_Flip:                          ; CODE XREF: Player_AutoFlipDirection+24   j  ; was: loc_16E2C
+Player_AutoFlipDirection_Flip:                          ; was: loc_16E2C
                                         ; Player_AutoFlipDirection+2C   j
                 eori.w  #$800,$E(a5)
-Player_AutoFlipDirection_Return:                        ; CODE XREF: Player_AutoFlipDirection+4   j  ; was: locret_16E32
+Player_AutoFlipDirection_Return:                        ; was: locret_16E32
                                         ; Player_AutoFlipDirection+C   j
                 rts
 ; End of function Player_AutoFlipDirection
 ; Accelerates horizontal velocity toward the limit selected by facing
-Physics_AccelerateHorizontalByFacing:                   ; CODE XREF: Player_GroundedMovementState:Player_GroundedMovementState_Accelerate   p  ; was: sub_16E34
+Physics_AccelerateHorizontalByFacing:                   ; was: sub_16E34
                                         ; sub_167EE:Player_CeilingMovementState_Accelerate   p
                 btst    #3,$E(a5)
                 bne.s   Physics_AccelerateHorizontalByFacing_AcceleratePositive
@@ -161,56 +160,56 @@ Physics_AccelerateHorizontalByFacing:                   ; CODE XREF: Player_Grou
                 bpl.s   Physics_AccelerateHorizontalByFacing_AccelerateNegative
                 cmpi.l  #$FFFBE000,d0
                 bmi.s   Physics_AccelerateHorizontalByFacing_Store
-Physics_AccelerateHorizontalByFacing_AccelerateNegative:  ; CODE XREF: Physics_AccelerateHorizontalByFacing+C   j  ; was: loc_16E4A
+Physics_AccelerateHorizontalByFacing_AccelerateNegative:  ; was: loc_16E4A
                 subi.l  #$A800,d0
                 move.l  d0,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Physics_AccelerateHorizontalByFacing_AcceleratePositive:  ; CODE XREF: Physics_AccelerateHorizontalByFacing+6   j  ; was: loc_16E56
+Physics_AccelerateHorizontalByFacing_AcceleratePositive:  ; was: loc_16E56
                 move.l  $18(a5),d0
                 bmi.s   Physics_AccelerateHorizontalByFacing_AddStep
                 cmpi.l  #$42000,d0
                 bpl.s   Physics_AccelerateHorizontalByFacing_Store
-Physics_AccelerateHorizontalByFacing_AddStep:           ; CODE XREF: Physics_AccelerateHorizontalByFacing+26   j  ; was: loc_16E64
+Physics_AccelerateHorizontalByFacing_AddStep:           ; was: loc_16E64
                 addi.l  #$A800,d0
-Physics_AccelerateHorizontalByFacing_Store:             ; CODE XREF: Physics_AccelerateHorizontalByFacing+14   j  ; was: loc_16E6A
+Physics_AccelerateHorizontalByFacing_Store:             ; was: loc_16E6A
                                         ; Physics_AccelerateHorizontalByFacing+2E   j
                 move.l  d0,$18(a5)
                 rts
 ; End of function Physics_AccelerateHorizontalByFacing
 ; Accelerates horizontal velocity toward the negative limit
-Physics_AccelerateHorizontalNegative:                   ; CODE XREF: Player_GroundWeaponState+4A   j  ; was: sub_16E70
+Physics_AccelerateHorizontalNegative:                   ; was: sub_16E70
                                         ; Player_CeilingAirControlState+56   j
                 move.l  $18(a5),d0
                 bpl.s   Physics_AccelerateHorizontalNegative_SubtractStep
                 cmpi.l  #$FFFD6000,d0
                 bmi.s   Physics_AccelerateHorizontalNegative_Store
-Physics_AccelerateHorizontalNegative_SubtractStep:      ; CODE XREF: Physics_AccelerateHorizontalNegative+4   j  ; was: loc_16E7E
+Physics_AccelerateHorizontalNegative_SubtractStep:      ; was: loc_16E7E
                 subi.l  #$A800,d0
-Physics_AccelerateHorizontalNegative_Store:             ; CODE XREF: Physics_AccelerateHorizontalNegative+C   j  ; was: loc_16E84
+Physics_AccelerateHorizontalNegative_Store:             ; was: loc_16E84
                 move.l  d0,$18(a5)
                 rts
 ; End of function Physics_AccelerateHorizontalNegative
 ; Accelerates horizontal velocity toward the positive limit
-Physics_AccelerateHorizontalPositive:                   ; CODE XREF: Player_GroundWeaponState+62   j  ; was: sub_16E8A
+Physics_AccelerateHorizontalPositive:                   ; was: sub_16E8A
                                         ; Player_CeilingAirControlState+6E   j
                 move.l  $18(a5),d0
                 bmi.s   Physics_AccelerateHorizontalPositive_AddStep
                 cmpi.l  #$2A000,d0
                 bpl.s   Physics_AccelerateHorizontalPositive_Store
-Physics_AccelerateHorizontalPositive_AddStep:           ; CODE XREF: Physics_AccelerateHorizontalPositive+4   j  ; was: loc_16E98
+Physics_AccelerateHorizontalPositive_AddStep:           ; was: loc_16E98
                 addi.l  #$A800,d0
-Physics_AccelerateHorizontalPositive_Store:             ; CODE XREF: Physics_AccelerateHorizontalPositive+C   j  ; was: loc_16E9E
+Physics_AccelerateHorizontalPositive_Store:             ; was: loc_16E9E
                 move.l  d0,$18(a5)
                 rts
 ; End of function Physics_AccelerateHorizontalPositive
 ; Selects the faster horizontal deceleration step
-Player_DecelerateHorizontalVelocityFast:                ; CODE XREF: Player_GroundCrouchState+30   p  ; was: sub_16EA4
+Player_DecelerateHorizontalVelocityFast:                ; was: sub_16EA4
                                         ; Player_GroundDecelerateState+34   p
                 move.l  #$C000,d1
 ; End of function Player_DecelerateHorizontalVelocityFast
 ; Decelerates horizontal velocity towards zero
-Player_DecelerateHorizontalVelocity:                    ; CODE XREF: Player_GroundCounterForceState+2A   p  ; was: sub_16EAA
+Player_DecelerateHorizontalVelocity:                    ; was: sub_16EAA
                                         ; Player_UnreferencedCounterForceTerrainPath+22   p
                 move.l  $18(a5),d0
                 bmi.s   Player_DecelerateHorizontalVelocity_IncreaseNegative
@@ -220,18 +219,18 @@ Player_DecelerateHorizontalVelocity:                    ; CODE XREF: Player_Grou
                 move.l  d0,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Player_DecelerateHorizontalVelocity_IncreaseNegative:   ; CODE XREF: Player_DecelerateHorizontalVelocity+4   j  ; was: loc_16EBC
+Player_DecelerateHorizontalVelocity_IncreaseNegative:   ; was: loc_16EBC
                 add.l   d1,d0
                 bmi.s   Physics_StoreHorizontalVelocity
                 moveq   #0,d0
 ; Stores final horizontal velocity to player entity after deceleration
-Physics_StoreHorizontalVelocity:                        ; CODE XREF: Player_DecelerateHorizontalVelocity+8   j  ; was: loc_16EC2
+Physics_StoreHorizontalVelocity:                        ; was: loc_16EC2
                                         ; Player_DecelerateHorizontalVelocity+14   j
                 move.l  d0,$18(a5)
                 rts
 ; End of function Player_DecelerateHorizontalVelocity
 ; Renders the player's unarmed idle frame with cycling offsets
-Player_RenderIdleFrame:                                 ; CODE XREF: Player_GroundIdleState+60   j  ; was: sub_16EC8
+Player_RenderIdleFrame:                                 ; was: sub_16EC8
                                         ; Player_GroundWeaponSelectState+1E   j
                 move.w  (FrameCounter).w,d0
                 asr.w   #2,d0
@@ -244,15 +243,14 @@ Player_RenderIdleFrame:                                 ; CODE XREF: Player_Grou
 ; End of function Player_RenderIdleFrame
 ; ---------------------------------------------------------------------------
 Player_IdleFrameOffsets:    dc.b    1, $FE, 0, $FF, 0, 0, 0, $FF  ; was: byte_16EEA
-                                        ; DATA XREF: Player_RenderIdleFrame+A   r
                                         ; Player_RenderIdleFrame+E   r
 
 ; Renders the shared motion pose, cycling its offsets while the counter is negative
-Player_RenderMotionPose:                                ; CODE XREF: Player_GroundCrouchState+5E   j  ; was: sub_16EF2
+Player_RenderMotionPose:                                ; was: sub_16EF2
                                         ; Player_HandleLandingState+76   j
                 tst.w   $48(a5)
                 bpl.s   Player_RenderMotionPose_UseStaticOffsets
-Player_RenderMotionPose_UseAnimatedOffsets:             ; CODE XREF: Player_JumpApexState+12   j  ; was: loc_16EF8
+Player_RenderMotionPose_UseAnimatedOffsets:             ; was: loc_16EF8
                 move.w  (FrameCounter).w,d0
                 asr.w   #2,d0
                 andi.w  #6,d0
@@ -263,7 +261,7 @@ Player_RenderMotionPose_UseAnimatedOffsets:             ; CODE XREF: Player_Jump
                 bra.w   Player_BuildSpritePieces
 ; ---------------------------------------------------------------------------
 ; Uses one fixed offset pair once the animation counter is non-negative
-Player_RenderMotionPose_UseStaticOffsets:               ; CODE XREF: Player_RenderMotionPose+4   j  ; was: loc_16F1A
+Player_RenderMotionPose_UseStaticOffsets:               ; was: loc_16F1A
                 moveq   #0,d5
                 moveq   #8,d6
                 movea.l #Player_CommonPrimarySpriteMapping,a1
@@ -272,5 +270,4 @@ Player_RenderMotionPose_UseStaticOffsets:               ; CODE XREF: Player_Rend
 ; End of function Player_RenderMotionPose
 ; ---------------------------------------------------------------------------
 Player_MotionPoseFrameOffsets:  dc.b    1, $F, 0, $10, 0, $11, 0, $10  ; was: byte_16F2E
-                                        ; DATA XREF: Player_RenderMotionPose+10   r
                                         ; Player_RenderMotionPose+14   r

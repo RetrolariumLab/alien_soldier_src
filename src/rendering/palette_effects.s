@@ -1,12 +1,12 @@
 ; Per-frame palette animation dispatchers and their stage/boss color handlers
 
 ; Runs the primary palette-effect slot while normal frame processing is active
-Palette_UpdatePrimaryEffect:                            ; CODE XREF: Sys_GameplayMainLoop+76   p  ; was: sub_4094
+Palette_UpdatePrimaryEffect:                            ; was: sub_4094
                 tst.b   (FrameControlFlags).w
                 bpl.s   Palette_UpdatePrimaryEffect_Dispatch
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdatePrimaryEffect_Dispatch:                   ; CODE XREF: Palette_UpdatePrimaryEffect+4   j  ; was: loc_409C
+Palette_UpdatePrimaryEffect_Dispatch:                   ; was: loc_409C
                 move.w  (PalettePrimaryIndex).w,d0
                 movea.w Palette_PrimaryEffectOffsets(pc,d0.w),a0
                 adda.l  #Palette_UpdateSharedAnimatedColors,a0
@@ -25,7 +25,7 @@ Palette_PrimaryEffectOffsets:   dc.w    Palette_EffectReturn-Palette_UpdateShare
                 dc.w    Palette_UpdateWolfGaropaColors-Palette_UpdateSharedAnimatedColors
 
 ; Alternates two shared colors, then advances the eight-step accent-color cycle
-Palette_UpdateSharedAnimatedColors:                     ; DATA XREF: Palette_UpdatePrimaryEffect+10   o  ; was: sub_40C0
+Palette_UpdateSharedAnimatedColors:                     ; was: sub_40C0
                                         ; ROM:Palette_PrimaryEffectOffsets   o
                 move.w  #$8CE,d0
                 move.w  #$6AE,d1
@@ -33,14 +33,14 @@ Palette_UpdateSharedAnimatedColors:                     ; DATA XREF: Palette_Upd
                 bne.s   Palette_UpdateSharedAnimatedColors_WritePair
                 move.w  #$8E,d0
                 move.w  #$4E,d1                         ; 'N'
-Palette_UpdateSharedAnimatedColors_WritePair:           ; CODE XREF: Palette_UpdateSharedAnimatedColors+E   j  ; was: loc_40D8
+Palette_UpdateSharedAnimatedColors_WritePair:           ; was: loc_40D8
                 movea.w #(PaletteActiveBuffer+$1C-M68K_RAM),a0
                 move.w  d0,$80(a0)
                 move.w  d0,(a0)+
                 move.w  d1,$80(a0)
                 move.w  d1,(a0)+
 ; Selects the shared accent color from frame-counter bits
-Palette_SelectSharedAccentColor:                        ; DATA XREF: ROM:000040B0   o  ; was: loc_40E8
+Palette_SelectSharedAccentColor:                        ; was: loc_40E8
                 move.w  (FrameCounter).w,d0
                 asr.w   #2,d0
                 andi.w  #$E,d0
@@ -49,11 +49,11 @@ Palette_SelectSharedAccentColor:                        ; DATA XREF: ROM:000040B
                 bne.s   Palette_StoreSharedAccentColor
                 subq.w  #2,d0
 ; Stores the selected accent in both active and shadow palette buffers
-Palette_StoreSharedAccentColor:                         ; CODE XREF: Palette_UpdateSharedAnimatedColors+3C   j  ; was: loc_4100
+Palette_StoreSharedAccentColor:                         ; was: loc_4100
                 movea.w #(PaletteActiveBuffer+$3E-M68K_RAM),a0
                 move.w  d0,(a0)
                 move.w  d0,$80(a0)
-Palette_EffectReturn:                                   ; DATA XREF: ROM:Palette_PrimaryEffectOffsets   o  ; was: locret_410A
+Palette_EffectReturn:                                   ; was: locret_410A
                                         ; ROM:Palette_SecondaryEffectOffsets   o
                 rts
 ; End of function Palette_UpdateSharedAnimatedColors
@@ -61,17 +61,17 @@ Palette_EffectReturn:                                   ; DATA XREF: ROM:Palette
 Palette_SharedAccentColorCycle: dc.w    2, 4, 6, 8, $A, $C, $2E, $26E  ; was: word_410C
 
 ; Alternates stage 2 palette color 6 between two blue-green values
-Palette_UpdateStage2BlinkColor:                         ; DATA XREF: ROM:000040B2   o  ; was: sub_411C
+Palette_UpdateStage2BlinkColor:                         ; was: sub_411C
                 move.w  #$480,d0
                 btst    #0,(FrameCounter+1).w
                 bne.s   Palette_UpdateStage2BlinkColor_Store
                 move.w  #$4C0,d0
-Palette_UpdateStage2BlinkColor_Store:                   ; CODE XREF: Palette_UpdateStage2BlinkColor+A   j  ; was: loc_412C
+Palette_UpdateStage2BlinkColor_Store:                   ; was: loc_412C
                 move.w  d0,(PaletteActiveBuffer+$C).w
                 rts
 ; End of function Palette_UpdateStage2BlinkColor
 ; Alternates two lightning-flash colors until the shared effect timer expires
-Palette_UpdateLightningFlash:                           ; DATA XREF: ROM:000040B4   o  ; was: sub_4132
+Palette_UpdateLightningFlash:                           ; was: sub_4132
                 move.w  (FrameCounter).w,d0
                 asl.w   #2,d0
                 andi.w  #4,d0
@@ -79,7 +79,7 @@ Palette_UpdateLightningFlash:                           ; DATA XREF: ROM:000040B
                 bpl.s   Palette_UpdateLightningFlash_StoreColors
                 clr.w   (PalettePrimaryIndex).w
                 moveq   #0,d0
-Palette_UpdateLightningFlash_StoreColors:               ; CODE XREF: Palette_UpdateLightningFlash+E   j  ; was: loc_4148
+Palette_UpdateLightningFlash_StoreColors:               ; was: loc_4148
                 move.w  Palette_LightningFlashColorPairs(pc,d0.w),(PaletteActiveBuffer+$14).w
                 move.w  Palette_LightningFlashColorPairs+2(pc,d0.w),(PaletteActiveBuffer+$16).w
                 rts
@@ -88,14 +88,14 @@ Palette_UpdateLightningFlash_StoreColors:               ; CODE XREF: Palette_Upd
 Palette_LightningFlashColorPairs:   dc.w    $E60, $E80, $EA0, $EC0  ; was: word_4156
 
 ; Alternates six Epsilon-1 palette entries between the two frame sets
-Palette_UpdateEpsilon1Colors:                           ; DATA XREF: ROM:000040B6   o  ; was: sub_415E
+Palette_UpdateEpsilon1Colors:                           ; was: sub_415E
                 lea     Palette_Epsilon1OddFrameColors(pc),a0
                 nop
                 btst    #0,(FrameCounter+1).w
                 bne.s   Palette_UpdateEpsilon1Colors_Copy
                 lea     Palette_Epsilon1EvenFrameColors(pc),a0
                 nop
-Palette_UpdateEpsilon1Colors_Copy:                      ; CODE XREF: Palette_UpdateEpsilon1Colors+C   j  ; was: loc_4172
+Palette_UpdateEpsilon1Colors_Copy:                      ; was: loc_4172
                 movea.w #(PaletteActiveBuffer+$20-M68K_RAM),a1
                 move.w  (a0)+,$A(a1)
                 move.w  (a0)+,$C(a1)
@@ -106,15 +106,12 @@ Palette_UpdateEpsilon1Colors_Copy:                      ; CODE XREF: Palette_Upd
                 rts
 ; End of function Palette_UpdateEpsilon1Colors
 ; ---------------------------------------------------------------------------
-Palette_Epsilon1OddFrameColors: dc.w    $A22, $C44, $E86, $ECA, 0, $44  ; was: word_4190
-                                        ; DATA XREF: Palette_UpdateEpsilon1Colors   o
+Palette_Epsilon1OddFrameColors:     dc.w    $A22, $C44, $E86, $ECA, 0, $44  ; was: word_4190
 Palette_Epsilon1EvenFrameColors:    dc.w    $C22, $E44, $EA6, $EEC, $46, 0  ; was: word_419C
-                                        ; DATA XREF: Palette_UpdateEpsilon1Colors+E   o
 
 ; Updates the shared stage 13-16 color cycles in active and shadow palettes
-Palette_UpdateMidgameColors:                            ; CODE XREF: Palette_UpdateMidgameAdjustedColors+4   j  ; was: sub_41A8
+Palette_UpdateMidgameColors:                            ; was: sub_41A8
                                         ; Palette_UpdateMidgameFadeAndColors+1A   j
-                                        ; DATA XREF:
                 move.w  (FrameCounter).w,d0
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a0
                 movea.w #(PaletteShadowBuffer-M68K_RAM),a1
@@ -137,7 +134,7 @@ Palette_UpdateMidgameColors:                            ; CODE XREF: Palette_Upd
                 move.w  Palette_MidgameColor2APairs(pc,d0.w),$2A(a1)
                 move.w  Palette_MidgameColor2CPairs(pc,d0.w),$2C(a0)
                 move.w  Palette_MidgameColor2CPairs(pc,d0.w),$2C(a1)
-Palette_UpdateMidgameColors_UpdateAlternatingSlot:      ; CODE XREF: Palette_UpdateMidgameColors+24   j  ; was: loc_4204
+Palette_UpdateMidgameColors_UpdateAlternatingSlot:      ; was: loc_4204
                 btst    #1,d3
                 bne.s   Palette_UpdateMidgameColors_Return
                 btst    #0,d3
@@ -146,10 +143,10 @@ Palette_UpdateMidgameColors_UpdateAlternatingSlot:      ; CODE XREF: Palette_Upd
                 move.w  Palette_MidgameColor1ACycle(pc,d1.w),$1C(a1)
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateMidgameColors_StoreColor1A:               ; CODE XREF: Palette_UpdateMidgameColors+66   j  ; was: loc_421E
+Palette_UpdateMidgameColors_StoreColor1A:               ; was: loc_421E
                 move.w  Palette_MidgameColor1ACycle(pc,d1.w),$1A(a0)
                 move.w  Palette_MidgameColor1ACycle(pc,d1.w),$1A(a1)
-Palette_UpdateMidgameColors_Return:                     ; CODE XREF: Palette_UpdateMidgameColors+60   j  ; was: locret_422A
+Palette_UpdateMidgameColors_Return:                     ; was: locret_422A
                 rts
 ; End of function Palette_UpdateMidgameColors
 ; ---------------------------------------------------------------------------
@@ -160,7 +157,7 @@ Palette_MidgameColor2APairs:    dc.w    $ECA, $EEC      ; was: word_4250
 Palette_MidgameColor2CPairs:    dc.w    $202, $200      ; was: word_4254
 
 ; Alternates Shield Viper's fixed highlights with their shadow-palette colors
-Palette_UpdateShieldViperColors:                        ; DATA XREF: ROM:000040BA   o  ; was: sub_4258
+Palette_UpdateShieldViperColors:                        ; was: sub_4258
                 movea.w #(PaletteActiveBuffer+2-M68K_RAM),a0
                 btst    #0,(FrameCounter+1).w
                 bne.s   Palette_UpdateShieldViperColors_RestoreShadow
@@ -174,7 +171,7 @@ Palette_UpdateShieldViperColors:                        ; DATA XREF: ROM:000040B
                 move.w  #$600,(a0)+
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateShieldViperColors_RestoreShadow:          ; CODE XREF: Palette_UpdateShieldViperColors+A   j  ; was: loc_4284
+Palette_UpdateShieldViperColors_RestoreShadow:          ; was: loc_4284
                 move.w  $80(a0),(a0)+
                 addq.w  #8,a0
                 move.w  $80(a0),(a0)+
@@ -186,7 +183,7 @@ Palette_UpdateShieldViperColors_RestoreShadow:          ; CODE XREF: Palette_Upd
                 rts
 ; End of function Palette_UpdateShieldViperColors
 ; Advances Wolf Garopa's accent channels and its 16-step color cycle
-Palette_UpdateWolfGaropaColors:                         ; DATA XREF: ROM:000040BE   o  ; was: sub_42A4
+Palette_UpdateWolfGaropaColors:                         ; was: sub_42A4
                 addi.w  #$10,(PaletteActiveBuffer+$3E).w
                 andi.w  #$F0,(PaletteActiveBuffer+$3E).w
                 move.w  (FrameCounter).w,d0
@@ -200,7 +197,7 @@ Palette_WolfGaropaColorCycle:   dc.w    0, 2, $24, $46, $68, $8A, $AC, $CE  ; wa
                 dc.w    $EC, $CA, $A8, $86, $64, $42, $20, 0
 
 ; Alternates three fixed highlight colors with their shadow-palette values
-Palette_ToggleThreeHighlightColors:                     ; DATA XREF: ROM:000040BC   o  ; was: sub_42E2
+Palette_ToggleThreeHighlightColors:                     ; was: sub_42E2
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a0
                 btst    #0,(FrameCounter+1).w
                 bne.s   Palette_ToggleThreeHighlightColors_RestoreShadow
@@ -209,19 +206,19 @@ Palette_ToggleThreeHighlightColors:                     ; DATA XREF: ROM:000040B
                 move.w  #$E64,$1E(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Palette_ToggleThreeHighlightColors_RestoreShadow:       ; CODE XREF: Palette_ToggleThreeHighlightColors+A   j  ; was: loc_4302
+Palette_ToggleThreeHighlightColors_RestoreShadow:       ; was: loc_4302
                 move.w  $84(a0),4(a0)
                 move.w  $9C(a0),$1C(a0)
                 move.w  $9E(a0),$1E(a0)
                 rts
 ; End of function Palette_ToggleThreeHighlightColors
 ; Runs the secondary palette-effect slot while normal frame processing is active
-Palette_UpdateSecondaryEffect:                          ; CODE XREF: Sys_GameplayMainLoop:Sys_GameplayMainLoop_UpdateSecondaryEffects   p  ; was: sub_4316
+Palette_UpdateSecondaryEffect:                          ; was: sub_4316
                 tst.b   (FrameControlFlags).w
                 bpl.s   Palette_UpdateSecondaryEffect_Dispatch
                 rts
 ; ---------------------------------------------------------------------------
-Palette_UpdateSecondaryEffect_Dispatch:                 ; CODE XREF: Palette_UpdateSecondaryEffect+4   j  ; was: loc_431E
+Palette_UpdateSecondaryEffect_Dispatch:                 ; was: loc_431E
                 move.w  (PaletteSecondaryIndex).w,d0
                 movea.w Palette_SecondaryEffectOffsets(pc,d0.w),a0
                 adda.l  #Palette_UpdatePairedEntryLists,a0
@@ -234,7 +231,7 @@ Palette_SecondaryEffectOffsets: dc.w    Palette_EffectReturn-Palette_UpdatePaire
                 dc.w    Palette_UpdateMidgameFadeAndColors-Palette_UpdatePairedEntryLists
 
 ; Applies opposite RGB deltas to two consecutive counted palette-entry lists
-Palette_UpdatePairedEntryLists:                         ; DATA XREF: Palette_UpdateSecondaryEffect+10   o  ; was: sub_4336
+Palette_UpdatePairedEntryLists:                         ; was: sub_4336
                                         ; ROM:Palette_SecondaryEffectOffsets   o
                 movea.l (PaletteEntryLists).w,a2
                 move.w  (PaletteEffectControl).w,d0
@@ -247,23 +244,23 @@ Palette_UpdatePairedEntryLists:                         ; DATA XREF: Palette_Upd
                 subq.w  #1,(PaletteEffectControl).w
                 bpl.s   Palette_UpdatePairedEntryLists_Return
                 clr.w   (PaletteSecondaryIndex).w
-Palette_UpdatePairedEntryLists_Return:                  ; CODE XREF: Palette_UpdatePairedEntryLists+1C   j  ; was: locret_435E
+Palette_UpdatePairedEntryLists_Return:                  ; was: locret_435E
                                         ; Palette_UpdatePairedEntryLists+22   j
                 rts
 ; End of function Palette_UpdatePairedEntryLists
 ; Applies the shared full-palette RGB adjustment before the midgame color cycles
-Palette_UpdateMidgameAdjustedColors:                    ; DATA XREF: ROM:00004332   o  ; was: sub_4360
+Palette_UpdateMidgameAdjustedColors:                    ; was: sub_4360
                 bsr.w   Gfx_UpdateFullPaletteRGBAdjustment
                 bra.w   Palette_UpdateMidgameColors
 ; End of function Palette_UpdateMidgameAdjustedColors
 ; Advances the full-palette fade parameter, then updates the midgame color cycles
-Palette_UpdateMidgameFadeAndColors:                     ; DATA XREF: ROM:00004334   o  ; was: sub_4368
+Palette_UpdateMidgameFadeAndColors:                     ; was: sub_4368
                 btst    #0,(FrameCounter+1).w
                 bne.s   Palette_UpdateMidgameFadeAndColors_Apply
                 addq.w  #1,(MidgameFadeLevel).w
                 bne.s   Palette_UpdateMidgameFadeAndColors_Apply
                 clr.w   (PaletteSecondaryIndex).w
-Palette_UpdateMidgameFadeAndColors_Apply:               ; CODE XREF: Palette_UpdateMidgameFadeAndColors+6   j  ; was: loc_437A
+Palette_UpdateMidgameFadeAndColors_Apply:               ; was: loc_437A
                                         ; Palette_UpdateMidgameFadeAndColors+C   j
                 move.w  (MidgameFadeLevel).w,d0
                 jsr     Gfx_ApplyFullActivePaletteFade(pc)  ; (pc)

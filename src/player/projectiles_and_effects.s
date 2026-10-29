@@ -1,4 +1,4 @@
-Player_SpawnProjectile:                                 ; CODE XREF: Player_PhoenixAttackUpdate+56   p  ; was: sub_173FA
+Player_SpawnProjectile:                                 ; was: sub_173FA
                                         ; Player_InitiateDashAttack+80   p
                 move.b  #$41,d0                         ; 'A'
                 jsr     (Sound_QueueSFXRequest).l
@@ -25,7 +25,7 @@ Player_SpawnProjectile:                                 ; CODE XREF: Player_Phoe
                 move.w  #$30,(HealthDeltaDisplayTimer).w  ; '0'
                 rts
 ; ---------------------------------------------------------------------------
-Player_SpawnProjectile_UseAlternateParameters:          ; CODE XREF: Player_SpawnProjectile+60   j  ; was: loc_17476
+Player_SpawnProjectile_UseAlternateParameters:          ; was: loc_17476
                 move.w  #$23,$26(a0)                    ; '#'
                 subi.w  #$32,(PlayerHealth).w           ; '2'
                 move.w  #$8032,(HealthDeltaDisplayValue).w
@@ -36,7 +36,7 @@ Player_SpawnProjectile_UseAlternateParameters:          ; CODE XREF: Player_Spaw
 Orphaned_PlayerGetWeaponTableOffset:
                 bne.s   Orphaned_PlayerGetWeaponTableOffsetSelectFrame  ; was: sub_17490
                 bset    #1,(PlayerActionStateFlags).w
-Orphaned_PlayerGetWeaponTableOffsetSelectFrame:         ; CODE XREF: Orphaned_PlayerGetWeaponTableOffset   j  ; was: loc_17498
+Orphaned_PlayerGetWeaponTableOffsetSelectFrame:         ; was: loc_17498
                 movea.l $48(a5),a0
                 move.w  (FrameCounter).w,d0
                 asr.w   #1,d0
@@ -44,7 +44,7 @@ Orphaned_PlayerGetWeaponTableOffsetSelectFrame:         ; CODE XREF: Orphaned_Pl
                 rts
 ; End of function Orphaned_PlayerGetWeaponTableOffset
 ; Expands two frame streams into the player's composite sprite-piece buffer
-Player_BuildSpritePieces:                               ; CODE XREF: Player_GroundDecelerateState+70   j  ; was: sub_174A8
+Player_BuildSpritePieces:                               ; was: sub_174A8
                                         ; Player_HandleFallingState+D6   j
                 movea.w #(PlayerSpritePieceBuffer-M68K_RAM),a3
                 move.l  a3,8(a5)
@@ -52,7 +52,7 @@ Player_BuildSpritePieces:                               ; CODE XREF: Player_Grou
                 moveq   #$F,d4
                 ext.w   d5
                 asl.w   #8,d6
-Player_BuildSpritePieces_CopyPrimaryStream:             ; CODE XREF: Player_BuildSpritePieces+2C   j  ; was: loc_174BA
+Player_BuildSpritePieces_CopyPrimaryStream:             ; was: loc_174BA
                 move.w  (a1)+,d0
                 bclr    d4,d0
                 bne.s   Player_BuildSpritePieces_CopyFinalPrimaryPiece
@@ -67,7 +67,7 @@ Player_BuildSpritePieces_CopyPrimaryStream:             ; CODE XREF: Player_Buil
                 move.w  d2,(a3)+
                 bra.s   Player_BuildSpritePieces_CopyPrimaryStream
 ; ---------------------------------------------------------------------------
-Player_BuildSpritePieces_CopyFinalPrimaryPiece:         ; CODE XREF: Player_BuildSpritePieces+16   j  ; was: loc_174D6
+Player_BuildSpritePieces_CopyFinalPrimaryPiece:         ; was: loc_174D6
                 move.w  d0,(a3)+
                 andi.w  #$3FF,d0
                 moveq   #0,d1
@@ -87,7 +87,7 @@ Player_BuildSpritePieces_CopyFinalPrimaryPiece:         ; CODE XREF: Player_Buil
                 add.b   d5,d1
                 move.b  d1,d2
                 move.w  d2,(a3)+
-Player_BuildSpritePieces_CopySecondaryStream:           ; CODE XREF: Player_BuildSpritePieces+68   j  ; was: loc_17502
+Player_BuildSpritePieces_CopySecondaryStream:           ; was: loc_17502
                 move.w  (a2)+,d1
                 move.w  d1,d2
                 add.w   d0,d2
@@ -99,7 +99,7 @@ Player_BuildSpritePieces_CopySecondaryStream:           ; CODE XREF: Player_Buil
                 rts
 ; End of function Player_BuildSpritePieces
 ; Spawns particle effect with random velocity
-Effect_SpawnParticle:                                   ; CODE XREF: Player_GroundIdleState+14   p  ; was: sub_17514
+Effect_SpawnParticle:                                   ; was: sub_17514
                                         ; Player_CeilingIdleState+16   p
                 btst    #4,$69(a5)
                 bne.w   Effect_SpawnParticle_Return
@@ -138,13 +138,13 @@ Effect_SpawnParticle:                                   ; CODE XREF: Player_Grou
                 btst    #4,$E(a5)
                 beq.s   Effect_SpawnParticle_SetPosition
                 moveq   #$10,d1
-Effect_SpawnParticle_SetPosition:                       ; CODE XREF: Effect_SpawnParticle+8C   j  ; was: loc_175A4
+Effect_SpawnParticle_SetPosition:                       ; was: loc_175A4
                 move.b  (RandomNumberState+1).w,d0
                 andi.w  #$1F,d0
                 sub.w   d1,d0
                 add.w   $14(a5),d0
                 move.w  d0,$14(a0)
-Effect_SpawnParticle_Return:                            ; CODE XREF: Effect_SpawnParticle+6   j  ; was: locret_175B6
+Effect_SpawnParticle_Return:                            ; was: locret_175B6
                                         ; Effect_SpawnParticle+12   j
                 rts
 ; End of function Effect_SpawnParticle
@@ -158,13 +158,13 @@ Player_SpawnPhoenixParticles:
                 subq.w  #2,(PhoenixAttackStatus).w
                 bpl.s   Player_SpawnPhoenixParticles_CheckSoundFrame
                 clr.w   (PhoenixAttackStatus).w
-Player_SpawnPhoenixParticles_CheckSoundFrame:           ; CODE XREF: Player_SpawnPhoenixParticles+1C   j  ; was: loc_175DA
+Player_SpawnPhoenixParticles_CheckSoundFrame:           ; was: loc_175DA
                 move.w  (FrameCounter).w,d0
                 andi.w  #$F,d0
                 bne.s   Player_SpawnPhoenixParticles_Allocate
                 move.b  #$AC,d0
                 jsr     (Sound_QueueSFXRequest).l
-Player_SpawnPhoenixParticles_Allocate:                  ; CODE XREF: Player_SpawnPhoenixParticles+2A   j  ; was: loc_175EE
+Player_SpawnPhoenixParticles_Allocate:                  ; was: loc_175EE
                 bsr.w   PlayerEffect_FindFreeSlot
                 bne.w   Player_SpawnPhoenixParticles_Return
                 lea     (Effect_SharedParticleSpriteFrames).l,a1
@@ -186,12 +186,12 @@ Player_SpawnPhoenixParticles_Allocate:                  ; CODE XREF: Player_Spaw
                 sub.l   d1,$14(a0)
                 move.w  $10(a5),$10(a0)
                 sub.l   d2,$10(a0)
-Player_SpawnPhoenixParticles_Return:                    ; CODE XREF: Player_SpawnPhoenixParticles+4   j  ; was: locret_17640
+Player_SpawnPhoenixParticles_Return:                    ; was: locret_17640
                                         ; Player_SpawnPhoenixParticles+14   j
                 rts
 ; End of function Player_SpawnPhoenixParticles
 ; Spawns three projectiles in spread pattern for special attack
-Player_SpawnTripleShot:                                 ; CODE XREF: Player_InitSpecialAttack+56   j  ; was: sub_17642
+Player_SpawnTripleShot:                                 ; was: sub_17642
                 movea.w #(PlayerEffectObjectPool-M68K_RAM),a0
                 move.w  $10(a5),d4
                 moveq   #3,d5
@@ -202,10 +202,10 @@ Player_SpawnTripleShot:                                 ; CODE XREF: Player_Init
                 subq.w  #8,d4
                 bra.s   Player_SpawnTripleShot_Loop
 ; ---------------------------------------------------------------------------
-Player_SpawnTripleShot_FaceLeft:                        ; CODE XREF: Player_SpawnTripleShot+12   j  ; was: loc_1765E
+Player_SpawnTripleShot_FaceLeft:                        ; was: loc_1765E
                 addq.w  #8,d4
                 move.w  #$1E0,d6
-Player_SpawnTripleShot_Loop:                            ; CODE XREF: Player_SpawnTripleShot+1A   j  ; was: loc_17664
+Player_SpawnTripleShot_Loop:                            ; was: loc_17664
                                         ; Player_SpawnTripleShot+30   j
                 move.l  #SharedCombatSpriteAnimation01,8(a0)
                 bsr.s   Player_InitShotProjectile
@@ -221,7 +221,7 @@ Orphaned_PlayerSpawnRadialShot:
                 btst    #3,$E(a5)
                 beq.s   Orphaned_PlayerSpawnRadialShotLoop
                 addi.w  #$80,d6
-Orphaned_PlayerSpawnRadialShotLoop:                     ; CODE XREF: Orphaned_PlayerSpawnRadialShot+E   j  ; was: loc_1768C
+Orphaned_PlayerSpawnRadialShotLoop:                     ; was: loc_1768C
                                         ; Orphaned_PlayerSpawnRadialShot+22   j
                 move.l  #SharedCombatSpriteAnimation01,8(a0)
                 bsr.s   Player_InitShotProjectile
@@ -230,7 +230,7 @@ Orphaned_PlayerSpawnRadialShotLoop:                     ; CODE XREF: Orphaned_Pl
                 rts
 ; End of function Orphaned_PlayerSpawnRadialShot
 ; Initializes shot projectile with angle and velocity
-Player_InitShotProjectile:                              ; CODE XREF: Player_SpawnTripleShot+2A   p  ; was: sub_176A0
+Player_InitShotProjectile:                              ; was: sub_176A0
                                         ; Orphaned_PlayerSpawnRadialShot+1C   p
                 jsr     (Projectile_InitType88).l
                 move.b  $20(a5),$20(a0)
@@ -252,9 +252,7 @@ Player_InitShotProjectile:                              ; CODE XREF: Player_Spaw
 ; End of function Player_InitShotProjectile
 ; ---------------------------------------------------------------------------
 Player_LowerTerrainAnimationIndices:    dc.w    0, 8, 4, 8, 0, $C, $10, $C  ; was: word_176E2
-                                        ; DATA XREF: Player_PrepareSpriteRendering:Player_PrepareSpriteRendering_WithTables   o
 Player_UpperTerrainAnimationIndices:    dc.w    0, $C, $10, $C, 0, 8, 4, 8  ; was: word_176F2
-                                        ; DATA XREF: Player_PrepareSpriteRendering+14   o
 
 ; Unreachable: would draw the signed health-delta value three writers still set
 Orphaned_UIRenderTransientValue:
@@ -265,14 +263,14 @@ Orphaned_UIRenderTransientValue:
                 subq.w  #1,(HealthDeltaDisplayTimer).w
                 bpl.s   Orphaned_UIRenderTransientValueUpdatePosition
                 clr.w   (HealthDeltaDisplayValue).w
-Orphaned_UIRenderTransientValueReturn:                  ; CODE XREF: Orphaned_UIRenderTransientValue+4   j  ; was: locret_1771A
+Orphaned_UIRenderTransientValueReturn:                  ; was: locret_1771A
                 rts
 ; ---------------------------------------------------------------------------
-Orphaned_UIRenderTransientValueUpdatePosition:          ; CODE XREF: Orphaned_UIRenderTransientValue+12   j  ; was: loc_1771C
+Orphaned_UIRenderTransientValueUpdatePosition:          ; was: loc_1771C
                 btst    #0,(FrameCounter+1).w
                 bne.s   Orphaned_UIRenderTransientValueBuildSprites
                 subq.w  #1,(TransientValueScreenY).w
-Orphaned_UIRenderTransientValueBuildSprites:            ; CODE XREF: Orphaned_UIRenderTransientValue+C   j  ; was: loc_17728
+Orphaned_UIRenderTransientValueBuildSprites:            ; was: loc_17728
                                         ; Orphaned_UIRenderTransientValue+20   j
                 move.b  (HealthDeltaDisplayValue).w,d0
                 andi.w  #$10,d0
@@ -297,7 +295,7 @@ Orphaned_UIRenderTransientValueBuildSprites:            ; CODE XREF: Orphaned_UI
                 cmpi.w  #$A0,d6
                 bpl.s   Orphaned_UIRenderTransientValueUseClampedY
                 move.w  #$A0,d6
-Orphaned_UIRenderTransientValueUseClampedY:             ; CODE XREF: Orphaned_UIRenderTransientValue+76   j  ; was: loc_1777E
+Orphaned_UIRenderTransientValueUseClampedY:             ; was: loc_1777E
                 movea.w #(SharedSpriteScratch-M68K_RAM),a0
                 move.w  d6,(a0)+
                 move.w  d4,(a0)+
@@ -323,7 +321,7 @@ Orphaned_UIRenderTransientValueUseClampedY:             ; CODE XREF: Orphaned_UI
                 jmp     (Sprite_AppendOAMEntries).l
 ; End of function Orphaned_UIRenderTransientValue
 ; Creates visual dash trail effect behind player
-Effect_CreateDashTrail:                                 ; CODE XREF: Player_DashAttackState+B8   j  ; was: sub_177B6
+Effect_CreateDashTrail:                                 ; was: sub_177B6
                                         ; Player_TeleportDash+C8   j
                 tst.w   (PlayerSpecialObjectSlot).w
                 beq.s   Effect_CreateDashTrail_AllocateObjects
@@ -333,7 +331,7 @@ Effect_CreateDashTrail:                                 ; CODE XREF: Player_Dash
                 move.l  #Player_PhoenixAndTeleportDashSpriteMapping,8(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_CreateDashTrail_AllocateObjects:                 ; CODE XREF: Effect_CreateDashTrail+4   j  ; was: loc_177D8
+Effect_CreateDashTrail_AllocateObjects:                 ; was: loc_177D8
                 bsr.w   Effect_FindDashTrailSlot
                 bne.w   Effect_CreateDashTrail_Return
                 move.w  #$250,(a0)
@@ -362,7 +360,7 @@ Effect_CreateDashTrail_AllocateObjects:                 ; CODE XREF: Effect_Crea
                 lea     (Effect_DashTrailSecondarySpriteFrames).l,a1
                 neg.w   $18(a0)
 ; Sets sprite properties for dash trail effect including position and velocity
-Effect_SetDashTrailProperties:                          ; CODE XREF: Effect_CreateDashTrail+90   j  ; was: loc_17852
+Effect_SetDashTrailProperties:                          ; was: loc_17852
                 jsr     (Sprite_InitFromTable).l
                 move.w  #$8880,2(a0)
                 move.b  $20(a5),$20(a0)
@@ -373,19 +371,19 @@ Effect_SetDashTrailProperties:                          ; CODE XREF: Effect_Crea
                 subi.w  #$10,d0
                 add.w   $14(a5),d0
                 move.w  d0,$14(a0)
-Effect_CreateDashTrail_Return:                          ; CODE XREF: Effect_CreateDashTrail+14   j  ; was: locret_17882
+Effect_CreateDashTrail_Return:                          ; was: locret_17882
                                         ; Effect_CreateDashTrail+26   j
                 rts
 ; End of function Effect_CreateDashTrail
 ; Updates dash trail position with acceleration
-Effect_UpdateDashTrail:                                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_17884
+Effect_UpdateDashTrail:                                 ; was: sub_17884
                 btst    #4,(PlayerActionStateFlags).w
                 bne.s   Effect_UpdateDashTrail_ApplyMotion
-Effect_UpdateDashTrail_SetDisplayFlag:                  ; CODE XREF: Effect_UpdateDashTrail+14   j  ; was: loc_1788C
+Effect_UpdateDashTrail_SetDisplayFlag:                  ; was: loc_1788C
                 bset    #4,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_UpdateDashTrail_ApplyMotion:                     ; CODE XREF: Effect_UpdateDashTrail+6   j  ; was: loc_17894
+Effect_UpdateDashTrail_ApplyMotion:                     ; was: loc_17894
                 subq.w  #1,$48(a5)
                 bmi.s   Effect_UpdateDashTrail_SetDisplayFlag
                 move.l  $18(a5),d0
@@ -395,23 +393,23 @@ Effect_UpdateDashTrail_ApplyMotion:                     ; CODE XREF: Effect_Upda
                 btst    #0,$49(a5)
                 beq.s   Effect_UpdateDashTrail_Return
                 bclr    #7,2(a5)
-Effect_UpdateDashTrail_Return:                          ; CODE XREF: Effect_UpdateDashTrail+2E   j  ; was: locret_178BA
+Effect_UpdateDashTrail_Return:                          ; was: locret_178BA
                 rts
 ; End of function Effect_UpdateDashTrail
 ; Updates sprite facing flags
-Effect_UpdateFacingFlags:                               ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_178BC
+Effect_UpdateFacingFlags:                               ; was: sub_178BC
                 andi.w  #$E7FF,$E(a5)
                 move.w  (GlobalSpriteFlipBits).w,d0
                 or.w    d0,$E(a5)
                 cmpi.w  #$80,$C(a5)
                 bmi.s   Effect_UpdateFacingFlags_Return
                 move.w  #$1000,2(a5)
-Effect_UpdateFacingFlags_Return:                        ; CODE XREF: Effect_UpdateFacingFlags+14   j  ; was: locret_178D8
+Effect_UpdateFacingFlags_Return:                        ; was: locret_178D8
                 rts
 ; End of function Effect_UpdateFacingFlags
 ; ---------------------------------------------------------------------------
-Weapon_AmmoRegenStepDelays:         dc.w    0, 1, 3, 3, $12, 5  ; DATA XREF: Weapon_UpdateStateAndAmmoRegen+1E   o  ; was: word_178DA
-WeaponSelect_SpriteFramePointers:   dc.l    WeaponSelect_AnimatedSpriteMapping00  ; DATA XREF: WeaponSelect_Initialize+8A   o  ; was: off_178E6
+Weapon_AmmoRegenStepDelays:         dc.w    0, 1, 3, 3, $12, 5  ; was: word_178DA
+WeaponSelect_SpriteFramePointers:   dc.l    WeaponSelect_AnimatedSpriteMapping00  ; was: off_178E6
                                         ; sub_2BBC0:UI_UpdateWeaponSelectionObject_LoadSelectedAnimatedMapping   o
                 dc.l    WeaponSelect_AnimatedSpriteMapping01
                 dc.l    WeaponSelect_AnimatedSpriteMapping02

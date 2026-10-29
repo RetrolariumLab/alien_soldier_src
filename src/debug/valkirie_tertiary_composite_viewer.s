@@ -1,11 +1,11 @@
 ; Minimal type-$3F4 controller followed by an unreferenced pose viewer
-Debug_ValkirieType3F4Main:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_51842
+Debug_ValkirieType3F4Main:                              ; was: sub_51842
                 tst.w   4(a5)
                 beq.w   Debug_ValkirieType3F4DispatchState
                 tst.w   8(a5)
                 beq.s   Debug_ValkirieType3F4DispatchState
                 jsr     (Gfx_ProcessDefaultColorFade).l
-Debug_ValkirieType3F4DispatchState:                     ; CODE XREF: Debug_ValkirieType3F4Main+4   j  ; was: loc_51856
+Debug_ValkirieType3F4DispatchState:                     ; was: loc_51856
                                         ; Debug_ValkirieType3F4Main+C   j
                 move.w  4(a5),d0
                 movea.w Debug_ValkirieType3F4StateTable(pc,d0.w),a0
@@ -14,11 +14,10 @@ Debug_ValkirieType3F4DispatchState:                     ; CODE XREF: Debug_Valki
 ; End of function Debug_ValkirieType3F4Main
 ; ---------------------------------------------------------------------------
 Debug_ValkirieType3F4StateTable:    dc.w    Debug_ValkirieType3F4Initialize-Debug_ValkirieType3F4Initialize  ; was: off_51866
-                                        ; DATA XREF: Debug_ValkirieType3F4Main+18   r
                 dc.w    Debug_ValkirieType3F4UpdateWaitFlag-Debug_ValkirieType3F4Initialize
 
 ; Initialize the type-$3F4 controller at its fixed position
-Debug_ValkirieType3F4Initialize:                        ; DATA XREF: Debug_ValkirieType3F4Main+1C   o  ; was: sub_5186A
+Debug_ValkirieType3F4Initialize:                        ; was: sub_5186A
                                         ; ROM:Debug_ValkirieType3F4StateTable   o
                 move.w  #1,8(a5)
                 move.w  #$3F4,(a5)
@@ -34,11 +33,11 @@ Debug_ValkirieType3F4Initialize:                        ; DATA XREF: Debug_Valki
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
 ; Type-$3F4 wait state: publish readiness when the global wait clears
-Debug_ValkirieType3F4UpdateWaitFlag:                    ; DATA XREF: ROM:00051868   o  ; was: loc_518AA
+Debug_ValkirieType3F4UpdateWaitFlag:                    ; was: loc_518AA
                 tst.w   (MessageSequenceState).w
                 bne.s   Debug_ValkirieType3F4WaitReturn
                 move.b  #1,(SceneSequenceFlags).w
-Debug_ValkirieType3F4WaitReturn:                        ; CODE XREF: Debug_ValkirieType3F4Initialize+44   j  ; was: locret_518B6
+Debug_ValkirieType3F4WaitReturn:                        ; was: locret_518B6
                 rts
 ; End of function Debug_ValkirieType3F4Initialize
 ; Unreferenced controller-input entry for the tertiary composite viewer
@@ -46,27 +45,27 @@ Debug_ValkirieTertiaryViewerUpdate:                     ; was: sub_518B8
                 btst    #2,(ControllerHeldState).w
                 beq.s   Debug_ValkirieTertiaryViewerCheckAngleDecreaseInput
                 addq.w  #2,$56(a5)
-Debug_ValkirieTertiaryViewerCheckAngleDecreaseInput:    ; CODE XREF: Debug_ValkirieTertiaryViewerUpdate+6   j  ; was: loc_518C4
+Debug_ValkirieTertiaryViewerCheckAngleDecreaseInput:    ; was: loc_518C4
                 btst    #3,(ControllerHeldState).w
                 beq.s   Debug_ValkirieTertiaryViewerPreparePoseUpdate
                 subq.w  #2,$56(a5)
-Debug_ValkirieTertiaryViewerPreparePoseUpdate:          ; CODE XREF: Debug_ValkirieTertiaryViewerUpdate+12   j  ; was: loc_518D0
+Debug_ValkirieTertiaryViewerPreparePoseUpdate:          ; was: loc_518D0
                 andi.w  #$1FE,$56(a5)
                 lea     Debug_ValkirieTertiaryViewerPoseScript(pc),a1
                 nop
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
-Debug_ValkirieTertiaryViewerAdvancePoseAndRender:       ; CODE XREF: Debug_ValkirieTertiaryViewerUpdate+24   j  ; was: loc_518E0
+Debug_ValkirieTertiaryViewerAdvancePoseAndRender:       ; was: loc_518E0
                 bsr.w   Debug_ValkirieTertiaryViewerAdvancePoseScript
                 moveq   #$19,d7
                 jmp     Sprite_BeginMetaspritePartTraversal
 ; End of function Debug_ValkirieTertiaryViewerUpdate
 ; Interpret pose commands and advance nineteen channels for linked-part angles
-Debug_ValkirieTertiaryViewerAdvancePoseScript:          ; CODE XREF: Debug_ValkirieTertiaryViewerUpdate:Debug_ValkirieTertiaryViewerAdvancePoseAndRender   p  ; was: sub_518EC
+Debug_ValkirieTertiaryViewerAdvancePoseScript:          ; was: sub_518EC
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Debug_ValkirieTertiaryViewerTickPoseInterpolation
-Debug_ValkirieTertiaryViewerReadNextPoseCommand:        ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+24   j  ; was: loc_518F6
+Debug_ValkirieTertiaryViewerReadNextPoseCommand:        ; was: loc_518F6
                                         ; Debug_ValkirieTertiaryViewerAdvancePoseScript+44   j
                 move.w  $58(a5),d0
                 bmi.w   Debug_ValkirieTertiaryViewerStorePoseComponents
@@ -76,21 +75,21 @@ Debug_ValkirieTertiaryViewerReadNextPoseCommand:        ; CODE XREF: Debug_Valki
                 addq.w  #2,$58(a5)
                 bra.s   Debug_ValkirieTertiaryViewerReadNextPoseCommand
 ; ---------------------------------------------------------------------------
-Debug_ValkirieTertiaryViewerCheckPoseControlCommand:    ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+18   j  ; was: loc_51912
+Debug_ValkirieTertiaryViewerCheckPoseControlCommand:    ; was: loc_51912
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Debug_ValkirieTertiaryViewerHandlePoseLoopCommand
                 move.w  d3,$58(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Debug_ValkirieTertiaryViewerHandlePoseLoopCommand:      ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+2E   j  ; was: loc_51922
+Debug_ValkirieTertiaryViewerHandlePoseLoopCommand:      ; was: loc_51922
                 cmpi.w  #$FFFF,d3
                 bne.s   Debug_ValkirieTertiaryViewerBeginPoseCommandInterpolation
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Debug_ValkirieTertiaryViewerReadNextPoseCommand
 ; ---------------------------------------------------------------------------
-Debug_ValkirieTertiaryViewerBeginPoseCommandInterpolation:  ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+3A   j  ; was: loc_51932
+Debug_ValkirieTertiaryViewerBeginPoseCommandInterpolation:  ; was: loc_51932
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -105,12 +104,12 @@ Debug_ValkirieTertiaryViewerBeginPoseCommandInterpolation:  ; CODE XREF: Debug_V
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Debug_ValkirieTertiaryViewerStorePoseComponents
-Debug_ValkirieTertiaryViewerTickPoseInterpolation:      ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+8   j  ; was: loc_51964
+Debug_ValkirieTertiaryViewerTickPoseInterpolation:      ; was: loc_51964
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Debug_ValkirieTertiaryViewerStorePoseComponents:        ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+E   j  ; was: loc_51974
+Debug_ValkirieTertiaryViewerStorePoseComponents:        ; was: loc_51974
                                         ; Debug_ValkirieTertiaryViewerAdvancePoseScript+76   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
@@ -206,7 +205,7 @@ Debug_ValkirieTertiaryViewerStorePoseComponents:        ; CODE XREF: Debug_Valki
                 rts
 ; End of function Debug_ValkirieTertiaryViewerAdvancePoseScript
 ; Initialize interpolation deltas for the next tertiary-viewer pose command
-Debug_ValkirieTertiaryViewerBeginPoseInterpolation:     ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+5C   p  ; was: sub_51A86
+Debug_ValkirieTertiaryViewerBeginPoseInterpolation:     ; was: sub_51A86
                 lea     (Boss_ValkirieAlternateRotationFramesAndNeutralPose).l,a1
                 moveq   #$12,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
@@ -220,9 +219,7 @@ Debug_ValkirieTertiaryViewerInitializePoseChannels:     ; was: sub_51A9C
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Debug_ValkirieTertiaryViewerInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Debug_ValkirieTertiaryViewerPoseScript: dc.b    $20, $20, 0, 0, $20, $20, 0, $12, $FF, $FF  ; was: byte_51AA8
-                                        ; DATA XREF: Debug_ValkirieTertiaryViewerUpdate+1E   o
+Debug_ValkirieTertiaryViewerPoseScript:     dc.b    $20, $20, 0, 0, $20, $20, 0, $12, $FF, $FF  ; was: byte_51AA8
 Debug_ValkirieTertiaryViewerPoseTargets:    dc.b    $40, 0, $C0, $94, $C0, $10, $EC, $40, $F0, $60, $F0, $20, $20, $20, $10, $E0  ; was: byte_51AB2
-                                        ; DATA XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+54   o
                 dc.b    $E0, 0, $40, 0, $C0, $94, $C0, $10, $EC, $40, $F0, $60, $F0, $20, $20, $20
                 dc.b    $10, $E0, $E0, 0

@@ -1,5 +1,5 @@
 ; Updates the stage-history display and lets the extended layout restart the frontend
-Results_UpdateHistoryDisplayAndHandleExtendedExit:      ; CODE XREF: Results_WaitForPostStageConfirmation+4   p  ; was: sub_1FBEC
+Results_UpdateHistoryDisplayAndHandleExtendedExit:      ; was: sub_1FBEC
                                         ; Results_UpdateFinalSummary+A   p
                 bsr.s   Results_DispatchHistoryDisplayState
                 move.w  (PrimaryCameraXPosition).w,(SecondaryCameraXPos).w
@@ -9,19 +9,19 @@ Results_UpdateHistoryDisplayAndHandleExtendedExit:      ; CODE XREF: Results_Wai
                 beq.s   Results_UpdateHistoryDisplayAndHandleExtendedExitReturn
                 move.w  #4,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
-Results_UpdateHistoryDisplayAndHandleExtendedExitReturn:  ; CODE XREF: Results_UpdateHistoryDisplayAndHandleExtendedExit+C   j  ; was: locret_1FC0C
+Results_UpdateHistoryDisplayAndHandleExtendedExitReturn:  ; was: locret_1FC0C
                                         ; Results_UpdateHistoryDisplayAndHandleExtendedExit+14   j
                 rts
 ; End of function Results_UpdateHistoryDisplayAndHandleExtendedExit
 ; Dispatches the stage-history display state stored at ResultsDisplayState
-Results_DispatchHistoryDisplayState:                    ; CODE XREF: Results_UpdateHistoryDisplayAndHandleExtendedExit   p  ; was: sub_1FC0E
+Results_DispatchHistoryDisplayState:                    ; was: sub_1FC0E
                 move.w  (ResultsDisplayState).w,d0
                 lea     Results_HistoryDisplayStateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Results_DispatchHistoryDisplayState
 ; ---------------------------------------------------------------------------
-Results_HistoryDisplayStateOffsets: dc.w    Results_InitializeHistoryDisplay-*  ; DATA XREF: Results_DispatchHistoryDisplayState+4   o  ; was: off_1FC1A
+Results_HistoryDisplayStateOffsets: dc.w    Results_InitializeHistoryDisplay-*  ; was: off_1FC1A
                 dc.w    Results_RenderInitialHistoryRow-*
                 dc.w    Results_ScrollHistoryIntoView-*
                 dc.w    Results_RenderAdditionalHistoryRowAndScroll-*
@@ -29,7 +29,7 @@ Results_HistoryDisplayStateOffsets: dc.w    Results_InitializeHistoryDisplay-*  
                 dc.w    Results_UpdateBrowsingState-*
 
 ; Builds 25 per-stage history rows, summary rows, and the initial viewport state
-Results_InitializeHistoryDisplay:                       ; DATA XREF: ROM:Results_HistoryDisplayStateOffsets   o  ; was: sub_1FC26
+Results_InitializeHistoryDisplay:                       ; was: sub_1FC26
                 addq.w  #2,(ResultsDisplayState).w
                 move.w  #1,d0
                 move.w  (ResultsExtendedLayout).w,(ResultsLayoutModeCopy).w
@@ -42,11 +42,11 @@ Results_InitializeHistoryDisplay:                       ; DATA XREF: ROM:Results
                 move.w  #$FF40,(ResultsLowerScrollBound).w
                 bra.s   Results_ConfigureInitialViewport
 ; ---------------------------------------------------------------------------
-Results_SetHistoryScrollBounds:                         ; CODE XREF: Results_InitializeHistoryDisplay+16   j  ; was: loc_1FC50
+Results_SetHistoryScrollBounds:                         ; was: loc_1FC50
                                         ; Results_InitializeHistoryDisplay+1A   j
                 move.w  #$17,(ResultsLastScrollRow).w
                 move.w  #$FEF0,(ResultsLowerScrollBound).w
-Results_ConfigureInitialViewport:                       ; CODE XREF: Results_InitializeHistoryDisplay+28   j  ; was: loc_1FC5C
+Results_ConfigureInitialViewport:                       ; was: loc_1FC5C
                 move.w  #$50,(SecondaryCameraYPos).w
                 move.w  #$F0,(PrimaryCameraYPosition).w
                 clr.w   (PrimaryCameraXPosition).w
@@ -58,7 +58,7 @@ Results_ConfigureInitialViewport:                       ; CODE XREF: Results_Ini
                 lea     (StageResultVisits).w,a4
                 moveq   #1,d5
                 moveq   #0,d6
-Results_BuildStageRowsLoop:                             ; CODE XREF: Results_InitializeHistoryDisplay+190   j  ; was: loc_1FC8A
+Results_BuildStageRowsLoop:                             ; was: loc_1FC8A
                 sub.w   d4,d4
                 abcd    d5,d6
                 move.w  d6,d0
@@ -73,7 +73,7 @@ Results_BuildStageRowsLoop:                             ; CODE XREF: Results_Ini
                 bpl.s   Results_WriteStageTimeLimit
                 cmp.w   (StageTableIndex).w,d0
                 bne.s   Results_WriteMissingStageTimeLimit
-Results_WriteStageTimeLimit:                            ; CODE XREF: Results_InitializeHistoryDisplay+86   j  ; was: loc_1FCB4
+Results_WriteStageTimeLimit:                            ; was: loc_1FCB4
                 move.w  (a1),(ResultsStageTimeScratch).w
                 move.b  (a1),d0
                 bsr.w   Results_WritePackedBCDByteDigits
@@ -82,14 +82,14 @@ Results_WriteStageTimeLimit:                            ; CODE XREF: Results_Ini
                 bsr.w   Results_WritePackedBCDByteDigits
                 bra.s   Results_AdvanceToFirstInterval
 ; ---------------------------------------------------------------------------
-Results_WriteMissingStageTimeLimit:                     ; CODE XREF: Results_InitializeHistoryDisplay+82   j  ; was: loc_1FCCC
+Results_WriteMissingStageTimeLimit:                     ; was: loc_1FCCC
                                         ; Results_InitializeHistoryDisplay+8C   j
                 bsr.w   Results_WriteMissingGlyph
                 bsr.w   Results_WriteMissingGlyph
                 bsr.w   Results_WriteTimeSeparator
                 bsr.w   Results_WriteMissingGlyph
                 bsr.w   Results_WriteMissingGlyph
-Results_AdvanceToFirstInterval:                         ; CODE XREF: Results_InitializeHistoryDisplay+A4   j  ; was: loc_1FCE0
+Results_AdvanceToFirstInterval:                         ; was: loc_1FCE0
                 addq.w  #2,a1
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowPaddingByte
@@ -100,13 +100,13 @@ Results_AdvanceToFirstInterval:                         ; CODE XREF: Results_Ini
                 bsr.w   Results_FormatBCDTimeDifference
                 bra.s   Results_AdvanceToSecondInterval
 ; ---------------------------------------------------------------------------
-Results_WriteMissingFirstInterval:                      ; CODE XREF: Results_InitializeHistoryDisplay+C8   j  ; was: loc_1FD02
+Results_WriteMissingFirstInterval:                      ; was: loc_1FD02
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
                 bsr.w   Results_WriteTimeSeparator
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
-Results_AdvanceToSecondInterval:                        ; CODE XREF: Results_InitializeHistoryDisplay+DA   j  ; was: loc_1FD16
+Results_AdvanceToSecondInterval:                        ; was: loc_1FD16
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowPaddingByte
                 move.w  (a3)+,(ResultsEndTimeScratch).w
@@ -116,13 +116,13 @@ Results_AdvanceToSecondInterval:                        ; CODE XREF: Results_Ini
                 bsr.w   Results_FormatBCDTimeDifference
                 bra.s   Results_AdvanceToTotalInterval
 ; ---------------------------------------------------------------------------
-Results_WriteMissingSecondInterval:                     ; CODE XREF: Results_InitializeHistoryDisplay+FC   j  ; was: loc_1FD36
+Results_WriteMissingSecondInterval:                     ; was: loc_1FD36
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
                 bsr.w   Results_WriteTimeSeparator
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
-Results_AdvanceToTotalInterval:                         ; CODE XREF: Results_InitializeHistoryDisplay+10E   j  ; was: loc_1FD4A
+Results_AdvanceToTotalInterval:                         ; was: loc_1FD4A
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowPaddingByte
                 tst.w   (ResultsEndTimeScratch).w
@@ -132,36 +132,36 @@ Results_AdvanceToTotalInterval:                         ; CODE XREF: Results_Ini
                 bsr.w   Results_FormatBCDTimeDifference
                 bra.s   Results_PrepareStageVisitCount
 ; ---------------------------------------------------------------------------
-Results_WriteMissingTotalInterval:                      ; CODE XREF: Results_InitializeHistoryDisplay+130   j  ; was: loc_1FD6A
+Results_WriteMissingTotalInterval:                      ; was: loc_1FD6A
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
                 bsr.w   Results_WriteTimeSeparator
                 move.b  #$FF,d0
                 bsr.w   Results_WritePackedBCDByteDigits
-Results_PrepareStageVisitCount:                         ; CODE XREF: Results_InitializeHistoryDisplay+142   j  ; was: loc_1FD7E
+Results_PrepareStageVisitCount:                         ; was: loc_1FD7E
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowPaddingByte
                 move.w  (a4)+,d0
                 bpl.s   Results_ConvertStageVisitCountToBCD
                 tst.w   -2(a3)
                 bmi.s   Results_WriteStageVisitCount
-Results_ConvertStageVisitCountToBCD:                    ; CODE XREF: Results_InitializeHistoryDisplay+162   j  ; was: loc_1FD90
+Results_ConvertStageVisitCountToBCD:                    ; was: loc_1FD90
                 addq.w  #1,d0
                 movem.w a0,-(sp)
                 lea     (Math_PackedBCDLookup).l,a0
                 add.w   d0,d0
                 move.w  (a0,d0.w),d0
                 movem.w (sp)+,a0
-Results_WriteStageVisitCount:                           ; CODE XREF: Results_InitializeHistoryDisplay+168   j  ; was: loc_1FDA6
+Results_WriteStageVisitCount:                           ; was: loc_1FDA6
                 bsr.w   Results_WritePackedBCDThreeDigits
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowPaddingByte
                 bsr.w   Results_WriteRowEndMarker
                 dbf     d7,Results_BuildStageRowsLoop
                 move.w  #5,d6
-Results_AppendBlankRowsLoop:                            ; CODE XREF: Results_InitializeHistoryDisplay+1A8   j  ; was: loc_1FDBE
+Results_AppendBlankRowsLoop:                            ; was: loc_1FDBE
                 move.w  #$24,d7
-Results_ClearBlankRowLoop:                              ; CODE XREF: Results_InitializeHistoryDisplay+1A0   j  ; was: loc_1FDC2
+Results_ClearBlankRowLoop:                              ; was: loc_1FDC2
                 bsr.w   Results_WriteRowPaddingByte
                 dbf     d7,Results_ClearBlankRowLoop
                 bsr.w   Results_WriteRowEndMarker
@@ -175,7 +175,7 @@ Results_ClearBlankRowLoop:                              ; CODE XREF: Results_Ini
                 rts
 ; End of function Results_InitializeHistoryDisplay
 ; Renders one of the first ten stage-history rows before the viewport enters
-Results_RenderInitialHistoryRow:                        ; DATA XREF: ROM:0001FC1C   o  ; was: sub_1FDEC
+Results_RenderInitialHistoryRow:                        ; was: sub_1FDEC
                 lea     (ResultsStageRowBuffer).w,a0
                 adda.w  (ResultsRowBufferOffset).w,a0
                 move.w  a0,(ResultsCurrentRowPtr).w
@@ -190,20 +190,20 @@ Results_RenderInitialHistoryRow:                        ; DATA XREF: ROM:0001FC1
                 move.w  #$2300,d0
                 bra.s   Results_CheckInitialRowCursor
 ; ---------------------------------------------------------------------------
-Results_SelectAvailableRowPalette:                      ; CODE XREF: Results_RenderInitialHistoryRow+26   j  ; was: loc_1FE1A
+Results_SelectAvailableRowPalette:                      ; was: loc_1FE1A
                 move.w  #$4300,d0
-Results_CheckInitialRowCursor:                          ; CODE XREF: Results_RenderInitialHistoryRow+2C   j  ; was: loc_1FE1E
+Results_CheckInitialRowCursor:                          ; was: loc_1FE1E
                 cmp.w   (ResultsSelectedRowTile).w,d4
                 bne.s   Results_RenderInitialPrimaryLine
                 move.w  #$FFFF,(ResultsSelectedRowTile).w
                 bra.s   Results_RenderInitialPrimaryLine
 ; ---------------------------------------------------------------------------
-Results_SelectCurrentStageRow:                          ; CODE XREF: Results_RenderInitialHistoryRow+1E   j  ; was: loc_1FE2C
+Results_SelectCurrentStageRow:                          ; was: loc_1FE2C
                 move.w  #$6300,d0
                 move.w  (ResultsRowBufferOffset).w,(ResultsSelectedRowData).w
                 move.w  (ResultsDetailTextOffset).w,(ResultsSelectedTextPos).w
                 move.w  d4,(ResultsSelectedRowTile).w
-Results_RenderInitialPrimaryLine:                       ; CODE XREF: Results_RenderInitialHistoryRow+36   j  ; was: loc_1FE40
+Results_RenderInitialPrimaryLine:                       ; was: loc_1FE40
                                         ; Results_RenderInitialHistoryRow+3E   j
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
                 movea.w (ResultsCurrentRowPtr).w,a0
@@ -215,19 +215,19 @@ Results_RenderInitialPrimaryLine:                       ; CODE XREF: Results_Ren
                 move.w  #$2300,d0
                 bra.s   Results_SelectMissingDetailText
 ; ---------------------------------------------------------------------------
-Results_SelectMissingDetailPalette:                     ; CODE XREF: Results_RenderInitialHistoryRow+6E   j  ; was: loc_1FE62
+Results_SelectMissingDetailPalette:                     ; was: loc_1FE62
                 move.w  #$4300,d0
-Results_SelectMissingDetailText:                        ; CODE XREF: Results_RenderInitialHistoryRow+74   j  ; was: loc_1FE66
+Results_SelectMissingDetailText:                        ; was: loc_1FE66
                 lea     Results_MissingDetailText(pc),a0
                 nop
                 bra.s   Results_RenderInitialDetailLine
 ; ---------------------------------------------------------------------------
-Results_SelectInitialDetailText:                        ; CODE XREF: Results_RenderInitialHistoryRow+66   j  ; was: loc_1FE6E
+Results_SelectInitialDetailText:                        ; was: loc_1FE6E
                 move.w  #$6300,d0
                 lea     Results_StageDetailTextTable(pc),a0
                 nop
                 adda.w  (ResultsDetailTextOffset).w,a0
-Results_RenderInitialDetailLine:                        ; CODE XREF: Results_RenderInitialHistoryRow+80   j  ; was: loc_1FE7C
+Results_RenderInitialDetailLine:                        ; was: loc_1FE7C
                 move.w  #$4050,d4
                 add.w   (ResultsRowTileOffset).w,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
@@ -238,11 +238,11 @@ Results_RenderInitialDetailLine:                        ; CODE XREF: Results_Ren
                 cmpi.w  #$A,(ResultsRenderedRowCount).w
                 bcs.s   Results_RenderInitialRowReturn
                 addq.w  #2,(ResultsDisplayState).w
-Results_RenderInitialRowReturn:                         ; CODE XREF: Results_RenderInitialHistoryRow+BA   j  ; was: locret_1FEAC
+Results_RenderInitialRowReturn:                         ; was: locret_1FEAC
                 rts
 ; End of function Results_RenderInitialHistoryRow
 ; Scrolls the first ten rendered history rows into view and selects the final target
-Results_ScrollHistoryIntoView:                          ; DATA XREF: ROM:0001FC1E   o  ; was: sub_1FEAE
+Results_ScrollHistoryIntoView:                          ; was: sub_1FEAE
                 subq.w  #2,(SecondaryCameraYPos).w
                 subq.w  #2,(PrimaryCameraYPosition).w
                 cmpi.w  #$90,(PrimaryCameraYPosition).w
@@ -257,19 +257,19 @@ Results_ScrollHistoryIntoView:                          ; DATA XREF: ROM:0001FC1
                 move.w  d0,(ResultsScrollTargetY).w
                 rts
 ; ---------------------------------------------------------------------------
-Results_SetExtendedScrollTarget:                        ; CODE XREF: Results_ScrollHistoryIntoView+18   j  ; was: loc_1FEDA
+Results_SetExtendedScrollTarget:                        ; was: loc_1FEDA
                 move.w  #$FEF0,(ResultsScrollTargetY).w
-Results_InitialScrollReturn:                            ; CODE XREF: Results_ScrollHistoryIntoView+E   j  ; was: locret_1FEE0
+Results_InitialScrollReturn:                            ; was: locret_1FEE0
                 rts
 ; End of function Results_ScrollHistoryIntoView
 ; Renders one additional history row while moving toward the automatic scroll target
-Results_RenderAdditionalHistoryRowAndScroll:            ; DATA XREF: ROM:0001FC20   o  ; was: sub_1FEE2
+Results_RenderAdditionalHistoryRowAndScroll:            ; was: sub_1FEE2
                 bsr.w   Results_QueueCompletionMusicAtScrollThreshold
                 move.w  (ResultsScrollTargetY).w,d0
                 cmp.w   (PrimaryCameraYPosition).w,d0
                 beq.s   Results_RenderScrolledRow
                 subq.w  #2,(PrimaryCameraYPosition).w
-Results_RenderScrolledRow:                              ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+C   j  ; was: loc_1FEF4
+Results_RenderScrolledRow:                              ; was: loc_1FEF4
                 lea     (ResultsStageRowBuffer).w,a0
                 adda.w  (ResultsRowBufferOffset).w,a0
                 move.w  a0,(ResultsCurrentRowPtr).w
@@ -284,16 +284,16 @@ Results_RenderScrolledRow:                              ; CODE XREF: Results_Ren
                 move.w  #$2300,d0
                 bra.s   Results_RenderScrolledPrimaryLine
 ; ---------------------------------------------------------------------------
-Results_SelectScrolledAvailablePalette:                 ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+38   j  ; was: loc_1FF22
+Results_SelectScrolledAvailablePalette:                 ; was: loc_1FF22
                 move.w  #$4300,d0
                 bra.s   Results_RenderScrolledPrimaryLine
 ; ---------------------------------------------------------------------------
-Results_SelectScrolledCurrentStageRow:                  ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+30   j  ; was: loc_1FF28
+Results_SelectScrolledCurrentStageRow:                  ; was: loc_1FF28
                 move.w  #$6300,d0
                 move.w  (ResultsRowBufferOffset).w,(ResultsSelectedRowData).w
                 move.w  (ResultsDetailTextOffset).w,(ResultsSelectedTextPos).w
                 move.w  d4,(ResultsSelectedRowTile).w
-Results_RenderScrolledPrimaryLine:                      ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+3E   j  ; was: loc_1FF3C
+Results_RenderScrolledPrimaryLine:                      ; was: loc_1FF3C
                                         ; Results_RenderAdditionalHistoryRowAndScroll+44   j
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
                 movea.w (ResultsCurrentRowPtr).w,a0
@@ -305,19 +305,19 @@ Results_RenderScrolledPrimaryLine:                      ; CODE XREF: Results_Ren
                 move.w  #$2300,d0
                 bra.s   Results_SelectScrolledMissingDetailText
 ; ---------------------------------------------------------------------------
-Results_SelectScrolledMissingDetailPalette:             ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+74   j  ; was: loc_1FF5E
+Results_SelectScrolledMissingDetailPalette:             ; was: loc_1FF5E
                 move.w  #$4300,d0
-Results_SelectScrolledMissingDetailText:                ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+7A   j  ; was: loc_1FF62
+Results_SelectScrolledMissingDetailText:                ; was: loc_1FF62
                 lea     Results_MissingDetailText(pc),a0
                 nop
                 bra.s   Results_RenderScrolledDetailLine
 ; ---------------------------------------------------------------------------
-Results_SelectScrolledDetailText:                       ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+6C   j  ; was: loc_1FF6A
+Results_SelectScrolledDetailText:                       ; was: loc_1FF6A
                 move.w  #$6300,d0
                 lea     Results_StageDetailTextTable(pc),a0
                 nop
                 adda.w  (ResultsDetailTextOffset).w,a0
-Results_RenderScrolledDetailLine:                       ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+86   j  ; was: loc_1FF78
+Results_RenderScrolledDetailLine:                       ; was: loc_1FF78
                 move.w  #$4050,d4
                 add.w   (ResultsRowTileOffset).w,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
@@ -328,11 +328,11 @@ Results_RenderScrolledDetailLine:                       ; CODE XREF: Results_Ren
                 cmpi.w  #$10,(ResultsRenderedRowCount).w
                 bcs.s   Results_RenderScrolledRowReturn
                 addq.w  #2,(ResultsDisplayState).w
-Results_RenderScrolledRowReturn:                        ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll+C0   j  ; was: locret_1FFA8
+Results_RenderScrolledRowReturn:                        ; was: locret_1FFA8
                 rts
 ; End of function Results_RenderAdditionalHistoryRowAndScroll
 ; Advances the automatic viewport twice per frame, then enters browsing state
-Results_UpdateAutomaticHistoryScroll:                   ; DATA XREF: ROM:0001FC22   o  ; was: sub_1FFAA
+Results_UpdateAutomaticHistoryScroll:                   ; was: sub_1FFAA
                 bsr.w   Results_QueueCompletionMusicAtScrollThreshold
                 bsr.s   Results_AdvanceAutomaticHistoryViewport
                 tst.w   (ResultsVerticalStep).w
@@ -343,13 +343,13 @@ Results_UpdateAutomaticHistoryScroll:                   ; DATA XREF: ROM:0001FC2
                 bsr.w   Results_RenderSelectedRowHighlight
                 rts
 ; ---------------------------------------------------------------------------
-Results_AdvanceToBrowsingState:                         ; CODE XREF: Results_UpdateAutomaticHistoryScroll+A   j  ; was: loc_1FFC4
+Results_AdvanceToBrowsingState:                         ; was: loc_1FFC4
                                         ; Results_UpdateAutomaticHistoryScroll+12   j
                 addq.w  #2,(ResultsDisplayState).w
                 rts
 ; End of function Results_UpdateAutomaticHistoryScroll
 ; Advances one automatic upward viewport step while target and lower bound allow it
-Results_AdvanceAutomaticHistoryViewport:                ; CODE XREF: Results_UpdateAutomaticHistoryScroll+4   p  ; was: sub_1FFCA
+Results_AdvanceAutomaticHistoryViewport:                ; was: sub_1FFCA
                                         ; Results_UpdateAutomaticHistoryScroll+C   p
                 move.w  (ResultsScrollTargetY).w,d0
                 cmp.w   (PrimaryCameraYPosition).w,d0
@@ -361,13 +361,13 @@ Results_AdvanceAutomaticHistoryViewport:                ; CODE XREF: Results_Upd
                 bsr.w   Results_UpdateViewport
                 rts
 ; ---------------------------------------------------------------------------
-Results_ClearAutomaticVerticalStep:                     ; CODE XREF: Results_AdvanceAutomaticHistoryViewport+8   j  ; was: loc_1FFEA
+Results_ClearAutomaticVerticalStep:                     ; was: loc_1FFEA
                                         ; Results_AdvanceAutomaticHistoryViewport+12   j
                 clr.w   (ResultsVerticalStep).w
                 rts
 ; End of function Results_AdvanceAutomaticHistoryViewport
 ; Queues the completion music once the scrolling rows reach the trigger point
-Results_QueueCompletionMusicAtScrollThreshold:          ; CODE XREF: Results_RenderAdditionalHistoryRowAndScroll   p  ; was: sub_1FFF0
+Results_QueueCompletionMusicAtScrollThreshold:          ; was: sub_1FFF0
                                         ; sub_1FFAA   p
                 tst.w   (ResultsMusicQueuedFlag).w
                 bne.s   Results_CompletionMusicReturn
@@ -378,19 +378,19 @@ Results_QueueCompletionMusicAtScrollThreshold:          ; CODE XREF: Results_Ren
                 move.w  #1,(ResultsMusicQueuedFlag).w
                 move.b  #$85,d0
                 jsr     (Sound_QueueSFXRequest).l
-Results_CompletionMusicReturn:                          ; CODE XREF: Results_QueueCompletionMusicAtScrollThreshold+4   j  ; was: locret_20014
+Results_CompletionMusicReturn:                          ; was: locret_20014
                                         ; Results_QueueCompletionMusicAtScrollThreshold+12   j
                 rts
 ; End of function Results_QueueCompletionMusicAtScrollThreshold
 ; Updates the interactive results view and draws its flashing row cursor
-Results_UpdateBrowsingState:                            ; DATA XREF: ROM:0001FC24   o  ; was: sub_20016
+Results_UpdateBrowsingState:                            ; was: sub_20016
                 bsr.w   Results_HandleNavigation
                 bsr.w   Results_HandleNavigation
                 bsr.w   Results_RenderSelectedRowHighlight
                 rts
 ; End of function Results_UpdateBrowsingState
 ; Handles D-pad scrolling and column snapping for results screen browsing
-Results_HandleNavigation:                               ; CODE XREF: Results_UpdateBrowsingState   p  ; was: sub_20024
+Results_HandleNavigation:                               ; was: sub_20024
                                         ; Results_UpdateBrowsingState+4   p
                 btst    #2,(ControllerHeldState).w
                 beq.s   Results_CheckRightNavigation
@@ -401,7 +401,7 @@ Results_HandleNavigation:                               ; CODE XREF: Results_Upd
                 move.w  #1,(ResultsHorizontalActive).w
                 move.w  #$FFFF,(ResultsHorizontalStep).w
                 addi.w  #-1,(PrimaryCameraXPosition).w
-Results_CheckRightNavigation:                           ; CODE XREF: Results_HandleNavigation+6   j  ; was: loc_2004C
+Results_CheckRightNavigation:                           ; was: loc_2004C
                 btst    #3,(ControllerHeldState).w
                 beq.s   Results_CheckUpNavigation
                 move.w  (PrimaryCameraXPosition).w,d0
@@ -413,16 +413,16 @@ Results_CheckRightNavigation:                           ; CODE XREF: Results_Han
                 addi.w  #1,(PrimaryCameraXPosition).w
                 bra.s   Results_CheckUpNavigation
 ; ---------------------------------------------------------------------------
-Results_StopHorizontalNavigation:                       ; CODE XREF: Results_HandleNavigation+14   j  ; was: loc_20074
+Results_StopHorizontalNavigation:                       ; was: loc_20074
                                         ; Results_HandleNavigation+3A   j
                 tst.w   (ResultsHorizontalActive).w
                 beq.s   Results_ClearHorizontalStep
                 clr.w   (ResultsHorizontalActive).w
                 move.b  #$DB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Results_ClearHorizontalStep:                            ; CODE XREF: Results_HandleNavigation+54   j  ; was: loc_20088
+Results_ClearHorizontalStep:                            ; was: loc_20088
                 clr.w   (ResultsHorizontalStep).w
-Results_CheckUpNavigation:                              ; CODE XREF: Results_HandleNavigation+2E   j  ; was: loc_2008C
+Results_CheckUpNavigation:                              ; was: loc_2008C
                                         ; Results_HandleNavigation+4E   j
                 btst    #0,(ControllerHeldState).w
                 beq.s   Results_CheckDownNavigation
@@ -433,7 +433,7 @@ Results_CheckUpNavigation:                              ; CODE XREF: Results_Han
                 move.w  #1,(ResultsVerticalStep).w
                 bra.s   Results_UpdateVerticalViewport
 ; ---------------------------------------------------------------------------
-Results_CheckDownNavigation:                            ; CODE XREF: Results_HandleNavigation+6E   j  ; was: loc_200A8
+Results_CheckDownNavigation:                            ; was: loc_200A8
                 btst    #1,(ControllerHeldState).w
                 beq.w   Results_ContinueHorizontalStep
                 move.w  (PrimaryCameraYPosition).w,d0
@@ -441,16 +441,16 @@ Results_CheckDownNavigation:                            ; CODE XREF: Results_Han
                 cmp.w   (ResultsLowerScrollBound).w,d0
                 blt.s   Results_StopVerticalNavigation
                 move.w  #$FFFF,(ResultsVerticalStep).w
-Results_UpdateVerticalViewport:                         ; CODE XREF: Results_HandleNavigation+82   j  ; was: loc_200C4
+Results_UpdateVerticalViewport:                         ; was: loc_200C4
                 bsr.w   Results_UpdateViewport
                 rts
 ; ---------------------------------------------------------------------------
-Results_StopVerticalNavigation:                         ; CODE XREF: Results_HandleNavigation+7A   j  ; was: loc_200CA
+Results_StopVerticalNavigation:                         ; was: loc_200CA
                                         ; Results_HandleNavigation+98   j
                 clr.w   (ResultsVerticalStep).w
                 rts
 ; ---------------------------------------------------------------------------
-Results_ContinueHorizontalStep:                         ; CODE XREF: Results_HandleNavigation+8A   j  ; was: loc_200D0
+Results_ContinueHorizontalStep:                         ; was: loc_200D0
                 tst.w   (ResultsHorizontalStep).w
                 beq.s   Results_ClampHorizontalMaximum
                 move.w  (ResultsHorizontalStep).w,d0
@@ -468,7 +468,7 @@ Results_ContinueHorizontalStep:                         ; CODE XREF: Results_Han
                 beq.s   Results_HandleHorizontalSnapPoint
                 cmpi.w  #$D0,(PrimaryCameraXPosition).w
                 bne.s   Results_ClampHorizontalMaximum
-Results_HandleHorizontalSnapPoint:                      ; CODE XREF: Results_HandleNavigation+C8   j  ; was: loc_2010E
+Results_HandleHorizontalSnapPoint:                      ; was: loc_2010E
                                         ; Results_HandleNavigation+D0   j
                 tst.b   (ControllerHeldState).w
                 bne.s   Results_ClearHorizontalStepAtSnap
@@ -477,21 +477,21 @@ Results_HandleHorizontalSnapPoint:                      ; CODE XREF: Results_Han
                 clr.w   (ResultsHorizontalActive).w
                 move.b  #$DB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Results_ClearHorizontalStepAtSnap:                      ; CODE XREF: Results_HandleNavigation+EE   j  ; was: loc_20128
+Results_ClearHorizontalStepAtSnap:                      ; was: loc_20128
                                         ; Results_HandleNavigation+F4   j
                 clr.w   (ResultsHorizontalStep).w
-Results_ClampHorizontalMaximum:                         ; CODE XREF: Results_HandleNavigation+B0   j  ; was: loc_2012C
+Results_ClampHorizontalMaximum:                         ; was: loc_2012C
                                         ; Results_HandleNavigation+C2   j
                 cmpi.w  #$D0,(PrimaryCameraXPosition).w
                 blt.s   Results_ClampHorizontalMinimum
                 move.w  #$D0,(PrimaryCameraXPosition).w
                 clr.w   (ResultsHorizontalStep).w
-Results_ClampHorizontalMinimum:                         ; CODE XREF: Results_HandleNavigation+10E   j  ; was: loc_2013E
+Results_ClampHorizontalMinimum:                         ; was: loc_2013E
                 cmpi.w  #0,(PrimaryCameraXPosition).w
                 bgt.s   Results_ContinueVerticalStep
                 move.w  #0,(PrimaryCameraXPosition).w
                 clr.w   (ResultsHorizontalStep).w
-Results_ContinueVerticalStep:                           ; CODE XREF: Results_HandleNavigation+120   j  ; was: loc_20150
+Results_ContinueVerticalStep:                           ; was: loc_20150
                 tst.w   (ResultsVerticalStep).w
                 beq.s   Results_ClampVerticalUpperBound
                 bsr.w   Results_UpdateViewport
@@ -499,47 +499,47 @@ Results_ContinueVerticalStep:                           ; CODE XREF: Results_Han
                 andi.w  #$F,d0
                 bne.s   Results_ClampVerticalUpperBound
                 clr.w   (ResultsVerticalStep).w
-Results_ClampVerticalUpperBound:                        ; CODE XREF: Results_HandleNavigation+130   j  ; was: loc_20168
+Results_ClampVerticalUpperBound:                        ; was: loc_20168
                                         ; Results_HandleNavigation+13E   j
                 cmpi.w  #$90,(PrimaryCameraYPosition).w
                 blt.s   Results_ClampVerticalLowerBound
                 move.w  #$90,(PrimaryCameraYPosition).w
                 clr.w   (ResultsVerticalStep).w
-Results_ClampVerticalLowerBound:                        ; CODE XREF: Results_HandleNavigation+14A   j  ; was: loc_2017A
+Results_ClampVerticalLowerBound:                        ; was: loc_2017A
                 move.w  (PrimaryCameraYPosition).w,d0
                 cmp.w   (ResultsLowerScrollBound).w,d0
                 bgt.s   Results_NavigationReturn
                 move.w  (ResultsLowerScrollBound).w,(PrimaryCameraYPosition).w
                 clr.w   (ResultsVerticalStep).w
-Results_NavigationReturn:                               ; CODE XREF: Results_HandleNavigation+15E   j  ; was: locret_2018E
+Results_NavigationReturn:                               ; was: locret_2018E
                 rts
 ; End of function Results_HandleNavigation
 ; Appends the $FF terminator to a results row
-Results_WriteRowEndMarker:                              ; CODE XREF: Results_InitializeHistoryDisplay+18C   p  ; was: sub_20190
+Results_WriteRowEndMarker:                              ; was: sub_20190
                                         ; Results_InitializeHistoryDisplay+1A4   p
                 move.b  #$FF,(a0)+
                 rts
 ; End of function Results_WriteRowEndMarker
 ; Appends one zero padding byte to a results row
-Results_WriteRowPaddingByte:                            ; CODE XREF: Results_InitializeHistoryDisplay+6E   p  ; was: sub_20196
+Results_WriteRowPaddingByte:                            ; was: sub_20196
                                         ; Results_InitializeHistoryDisplay+72   p
                 move.b  #0,(a0)+
                 rts
 ; End of function Results_WriteRowPaddingByte
 ; Writes the custom-font separator between packed-BCD time fields
-Results_WriteTimeSeparator:                             ; CODE XREF: Results_InitializeHistoryDisplay+98   p  ; was: sub_2019C
+Results_WriteTimeSeparator:                             ; was: sub_2019C
                                         ; Results_InitializeHistoryDisplay+AE   p
                 move.b  #$25,(a0)+
                 rts
 ; End of function Results_WriteTimeSeparator
 ; Writes one custom-font glyph used to mark a missing result field
-Results_WriteMissingGlyph:                              ; CODE XREF: Results_InitializeHistoryDisplay:Results_WriteMissingStageTimeLimit   p  ; was: sub_201A2
+Results_WriteMissingGlyph:                              ; was: sub_201A2
                                         ; Results_InitializeHistoryDisplay+AA   p
                 move.b  #$2A,(a0)+
                 rts
 ; End of function Results_WriteMissingGlyph
 ; Writes two results-font glyph indices from one packed-BCD byte
-Results_WritePackedBCDByteDigits:                       ; CODE XREF: Results_InitializeHistoryDisplay+6A   p  ; was: sub_201A8
+Results_WritePackedBCDByteDigits:                       ; was: sub_201A8
                                         ; Results_InitializeHistoryDisplay+94   p
                 tst.b   d0
                 bmi.s   Results_WriteMissingBCDByte
@@ -552,13 +552,13 @@ Results_WritePackedBCDByteDigits:                       ; CODE XREF: Results_Ini
                 move.b  d0,(a0)+
                 rts
 ; ---------------------------------------------------------------------------
-Results_WriteMissingBCDByte:                            ; CODE XREF: Results_WritePackedBCDByteDigits+2   j  ; was: loc_201BE
+Results_WriteMissingBCDByte:                            ; was: loc_201BE
                 move.b  #$22,(a0)+                      ; missing-BCD glyph
                 move.b  #$22,(a0)+                      ; missing-BCD glyph
                 rts
 ; End of function Results_WritePackedBCDByteDigits
 ; Writes three results-font glyph indices from the low three packed-BCD nibbles
-Results_WritePackedBCDThreeDigits:                      ; CODE XREF: Results_InitializeHistoryDisplay:Results_WriteStageVisitCount   p  ; was: sub_201C8
+Results_WritePackedBCDThreeDigits:                      ; was: sub_201C8
                 tst.w   d0
                 bmi.s   Results_WriteMissingBCDWord
                 move.w  d0,d1
@@ -574,14 +574,14 @@ Results_WritePackedBCDThreeDigits:                      ; CODE XREF: Results_Ini
                 move.b  d0,(a0)+
                 rts
 ; ---------------------------------------------------------------------------
-Results_WriteMissingBCDWord:                            ; CODE XREF: Results_WritePackedBCDThreeDigits+2   j  ; was: loc_201E6
+Results_WriteMissingBCDWord:                            ; was: loc_201E6
                 move.b  #$22,(a0)+                      ; missing-BCD glyph
                 move.b  #$22,(a0)+                      ; missing-BCD glyph
                 move.b  #$22,(a0)+                      ; missing-BCD glyph
                 rts
 ; End of function Results_WritePackedBCDThreeDigits
 ; Formats the difference between two packed-BCD times with a field separator
-Results_FormatBCDTimeDifference:                        ; CODE XREF: Results_InitializeHistoryDisplay+D6   p  ; was: sub_201F4
+Results_FormatBCDTimeDifference:                        ; was: sub_201F4
                                         ; Results_InitializeHistoryDisplay+10A   p
                 bsr.s   Results_CalculatePackedBCDTimeDifference
                 move.b  d2,d0
@@ -592,7 +592,7 @@ Results_FormatBCDTimeDifference:                        ; CODE XREF: Results_Ini
                 rts
 ; End of function Results_FormatBCDTimeDifference
 ; Subtracts ResultsBCDEndTime from ResultsBCDStartTime with a 60-second borrow
-Results_CalculatePackedBCDTimeDifference:               ; CODE XREF: Results_FormatBCDTimeDifference   p  ; was: sub_20208
+Results_CalculatePackedBCDTimeDifference:               ; was: sub_20208
                                         ; Results_ComputeSummaryData+5C   p
                 move.b  (ResultsBCDStartTime).w,d0
                 move.b  (ResultsBCDEndTime).w,d1
@@ -609,7 +609,7 @@ Results_CalculatePackedBCDTimeDifference:               ; CODE XREF: Results_For
                 moveq   #$60,d3
                 sub.w   d4,d4
                 abcd    d3,d0
-Results_SubtractBCDLowByte:                             ; CODE XREF: Results_CalculatePackedBCDTimeDifference+18   j  ; was: loc_2022E
+Results_SubtractBCDLowByte:                             ; was: loc_2022E
                 sub.w   d4,d4
                 sbcd    d1,d0
                 move.b  d0,d3
@@ -620,7 +620,7 @@ Results_ClearStageCompletionTimes:                      ; was: sub_20236
                 move.w  #$18,d7
                 move.w  #0,d0
                 lea     (StageCompletionTimes).w,a0
-Results_ClearStageCompletionTimesLoop:                  ; CODE XREF: Results_ClearStageCompletionTimes+E   j  ; was: loc_20242
+Results_ClearStageCompletionTimesLoop:                  ; was: loc_20242
                 move.w  d0,(a0)+
                 dbf     d7,Results_ClearStageCompletionTimesLoop
                 rts

@@ -1,5 +1,5 @@
 ; ROM-ordered phoenix/teleport, special-attack, and death-particle mappings
-Player_PhoenixAndTeleportDashSpriteMapping: dc.w    0   ; DATA XREF: Player_PhoenixAttackUpdate+4E   o  ; was: word_E8E6A
+Player_PhoenixAndTeleportDashSpriteMapping: dc.w    0   ; was: word_E8E6A
                                         ; Player_InitiateDashAttack+84   o
                 dc.l    Player_PhoenixAndTeleportDashSpriteArtPiece00+$D000000
                 dc.w    $B09
@@ -30,7 +30,7 @@ Player_PhoenixAndTeleportDashSpriteMapping: dc.w    0   ; DATA XREF: Player_Phoe
                 dc.w    $802C
                 dc.l    Player_PhoenixAndTeleportDashSpriteArtPiece09+$B000000
                 dc.w    $E3F1
-Player_TeleportDashTrailSpriteMapping:  dc.w    0       ; DATA XREF: Player_InitTeleportDashReturnState+42   o  ; was: word_E8EBA
+Player_TeleportDashTrailSpriteMapping:  dc.w    0       ; was: word_E8EBA
                                         ; Effect_CreateDashTrail+6   o
                 dc.l    Player_TeleportDashTrailSpriteArtPiece00+$5000000
                 dc.w    $F430
@@ -61,7 +61,7 @@ Player_TeleportDashTrailSpriteMapping:  dc.w    0       ; DATA XREF: Player_Init
                 dc.w    $803A
                 dc.l    Player_TeleportDashTrailSpriteArtPiece09+$6000000
                 dc.w    $F4D0
-Player_MotionPoseSecondarySpriteMapping:    dc.w    $800  ; DATA XREF: Player_RenderMotionPose+1E   o  ; was: word_E8F0A
+Player_MotionPoseSecondarySpriteMapping:    dc.w    $800  ; was: word_E8F0A
                                         ; Player_RenderCeilingMotionWithWeapon+1E   o
                 dc.l    Player_AirborneWeaponSecondarySpriteArtPiece00
                 dc.w    3
@@ -71,12 +71,12 @@ Player_MotionPoseSecondarySpriteMapping:    dc.w    $800  ; DATA XREF: Player_Re
                 dc.w    $8807
                 dc.l    Player_AirborneWeaponSecondarySpriteArtPiece02+$B000000
                 dc.w    $EB
-Player_TeleportDashProjectileSpriteMapping: dc.w    4, 0, $ECD8  ; DATA XREF: Player_TeleportDash+60   o  ; was: word_E8F22
+Player_TeleportDashProjectileSpriteMapping: dc.w    4, 0, $ECD8  ; was: word_E8F22
                                         ; Player_SpawnProjectile+30   o
                 dc.w    5, $D00, $E4E0
                 dc.w    $D, $D00, $E400
                 dc.w    $8015, $500, $E420
-Player_SpecialAttackSecondarySpriteMappingA:    dc.w    $800  ; DATA XREF: Player_HandleSpecialAttack:Player_HandleSpecialAttack_SelectFrame   o  ; was: word_E8F3A
+Player_SpecialAttackSecondarySpriteMappingA:    dc.w    $800  ; was: word_E8F3A
                                         ; sub_16116   o
                 dc.l    Player_SpecialAttackSecondarySpriteArtAPiece00+$5000000
                 dc.w    $17F9
@@ -95,7 +95,7 @@ Player_SpecialAttackSecondarySpriteMappingA:    dc.w    $800  ; DATA XREF: Playe
                 dc.w    $8814
                 dc.l    Player_SpecialAttackSecondarySpriteArtAPiece05+$A000000
                 dc.w    $EFF9
-Player_SpecialAttackSecondarySpriteMappingB:    dc.w    $800  ; DATA XREF: Player_HandleSpecialAttack+A0   o  ; was: word_E8F6A
+Player_SpecialAttackSecondarySpriteMappingB:    dc.w    $800  ; was: word_E8F6A
                                         ; Player_RenderSpecialMoveRecovery+E   o
                 dc.l    Player_SpecialAttackSecondarySpriteArtBPiece00+$E000000
                 dc.w    $EFF9
@@ -114,7 +114,7 @@ Player_SpecialAttackSecondarySpriteMappingB:    dc.w    $800  ; DATA XREF: Playe
                 dc.w    $881E
                 dc.l    Player_SpecialAttackSecondarySpriteArtAPiece04+$1000000
                 dc.w    $F7F1
-Player_DeathSequenceSpriteMapping00:    dc.w    $800    ; DATA XREF: ROM:Player_DeathSequenceAnimationFrames   o  ; was: word_E8F9A
+Player_DeathSequenceSpriteMapping00:    dc.w    $800    ; was: word_E8F9A
                 dc.l    Player_DeathSequenceSpriteArt00Piece00+$9000000
                 dc.w    $5F3
                 dc.w    $806
@@ -129,7 +129,7 @@ Player_DeathSequenceSpriteMapping00:    dc.w    $800    ; DATA XREF: ROM:Player_
                 dc.w    $8813
                 dc.l    Player_DeathSequenceSpriteArt00Piece04+$C000000
                 dc.w    $E204
-Player_DeathSequenceSpriteMapping01:    dc.w    $800    ; DATA XREF: ROM:00017246   o  ; was: word_E8FC2
+Player_DeathSequenceSpriteMapping01:    dc.w    $800    ; was: word_E8FC2
                 dc.l    Player_DeathSequenceSpriteArt00Piece00+$9000000
                 dc.w    $5F3
                 dc.w    $806
@@ -144,7 +144,7 @@ Player_DeathSequenceSpriteMapping01:    dc.w    $800    ; DATA XREF: ROM:0001724
                 dc.w    $8813
                 dc.l    Player_DeathSequenceSpriteArt00Piece04+$C000000
                 dc.w    $E204
-Player_DeathSequenceSpriteMapping02:    dc.w    $800    ; DATA XREF: ROM:0001724A   o  ; was: word_E8FEA
+Player_DeathSequenceSpriteMapping02:    dc.w    $800    ; was: word_E8FEA
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $EAF5
                 dc.w    $808
@@ -159,7 +159,7 @@ Player_DeathSequenceSpriteMapping02:    dc.w    $800    ; DATA XREF: ROM:0001724
                 dc.w    $8813
                 dc.l    Player_DeathSequenceSpriteArt00Piece04+$C000000
                 dc.w    $E204
-Player_DeathSequenceSpriteMapping03:    dc.w    $800    ; DATA XREF: ROM:0001724E   o  ; was: word_E9012
+Player_DeathSequenceSpriteMapping03:    dc.w    $800    ; was: word_E9012
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $ECF5
                 dc.w    $808
@@ -174,25 +174,25 @@ Player_DeathSequenceSpriteMapping03:    dc.w    $800    ; DATA XREF: ROM:0001724
                 dc.w    $8810
                 dc.l    Player_DeathSequenceSpriteArt00Piece04+$C000000
                 dc.w    $E204
-Player_DeathSequenceSpriteMapping04:    dc.w    $800    ; DATA XREF: ROM:00017252   o  ; was: word_E903A
+Player_DeathSequenceSpriteMapping04:    dc.w    $800    ; was: word_E903A
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $EDF5
                 dc.w    $8808
                 dc.l    Player_DeathSequenceSpriteArt03Piece01+$8000000
                 dc.w    $9F3
-Player_DeathSequenceSpriteMapping05:    dc.w    $800    ; DATA XREF: ROM:00017256   o  ; was: word_E904A
+Player_DeathSequenceSpriteMapping05:    dc.w    $800    ; was: word_E904A
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $EEF5
                 dc.w    $8808
                 dc.l    Player_DeathSequenceSpriteArt03Piece01+$8000000
                 dc.w    $9F3
-Player_DeathSequenceSpriteMapping06:    dc.w    $800    ; DATA XREF: ROM:0001725A   o  ; was: word_E905A
+Player_DeathSequenceSpriteMapping06:    dc.w    $800    ; was: word_E905A
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $EAF5
                 dc.w    $8808
                 dc.l    Player_DeathSequenceSpriteArt03Piece01+$8000000
                 dc.w    $9F3
-Player_DeathSequenceSpriteMapping07:    dc.w    $800    ; DATA XREF: ROM:0001725E   o  ; was: word_E906A
+Player_DeathSequenceSpriteMapping07:    dc.w    $800    ; was: word_E906A
                 dc.l    Player_DeathSequenceSpriteArt00Piece01+$7000000
                 dc.w    $E6F5
                 dc.w    $8808

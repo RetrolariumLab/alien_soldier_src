@@ -1,5 +1,5 @@
 ; ROM-ordered player state, fall, counter-force, and weapon frame mappings
-Player_StateAnimationSpriteMapping00:   dc.w    $800    ; DATA XREF: ROM:Player_AnimationFrameTable   o  ; was: word_E8A1A
+Player_StateAnimationSpriteMapping00:   dc.w    $800    ; was: word_E8A1A
                 dc.l    Player_StateAnimationSpriteArt00Piece00
                 dc.w    $10E
                 dc.w    $801
@@ -17,7 +17,7 @@ Player_StateAnimationSpriteMapping00:   dc.w    $800    ; DATA XREF: ROM:Player_
                 dc.w    $8812
                 dc.l    Player_StateAnimationSpriteArt00Piece05+$E000000
                 dc.w    $EEEE
-Player_StateAnimationSpriteMapping01:   dc.w    $800    ; DATA XREF: ROM:000171F0   o  ; was: word_E8A4A
+Player_StateAnimationSpriteMapping01:   dc.w    $800    ; was: word_E8A4A
                 dc.l    Player_StateAnimationSpriteArt01Piece00
                 dc.w    $E9F8
                 dc.w    $801
@@ -38,7 +38,7 @@ Player_StateAnimationSpriteMapping01:   dc.w    $800    ; DATA XREF: ROM:000171F
                 dc.w    $8814
                 dc.l    Player_StateAnimationSpriteArt01Piece06+$9000000
                 dc.w    $F1F8
-Player_StateAnimationSpriteMapping02:   dc.w    $800    ; DATA XREF: ROM:000171F4   o  ; was: word_E8A82
+Player_StateAnimationSpriteMapping02:   dc.w    $800    ; was: word_E8A82
                 dc.l    Player_StateAnimationSpriteArt02Piece00+$1000000
                 dc.w    $E2EE
                 dc.w    $802
@@ -59,7 +59,7 @@ Player_StateAnimationSpriteMapping02:   dc.w    $800    ; DATA XREF: ROM:000171F
                 dc.w    $880E
                 dc.l    Player_StateAnimationSpriteArt02Piece06+$F000000
                 dc.w    $F2EE
-Player_StateAnimationSpriteMapping03:   dc.w    $800    ; DATA XREF: ROM:000171F8   o  ; was: word_E8ABA
+Player_StateAnimationSpriteMapping03:   dc.w    $800    ; was: word_E8ABA
                 dc.l    Player_StateAnimationSpriteArt03Piece00+$8000000
                 dc.w    $DF00
                 dc.w    $803
@@ -74,7 +74,7 @@ Player_StateAnimationSpriteMapping03:   dc.w    $800    ; DATA XREF: ROM:000171F
                 dc.w    $8815
                 dc.l    Player_StateAnimationSpriteArt03Piece04+$9000000
                 dc.w    $7F0
-Player_StateAnimationSpriteMapping04:   dc.w    $1000   ; DATA XREF: ROM:000171FC   o  ; was: word_E8AE2
+Player_StateAnimationSpriteMapping04:   dc.w    $1000   ; was: word_E8AE2
                 dc.l    Player_StateAnimationSpriteArt00Piece00
                 dc.w    $F7EC
                 dc.w    $1001
@@ -92,7 +92,7 @@ Player_StateAnimationSpriteMapping04:   dc.w    $1000   ; DATA XREF: ROM:000171F
                 dc.w    $9012
                 dc.l    Player_StateAnimationSpriteArt00Piece05+$E000000
                 dc.w    $FAF4
-Player_StateAnimationSpriteMapping05:   dc.w    $1000   ; DATA XREF: ROM:00017200   o  ; was: word_E8B12
+Player_StateAnimationSpriteMapping05:   dc.w    $1000   ; was: word_E8B12
                 dc.l    Player_StateAnimationSpriteArt01Piece00
                 dc.w    $F00
                 dc.w    $1001
@@ -113,7 +113,7 @@ Player_StateAnimationSpriteMapping05:   dc.w    $1000   ; DATA XREF: ROM:0001720
                 dc.w    $9014
                 dc.l    Player_StateAnimationSpriteArt01Piece06+$9000000
                 dc.w    $FFF0
-Player_StateAnimationSpriteMapping06:   dc.w    $1000   ; DATA XREF: ROM:00017204   o  ; was: word_E8B4A
+Player_StateAnimationSpriteMapping06:   dc.w    $1000   ; was: word_E8B4A
                 dc.l    Player_StateAnimationSpriteArt02Piece00+$1000000
                 dc.w    $E0A
                 dc.w    $1002
@@ -134,7 +134,7 @@ Player_StateAnimationSpriteMapping06:   dc.w    $1000   ; DATA XREF: ROM:0001720
                 dc.w    $900E
                 dc.l    Player_StateAnimationSpriteArt02Piece06+$F000000
                 dc.w    $EEF2
-Player_StateAnimationSpriteMapping07:   dc.w    $1000   ; DATA XREF: ROM:00017208   o  ; was: word_E8B82
+Player_StateAnimationSpriteMapping07:   dc.w    $1000   ; was: word_E8B82
                 dc.l    Player_StateAnimationSpriteArt03Piece00+$8000000
                 dc.w    $18E8
                 dc.w    $1003
@@ -149,7 +149,7 @@ Player_StateAnimationSpriteMapping07:   dc.w    $1000   ; DATA XREF: ROM:0001720
                 dc.w    $9015
                 dc.l    Player_StateAnimationSpriteArt03Piece04+$9000000
                 dc.w    $E8F8
-Player_KnockbackPrimarySpriteMapping:   dc.w    $800    ; DATA XREF: Player_KnockbackState   o  ; was: word_E8BAA
+Player_KnockbackPrimarySpriteMapping:   dc.w    $800    ; was: word_E8BAA
                                         ; sub_1A122   o
                 dc.l    Player_KnockbackPrimarySpriteArtPiece00+$D000000
                 dc.w    $F3EE
@@ -161,7 +161,7 @@ Player_KnockbackPrimarySpriteMapping:   dc.w    $800    ; DATA XREF: Player_Knoc
                 dc.w    $DBFE
 ; Four primary Counter Force mappings selected by the frame table at $1735E
 ; Piece indices follow pointer order inside each mapping, not ROM art order
-Player_CounterForcePrimarySpriteMapping00:  dc.w    $800  ; DATA XREF: ROM:Player_CounterForcePrimaryFrameTable   o  ; was: word_E8BC2
+Player_CounterForcePrimarySpriteMapping00:  dc.w    $800  ; was: word_E8BC2
                 dc.l    Player_CounterForcePrimarySpriteArt00Piece00+$1000000
                 dc.w    $EAE5
                 dc.w    $802
@@ -173,7 +173,7 @@ Player_CounterForcePrimarySpriteMapping00:  dc.w    $800  ; DATA XREF: ROM:Playe
                 dc.w    $880C
                 dc.l    Player_CounterForcePrimarySpriteArt00Piece03+$D000000
                 dc.w    $DAED
-Player_CounterForcePrimarySpriteMapping01:  dc.w    $800  ; DATA XREF: ROM:00017362   o  ; was: word_E8BE2
+Player_CounterForcePrimarySpriteMapping01:  dc.w    $800  ; was: word_E8BE2
                 dc.l    Player_CounterForcePrimarySpriteArt01Piece00+$1000000
                 dc.w    $E2E9
                 dc.w    $802
@@ -182,13 +182,13 @@ Player_CounterForcePrimarySpriteMapping01:  dc.w    $800  ; DATA XREF: ROM:00017
                 dc.w    $8803
                 dc.l    Player_CounterForcePrimarySpriteArt01Piece02+$F000000
                 dc.w    $DAF0
-Player_CounterForcePrimarySpriteMapping02:  dc.w    $800  ; DATA XREF: ROM:00017366   o  ; was: word_E8BFA
+Player_CounterForcePrimarySpriteMapping02:  dc.w    $800  ; was: word_E8BFA
                 dc.l    Player_CounterForcePrimarySpriteArt02Piece00+$1000000
                 dc.w    $E2EA
                 dc.w    $8802
                 dc.l    Player_CounterForcePrimarySpriteArt02Piece01+$F000000
                 dc.w    $DAF2
-Player_CounterForcePrimarySpriteMapping03:  dc.w    $800  ; DATA XREF: ROM:0001736A   o  ; was: word_E8C0A
+Player_CounterForcePrimarySpriteMapping03:  dc.w    $800  ; was: word_E8C0A
                 dc.l    Player_CounterForcePrimarySpriteArt03Piece00+$8000000
                 dc.w    $EACF
                 dc.w    $803
@@ -200,7 +200,7 @@ Player_CounterForcePrimarySpriteMapping03:  dc.w    $800  ; DATA XREF: ROM:00017
                 dc.w    $8806
                 dc.l    Player_CounterForcePrimarySpriteArt03Piece03+$F000000
                 dc.w    $DAEF
-Player_DefaultVerticalSecondarySpriteMapping:   dc.w    $800  ; DATA XREF: Player_SelectFallAnimation:Player_SelectFallAnimation_UseDefaultFrame   o  ; was: word_E8C2A
+Player_DefaultVerticalSecondarySpriteMapping:   dc.w    $800  ; was: word_E8C2A
                 dc.l    Player_FastVerticalSecondarySpriteArtPiece00
                 dc.w    $20F6
                 dc.w    $801
@@ -215,7 +215,7 @@ Player_DefaultVerticalSecondarySpriteMapping:   dc.w    $800  ; DATA XREF: Playe
                 dc.w    $8812
                 dc.l    Player_FastVerticalSecondarySpriteArtPiece04+$C000000
                 dc.w    $F8EE
-Player_RisingSecondarySpriteMapping:    dc.w    $800    ; DATA XREF: Player_SelectFallAnimation:Player_SelectFallAnimation_UseRisingFrame   o  ; was: word_E8C52
+Player_RisingSecondarySpriteMapping:    dc.w    $800    ; was: word_E8C52
                 dc.l    Player_RisingSecondarySpriteArtPiece00+$4000000
                 dc.w    $EFF6
                 dc.w    $802
@@ -224,7 +224,7 @@ Player_RisingSecondarySpriteMapping:    dc.w    $800    ; DATA XREF: Player_Sele
                 dc.w    $880A
                 dc.l    Player_RisingSecondarySpriteArtPiece02+$E000000
                 dc.w    $F7EE
-Player_FallingSecondarySpriteMapping:   dc.w    $800    ; DATA XREF: Player_SelectFallAnimation+1A   o  ; was: word_E8C6A
+Player_FallingSecondarySpriteMapping:   dc.w    $800    ; was: word_E8C6A
                 dc.l    Player_FallingSecondarySpriteArtPiece00+$7000000
                 dc.w    $10FA
                 dc.w    $808
@@ -233,7 +233,7 @@ Player_FallingSecondarySpriteMapping:   dc.w    $800    ; DATA XREF: Player_Sele
                 dc.w    $880E
                 dc.l    Player_FallingSecondarySpriteArtPiece02+$9000000
                 dc.w    $F0F6
-Player_FallPrimarySpriteMapping:    dc.w    $800        ; DATA XREF: Player_SelectFallPrimaryFrame:Player_SelectFallPrimaryFrame_UseDefault   o  ; was: word_E8C82
+Player_FallPrimarySpriteMapping:    dc.w    $800        ; was: word_E8C82
                 dc.l    Player_FallPrimarySpriteArtPiece00+$2000000
                 dc.w    $D70E
                 dc.w    $803
@@ -242,7 +242,7 @@ Player_FallPrimarySpriteMapping:    dc.w    $800        ; DATA XREF: Player_Sele
                 dc.w    $8805
                 dc.l    Player_FallPrimarySpriteArtPiece02+$B000000
                 dc.w    $D7F6
-Player_FastFallPrimarySpriteMapping:    dc.w    $800    ; DATA XREF: Player_SelectFallPrimaryFrame+E   o  ; was: word_E8C9A
+Player_FastFallPrimarySpriteMapping:    dc.w    $800    ; was: word_E8C9A
                 dc.l    Player_FastFallPrimarySpriteArtPiece00+$8000000
                 dc.w    $CFF6
                 dc.w    $803
@@ -257,7 +257,7 @@ Player_FastFallPrimarySpriteMapping:    dc.w    $800    ; DATA XREF: Player_Sele
                 dc.w    $880B
                 dc.l    Player_FastFallPrimarySpriteArtPiece04+$D000000
                 dc.w    $DFF6
-Player_WeaponAnimationSpriteMapping00:  dc.w    $800    ; DATA XREF: ROM:Player_WeaponAnimationFrames   o  ; was: word_E8CC2
+Player_WeaponAnimationSpriteMapping00:  dc.w    $800    ; was: word_E8CC2
                 dc.l    Player_WeaponAnimationSpriteArt00Piece00+$9000000
                 dc.w    $10F6
                 dc.w    $806
@@ -266,13 +266,13 @@ Player_WeaponAnimationSpriteMapping00:  dc.w    $800    ; DATA XREF: ROM:Player_
                 dc.w    $8809
                 dc.l    Player_WeaponAnimationSpriteArt00Piece02+$E000000
                 dc.w    $F8EE
-Player_WeaponAnimationSpriteMapping01:  dc.w    $800    ; DATA XREF: ROM:0001703E   o  ; was: word_E8CDA
+Player_WeaponAnimationSpriteMapping01:  dc.w    $800    ; was: word_E8CDA
                 dc.l    Player_WeaponAnimationSpriteArt01Piece00+$B000000
                 dc.w    $F0F8
                 dc.w    $880C
                 dc.l    Player_WeaponAnimationSpriteArt01Piece01+$D000000
                 dc.w    $10F2
-Player_WeaponAnimationSpriteMapping02:  dc.w    $800    ; DATA XREF: ROM:00017042   o  ; was: word_E8CEA
+Player_WeaponAnimationSpriteMapping02:  dc.w    $800    ; was: word_E8CEA
                 dc.l    Player_WeaponAnimationSpriteArt02Piece00+$8000000
                 dc.w    $F0F8
                 dc.w    $803
@@ -287,7 +287,7 @@ Player_WeaponAnimationSpriteMapping02:  dc.w    $800    ; DATA XREF: ROM:0001704
                 dc.w    $8811
                 dc.l    Player_WeaponAnimationSpriteArt02Piece04+$D000000
                 dc.w    $10F0
-Player_WeaponAnimationSpriteMapping03:  dc.w    $800    ; DATA XREF: ROM:00017046   o  ; was: word_E8D12
+Player_WeaponAnimationSpriteMapping03:  dc.w    $800    ; was: word_E8D12
                 dc.l    Player_WeaponAnimationSpriteArt03Piece00+$8000000
                 dc.w    $F0F8
                 dc.w    $803
@@ -296,7 +296,7 @@ Player_WeaponAnimationSpriteMapping03:  dc.w    $800    ; DATA XREF: ROM:0001704
                 dc.w    $8809
                 dc.l    Player_WeaponAnimationSpriteArt03Piece02+$E000000
                 dc.w    $F8F0
-Player_WeaponAnimationSpriteMapping04:  dc.w    $800    ; DATA XREF: ROM:0001704A   o  ; was: word_E8D2A
+Player_WeaponAnimationSpriteMapping04:  dc.w    $800    ; was: word_E8D2A
                 dc.l    Player_WeaponAnimationSpriteArt04Piece00
                 dc.w    $18E9
                 dc.w    $801
@@ -311,7 +311,7 @@ Player_WeaponAnimationSpriteMapping04:  dc.w    $800    ; DATA XREF: ROM:0001704
                 dc.w    $880D
                 dc.l    Player_WeaponAnimationSpriteArt04Piece04+$A000000
                 dc.w    $F0F8
-Player_PrimaryLayoutSpriteMapping04:    dc.w    $800    ; DATA XREF: ROM:000172CC   o  ; was: word_E8D52
+Player_PrimaryLayoutSpriteMapping04:    dc.w    $800    ; was: word_E8D52
                 dc.l    Player_PrimaryLayoutSpriteArt04Piece00+$4000000
                 dc.w    $F90B
                 dc.w    $802
@@ -323,7 +323,7 @@ Player_PrimaryLayoutSpriteMapping04:    dc.w    $800    ; DATA XREF: ROM:000172C
                 dc.w    $8808
                 dc.l    Player_PrimaryLayoutSpriteArt04Piece03+$9000000
                 dc.w    $E1FB
-Player_PrimaryLayoutSpriteMapping03:    dc.w    $800    ; DATA XREF: ROM:000172C8   o  ; was: word_E8D72
+Player_PrimaryLayoutSpriteMapping03:    dc.w    $800    ; was: word_E8D72
                 dc.l    Player_PrimaryLayoutSpriteArt03Piece00
                 dc.w    $F018
                 dc.w    $801
@@ -335,7 +335,7 @@ Player_PrimaryLayoutSpriteMapping03:    dc.w    $800    ; DATA XREF: ROM:000172C
                 dc.w    $8808
                 dc.l    Player_PrimaryLayoutSpriteArt03Piece03+$D000000
                 dc.w    $E8F8
-Player_PrimaryLayoutSpriteMapping00:    dc.w    $800    ; DATA XREF: ROM:Player_PrimaryAnimationLayoutTable   o  ; was: word_E8D92
+Player_PrimaryLayoutSpriteMapping00:    dc.w    $800    ; was: word_E8D92
                 dc.l    Player_PrimaryLayoutSpriteArt00Piece00+$9000000
                 dc.w    $E3DE
                 dc.w    $806
@@ -344,7 +344,7 @@ Player_PrimaryLayoutSpriteMapping00:    dc.w    $800    ; DATA XREF: ROM:Player_
                 dc.w    $880C
                 dc.l    Player_PrimaryLayoutSpriteArt00Piece02+$D000000
                 dc.w    $DBF6
-Player_PrimaryLayoutSpriteMapping02:    dc.w    $800    ; DATA XREF: ROM:000172C4   o  ; was: word_E8DAA
+Player_PrimaryLayoutSpriteMapping02:    dc.w    $800    ; was: word_E8DAA
                 dc.l    Player_PrimaryLayoutSpriteArt02Piece00+$9000000
                 dc.w    $F3EC
                 dc.w    $806
@@ -353,7 +353,7 @@ Player_PrimaryLayoutSpriteMapping02:    dc.w    $800    ; DATA XREF: ROM:000172C
                 dc.w    $8808
                 dc.l    Player_PrimaryLayoutSpriteArt02Piece02+$A000000
                 dc.w    $DBF1
-Player_PrimaryLayoutSpriteMapping01:    dc.w    $800    ; DATA XREF: ROM:000172C0   o  ; was: word_E8DC2
+Player_PrimaryLayoutSpriteMapping01:    dc.w    $800    ; was: word_E8DC2
                 dc.l    Player_PrimaryLayoutSpriteArt01Piece00+$6000000
                 dc.w    $F5F6
                 dc.w    $806
@@ -362,7 +362,7 @@ Player_PrimaryLayoutSpriteMapping01:    dc.w    $800    ; DATA XREF: ROM:000172C
                 dc.w    $8807
                 dc.l    Player_PrimaryLayoutSpriteArt01Piece02+$A000000
                 dc.w    $DDEE
-Player_AlternateLayoutSpriteMapping04:  dc.w    $800    ; DATA XREF: ROM:00017308   o  ; was: word_E8DDA
+Player_AlternateLayoutSpriteMapping04:  dc.w    $800    ; was: word_E8DDA
                 dc.l    Player_AlternateLayoutSpriteArt04Piece00+$6000000
                 dc.w    $CBF3
                 dc.w    $806
@@ -371,7 +371,7 @@ Player_AlternateLayoutSpriteMapping04:  dc.w    $800    ; DATA XREF: ROM:0001730
                 dc.w    $8808
                 dc.l    Player_AlternateLayoutSpriteArt04Piece02+$E000000
                 dc.w    $E3F3
-Player_AlternateLayoutSpriteMapping03:  dc.w    $800    ; DATA XREF: ROM:00017304   o  ; was: word_E8DF2
+Player_AlternateLayoutSpriteMapping03:  dc.w    $800    ; was: word_E8DF2
                 dc.l    Player_AlternateLayoutSpriteArt03Piece00+$5000000
                 dc.w    $F209
                 dc.w    $804
@@ -383,7 +383,7 @@ Player_AlternateLayoutSpriteMapping03:  dc.w    $800    ; DATA XREF: ROM:0001730
                 dc.w    $880D
                 dc.l    Player_AlternateLayoutSpriteArt03Piece03+$D000000
                 dc.w    $E2F1
-Player_AlternateLayoutSpriteMapping00:  dc.w    $800    ; DATA XREF: ROM:Player_AlternateAnimationLayoutTable   o  ; was: word_E8E12
+Player_AlternateLayoutSpriteMapping00:  dc.w    $800    ; was: word_E8E12
                 dc.l    Player_AlternateLayoutSpriteArt00Piece00
                 dc.w    $E4E5
                 dc.w    $801
@@ -395,7 +395,7 @@ Player_AlternateLayoutSpriteMapping00:  dc.w    $800    ; DATA XREF: ROM:Player_
                 dc.w    $8806
                 dc.l    Player_AlternateLayoutSpriteArt00Piece03+$F000000
                 dc.w    $DCED
-Player_AlternateLayoutSpriteMapping02:  dc.w    $800    ; DATA XREF: ROM:00017300   o  ; was: word_E8E32
+Player_AlternateLayoutSpriteMapping02:  dc.w    $800    ; was: word_E8E32
                 dc.l    Player_AlternateLayoutSpriteArt02Piece00+$5000000
                 dc.w    $F6DD
                 dc.w    $804
@@ -404,7 +404,7 @@ Player_AlternateLayoutSpriteMapping02:  dc.w    $800    ; DATA XREF: ROM:0001730
                 dc.w    $8808
                 dc.l    Player_AlternateLayoutSpriteArt02Piece02+$F000000
                 dc.w    $DEEA
-Player_AlternateLayoutSpriteMapping01:  dc.w    $800    ; DATA XREF: ROM:000172FC   o  ; was: word_E8E4A
+Player_AlternateLayoutSpriteMapping01:  dc.w    $800    ; was: word_E8E4A
                 dc.l    Player_AlternateLayoutSpriteArt01Piece00+$4000000
                 dc.w    $ED0A
                 dc.w    $802

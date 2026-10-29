@@ -1,4 +1,4 @@
-Stage_LoadStage14To16Assets:                            ; DATA XREF: ROM:00011750   o  ; was: sub_11A5C
+Stage_LoadStage14To16Assets:                            ; was: sub_11A5C
                                         ; ROM:00011752   o
                 move.w  #4,(StageProcessTableOffset).w
                 lea     Stage14To16AssetLoadList(pc),a0
@@ -9,7 +9,6 @@ Stage_LoadStage14To16Assets:                            ; DATA XREF: ROM:0001175
 ; End of function Stage_LoadStage14To16Assets
 ; ---------------------------------------------------------------------------
 Stage14To16AssetLoadList:   dc.w    7                   ; field_0  ; was: stru_11A6E
-                                        ; DATA XREF: Stage_LoadStage14To16Assets+6   o
                 dc.l    Stage14To16TileArt0000          ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -36,7 +35,7 @@ Stage14To16AssetLoadList:   dc.w    7                   ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 17 asset list
-Stage_LoadStage17Assets:                                ; DATA XREF: ROM:00011756   o  ; was: sub_11AB0
+Stage_LoadStage17Assets:                                ; was: sub_11AB0
                 move.w  #4,(StageProcessTableOffset).w
                 lea     Stage17AssetLoadList(pc),a0
                 nop
@@ -46,7 +45,6 @@ Stage_LoadStage17Assets:                                ; DATA XREF: ROM:0001175
 ; End of function Stage_LoadStage17Assets
 ; ---------------------------------------------------------------------------
 Stage17AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_11AC2
-                                        ; DATA XREF: Stage_LoadStage17Assets+6   o
                 dc.l    Stage17TileArt0000              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -67,7 +65,7 @@ Stage17AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 18 asset list
-Stage_LoadStage18And19Assets:                           ; DATA XREF: ROM:00011758   o  ; was: sub_11AF4
+Stage_LoadStage18And19Assets:                           ; was: sub_11AF4
                                         ; ROM:0001175A   o
                 move.w  #8,(StageProcessTableOffset).w
                 lea     Stage18And19AssetLoadList(pc),a0
@@ -78,7 +76,6 @@ Stage_LoadStage18And19Assets:                           ; DATA XREF: ROM:0001175
 ; End of function Stage_LoadStage18And19Assets
 ; ---------------------------------------------------------------------------
 Stage18And19AssetLoadList:  dc.w    7                   ; field_0  ; was: stru_11B06
-                                        ; DATA XREF: Stage_LoadStage18And19Assets+6   o
                 dc.l    Stage18And19TileArt0000         ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -124,7 +121,6 @@ UnreferencedStage17AlternateAssetLoader:
 ; End of function UnreferencedStage17AlternateAssetLoader
 ; ---------------------------------------------------------------------------
 UnreferencedStage17AlternateAssetLoadList:  dc.w    7   ; field_0  ; was: stru_11B72
-                                        ; DATA XREF: UnreferencedStage17AlternateAssetLoader+6   o
                 dc.l    UnreferencedStage17AlternateTileArt0000  ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -142,7 +138,7 @@ UnreferencedStage17AlternateAssetLoadList:  dc.w    7   ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 20 asset list
-Stage_LoadStage20Assets:                                ; DATA XREF: ROM:0001175C   o  ; was: sub_11B9C
+Stage_LoadStage20Assets:                                ; was: sub_11B9C
                 move.w  #8,(StageProcessTableOffset).w
                 lea     Stage20AssetLoadList(pc),a0
                 nop
@@ -152,7 +148,6 @@ Stage_LoadStage20Assets:                                ; DATA XREF: ROM:0001175
 ; End of function Stage_LoadStage20Assets
 ; ---------------------------------------------------------------------------
 Stage20AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_11BAE
-                                        ; DATA XREF: Stage_LoadStage20Assets+6   o
                 dc.l    Stage20TileArt0000              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -185,20 +180,20 @@ Stage20AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 23 asset list
-Stage_LoadStage23Assets:                                ; DATA XREF: ROM:00011762   o  ; was: sub_11C00
+Stage_LoadStage23Assets:                                ; was: sub_11C00
                 move.w  #$C,(StageProcessTableOffset).w
                 bset    #0,(PlayerModeFlags).w
                 bset    #7,(CameraMotionLockFlags).w
                 bra.s   Stage_SubmitStage21To23SharedAssetList
 ; End of function Stage_LoadStage23Assets
 ; Prepares resampled tiles and loads the shared Stages 21 to 23 asset list
-Stage_LoadStage21And22Assets:                           ; DATA XREF: ROM:0001175E   o  ; was: sub_11C14
+Stage_LoadStage21And22Assets:                           ; was: sub_11C14
                                         ; ROM:00011760   o
                 move.w  #$C,(StageProcessTableOffset).w
                 bset    #0,(PlayerModeFlags).w
                 bset    #7,(CameraMotionLockFlags).w
                 bsr.w   Gfx_PrepareStage21And22ResampledTiles
-Stage_SubmitStage21To23SharedAssetList:                 ; CODE XREF: Stage_LoadStage23Assets+12   j  ; was: loc_11C2A
+Stage_SubmitStage21To23SharedAssetList:                 ; was: loc_11C2A
                 lea     Stage21To23SharedAssetLoadList(pc),a0
                 nop
                 jmp     Stage_DispatchAssetListLoaderByGameMode(pc)  ; (pc)
@@ -207,7 +202,6 @@ Stage_SubmitStage21To23SharedAssetList:                 ; CODE XREF: Stage_LoadS
 ; End of function Stage_LoadStage21And22Assets
 ; ---------------------------------------------------------------------------
 Stage21To23SharedAssetLoadList: dc.w    7               ; field_0  ; was: stru_11C36
-                                        ; DATA XREF: Stage_LoadStage21And22Assets:Stage_SubmitStage21To23SharedAssetList   o
                 dc.l    Stage21To23TileArt              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -231,7 +225,7 @@ Stage21To23SharedAssetLoadList: dc.w    7               ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 24 asset list
-Stage_LoadStage24Assets:                                ; DATA XREF: ROM:00011764   o  ; was: sub_11C70
+Stage_LoadStage24Assets:                                ; was: sub_11C70
                 move.w  #$C,(StageProcessTableOffset).w
                 lea     Stage24AssetLoadList(pc),a0
                 nop
@@ -241,7 +235,6 @@ Stage_LoadStage24Assets:                                ; DATA XREF: ROM:0001176
 ; End of function Stage_LoadStage24Assets
 ; ---------------------------------------------------------------------------
 Stage24AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_11C82
-                                        ; DATA XREF: Stage_LoadStage24Assets+6   o
                 dc.l    Stage24TileArt0000              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -272,7 +265,6 @@ UnreferencedLateStageVariantAAssetLoader:
 ; End of function UnreferencedLateStageVariantAAssetLoader
 ; ---------------------------------------------------------------------------
 UnreferencedLateStageVariantAAssetLoadList: dc.w    7   ; field_0  ; was: stru_11CC6
-                                        ; DATA XREF: UnreferencedLateStageVariantAAssetLoader+6   o
                 dc.l    UnreferencedLateStageVariantATileArt0000  ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -303,7 +295,6 @@ UnreferencedLateStageVariantBAssetLoader:
 ; End of function UnreferencedLateStageVariantBAssetLoader
 ; ---------------------------------------------------------------------------
 UnreferencedLateStageVariantBAssetLoadList: dc.w    7   ; field_0  ; was: stru_11D0A
-                                        ; DATA XREF: UnreferencedLateStageVariantBAssetLoader+6   o
                 dc.l    UnreferencedLateStageVariantBTileArt0000  ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -321,7 +312,7 @@ UnreferencedLateStageVariantBAssetLoadList: dc.w    7   ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 25 asset list
-Stage_LoadStage25Assets:                                ; DATA XREF: ROM:00011766   o  ; was: sub_11D34
+Stage_LoadStage25Assets:                                ; was: sub_11D34
                 move.w  #$C,(StageProcessTableOffset).w
                 lea     Stage25AssetLoadList(pc),a0
                 nop
@@ -331,7 +322,6 @@ Stage_LoadStage25Assets:                                ; DATA XREF: ROM:0001176
 ; End of function Stage_LoadStage25Assets
 ; ---------------------------------------------------------------------------
 Stage25AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_11D46
-                                        ; DATA XREF: Stage_LoadStage25Assets+6   o
                 dc.l    Stage25TileArt0000              ; field_2
                 dc.w    0                               ; field_6
                 dc.w    7                               ; field_0
@@ -361,7 +351,7 @@ Stage25AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Loads the Stage 26 asset list
-Stage_LoadStage26Assets:                                ; DATA XREF: ROM:00011768   o  ; was: sub_11D90
+Stage_LoadStage26Assets:                                ; was: sub_11D90
                 move.w  #$C,(StageProcessTableOffset).w
                 bset    #0,(PlayerModeFlags).w
                 lea     Stage26AssetLoadList(pc),a0
@@ -372,7 +362,6 @@ Stage_LoadStage26Assets:                                ; DATA XREF: ROM:0001176
 ; End of function Stage_LoadStage26Assets
 ; ---------------------------------------------------------------------------
 Stage26AssetLoadList:   dc.w    7                       ; field_0  ; was: stru_11DA8
-                                        ; DATA XREF: Stage_LoadStage26Assets+C   o
                 dc.l    Stage26ZLeoEndingTileArt0000    ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0

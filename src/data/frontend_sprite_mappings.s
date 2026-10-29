@@ -1,7 +1,7 @@
-FrontendSegaScreenSpriteMapping:    dc.w    $300, $F00, $F0D0  ; DATA XREF: Frontend_InitializeSegaScreen+17C   o  ; was: word_E98B0
+FrontendSegaScreenSpriteMapping:    dc.w    $300, $F00, $F0D0  ; was: word_E98B0
                 dc.w    $310, $F00, $F0F0
                 dc.w    $8320, $F00, $F010
-FrontendTitleTransitionSpriteMapping:   dc.w    $300, $F00, $D4E4  ; DATA XREF: Frontend_InitializeTitleTransition+3A   o  ; was: word_E98C2
+FrontendTitleTransitionSpriteMapping:   dc.w    $300, $F00, $D4E4  ; was: word_E98C2
                 dc.w    $310, $B00, $D404
                 dc.w    $31C, $F00, $F4E4
                 dc.w    $32C, $B00, $F404

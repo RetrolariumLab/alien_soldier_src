@@ -1,23 +1,23 @@
-Input_InitializeControllerState:                        ; CODE XREF: Sys_ResetTransferAndInputState+C   p  ; was: sub_33A4
+Input_InitializeControllerState:                        ; was: sub_33A4
                 clr.b   (GameplayControlFlags).w
                 move.w  #$FFFF,(ControllerHeldState).w
                 move.w  #0,(ControllerPressedState).w
                 move.w  #0,(ControllerReleasedState).w
 ; End of function Input_InitializeControllerState
 ; Polls both controller ports while holding and then releasing the Z80 bus
-Input_PollBothControllersWithZ80BusLock:                ; CODE XREF: Sys_VBlankHandler+18   p  ; was: sub_33BA
+Input_PollBothControllersWithZ80BusLock:                ; was: sub_33BA
                                         ; Input_PollBothControllersWithZ80BusLock+8   j
                 bset    #0,(IO_Z80BUS).l
                 bne.s   Input_PollBothControllersWithZ80BusLock
                 bsr.w   Input_ReadPrimaryController
                 bsr.w   Input_ReadSecondaryController
-Input_PollBothControllers_WaitForZ80BusRelease:         ; CODE XREF: Input_PollBothControllersWithZ80BusLock+1A   j  ; was: loc_33CC
+Input_PollBothControllers_WaitForZ80BusRelease:         ; was: loc_33CC
                 bclr    #0,(IO_Z80BUS).l
                 beq.s   Input_PollBothControllers_WaitForZ80BusRelease
                 rts
 ; End of function Input_PollBothControllersWithZ80BusLock
 ; Reads the primary controller type and updates its button state when connected
-Input_ReadPrimaryController:                            ; CODE XREF: Input_PollBothControllersWithZ80BusLock+A   p  ; was: sub_33D8
+Input_ReadPrimaryController:                            ; was: sub_33D8
                 lea     (ControllerHeldState).w,a1
                 lea     ((IO_CT1_DATA+1)).l,a2
                 lea     (P1ButtonASourceBit).w,a3
@@ -28,7 +28,7 @@ Input_ReadPrimaryController:                            ; CODE XREF: Input_PollB
                 bra.w   Input_ClearDisconnectedControllerState
 ; End of function Input_ReadPrimaryController
 ; Reads the secondary controller type and updates its button state when connected
-Input_ReadSecondaryController:                          ; CODE XREF: Input_PollBothControllersWithZ80BusLock+E   p  ; was: sub_33FA
+Input_ReadSecondaryController:                          ; was: sub_33FA
                 lea     ((ControllerHeldState+1)).w,a1
                 lea     ((IO_CT2_DATA+1)).l,a2
                 lea     (P2ButtonASourceBit).w,a3
@@ -36,13 +36,13 @@ Input_ReadSecondaryController:                          ; CODE XREF: Input_PollB
                 move.b  d0,(Controller2TypeID).w
                 cmpi.b  #$D,d0
                 beq.w   Input_UpdateControllerButtonStates
-Input_ClearDisconnectedControllerState:                 ; CODE XREF: Input_ReadPrimaryController+1E   j  ; was: loc_3418
+Input_ClearDisconnectedControllerState:                 ; was: loc_3418
                 clr.b   (a1)
                 clr.b   2(a1)
                 clr.b   4(a1)
                 rts
 ; ---------------------------------------------------------------------------
-Input_UpdateControllerButtonStates:                     ; CODE XREF: Input_ReadPrimaryController+1A   j  ; was: loc_3424
+Input_UpdateControllerButtonStates:                     ; was: loc_3424
                                         ; Input_ReadSecondaryController+1A   j
                 move.b  #0,(a2)
                 nop
@@ -70,7 +70,7 @@ Input_UpdateControllerButtonStates:                     ; CODE XREF: Input_ReadP
                 rts
 ; End of function Input_UpdateControllerButtonStates
 ; Applies the selected port's configurable A/B/C source-bit mapping
-Input_ApplyConfiguredABCMapping:                        ; CODE XREF: Input_ReadSecondaryController+4E   p  ; was: sub_3462
+Input_ApplyConfiguredABCMapping:                        ; was: sub_3462
                 btst    #6,(GameplayControlFlags).w
                 beq.w   Input_ApplyConfiguredABCMapping_Return
                 move.b  d0,d1
@@ -84,20 +84,20 @@ Input_ApplyConfiguredABCMapping:                        ; CODE XREF: Input_ReadS
                 move.b  4(a3),d3
 ; End of function Input_ApplyConfiguredABCMapping
 ; Copies one configured source button bit to its canonical output position
-Input_CopyConfiguredButtonBit:                          ; CODE XREF: Input_ApplyConfiguredABCMapping+12   p  ; was: sub_348C
+Input_CopyConfiguredButtonBit:                          ; was: sub_348C
                                         ; Input_ApplyConfiguredABCMapping+1E   p
                 btst    d3,d1
                 beq.w   Input_CopyConfiguredButtonBit_Clear
                 bset    d2,d0
                 rts
 ; ---------------------------------------------------------------------------
-Input_CopyConfiguredButtonBit_Clear:                    ; CODE XREF: Input_CopyConfiguredButtonBit+2   j  ; was: loc_3496
+Input_CopyConfiguredButtonBit_Clear:                    ; was: loc_3496
                 bclr    d2,d0
-Input_ApplyConfiguredABCMapping_Return:                 ; CODE XREF: Input_ApplyConfiguredABCMapping+6   j  ; was: locret_3498
+Input_ApplyConfiguredABCMapping_Return:                 ; was: locret_3498
                 rts
 ; End of function Input_CopyConfiguredButtonBit
 ; Combines TH-high and TH-low samples into the controller type signature
-Input_ReadControllerTypeSignature:                      ; CODE XREF: Input_ReadPrimaryController+E   p  ; was: sub_349A
+Input_ReadControllerTypeSignature:                      ; was: sub_349A
                                         ; Input_ReadSecondaryController+E   p
                 move.b  #$40,(a2)                       ; '@'
                 nop

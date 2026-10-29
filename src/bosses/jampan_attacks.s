@@ -1,6 +1,6 @@
 ; Jampan offset and shield attacks, defeat sequence, and post-defeat movement
 
-Boss_JampanMoveOffsetAttackAcrossScreenState:           ; DATA XREF: ROM:000491FE   o  ; was: sub_49A14
+Boss_JampanMoveOffsetAttackAcrossScreenState:           ; was: sub_49A14
                 eori.w  #$8000,(SeventhEntityFlags).w
                 bsr.w   Boss_JampanTrackVerticalOrbitOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -23,24 +23,24 @@ Boss_JampanMoveOffsetAttackAcrossScreenState:           ; DATA XREF: ROM:000491F
                 subq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanFinishOffsetAttack:                          ; CODE XREF: Boss_JampanMoveOffsetAttackAcrossScreenState+1C   j
+Boss_JampanFinishOffsetAttack:
                                         ; Boss_JampanMoveOffsetAttackAcrossScreenState+22   j
                 ori.w   #$8000,(SeventhEntityFlags).w
                 bset    #1,$4C(a5)
                 move.w  #$12,4(a5)
-Boss_JampanMoveOffsetAttackAcrossScreenReturn:          ; CODE XREF: Boss_JampanMoveOffsetAttackAcrossScreenState+2C   j
+Boss_JampanMoveOffsetAttackAcrossScreenReturn:
                 rts
 ; End of function Boss_JampanMoveOffsetAttackAcrossScreenState
-Boss_JampanNoOpState2A:                                 ; DATA XREF: ROM:00049200   o
+Boss_JampanNoOpState2A:
                 rts
 ; End of function Boss_JampanNoOpState2A
 
-Boss_JampanNoOpState2C:                                 ; DATA XREF: ROM:00049202   o
+Boss_JampanNoOpState2C:
                 rts
 ; End of function Boss_JampanNoOpState2C
 
 ; Converges the shield-cycle vertical orbit offset on zero
-Boss_JampanNormalizeShieldCycleVerticalOffsetState:     ; DATA XREF: ROM:00049204   o  ; was: sub_49A7E
+Boss_JampanNormalizeShieldCycleVerticalOffsetState:     ; was: sub_49A7E
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanTrackPlayerAimOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -51,17 +51,17 @@ Boss_JampanNormalizeShieldCycleVerticalOffsetState:     ; DATA XREF: ROM:0004920
                 subq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanIncreaseShieldCycleVerticalOffset:           ; CODE XREF: Boss_JampanNormalizeShieldCycleVerticalOffsetState+16   j
+Boss_JampanIncreaseShieldCycleVerticalOffset:
                 addq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanBeginShieldCycleDelay:                       ; CODE XREF: Boss_JampanNormalizeShieldCycleVerticalOffsetState+10   j
+Boss_JampanBeginShieldCycleDelay:
                 move.w  #$10,$48(a5)
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_JampanNormalizeShieldCycleVerticalOffsetState
 ; Delays before enabling and positioning the six shield objects
-Boss_JampanShieldCycleDelayState:                       ; DATA XREF: ROM:00049206   o  ; was: sub_49AAE
+Boss_JampanShieldCycleDelayState:                       ; was: sub_49AAE
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanTrackPlayerAimOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -70,11 +70,11 @@ Boss_JampanShieldCycleDelayState:                       ; DATA XREF: ROM:0004920
                 bsr.w   Boss_JampanEnableShields
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 addq.w  #2,4(a5)
-Boss_JampanShieldCycleDelayReturn:                      ; CODE XREF: Boss_JampanShieldCycleDelayState+10   j
+Boss_JampanShieldCycleDelayReturn:
                 rts
 ; End of function Boss_JampanShieldCycleDelayState
 ; Expands the shared shield-formation radius to $18
-Boss_JampanExpandShieldRadiusState:                     ; DATA XREF: ROM:00049208   o  ; was: sub_49ACE
+Boss_JampanExpandShieldRadiusState:                     ; was: sub_49ACE
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanTrackPlayerAimOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -84,11 +84,11 @@ Boss_JampanExpandShieldRadiusState:                     ; DATA XREF: ROM:0004920
                 bne.s   Boss_JampanExpandShieldRadiusReturn
                 move.w  #$10,$48(a5)
                 addq.w  #2,4(a5)
-Boss_JampanExpandShieldRadiusReturn:                    ; CODE XREF: Boss_JampanExpandShieldRadiusState+1A   j
+Boss_JampanExpandShieldRadiusReturn:
                 rts
 ; End of function Boss_JampanExpandShieldRadiusState
 ; Holds the expanded shield formation before rotation
-Boss_JampanShieldCyclePauseState:                       ; DATA XREF: ROM:0004920A   o  ; was: sub_49AF6
+Boss_JampanShieldCyclePauseState:                       ; was: sub_49AF6
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanTrackPlayerAimOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -100,11 +100,11 @@ Boss_JampanShieldCyclePauseState:                       ; DATA XREF: ROM:0004920
                 bclr    #1,$4C(a5)
                 move.w  #$D1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_JampanShieldCyclePauseReturn:                      ; CODE XREF: Boss_JampanShieldCyclePauseState+14   j
+Boss_JampanShieldCyclePauseReturn:
                 rts
 ; End of function Boss_JampanShieldCyclePauseState
 ; Rotates the primary shield-pattern angle forward for $14 frames
-Boss_JampanRotateShieldPatternForwardState:             ; DATA XREF: ROM:0004920C   o  ; was: sub_49B2A
+Boss_JampanRotateShieldPatternForwardState:             ; was: sub_49B2A
                 addq.w  #4,(SharedScratchLong1).w
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -117,11 +117,11 @@ Boss_JampanRotateShieldPatternForwardState:             ; DATA XREF: ROM:0004920
                 move.w  #4,(PlaneBShakeLevel).w
                 move.w  #$A1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_JampanRotateShieldPatternForwardReturn:            ; CODE XREF: Boss_JampanRotateShieldPatternForwardState+14   j
+Boss_JampanRotateShieldPatternForwardReturn:
                 rts
 ; End of function Boss_JampanRotateShieldPatternForwardState
 ; Rotates the primary shield-pattern angle backward and selects repeat/recovery
-Boss_JampanRotateShieldPatternBackwardState:            ; DATA XREF: ROM:0004920E   o  ; was: sub_49B64
+Boss_JampanRotateShieldPatternBackwardState:            ; was: sub_49B64
                 subq.w  #4,(SharedScratchLong1).w
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -135,24 +135,24 @@ Boss_JampanRotateShieldPatternBackwardState:            ; DATA XREF: ROM:0004920
                 sub.w   $10(a5),d0
                 bpl.s   Boss_JampanUseAbsolutePlayerHorizontalDelta
                 neg.w   d0
-Boss_JampanUseAbsolutePlayerHorizontalDelta:            ; CODE XREF: Boss_JampanRotateShieldPatternBackwardState+2C   j
+Boss_JampanUseAbsolutePlayerHorizontalDelta:
                 cmpi.w  #$80,d0
                 bcc.s   Boss_JampanFinishShieldRotationCycle
                 move.w  #$10,$48(a5)
                 subq.w  #4,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanFinishShieldRotationCycle:                   ; CODE XREF: Boss_JampanRotateShieldPatternBackwardState+22   j
+Boss_JampanFinishShieldRotationCycle:
                                         ; Boss_JampanRotateShieldPatternBackwardState+34   j
                 move.w  #2,(SecondaryEntityWork52).w
                 move.w  #2,(QuaternaryEntityWork52).w
                 clr.b   (TwentyThirdEntityStatus).w
                 addq.w  #2,4(a5)
-Boss_JampanRotateShieldPatternBackwardReturn:           ; CODE XREF: Boss_JampanRotateShieldPatternBackwardState+14   j
+Boss_JampanRotateShieldPatternBackwardReturn:
                 rts
 ; End of function Boss_JampanRotateShieldPatternBackwardState
 ; Collapses the shield-formation radius and disables the six shields
-Boss_JampanCollapseShieldRadiusState:                   ; DATA XREF: ROM:00049210   o  ; was: sub_49BBC
+Boss_JampanCollapseShieldRadiusState:                   ; was: sub_49BBC
                 bsr.w   Boss_JampanTrackPlayerAimOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
@@ -163,22 +163,22 @@ Boss_JampanCollapseShieldRadiusState:                   ; DATA XREF: ROM:0004921
                 bsr.w   Boss_JampanDisableShields
                 move.w  #$10,$48(a5)
                 addq.w  #2,4(a5)
-Boss_JampanCollapseShieldRadiusReturn:                  ; CODE XREF: Boss_JampanCollapseShieldRadiusState+10   j
+Boss_JampanCollapseShieldRadiusReturn:
                 rts
 ; End of function Boss_JampanCollapseShieldRadiusState
 ; Waits before restoring linked-part states and returning to selection
-Boss_JampanShieldCycleRecoveryDelayState:               ; DATA XREF: ROM:00049212   o  ; was: sub_49BE6
+Boss_JampanShieldCycleRecoveryDelayState:               ; was: sub_49BE6
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 subq.w  #1,$48(a5)
                 bne.s   Boss_JampanShieldCycleRecoveryDelayReturn
                 move.w  #1,(TertiaryEntityWork52).w
                 move.w  #1,(FifthEntityWork52).w
                 move.w  #$12,4(a5)
-Boss_JampanShieldCycleRecoveryDelayReturn:              ; CODE XREF: Boss_JampanShieldCycleRecoveryDelayState+8   j
+Boss_JampanShieldCycleRecoveryDelayReturn:
                 rts
 ; End of function Boss_JampanShieldCycleRecoveryDelayState
 ; Converges shared offsets and initializes the alternate combat pattern
-Boss_JampanInitializeAlternatePatternState:             ; DATA XREF: ROM:00049214   o  ; was: sub_49C04
+Boss_JampanInitializeAlternatePatternState:             ; was: sub_49C04
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 tst.w   (SharedScratchLong9+2).w
                 beq.s   Boss_JampanUpdateAlternateSecondaryOffset
@@ -187,9 +187,9 @@ Boss_JampanInitializeAlternatePatternState:             ; DATA XREF: ROM:0004921
                 subq.w  #1,(SharedScratchLong9+2).w
                 bra.s   Boss_JampanUpdateAlternateSecondaryOffset
 ; ---------------------------------------------------------------------------
-Boss_JampanIncreaseAlternatePrimaryOffset:              ; CODE XREF: Boss_JampanInitializeAlternatePatternState+E   j
+Boss_JampanIncreaseAlternatePrimaryOffset:
                 addq.w  #1,(SharedScratchLong9+2).w
-Boss_JampanUpdateAlternateSecondaryOffset:              ; CODE XREF: Boss_JampanInitializeAlternatePatternState+8   j
+Boss_JampanUpdateAlternateSecondaryOffset:
                                         ; Boss_JampanInitializeAlternatePatternState+14   j
                 tst.w   (SharedScratchLong10).w
                 beq.s   Boss_JampanFinishAlternatePatternInitialization
@@ -198,11 +198,11 @@ Boss_JampanUpdateAlternateSecondaryOffset:              ; CODE XREF: Boss_Jampan
                 subq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanIncreaseAlternateSecondaryOffset:            ; CODE XREF: Boss_JampanInitializeAlternatePatternState+24   j
+Boss_JampanIncreaseAlternateSecondaryOffset:
                 addq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanFinishAlternatePatternInitialization:        ; CODE XREF: Boss_JampanInitializeAlternatePatternState+1E   j
+Boss_JampanFinishAlternatePatternInitialization:
                 tst.w   (SharedScratchLong9+2).w
                 bne.s   Boss_JampanInitializeAlternatePatternReturn
                 bclr    #2,$4C(a5)
@@ -215,11 +215,11 @@ Boss_JampanFinishAlternatePatternInitialization:        ; CODE XREF: Boss_Jampan
                 move.w  #4,(SharedScratchLong5).w
                 move.w  #4,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
-Boss_JampanInitializeAlternatePatternReturn:            ; CODE XREF: Boss_JampanInitializeAlternatePatternState+36   j
+Boss_JampanInitializeAlternatePatternReturn:
                 rts
 ; End of function Boss_JampanInitializeAlternatePatternState
 ; Waits for the alternate pattern angle to reach $180
-Boss_JampanWaitForAlternatePatternAngleState:           ; DATA XREF: ROM:00049216   o  ; was: sub_49C72
+Boss_JampanWaitForAlternatePatternAngleState:           ; was: sub_49C72
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 cmpi.w  #$180,(SharedScratchLong2).w
                 bne.s   Boss_JampanWaitForAlternatePatternAngleReturn
@@ -227,15 +227,15 @@ Boss_JampanWaitForAlternatePatternAngleState:           ; DATA XREF: ROM:0004921
                 bsr.w   Boss_JampanEnableShields
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 addq.w  #2,4(a5)
-Boss_JampanWaitForAlternatePatternAngleReturn:          ; CODE XREF: Boss_JampanWaitForAlternatePatternAngleState+A   j
+Boss_JampanWaitForAlternatePatternAngleReturn:
                 rts
 ; End of function Boss_JampanWaitForAlternatePatternAngleState
 ; Expands the alternate pattern radius while accelerating its angle
-Boss_JampanExpandAlternatePatternState:                 ; DATA XREF: ROM:00049218   o  ; was: sub_49C90
+Boss_JampanExpandAlternatePatternState:                 ; was: sub_49C90
                 cmpi.l  #$80000,(SharedScratchLong4).w
                 beq.s   Boss_JampanUpdateExpandedAlternatePattern
                 addi.l  #$4000,(SharedScratchLong4).w
-Boss_JampanUpdateExpandedAlternatePattern:              ; CODE XREF: Boss_JampanExpandAlternatePatternState+8   j
+Boss_JampanUpdateExpandedAlternatePattern:
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 addq.w  #1,(SharedScratchLong11).w
@@ -244,11 +244,11 @@ Boss_JampanUpdateExpandedAlternatePattern:              ; CODE XREF: Boss_Jampan
                 move.w  #$18,(SharedScratchLong11).w
                 move.w  #$A0,(TwentyThirdEntityWork26).w
                 addq.w  #2,4(a5)
-Boss_JampanExpandAlternatePatternReturn:                ; CODE XREF: Boss_JampanExpandAlternatePatternState+24   j
+Boss_JampanExpandAlternatePatternReturn:
                 rts
 ; End of function Boss_JampanExpandAlternatePatternState
 ; Starts the alternate pattern's timed hold
-Boss_JampanBeginAlternatePatternHoldState:              ; DATA XREF: ROM:0004921A   o  ; was: sub_49CC8
+Boss_JampanBeginAlternatePatternHoldState:              ; was: sub_49CC8
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 move.w  #$100,$48(a5)
@@ -257,11 +257,11 @@ Boss_JampanBeginAlternatePatternHoldState:              ; DATA XREF: ROM:0004921
                 rts
 ; End of function Boss_JampanBeginAlternatePatternHoldState
 ; Tracks the player during the alternate pattern hold
-Boss_JampanTrackPlayerDuringAlternatePatternState:      ; DATA XREF: ROM:0004921C   o  ; was: sub_49CE2
+Boss_JampanTrackPlayerDuringAlternatePatternState:      ; was: sub_49CE2
                 cmpi.w  #$C0,$48(a5)
                 bcs.s   Boss_JampanUpdateAlternatePatternHold
                 bsr.w   Boss_JampanTrackPlayerY
-Boss_JampanUpdateAlternatePatternHold:                  ; CODE XREF: Boss_JampanTrackPlayerDuringAlternatePatternState+6   j
+Boss_JampanUpdateAlternatePatternHold:
                 bsr.w   Boss_JampanTrackPlayerX
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
@@ -269,14 +269,14 @@ Boss_JampanUpdateAlternatePatternHold:                  ; CODE XREF: Boss_Jampan
                 ble.s   Boss_JampanFinishAlternatePatternHold
                 subq.w  #1,$48(a5)
                 bne.s   Boss_JampanTrackPlayerDuringAlternatePatternReturn
-Boss_JampanFinishAlternatePatternHold:                  ; CODE XREF: Boss_JampanTrackPlayerDuringAlternatePatternState+1C   j
+Boss_JampanFinishAlternatePatternHold:
                 bset    #1,$4C(a5)
                 addq.w  #2,4(a5)
-Boss_JampanTrackPlayerDuringAlternatePatternReturn:     ; CODE XREF: Boss_JampanTrackPlayerDuringAlternatePatternState+22   j
+Boss_JampanTrackPlayerDuringAlternatePatternReturn:
                 rts
 ; End of function Boss_JampanTrackPlayerDuringAlternatePatternState
 ; Moves vertically toward screen Y $F0 before enabling oscillation
-Boss_JampanCenterAlternatePatternVerticallyState:       ; DATA XREF: ROM:0004921E   o  ; was: sub_49D12
+Boss_JampanCenterAlternatePatternVerticallyState:       ; was: sub_49D12
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 move.w  $14(a5),d0
@@ -287,11 +287,11 @@ Boss_JampanCenterAlternatePatternVerticallyState:       ; DATA XREF: ROM:0004921
                 addq.w  #1,$14(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanMoveAlternatePatternUpward:                  ; CODE XREF: Boss_JampanCenterAlternatePatternVerticallyState+14   j
+Boss_JampanMoveAlternatePatternUpward:
                 subq.w  #1,$14(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanBeginAlternatePatternOscillation:            ; CODE XREF: Boss_JampanCenterAlternatePatternVerticallyState+10   j
+Boss_JampanBeginAlternatePatternOscillation:
                 bset    #2,$4C(a5)
                 move.l  #$FFFF0000,$1C(a5)
                 move.l  #$2000,$54(a5)
@@ -300,18 +300,18 @@ Boss_JampanBeginAlternatePatternOscillation:            ; CODE XREF: Boss_Jampan
                 rts
 ; End of function Boss_JampanCenterAlternatePatternVerticallyState
 ; Waits for the alternate pattern's primary angle to reach $100
-Boss_JampanWaitForAlternatePrimaryAngleState:           ; DATA XREF: ROM:00049220   o  ; was: sub_49D56
+Boss_JampanWaitForAlternatePrimaryAngleState:           ; was: sub_49D56
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 cmpi.w  #$100,(SharedScratchLong1).w
                 bne.s   Boss_JampanWaitForAlternatePrimaryAngleReturn
                 clr.w   (SharedScratchLong4).w
                 addq.w  #2,4(a5)
-Boss_JampanWaitForAlternatePrimaryAngleReturn:          ; CODE XREF: Boss_JampanWaitForAlternatePrimaryAngleState+E   j
+Boss_JampanWaitForAlternatePrimaryAngleReturn:
                 rts
 ; End of function Boss_JampanWaitForAlternatePrimaryAngleState
 ; Collapses the alternate pattern radius and disables the shields
-Boss_JampanCollapseAlternatePatternState:               ; DATA XREF: ROM:00049222   o  ; was: sub_49D70
+Boss_JampanCollapseAlternatePatternState:               ; was: sub_49D70
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 subq.w  #4,(SharedScratchLong11).w
@@ -320,26 +320,26 @@ Boss_JampanCollapseAlternatePatternState:               ; DATA XREF: ROM:0004922
                 bsr.w   Boss_JampanDisableShields
                 andi.w  #$1F8,(SharedScratchLong2).w
                 addq.w  #2,4(a5)
-Boss_JampanCollapseAlternatePatternReturn:              ; CODE XREF: Boss_JampanCollapseAlternatePatternState+C   j
+Boss_JampanCollapseAlternatePatternReturn:
                 rts
 ; End of function Boss_JampanCollapseAlternatePatternState
 ; Restores the secondary angle to $100 before attack selection
-Boss_JampanRestoreAttackSelectionAngleState:            ; DATA XREF: ROM:00049224   o  ; was: sub_49D92
+Boss_JampanRestoreAttackSelectionAngleState:            ; was: sub_49D92
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 addq.w  #8,(SharedScratchLong2).w
                 andi.w  #$1F8,(SharedScratchLong2).w
                 cmpi.w  #$100,(SharedScratchLong2).w
                 bne.s   Boss_JampanRestoreAttackSelectionAngleReturn
                 move.w  #$12,4(a5)
-Boss_JampanRestoreAttackSelectionAngleReturn:           ; CODE XREF: Boss_JampanRestoreAttackSelectionAngleState+14   j
+Boss_JampanRestoreAttackSelectionAngleReturn:
                 rts
 ; End of function Boss_JampanRestoreAttackSelectionAngleState
-Boss_JampanNoOpState50:                                 ; DATA XREF: ROM:00049226   o
+Boss_JampanNoOpState50:
                 rts
 ; End of function Boss_JampanNoOpState50
 
 ; Shrinks the shield radius, then gates defeat setup on the primary offset
-Boss_JampanBeginDefeatState:                            ; DATA XREF: ROM:00049228   o  ; was: sub_49DB2
+Boss_JampanBeginDefeatState:                            ; was: sub_49DB2
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 tst.w   (SharedScratchLong11).w
@@ -347,7 +347,7 @@ Boss_JampanBeginDefeatState:                            ; DATA XREF: ROM:0004922
                 subq.w  #1,(SharedScratchLong11).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanUpdateDefeatPrimaryOffset:                   ; CODE XREF: Boss_JampanBeginDefeatState+C   j
+Boss_JampanUpdateDefeatPrimaryOffset:
                 tst.w   (SharedScratchLong9+2).w
                 beq.s   Boss_JampanUpdateDefeatSecondaryOffset
                 tst.w   (SharedScratchLong9+2).w
@@ -355,9 +355,9 @@ Boss_JampanUpdateDefeatPrimaryOffset:                   ; CODE XREF: Boss_Jampan
                 subq.w  #1,(SharedScratchLong9+2).w
                 bra.s   Boss_JampanUpdateDefeatSecondaryOffset
 ; ---------------------------------------------------------------------------
-Boss_JampanIncreaseDefeatPrimaryOffset:                 ; CODE XREF: Boss_JampanBeginDefeatState+1E   j
+Boss_JampanIncreaseDefeatPrimaryOffset:
                 addq.w  #1,(SharedScratchLong9+2).w
-Boss_JampanUpdateDefeatSecondaryOffset:                 ; CODE XREF: Boss_JampanBeginDefeatState+18   j
+Boss_JampanUpdateDefeatSecondaryOffset:
                                         ; Boss_JampanBeginDefeatState+24   j
                 tst.w   (SharedScratchLong9+2).w
                 beq.s   Boss_JampanCompleteDefeatAfterPrimaryOffsetZero
@@ -366,11 +366,11 @@ Boss_JampanUpdateDefeatSecondaryOffset:                 ; CODE XREF: Boss_Jampan
                 subq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanIncreaseDefeatSecondaryOffset:               ; CODE XREF: Boss_JampanBeginDefeatState+34   j
+Boss_JampanIncreaseDefeatSecondaryOffset:
                 addq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
-Boss_JampanCompleteDefeatAfterPrimaryOffsetZero:        ; CODE XREF: Boss_JampanBeginDefeatState+2E   j
+Boss_JampanCompleteDefeatAfterPrimaryOffsetZero:
                 tst.w   (SharedScratchLong9+2).w
                 bne.s   Boss_JampanBeginDefeatReturn
                 bclr    #2,$4C(a5)
@@ -382,11 +382,11 @@ Boss_JampanCompleteDefeatAfterPrimaryOffsetZero:        ; CODE XREF: Boss_Jampan
                 clr.b   $21(a5)
                 move.b  #1,(SoundFadeOutDelay).w
                 addq.w  #2,4(a5)
-Boss_JampanBeginDefeatReturn:                           ; CODE XREF: Boss_JampanBeginDefeatState+46   j
+Boss_JampanBeginDefeatReturn:
                 rts
 ; End of function Boss_JampanBeginDefeatState
 ; Falls with explosion debris until reaching screen Y $110
-Boss_JampanDefeatFallState:                             ; DATA XREF: ROM:0004922A   o  ; was: sub_49E26
+Boss_JampanDefeatFallState:                             ; was: sub_49E26
                 addi.l  #$200,$1C(a5)
                 bsr.w   Boss_JampanUpdateShieldFormationGeometry
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -399,11 +399,11 @@ Boss_JampanDefeatFallState:                             ; DATA XREF: ROM:0004922
                 andi.w  #$1FE,(SharedScratchLong2).w
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
-Boss_JampanDefeatFallReturn:                            ; CODE XREF: Boss_JampanDefeatFallState+1C   j
+Boss_JampanDefeatFallReturn:
                 rts
 ; End of function Boss_JampanDefeatFallState
 ; Holds the explosion sequence, then creates the type-$23C shield object
-Boss_JampanDefeatExplosionHoldState:                    ; DATA XREF: ROM:0004922C   o  ; was: sub_49E64
+Boss_JampanDefeatExplosionHoldState:                    ; was: sub_49E64
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 jsr     (Boss_UpdateDefeatExplosionAndSpawnDebris).l
                 subq.w  #1,$48(a5)
@@ -415,21 +415,21 @@ Boss_JampanDefeatExplosionHoldState:                    ; DATA XREF: ROM:0004922
                 move.w  #$D00,2(a0)
                 move.l  $10(a5),$10(a0)
                 move.l  $14(a5),$14(a0)
-Boss_JampanDefeatExplosionHoldReturn:                   ; CODE XREF: Boss_JampanDefeatExplosionHoldState+E   j
+Boss_JampanDefeatExplosionHoldReturn:
                 rts
 ; End of function Boss_JampanDefeatExplosionHoldState
 ; Waits for the shield object's Y to fall below $60
-Boss_JampanWaitForDefeatShieldYBelow60State:            ; DATA XREF: ROM:0004922E   o  ; was: sub_49E9A
+Boss_JampanWaitForDefeatShieldYBelow60State:            ; was: sub_49E9A
                 jsr     (Boss_UpdateDefeatExplosionAndSpawnDebris).l
                 cmpi.w  #$60,(TwentyNinthEntityYPos).w  ; '`'
                 bcc.s   Boss_JampanWaitForDefeatShieldYBelow60Return
                 clr.l   (TwentyNinthEntityYVel).w
                 addq.w  #2,4(a5)
-Boss_JampanWaitForDefeatShieldYBelow60Return:           ; CODE XREF: Boss_JampanWaitForDefeatShieldYBelow60State+C   j
+Boss_JampanWaitForDefeatShieldYBelow60Return:
                 rts
 ; End of function Boss_JampanWaitForDefeatShieldYBelow60State
 ; Advances the defeat palette-fade index to $0F
-Boss_JampanFadeDefeatPaletteOutState:                   ; DATA XREF: ROM:00049230   o  ; was: sub_49EB2
+Boss_JampanFadeDefeatPaletteOutState:                   ; was: sub_49EB2
                 bsr.s   Boss_JampanApplyDefeatPaletteFade
                 addq.w  #1,$5C(a5)
                 cmpi.w  #$F,$5C(a5)
@@ -438,11 +438,11 @@ Boss_JampanFadeDefeatPaletteOutState:                   ; DATA XREF: ROM:0004923
                 clr.b   (PlaneBScrollModeFlags).w
                 clr.b   (VDPReg11Shadow+1).w
                 addq.w  #2,4(a5)
-Boss_JampanFadeDefeatPaletteOutReturn:                  ; CODE XREF: Boss_JampanFadeDefeatPaletteOutState+C   j
+Boss_JampanFadeDefeatPaletteOutReturn:
                 rts
 ; End of function Boss_JampanFadeDefeatPaletteOutState
 ; Applies the current defeat palette-fade index
-Boss_JampanApplyDefeatPaletteFade:                      ; CODE XREF: Boss_JampanFadeDefeatPaletteOutState   p  ; was: sub_49ED2
+Boss_JampanApplyDefeatPaletteFade:                      ; was: sub_49ED2
                                         ; sub_49EEC   p
                 move.w  $5C(a5),d0
                 andi.w  #$E,d0
@@ -452,7 +452,7 @@ Boss_JampanApplyDefeatPaletteFade:                      ; CODE XREF: Boss_Jampan
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Boss_JampanApplyDefeatPaletteFade
 ; Clears encounter objects and initializes the player-spawn transition
-Boss_JampanResetAfterDefeatFadeState:                   ; DATA XREF: ROM:00049232   o  ; was: sub_49EEC
+Boss_JampanResetAfterDefeatFadeState:                   ; was: sub_49EEC
                 bsr.s   Boss_JampanApplyDefeatPaletteFade
                 move.w  #$218,d0
                 move.w  #$23C,d1
@@ -463,17 +463,17 @@ Boss_JampanResetAfterDefeatFadeState:                   ; DATA XREF: ROM:0004923
                 rts
 ; End of function Boss_JampanResetAfterDefeatFadeState
 ; Reduces the defeat palette-fade index back to zero
-Boss_JampanFadeDefeatPaletteInState:                    ; DATA XREF: ROM:00049234   o  ; was: sub_49F0E
+Boss_JampanFadeDefeatPaletteInState:                    ; was: sub_49F0E
                 bsr.s   Boss_JampanApplyDefeatPaletteFade
                 subq.w  #1,$5C(a5)
                 cmpi.w  #0,$5C(a5)
                 bne.s   Boss_JampanFadeDefeatPaletteInReturn
                 addq.w  #2,4(a5)
-Boss_JampanFadeDefeatPaletteInReturn:                   ; CODE XREF: Boss_JampanFadeDefeatPaletteInState+C   j
+Boss_JampanFadeDefeatPaletteInReturn:
                 rts
 ; End of function Boss_JampanFadeDefeatPaletteInState
 ; Adopts the type-$23C shield position and prepares the post-defeat controller
-Boss_JampanPreparePostDefeatControllerState:            ; DATA XREF: ROM:00049236   o  ; was: sub_49F22
+Boss_JampanPreparePostDefeatControllerState:            ; was: sub_49F22
                 move.w  (TwentyNinthEntityXPos).w,$10(a5)
                 move.w  (TwentyNinthEntityYPos).w,$14(a5)
                 bset    #4,(TwentyNinthEntityFlags).w
@@ -482,7 +482,7 @@ Boss_JampanPreparePostDefeatControllerState:            ; DATA XREF: ROM:0004923
                 rts
 ; End of function Boss_JampanPreparePostDefeatControllerState
 ; Restores encounter objects and starts the post-defeat sequence timer
-Boss_JampanReinitializePostDefeatObjectsState:          ; DATA XREF: ROM:00049238   o  ; was: sub_49F40
+Boss_JampanReinitializePostDefeatObjectsState:          ; was: sub_49F40
                 subq.w  #1,$48(a5)
                 bne.s   Boss_JampanReinitializePostDefeatObjectsReturn
                 lea     (Boss_JampanPaletteCommand).l,a0
@@ -497,11 +497,11 @@ Boss_JampanReinitializePostDefeatObjectsState:          ; DATA XREF: ROM:0004923
                 move.w  #1,(SixthEntityWork52).w
                 addq.w  #2,4(a5)
                 bsr.w   Boss_JampanInitializePostDefeatSequenceTimer
-Boss_JampanReinitializePostDefeatObjectsReturn:         ; CODE XREF: Boss_JampanReinitializePostDefeatObjectsState+4   j
+Boss_JampanReinitializePostDefeatObjectsReturn:
                 rts
 ; End of function Boss_JampanReinitializePostDefeatObjectsState
 ; Initializes one directed post-defeat movement interval
-Boss_JampanInitializePostDefeatMovementState:           ; DATA XREF: ROM:0004923A   o  ; was: sub_49F88
+Boss_JampanInitializePostDefeatMovementState:           ; was: sub_49F88
                 bsr.w   Boss_JampanUpdatePostDefeatSequenceTimer
                 move.w  #1,(SecondaryEntityWork52).w
                 move.w  #1,(QuaternaryEntityWork52).w
@@ -533,7 +533,7 @@ Boss_JampanInitializePostDefeatMovementState:           ; DATA XREF: ROM:0004923
                 rts
 ; End of function Boss_JampanInitializePostDefeatMovementState
 ; Accelerates the post-defeat movement until its randomized timer expires
-Boss_JampanUpdatePostDefeatMovementState:               ; DATA XREF: ROM:0004923C   o  ; was: sub_49FEE
+Boss_JampanUpdatePostDefeatMovementState:               ; was: sub_49FEE
                 bsr.w   Boss_JampanUpdatePostDefeatSequenceTimer
                 bsr.w   Boss_JampanAdjustOrbitParametersFromInput
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -544,41 +544,41 @@ Boss_JampanUpdatePostDefeatMovementState:               ; DATA XREF: ROM:0004923
                 subq.w  #1,$48(a5)
                 bne.s   Boss_JampanUpdatePostDefeatMovementReturn
                 subq.w  #2,4(a5)
-Boss_JampanUpdatePostDefeatMovementReturn:              ; CODE XREF: Boss_JampanUpdatePostDefeatMovementState+20   j
+Boss_JampanUpdatePostDefeatMovementReturn:
                 rts
 ; End of function Boss_JampanUpdatePostDefeatMovementState
-Boss_JampanPostDefeatNoOpState68:                       ; DATA XREF: ROM:0004923E   o
+Boss_JampanPostDefeatNoOpState68:
                 rts
 ; End of function Boss_JampanPostDefeatNoOpState68
 
 ; Initializes the shared post-defeat timer and stage object count
-Boss_JampanInitializePostDefeatSequenceTimer:           ; CODE XREF: Boss_JampanReinitializePostDefeatObjectsState+42   p  ; was: sub_4A018
+Boss_JampanInitializePostDefeatSequenceTimer:           ; was: sub_4A018
                 move.w  #$100,(SharedScratchLong11+2).w
                 move.w  #$2E,(MessageSequenceState).w   ; '.'
                 rts
 ; End of function Boss_JampanInitializePostDefeatSequenceTimer
 ; Counts down the post-defeat timer and publishes its completion flag
-Boss_JampanUpdatePostDefeatSequenceTimer:               ; CODE XREF: Boss_JampanInitializePostDefeatMovementState   p  ; was: sub_4A026
+Boss_JampanUpdatePostDefeatSequenceTimer:               ; was: sub_4A026
                                         ; sub_49FEE   p
                 subq.w  #1,(SharedScratchLong11+2).w
                 bne.s   Boss_JampanUpdatePostDefeatSequenceTimerReturn
                 move.b  #1,(SceneSequenceFlags).w
-Boss_JampanUpdatePostDefeatSequenceTimerReturn:         ; CODE XREF: Boss_JampanUpdatePostDefeatSequenceTimer+4   j
+Boss_JampanUpdatePostDefeatSequenceTimerReturn:
                 rts
 ; End of function Boss_JampanUpdatePostDefeatSequenceTimer
 ; Dispatches the separate type-$240 post-defeat object
-Boss_JampanPostDefeatObjectMain:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_4A034
+Boss_JampanPostDefeatObjectMain:                        ; was: sub_4A034
                 move.w  4(a5),d0
                 lea     Boss_JampanPostDefeatObjectStateHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Boss_JampanPostDefeatObjectMain
 ; ---------------------------------------------------------------------------
-Boss_JampanPostDefeatObjectStateHandlers:   dc.w    Boss_JampanInitializePostDefeatObjectState-*  ; DATA XREF: Boss_JampanPostDefeatObjectMain+4   o
+Boss_JampanPostDefeatObjectStateHandlers:   dc.w    Boss_JampanInitializePostDefeatObjectState-*
                 dc.w    Boss_JampanUpdatePostDefeatObjectState-*
 
 ; Initializes the type-$240 post-defeat object and linked-part state
-Boss_JampanInitializePostDefeatObjectState:             ; DATA XREF: ROM:Boss_JampanPostDefeatObjectStateHandlers   o  ; was: sub_4A044
+Boss_JampanInitializePostDefeatObjectState:             ; was: sub_4A044
                 move.b  #$40,$20(a5)                    ; '@'
                 move.w  #1,(SecondaryEntityWork52).w
                 move.w  #1,(QuaternaryEntityWork52).w
@@ -592,7 +592,7 @@ Boss_JampanInitializePostDefeatObjectState:             ; DATA XREF: ROM:Boss_Ja
                 rts
 ; End of function Boss_JampanInitializePostDefeatObjectState
 ; Updates the type-$240 post-defeat object's orbiting-part geometry
-Boss_JampanUpdatePostDefeatObjectState:                 ; DATA XREF: ROM:0004A042   o  ; was: sub_4A078
+Boss_JampanUpdatePostDefeatObjectState:                 ; was: sub_4A078
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 rts
 ; End of function Boss_JampanUpdatePostDefeatObjectState

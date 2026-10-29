@@ -1,11 +1,11 @@
-Boss_FlyingNeoMain:                                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3BFF6
+Boss_FlyingNeoMain:                                     ; was: sub_3BFF6
                 tst.w   4(a5)
                 beq.w   Boss_FlyingNeoStateDispatch
                 tst.w   $23C(a5)
                 bmi.s   Boss_FlyingNeoProcessMainColorFade
                 beq.s   Boss_FlyingNeoProcessMainColorFade
                 bclr    #0,(BossColorEffectFlags).w
-Boss_FlyingNeoProcessMainColorFade:                     ; CODE XREF: Boss_FlyingNeoMain+C   j  ; was: loc_3C00C
+Boss_FlyingNeoProcessMainColorFade:                     ; was: loc_3C00C
                                         ; Boss_FlyingNeoMain+E   j
                 lea     (PaletteFade_FlyingNeoEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
@@ -28,12 +28,12 @@ Boss_FlyingNeoProcessMainColorFade:                     ; CODE XREF: Boss_Flying
                 move.w  #$FFFF,$23C(a5)
                 bra.s   Boss_FlyingNeoCheckDefeat
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoSelectHealthFadeThreshold:                ; CODE XREF: Boss_FlyingNeoMain+3E   j  ; was: loc_3C05A
+Boss_FlyingNeoSelectHealthFadeThreshold:                ; was: loc_3C05A
                 move.w  #$2580,d0
                 tst.w   (DifficultyMode).w
                 beq.s   Boss_FlyingNeoCheckHealthFadeThreshold
                 move.w  #$3880,d0
-Boss_FlyingNeoCheckHealthFadeThreshold:                 ; CODE XREF: Boss_FlyingNeoMain+6C   j  ; was: loc_3C068
+Boss_FlyingNeoCheckHealthFadeThreshold:                 ; was: loc_3C068
                 cmp.w   (BossHealth).w,d0
                 bmi.s   Boss_FlyingNeoCheckDefeat
                 cmpi.w  #$2380,(BossHealth).w
@@ -41,19 +41,19 @@ Boss_FlyingNeoCheckHealthFadeThreshold:                 ; CODE XREF: Boss_Flying
                 move.w  #1,$23C(a5)
                 bra.s   Boss_FlyingNeoCheckDefeat
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoSetSharedPhaseTwo:                        ; CODE XREF: Boss_FlyingNeoMain+7E   j  ; was: loc_3C07E
+Boss_FlyingNeoSetSharedPhaseTwo:                        ; was: loc_3C07E
                 move.w  #2,(ColorFadeTriggerState).w
-Boss_FlyingNeoCheckDefeat:                              ; CODE XREF: Boss_FlyingNeoMain+3C   j  ; was: loc_3C084
+Boss_FlyingNeoCheckDefeat:                              ; was: loc_3C084
                                         ; Boss_FlyingNeoMain+48   j
                 tst.w   (BossHealth).w
                 beq.w   Boss_FlyingNeoDefeatInit
-Boss_FlyingNeoPublishScreenX:                           ; CODE XREF: Boss_FlyingNeoMain+2E   j  ; was: loc_3C08C
+Boss_FlyingNeoPublishScreenX:                           ; was: loc_3C08C
                                         ; Boss_FlyingNeoMain+36   j
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $430(a5),d0
                 move.w  d0,$BC(a5)
 ; State dispatcher for Flying Neo boss using jump table
-Boss_FlyingNeoStateDispatch:                            ; CODE XREF: Boss_FlyingNeoMain+4   j  ; was: loc_3C098
+Boss_FlyingNeoStateDispatch:                            ; was: loc_3C098
                                         ; Boss_FlyingNeoMain+26   j
                 move.w  4(a5),d0
                 movea.w Boss_FlyingNeoStateOffsets(pc,d0.w),a0
@@ -62,7 +62,6 @@ Boss_FlyingNeoStateDispatch:                            ; CODE XREF: Boss_Flying
 ; End of function Boss_FlyingNeoMain
 ; ---------------------------------------------------------------------------
 Boss_FlyingNeoStateOffsets: dc.w    Boss_FlyingNeoInit-Boss_FlyingNeoInit  ; was: off_3C0A8
-                                        ; DATA XREF: Boss_FlyingNeoMain+A6   r
                 dc.w    Boss_FlyingNeoWaitForScrollingBackground-Boss_FlyingNeoInit
                 dc.w    Boss_FlyingNeoSetup-Boss_FlyingNeoInit
                 dc.w    Boss_FlyingNeoIntroDelayState-Boss_FlyingNeoInit
@@ -84,7 +83,7 @@ Boss_FlyingNeoStateOffsets: dc.w    Boss_FlyingNeoInit-Boss_FlyingNeoInit  ; was
                 dc.w    Boss_FlyingNeoPartAnchorState-Boss_FlyingNeoInit
 
 ; Initializes Flying-Neo boss clearing sprites
-Boss_FlyingNeoInit:                                     ; DATA XREF: Boss_FlyingNeoMain+AA   o  ; was: sub_3C0D0
+Boss_FlyingNeoInit:                                     ; was: sub_3C0D0
                                         ; ROM:Boss_FlyingNeoStateOffsets   o
                 addq.w  #2,4(a5)
                 move.w  #1,8(a5)
@@ -99,36 +98,36 @@ Boss_FlyingNeoInit:                                     ; DATA XREF: Boss_Flying
                 move.w  #$F00,(TilemapRowXOrFillWord).w
                 move.w  #$F760,(TilemapRowYPosition).w
                 move.w  #$1F,(TilemapRowCountdown).w
-Boss_FlyingNeoInitOrWaitReturn:                         ; CODE XREF: Boss_FlyingNeoWaitForScrollingBackground+6   j  ; was: locret_3C10E
+Boss_FlyingNeoInitOrWaitReturn:                         ; was: locret_3C10E
                 rts
 ; End of function Boss_FlyingNeoInit
 ; Clears bit 15 in four palette-buffer ranges
-Boss_FlyingNeoClearPaletteHighBits:                     ; CODE XREF: Stage_InitializeStage9:Stage_ClearPaletteHighBitsBeforeFourRangeFill   p  ; was: sub_3C110
+Boss_FlyingNeoClearPaletteHighBits:                     ; was: sub_3C110
                                         ; Boss_FlyingNeoInit+22   p
                 lea     (FlyingNeoTileAttrRangeA).l,a0
                 move.w  #$7FFF,d0
                 move.w  #$EF,d7
-Boss_FlyingNeoClearPaletteHighBitsFirstRange:           ; CODE XREF: Boss_FlyingNeoClearPaletteHighBits+10   j  ; was: loc_3C11E
+Boss_FlyingNeoClearPaletteHighBitsFirstRange:           ; was: loc_3C11E
                 and.w   d0,(a0)+
                 dbf     d7,Boss_FlyingNeoClearPaletteHighBitsFirstRange
                 lea     (FlyingNeoTileAttrRangeB).l,a0
                 move.w  #$F,d7
-Boss_FlyingNeoClearPaletteHighBitsSecondRange:          ; CODE XREF: Boss_FlyingNeoClearPaletteHighBits+20   j  ; was: loc_3C12E
+Boss_FlyingNeoClearPaletteHighBitsSecondRange:          ; was: loc_3C12E
                 and.w   d0,(a0)+
                 dbf     d7,Boss_FlyingNeoClearPaletteHighBitsSecondRange
                 lea     (FlyingNeoTileAttrRangeC).l,a0
                 move.w  #$2F,d7                         ; '/'
-Boss_FlyingNeoClearPaletteHighBitsThirdRange:           ; CODE XREF: Boss_FlyingNeoClearPaletteHighBits+30   j  ; was: loc_3C13E
+Boss_FlyingNeoClearPaletteHighBitsThirdRange:           ; was: loc_3C13E
                 and.w   d0,(a0)+
                 dbf     d7,Boss_FlyingNeoClearPaletteHighBitsThirdRange
                 lea     (FlyingNeoTileAttrRangeD).l,a0
                 move.w  #$2F,d7                         ; '/'
-Boss_FlyingNeoClearPaletteHighBitsFourthRange:          ; CODE XREF: Boss_FlyingNeoClearPaletteHighBits+40   j  ; was: loc_3C14E
+Boss_FlyingNeoClearPaletteHighBitsFourthRange:          ; was: loc_3C14E
                 and.w   d0,(a0)+
                 dbf     d7,Boss_FlyingNeoClearPaletteHighBitsFourthRange
                 rts
 ; Waits for the scrolling-background helper to report completion
-Boss_FlyingNeoWaitForScrollingBackground:               ; DATA XREF: ROM:0003C0AA   o  ; was: sub_3C156
+Boss_FlyingNeoWaitForScrollingBackground:               ; was: sub_3C156
                 jsr     (Tilemap_QueueNextScrollingRow).l
                 bpl.s   Boss_FlyingNeoInitOrWaitReturn
                 addq.w  #2,4(a5)
@@ -136,7 +135,7 @@ Boss_FlyingNeoWaitForScrollingBackground:               ; DATA XREF: ROM:0003C0A
                 rts
 ; End of function Boss_FlyingNeoWaitForScrollingBackground
 ; Complex setup with metasprite and palette initialization
-Boss_FlyingNeoSetup:                                    ; DATA XREF: ROM:0003C0AC   o  ; was: sub_3C168
+Boss_FlyingNeoSetup:                                    ; was: sub_3C168
                 movea.w #(SecondaryEntityType-M68K_RAM),a4
                 move.w  #$300,(MetaspriteBaseTileWord).w
                 moveq   #8,d7
@@ -206,10 +205,10 @@ Boss_FlyingNeoSetup:                                    ; DATA XREF: ROM:0003C0A
                 bsr.w   Boss_FlyingNeoApplyFacingGraphics
 ; End of function Boss_FlyingNeoSetup
 ; Counts down the intro delay while maintaining the common pose
-Boss_FlyingNeoIntroDelayState:                          ; DATA XREF: ROM:0003C0AE   o  ; was: sub_3C29C
+Boss_FlyingNeoIntroDelayState:                          ; was: sub_3C29C
                 subq.w  #1,$1DE(a5)
                 bmi.s   Boss_FlyingNeoAdvanceToPlayerSequenceWait
-Boss_FlyingNeoUpdateIntroPose:                          ; CODE XREF: Boss_FlyingNeoWaitForPlayerSequenceState+4   j  ; was: loc_3C2A2
+Boss_FlyingNeoUpdateIntroPose:                          ; was: loc_3C2A2
                                         ; Boss_FlyingNeoWaitForPlayerSequenceState+1E   j
                 bsr.w   Boss_FlyingNeoUpdateVerticalOscillation
                 lea     Boss_FlyingNeoNeutralPoses(pc),a1
@@ -218,12 +217,12 @@ Boss_FlyingNeoUpdateIntroPose:                          ; CODE XREF: Boss_Flying
                 bra.w   Boss_FlyingNeoUpdateSprites
 ; ---------------------------------------------------------------------------
 ; Advances from the intro delay into the player-sequence wait
-Boss_FlyingNeoAdvanceToPlayerSequenceWait:              ; CODE XREF: Boss_FlyingNeoIntroDelayState+4   j  ; was: loc_3C2B4
+Boss_FlyingNeoAdvanceToPlayerSequenceWait:              ; was: loc_3C2B4
                 addq.w  #2,4(a5)
                 moveq   #7,d0
                 jsr     (BossMessage_Start).l
 ; Waits for the player sequence to finish before starting the attack delay
-Boss_FlyingNeoWaitForPlayerSequenceState:               ; DATA XREF: ROM:0003C0B0   o  ; was: sub_3C2C0
+Boss_FlyingNeoWaitForPlayerSequenceState:               ; was: sub_3C2C0
                 tst.w   (MessageSequenceState).w
                 bne.s   Boss_FlyingNeoUpdateIntroPose
                 addq.w  #2,4(a5)
@@ -231,13 +230,13 @@ Boss_FlyingNeoWaitForPlayerSequenceState:               ; DATA XREF: ROM:0003C0B
                 subi.w  #$A0,(CameraXLowerBound).w
                 clr.b   (BossColorEffectFlags).w
 ; Counts down the final delay before initializing the attack pattern
-Boss_FlyingNeoAttackStartDelayState:                    ; DATA XREF: ROM:0003C0B2   o  ; was: loc_3C2DA
+Boss_FlyingNeoAttackStartDelayState:                    ; was: loc_3C2DA
                 subq.w  #1,$1DE(a5)
                 bpl.s   Boss_FlyingNeoUpdateIntroPose
                 bra.w   Boss_FlyingNeoBeginPursuitState
 ; End of function Boss_FlyingNeoWaitForPlayerSequenceState
 ; Initializes boss defeat sequence clearing flags
-Boss_FlyingNeoDefeatInit:                               ; CODE XREF: Boss_FlyingNeoMain+92   j  ; was: sub_3C2E4
+Boss_FlyingNeoDefeatInit:                               ; was: sub_3C2E4
                 move.w  #$C,4(a5)
                 clr.w   8(a5)
                 clr.w   $48(a5)
@@ -251,7 +250,7 @@ Boss_FlyingNeoDefeatInit:                               ; CODE XREF: Boss_Flying
                 move.w  #4,(StageSpawnCountdown).w
 ; End of function Boss_FlyingNeoDefeatInit
 ; Converts one linked-object slot every six frames while walking forward
-Boss_FlyingNeoDefeatConvertForwardSlotRangeState:       ; DATA XREF: ROM:0003C0B4   o  ; was: sub_3C31C
+Boss_FlyingNeoDefeatConvertForwardSlotRangeState:       ; was: sub_3C31C
                 bsr.w   Boss_FlyingNeoUpdatePaletteFade
                 bsr.w   Boss_FlyingNeoUpdateDefeatEffectOrigin
                 bsr.w   Boss_FlyingNeoBuildLineScrollTables
@@ -264,24 +263,24 @@ Boss_FlyingNeoDefeatConvertForwardSlotRangeState:       ; DATA XREF: ROM:0003C0B
                 bmi.s   Boss_FlyingNeoConvertNextForwardSlot
                 addq.w  #2,4(a5)
                 move.w  #$CD40,$4A(a5)
-Boss_FlyingNeoConvertNextForwardSlot:                   ; CODE XREF: Boss_FlyingNeoDefeatConvertForwardSlotRangeState+28   j  ; was: loc_3C350
+Boss_FlyingNeoConvertNextForwardSlot:                   ; was: loc_3C350
                 bsr.w   Boss_FlyingNeoConvertPartToDefeatParticle
-Boss_FlyingNeoDefeatConvertForwardSlotRangeReturn:      ; CODE XREF: Boss_FlyingNeoDefeatConvertForwardSlotRangeState+10   j  ; was: locret_3C354
+Boss_FlyingNeoDefeatConvertForwardSlotRangeReturn:      ; was: locret_3C354
                 rts
 ; End of function Boss_FlyingNeoDefeatConvertForwardSlotRangeState
 ; Sets flag bit zero on 19 linked-object records
-Boss_FlyingNeoSetLinkedPartFlag0:                       ; CODE XREF: Boss_FlyingNeoDefeatInit+14   p  ; was: sub_3C356
+Boss_FlyingNeoSetLinkedPartFlag0:                       ; was: sub_3C356
                 moveq   #0,d0
                 movea.w #(SecondaryEntityFlags-M68K_RAM),a0
                 moveq   #$12,d7
-Boss_FlyingNeoSetNextLinkedPartFlag0:                   ; CODE XREF: Boss_FlyingNeoSetLinkedPartFlag0+E   j  ; was: loc_3C35E
+Boss_FlyingNeoSetNextLinkedPartFlag0:                   ; was: loc_3C35E
                 bset    d0,(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_FlyingNeoSetNextLinkedPartFlag0
                 rts
 ; End of function Boss_FlyingNeoSetLinkedPartFlag0
 ; Converts the linked record in A0 into an upward-moving defeat particle
-Boss_FlyingNeoConvertPartToDefeatParticle:              ; CODE XREF: Boss_FlyingNeoDefeatConvertForwardSlotRangeState:Boss_FlyingNeoConvertNextForwardSlot   p  ; was: sub_3C36A
+Boss_FlyingNeoConvertPartToDefeatParticle:              ; was: sub_3C36A
                                         ; Boss_FlyingNeoDefeatConvertReverseSlotRangeState:Boss_FlyingNeoConvertNextReverseSlot   p
                 movea.l #Projectile_SpawnSpriteFrames,a1  ; make offsets?
                 jsr     (Sprite_InitFromTable).l
@@ -292,14 +291,14 @@ Boss_FlyingNeoConvertPartToDefeatParticle:              ; CODE XREF: Boss_Flying
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Boss_FlyingNeoConvertPartToDefeatParticle
 ; Updates the defeat-effect origin from boss position and facing
-Boss_FlyingNeoUpdateDefeatEffectOrigin:                 ; CODE XREF: Boss_FlyingNeoDefeatConvertForwardSlotRangeState+4   p  ; was: sub_3C390
+Boss_FlyingNeoUpdateDefeatEffectOrigin:                 ; was: sub_3C390
                                         ; Boss_FlyingNeoDefeatConvertReverseSlotRangeState+4   p
                 moveq   #$E,d0
                 moveq   #$1C,d1
                 tst.w   $54(a5)
                 beq.s   Boss_FlyingNeoStoreDefeatEffectOrigin
                 moveq   #$10,d0
-Boss_FlyingNeoStoreDefeatEffectOrigin:                  ; CODE XREF: Boss_FlyingNeoUpdateDefeatEffectOrigin+8   j  ; was: loc_3C39C
+Boss_FlyingNeoStoreDefeatEffectOrigin:                  ; was: loc_3C39C
                 add.w   $10(a5),d0
                 add.w   $14(a5),d1
                 move.w  d0,$70(a5)
@@ -307,7 +306,7 @@ Boss_FlyingNeoStoreDefeatEffectOrigin:                  ; CODE XREF: Boss_Flying
                 rts
 ; End of function Boss_FlyingNeoUpdateDefeatEffectOrigin
 ; Converts one linked-object slot every five frames while walking backward
-Boss_FlyingNeoDefeatConvertReverseSlotRangeState:       ; DATA XREF: ROM:0003C0B6   o  ; was: sub_3C3AE
+Boss_FlyingNeoDefeatConvertReverseSlotRangeState:       ; was: sub_3C3AE
                 bsr.w   Boss_FlyingNeoUpdatePaletteFade
                 bsr.w   Boss_FlyingNeoUpdateDefeatEffectOrigin
                 bsr.w   Boss_FlyingNeoBuildLineScrollTables
@@ -319,13 +318,13 @@ Boss_FlyingNeoDefeatConvertReverseSlotRangeState:       ; DATA XREF: ROM:0003C0B
                 cmpi.w  #$C9E0,$4A(a5)
                 bne.s   Boss_FlyingNeoConvertNextReverseSlot
                 addq.w  #2,4(a5)
-Boss_FlyingNeoConvertNextReverseSlot:                   ; CODE XREF: Boss_FlyingNeoDefeatConvertReverseSlotRangeState+28   j  ; was: loc_3C3DC
+Boss_FlyingNeoConvertNextReverseSlot:                   ; was: loc_3C3DC
                 bsr.w   Boss_FlyingNeoConvertPartToDefeatParticle
-Boss_FlyingNeoDefeatConvertReverseSlotRangeReturn:      ; CODE XREF: Boss_FlyingNeoDefeatConvertReverseSlotRangeState+10   j  ; was: locret_3C3E0
+Boss_FlyingNeoDefeatConvertReverseSlotRangeReturn:      ; was: locret_3C3E0
                 rts
 ; End of function Boss_FlyingNeoDefeatConvertReverseSlotRangeState
 ; Waits, then launches the fixed type-$88 part from slot $FFC9E0
-Boss_FlyingNeoDefeatLaunchType88PartState:              ; DATA XREF: ROM:0003C0B8   o  ; was: sub_3C3E2
+Boss_FlyingNeoDefeatLaunchType88PartState:              ; was: sub_3C3E2
                 bsr.w   Boss_FlyingNeoUpdatePaletteFade
                 bsr.w   Boss_FlyingNeoUpdateDefeatEffectOrigin
                 bsr.w   Boss_FlyingNeoBuildLineScrollTables
@@ -340,14 +339,14 @@ Boss_FlyingNeoDefeatLaunchType88PartState:              ; DATA XREF: ROM:0003C0B
                 tst.w   $54(a5)
                 beq.s   Boss_FlyingNeoInitializeLaunchedType88Part
                 neg.l   $18(a0)
-Boss_FlyingNeoInitializeLaunchedType88Part:             ; CODE XREF: Boss_FlyingNeoDefeatLaunchType88PartState+38   j  ; was: loc_3C420
+Boss_FlyingNeoInitializeLaunchedType88Part:             ; was: loc_3C420
                 jmp     Projectile_InitType88
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoDefeatLaunchType88PartReturn:             ; CODE XREF: Boss_FlyingNeoDefeatLaunchType88PartState+10   j  ; was: locret_3C426
+Boss_FlyingNeoDefeatLaunchType88PartReturn:             ; was: locret_3C426
                 rts
 ; End of function Boss_FlyingNeoDefeatLaunchType88PartState
 ; Emits randomized type-$88 particles before loading the final tile command
-Boss_FlyingNeoDefeatParticleRainState:                  ; DATA XREF: ROM:0003C0BA   o  ; was: sub_3C428
+Boss_FlyingNeoDefeatParticleRainState:                  ; was: sub_3C428
                 bsr.w   Boss_FlyingNeoUpdatePaletteFade
                 bsr.w   Boss_FlyingNeoUpdateDefeatEffectOrigin
                 bsr.w   Boss_FlyingNeoBuildLineScrollTables
@@ -370,7 +369,7 @@ Boss_FlyingNeoDefeatParticleRainState:                  ; DATA XREF: ROM:0003C0B
                 tst.w   $54(a5)
                 beq.s   Boss_FlyingNeoPositionDefeatRainParticle
                 addi.w  #$20,d0                         ; ' '
-Boss_FlyingNeoPositionDefeatRainParticle:               ; CODE XREF: Boss_FlyingNeoDefeatParticleRainState+58   j  ; was: loc_3C486
+Boss_FlyingNeoPositionDefeatRainParticle:               ; was: loc_3C486
                 add.w   $14(a5),d1
                 move.w  d0,$10(a0)
                 move.w  d1,$14(a0)
@@ -380,7 +379,7 @@ Boss_FlyingNeoPositionDefeatRainParticle:               ; CODE XREF: Boss_Flying
                 move.b  #$BC,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateDefeatParticleRainTimer:            ; CODE XREF: Boss_FlyingNeoDefeatParticleRainState+14   j  ; was: loc_3C4A6
+Boss_FlyingNeoUpdateDefeatParticleRainTimer:            ; was: loc_3C4A6
                                         ; Boss_FlyingNeoDefeatParticleRainState+1C   j
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_FlyingNeoDefeatParticleRainReturn
@@ -391,23 +390,22 @@ Boss_FlyingNeoUpdateDefeatParticleRainTimer:            ; CODE XREF: Boss_Flying
                 nop
                 jmp     Tilemap_QueueIndexedRows
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoDefeatParticleRainReturn:                 ; CODE XREF: Boss_FlyingNeoDefeatParticleRainState+82   j  ; was: locret_3C4C8
+Boss_FlyingNeoDefeatParticleRainReturn:                 ; was: locret_3C4C8
                 rts
 ; End of function Boss_FlyingNeoDefeatParticleRainState
 ; Counts down before publishing the final player-sequence value
-Boss_FlyingNeoDefeatCompletionDelayState:               ; DATA XREF: ROM:0003C0BC   o  ; was: sub_3C4CA
+Boss_FlyingNeoDefeatCompletionDelayState:               ; was: sub_3C4CA
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_FlyingNeoDefeatScrollState
                 addq.w  #2,4(a5)
                 addq.w  #2,(StageStateOffset).w
                 move.w  #$5C,(MessageSequenceState).w   ; '\'
 ; Updates scrolling after the defeat particle sequence
-Boss_FlyingNeoDefeatScrollState:                        ; CODE XREF: Boss_FlyingNeoDefeatCompletionDelayState+4   j  ; was: loc_3C4DE
-                                        ; DATA XREF: ROM:0003C0BE   o
+Boss_FlyingNeoDefeatScrollState:                        ; was: loc_3C4DE
                 bra.w   Boss_FlyingNeoBuildLineScrollTables
 ; End of function Boss_FlyingNeoDefeatCompletionDelayState
 ; Flying-Neo boss player control input handler
-Boss_FlyingNeoPlayerControlled:                         ; DATA XREF: ROM:0003C0C0   o  ; was: sub_3C4E2
+Boss_FlyingNeoPlayerControlled:                         ; was: sub_3C4E2
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
                 clr.w   $23E(a5)
@@ -417,31 +415,31 @@ Boss_FlyingNeoPlayerControlled:                         ; DATA XREF: ROM:0003C0C
                 beq.s   Boss_FlyingNeoPlayerControlCheckDown
                 move.w  #$FFFF,$1C(a5)
                 move.w  #$FFE0,$23E(a5)
-Boss_FlyingNeoPlayerControlCheckDown:                   ; CODE XREF: Boss_FlyingNeoPlayerControlled+1A   j  ; was: loc_3C50A
+Boss_FlyingNeoPlayerControlCheckDown:                   ; was: loc_3C50A
                 btst    #1,(ControllerHeldState).w
                 beq.s   Boss_FlyingNeoPlayerControlCheckRight
                 move.w  #1,$1C(a5)
                 move.w  #$20,$23E(a5)                   ; ' '
-Boss_FlyingNeoPlayerControlCheckRight:                  ; CODE XREF: Boss_FlyingNeoPlayerControlled+2E   j  ; was: loc_3C51E
+Boss_FlyingNeoPlayerControlCheckRight:                  ; was: loc_3C51E
                 btst    #3,(ControllerHeldState).w
                 beq.s   Boss_FlyingNeoPlayerControlCheckLeft
                 move.w  #2,$18(a5)
                 move.w  #$100,$54(a5)
                 bsr.w   Boss_FlyingNeoApplyFacingGraphics
-Boss_FlyingNeoPlayerControlCheckLeft:                   ; CODE XREF: Boss_FlyingNeoPlayerControlled+42   j  ; was: loc_3C536
+Boss_FlyingNeoPlayerControlCheckLeft:                   ; was: loc_3C536
                 btst    #2,(ControllerHeldState).w
                 beq.s   Boss_FlyingNeoApplyPlayerControlPose
                 move.w  #$FFFE,$18(a5)
                 move.w  #0,$54(a5)
                 bsr.w   Boss_FlyingNeoApplyFacingGraphics
-Boss_FlyingNeoApplyPlayerControlPose:                   ; CODE XREF: Boss_FlyingNeoPlayerControlled+5A   j  ; was: loc_3C54E
+Boss_FlyingNeoApplyPlayerControlPose:                   ; was: loc_3C54E
                 lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
 ; End of function Boss_FlyingNeoPlayerControlled
 ; Begins the timed pursuit state and resets its motion submodes
-Boss_FlyingNeoBeginPursuitState:                        ; CODE XREF: Boss_FlyingNeoWaitForPlayerSequenceState+20   j  ; was: sub_3C55C
+Boss_FlyingNeoBeginPursuitState:                        ; was: sub_3C55C
                                         ; Boss_FlyingNeoHoverDecisionState+12   j
                 move.w  #$1A,4(a5)
                 clr.w   $17E(a5)
@@ -451,14 +449,14 @@ Boss_FlyingNeoBeginPursuitState:                        ; CODE XREF: Boss_Flying
                 addi.w  #$40,d0                         ; '@'
                 move.w  d0,$1DE(a5)
 ; Restores self-anchored part links and the neutral part mappings
-Boss_FlyingNeoSetNeutralPartAnchors:                    ; CODE XREF: Boss_FlyingNeoRisingArcState+12   j  ; was: loc_3C57A
+Boss_FlyingNeoSetNeutralPartAnchors:                    ; was: loc_3C57A
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
                 move.l  #Boss_FlyingNeoAnchorPartMappingB,$1E8(a5)
                 move.l  #Boss_FlyingNeoAnchorPartMappingB,$368(a5)
 ; End of function Boss_FlyingNeoBeginPursuitState
 ; Pursues the player while applying vertical oscillation and timed reversals
-Boss_FlyingNeoPursuitState:                             ; DATA XREF: ROM:0003C0C2   o  ; was: sub_3C592
+Boss_FlyingNeoPursuitState:                             ; was: sub_3C592
                 subq.w  #1,$1DE(a5)
                 bmi.w   Boss_FlyingNeoBeginHorizontalSwoopState
                 bsr.w   Boss_FlyingNeoUpdateVerticalOscillation
@@ -468,14 +466,14 @@ Boss_FlyingNeoPursuitState:                             ; DATA XREF: ROM:0003C0C
                 beq.s   Boss_FlyingNeoUpdatePursuitPose
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdatePursuitPose:                        ; CODE XREF: Boss_FlyingNeoPursuitState+18   j  ; was: loc_3C5AE
+Boss_FlyingNeoUpdatePursuitPose:                        ; was: loc_3C5AE
                 lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
 ; End of function Boss_FlyingNeoPursuitState
 ; Accelerates toward the player or runs the active short reversal
-Boss_FlyingNeoUpdatePursuitHorizontalMotion:            ; CODE XREF: Boss_FlyingNeoPursuitState+10   p  ; was: sub_3C5BC
+Boss_FlyingNeoUpdatePursuitHorizontalMotion:            ; was: sub_3C5BC
                 move.b  (RandomNumberState+1).w,d5
                 move.b  (RandomNumberState).w,d6
                 move.w  (FrameCounter).w,d7
@@ -491,25 +489,25 @@ Boss_FlyingNeoUpdatePursuitHorizontalMotion:            ; CODE XREF: Boss_Flying
                 cmpi.l  #$2C000,$18(a5)
                 bpl.s   Boss_FlyingNeoCheckRightwardCloseRangeManeuver
                 addi.l  #$3200,$18(a5)
-Boss_FlyingNeoCheckRightwardCloseRangeManeuver:         ; CODE XREF: Boss_FlyingNeoUpdatePursuitHorizontalMotion+30   j  ; was: loc_3C5F6
+Boss_FlyingNeoCheckRightwardCloseRangeManeuver:         ; was: loc_3C5F6
                 bsr.w   Boss_FlyingNeoSelectCloseRangeManeuver
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateRightwardReversal:                  ; CODE XREF: Boss_FlyingNeoUpdatePursuitHorizontalMotion+26   j  ; was: loc_3C5FC
+Boss_FlyingNeoUpdateRightwardReversal:                  ; was: loc_3C5FC
                 subq.w  #1,$11C(a5)
                 bpl.s   Boss_FlyingNeoAccelerateReversalLeft
-Boss_FlyingNeoFinishPursuitReversal:                    ; CODE XREF: Boss_FlyingNeoUpdateLeftwardReversal+4   j  ; was: loc_3C602
+Boss_FlyingNeoFinishPursuitReversal:                    ; was: loc_3C602
                 clr.w   $1DC(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoAccelerateReversalLeft:                   ; CODE XREF: Boss_FlyingNeoUpdateRightwardReversal+4   j  ; was: loc_3C608
+Boss_FlyingNeoAccelerateReversalLeft:                   ; was: loc_3C608
                 cmpi.l  #$FFFC2000,$18(a5)
                 bmi.s   Boss_FlyingNeoRightwardReversalReturn
                 addi.l  #-$4200,$18(a5)
-Boss_FlyingNeoRightwardReversalReturn:                  ; CODE XREF: Boss_FlyingNeoAccelerateReversalLeft+6   j  ; was: locret_3C61A
+Boss_FlyingNeoRightwardReversalReturn:                  ; was: locret_3C61A
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateLeftwardPursuitMotion:              ; CODE XREF: Boss_FlyingNeoUpdatePursuitHorizontalMotion+18   j  ; was: loc_3C61C
+Boss_FlyingNeoUpdateLeftwardPursuitMotion:              ; was: loc_3C61C
                 tst.w   d1
                 bpl.w   Boss_FlyingNeoBeginHorizontalSwoopState
                 tst.w   $1DC(a5)
@@ -517,24 +515,24 @@ Boss_FlyingNeoUpdateLeftwardPursuitMotion:              ; CODE XREF: Boss_Flying
                 cmpi.l  #$FFFD4000,$18(a5)
                 bmi.s   Boss_FlyingNeoCheckLeftwardCloseRangeManeuver
                 addi.l  #-$3200,$18(a5)
-Boss_FlyingNeoCheckLeftwardCloseRangeManeuver:          ; CODE XREF: Boss_FlyingNeoUpdatePursuitHorizontalMotion+74   j  ; was: loc_3C63A
+Boss_FlyingNeoCheckLeftwardCloseRangeManeuver:          ; was: loc_3C63A
                 cmpi.w  #$E4,d0
                 bpl.s   Boss_FlyingNeoLeftwardPursuitReturn
                 bsr.w   Boss_FlyingNeoSelectCloseRangeManeuver
-Boss_FlyingNeoLeftwardPursuitReturn:                    ; CODE XREF: Boss_FlyingNeoCheckLeftwardCloseRangeManeuver+6   j  ; was: locret_3C644
+Boss_FlyingNeoLeftwardPursuitReturn:                    ; was: locret_3C644
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateLeftwardReversal:                   ; CODE XREF: Boss_FlyingNeoUpdateLeftwardPursuitMotion+10   j  ; was: loc_3C646
+Boss_FlyingNeoUpdateLeftwardReversal:                   ; was: loc_3C646
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_FlyingNeoFinishPursuitReversal
                 cmpi.l  #$3E000,$18(a5)
                 bpl.s   Boss_FlyingNeoLeftwardReversalReturn
                 addi.l  #$4200,$18(a5)
-Boss_FlyingNeoLeftwardReversalReturn:                   ; CODE XREF: Boss_FlyingNeoUpdateLeftwardReversal+E   j  ; was: locret_3C65E
+Boss_FlyingNeoLeftwardReversalReturn:                   ; was: locret_3C65E
                 rts
 ; End of function Boss_FlyingNeoUpdatePursuitHorizontalMotion
 ; Selects a short reversal or the rising retreat when the player is nearby
-Boss_FlyingNeoSelectCloseRangeManeuver:                 ; CODE XREF: Boss_FlyingNeoUpdatePursuitHorizontalMotion:Boss_FlyingNeoCheckRightwardCloseRangeManeuver   p  ; was: sub_3C660
+Boss_FlyingNeoSelectCloseRangeManeuver:                 ; was: sub_3C660
                                         ; Boss_FlyingNeoUpdatePursuitHorizontalMotion+84   p
                 cmpi.w  #$D4,d0
                 bpl.s   Boss_FlyingNeoCloseRangeManeuverReturn
@@ -543,23 +541,23 @@ Boss_FlyingNeoSelectCloseRangeManeuver:                 ; CODE XREF: Boss_Flying
                 beq.s   Boss_FlyingNeoStartPursuitReversal
                 andi.w  #1,d0
                 beq.w   Boss_FlyingNeoBeginRisingRetreatState
-Boss_FlyingNeoStartPursuitReversal:                     ; CODE XREF: Boss_FlyingNeoSelectCloseRangeManeuver+E   j  ; was: loc_3C678
+Boss_FlyingNeoStartPursuitReversal:                     ; was: loc_3C678
                 addq.w  #2,$1DC(a5)
                 andi.w  #$F,d6
                 addq.w  #3,d6
                 move.w  d6,$11C(a5)
-Boss_FlyingNeoCloseRangeManeuverReturn:                 ; CODE XREF: Boss_FlyingNeoSelectCloseRangeManeuver+4   j  ; was: locret_3C686
+Boss_FlyingNeoCloseRangeManeuverReturn:                 ; was: locret_3C686
                 rts
 ; End of function Boss_FlyingNeoSelectCloseRangeManeuver
 ; Oscillates vertically between the upper and lower bands with random turns
-Boss_FlyingNeoUpdateVerticalOscillation:                ; CODE XREF: Boss_FlyingNeoIntroDelayState:Boss_FlyingNeoUpdateIntroPose   p  ; was: sub_3C688
+Boss_FlyingNeoUpdateVerticalOscillation:                ; was: sub_3C688
                                         ; Boss_FlyingNeoPursuitState+8   p
                 move.w  $14(a5),d7
                 move.l  $1C(a5),d6
                 move.w  (RandomNumberState).w,d0
                 tst.w   $17E(a5)
                 bne.w   Boss_FlyingNeoSelectDownwardOscillation
-Boss_FlyingNeoSelectUpwardOscillation:                  ; CODE XREF: Boss_FlyingNeoUpdateVerticalOscillation+48   j  ; was: loc_3C69C
+Boss_FlyingNeoSelectUpwardOscillation:                  ; was: loc_3C69C
                                         ; Boss_FlyingNeoUpdateVerticalOscillation+54   j
                 clr.w   $17E(a5)
                 cmpi.w  #$B0,d7
@@ -568,16 +566,16 @@ Boss_FlyingNeoSelectUpwardOscillation:                  ; CODE XREF: Boss_Flying
                 bpl.s   Boss_FlyingNeoAccelerateUpward
                 andi.w  #7,d0
                 beq.s   Boss_FlyingNeoSelectDownwardOscillation
-Boss_FlyingNeoAccelerateUpward:                         ; CODE XREF: Boss_FlyingNeoUpdateVerticalOscillation+22   j  ; was: loc_3C6B2
+Boss_FlyingNeoAccelerateUpward:                         ; was: loc_3C6B2
                 cmpi.l  #$FFFEE000,d6
                 bmi.s   Boss_FlyingNeoVerticalOscillationReturn
                 addi.l  #-$1E00,d6
                 move.l  d6,$1C(a5)
-Boss_FlyingNeoVerticalOscillationReturn:                ; CODE XREF: Boss_FlyingNeoUpdateVerticalOscillation+30   j  ; was: locret_3C6C4
+Boss_FlyingNeoVerticalOscillationReturn:                ; was: locret_3C6C4
                                         ; Boss_FlyingNeoUpdateVerticalOscillation+5C   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoSelectDownwardOscillation:                ; CODE XREF: Boss_FlyingNeoUpdateVerticalOscillation+10   j  ; was: loc_3C6C6
+Boss_FlyingNeoSelectDownwardOscillation:                ; was: loc_3C6C6
                                         ; Boss_FlyingNeoUpdateVerticalOscillation+1C   j
                 move.w  #2,$17E(a5)
                 cmpi.w  #$DC,d7
@@ -586,7 +584,7 @@ Boss_FlyingNeoSelectDownwardOscillation:                ; CODE XREF: Boss_Flying
                 bmi.s   Boss_FlyingNeoAccelerateDownward
                 andi.w  #7,d0
                 beq.s   Boss_FlyingNeoSelectUpwardOscillation
-Boss_FlyingNeoAccelerateDownward:                       ; CODE XREF: Boss_FlyingNeoUpdateVerticalOscillation+4E   j  ; was: loc_3C6DE
+Boss_FlyingNeoAccelerateDownward:                       ; was: loc_3C6DE
                 cmpi.l  #$12000,d6
                 bpl.s   Boss_FlyingNeoVerticalOscillationReturn
                 addi.l  #$1E00,d6
@@ -594,7 +592,7 @@ Boss_FlyingNeoAccelerateDownward:                       ; CODE XREF: Boss_Flying
                 rts
 ; End of function Boss_FlyingNeoUpdateVerticalOscillation
 ; Enters the horizontal swoop state with neutral self-anchored parts
-Boss_FlyingNeoBeginHorizontalSwoopState:                ; CODE XREF: Boss_FlyingNeoPursuitState+4   j  ; was: sub_3C6F2
+Boss_FlyingNeoBeginHorizontalSwoopState:                ; was: sub_3C6F2
                                         ; Boss_FlyingNeoUpdatePursuitHorizontalMotion+1E   j
                 move.w  #$1C,4(a5)
                 move.l  #Boss_FlyingNeoAnchorPartMappingB,$1E8(a5)
@@ -605,7 +603,7 @@ Boss_FlyingNeoBeginHorizontalSwoopState:                ; CODE XREF: Boss_Flying
                 move.w  #$FFFF,$C(a5)
 ; End of function Boss_FlyingNeoBeginHorizontalSwoopState
 ; Sweeps horizontally toward the facing-side screen boundary while rising
-Boss_FlyingNeoHorizontalSwoopState:                     ; DATA XREF: ROM:0003C0C4   o  ; was: sub_3C71A
+Boss_FlyingNeoHorizontalSwoopState:                     ; was: sub_3C71A
                 subi.l  #$E00,$1C(a5)
                 tst.w   $54(a5)
                 bne.s   Boss_FlyingNeoUpdateRightwardSwoop
@@ -616,20 +614,20 @@ Boss_FlyingNeoHorizontalSwoopState:                     ; DATA XREF: ROM:0003C0C
                 addi.l  #-$4200,$18(a5)
                 bra.s   Boss_FlyingNeoUpdateSwoopPose
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoUpdateRightwardSwoop:                     ; CODE XREF: Boss_FlyingNeoHorizontalSwoopState+C   j  ; was: loc_3C746
+Boss_FlyingNeoUpdateRightwardSwoop:                     ; was: loc_3C746
                 cmpi.w  #$1120,$BC(a5)
                 bpl.w   Boss_FlyingNeoBeginHoverDecisionState
                 cmpi.l  #$56000,$18(a5)
                 bpl.s   Boss_FlyingNeoUpdateSwoopPose
                 addi.l  #$4200,$18(a5)
-Boss_FlyingNeoUpdateSwoopPose:                          ; CODE XREF: Boss_FlyingNeoHorizontalSwoopState+20   j  ; was: loc_3C762
+Boss_FlyingNeoUpdateSwoopPose:                          ; was: loc_3C762
                                         ; Boss_FlyingNeoHorizontalSwoopState+2A   j
                 lea     Boss_FlyingNeoHorizontalSwoopPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoBeginHoverDecisionState:                  ; CODE XREF: Boss_FlyingNeoHorizontalSwoopState+14   j  ; was: loc_3C770
+Boss_FlyingNeoBeginHoverDecisionState:                  ; was: loc_3C770
                                         ; Boss_FlyingNeoHorizontalSwoopState+32   j
                 move.w  #$1E,4(a5)
                 move.w  #$C0,$14(a5)
@@ -645,7 +643,7 @@ Boss_FlyingNeoBeginHoverDecisionState:                  ; CODE XREF: Boss_Flying
                 cmpi.w  #$FD0,$BC(a5)
                 bpl.s   Boss_FlyingNeoApplyPostSwoopFacing
                 move.w  #$100,$54(a5)
-Boss_FlyingNeoApplyPostSwoopFacing:                     ; CODE XREF: Boss_FlyingNeoHorizontalSwoopState+8C   j  ; was: loc_3C7AE
+Boss_FlyingNeoApplyPostSwoopFacing:                     ; was: loc_3C7AE
                 bsr.w   Boss_FlyingNeoApplyFacingGraphics
 ; End of function Boss_FlyingNeoHorizontalSwoopState
 ; Hover decision state choosing next attack pattern

@@ -1,5 +1,5 @@
 ; Handle Medusa completion, battle effects, scripted spawns, then state dispatch
-Boss_UpdateMedusa:                                      ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_5699C
+Boss_UpdateMedusa:                                      ; was: sub_5699C
                 tst.w   4(a5)
                 beq.w   Boss_DispatchMedusaState
                 tst.w   8(a5)
@@ -13,7 +13,7 @@ Boss_UpdateMedusa:                                      ; DATA XREF: ROM:Entity_
                 moveq   #4,d0
                 jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
-Boss_UpdateMedusaBattleEffects:                         ; CODE XREF: Boss_UpdateMedusa+14   j  ; was: loc_569C8
+Boss_UpdateMedusaBattleEffects:                         ; was: loc_569C8
                                         ; Boss_UpdateMedusa+1C   j
                 lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
@@ -21,7 +21,7 @@ Boss_UpdateMedusaBattleEffects:                         ; CODE XREF: Boss_Update
                 jsr     (Gfx_UpdateSevenForceBattlePalette).l
                 bsr.w   Entity_UpdateMedusaScriptedSpawnSequence
 ; Resolve the even-numbered state offset and jump to its handler
-Boss_DispatchMedusaState:                               ; CODE XREF: Boss_UpdateMedusa+4   j  ; was: loc_569E0
+Boss_DispatchMedusaState:                               ; was: loc_569E0
                                         ; Boss_UpdateMedusa+C   j
                 move.w  4(a5),d0
                 movea.w Boss_MedusaStateOffsets(pc,d0.w),a0
@@ -31,7 +31,6 @@ Boss_DispatchMedusaState:                               ; CODE XREF: Boss_Update
 ; ---------------------------------------------------------------------------
 ; Eleven relative handler offsets for states $00 through $14
 Boss_MedusaStateOffsets:    dc.w    Boss_InitMedusaState0-Boss_InitMedusaState0  ; was: off_569F0
-                                        ; DATA XREF: Boss_UpdateMedusa+48   r
                 dc.w    Boss_UpdateMedusaState2-Boss_InitMedusaState0
                 dc.w    Boss_UpdateMedusaState4-Boss_InitMedusaState0
                 dc.w    Boss_UpdateMedusaState6-Boss_InitMedusaState0
@@ -44,7 +43,7 @@ Boss_MedusaStateOffsets:    dc.w    Boss_InitMedusaState0-Boss_InitMedusaState0 
                 dc.w    Boss_UpdateMedusaState14-Boss_InitMedusaState0
 
 ; Initialize the Medusa metasprite and enter state four
-Boss_InitMedusaState0:                                  ; DATA XREF: Boss_UpdateMedusa+4C   o  ; was: sub_56A06
+Boss_InitMedusaState0:                                  ; was: sub_56A06
                                         ; ROM:Boss_MedusaStateOffsets   o
                 move.w  #1,8(a5)
                 move.w  #$7000,(BossHealth).w
@@ -86,23 +85,23 @@ Boss_InitMedusaAtFixedPosition:                         ; was: sub_56A8A
                 move.w  a5,$4A(a5)
 ; End of function Boss_InitMedusaAtFixedPosition
 ; State two follows the shared vertical coordinate and accepts left/right input
-Boss_UpdateMedusaState2:                                ; DATA XREF: ROM:000569F2   o  ; was: sub_56ABA
+Boss_UpdateMedusaState2:                                ; was: sub_56ABA
                 move.w  (Entity57YPos).w,d0
                 move.w  d0,$14(a5)
                 btst    #2,(ControllerHeldState).w
                 beq.s   Boss_CheckMedusaState2RightInput
                 subq.w  #4,$10(a5)
-Boss_CheckMedusaState2RightInput:                       ; CODE XREF: Boss_UpdateMedusaState2+E   j  ; was: loc_56ACE
+Boss_CheckMedusaState2RightInput:                       ; was: loc_56ACE
                 btst    #3,(ControllerHeldState).w
                 beq.s   Boss_RenderMedusaState2
                 addq.w  #4,$10(a5)
-Boss_RenderMedusaState2:                                ; CODE XREF: Boss_UpdateMedusaState2+1A   j  ; was: loc_56ADA
+Boss_RenderMedusaState2:                                ; was: loc_56ADA
                 lea     Medusa_State2Poses(pc),a1
                 nop
                 bra.w   Boss_RenderMedusaPose
 ; End of function Boss_UpdateMedusaState2
 ; Enter state four and seed the pose interpolator
-Boss_EnterMedusaState4:                                 ; CODE XREF: Boss_InitMedusaState0+80   j  ; was: sub_56AE4
+Boss_EnterMedusaState4:                                 ; was: sub_56AE4
                 move.w  #4,4(a5)
                 bclr    #3,2(a5)
                 bclr    #2,2(a5)
@@ -115,7 +114,7 @@ Boss_EnterMedusaState4:                                 ; CODE XREF: Boss_InitMe
                 bsr.w   Boss_MedusaInitializePoseChannels
 ; End of function Boss_EnterMedusaState4
 ; State four advances its pose script before opening the active battle phase
-Boss_UpdateMedusaState4:                                ; DATA XREF: ROM:000569F4   o  ; was: sub_56B16
+Boss_UpdateMedusaState4:                                ; was: sub_56B16
                 tst.w   $58(a5)
                 bmi.s   Boss_EnterMedusaState6
                 lea     Medusa_State4Poses(pc),a1
@@ -126,7 +125,7 @@ Boss_UpdateMedusaState4:                                ; DATA XREF: ROM:000569F
                 move.w  d0,$50(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaState6:                                 ; CODE XREF: Boss_UpdateMedusaState4+4   j  ; was: loc_56B32
+Boss_EnterMedusaState6:                                 ; was: loc_56B32
                 addq.w  #2,4(a5)
                 clr.w   $50(a5)
                 bset    #3,2(a5)
@@ -140,18 +139,18 @@ Boss_EnterMedusaState6:                                 ; CODE XREF: Boss_Update
                 jsr     (Object_InitGroupFromTable).l
 ; End of function Boss_UpdateMedusaState4
 ; State six applies vertical acceleration until it crosses the shared coordinate
-Boss_UpdateMedusaState6:                                ; DATA XREF: ROM:000569F6   o  ; was: sub_56B6C
+Boss_UpdateMedusaState6:                                ; was: sub_56B6C
                 addi.l  #$2000,$1C(a5)
                 bmi.s   Boss_RenderMedusaState6
                 move.w  (Entity57YPos).w,d0
                 cmp.w   $14(a5),d0
                 bmi.s   Boss_EnterMedusaState8
-Boss_RenderMedusaState6:                                ; CODE XREF: Boss_UpdateMedusaState6+8   j  ; was: loc_56B80
+Boss_RenderMedusaState6:                                ; was: loc_56B80
                 lea     Medusa_State6And12Poses(pc),a1
                 nop
                 bra.w   Boss_RenderMedusaPose
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaState8:                                 ; CODE XREF: Boss_UpdateMedusaState6+12   j  ; was: loc_56B8A
+Boss_EnterMedusaState8:                                 ; was: loc_56B8A
                 addq.w  #2,4(a5)
                 move.l  $18(a5),d0
                 asr.l   #3,d0
@@ -161,7 +160,7 @@ Boss_EnterMedusaState8:                                 ; CODE XREF: Boss_Update
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; State eight settles onto the shared vertical coordinate while moving right
-Boss_UpdateMedusaState8:                                ; DATA XREF: ROM:000569F8   o  ; was: loc_56BB0
+Boss_UpdateMedusaState8:                                ; was: loc_56BB0
                 tst.w   $4DC(a5)
                 beq.s   Boss_SyncMedusaState8VerticalPosition
                 addi.l  #$2000,$1C(a5)
@@ -172,23 +171,23 @@ Boss_UpdateMedusaState8:                                ; DATA XREF: ROM:000569F
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 clr.w   $4DC(a5)
-Boss_SyncMedusaState8VerticalPosition:                  ; CODE XREF: Boss_UpdateMedusaState8   j  ; was: loc_56BD6
+Boss_SyncMedusaState8VerticalPosition:                  ; was: loc_56BD6
                 move.w  (Entity57YPos).w,d0
                 move.w  d0,$14(a5)
                 cmpi.w  #$1C0,$10(a5)
                 bpl.s   Boss_EnterMedusaStateA
-Boss_RenderMedusaState8:                                ; CODE XREF: Boss_UpdateMedusaState8   j  ; was: loc_56BE6
+Boss_RenderMedusaState8:                                ; was: loc_56BE6
                 lea     Medusa_State8And12Poses(pc),a1
                 nop
                 bra.w   Boss_RenderMedusaPose
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaStateA:                                 ; CODE XREF: Boss_UpdateMedusaState8   j  ; was: loc_56BF0
+Boss_EnterMedusaStateA:                                 ; was: loc_56BF0
                 addq.w  #2,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 move.w  #$40,$11C(a5)                   ; '@'
 ; State A approaches its target, then enables the scripted spawn sequence
-Boss_UpdateMedusaStateA:                                ; DATA XREF: ROM:000569FA   o  ; was: loc_56C04
+Boss_UpdateMedusaStateA:                                ; was: loc_56C04
                 subq.w  #1,$11C(a5)
                 bpl.s   Boss_UpdateMedusaStateAApproach
                 clr.b   (BossColorEffectFlags).w
@@ -200,24 +199,24 @@ Boss_UpdateMedusaStateA:                                ; DATA XREF: ROM:000569F
                 clr.w   $4DC(a5)
                 bra.w   Boss_EnterMedusaStateC
 ; ---------------------------------------------------------------------------
-Boss_UpdateMedusaStateAApproach:                        ; CODE XREF: Boss_UpdateMedusaStateA   j  ; was: loc_56C36
+Boss_UpdateMedusaStateAApproach:                        ; was: loc_56C36
                 move.w  #$180,d0
                 bsr.w   Boss_SteerMedusaHorizontalVelocityByXTarget
                 lea     Medusa_StateACPoses(pc),a1
                 nop
                 bra.w   Boss_SyncMedusaVerticalPosition
 ; ---------------------------------------------------------------------------
-Boss_ClearMedusaSequenceCommand:                        ; CODE XREF: Boss_UpdateMedusaState12   j  ; was: loc_56C48
+Boss_ClearMedusaSequenceCommand:                        ; was: loc_56C48
                                         ; Boss_UpdateMedusaState10   j
                                         ; Boss_UpdateMedusaState14   j
                 clr.w   $47E(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
-Boss_EnterMedusaStateC:                                 ; CODE XREF: Boss_UpdateMedusaStateA   j  ; was: loc_56C56
+Boss_EnterMedusaStateC:                                 ; was: loc_56C56
                                         ; Boss_UpdateMedusaStateE   j
                 move.w  #$C,4(a5)
 ; State C consumes scripted commands and tracks the selected horizontal target
-Boss_UpdateMedusaStateC:                                ; DATA XREF: ROM:000569FC   o  ; was: loc_56C5C
+Boss_UpdateMedusaStateC:                                ; was: loc_56C5C
                 move.l  #Medusa_StateACPoses,$53C(a5)
                 tst.b   (Entity57Work56).w
                 beq.w   Boss_EnterMedusaStateE
@@ -231,24 +230,24 @@ Boss_UpdateMedusaStateC:                                ; DATA XREF: ROM:000569F
                 move.w  #1,(PlaneAShakeLevel).w
                 clr.w   $4DC(a5)
                 clr.l   $1C(a5)
-Boss_SyncMedusaStateCVerticalPosition:                  ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56C94
+Boss_SyncMedusaStateCVerticalPosition:                  ; was: loc_56C94
                 move.w  (Entity57YPos).w,d0
                 move.w  d0,$14(a5)
-Boss_ProcessMedusaStateCCommand:                        ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56C9C
+Boss_ProcessMedusaStateCCommand:                        ; was: loc_56C9C
                 cmpi.w  #4,$47E(a5)
                 bne.s   Boss_DispatchMedusaStateCCommand
                 clr.w   $47E(a5)
                 move.w  $5E(a5),$11E(a5)
                 bra.s   Boss_UpdateMedusaStateCTarget
 ; ---------------------------------------------------------------------------
-Boss_DispatchMedusaStateCCommand:                       ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56CB0
+Boss_DispatchMedusaStateCCommand:                       ; was: loc_56CB0
                 cmpi.w  #2,$47E(a5)
                 beq.w   Boss_EnterMedusaState10
                 cmpi.w  #6,$47E(a5)
                 beq.w   Boss_EnterMedusaState12
                 cmpi.w  #8,$47E(a5)
                 beq.w   Boss_EnterMedusaState14
-Boss_UpdateMedusaStateCTarget:                          ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56CCE
+Boss_UpdateMedusaStateCTarget:                          ; was: loc_56CCE
                 bsr.w   Boss_SteerMedusaHorizontalVelocityFromStoredTarget
                 move.b  #$D8,d0
                 bsr.w   Boss_MedusaPlaySFXEvery8Frames
@@ -256,18 +255,18 @@ Boss_UpdateMedusaStateCTarget:                          ; CODE XREF: Boss_Update
                 nop
                 bra.w   Boss_RenderMedusaPose
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaStateE:                                 ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56CE4
+Boss_EnterMedusaStateE:                                 ; was: loc_56CE4
                                         ; Boss_UpdateMedusaState10   j
                 move.w  #$E,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; State E completes the vertical transfer before returning to state C
-Boss_UpdateMedusaStateE:                                ; DATA XREF: ROM:000569FE   o  ; was: loc_56CF4
+Boss_UpdateMedusaStateE:                                ; was: loc_56CF4
                 cmpi.l  #$68000,$1C(a5)
                 bpl.s   Boss_CheckMedusaStateEVerticalTransfer
                 addi.l  #$2000,$1C(a5)
                 bmi.s   Boss_RenderMedusaStateE
-Boss_CheckMedusaStateEVerticalTransfer:                 ; CODE XREF: Boss_UpdateMedusaStateE   j  ; was: loc_56D08
+Boss_CheckMedusaStateEVerticalTransfer:                 ; was: loc_56D08
                 tst.b   (Entity57Work56).w
                 beq.s   Boss_RenderMedusaStateE
                 move.w  (Entity57YPos).w,d0
@@ -283,23 +282,23 @@ Boss_CheckMedusaStateEVerticalTransfer:                 ; CODE XREF: Boss_Update
                 move.w  #2,(PlaneAShakeLevel).w
                 bra.w   Boss_EnterMedusaStateC
 ; ---------------------------------------------------------------------------
-Boss_RenderMedusaStateE:                                ; CODE XREF: Boss_UpdateMedusaStateE   j  ; was: loc_56D48
+Boss_RenderMedusaStateE:                                ; was: loc_56D48
                 movea.l $53C(a5),a1
                 bra.w   Boss_RenderMedusaPose
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaState12:                                ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56D50
+Boss_EnterMedusaState12:                                ; was: loc_56D50
                 move.w  #$12,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; State $12 damps horizontal velocity and reacts to scripted commands
-Boss_UpdateMedusaState12:                               ; DATA XREF: ROM:00056A02   o  ; was: loc_56D60
+Boss_UpdateMedusaState12:                               ; was: loc_56D60
                 cmpi.w  #4,$47E(a5)
                 bne.s   Boss_UpdateMedusaState12Motion
                 clr.w   $47E(a5)
                 move.w  $5E(a5),$11E(a5)
                 bra.w   Boss_ClearMedusaSequenceCommand
 ; ---------------------------------------------------------------------------
-Boss_UpdateMedusaState12Motion:                         ; CODE XREF: Boss_UpdateMedusaState12   j  ; was: loc_56D76
+Boss_UpdateMedusaState12Motion:                         ; was: loc_56D76
                 cmpi.w  #2,$47E(a5)
                 beq.w   Boss_EnterMedusaState10
                 cmpi.w  #8,$47E(a5)
@@ -311,28 +310,28 @@ Boss_UpdateMedusaState12Motion:                         ; CODE XREF: Boss_Update
                 bmi.s   Boss_StopMedusaState12HorizontalMotion
                 bra.s   Boss_RenderMedusaState12MovingPose
 ; ---------------------------------------------------------------------------
-Boss_DecelerateMedusaState12NegativeVelocity:           ; CODE XREF: Boss_UpdateMedusaState12Motion   j  ; was: loc_56D9E
+Boss_DecelerateMedusaState12NegativeVelocity:           ; was: loc_56D9E
                 addi.l  #$2000,$18(a5)
                 bmi.s   Boss_RenderMedusaState12MovingPose
-Boss_StopMedusaState12HorizontalMotion:                 ; CODE XREF: Boss_UpdateMedusaState12Motion   j  ; was: loc_56DA8
+Boss_StopMedusaState12HorizontalMotion:                 ; was: loc_56DA8
                 clr.l   $18(a5)
-Boss_RenderMedusaState12MovingPose:                     ; CODE XREF: Boss_UpdateMedusaState12Motion   j  ; was: loc_56DAC
+Boss_RenderMedusaState12MovingPose:                     ; was: loc_56DAC
                 lea     Medusa_State6And12Poses(pc),a1
                 nop
                 bra.w   Boss_SyncMedusaVerticalPosition
 ; ---------------------------------------------------------------------------
-Boss_RenderMedusaState12IdlePose:                       ; CODE XREF: Boss_UpdateMedusaState12Motion   j  ; was: loc_56DB6
+Boss_RenderMedusaState12IdlePose:                       ; was: loc_56DB6
                 lea     Medusa_State8And12Poses(pc),a1
                 nop
                 bra.w   Boss_SyncMedusaVerticalPosition
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaState10:                                ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56DC0
+Boss_EnterMedusaState10:                                ; was: loc_56DC0
                                         ; Boss_UpdateMedusaState12Motion   j
                 move.w  #$10,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; State $10 accelerates left until it can return to state C
-Boss_UpdateMedusaState10:                               ; DATA XREF: ROM:00056A00   o  ; was: loc_56DD0
+Boss_UpdateMedusaState10:                               ; was: loc_56DD0
                 move.l  #Medusa_State10Poses,$53C(a5)
                 tst.b   (Entity57Work56).w
                 beq.w   Boss_EnterMedusaStateE
@@ -342,40 +341,40 @@ Boss_UpdateMedusaState10:                               ; DATA XREF: ROM:00056A0
                 move.w  #$B0,$11E(a5)
                 bra.w   Boss_ClearMedusaSequenceCommand
 ; ---------------------------------------------------------------------------
-Boss_AccelerateMedusaState10Left:                       ; CODE XREF: Boss_UpdateMedusaState10   j  ; was: loc_56DF8
+Boss_AccelerateMedusaState10Left:                       ; was: loc_56DF8
                 tst.l   $18(a5)
                 bpl.s   Boss_ApplyMedusaState10LeftAcceleration
                 cmpi.l  #$FFFB0000,$18(a5)
                 bmi.s   Boss_RenderMedusaState10
-Boss_ApplyMedusaState10LeftAcceleration:                ; CODE XREF: Boss_AccelerateMedusaState10Left   j  ; was: loc_56E08
+Boss_ApplyMedusaState10LeftAcceleration:                ; was: loc_56E08
                 subi.l  #$800,$18(a5)
-Boss_RenderMedusaState10:                               ; CODE XREF: Boss_AccelerateMedusaState10Left   j  ; was: loc_56E10
+Boss_RenderMedusaState10:                               ; was: loc_56E10
                 move.b  #$F2,d0
                 bsr.w   Boss_MedusaPlaySFXEvery4Frames
                 lea     Medusa_State10Poses(pc),a1
                 nop
                 bra.w   Boss_SyncMedusaVerticalPosition
 ; ---------------------------------------------------------------------------
-Boss_EnterMedusaState14:                                ; CODE XREF: Boss_UpdateMedusaStateC   j  ; was: loc_56E22
+Boss_EnterMedusaState14:                                ; was: loc_56E22
                                         ; Boss_UpdateMedusaState12Motion   j
                 move.w  #$14,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; State $14 accelerates right until it can return to state C
-Boss_UpdateMedusaState14:                               ; DATA XREF: ROM:00056A04   o  ; was: loc_56E32
+Boss_UpdateMedusaState14:                               ; was: loc_56E32
                 cmpi.w  #$180,$10(a5)
                 bmi.s   Boss_AccelerateMedusaState14Right
                 move.w  #$18C,$11E(a5)
                 bra.w   Boss_ClearMedusaSequenceCommand
 ; ---------------------------------------------------------------------------
-Boss_AccelerateMedusaState14Right:                      ; CODE XREF: Boss_UpdateMedusaState14   j  ; was: loc_56E44
+Boss_AccelerateMedusaState14Right:                      ; was: loc_56E44
                 tst.l   $18(a5)
                 bpl.s   Boss_ApplyMedusaState14RightAcceleration
                 cmpi.l  #$24000,$18(a5)
                 bpl.s   Boss_RenderMedusaState14
-Boss_ApplyMedusaState14RightAcceleration:               ; CODE XREF: Boss_AccelerateMedusaState14Right   j  ; was: loc_56E54
+Boss_ApplyMedusaState14RightAcceleration:               ; was: loc_56E54
                 addi.l  #$800,$18(a5)
-Boss_RenderMedusaState14:                               ; CODE XREF: Boss_AccelerateMedusaState14Right   j  ; was: loc_56E5C
+Boss_RenderMedusaState14:                               ; was: loc_56E5C
                 move.b  #$F3,d0
                 bsr.w   Boss_MedusaPlaySFXEvery4Frames
                 lea     Medusa_State14PoseScript(pc),a1
@@ -383,39 +382,39 @@ Boss_RenderMedusaState14:                               ; CODE XREF: Boss_Accele
                 bra.w   Boss_SyncMedusaVerticalPosition
 ; End of Medusa state controller
 ; Alternate entry: load the scripted X target from $11E, then fall through
-Boss_SteerMedusaHorizontalVelocityFromStoredTarget:     ; CODE XREF: Boss_UpdateMedusaStateCTarget   p  ; was: sub_56E6E
+Boss_SteerMedusaHorizontalVelocityFromStoredTarget:     ; was: sub_56E6E
                 move.w  $11E(a5),d0
 ; Shared entry: steer X velocity by comparing target d0 with current X
-Boss_SteerMedusaHorizontalVelocityByXTarget:            ; CODE XREF: Boss_UpdateMedusaStateAApproach   p  ; was: sub_56E72
+Boss_SteerMedusaHorizontalVelocityByXTarget:            ; was: sub_56E72
                 cmp.w   $10(a5),d0
                 bpl.s   Boss_CheckMedusaRightwardAcceleration
                 tst.l   $18(a5)
                 bpl.s   Boss_DecreaseMedusaXVelocityBy2000
                 cmpi.l  #$FFFDC000,$18(a5)
                 bmi.s   Boss_SteerMedusaHorizontalVelocityReturn
-Boss_DecreaseMedusaXVelocityBy2000:                     ; CODE XREF: Boss_SteerMedusaHorizontalVelocityByXTarget+A   j  ; was: loc_56E88
+Boss_DecreaseMedusaXVelocityBy2000:                     ; was: loc_56E88
                 subi.l  #$2000,$18(a5)
-Boss_SteerMedusaHorizontalVelocityReturn:               ; CODE XREF: Boss_SteerMedusaHorizontalVelocityByXTarget+14   j  ; was: locret_56E90
+Boss_SteerMedusaHorizontalVelocityReturn:               ; was: locret_56E90
                                         ; Boss_SteerMedusaHorizontalVelocityByXTarget+2E   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_CheckMedusaRightwardAcceleration:                  ; CODE XREF: Boss_SteerMedusaHorizontalVelocityByXTarget+4   j  ; was: loc_56E92
+Boss_CheckMedusaRightwardAcceleration:                  ; was: loc_56E92
                 tst.l   $18(a5)
                 bmi.s   Boss_IncreaseMedusaXVelocityBy2000
                 cmpi.l  #$12000,$18(a5)
                 bpl.s   Boss_SteerMedusaHorizontalVelocityReturn
-Boss_IncreaseMedusaXVelocityBy2000:                     ; CODE XREF: Boss_SteerMedusaHorizontalVelocityByXTarget+24   j  ; was: loc_56EA2
+Boss_IncreaseMedusaXVelocityBy2000:                     ; was: loc_56EA2
                 addi.l  #$2000,$18(a5)
                 rts
 ; End of Medusa horizontal-velocity steering helper
 ; Synchronize Medusa with the shared vertical coordinate
-Boss_SyncMedusaVerticalPosition:                        ; CODE XREF: Boss_UpdateMedusaStateAApproach   j  ; was: sub_56EAC
+Boss_SyncMedusaVerticalPosition:                        ; was: sub_56EAC
                                         ; Boss_RenderMedusaState12MovingPose   j
                 move.w  (Entity57YPos).w,d0
                 move.w  d0,$14(a5)
 ; End of function Boss_SyncMedusaVerticalPosition
 ; Advance the pose, apply it to the metasprite, and traverse its 20 parts
-Boss_RenderMedusaPose:                                  ; CODE XREF: Boss_UpdateMedusaState2+26   j  ; was: sub_56EB4
+Boss_RenderMedusaPose:                                  ; was: sub_56EB4
                                         ; Boss_UpdateMedusaState4+C   p
                 bsr.w   Boss_UpdateMedusaPoseScript
                 bsr.w   Boss_ApplyMedusaPoseToParts
@@ -423,7 +422,7 @@ Boss_RenderMedusaPose:                                  ; CODE XREF: Boss_Update
                 jmp     Sprite_BeginMetaspritePartTraversal
 ; End of function Boss_RenderMedusaPose
 ; Map the current pose values and offsets onto the Medusa metasprite parts
-Boss_ApplyMedusaPoseToParts:                            ; CODE XREF: Boss_RenderMedusaPose+4   p  ; was: sub_56EC4
+Boss_ApplyMedusaPoseToParts:                            ; was: sub_56EC4
                 move.w  #$80,d6
                 move.w  #0,$B6(a5)
                 move.w  #$80,$296(a5)
@@ -527,7 +526,7 @@ Boss_ApplyMedusaPoseToParts:                            ; CODE XREF: Boss_Render
                 rts
 ; End of function Boss_ApplyMedusaPoseToParts
 ; Apply one pose offset to a four-part metasprite group
-Boss_OffsetMedusaPosePartGroup:                         ; CODE XREF: Boss_ApplyMedusaPoseToParts+EE   p  ; was: sub_56FF6
+Boss_OffsetMedusaPosePartGroup:                         ; was: sub_56FF6
                                         ; Boss_ApplyMedusaPoseToParts+F6   p
                 move.w  $B2(a1),d0
                 add.w   d1,d0
@@ -544,32 +543,32 @@ Boss_OffsetMedusaPosePartGroup:                         ; CODE XREF: Boss_ApplyM
                 rts
 ; End of function Boss_OffsetMedusaPosePartGroup
 ; Plays sound effect every 4th frame during animation
-Boss_MedusaPlaySFXEvery4Frames:                         ; CODE XREF: Boss_RenderMedusaState10   p  ; was: sub_57020
+Boss_MedusaPlaySFXEvery4Frames:                         ; was: sub_57020
                                         ; Boss_RenderMedusaState14   p
                 move.w  (FrameCounter).w,d1
                 andi.w  #3,d1
                 bne.s   Boss_PlayMedusaSFXEvery4FramesReturn
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_PlayMedusaSFXEvery4FramesReturn:                   ; CODE XREF: Boss_MedusaPlaySFXEvery4Frames+8   j  ; was: locret_57030
+Boss_PlayMedusaSFXEvery4FramesReturn:                   ; was: locret_57030
                 rts
 ; End of function Boss_MedusaPlaySFXEvery4Frames
 ; Plays sound effect every 8th frame during animation
-Boss_MedusaPlaySFXEvery8Frames:                         ; CODE XREF: Boss_UpdateMedusaStateCTarget   p  ; was: sub_57032
+Boss_MedusaPlaySFXEvery8Frames:                         ; was: sub_57032
                 move.w  (FrameCounter).w,d1
                 andi.w  #7,d1
                 bne.s   Boss_PlayMedusaSFXEvery8FramesReturn
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_PlayMedusaSFXEvery8FramesReturn:                   ; CODE XREF: Boss_MedusaPlaySFXEvery8Frames+8   j  ; was: locret_57042
+Boss_PlayMedusaSFXEvery8FramesReturn:                   ; was: locret_57042
                 rts
 ; End of function Boss_MedusaPlaySFXEvery8Frames
 ; Interpret the current state's pose script
-Boss_UpdateMedusaPoseScript:                            ; CODE XREF: Boss_RenderMedusaPose   p  ; was: sub_57044
+Boss_UpdateMedusaPoseScript:                            ; was: sub_57044
                 clr.b   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_AdvanceMedusaPoseInterpolation
-Boss_ReadMedusaPoseScriptCommand:                       ; CODE XREF: Boss_UpdateMedusaPoseScript+24   j  ; was: loc_5704E
+Boss_ReadMedusaPoseScriptCommand:                       ; was: loc_5704E
                                         ; Boss_CheckMedusaPoseLoopMarker+E   j
                 move.w  $58(a5),d0
                 bmi.w   Boss_PrepareMedusaPosePartTraversal
@@ -579,7 +578,7 @@ Boss_ReadMedusaPoseScriptCommand:                       ; CODE XREF: Boss_Update
                 addq.w  #2,$58(a5)
                 bra.s   Boss_ReadMedusaPoseScriptCommand
 ; ---------------------------------------------------------------------------
-Boss_CheckMedusaPoseStopMarker:                         ; CODE XREF: Boss_UpdateMedusaPoseScript+18   j  ; was: loc_5706A
+Boss_CheckMedusaPoseStopMarker:                         ; was: loc_5706A
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_CheckMedusaPoseLoopMarker
@@ -591,14 +590,14 @@ Boss_MedusaPoseScriptNoOp:                              ; was: nullsub_129
 ; End of function Boss_MedusaPoseScriptNoOp
 
 ; Restart at $FFFF or set up the next pose frame and interpolation countdown
-Boss_CheckMedusaPoseLoopMarker:                         ; CODE XREF: Boss_UpdateMedusaPoseScript+2E   j  ; was: sub_5707E
+Boss_CheckMedusaPoseLoopMarker:                         ; was: sub_5707E
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_StartMedusaPoseFrame
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Boss_ReadMedusaPoseScriptCommand
 ; ---------------------------------------------------------------------------
-Boss_StartMedusaPoseFrame:                              ; CODE XREF: Boss_CheckMedusaPoseLoopMarker+4   j  ; was: loc_5708E
+Boss_StartMedusaPoseFrame:                              ; was: loc_5708E
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -613,19 +612,19 @@ Boss_StartMedusaPoseFrame:                              ; CODE XREF: Boss_CheckM
                 addq.w  #1,$29C(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_PrepareMedusaPosePartTraversal
-Boss_AdvanceMedusaPoseInterpolation:                    ; CODE XREF: Boss_UpdateMedusaPoseScript+8   j  ; was: loc_570BE
+Boss_AdvanceMedusaPoseInterpolation:                    ; was: loc_570BE
                 subq.w  #1,$C(a5)
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #7,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_PrepareMedusaPosePartTraversal:                    ; CODE XREF: Boss_UpdateMedusaPoseScript+E   j  ; was: loc_570CE
+Boss_PrepareMedusaPosePartTraversal:                    ; was: loc_570CE
                                         ; Boss_UpdateMedusaPoseScript+34   j
                 move.w  #$1FE,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_CheckMedusaPoseLoopMarker
 ; Calculate interpolation deltas for the next Medusa pose frame
-Boss_CalculateMedusaPoseDeltas:                         ; CODE XREF: Boss_CheckMedusaPoseLoopMarker+24   p  ; was: sub_570D8
+Boss_CalculateMedusaPoseDeltas:                         ; was: sub_570D8
                 movea.l $2FC(a5),a1
                 moveq   #7,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
@@ -633,39 +632,36 @@ Boss_CalculateMedusaPoseDeltas:                         ; CODE XREF: Boss_CheckM
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_CalculateMedusaPoseDeltas
 ; Initialize Medusa's eight fixed-point pose channels from bytes at a0
-Boss_MedusaInitializePoseChannels:                      ; CODE XREF: Boss_EnterMedusaState4+2E   p  ; was: sub_570EC
+Boss_MedusaInitializePoseChannels:                      ; was: sub_570EC
                 moveq   #7,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_MedusaInitializePoseChannels
 ; ---------------------------------------------------------------------------
 ; State-selected word streams consumed by Boss_UpdateMedusaPoseScript
-Medusa_State2Poses: dc.w    $2020, 0, $FFFF             ; DATA XREF: Boss_UpdateMedusaState2:Boss_RenderMedusaState2   o  ; was: word_570F8
-Medusa_State4Poses: dc.w    $3060, 0, $2020, 0, $FFFE   ; was: word_570FE
-                                        ; DATA XREF: Boss_UpdateMedusaState4+6   o
-Medusa_StateACPoses:    dc.w    $2020, 0, $FFFF         ; DATA XREF: Boss_UpdateMedusaStateAApproach   o  ; was: word_57108
+Medusa_State2Poses:     dc.w    $2020, 0, $FFFF         ; was: word_570F8
+Medusa_State4Poses:     dc.w    $3060, 0, $2020, 0, $FFFE  ; was: word_570FE
+Medusa_StateACPoses:    dc.w    $2020, 0, $FFFF         ; was: word_57108
                                         ; Boss_UpdateMedusaStateC   o
-Medusa_State14PoseScript:   dc.w    $1818, $10, $FFFF   ; DATA XREF: Boss_RenderMedusaState14   o  ; was: word_5710E
-Medusa_State6And12Poses:    dc.w    $1010, $28, $FFFF   ; DATA XREF: Boss_RenderMedusaState6   o  ; was: word_57114
+Medusa_State14PoseScript:   dc.w    $1818, $10, $FFFF   ; was: word_5710E
+Medusa_State6And12Poses:    dc.w    $1010, $28, $FFFF   ; was: word_57114
                                         ; Boss_RenderMedusaState12MovingPose   o
-Medusa_State10Poses:    dc.w    $1010, $18, $FFFF       ; DATA XREF: Boss_UpdateMedusaState10   o  ; was: word_5711A
+Medusa_State10Poses:    dc.w    $1010, $18, $FFFF       ; was: word_5711A
                                         ; Boss_RenderMedusaState10   o
 Medusa_State8And12Poses:    dc.w    $308, $30, $E0E, $30, $408, $28, $1010  ; was: word_57120
-                                        ; DATA XREF: Boss_RenderMedusaState8   o
                                         ; Boss_RenderMedusaState12IdlePose   o
                 dc.w    $28, $FFFF
 ; Frame-data base saved in $35C(a5); script offsets select poses from here
 Medusa_PoseTable:   dc.w    $401C, $1402, $14, 0, $C01C, $1402, $10  ; was: word_57132
-                                        ; DATA XREF: Boss_InitMedusaState0+3C   o
                 dc.w    0, $C0E4, $E4FE, $D0, 0, $401C, $1402
                 dc.w    $28, $1000, 0, 0, $FC00, 0, $401C
                 dc.w    $1402, 0, 0, $5018, $8F0, $1E0, 0
                 dc.w    $4018, $20F0, $238, $1800
 ; Initial eight pose-channel bytes, not interpolation delays
-Medusa_InitialPoseChannelValues:    dc.w    0, 0, $7090, 0  ; DATA XREF: Boss_EnterMedusaState4+28   o  ; was: word_57172
+Medusa_InitialPoseChannelValues:    dc.w    0, 0, $7090, 0  ; was: word_57172
 
 ; Synchronize the falling part X coordinate and dispatch its three states
-Entity_UpdateMedusaFallingPart:                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_5717A
+Entity_UpdateMedusaFallingPart:                         ; was: sub_5717A
                 move.w  (PrimaryEntityXPos).w,$10(a5)
                 clr.w   6(a5)
                 move.w  4(a5),d0
@@ -675,12 +671,11 @@ Entity_UpdateMedusaFallingPart:                         ; DATA XREF: ROM:Entity_
 ; End of function Entity_UpdateMedusaFallingPart
 ; ---------------------------------------------------------------------------
 Entity_MedusaFallingPartStateOffsets:   dc.w    Entity_InitMedusaFallingPartState0-Entity_InitMedusaFallingPartState0  ; was: off_57194
-                                        ; DATA XREF: Entity_UpdateMedusaFallingPart+E   r
                 dc.w    Entity_UpdateMedusaFallingPartState2-Entity_InitMedusaFallingPartState0
                 dc.w    Entity_UpdateMedusaFallingPartState4-Entity_InitMedusaFallingPartState0
 
 ; Initialize the falling-part sprite and enter terrain-wait state two
-Entity_InitMedusaFallingPartState0:                     ; DATA XREF: Entity_UpdateMedusaFallingPart+12   o  ; was: sub_5719A
+Entity_InitMedusaFallingPartState0:                     ; was: sub_5719A
                                         ; ROM:Entity_MedusaFallingPartStateOffsets   o
                 addq.w  #2,4(a5)
                 move.w  #$400,2(a5)
@@ -688,37 +683,37 @@ Entity_InitMedusaFallingPartState0:                     ; DATA XREF: Entity_Upda
                 move.w  #$500,8(a5)
                 move.w  #$F8F8,$A(a5)
                 move.w  #$128,$14(a5)
-Entity_ResetMedusaFallingPartState2:                    ; CODE XREF: Entity_UpdateMedusaFallingPartState4+1C   j  ; was: loc_571BC
+Entity_ResetMedusaFallingPartState2:                    ; was: loc_571BC
                 move.w  #2,4(a5)
                 clr.l   $1C(a5)
                 move.b  #1,$56(a5)
                 rts
 ; End of function Entity_InitMedusaFallingPartState0
 ; Hold state two while lower-terrain contact remains asserted
-Entity_UpdateMedusaFallingPartState2:                   ; DATA XREF: ROM:00057196   o  ; was: sub_571CE
+Entity_UpdateMedusaFallingPartState2:                   ; was: sub_571CE
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
                 beq.s   Entity_AdvanceMedusaFallingPartState4
                 rts
 ; ---------------------------------------------------------------------------
-Entity_AdvanceMedusaFallingPartState4:                  ; CODE XREF: Entity_UpdateMedusaFallingPartState2+C   j  ; was: loc_571DE
+Entity_AdvanceMedusaFallingPartState4:                  ; was: loc_571DE
                 move.w  #4,4(a5)
                 clr.b   $56(a5)
                 rts
 ; End of function Entity_UpdateMedusaFallingPartState2
 ; Apply gravity in state four until descending terrain contact resets state two
-Entity_UpdateMedusaFallingPartState4:                   ; DATA XREF: ROM:00057198   o  ; was: sub_571EA
+Entity_UpdateMedusaFallingPartState4:                   ; was: sub_571EA
                 cmpi.w  #7,$1C(a5)
                 bpl.s   Entity_CheckMedusaFallingPartTerrain
                 addi.l  #$4000,$1C(a5)
-Entity_CheckMedusaFallingPartTerrain:                   ; CODE XREF: Entity_UpdateMedusaFallingPartState4+6   j  ; was: loc_571FA
+Entity_CheckMedusaFallingPartTerrain:                   ; was: loc_571FA
                 jsr     (Physics_CheckLowerTerrainWhenDescending).l
                 btst    #0,6(a5)
                 bne.w   Entity_ResetMedusaFallingPartState2
                 rts
 ; End of function Entity_UpdateMedusaFallingPartState4
 ; Consume scroll-triggered spawn records and controller commands
-Entity_UpdateMedusaScriptedSpawnSequence:               ; CODE XREF: Boss_UpdateMedusa+40   p  ; was: sub_5720C
+Entity_UpdateMedusaScriptedSpawnSequence:               ; was: sub_5720C
                 tst.w   (MedusaSpawnSequenceFlag).w
                 beq.w   Entity_UpdateMedusaSpawnSequenceReturn
                 movea.l $59C(a5),a4
@@ -733,16 +728,16 @@ Entity_UpdateMedusaScriptedSpawnSequence:               ; CODE XREF: Boss_Update
                 move.l  #Medusa_ScriptedSpawnSequenceData,$59C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Entity_AdvanceMedusaSpawnSequenceSegment:               ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+24   j  ; was: loc_5723C
+Entity_AdvanceMedusaSpawnSequenceSegment:               ; was: loc_5723C
                 addq.w  #2,d1
                 adda.l  d1,a4
                 move.l  a4,$59C(a5)
-Entity_CheckMedusaSpawnSequenceTrigger:                 ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+16   j  ; was: loc_57244
+Entity_CheckMedusaSpawnSequenceTrigger:                 ; was: loc_57244
                 move.w  (PrimaryCameraXPosition).w,d4
                 cmp.w   d2,d4
                 beq.s   Entity_ProcessMedusaSpawnSequenceEntry
                 bpl.s   Entity_UpdateMedusaSpawnSequenceReturn
-Entity_ProcessMedusaSpawnSequenceEntry:                 ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+3E   j  ; was: loc_5724E
+Entity_ProcessMedusaSpawnSequenceEntry:                 ; was: loc_5724E
                 addq.w  #8,(MedusaSequenceOffset).w
                 move.w  2(a4,d1.w),d5
                 beq.w   Entity_ApplyMedusaSpawnSequenceCommand
@@ -750,7 +745,7 @@ Entity_ProcessMedusaSpawnSequenceEntry:                 ; CODE XREF: Entity_Upda
                 bne.s   Entity_SpawnMedusaSequenceObject
                 tst.w   d5
                 bmi.s   Entity_UpdateMedusaSpawnSequenceReturn
-Entity_SpawnMedusaSequenceObject:                       ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+52   j  ; was: loc_57264
+Entity_SpawnMedusaSequenceObject:                       ; was: loc_57264
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Entity_UpdateMedusaSpawnSequenceReturn
                 move.w  (a4,d1.w),d2
@@ -766,14 +761,14 @@ Entity_SpawnMedusaSequenceObject:                       ; CODE XREF: Entity_Upda
                 bne.s   Entity_SpawnMedusaSequenceLargePickup
                 jmp     Pickup_SpawnSmall
 ; ---------------------------------------------------------------------------
-Entity_SpawnMedusaSequenceLargePickup:                  ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+86   j  ; was: loc_5729A
+Entity_SpawnMedusaSequenceLargePickup:                  ; was: loc_5729A
                 jmp     Pickup_SpawnLarge
 ; ---------------------------------------------------------------------------
-Entity_UpdateMedusaSpawnSequenceReturn:                 ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+4   j  ; was: locret_572A0
+Entity_UpdateMedusaSpawnSequenceReturn:                 ; was: locret_572A0
                                         ; Entity_UpdateMedusaScriptedSpawnSequence+40   j
                 rts
 ; ---------------------------------------------------------------------------
-Entity_ApplyMedusaSpawnSequenceCommand:                 ; CODE XREF: Entity_UpdateMedusaScriptedSpawnSequence+4A   j  ; was: loc_572A2
+Entity_ApplyMedusaSpawnSequenceCommand:                 ; was: loc_572A2
                 move.w  6(a4,d1.w),$47E(a5)
                 move.w  4(a4,d1.w),$5E(a5)
                 rts
@@ -782,7 +777,6 @@ Entity_ApplyMedusaSpawnSequenceCommand:                 ; CODE XREF: Entity_Upda
 Medusa_ScriptedSpawnSequenceData:   binclude "data/other/word_572B0.bin"  ; was: word_572B0
 Medusa_ScriptedSpawnSequenceDataEnd:                    ; was: word_572B0_End
 Medusa_StateASpawnSchedule:         dc.w    $698, 0, 0, 8, $5D4, $11A, 0, $24C  ; was: word_573E6
-                                        ; DATA XREF: Boss_UpdateMedusaState6+AE   o
                 dc.w    $4C4, 0, $120, 4, $4C0, $D0, 0, $8000
                 dc.w    $480, $130, 0, $8000, $408, $D0, 0, $8000
                 dc.w    $480, $130, 0, $8000, $3E8, $148, 0, $8001

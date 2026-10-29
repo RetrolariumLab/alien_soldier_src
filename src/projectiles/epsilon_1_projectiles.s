@@ -1,14 +1,14 @@
 ; Epsilon 1 spread, barrage-emitter, barrage-row, and fixed-ring objects
-Projectile_Epsilon1InitializeFivePartSpread:            ; DATA XREF: Projectile_PrepareEpsilon1FiveStepSpread   o  ; was: sub_470C2
+Projectile_Epsilon1InitializeFivePartSpread:            ; was: sub_470C2
                 movea.w a5,a0
                 move.w  #5,$4A(a0)
                 bra.s   Projectile_Epsilon1InitializeSpreadCommon
 ; End of function Projectile_Epsilon1InitializeFivePartSpread
 ; Initializes the eleven-clone spread used by the longer attack sequence
-Projectile_Epsilon1InitializeElevenPartSpread:          ; DATA XREF: Projectile_PrepareEpsilon1ElevenStepSpread   o  ; was: sub_470CC
+Projectile_Epsilon1InitializeElevenPartSpread:          ; was: sub_470CC
                 movea.w a5,a0
                 move.w  #$B,$4A(a0)
-Projectile_Epsilon1InitializeSpreadCommon:              ; CODE XREF: Projectile_Epsilon1InitializeFivePartSpread+8   j
+Projectile_Epsilon1InitializeSpreadCommon:
                 move.w  #$27C,(a0)
                 move.w  #$44F1,$E(a0)
                 move.w  #0,8(a0)
@@ -38,7 +38,7 @@ Projectile_Epsilon1InitializeSpreadCommon:              ; CODE XREF: Projectile_
                 rts
 ; End of function Projectile_Epsilon1InitializeElevenPartSpread
 ; Type-$27C spread projectile: emits its reserved clones, then animates in flight
-Projectile_Epsilon1SpreadProjectileMain:                ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_47146
+Projectile_Epsilon1SpreadProjectileMain:                ; was: sub_47146
                 bsr.w   Projectile_Epsilon1ConvertOnGlobalMode
                 move.w  $10(a5),d0
                 add.w   (PrimaryCameraXPosition).w,d0
@@ -54,27 +54,27 @@ Projectile_Epsilon1SpreadProjectileMain:                ; DATA XREF: ROM:Entity_
                 tst.w   $5E(a5)
                 beq.w   Projectile_Epsilon1DispatchSpreadProjectileState
                 move.w  #4,4(a5)
-Projectile_Epsilon1DispatchSpreadProjectileState:       ; CODE XREF: Projectile_Epsilon1SpreadProjectileMain+3C   j
+Projectile_Epsilon1DispatchSpreadProjectileState:
                 move.w  4(a5),d0
                 lea     Projectile_Epsilon1SpreadProjectileStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Projectile_Epsilon1SpreadProjectileMain
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1SpreadProjectileStates:  dc.w    Projectile_Epsilon1SpreadProjectileDelayState-*  ; DATA XREF: Projectile_Epsilon1SpreadProjectileMain+4A   o
+Projectile_Epsilon1SpreadProjectileStates:  dc.w    Projectile_Epsilon1SpreadProjectileDelayState-*
                 dc.w    Projectile_Epsilon1EmitSpreadCloneState-*
                 dc.w    Projectile_Epsilon1AnimateSpreadProjectileState-*
 
 ; Delays the parent spread projectile before clone emission
-Projectile_Epsilon1SpreadProjectileDelayState:          ; DATA XREF: ROM:Projectile_Epsilon1SpreadProjectileStates   o  ; was: sub_4719E
+Projectile_Epsilon1SpreadProjectileDelayState:          ; was: sub_4719E
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1SpreadProjectileDelayReturn
                 addq.w  #2,4(a5)
-Projectile_Epsilon1SpreadProjectileDelayReturn:         ; CODE XREF: Projectile_Epsilon1SpreadProjectileDelayState+4   j
+Projectile_Epsilon1SpreadProjectileDelayReturn:
                 rts
 ; End of function Projectile_Epsilon1SpreadProjectileDelayState
 ; Emits one clone at the current spread offset and advances that offset
-Projectile_Epsilon1EmitSpreadCloneState:                ; DATA XREF: ROM:0004719A   o  ; was: sub_471AA
+Projectile_Epsilon1EmitSpreadCloneState:                ; was: sub_471AA
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_Epsilon1EmitSpreadCloneReturn
                 move.w  #1,$5E(a0)
@@ -99,12 +99,12 @@ Projectile_Epsilon1EmitSpreadCloneState:                ; DATA XREF: ROM:0004719
                 subq.w  #1,$4A(a5)
                 bne.s   Projectile_Epsilon1EmitSpreadCloneReturn
                 addq.w  #2,4(a5)
-Projectile_Epsilon1EmitSpreadCloneReturn:               ; CODE XREF: Projectile_Epsilon1EmitSpreadCloneState+6   j
+Projectile_Epsilon1EmitSpreadCloneReturn:
                                         ; Projectile_Epsilon1EmitSpreadCloneState+6E   j
                 rts
 ; End of function Projectile_Epsilon1EmitSpreadCloneState
 ; Selects the spread projectile art from the global animation phase
-Projectile_Epsilon1AnimateSpreadProjectileState:        ; DATA XREF: ROM:0004719C   o  ; was: sub_47220
+Projectile_Epsilon1AnimateSpreadProjectileState:        ; was: sub_47220
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 beq.s   Projectile_Epsilon1AnimateSpreadProjectileReturn
@@ -115,17 +115,17 @@ Projectile_Epsilon1AnimateSpreadProjectileState:        ; DATA XREF: ROM:0004719
                 move.w  #$44F7,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1UseSpreadProjectileFrame44F6:        ; CODE XREF: Projectile_Epsilon1AnimateSpreadProjectileState+14   j
+Projectile_Epsilon1UseSpreadProjectileFrame44F6:
                 move.w  #$44F6,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1UseSpreadProjectileFrame44F1:        ; CODE XREF: Projectile_Epsilon1AnimateSpreadProjectileState+E   j
+Projectile_Epsilon1UseSpreadProjectileFrame44F1:
                 move.w  #$44F1,$E(a5)
-Projectile_Epsilon1AnimateSpreadProjectileReturn:       ; CODE XREF: Projectile_Epsilon1AnimateSpreadProjectileState+8   j
+Projectile_Epsilon1AnimateSpreadProjectileReturn:
                 rts
 ; End of function Projectile_Epsilon1AnimateSpreadProjectileState
 ; Converts a spread projectile to type-$88 debris after it crosses the lower bound
-Projectile_Epsilon1ConvertSpreadProjectileToDebris:     ; CODE XREF: Projectile_Epsilon1SpreadProjectileMain+16   j  ; was: sub_4724E
+Projectile_Epsilon1ConvertSpreadProjectileToDebris:     ; was: sub_4724E
                 clr.b   $21(a5)
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
@@ -147,31 +147,31 @@ Projectile_Epsilon1ConvertSpreadProjectileToDebris:     ; CODE XREF: Projectile_
                 bne.w   Projectile_Epsilon1ConvertSpreadProjectileToDebrisReturn
                 move.b  #$E1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Projectile_Epsilon1ConvertSpreadProjectileToDebrisReturn:  ; CODE XREF: Projectile_Epsilon1ConvertSpreadProjectileToDebris+38   j
+Projectile_Epsilon1ConvertSpreadProjectileToDebrisReturn:
                                         ; Projectile_Epsilon1ConvertSpreadProjectileToDebris+42   j
                 rts
 ; End of function Projectile_Epsilon1ConvertSpreadProjectileToDebris
 ; Marks an out-of-bounds spread projectile for removal and releases its aim marker
-Projectile_Epsilon1MarkSpreadProjectileOutOfBounds:     ; CODE XREF: Projectile_Epsilon1SpreadProjectileMain+20   j  ; was: sub_472A0
+Projectile_Epsilon1MarkSpreadProjectileOutOfBounds:     ; was: sub_472A0
                                         ; Projectile_Epsilon1SpreadProjectileMain+2A   j
                 move.w  #$1000,2(a5)
                 bsr.s   Projectile_Epsilon1ReleaseSpreadAimMarker
-Projectile_Epsilon1SpreadOrBarrageReturn:               ; CODE XREF: Boss_Epsilon1ReserveBarrageEmitterState+6   j
+Projectile_Epsilon1SpreadOrBarrageReturn:
                 rts
 ; End of function Projectile_Epsilon1MarkSpreadProjectileOutOfBounds
 ; Signals the saved aim-marker entity, then clears the shared marker pointer
-Projectile_Epsilon1ReleaseSpreadAimMarker:              ; CODE XREF: Projectile_Epsilon1ConvertSpreadProjectileToDebris+32   p  ; was: sub_472AA
+Projectile_Epsilon1ReleaseSpreadAimMarker:              ; was: sub_472AA
                                         ; Projectile_Epsilon1MarkSpreadProjectileOutOfBounds+6   p
                 tst.w   (SharedScratchLong8).w
                 beq.s   Projectile_Epsilon1ReleaseSpreadAimMarkerReturn
                 movea.w (SharedScratchLong8).w,a0
                 bset    #4,2(a0)
                 clr.w   (SharedScratchLong8).w
-Projectile_Epsilon1ReleaseSpreadAimMarkerReturn:        ; CODE XREF: Projectile_Epsilon1ReleaseSpreadAimMarker+4   j
+Projectile_Epsilon1ReleaseSpreadAimMarkerReturn:
                 rts
 ; End of function Projectile_Epsilon1ReleaseSpreadAimMarker
 ; Type-$2E8 barrage emitter reserved and activated by the Epsilon 1 ring controller
-Projectile_Epsilon1BarrageEmitterMain:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_472C0
+Projectile_Epsilon1BarrageEmitterMain:                  ; was: sub_472C0
                 bsr.w   Projectile_Epsilon1ConvertOnGlobalMode
                 move.w  4(a5),d0
                 lea     Projectile_Epsilon1BarrageEmitterStates(pc,d0.w),a0
@@ -179,35 +179,35 @@ Projectile_Epsilon1BarrageEmitterMain:                  ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function Projectile_Epsilon1BarrageEmitterMain
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1BarrageEmitterStates:    dc.w    Projectile_Epsilon1InitializeBarrageEmitterDelayState-*  ; DATA XREF: Projectile_Epsilon1BarrageEmitterMain+8   o
+Projectile_Epsilon1BarrageEmitterStates:    dc.w    Projectile_Epsilon1InitializeBarrageEmitterDelayState-*
                 dc.w    Projectile_Epsilon1WaitForBarrageEmitterDelayState-*
                 dc.w    Projectile_Epsilon1EmitBarrageRowState-*
                 dc.w    Projectile_Epsilon1BarrageEmitterRemovalDelayState-*
 
 ; Initializes the barrage-emitter startup delay
-Projectile_Epsilon1InitializeBarrageEmitterDelayState:  ; DATA XREF: ROM:Projectile_Epsilon1BarrageEmitterStates   o  ; was: sub_472D8
+Projectile_Epsilon1InitializeBarrageEmitterDelayState:  ; was: sub_472D8
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
                 rts
 ; End of function Projectile_Epsilon1InitializeBarrageEmitterDelayState
 ; Waits for the barrage-emitter startup delay
-Projectile_Epsilon1WaitForBarrageEmitterDelayState:     ; DATA XREF: ROM:000472D2   o  ; was: sub_472E4
+Projectile_Epsilon1WaitForBarrageEmitterDelayState:     ; was: sub_472E4
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1WaitForBarrageEmitterDelayReturn
                 move.w  #8,$48(a5)
                 addq.w  #2,4(a5)
-Projectile_Epsilon1WaitForBarrageEmitterDelayReturn:    ; CODE XREF: Projectile_Epsilon1WaitForBarrageEmitterDelayState+4   j
+Projectile_Epsilon1WaitForBarrageEmitterDelayReturn:
                 rts
 ; End of function Projectile_Epsilon1WaitForBarrageEmitterDelayState
 ; Emits a vertical row of eight type-$280 projectiles
-Projectile_Epsilon1EmitBarrageRowState:                 ; DATA XREF: ROM:000472D4   o  ; was: sub_472F6
+Projectile_Epsilon1EmitBarrageRowState:                 ; was: sub_472F6
                 eori.w  #$8000,2(a5)
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1EmitBarrageRowReturn
                 move.w  #7,d7
                 move.w  #$60,d6                         ; '`'
                 clr.w   d5
-Projectile_Epsilon1EmitBarrageRowLoop:                  ; CODE XREF: Projectile_Epsilon1EmitBarrageRowState+34   j
+Projectile_Epsilon1EmitBarrageRowLoop:
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_Epsilon1FinishBarrageRowEmission
                 bsr.s   Projectile_Epsilon1InitializeBarrageRowProjectile
@@ -217,17 +217,17 @@ Projectile_Epsilon1EmitBarrageRowLoop:                  ; CODE XREF: Projectile_
                 addq.w  #1,d5
                 subi.w  #$20,d6                         ; ' '
                 dbf     d7,Projectile_Epsilon1EmitBarrageRowLoop
-Projectile_Epsilon1FinishBarrageRowEmission:            ; CODE XREF: Projectile_Epsilon1EmitBarrageRowState+1C   j
+Projectile_Epsilon1FinishBarrageRowEmission:
                 move.w  #$10,$48(a5)
                 ori.w   #$8000,2(a5)
                 addq.w  #2,4(a5)
                 move.b  #$AB,d0
                 jsr     (Sound_QueueSFXRequest).l
-Projectile_Epsilon1EmitBarrageRowReturn:                ; CODE XREF: Projectile_Epsilon1EmitBarrageRowState+A   j
+Projectile_Epsilon1EmitBarrageRowReturn:
                 rts
 ; End of function Projectile_Epsilon1EmitBarrageRowState
 ; Initializes one barrage-row projectile
-Projectile_Epsilon1InitializeBarrageRowProjectile:      ; CODE XREF: Projectile_Epsilon1EmitBarrageRowState+1E   p  ; was: sub_4734A
+Projectile_Epsilon1InitializeBarrageRowProjectile:      ; was: sub_4734A
                 move.w  #$280,(a0)
                 move.w  #$8D80,2(a0)
                 move.w  #$43D2,$E(a0)
@@ -238,15 +238,15 @@ Projectile_Epsilon1InitializeBarrageRowProjectile:      ; CODE XREF: Projectile_
                 rts
 ; End of function Projectile_Epsilon1InitializeBarrageRowProjectile
 ; Removes the barrage emitter after its post-emission delay
-Projectile_Epsilon1BarrageEmitterRemovalDelayState:     ; DATA XREF: ROM:000472D6   o  ; was: sub_47374
+Projectile_Epsilon1BarrageEmitterRemovalDelayState:     ; was: sub_47374
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1BarrageEmitterRemovalDelayReturn
                 bset    #4,2(a5)
-Projectile_Epsilon1BarrageEmitterRemovalDelayReturn:    ; CODE XREF: Projectile_Epsilon1BarrageEmitterRemovalDelayState+4   j
+Projectile_Epsilon1BarrageEmitterRemovalDelayReturn:
                 rts
 ; End of function Projectile_Epsilon1BarrageEmitterRemovalDelayState
 ; Type-$280 barrage-row projectile: delays, expands, then falls
-Projectile_Epsilon1BarrageRowProjectileMain:            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_47382
+Projectile_Epsilon1BarrageRowProjectileMain:            ; was: sub_47382
                 cmpi.w  #$150,$14(a5)
                 bgt.w   Projectile_Epsilon1ConvertBarrageRowProjectileToDebris
                 move.w  4(a5),d0
@@ -255,12 +255,12 @@ Projectile_Epsilon1BarrageRowProjectileMain:            ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function Projectile_Epsilon1BarrageRowProjectileMain
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1BarrageRowProjectileStates:  dc.w    Projectile_Epsilon1BarrageRowLaunchDelayState-*  ; DATA XREF: Projectile_Epsilon1BarrageRowProjectileMain+E   o
+Projectile_Epsilon1BarrageRowProjectileStates:  dc.w    Projectile_Epsilon1BarrageRowLaunchDelayState-*
                 dc.w    Projectile_Epsilon1AnimateBarrageRowExpansionState-*
                 dc.w    Projectile_Epsilon1BarrageRowFlightState-*
 
 ; Waits before stopping the initial descent and enabling collision
-Projectile_Epsilon1BarrageRowLaunchDelayState:          ; DATA XREF: ROM:Projectile_Epsilon1BarrageRowProjectileStates   o  ; was: sub_4739E
+Projectile_Epsilon1BarrageRowLaunchDelayState:          ; was: sub_4739E
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1BarrageRowLaunchDelayReturn
                 clr.l   $1C(a5)
@@ -269,11 +269,11 @@ Projectile_Epsilon1BarrageRowLaunchDelayState:          ; DATA XREF: ROM:Project
                 move.b  #$40,$21(a5)                    ; '@'
                 move.l  #$F808F010,$2C(a5)
                 move.w  #$C8,$26(a5)
-Projectile_Epsilon1BarrageRowLaunchDelayReturn:         ; CODE XREF: Projectile_Epsilon1BarrageRowLaunchDelayState+4   j
+Projectile_Epsilon1BarrageRowLaunchDelayReturn:
                 rts
 ; End of function Projectile_Epsilon1BarrageRowLaunchDelayState
 ; Expands the barrage-row projectile through its nine-frame table
-Projectile_Epsilon1AnimateBarrageRowExpansionState:     ; DATA XREF: ROM:0004739A   o  ; was: sub_473C8
+Projectile_Epsilon1AnimateBarrageRowExpansionState:     ; was: sub_473C8
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Epsilon1AnimateBarrageRowExpansionReturn
                 move.w  #2,$48(a5)
@@ -285,28 +285,25 @@ Projectile_Epsilon1AnimateBarrageRowExpansionState:     ; DATA XREF: ROM:0004739
                 addq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_Epsilon1ApplyBarrageRowExpansionFrame:       ; CODE XREF: Projectile_Epsilon1AnimateBarrageRowExpansionState+16   j
+Projectile_Epsilon1ApplyBarrageRowExpansionFrame:
                 move.w  $5C(a5),d0
                 move.w  Projectile_Epsilon1BarrageRowFrameTileAttributes(pc,d0.w),$E(a5)
                 move.w  Projectile_Epsilon1BarrageRowFrameWord8Values(pc,d0.w),8(a5)
                 move.w  Projectile_Epsilon1BarrageRowFrameWordAValues(pc,d0.w),$A(a5)
-Projectile_Epsilon1AnimateBarrageRowExpansionReturn:    ; CODE XREF: Projectile_Epsilon1AnimateBarrageRowExpansionState+4   j
+Projectile_Epsilon1AnimateBarrageRowExpansionReturn:
                 rts
 ; End of function Projectile_Epsilon1AnimateBarrageRowExpansionState
 ; ---------------------------------------------------------------------------
 Projectile_Epsilon1BarrageRowFrameTileAttributes:   dc.w    $43D2, $43D6, $43DA, $43EA, $43E2, $43EA, $43DA, $43D6, $43D2
-                                        ; DATA XREF: Projectile_Epsilon1AnimateBarrageRowExpansionState+2C   r
-Projectile_Epsilon1BarrageRowFrameWord8Values:  dc.w    $300, $300, $700, $700, $700, $700, $700, $300, $300
-                                        ; DATA XREF: Projectile_Epsilon1AnimateBarrageRowExpansionState+32   r
-Projectile_Epsilon1BarrageRowFrameWordAValues:  dc.w    $FCF0, $FCF0, $F8F0, $F8F0, $F8F0, $F8F0, $F8F0, $FCF0, $FCF0
-                                        ; DATA XREF: Projectile_Epsilon1AnimateBarrageRowExpansionState+38   r
+Projectile_Epsilon1BarrageRowFrameWord8Values:      dc.w    $300, $300, $700, $700, $700, $700, $700, $300, $300
+Projectile_Epsilon1BarrageRowFrameWordAValues:      dc.w    $FCF0, $FCF0, $F8F0, $F8F0, $F8F0, $F8F0, $F8F0, $FCF0, $FCF0
 
-Projectile_Epsilon1BarrageRowFlightState:               ; DATA XREF: ROM:0004739C   o
+Projectile_Epsilon1BarrageRowFlightState:
                 rts
 ; End of function Projectile_Epsilon1BarrageRowFlightState
 
 ; Converts a barrage-row projectile to type-$88 debris below the playfield
-Projectile_Epsilon1ConvertBarrageRowProjectileToDebris:  ; CODE XREF: Projectile_Epsilon1BarrageRowProjectileMain+6   j  ; was: sub_47440
+Projectile_Epsilon1ConvertBarrageRowProjectileToDebris:  ; was: sub_47440
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 clr.l   $18(a5)
@@ -324,11 +321,11 @@ Projectile_Epsilon1ConvertBarrageRowProjectileToDebris:  ; CODE XREF: Projectile
                 move.w  #2,(PlaneAShakeLevel).w
                 move.b  #$E1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Projectile_Epsilon1ConvertBarrageRowProjectileToDebrisReturn:  ; CODE XREF: Projectile_Epsilon1ConvertBarrageRowProjectileToDebris+32   j
+Projectile_Epsilon1ConvertBarrageRowProjectileToDebrisReturn:
                 rts
 ; End of function Projectile_Epsilon1ConvertBarrageRowProjectileToDebris
 ; Type-$284 fixed ring object created with the twelve-object Epsilon 1 ring
-Boss_Epsilon1RingObjectMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_47486
+Boss_Epsilon1RingObjectMain:                            ; was: sub_47486
                 btst    #0,(PrimaryEntityWork4C).w
                 bne.s   Boss_Epsilon1ForceRingObjectDefeatHold
                 btst    #2,(PrimaryEntityWork4C).w
@@ -336,11 +333,11 @@ Boss_Epsilon1RingObjectMain:                            ; DATA XREF: ROM:Entity_
                 clr.w   4(a5)
                 bra.s   Boss_Epsilon1DeactivateRingObjectAndLink
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1ForceRingObjectDefeatHold:                 ; CODE XREF: Boss_Epsilon1RingObjectMain+6   j
+Boss_Epsilon1ForceRingObjectDefeatHold:
                 cmpi.w  #$C,4(a5)
                 bcc.s   Boss_Epsilon1DispatchRingObjectState
                 move.w  #$C,4(a5)
-Boss_Epsilon1DeactivateRingObjectAndLink:               ; CODE XREF: Boss_Epsilon1RingObjectMain+14   j
+Boss_Epsilon1DeactivateRingObjectAndLink:
                 andi.w  #$7FFF,2(a5)
                 tst.w   $4E(a5)
                 movea.w $4E(a5),a0
@@ -353,7 +350,7 @@ Boss_Epsilon1DeactivateRingObjectAndLink:               ; CODE XREF: Boss_Epsilo
                 andi.w  #$8000,d0
                 andi.w  #$7FFF,2(a0)
                 or.w    d0,2(a0)
-Boss_Epsilon1DispatchRingObjectState:                   ; CODE XREF: Boss_Epsilon1RingObjectMain+E   j
+Boss_Epsilon1DispatchRingObjectState:
                                         ; Boss_Epsilon1RingObjectMain+1C   j
                 move.w  4(a5),d0
                 lea     Boss_Epsilon1RingObjectStates(pc,d0.w),a0
@@ -361,7 +358,7 @@ Boss_Epsilon1DispatchRingObjectState:                   ; CODE XREF: Boss_Epsilo
                 jmp     (a0)
 ; End of function Boss_Epsilon1RingObjectMain
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1RingObjectStates:  dc.w    Boss_Epsilon1RingObjectInactiveState-*  ; DATA XREF: Boss_Epsilon1RingObjectMain+64   o
+Boss_Epsilon1RingObjectStates:  dc.w    Boss_Epsilon1RingObjectInactiveState-*
                 dc.w    Boss_Epsilon1WaitForRingAngleThresholdState-*
                 dc.w    Boss_Epsilon1WaitForRingLaunchWindowState-*
                 dc.w    Boss_Epsilon1LaunchRingObjectState-*
@@ -372,17 +369,17 @@ Boss_Epsilon1RingObjectStates:  dc.w    Boss_Epsilon1RingObjectInactiveState-*  
                 dc.w    Boss_Epsilon1ExplodeRingObjectState-*
                 dc.w    Boss_Epsilon1DespawnRingObjectState-*
 
-Boss_Epsilon1RingObjectInactiveState:                   ; DATA XREF: ROM:Boss_Epsilon1RingObjectStates   o
+Boss_Epsilon1RingObjectInactiveState:
                 rts
 ; End of function Boss_Epsilon1RingObjectInactiveState
 
 ; Waits for the assigned ring-angle sample to reach the first threshold
-Boss_Epsilon1WaitForRingAngleThresholdState:            ; DATA XREF: ROM:000474F4   o  ; was: sub_47508
+Boss_Epsilon1WaitForRingAngleThresholdState:            ; was: sub_47508
                 move.w  $4A(a5),d0
                 cmpi.w  #6,d0
                 bcs.s   Boss_Epsilon1SelectRingAngleSample
                 subq.w  #6,d0
-Boss_Epsilon1SelectRingAngleSample:                     ; CODE XREF: Boss_Epsilon1WaitForRingAngleThresholdState+8   j
+Boss_Epsilon1SelectRingAngleSample:
                 add.w   d0,d0
                 lea     (SharedScratchLong0).w,a0
                 move.w  (a0,d0.w),d1
@@ -391,16 +388,16 @@ Boss_Epsilon1SelectRingAngleSample:                     ; CODE XREF: Boss_Epsilo
                 move.w  #$80,d0
                 bsr.w   Boss_Epsilon1StoreRingObjectPhaseValue
                 addq.w  #2,4(a5)
-Boss_Epsilon1WaitForRingAngleThresholdReturn:           ; CODE XREF: Boss_Epsilon1WaitForRingAngleThresholdState+1A   j
+Boss_Epsilon1WaitForRingAngleThresholdReturn:
                 rts
 ; End of function Boss_Epsilon1WaitForRingAngleThresholdState
 ; Waits for the ring-angle launch window and creates the two side effects
-Boss_Epsilon1WaitForRingLaunchWindowState:              ; DATA XREF: ROM:000474F6   o  ; was: sub_47532
+Boss_Epsilon1WaitForRingLaunchWindowState:              ; was: sub_47532
                 move.w  $4A(a5),d0
                 cmpi.w  #6,d0
                 bcs.s   Boss_Epsilon1SelectRingLaunchAngleSample
                 subq.w  #6,d0
-Boss_Epsilon1SelectRingLaunchAngleSample:               ; CODE XREF: Boss_Epsilon1WaitForRingLaunchWindowState+8   j
+Boss_Epsilon1SelectRingLaunchAngleSample:
                 add.w   d0,d0
                 lea     (SharedScratchLong0).w,a0
                 move.w  (a0,d0.w),d1
@@ -427,12 +424,12 @@ Boss_Epsilon1SelectRingLaunchAngleSample:               ; CODE XREF: Boss_Epsilo
                 move.w  $10(a5),$10(a0)
                 addi.w  #-8,$10(a0)
                 move.w  $14(a5),$14(a0)
-Boss_Epsilon1WaitForRingLaunchWindowReturn:             ; CODE XREF: Boss_Epsilon1WaitForRingLaunchWindowState+1A   j
+Boss_Epsilon1WaitForRingLaunchWindowReturn:
                                         ; Boss_Epsilon1WaitForRingLaunchWindowState+22   j
                 rts
 ; End of function Boss_Epsilon1WaitForRingLaunchWindowState
 ; Positions a fixed ring object from the shared center and vertical samples
-Boss_Epsilon1PositionRingObjectFromSamples:             ; CODE XREF: Boss_Epsilon1WaitForRingLaunchWindowState+30   p  ; was: sub_475C4
+Boss_Epsilon1PositionRingObjectFromSamples:             ; was: sub_475C4
                                         ; Boss_Epsilon1LaunchRingObjectState+6   p
                 move.w  $4A(a5),d0
                 add.w   d0,d0
@@ -451,7 +448,7 @@ Boss_Epsilon1PositionRingObjectFromSamples:             ; CODE XREF: Boss_Epsilo
                 rts
 ; End of function Boss_Epsilon1PositionRingObjectFromSamples
 ; Releases a ring object and synchronizes its linked projectile
-Boss_Epsilon1LaunchRingObjectState:                     ; DATA XREF: ROM:000474F8   o  ; was: sub_475FA
+Boss_Epsilon1LaunchRingObjectState:                     ; was: sub_475FA
                 subq.w  #1,$48(a5)
                 bne.s   Boss_Epsilon1LaunchRingObjectReturn
                 bsr.w   Boss_Epsilon1PositionRingObjectFromSamples
@@ -467,7 +464,7 @@ Boss_Epsilon1LaunchRingObjectState:                     ; DATA XREF: ROM:000474F
                 addq.w  #2,4(a5)
                 move.b  #$50,d0                         ; 'P'
                 jsr     (Sound_QueueSFXRequest).l
-Boss_Epsilon1LaunchRingObjectReturn:                    ; CODE XREF: Boss_Epsilon1LaunchRingObjectState+4   j
+Boss_Epsilon1LaunchRingObjectReturn:
                 rts
 ; End of function Boss_Epsilon1LaunchRingObjectState
 ; Returns a released ring object to inactive state and removes its linked projectile
@@ -478,11 +475,11 @@ Boss_Epsilon1ResetRingObjectAndLinkedProjectile:
                 clr.w   4(a5)
 ; End of function Boss_Epsilon1ResetRingObjectAndLinkedProjectile
 ; Clears this ring object's entry in the shared phase table
-Boss_Epsilon1ClearRingObjectPhaseValue:                 ; CODE XREF: Boss_Epsilon1ResetReleasedRingObjectState   p  ; was: sub_4765A
+Boss_Epsilon1ClearRingObjectPhaseValue:                 ; was: sub_4765A
                 moveq   #0,d0
 ; End of function Boss_Epsilon1ClearRingObjectPhaseValue
 ; Stores this ring object's value in the shared phase table
-Boss_Epsilon1StoreRingObjectPhaseValue:                 ; CODE XREF: Boss_Epsilon1WaitForRingAngleThresholdState+20   p  ; was: sub_4765C
+Boss_Epsilon1StoreRingObjectPhaseValue:                 ; was: sub_4765C
                                         ; Boss_Epsilon1UpdateReleasedRingObjectState+C   p
                 lea     (Epsilon1RingPhaseTable).w,a1
                 move.w  $4A(a5),d1
@@ -491,17 +488,17 @@ Boss_Epsilon1StoreRingObjectPhaseValue:                 ; CODE XREF: Boss_Epsilo
                 rts
 ; End of function Boss_Epsilon1StoreRingObjectPhaseValue
 ; Advances a released ring object and keeps its linked projectile aligned
-Boss_Epsilon1UpdateReleasedRingObjectState:             ; DATA XREF: ROM:000474FA   o  ; was: sub_4766C
+Boss_Epsilon1UpdateReleasedRingObjectState:             ; was: sub_4766C
                 cmpi.w  #$120,$48(a5)
                 beq.s   Boss_Epsilon1AdvanceReleasedRingObjectLinkOffset
                 move.w  $48(a5),d0
                 bsr.w   Boss_Epsilon1StoreRingObjectPhaseValue
                 addi.w  #$10,$48(a5)
-Boss_Epsilon1AdvanceReleasedRingObjectLinkOffset:       ; CODE XREF: Boss_Epsilon1UpdateReleasedRingObjectState+6   j
+Boss_Epsilon1AdvanceReleasedRingObjectLinkOffset:
                 cmpi.w  #$20,$50(a5)                    ; ' '
                 beq.s   Boss_Epsilon1PositionReleasedRingObjectLink
                 addq.w  #4,$50(a5)
-Boss_Epsilon1PositionReleasedRingObjectLink:            ; CODE XREF: Boss_Epsilon1UpdateReleasedRingObjectState+1C   j
+Boss_Epsilon1PositionReleasedRingObjectLink:
                 movea.w $4E(a5),a0
                 ori.w   #$8000,2(a0)
                 move.w  $10(a5),$10(a0)
@@ -523,28 +520,28 @@ Boss_Epsilon1PositionReleasedRingObjectLink:            ; CODE XREF: Boss_Epsilo
                 move.w  d0,$1C(a0)
                 clr.l   $1C(a5)
                 addq.w  #2,4(a5)
-Boss_Epsilon1UpdateReleasedRingObjectReturn:            ; CODE XREF: Boss_Epsilon1UpdateReleasedRingObjectState+46   j
+Boss_Epsilon1UpdateReleasedRingObjectReturn:
                 rts
 ; End of function Boss_Epsilon1UpdateReleasedRingObjectState
 ; Clears the ring object's phase entry and returns it to inactive state
-Boss_Epsilon1ResetReleasedRingObjectState:              ; DATA XREF: ROM:000474FC   o  ; was: sub_476F4
+Boss_Epsilon1ResetReleasedRingObjectState:              ; was: sub_476F4
                 bsr.w   Boss_Epsilon1ClearRingObjectPhaseValue
                 clr.w   4(a5)
                 rts
 ; End of function Boss_Epsilon1ResetReleasedRingObjectState
-Boss_Epsilon1RingObjectDefeatHoldState:                 ; DATA XREF: ROM:000474FE   o
+Boss_Epsilon1RingObjectDefeatHoldState:
                 rts
 ; End of function Boss_Epsilon1RingObjectDefeatHoldState
 
 ; Advances a defeated ring object and periodically emits type-$88 debris
-Boss_Epsilon1UpdateRingObjectDefeatFallState:           ; DATA XREF: ROM:00047500   o  ; was: sub_47700
+Boss_Epsilon1UpdateRingObjectDefeatFallState:           ; was: sub_47700
                 bsr.s   Boss_Epsilon1AdvanceRingObjectDefeatPosition
                 cmpi.w  #$140,$14(a5)
                 blt.s   Boss_Epsilon1SpawnRingObjectDefeatDebris
                 addq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1SpawnRingObjectDefeatDebris:               ; CODE XREF: Boss_Epsilon1UpdateRingObjectDefeatFallState+8   j
+Boss_Epsilon1SpawnRingObjectDefeatDebris:
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.s   Boss_Epsilon1UpdateRingObjectDefeatFallReturn
@@ -560,12 +557,12 @@ Boss_Epsilon1SpawnRingObjectDefeatDebris:               ; CODE XREF: Boss_Epsilo
                 subq.w  #2,d0
                 move.w  d0,$18(a0)
                 move.l  #SharedCombatSpriteAnimation05,8(a0)
-Boss_Epsilon1UpdateRingObjectDefeatFallReturn:          ; CODE XREF: Boss_Epsilon1UpdateRingObjectDefeatFallState+18   j
+Boss_Epsilon1UpdateRingObjectDefeatFallReturn:
                                         ; Boss_Epsilon1UpdateRingObjectDefeatFallState+20   j
                 rts
 ; End of function Boss_Epsilon1UpdateRingObjectDefeatFallState
 ; Updates a defeated ring object's sampled position and shared offset slot
-Boss_Epsilon1AdvanceRingObjectDefeatPosition:           ; CODE XREF: Boss_Epsilon1UpdateRingObjectDefeatFallState   p  ; was: sub_47754
+Boss_Epsilon1AdvanceRingObjectDefeatPosition:           ; was: sub_47754
                 addi.w  #$20,$50(a5)                    ; ' '
                 move.w  $50(a5),d0
                 bsr.w   Boss_Epsilon1StoreRingObjectPhaseValue
@@ -582,13 +579,13 @@ Boss_Epsilon1AdvanceRingObjectDefeatPosition:           ; CODE XREF: Boss_Epsilo
                 cmpi.w  #$C,d0
                 bcs.s   Boss_Epsilon1SelectRingObjectDefeatOffsetSlot
                 subi.w  #$C,d0
-Boss_Epsilon1SelectRingObjectDefeatOffsetSlot:          ; CODE XREF: Boss_Epsilon1AdvanceRingObjectDefeatPosition+38   j
+Boss_Epsilon1SelectRingObjectDefeatOffsetSlot:
                 lea     (Epsilon1RowOffsetTable).w,a1
                 addi.w  #-2,(a1,d0.w)
                 rts
 ; End of function Boss_Epsilon1AdvanceRingObjectDefeatPosition
 ; Explodes a defeated ring object and converts it to type-$88 debris
-Boss_Epsilon1ExplodeRingObjectState:                    ; DATA XREF: ROM:00047502   o  ; was: sub_4779E
+Boss_Epsilon1ExplodeRingObjectState:                    ; was: sub_4779E
                 jsr     (Effect_SpawnExplosionA).l
                 move.w  $4A(a5),d0
                 add.w   d0,d0
@@ -604,7 +601,7 @@ Boss_Epsilon1RingObjectStandaloneReturn:
 ; End of function Boss_Epsilon1RingObjectStandaloneReturn
 
 ; Despawns a ring object and clears its active flag
-Boss_Epsilon1DespawnRingObjectState:                    ; DATA XREF: ROM:00047504   o  ; was: sub_477CE
+Boss_Epsilon1DespawnRingObjectState:                    ; was: sub_477CE
                 clr.w   (a5)
                 bclr    #4,2(a5)
                 rts

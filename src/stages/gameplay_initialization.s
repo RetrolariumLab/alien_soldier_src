@@ -1,5 +1,5 @@
 ; Initializes the Z-Leo ending scene's player, assets, palette, and scroll position
-ZLeoEnding_InitializeScene:                             ; DATA XREF: ROM:0001E850   o  ; was: sub_1EDC2
+ZLeoEnding_InitializeScene:                             ; was: sub_1EDC2
                 move.w  #$7FFF,(StageTimeRemaining).w
                 jsr     (Player_InitializeStats).l
                 move.w  #$5C,(PlayerStateOffset).w      ; '\'
@@ -18,7 +18,6 @@ ZLeoEnding_InitializeScene:                             ; DATA XREF: ROM:0001E85
 ; End of function ZLeoEnding_InitializeScene
 ; ---------------------------------------------------------------------------
 ZLeoEnding_AssetLoadDescriptors:    dc.w    7           ; field_0  ; was: stru_1EE12
-                                        ; DATA XREF: ZLeoEnding_InitializeScene+18   o
                 dc.l    Stage26ZLeoEndingTileArt0000    ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -36,7 +35,7 @@ ZLeoEnding_AssetLoadDescriptors:    dc.w    7           ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Updates the player, Z-Leo ending controller, objects, projectiles, and tilemap
-ZLeoEnding_UpdateScene:                                 ; DATA XREF: ROM:0001E866   o  ; was: sub_1EE3C
+ZLeoEnding_UpdateScene:                                 ; was: sub_1EE3C
                 jsr     (Player_Update).l
                 jsr     (Boss_ZLeoMainController).l
                 jsr     (Sys_UpdateObjectSpawner).l
@@ -44,17 +43,17 @@ ZLeoEnding_UpdateScene:                                 ; DATA XREF: ROM:0001E86
                 jmp     Tilemap_QueuePrimaryCameraColumnOffset158
 ; End of function ZLeoEnding_UpdateScene
 ; Enters the shared ending sequence from transition route four
-EndingSequence_InitializeFromTransition:                ; DATA XREF: ROM:0001E852   o  ; was: sub_1EE5A
+EndingSequence_InitializeFromTransition:                ; was: sub_1EE5A
                 move.b  #0,(VDPReg18Shadow+1).w
                 jmp     (EndingSequence_Initialize).l
 ; End of function EndingSequence_InitializeFromTransition
 ; Updates the shared ending sequence or advances after it signals completion
-EndingSequence_UpdateFromTransition:                    ; DATA XREF: ROM:0001E868   o  ; was: sub_1EE66
+EndingSequence_UpdateFromTransition:                    ; was: sub_1EE66
                 tst.w   (EndingSequenceComplete).w
                 bne.w   EndingSequence_AdvanceStage
                 jmp     (EndingSequence_Dispatch).l
 ; ---------------------------------------------------------------------------
-EndingSequence_AdvanceStage:                            ; CODE XREF: EndingSequence_UpdateFromTransition+4   j  ; was: loc_1EE74
+EndingSequence_AdvanceStage:                            ; was: loc_1EE74
                 clr.w   (StatusDisplayModeOffset).w
                 addq.w  #2,(StageTableIndex).w
                 bclr    #7,(StageObjectSpawnCursor).w
@@ -66,7 +65,7 @@ EndingSequence_AdvanceStage:                            ; CODE XREF: EndingSeque
                 jmp     StageTransition_LoadStage
 ; End of function EndingSequence_UpdateFromTransition
 ; Initializes the weapon-setup screen and queues its font DMA
-WeaponSetup_InitializeScreen:                           ; DATA XREF: Sys_DispatchGameState+C6   o  ; was: sub_1EE9E
+WeaponSetup_InitializeScreen:                           ; was: sub_1EE9E
                 tst.w   (GameSubstateIndex).w
                 bne.s   WeaponSetup_ActivateScreen
                 clr.w   (SetupTransitionIndex).w
@@ -84,7 +83,7 @@ WeaponSetup_InitializeScreen:                           ; DATA XREF: Sys_Dispatc
                 jmp     Gfx_QueueLargeFontDMA
 ; ---------------------------------------------------------------------------
 ; Activates the weapon-setup screen and its interactive test arena
-WeaponSetup_ActivateScreen:                             ; CODE XREF: WeaponSetup_InitializeScreen+4   j  ; was: loc_1EEEA
+WeaponSetup_ActivateScreen:                             ; was: loc_1EEEA
                 addq.w  #4,(GameModeIndex).w
                 clr.w   (GameSubstateIndex).w
                 lea     WeaponSetup_AssetLoadDescriptors(pc),a0
@@ -128,7 +127,6 @@ WeaponSetup_ActivateScreen:                             ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_InitializeScreen
 ; ---------------------------------------------------------------------------
 WeaponSetup_AssetLoadDescriptors:   dc.w    3           ; field_0  ; was: stru_1EFB8
-                                        ; DATA XREF: WeaponSetup_InitializeScreen+54   o
                 dc.l    WeaponSetupType3Data5800        ; field_2
                 dc.w    $5800                           ; field_6
                 dc.w    7                               ; field_0
@@ -158,13 +156,13 @@ WeaponSetup_AssetLoadDescriptors:   dc.w    3           ; field_0  ; was: stru_1
                 dc.w    $FFFF
 
 ; Initializes the weapon-setup screen's three color lookup tables in RAM
-WeaponSetup_InitializeColorTables:                      ; CODE XREF: WeaponSetup_InitializeScreen+88   p  ; was: sub_1F002
+WeaponSetup_InitializeColorTables:                      ; was: sub_1F002
                 lea     (PlaneTilemapRow26).l,a0
                 lea     (PlaneTilemapRow27).l,a1
                 lea     (PlaneTilemapRow28).l,a2
                 move.w  #$FF,d1
                 moveq   #$3F,d7                         ; '?'
-WeaponSetup_InitializeColorTables_Loop:                 ; CODE XREF: WeaponSetup_InitializeColorTables+1E   j  ; was: loc_1F01A
+WeaponSetup_InitializeColorTables_Loop:                 ; was: loc_1F01A
                 move.w  d1,(a0)+
                 move.w  d1,(a1)+
                 move.w  d1,(a2)+
@@ -173,7 +171,7 @@ WeaponSetup_InitializeColorTables_Loop:                 ; CODE XREF: WeaponSetup
                 rts
 ; End of function WeaponSetup_InitializeColorTables
 ; Initializes weapon-setup text and the six force-name tile regions
-WeaponSetup_InitializeTextAndTiles:                     ; CODE XREF: WeaponSetup_InitializeScreen+E8   p  ; was: sub_1F02E
+WeaponSetup_InitializeTextAndTiles:                     ; was: sub_1F02E
                 bsr.w   WeaponSetup_RenderHeading
                 bsr.w   WeaponSetup_FindControlTypeIndex
                 bsr.w   WeaponSetup_RenderStatusAndControlType
@@ -181,7 +179,7 @@ WeaponSetup_InitializeTextAndTiles:                     ; CODE XREF: WeaponSetup
                 lea     WeaponSetup_ForceTextLayout(pc),a2
                 nop
                 moveq   #0,d7
-WeaponSetup_InitializeForceTileLoop:                    ; CODE XREF: WeaponSetup_InitializeTextAndTiles+2C   j  ; was: loc_1F046
+WeaponSetup_InitializeForceTileLoop:                    ; was: loc_1F046
                 move.w  (a2,d7.w),d3
                 subq.w  #6,d3
                 move.w  d7,d0
@@ -189,12 +187,12 @@ WeaponSetup_InitializeForceTileLoop:                    ; CODE XREF: WeaponSetup
                 addq.w  #2,d7
                 cmpi.w  #$C,d7
                 bmi.s   WeaponSetup_InitializeForceTileLoop
-WeaponSetup_StateWaitReturn:                            ; CODE XREF: WeaponSetup_HandleLoadoutState+C   j  ; was: locret_1F05C
+WeaponSetup_StateWaitReturn:                            ; was: locret_1F05C
                                         ; WeaponSetup_HandleControlTypeInput+C   j
                 rts
 ; End of function WeaponSetup_InitializeTextAndTiles
 ; Clears all four loadout slots, then refills their runtime ammunition
-WeaponSetup_ClearLoadoutAndRefillAmmo:                  ; CODE XREF: WeaponSetup_InitializeScreen+7E   p  ; was: sub_1F05E
+WeaponSetup_ClearLoadoutAndRefillAmmo:                  ; was: sub_1F05E
                 clr.w   (WeaponSlotOffset).w
                 clr.w   (WeaponSlotConfig0).w
                 clr.w   (WeaponSlotConfig1).w
@@ -202,18 +200,18 @@ WeaponSetup_ClearLoadoutAndRefillAmmo:                  ; CODE XREF: WeaponSetup
                 clr.w   (WeaponSlotConfig3).w
 ; End of function WeaponSetup_ClearLoadoutAndRefillAmmo
 ; Refills the eight weapon-ammunition words used by the setup screen
-WeaponSetup_RefillAmmo:                                 ; CODE XREF: WeaponSetup_HandleLoadoutState+16   p  ; was: sub_1F072
+WeaponSetup_RefillAmmo:                                 ; was: sub_1F072
                                         ; WeaponSetup_HandleShootingModeInput+C   p
                 movea.w #(WeaponSlotAmmo0-M68K_RAM),a0
                 move.w  #$3E8,d0
                 moveq   #7,d7
-WeaponSetup_RefillAmmoLoop:                             ; CODE XREF: WeaponSetup_RefillAmmo+C   j  ; was: loc_1F07C
+WeaponSetup_RefillAmmoLoop:                             ; was: loc_1F07C
                 move.w  d0,(a0)+
                 dbf     d7,WeaponSetup_RefillAmmoLoop
                 rts
 ; End of function WeaponSetup_RefillAmmo
 ; Updates the interactive weapon-setup screen, player, HUD, objects, and rendering
-WeaponSetup_UpdateScreen:                               ; DATA XREF: Sys_DispatchGameState+CA   o  ; was: sub_1F084
+WeaponSetup_UpdateScreen:                               ; was: sub_1F084
                 jsr     (Object_ApplyCameraMotion).l
                 jsr     (Collision_UpdateSystem).l
                 jsr     (Sprite_InitializePriorityBuckets).l
@@ -235,12 +233,12 @@ WeaponSetup_UpdateScreen:                               ; DATA XREF: Sys_Dispatc
                 addq.w  #2,(GameSubstateIndex).w
                 rts
 ; ---------------------------------------------------------------------------
-WeaponSetup_UpdateScreen_CheckExit:                     ; CODE XREF: WeaponSetup_UpdateScreen+62   j  ; was: loc_1F0EE
+WeaponSetup_UpdateScreen_CheckExit:                     ; was: loc_1F0EE
                 bclr    #1,(PaletteFadeMaskStatus).w
                 bne.s   WeaponSetup_UpdateScreen_HandleExit
                 rts
 ; ---------------------------------------------------------------------------
-WeaponSetup_UpdateScreen_HandleExit:                    ; CODE XREF: WeaponSetup_UpdateScreen+70   j  ; was: loc_1F0F8
+WeaponSetup_UpdateScreen_HandleExit:                    ; was: loc_1F0F8
                 tst.w   (StageTableIndex).w
                 bne.s   WeaponSetup_ExitToStageReady
                 move.l  #StageTransitionMessageSequence_StageZero,(StageMessageCursor).w  ; text?
@@ -250,13 +248,13 @@ WeaponSetup_UpdateScreen_HandleExit:                    ; CODE XREF: WeaponSetup
                 jmp     Game_InitializeNewSession
 ; ---------------------------------------------------------------------------
 ; Leaves weapon setup through the nonzero-stage ready-screen route
-WeaponSetup_ExitToStageReady:                           ; CODE XREF: WeaponSetup_UpdateScreen+78   j  ; was: loc_1F11C
+WeaponSetup_ExitToStageReady:                           ; was: loc_1F11C
                 move.w  #$3C,(GameModeIndex).w          ; '<'
                 clr.w   (GameSubstateIndex).w
                 jmp     UI_ResetPaletteAndMessageMode_Clear
 ; End of function WeaponSetup_UpdateScreen
 ; Updates the setup background and dispatches the current setup-screen state
-WeaponSetup_UpdateAndDispatchState:                     ; CODE XREF: WeaponSetup_UpdateScreen+3C   p  ; was: sub_1F12C
+WeaponSetup_UpdateAndDispatchState:                     ; was: sub_1F12C
                 bsr.w   WeaponSetup_UpdateBackgroundEffect
                 move.w  (SetupTransitionIndex).w,d0
                 movea.w WeaponSetup_StateHandlerOffsets(pc,d0.w),a0
@@ -265,7 +263,6 @@ WeaponSetup_UpdateAndDispatchState:                     ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_UpdateAndDispatchState
 ; ---------------------------------------------------------------------------
 WeaponSetup_StateHandlerOffsets:    dc.w    WeaponSetup_HandleLoadoutState-WeaponSetup_HandleLoadoutState  ; was: off_1F140
-                                        ; DATA XREF: WeaponSetup_UpdateAndDispatchState+8   r
                 dc.w    WeaponSetup_HandleControlTypeInput-WeaponSetup_HandleLoadoutState
                 dc.w    WeaponSetup_HandleExitInput-WeaponSetup_HandleLoadoutState
                 dc.w    WeaponSetup_UpdateExitTilemapFill-WeaponSetup_HandleLoadoutState
@@ -274,7 +271,7 @@ WeaponSetup_StateHandlerOffsets:    dc.w    WeaponSetup_HandleLoadoutState-Weapo
                 dc.w    WeaponSetup_IdleState-WeaponSetup_HandleLoadoutState
 
 ; Handles the four-slot loadout-selection state
-WeaponSetup_HandleLoadoutState:                         ; DATA XREF: WeaponSetup_UpdateAndDispatchState+C   o  ; was: sub_1F14E
+WeaponSetup_HandleLoadoutState:                         ; was: sub_1F14E
                                         ; ROM:WeaponSetup_StateHandlerOffsets   o
                 bsr.w   WeaponSetup_RenderSlotSprites
                 bsr.w   WeaponSetup_UpdateHighlightPalette
@@ -288,7 +285,7 @@ WeaponSetup_HandleLoadoutState:                         ; DATA XREF: WeaponSetup
                 rts
 ; ---------------------------------------------------------------------------
 ; Renders the cursor at the selected force in the current loadout slot
-WeaponSetup_RenderSelectedForceCursor:                  ; CODE XREF: WeaponSetup_HandleLoadoutState+24   j  ; was: loc_1F176
+WeaponSetup_RenderSelectedForceCursor:                  ; was: loc_1F176
                 movea.w #(SharedSpriteScratch-M68K_RAM),a0
                 movea.w a0,a1
                 move.w  (WeaponSetupForceIndex).w,d0
@@ -301,6 +298,4 @@ WeaponSetup_RenderSelectedForceCursor:                  ; CODE XREF: WeaponSetup
 ; End of function WeaponSetup_HandleLoadoutState
 ; ---------------------------------------------------------------------------
 WeaponSetup_ForceCursorXPositions:  dc.w    $97, $127, $97, $127, $97, $127  ; was: word_1F19A
-                                        ; DATA XREF: WeaponSetup_HandleLoadoutState+3E   r
 WeaponSetup_ForceCursorYPositions:  dc.w    $B8, $B8, $C8, $C8, $D8, $D8  ; was: word_1F1A6
-                                        ; DATA XREF: WeaponSetup_HandleLoadoutState+32   r

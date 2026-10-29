@@ -1,4 +1,4 @@
-StoryScreen_Initialize:                                 ; DATA XREF: Sys_DispatchGameState+7A   o  ; was: sub_4840
+StoryScreen_Initialize:                                 ; was: sub_4840
                 move    sr,-(sp)
                 move    #$2700,sr
                 lea     (VDP_DATA).l,a0
@@ -6,7 +6,7 @@ StoryScreen_Initialize:                                 ; DATA XREF: Sys_Dispatc
                 move.l  #$40000001,(VDP_CTRL).l
                 move.w  #$7FF,d0
                 move.w  #0,d1
-StoryScreen_ClearPlaneA:                                ; CODE XREF: StoryScreen_Initialize+28   j  ; was: loc_4866
+StoryScreen_ClearPlaneA:                                ; was: loc_4866
                 move.w  d1,(a0)
                 dbf     d0,StoryScreen_ClearPlaneA
                 move    (sp)+,sr
@@ -18,7 +18,7 @@ StoryScreen_ClearPlaneA:                                ; CODE XREF: StoryScreen
                 move.w  #$7FF,d0
                 move.w  #0,d1
 ; Clears scroll plane B and initializes game state variables
-StoryScreen_ClearPlaneB:                                ; CODE XREF: StoryScreen_Initialize+56   j  ; was: loc_4894
+StoryScreen_ClearPlaneB:                                ; was: loc_4894
                 move.w  d1,(a0)
                 dbf     d0,StoryScreen_ClearPlaneB
                 move    (sp)+,sr
@@ -38,7 +38,6 @@ StoryScreen_ClearPlaneB:                                ; CODE XREF: StoryScreen
 ; End of function StoryScreen_Initialize
 ; ---------------------------------------------------------------------------
 StoryScreenAssetCommands:   dc.w    7                   ; field_0  ; was: stru_48DA
-                                        ; DATA XREF: StoryScreen_FadeOutAndLoadTitleAssets+36   o
                 dc.l    StoryScreenTileArt0000          ; field_2
                 dc.w    0                               ; field_6
                 dc.w    6                               ; field_0
@@ -53,7 +52,7 @@ StoryScreenAssetCommands:   dc.w    7                   ; field_0  ; was: stru_4
                 dc.w    $FFFF
 
 ; Runs one story-screen frame and dispatches the current sequence state
-StoryScreen_MainLoop:                                   ; DATA XREF: Sys_DispatchGameState+7E   o  ; was: sub_48FC
+StoryScreen_MainLoop:                                   ; was: sub_48FC
                 btst    #0,(PaletteFadeMaskStatus).w
                 beq.s   StoryScreen_RunFrame
                 tst.w   (ScenePaletteFadeOffset).l
@@ -62,7 +61,7 @@ StoryScreen_MainLoop:                                   ; DATA XREF: Sys_Dispatc
                 bmi.s   StoryScreen_RunFrame
                 btst    #7,(ControllerPressedState).w
                 bne.w   StoryScreen_StartExitFade
-StoryScreen_RunFrame:                                   ; CODE XREF: StoryScreen_MainLoop+6   j  ; was: loc_491C
+StoryScreen_RunFrame:                                   ; was: loc_491C
                                         ; StoryScreen_MainLoop+E   j
                 jsr     (Object_ApplyCameraMotion).l
                 jsr     (Sprite_InitializePriorityBuckets).l
@@ -81,7 +80,7 @@ StoryScreen_RunFrame:                                   ; CODE XREF: StoryScreen
                 rts
 ; End of function StoryScreen_MainLoop
 ; Advances the shared cutscene timer and dispatches the story-screen state
-StoryScreen_DispatchState:                              ; CODE XREF: StoryScreen_MainLoop+38   p  ; was: sub_495E
+StoryScreen_DispatchState:                              ; was: sub_495E
                 subq.w  #1,(CutsceneTimer).l
                 move.w  (GameSubstateIndex).w,d0
                 lea     StoryScreen_StateOffsets(pc,d0.w),a0
@@ -89,7 +88,7 @@ StoryScreen_DispatchState:                              ; CODE XREF: StoryScreen
                 jmp     (a0)
 ; End of function StoryScreen_DispatchState
 ; ---------------------------------------------------------------------------
-StoryScreen_StateOffsets:   dc.w    StoryScreen_StartLongTimer-*  ; DATA XREF: StoryScreen_DispatchState+A   o  ; was: off_4970
+StoryScreen_StateOffsets:   dc.w    StoryScreen_StartLongTimer-*  ; was: off_4970
                 dc.w    StoryScreen_WaitForCueTime-*
                 dc.w    StoryScreen_WaitToBeginFade-*
                 dc.w    StoryScreen_FadeOutAndLoadTitleAssets-*
@@ -104,13 +103,13 @@ StoryScreen_StateOffsets:   dc.w    StoryScreen_StartLongTimer-*  ; DATA XREF: S
                 dc.w    StoryScreen_ExitToTitleScreen-*
 
 ; Starts the story sequence's initial long timer
-StoryScreen_StartLongTimer:                             ; DATA XREF: ROM:StoryScreen_StateOffsets   o  ; was: sub_498A
+StoryScreen_StartLongTimer:                             ; was: sub_498A
                 move.w  #StoryInitialTimer,(CutsceneTimer).l
                 addq.w  #2,(GameSubstateIndex).w
                 rts
 ; End of function StoryScreen_StartLongTimer
 ; Plays the first timed story-screen sound cue
-StoryScreen_WaitForCueTime:                             ; DATA XREF: ROM:00004972   o  ; was: sub_4998
+StoryScreen_WaitForCueTime:                             ; was: sub_4998
                 cmpi.w  #StoryFirstCueTimer,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.b  #1,d0
@@ -119,7 +118,7 @@ StoryScreen_WaitForCueTime:                             ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_WaitForCueTime
 ; Resets the story fade accumulator at the second timed cue
-StoryScreen_WaitToBeginFade:                            ; DATA XREF: ROM:00004974   o  ; was: sub_49B4
+StoryScreen_WaitToBeginFade:                            ; was: sub_49B4
                 cmpi.w  #StoryFadeCueTimer,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.w  #0,(ScenePaletteFadeOffset).l
@@ -127,7 +126,7 @@ StoryScreen_WaitToBeginFade:                            ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_WaitToBeginFade
 ; Fades out palette to dark then loads new graphics data
-StoryScreen_FadeOutAndLoadTitleAssets:                  ; DATA XREF: ROM:00004976   o  ; was: sub_49CE
+StoryScreen_FadeOutAndLoadTitleAssets:                  ; was: sub_49CE
                 move.w  (VBlankFrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Cutscene_Return
@@ -145,7 +144,7 @@ StoryScreen_FadeOutAndLoadTitleAssets:                  ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_FadeOutAndLoadTitleAssets
 ; Fades to target palette and sets up scrolling data
-StoryScreen_FadeInAndStartScroll:                       ; DATA XREF: ROM:00004978   o  ; was: sub_4A16
+StoryScreen_FadeInAndStartScroll:                       ; was: sub_4A16
                 move.w  #$FFF2,d0
                 lea     (PaletteActiveColor01).w,a0
                 move.w  #$3E,d5                         ; '>'
@@ -163,7 +162,7 @@ StoryScreen_FadeInAndStartScroll:                       ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_FadeInAndStartScroll
 ; Waits for fade completion then loads tile data via DMA
-StoryScreen_WaitForScrollAndLoadPalette:                ; DATA XREF: ROM:0000497A   o  ; was: sub_4A5C
+StoryScreen_WaitForScrollAndLoadPalette:                ; was: sub_4A5C
                 move.w  #$FFF2,d0
                 lea     (PaletteActiveColor01).w,a0
                 move.w  #$3E,d5                         ; '>'
@@ -189,7 +188,7 @@ StoryScreen_WaitForScrollAndLoadPalette:                ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_WaitForScrollAndLoadPalette
 ; Fades in palette from dark to normal brightness
-StoryScreen_FadeInTitleScene:                           ; DATA XREF: ROM:0000497C   o  ; was: sub_4ACE
+StoryScreen_FadeInTitleScene:                           ; was: sub_4ACE
                 move.w  (VBlankFrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Cutscene_Return
@@ -205,7 +204,7 @@ StoryScreen_FadeInTitleScene:                           ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_FadeInTitleScene
 ; Plays the timed cue immediately before the logo reveal
-StoryScreen_WaitBeforeLogoTransition:                   ; DATA XREF: ROM:0000497E   o  ; was: sub_4B08
+StoryScreen_WaitBeforeLogoTransition:                   ; was: sub_4B08
                 cmpi.w  #$80,(CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.b  #1,d0
@@ -214,7 +213,7 @@ StoryScreen_WaitBeforeLogoTransition:                   ; DATA XREF: ROM:0000497
                 rts
 ; End of function StoryScreen_WaitBeforeLogoTransition
 ; Clears the planes, stages the first logo glyph, and starts its reveal effect
-StoryTitle_SetupLogoReveal:                             ; DATA XREF: ROM:00004980   o  ; was: sub_4B24
+StoryTitle_SetupLogoReveal:                             ; was: sub_4B24
                 tst.w   (CutsceneTimer).l
                 bne.w   Cutscene_Return
                 move.b  #4,d0
@@ -347,7 +346,7 @@ StoryTitle_RepeatedPaletteColorRamp:    dc.w    $EEE, $CCE, $AAE, $88C, $66C, $4
 StoryTitle_FirstPaletteColorRamp:       dc.w    $666, $666, $666, $444, $444, $224, $222, 2, 2  ; was: word_4D30
 
 ; Expands each logo character, then stages the completed spaced logo
-StoryTitle_RevealLogoCharacters:                        ; DATA XREF: ROM:00004982   o  ; was: sub_4D42
+StoryTitle_RevealLogoCharacters:                        ; was: sub_4D42
                 cmpi.w  #1,(StoryTitleExpandSpan).l
                 beq.w   StoryTitle_AdvanceRevealCharacter
                 addq.w  #2,(CutscenePaletteStep).l
@@ -561,7 +560,7 @@ StoryTitle_FinishCompletedLogoDMA:                      ; was: loc_4FA6
 StoryTitle_CompletedLogoCharacters: dc.b    $B, $16, $13, $F, $18, 0, $1D, $19, $16, $E, $13, $F, $1C, $FF  ; was: byte_4FC8
 
 ; Expands the complete spaced logo and reuses the centered scroll/DMA tail
-StoryTitle_ExpandCompletedLogo:                         ; DATA XREF: ROM:00004984   o  ; was: sub_4FD6
+StoryTitle_ExpandCompletedLogo:                         ; was: sub_4FD6
                 cmpi.w  #1,(StoryTitleExpandSpan).l
                 beq.w   StoryTitle_FinishCompletedLogoExpansion
                 addq.w  #2,(CutscenePaletteStep).l
@@ -661,7 +660,7 @@ StoryTitle_FinishCompletedLogoExpansion:                ; was: loc_50E0
                 rts
 ; End of function StoryTitle_ExpandCompletedLogo
 ; Waits after the logo expansion, then starts the common exit fade
-StoryScreen_WaitThenStartExitFade:                      ; DATA XREF: ROM:00004986   o  ; was: sub_50F8
+StoryScreen_WaitThenStartExitFade:                      ; was: sub_50F8
                 subq.w  #1,(CutsceneTimer).l
                 bne.w   Cutscene_Return
 StoryScreen_StartExitFade:                              ; was: loc_5102
@@ -677,7 +676,7 @@ StoryScreen_StartExitFade:                              ; was: loc_5102
                 rts
 ; End of function StoryScreen_WaitThenStartExitFade
 ; Switches to the title initializer after the exit fade signals completion
-StoryScreen_ExitToTitleScreen:                          ; DATA XREF: ROM:00004988   o  ; was: sub_5130
+StoryScreen_ExitToTitleScreen:                          ; was: sub_5130
                 bclr    #1,(PaletteFadeMaskStatus).w
                 beq.w   Cutscene_Return
                 bclr    #6,(VDPReg1Shadow+1).w

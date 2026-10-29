@@ -7,16 +7,16 @@ Orphaned_PlayerUpdateWeaponCharge:
                 sub.w   (PlayerMaxHealth).w,d0
                 move.w  d0,(PhoenixAttackStatus).w
                 moveq   #1,d0
-Orphaned_PlayerUpdateWeaponChargeReturn:                ; CODE XREF: Orphaned_PlayerUpdateWeaponCharge+6   j  ; was: locret_164FA
+Orphaned_PlayerUpdateWeaponChargeReturn:                ; was: locret_164FA
                                         ; Orphaned_PlayerUpdateWeaponCharge+E   j
                 rts
 ; End of function Orphaned_PlayerUpdateWeaponCharge
 ; Initializes player dash state with animation and counter setup
-Player_InitDashState:                                   ; CODE XREF: Player_CeilingIdleState+44   j  ; was: sub_164FC
+Player_InitDashState:                                   ; was: sub_164FC
                                         ; Player_CeilingDecelerateState+32   j
                 move.w  #2,$48(a5)
 ; Initializes dash animation with timer and direction flip
-Player_InitDashAnimation:                               ; CODE XREF: Player_DashAttackState+88   j  ; was: loc_16502
+Player_InitDashAnimation:                               ; was: loc_16502
                                         ; Player_HandleSlideState+38   j
                 move.w  #$22,4(a5)                      ; '"'
                 bset    #4,$E(a5)
@@ -26,12 +26,12 @@ Player_InitDashAnimation:                               ; CODE XREF: Player_Dash
                 move.b  #$7F,(PlayerInputMask).w
                 bra.w   Player_AutoFlipDirection
 ; End of function Player_InitDashState
-Player_CeilingDashState_Return:                         ; CODE XREF: Player_CeilingDashState+20   j  ; was: nullsub_43
+Player_CeilingDashState_Return:                         ; was: nullsub_43
                 rts
 ; End of function Player_CeilingDashState_Return
 
 ; Handles dash movement while the player remains attached to upper terrain
-Player_CeilingDashState:                                ; DATA XREF: ROM:00015084   o  ; was: sub_1652C
+Player_CeilingDashState:                                ; was: sub_1652C
                 bset    #1,(PlayerActionStateFlags).w
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
                 nop
@@ -47,7 +47,7 @@ Player_CeilingDashState:                                ; DATA XREF: ROM:0001508
                 beq.w   Player_InitCeilingDetachFall
                 bra.w   Player_InitiateDashAttack
 ; ---------------------------------------------------------------------------
-Player_CeilingDashState_UpdateMovement:                 ; CODE XREF: Player_CeilingDashState+28   j  ; was: loc_16564
+Player_CeilingDashState_UpdateMovement:                 ; was: loc_16564
                 btst    #0,(CounterForceTriggerFlag).w
                 bne.w   Player_StartCeilingCounterForce
                 bsr.w   Player_DecelerateHorizontalVelocityFast
@@ -58,18 +58,18 @@ Player_CeilingDashState_UpdateMovement:                 ; CODE XREF: Player_Ceil
                 beq.s   Player_CeilingDashState_CheckDashInput
                 tst.w   (ShootingMode).w
                 bne.s   Player_CeilingDashState_Render
-Player_CeilingDashState_CheckDashInput:                 ; CODE XREF: Player_CeilingDashState+58   j  ; was: loc_1658C
+Player_CeilingDashState_CheckDashInput:                 ; was: loc_1658C
                 btst    #0,$69(a5)
                 beq.w   Player_InitCeilingIdleState
 ; Selects the armed or unarmed ceiling-dash rendering path
-Player_CeilingDashState_Render:                         ; CODE XREF: Player_CeilingDashState+4A   j  ; was: loc_16596
+Player_CeilingDashState_Render:                         ; was: loc_16596
                                         ; Player_CeilingDashState+5E   j
                 btst    #4,$69(a5)
                 beq.w   Player_RenderMotionPose
                 bra.w   Player_RenderCeilingMotionWithWeapon
 ; End of function Player_CeilingDashState
 ; Enters state $1E, which brakes the player to a stop while held to the ceiling
-Player_InitCeilingDecelerateState:                      ; CODE XREF: Player_CeilingLandingState+68   j  ; was: sub_165A4
+Player_InitCeilingDecelerateState:                      ; was: sub_165A4
                                         ; Player_InitCeilingMovementState+3A   j
                 move.b  #$7F,(PlayerInputMask).w
                 clr.w   (PlayerAirMoveUsedFlags).w
@@ -79,7 +79,7 @@ Player_InitCeilingDecelerateState:                      ; CODE XREF: Player_Ceil
                 bra.w   Player_AutoFlipDirection
 ; End of function Player_InitCeilingDecelerateState
 ; Brakes to a stop on the ceiling, then resumes movement or goes idle
-Player_CeilingDecelerateState:                          ; DATA XREF: ROM:00015080   o  ; was: sub_165C2
+Player_CeilingDecelerateState:                          ; was: sub_165C2
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
                 nop
                 jsr     Physics_UpperTerrainCheckWrapper(pc)  ; (pc)
@@ -104,7 +104,7 @@ Player_CeilingDecelerateState:                          ; DATA XREF: ROM:0001508
                 bra.w   Player_InitCeilingIdleState
 ; ---------------------------------------------------------------------------
 ; Selects the rendering path while still sliding along the ceiling
-Player_CeilingDecelerateState_Render:                   ; CODE XREF: Player_CeilingDecelerateState+3E   j  ; was: loc_1661A
+Player_CeilingDecelerateState_Render:                   ; was: loc_1661A
                 btst    #4,$69(a5)
                 bne.w   Player_RenderCeilingMotionFrame
                 movea.l #Player_CommonPrimarySpriteMapping,a1
@@ -113,12 +113,12 @@ Player_CeilingDecelerateState_Render:                   ; CODE XREF: Player_Ceil
                 moveq   #6,d6
                 bra.w   Player_BuildSpritePieces
 ; ---------------------------------------------------------------------------
-Player_CeilingState_Return:                             ; CODE XREF: Player_CeilingDecelerateState+1A   j  ; was: locret_16638
+Player_CeilingState_Return:                             ; was: locret_16638
                                         ; Player_CeilingDecelerateState+20   j
                 rts
 ; End of function Player_CeilingDecelerateState
 ; Initializes the landing state for contact with upper terrain
-Player_InitCeilingLandingState:                         ; CODE XREF: Player_HandleFallingState+66   j  ; was: sub_1663A
+Player_InitCeilingLandingState:                         ; was: sub_1663A
                                         ; Player_UpwardTerrainLaunchState+3A   j
                 move.b  #$7F,(PlayerInputMask).w
                 clr.w   (PlayerAirMoveUsedFlags).w
@@ -132,7 +132,7 @@ Player_InitCeilingLandingState:                         ; CODE XREF: Player_Hand
                 bra.w   Player_AutoFlipDirection
 ; End of function Player_InitCeilingLandingState
 ; Handles the landing timer while attached to upper terrain
-Player_CeilingLandingState:                             ; DATA XREF: ROM:00015088   o  ; was: sub_16670
+Player_CeilingLandingState:                             ; was: sub_16670
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
                 nop
                 jsr     Physics_UpperTerrainCheckWrapper(pc)  ; (pc)
@@ -156,21 +156,21 @@ Player_CeilingLandingState:                             ; DATA XREF: ROM:0001508
                 move.w  #$FFFF,$48(a5)
                 bra.s   Player_CeilingLandingState_Render
 ; ---------------------------------------------------------------------------
-Player_CeilingLandingState_CheckMovementInput:          ; CODE XREF: Player_CeilingLandingState+46   j  ; was: loc_166C4
+Player_CeilingLandingState_CheckMovementInput:          ; was: loc_166C4
                 btst    #2,$69(a5)
                 bne.w   Player_InitCeilingMovementFromDirection
                 btst    #3,$69(a5)
                 bne.w   Player_InitCeilingMovementFromDirection
                 bra.w   Player_InitCeilingDecelerateState
 ; ---------------------------------------------------------------------------
-Player_CeilingLandingState_Render:                      ; CODE XREF: Player_CeilingLandingState+3E   j  ; was: loc_166DC
+Player_CeilingLandingState_Render:                      ; was: loc_166DC
                                         ; Player_CeilingLandingState+52   j
                 btst    #4,$69(a5)
                 beq.w   Player_RenderMotionPose
                 bra.w   Player_RenderCeilingMotionWithWeapon
 ; End of function Player_CeilingLandingState
 ; Opens ceiling weapon selection with A, or toggles shooting mode with up+A
-Player_CheckCeilingWeaponSelectInput:                   ; CODE XREF: Player_CeilingIdleState+1A   p  ; was: sub_166EA
+Player_CheckCeilingWeaponSelectInput:                   ; was: sub_166EA
                                         ; Player_CeilingDashState+1C   p
                 btst    #6,$6A(a5)
                 beq.s   Player_CheckCeilingWeaponSelectInput_NotActivated
@@ -178,11 +178,11 @@ Player_CheckCeilingWeaponSelectInput:                   ; CODE XREF: Player_Ceil
                 bne.w   Player_ToggleShootingMode
                 tst.w   (WeaponStateCooldown).w
                 bmi.s   Player_CheckCeilingWeaponSelectInput_Start
-Player_CheckCeilingWeaponSelectInput_NotActivated:      ; CODE XREF: Player_CheckCeilingWeaponSelectInput+6   j  ; was: loc_16702
+Player_CheckCeilingWeaponSelectInput_NotActivated:      ; was: loc_16702
                 moveq   #0,d0
                 rts
 ; ---------------------------------------------------------------------------
-Player_CheckCeilingWeaponSelectInput_Start:             ; CODE XREF: Player_CheckCeilingWeaponSelectInput+16   j  ; was: loc_16706
+Player_CheckCeilingWeaponSelectInput_Start:             ; was: loc_16706
                 move.w  (WeaponSlotOffset).w,(WeaponSavedSlotOffset).w
                 move.w  #$12,(WeaponStateIndex).w
                 move.b  #$7F,(PlayerInputMask).w
@@ -196,12 +196,12 @@ Player_CheckCeilingWeaponSelectInput_Start:             ; CODE XREF: Player_Chec
                 btst    #0,$69(a5)
                 beq.s   Player_CheckCeilingWeaponSelectInput_ReturnActivated
                 move.w  #$14,$5C(a5)
-Player_CheckCeilingWeaponSelectInput_ReturnActivated:   ; CODE XREF: Player_CheckCeilingWeaponSelectInput+54   j  ; was: loc_16746
+Player_CheckCeilingWeaponSelectInput_ReturnActivated:   ; was: loc_16746
                 moveq   #1,d0
                 rts
 ; End of function Player_CheckCeilingWeaponSelectInput
 ; Holds the ceiling player state while the weapon selector is active
-Player_CeilingWeaponSelectState:                        ; DATA XREF: ROM:00015082   o  ; was: sub_1674A
+Player_CeilingWeaponSelectState:                        ; was: sub_1674A
                 cmpi.w  #$12,(WeaponStateIndex).w
                 bmi.w   Player_InitCeilingIdleState
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
@@ -213,7 +213,7 @@ Player_CeilingWeaponSelectState:                        ; DATA XREF: ROM:0001508
                 bra.w   Player_RenderIdleFrame
 ; End of function Player_CeilingWeaponSelectState
 ; Toggles moving/fixed shooting mode and plays its sound
-Player_ToggleShootingMode:                              ; CODE XREF: Player_CheckCeilingWeaponSelectInput+E   j  ; was: sub_1676E
+Player_ToggleShootingMode:                              ; was: sub_1676E
                 eori.w  #2,(ShootingMode).w
                 move.b  #$A3,d0
                 jsr     (Sound_QueueSFXRequest).l
@@ -221,7 +221,7 @@ Player_ToggleShootingMode:                              ; CODE XREF: Player_Chec
                 rts
 ; End of function Player_ToggleShootingMode
 ; Enters state $1A, ceiling movement, from a held direction
-Player_InitCeilingMovementState:                        ; CODE XREF: Player_CeilingIdleState+4E   j  ; was: sub_16782
+Player_InitCeilingMovementState:                        ; was: sub_16782
                                         ; Player_CeilingIdleState+58   j
                 btst    #4,$69(a5)
                 beq.s   Player_InitCeilingMovementAnimation
@@ -229,26 +229,26 @@ Player_InitCeilingMovementState:                        ; CODE XREF: Player_Ceil
                 beq.s   Player_InitCeilingMovementCheckFacing
                 rts
 ; ---------------------------------------------------------------------------
-Player_InitCeilingMovementFromDirection:                ; CODE XREF: Player_CeilingDecelerateState+46   j  ; was: loc_16792
+Player_InitCeilingMovementFromDirection:                ; was: loc_16792
                                         ; Player_CeilingDecelerateState+50   j
                 btst    #4,$69(a5)
                 beq.s   Player_InitCeilingMovementAnimation
                 tst.w   (ShootingMode).w
                 bne.w   Player_InitCeilingIdleState
-Player_InitCeilingMovementCheckFacing:                  ; CODE XREF: Player_InitCeilingMovementState+C   j  ; was: loc_167A2
+Player_InitCeilingMovementCheckFacing:                  ; was: loc_167A2
                 btst    #3,$69(a5)
                 beq.s   Player_InitCeilingMovementCheckLeft
                 btst    #3,$E(a5)
                 bne.w   Player_InitCeilingAirControlState
                 bra.s   Player_InitCeilingMovementAnimation
 ; ---------------------------------------------------------------------------
-Player_InitCeilingMovementCheckLeft:                    ; CODE XREF: Player_InitCeilingMovementState+26   j  ; was: loc_167B6
+Player_InitCeilingMovementCheckLeft:                    ; was: loc_167B6
                 btst    #2,$69(a5)
                 beq.w   Player_InitCeilingDecelerateState
                 btst    #3,$E(a5)
                 beq.w   Player_InitCeilingAirControlState
 ; Installs the ceiling-movement animation and enters state $1A
-Player_InitCeilingMovementAnimation:                    ; CODE XREF: Player_InitCeilingMovementState+6   j  ; was: loc_167CA
+Player_InitCeilingMovementAnimation:                    ; was: loc_167CA
                                         ; Player_InitCeilingMovementState+16   j
                 move.b  #$7F,(PlayerInputMask).w
                 move.w  #$1A,4(a5)
@@ -257,13 +257,13 @@ Player_InitCeilingMovementAnimation:                    ; CODE XREF: Player_Init
                 move.w  #$10,$5C(a5)
                 bra.w   Player_AutoFlipDirection
 ; End of function Player_InitCeilingMovementState
-Player_CeilingMovementState_Return:                     ; CODE XREF: Player_CeilingMovementState+1A   j  ; was: nullsub_44
+Player_CeilingMovementState_Return:                     ; was: nullsub_44
                                         ; Player_CeilingMovementState+20   j
                 rts
 ; End of function Player_CeilingMovementState_Return
 
 ; Handles directional movement while the player is attached to upper terrain
-Player_CeilingMovementState:                            ; DATA XREF: ROM:0001507C   o  ; was: sub_167EE
+Player_CeilingMovementState:                            ; was: sub_167EE
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
                 nop
                 jsr     Physics_UpperTerrainCheckWrapper(pc)  ; (pc)
@@ -282,12 +282,12 @@ Player_CeilingMovementState:                            ; DATA XREF: ROM:0001507
                 beq.s   Player_CeilingMovementState_CheckHorizontalInput
                 tst.w   (ShootingMode).w
                 bne.w   Player_InitCeilingDecelerateState
-Player_CeilingMovementState_CheckHorizontalInput:       ; CODE XREF: Player_CeilingMovementState+3C   j  ; was: loc_16834
+Player_CeilingMovementState_CheckHorizontalInput:       ; was: loc_16834
                 btst    #2,$69(a5)
                 bne.s   Player_CeilingMovementState_Accelerate
                 btst    #3,$69(a5)
                 beq.w   Player_InitCeilingDecelerateState
-Player_CeilingMovementState_Accelerate:                 ; CODE XREF: Player_CeilingMovementState+4C   j  ; was: loc_16846
+Player_CeilingMovementState_Accelerate:                 ; was: loc_16846
                 bsr.w   Physics_AccelerateHorizontalByFacing
                 btst    #4,$69(a5)
                 beq.w   Player_RenderDirectionalMovement
@@ -297,23 +297,23 @@ Player_CeilingMovementState_Accelerate:                 ; CODE XREF: Player_Ceil
                 beq.w   Player_InitCeilingAirControlState
                 bra.w   Player_RenderCeilingDashPose
 ; ---------------------------------------------------------------------------
-Player_CeilingMovementState_CheckRightFacing:           ; CODE XREF: Player_CeilingMovementState+6C   j  ; was: loc_1686A
+Player_CeilingMovementState_CheckRightFacing:           ; was: loc_1686A
                 btst    #3,$E(a5)
                 bne.w   Player_InitCeilingAirControlState
                 bra.w   Player_RenderCeilingDashPose
 ; ---------------------------------------------------------------------------
-Player_InitCeilingAirControlState:                      ; CODE XREF: Player_InitCeilingMovementState+2E   j  ; was: loc_16878
+Player_InitCeilingAirControlState:                      ; was: loc_16878
                                         ; Player_InitCeilingMovementState+44   j
                 move.w  #$1C,4(a5)
                 clr.w   $48(a5)
                 move.w  #$FFFF,$C(a5)
                 move.w  #$10,$5C(a5)
-Player_CeilingAirControlState_Return:                   ; CODE XREF: Player_CeilingAirControlState+1A   j  ; was: locret_1688E
+Player_CeilingAirControlState_Return:                   ; was: locret_1688E
                                         ; Player_CeilingAirControlState+20   j
                 rts
 ; End of function Player_CeilingMovementState
 ; Handles armed movement while the player remains attached to upper terrain
-Player_CeilingAirControlState:                          ; DATA XREF: ROM:0001507E   o  ; was: sub_16890
+Player_CeilingAirControlState:                          ; was: sub_16890
                 jsr     Physics_WallCheckWrapper(pc)    ; (pc)
                 nop
                 jsr     Physics_UpperTerrainCheckWrapper(pc)  ; (pc)
@@ -337,7 +337,7 @@ Player_CeilingAirControlState:                          ; DATA XREF: ROM:0001507
                 beq.w   Player_InitCeilingMovementAnimation
                 bra.w   Physics_AccelerateHorizontalNegative
 ; ---------------------------------------------------------------------------
-Player_CeilingAirControlState_CheckRightFacing:         ; CODE XREF: Player_CeilingAirControlState+4A   j  ; was: loc_168EA
+Player_CeilingAirControlState_CheckRightFacing:         ; was: loc_168EA
                 btst    #3,$69(a5)
                 beq.w   Player_InitCeilingDecelerateState
                 btst    #3,$E(a5)
@@ -345,34 +345,34 @@ Player_CeilingAirControlState_CheckRightFacing:         ; CODE XREF: Player_Ceil
                 bra.w   Physics_AccelerateHorizontalPositive
 ; End of function Player_CeilingAirControlState
 ; Updates aim direction from D-pad
-Player_UpdateAimDirection:                              ; DATA XREF: ROM:000150AA   o  ; was: sub_16902
+Player_UpdateAimDirection:                              ; was: sub_16902
                 bset    #4,$E(a5)
                 btst    #2,(ControllerHeldState).w
                 beq.s   Player_UpdateAimDirection_CheckRight
                 bclr    #3,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Player_UpdateAimDirection_CheckRight:                   ; CODE XREF: Player_UpdateAimDirection+C   j  ; was: loc_16918
+Player_UpdateAimDirection_CheckRight:                   ; was: loc_16918
                 btst    #3,(ControllerHeldState).w
                 beq.s   Player_UpdateAimDirection_Return
                 bset    #3,$E(a5)
-Player_UpdateAimDirection_Return:                       ; CODE XREF: Player_UpdateAimDirection+1C   j  ; was: locret_16926
+Player_UpdateAimDirection_Return:                       ; was: locret_16926
                 rts
 ; End of function Player_UpdateAimDirection
 ; Attributes: thunk
 ; State-table thunk returning the player to upper-terrain idle
-Player_ReturnToCeilingIdleState:                        ; DATA XREF: ROM:000150AC   o  ; was: sub_16928
+Player_ReturnToCeilingIdleState:                        ; was: sub_16928
                 bra.w   Player_InitCeilingIdleState
 ; End of function Player_ReturnToCeilingIdleState
 ; Handles jump apex for fall transition
-Player_JumpApexState:                                   ; DATA XREF: ROM:000150AE   o  ; was: sub_1692C
+Player_JumpApexState:                                   ; was: sub_1692C
                 addi.l  #$8800,$1C(a5)
                 bpl.w   Player_InitFallState
                 bclr    #4,$E(a5)
                 bra.w   Player_RenderMotionPose_UseAnimatedOffsets
 ; End of function Player_JumpApexState
 ; Player dash effect during teleport
-Player_TeleportDash:                                    ; DATA XREF: ROM:000150B2   o  ; was: sub_16942
+Player_TeleportDash:                                    ; was: sub_16942
                 clr.w   (PlayerDefeatPhase).w
                 move.b  #$70,(PlayerInputMask).w        ; 'p'
                 bset    #0,(PlayerRestrictionFlags).w
@@ -402,7 +402,7 @@ Player_TeleportDash:                                    ; DATA XREF: ROM:000150B
                 jsr     (Sound_QueueSFXRequest).l
                 move.l  #Player_PhoenixAndTeleportDashSpriteMapping,8(a5)
 ; Applies velocity during player teleport dash
-Player_TeleportDash_ApplyVelocity:                      ; DATA XREF: ROM:000150B4   o  ; was: loc_169E0
+Player_TeleportDash_ApplyVelocity:                      ; was: loc_169E0
                 tst.w   $48(a5)
                 bne.w   Player_TeleportDash_Finish
                 subi.l  #$620,$1C(a5)
@@ -412,7 +412,7 @@ Player_TeleportDash_ApplyVelocity:                      ; DATA XREF: ROM:000150B
                 bset    #4,(PlayerActionStateFlags).w
                 bra.w   Effect_CreateDashTrail
 ; ---------------------------------------------------------------------------
-Player_TeleportDash_Finish:                             ; CODE XREF: Player_TeleportDash+A2   j  ; was: loc_16A0E
+Player_TeleportDash_Finish:                             ; was: loc_16A0E
                 bclr    #6,$21(a5)
                 bclr    #4,$23(a5)
                 jsr     (Sys_ClearObjectBlocks17).l
@@ -423,17 +423,17 @@ Player_TeleportDash_Finish:                             ; CODE XREF: Player_Tele
                 bra.w   Player_InitFallState_Finish
 ; End of function Player_TeleportDash
 ; Advances the common player animation state by four
-Player_UpdateAnimStatePlus4:                            ; DATA XREF: ROM:000150BA   o  ; was: sub_16A3E
+Player_UpdateAnimStatePlus4:                            ; was: sub_16A3E
                 moveq   #4,d1
                 bra.w   Player_UpdateAnimationState
 ; End of function Player_UpdateAnimStatePlus4
 ; Updates animation state with -4 offset
-Player_UpdateAnimStateMinus4:                           ; DATA XREF: ROM:000150BC   o  ; was: sub_16A44
+Player_UpdateAnimStateMinus4:                           ; was: sub_16A44
                 moveq   #$FFFFFFFC,d1
                 bra.w   Player_UpdateAnimationState
 ; End of function Player_UpdateAnimStateMinus4
 ; Initializes the return half of the teleport-dash sequence
-Player_InitTeleportDashReturnState:                     ; DATA XREF: ROM:000150BE   o  ; was: sub_16A4A
+Player_InitTeleportDashReturnState:                     ; was: sub_16A4A
                 addq.w  #2,4(a5)
                 move.b  #$70,(PlayerInputMask).w        ; 'p'
                 bset    #0,(PlayerRestrictionFlags).w
@@ -445,17 +445,17 @@ Player_InitTeleportDashReturnState:                     ; DATA XREF: ROM:000150B
                 bclr    #4,$E(a5)
                 move.l  #Player_PhoenixAndTeleportDashSpriteMapping,8(a5)
 ; Alternates sprite frames during the teleport-dash return state
-Player_TeleportDashReturnState:                         ; DATA XREF: ROM:000150C0   o  ; was: loc_16A86
+Player_TeleportDashReturnState:                         ; was: loc_16A86
                 bset    #4,$23(a5)
                 move.l  #Player_TeleportDashTrailSpriteMapping,8(a5)
                 btst    #0,(FrameCounter+1).w
                 bne.w   Player_TeleportDashReturnState_Return
                 move.l  #Player_PhoenixAndTeleportDashSpriteMapping,8(a5)
-Player_TeleportDashReturnState_Return:                  ; CODE XREF: Player_InitTeleportDashReturnState+50   j  ; was: locret_16AA6
+Player_TeleportDashReturnState_Return:                  ; was: locret_16AA6
                 rts
 ; End of function Player_InitTeleportDashReturnState
 ; Starts the timed defeat exit after health or stage time reaches zero
-Player_InitDefeatExitState:                             ; CODE XREF: Player_Update+34   j  ; was: sub_16AA8
+Player_InitDefeatExitState:                             ; was: sub_16AA8
                                         ; Player_Update+3C   j
                 move.w  #2,(PlayerDefeatPhase).w
                 move.w  #$100,2(a5)
@@ -466,7 +466,7 @@ Player_InitDefeatExitState:                             ; CODE XREF: Player_Upda
                 jmp     (Sound_QueueSFXRequest).l
 ; End of function Player_InitDefeatExitState
 ; Counts down the defeat exit and requests its gameplay fade when expired
-Player_UpdateDefeatExitState:                           ; CODE XREF: Player_Update+2C   j  ; was: sub_16ACE
+Player_UpdateDefeatExitState:                           ; was: sub_16ACE
                 bclr    #7,2(a5)
                 tst.w   $48(a5)
                 bmi.s   Player_UpdateDefeatExitState_Return
@@ -477,9 +477,9 @@ Player_UpdateDefeatExitState:                           ; CODE XREF: Player_Upda
                 clr.w   (PaletteFadeColorOffset).w
                 move.w  #$E000,(PaletteFadeMaskStatus).w
                 move.b  #$80,(GameplayControlFlags).w
-Player_UpdateDefeatExitState_SpawnSpark:                ; CODE XREF: Player_UpdateDefeatExitState+10   j  ; was: loc_16AFC
+Player_UpdateDefeatExitState_SpawnSpark:                ; was: loc_16AFC
                 jmp     Effect_SpawnPlayerDeathSpark
 ; ---------------------------------------------------------------------------
-Player_UpdateDefeatExitState_Return:                    ; CODE XREF: Player_UpdateDefeatExitState+A   j  ; was: locret_16B02
+Player_UpdateDefeatExitState_Return:                    ; was: locret_16B02
                 rts
 ; End of function Player_UpdateDefeatExitState

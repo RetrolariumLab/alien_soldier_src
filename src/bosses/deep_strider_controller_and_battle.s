@@ -1,5 +1,5 @@
 ; Deep Strider controller, attack states, and linked-part rendering
-Boss_DeepStriderMain:                                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_3E582
+Boss_DeepStriderMain:                                   ; was: sub_3E582
                 tst.w   4(a5)
                 beq.w   Boss_DeepStriderStateDispatch
                 tst.w   8(a5)
@@ -10,14 +10,14 @@ Boss_DeepStriderMain:                                   ; DATA XREF: ROM:Entity_
                 bne.s   Boss_DeepStriderUpdateStageRelativeX
                 tst.w   (BossHealth).w
                 beq.w   Boss_DeepStriderBeginDefeat
-Boss_DeepStriderUpdateStageRelativeX:                   ; CODE XREF: Boss_DeepStriderMain+14   j  ; was: loc_3E5A8
+Boss_DeepStriderUpdateStageRelativeX:                   ; was: loc_3E5A8
                                         ; Boss_DeepStriderMain+1C   j
                 jsr     (Gfx_ProcessDefaultColorFade).l
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 move.w  d0,$BC(a5)
 ; State machine dispatcher for Deep Strider boss
-Boss_DeepStriderStateDispatch:                          ; CODE XREF: Boss_DeepStriderMain+4   j  ; was: loc_3E5BA
+Boss_DeepStriderStateDispatch:                          ; was: loc_3E5BA
                                         ; Boss_DeepStriderMain+C   j
                 move.w  4(a5),d0
                 movea.w Boss_DeepStriderStateOffsets(pc,d0.w),a0
@@ -26,7 +26,6 @@ Boss_DeepStriderStateDispatch:                          ; CODE XREF: Boss_DeepSt
 ; End of function Boss_DeepStriderMain
 ; ---------------------------------------------------------------------------
 Boss_DeepStriderStateOffsets:   dc.w    Boss_DeepStriderInit-Boss_DeepStriderInit  ; was: off_3E5CA
-                                        ; DATA XREF: Boss_DeepStriderMain+3C   r
                 dc.w    Boss_DeepStriderIntroRise-Boss_DeepStriderInit
                 dc.w    Boss_DeepStriderIntroRisingState-Boss_DeepStriderInit
                 dc.w    Boss_DeepStriderIntroRiseDelayState-Boss_DeepStriderInit
@@ -49,19 +48,19 @@ Boss_DeepStriderStateOffsets:   dc.w    Boss_DeepStriderInit-Boss_DeepStriderIni
                 dc.w    Boss_DeepStriderHoverExitRiseState-Boss_DeepStriderInit
 
 ; Initializes Deep Strider boss state
-Boss_DeepStriderInit:                                   ; DATA XREF: Boss_DeepStriderMain+40   o  ; was: sub_3E5F4
+Boss_DeepStriderInit:                                   ; was: sub_3E5F4
                                         ; ROM:Boss_DeepStriderStateOffsets   o
                 addq.w  #2,4(a5)
                 clr.w   8(a5)
 ; End of function Boss_DeepStriderInit
 ; Clears sprites except boss
-Boss_DeepStriderClearStageObjects:                      ; CODE XREF: Boss_DeepStriderDefeatRiseState+38   p  ; was: sub_3E5FC
+Boss_DeepStriderClearStageObjects:                      ; was: sub_3E5FC
                 move.w  #$19C,d0
                 move.w  #$208,d1
                 jmp     Object_ClearEntityRecordsExceptTwoTypes
 ; End of function Boss_DeepStriderClearStageObjects
 ; Boss intro rise sequence
-Boss_DeepStriderIntroRise:                              ; DATA XREF: ROM:0003E5CC   o  ; was: sub_3E60A
+Boss_DeepStriderIntroRise:                              ; was: sub_3E60A
                 addq.w  #1,8(a5)
                 movea.w a5,a4
                 move.w  #$300,(MetaspriteBaseTileWord).w
@@ -90,7 +89,7 @@ Boss_DeepStriderIntroRise:                              ; DATA XREF: ROM:0003E5C
                 move.l  #$12000,$4FC(a5)
                 clr.w   $11C(a5)
 ; Deep Strider intro rising with projectiles
-Boss_DeepStriderIntroRisingState:                       ; DATA XREF: ROM:0003E5CE   o  ; was: loc_3E6A0
+Boss_DeepStriderIntroRisingState:                       ; was: loc_3E6A0
                 tst.w   $11C(a5)
                 bne.s   Boss_DeepStriderAdvanceIntroRise
                 cmpi.w  #$110,$4F4(a5)
@@ -99,7 +98,7 @@ Boss_DeepStriderIntroRisingState:                       ; DATA XREF: ROM:0003E5C
                 move.b  #$4D,d0                         ; 'M'
                 jsr     (Sound_QueueSFXRequest).l
                 bsr.w   Boss_DeepStriderSpawnQuadVolley
-Boss_DeepStriderAdvanceIntroRise:                       ; CODE XREF: Boss_DeepStriderIntroRise+9A   j  ; was: loc_3E6C0
+Boss_DeepStriderAdvanceIntroRise:                       ; was: loc_3E6C0
                                         ; Boss_DeepStriderIntroRise+A2   j
                 addq.w  #1,$1DC(a5)
                 addi.l  #$3C00,$4FC(a5)
@@ -109,7 +108,7 @@ Boss_DeepStriderAdvanceIntroRise:                       ; CODE XREF: Boss_DeepSt
                 clr.l   $4FC(a5)
                 move.w  #$34,$11C(a5)                   ; '4'
 ; Waits during intro rise before next state
-Boss_DeepStriderIntroRiseDelayState:                    ; DATA XREF: ROM:0003E5D0   o  ; was: loc_3E6E4
+Boss_DeepStriderIntroRiseDelayState:                    ; was: loc_3E6E4
                 subq.w  #1,$11C(a5)
                 bpl.w   Boss_DeepStriderUpdateParts
                 addq.w  #2,4(a5)
@@ -118,7 +117,7 @@ Boss_DeepStriderIntroRiseDelayState:                    ; DATA XREF: ROM:0003E5D
                 bsr.w   Boss_DeepStriderSetupDivePositionAndVelocity
 ; End of function Boss_DeepStriderIntroRise
 ; Boss intro dive sequence
-Boss_DeepStriderIntroDiveState:                         ; DATA XREF: ROM:0003E5D2   o  ; was: sub_3E700
+Boss_DeepStriderIntroDiveState:                         ; was: sub_3E700
                 bsr.w   Boss_DeepStriderDiveSequence
                 bmi.w   Boss_DeepStriderMotionStateReturn
                 addq.w  #2,4(a5)
@@ -126,7 +125,7 @@ Boss_DeepStriderIntroDiveState:                         ; DATA XREF: ROM:0003E5D
                 clr.l   $4FC(a5)
                 move.w  #$38,$11C(a5)                   ; '8'
 ; Sets up dive parameters and velocities
-Boss_DeepStriderIntroLaunchSetupState:                  ; DATA XREF: ROM:0003E5D4   o  ; was: loc_3E71A
+Boss_DeepStriderIntroLaunchSetupState:                  ; was: loc_3E71A
                 subq.w  #1,$11C(a5)
                 bpl.w   Boss_DeepStriderUpdateParts
                 addq.w  #2,4(a5)
@@ -146,7 +145,7 @@ Boss_DeepStriderIntroLaunchSetupState:                  ; DATA XREF: ROM:0003E5D
                 bsr.w   Boss_DeepStriderSpawnQuadVolley
 ; End of function Boss_DeepStriderIntroDiveState
 ; Lands the introductory launch arc before aligning the battle-entry pose
-Boss_DeepStriderIntroArcLandingState:                   ; DATA XREF: ROM:0003E5D6   o  ; was: sub_3E776
+Boss_DeepStriderIntroArcLandingState:                   ; was: sub_3E776
                 subq.w  #1,$1DE(a5)
                 subq.w  #1,$1DC(a5)
                 subq.w  #1,$56(a5)
@@ -161,7 +160,7 @@ Boss_DeepStriderIntroArcLandingState:                   ; DATA XREF: ROM:0003E5D
                 clr.l   $4F8(a5)
                 clr.l   $4FC(a5)
 ; Aligns the linked-part pose before the battle-entry sequence
-Boss_DeepStriderIntroPoseAlignmentState:                ; DATA XREF: ROM:0003E5D8   o  ; was: loc_3E7B6
+Boss_DeepStriderIntroPoseAlignmentState:                ; was: loc_3E7B6
                 subq.w  #6,$56(a5)
                 subq.w  #2,$1DC(a5)
                 andi.w  #$1FE,$1DC(a5)
@@ -176,21 +175,20 @@ Boss_DeepStriderIntroPoseAlignmentState:                ; DATA XREF: ROM:0003E5D
                 bra.s   Boss_DeepStriderBattleEntryPoseState
 ; End of function Boss_DeepStriderIntroArcLandingState
 ; Holds the battle-entry pose before starting the repeating attack cycle
-Boss_DeepStriderBattleEntryDelayState:                  ; DATA XREF: ROM:0003E5DC   o  ; was: sub_3E7E8
+Boss_DeepStriderBattleEntryDelayState:                  ; was: sub_3E7E8
                 subq.w  #1,$17E(a5)
                 bpl.s   Boss_DeepStriderUpdateBattleEntryPose
                 bra.w   Boss_DeepStriderBeginBattleCycle
 ; End of function Boss_DeepStriderBattleEntryDelayState
 ; Oscillates the linked-part pose while waiting for the battle-entry sequence
-Boss_DeepStriderBattleEntryPoseState:                   ; CODE XREF: Boss_DeepStriderIntroPoseAlignmentState+70   j  ; was: sub_3E7F2
-                                        ; DATA XREF: ROM:0003E5DA   o
+Boss_DeepStriderBattleEntryPoseState:                   ; was: sub_3E7F2
                 tst.w   (MessageSequenceState).w
                 bne.s   Boss_DeepStriderUpdateBattleEntryPose
                 addq.w  #2,4(a5)
                 move.w  #$40,$17E(a5)                   ; '@'
                 clr.b   (BossColorEffectFlags).w
                 subi.w  #$A0,(CameraXLowerBound).w
-Boss_DeepStriderUpdateBattleEntryPose:                  ; CODE XREF: Boss_DeepStriderBattleEntryDelayState+4   j  ; was: loc_3E80C
+Boss_DeepStriderUpdateBattleEntryPose:                  ; was: loc_3E80C
                                         ; Boss_DeepStriderBattleEntryPoseState+4   j
                 andi.w  #$1FC,$1DE(a5)
                 tst.w   $11E(a5)
@@ -200,7 +198,7 @@ Boss_DeepStriderUpdateBattleEntryPose:                  ; CODE XREF: Boss_DeepSt
                 cmpi.w  #$1E0,$1DE(a5)
                 beq.s   Boss_DeepStriderRotatePositiveBattleEntryPose
                 addq.w  #4,$1DE(a5)
-Boss_DeepStriderRotatePositiveBattleEntryPose:          ; CODE XREF: Boss_DeepStriderBattleEntryPoseState+32   j  ; was: loc_3E82A
+Boss_DeepStriderRotatePositiveBattleEntryPose:          ; was: loc_3E82A
                 addq.w  #3,$56(a5)
                 addq.w  #2,$1DC(a5)
                 cmpi.w  #$1FA,$1DC(a5)
@@ -209,11 +207,11 @@ Boss_DeepStriderRotatePositiveBattleEntryPose:          ; CODE XREF: Boss_DeepSt
                 bmi.s   Boss_DeepStriderRandomizeNextBattleEntryPose
                 bra.w   Boss_DeepStriderUpdateParts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderAdjustNegativeBattleEntryPose:          ; CODE XREF: Boss_DeepStriderBattleEntryPoseState+2A   j  ; was: loc_3E844
+Boss_DeepStriderAdjustNegativeBattleEntryPose:          ; was: loc_3E844
                 cmpi.w  #$1C0,$1DE(a5)
                 beq.s   Boss_DeepStriderRotateNegativeBattleEntryPose
                 subq.w  #4,$1DE(a5)
-Boss_DeepStriderRotateNegativeBattleEntryPose:          ; CODE XREF: Boss_DeepStriderBattleEntryPoseState+58   j  ; was: loc_3E850
+Boss_DeepStriderRotateNegativeBattleEntryPose:          ; was: loc_3E850
                 subq.w  #3,$56(a5)
                 subq.w  #2,$1DC(a5)
                 cmpi.w  #$1D8,$1DC(a5)
@@ -222,11 +220,11 @@ Boss_DeepStriderRotateNegativeBattleEntryPose:          ; CODE XREF: Boss_DeepSt
                 bmi.s   Boss_DeepStriderRandomizeNextBattleEntryPose
                 bra.w   Boss_DeepStriderUpdateParts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderCountDownBattleEntryPause:              ; CODE XREF: Boss_DeepStriderBattleEntryPoseState+24   j  ; was: loc_3E86A
+Boss_DeepStriderCountDownBattleEntryPause:              ; was: loc_3E86A
                 subq.w  #1,$11E(a5)
                 bra.w   Boss_DeepStriderUpdateParts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderRandomizeNextBattleEntryPose:           ; CODE XREF: Boss_DeepStriderBattleEntryPoseState+46   j  ; was: loc_3E872
+Boss_DeepStriderRandomizeNextBattleEntryPose:           ; was: loc_3E872
                                         ; Boss_DeepStriderBattleEntryPoseState+4C   j
                 move.b  (RandomNumberState).w,d0
                 andi.w  #$F,d0
@@ -239,24 +237,24 @@ Boss_DeepStriderRandomizeNextBattleEntryPose:           ; CODE XREF: Boss_DeepSt
                 bra.w   Boss_DeepStriderUpdateParts
 ; End of function Boss_DeepStriderBattleEntryPoseState
 ; Main battle logic with attack patterns and phase transitions
-Boss_DeepStriderBeginBattleCycle:                       ; CODE XREF: Boss_DeepStriderBattleEntryDelayState+6   j  ; was: sub_3E896
+Boss_DeepStriderBeginBattleCycle:                       ; was: sub_3E896
                 addq.w  #2,4(a5)
                 move.w  #2,$11C(a5)
                 move.w  #$80,$536(a5)
 ; Deep Strider battle descend with rotation
-Boss_DeepStriderBattleDescendState:                     ; DATA XREF: ROM:0003E5DE   o  ; was: loc_3E8A6
+Boss_DeepStriderBattleDescendState:                     ; was: loc_3E8A6
                 andi.w  #$1FC,$1DE(a5)
                 cmpi.w  #$1C0,$1DE(a5)
                 beq.s   Boss_DeepStriderContinueBattleDescent
                 subq.w  #4,$1DE(a5)
-Boss_DeepStriderContinueBattleDescent:                  ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1C   j  ; was: loc_3E8B8
+Boss_DeepStriderContinueBattleDescent:                  ; was: loc_3E8B8
                 subq.w  #3,$56(a5)
                 subq.w  #2,$1DC(a5)
                 cmpi.w  #$1CC,$1DC(a5)
                 bpl.w   Boss_DeepStriderUpdateParts
                 addq.w  #2,4(a5)
 ; Deep Strider battle wait timer
-Boss_DeepStriderBattleDescentDelayState:                ; DATA XREF: ROM:0003E5E0   o  ; was: loc_3E8CE
+Boss_DeepStriderBattleDescentDelayState:                ; was: loc_3E8CE
                 subq.w  #1,$11C(a5)
                 bpl.w   Boss_DeepStriderUpdateParts
                 addq.w  #2,4(a5)
@@ -269,7 +267,7 @@ Boss_DeepStriderBattleDescentDelayState:                ; DATA XREF: ROM:0003E5E
                 move.l  #$FFFB0000,$4FC(a5)
                 bclr    #0,$2A2(a5)
 ; Deep Strider battle ascend with projectiles
-Boss_DeepStriderBattleAscendState:                      ; DATA XREF: ROM:0003E5E2   o  ; was: loc_3E90A
+Boss_DeepStriderBattleAscendState:                      ; was: loc_3E90A
                 tst.w   $11E(a5)
                 bne.s   Boss_DeepStriderAdvanceBattleAscent
                 cmpi.w  #$150,$4F4(a5)
@@ -278,7 +276,7 @@ Boss_DeepStriderBattleAscendState:                      ; DATA XREF: ROM:0003E5E
                 move.b  #$4D,d0                         ; 'M'
                 jsr     (Sound_QueueSFXRequest).l
                 bsr.w   Boss_DeepStriderSpawnQuadVolley
-Boss_DeepStriderAdvanceBattleAscent:                    ; CODE XREF: Boss_DeepStriderBeginBattleCycle+78   j  ; was: loc_3E92A
+Boss_DeepStriderAdvanceBattleAscent:                    ; was: loc_3E92A
                                         ; Boss_DeepStriderBeginBattleCycle+80   j
                 addq.w  #6,$56(a5)
                 addq.w  #1,$1DC(a5)
@@ -287,7 +285,7 @@ Boss_DeepStriderAdvanceBattleAscent:                    ; CODE XREF: Boss_DeepSt
                 cmpi.w  #$1E0,$4F4(a5)
                 bmi.w   Boss_DeepStriderUpdateParts
                 move.w  #$B,$17C(a5)
-Boss_DeepStriderBeginBattleDecisionState:               ; CODE XREF: Boss_DeepStriderBeginBattleCycle+28A   j  ; was: loc_3E952
+Boss_DeepStriderBeginBattleDecisionState:               ; was: loc_3E952
                                         ; Boss_DeepStriderDiveAttackState+10   j
                 move.w  #$1A,4(a5)
                 bclr    #0,(ForcedPositionFlags).w
@@ -302,14 +300,13 @@ Boss_DeepStriderBeginBattleDecisionState:               ; CODE XREF: Boss_DeepSt
                 move.w  #$10,$11C(a5)
                 bra.s   Boss_DeepStriderBattleDecisionState
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderRandomizeBattleDecisionDelay:           ; CODE XREF: Boss_DeepStriderBeginBattleCycle+EC   j  ; was: loc_3E98C
+Boss_DeepStriderRandomizeBattleDecisionDelay:           ; was: loc_3E98C
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$3F,d0                         ; '?'
                 addq.w  #4,d0
                 move.w  d0,$11C(a5)
 ; Idle timer before attack selection
-Boss_DeepStriderBattleDecisionState:                    ; CODE XREF: Boss_DeepStriderBeginBattleCycle+F4   j  ; was: loc_3E99A
-                                        ; DATA XREF: ROM:0003E5E4   o
+Boss_DeepStriderBattleDecisionState:                    ; was: loc_3E99A
                 subq.w  #1,$11C(a5)
                 bpl.w   Boss_DeepStriderUpdateParts
                 subq.w  #1,$17C(a5)
@@ -323,13 +320,13 @@ Boss_DeepStriderBattleDecisionState:                    ; CODE XREF: Boss_DeepSt
                 btst    #6,(PlayerActionStateFlags).w
                 beq.w   Boss_DeepStriderTestDiveRandomSelection
                 moveq   #1,d0
-Boss_DeepStriderTestDiveRandomSelection:                ; CODE XREF: Boss_DeepStriderBeginBattleCycle+134   j  ; was: loc_3E9D0
+Boss_DeepStriderTestDiveRandomSelection:                ; was: loc_3E9D0
                 move.w  (RandomNumberState).w,d1
                 and.w   d0,d1
                 beq.s   Boss_DeepStriderBeginHoverAndShoot
                 bra.w   Boss_DeepStriderBeginDiveAttack
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderBeginHoverAndShoot:                     ; CODE XREF: Boss_DeepStriderBeginBattleCycle+11E   j  ; was: loc_3E9DC
+Boss_DeepStriderBeginHoverAndShoot:                     ; was: loc_3E9DC
                                         ; Boss_DeepStriderBeginBattleCycle+140   j
                 move.w  #$26,4(a5)                      ; '&'
                 move.w  #1,$534(a5)
@@ -345,13 +342,13 @@ Boss_DeepStriderBeginHoverAndShoot:                     ; CODE XREF: Boss_DeepSt
                 move.w  d0,$4F0(a5)
                 move.w  #$1B0,$4F4(a5)
 ; Deep Strider hovering with angle firing
-Boss_DeepStriderHoverAndShootState:                     ; DATA XREF: ROM:0003E5F0   o  ; was: loc_3EA20
+Boss_DeepStriderHoverAndShootState:                     ; was: loc_3EA20
                 jsr     (Physics_GetPlayerDelta).l
                 move.w  #$100,$54(a5)
                 tst.w   d1
                 bpl.s   Boss_DeepStriderApplyHoverFacing
                 clr.w   $54(a5)
-Boss_DeepStriderApplyHoverFacing:                       ; CODE XREF: Boss_DeepStriderBeginBattleCycle+198   j  ; was: loc_3EA34
+Boss_DeepStriderApplyHoverFacing:                       ; was: loc_3EA34
                 tst.w   $11E(a5)
                 bne.s   Boss_DeepStriderDecreaseHoverJointAngle
                 addq.w  #1,$56(a5)
@@ -359,13 +356,13 @@ Boss_DeepStriderApplyHoverFacing:                       ; CODE XREF: Boss_DeepSt
                 beq.s   Boss_DeepStriderReverseHoverJointMotion
                 bra.s   Boss_DeepStriderUpdateHoverVerticalMotion
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderDecreaseHoverJointAngle:                ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1A2   j  ; was: loc_3EA48
+Boss_DeepStriderDecreaseHoverJointAngle:                ; was: loc_3EA48
                 subq.w  #1,$56(a5)
                 cmpi.w  #$178,$56(a5)
                 bne.s   Boss_DeepStriderUpdateHoverVerticalMotion
-Boss_DeepStriderReverseHoverJointMotion:                ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1AE   j  ; was: loc_3EA54
+Boss_DeepStriderReverseHoverJointMotion:                ; was: loc_3EA54
                 eori.w  #1,$11E(a5)
-Boss_DeepStriderUpdateHoverVerticalMotion:              ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1B0   j  ; was: loc_3EA5A
+Boss_DeepStriderUpdateHoverVerticalMotion:              ; was: loc_3EA5A
                                         ; Boss_DeepStriderBeginBattleCycle+1BC   j
                 tst.w   $11C(a5)
                 beq.s   Boss_DeepStriderAccelerateHoverUpward
@@ -374,7 +371,7 @@ Boss_DeepStriderUpdateHoverVerticalMotion:              ; CODE XREF: Boss_DeepSt
                 cmpi.l  #$10000,$4FC(a5)
                 bmi.s   Boss_DeepStriderCheckHoverDownwardHeight
                 move.l  #$10000,$4FC(a5)
-Boss_DeepStriderCheckHoverDownwardHeight:               ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1D2   j  ; was: loc_3EA7C
+Boss_DeepStriderCheckHoverDownwardHeight:               ; was: loc_3EA7C
                                         ; Boss_DeepStriderBeginBattleCycle+1DC   j
                 cmpi.w  #$160,$4F4(a5)
                 bmi.s   Boss_DeepStriderUpdateHoverAttack
@@ -382,19 +379,19 @@ Boss_DeepStriderCheckHoverDownwardHeight:               ; CODE XREF: Boss_DeepSt
                 bmi.w   Boss_DeepStriderBeginHoverExitRise
                 bra.s   Boss_DeepStriderReverseHoverVerticalMotion
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderAccelerateHoverUpward:                  ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1C8   j  ; was: loc_3EA8E
+Boss_DeepStriderAccelerateHoverUpward:                  ; was: loc_3EA8E
                 subi.l  #$1000,$4FC(a5)
                 bpl.s   Boss_DeepStriderCheckHoverUpwardHeight
                 cmpi.l  #$FFFF0000,$4FC(a5)
                 bpl.s   Boss_DeepStriderCheckHoverUpwardHeight
                 move.l  #$FFFF0000,$4FC(a5)
-Boss_DeepStriderCheckHoverUpwardHeight:                 ; CODE XREF: Boss_DeepStriderBeginBattleCycle+200   j  ; was: loc_3EAAA
+Boss_DeepStriderCheckHoverUpwardHeight:                 ; was: loc_3EAAA
                                         ; Boss_DeepStriderBeginBattleCycle+20A   j
                 cmpi.w  #$170,$4F4(a5)
                 bpl.s   Boss_DeepStriderUpdateHoverAttack
-Boss_DeepStriderReverseHoverVerticalMotion:             ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1F6   j  ; was: loc_3EAB2
+Boss_DeepStriderReverseHoverVerticalMotion:             ; was: loc_3EAB2
                 eori.w  #1,$11C(a5)
-Boss_DeepStriderUpdateHoverAttack:                      ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1EC   j  ; was: loc_3EAB8
+Boss_DeepStriderUpdateHoverAttack:                      ; was: loc_3EAB8
                                         ; Boss_DeepStriderBeginBattleCycle+21A   j
                 subq.w  #1,$17C(a5)
                 cmpi.w  #$9F,$17C(a5)
@@ -402,7 +399,7 @@ Boss_DeepStriderUpdateHoverAttack:                      ; CODE XREF: Boss_DeepSt
                 bsr.w   Boss_DeepStriderFireAngleProjectile
                 bra.w   Boss_DeepStriderUpdateParts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderBeginHoverExitRise:                     ; CODE XREF: Boss_DeepStriderBeginBattleCycle+1F2   j  ; was: loc_3EACE
+Boss_DeepStriderBeginHoverExitRise:                     ; was: loc_3EACE
                 addq.w  #2,4(a5)
                 clr.w   $11C(a5)
                 move.l  #$FFFB0000,$4FC(a5)
@@ -411,7 +408,7 @@ Boss_DeepStriderBeginHoverExitRise:                     ; CODE XREF: Boss_DeepSt
                 bsr.w   Boss_DeepStriderSpawnQuadVolley
                 move.w  #$B,$17C(a5)
 ; Deep Strider post-dive rising with scroll
-Boss_DeepStriderHoverExitRiseState:                     ; DATA XREF: ROM:0003E5F2   o  ; was: loc_3EAF2
+Boss_DeepStriderHoverExitRiseState:                     ; was: loc_3EAF2
                 addq.w  #1,$11C(a5)
                 addi.l  #$3A00,$4FC(a5)
                 subq.w  #8,$56(a5)
@@ -420,12 +417,12 @@ Boss_DeepStriderHoverExitRiseState:                     ; DATA XREF: ROM:0003E5F
                 bmi.s   Boss_DeepStriderCheckHoverExitHeight
                 addq.w  #2,$1DC(a5)
                 addq.w  #4,$56(a5)
-Boss_DeepStriderCheckHoverExitHeight:                   ; CODE XREF: Boss_DeepStriderBeginBattleCycle+276   j  ; was: loc_3EB16
+Boss_DeepStriderCheckHoverExitHeight:                   ; was: loc_3EB16
                 cmpi.w  #$1C0,$4F4(a5)
                 bmi.w   Boss_DeepStriderUpdateParts
                 bra.w   Boss_DeepStriderBeginBattleDecisionState
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderBeginDiveAttack:                        ; CODE XREF: Boss_DeepStriderBeginBattleCycle+116   j  ; was: loc_3EB24
+Boss_DeepStriderBeginDiveAttack:                        ; was: loc_3EB24
                                         ; Boss_DeepStriderBeginBattleCycle+128   j
                 move.b  #$12,$141(a5)
                 clr.w   $17E(a5)
@@ -437,18 +434,18 @@ Boss_DeepStriderBeginDiveAttack:                        ; CODE XREF: Boss_DeepSt
                 jsr     (Physics_GetPlayerDelta).l
                 tst.w   d1
                 bpl.s   Boss_DeepStriderSetNonzeroDiveFacing
-Boss_DeepStriderSetZeroDiveFacing:                      ; CODE XREF: Boss_DeepStriderBeginBattleCycle+2A8   j  ; was: loc_3EB4A
+Boss_DeepStriderSetZeroDiveFacing:                      ; was: loc_3EB4A
                 clr.w   $54(a5)
                 bra.s   Boss_DeepStriderInitializeDiveMotion
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderSetNonzeroDiveFacing:                   ; CODE XREF: Boss_DeepStriderBeginBattleCycle+2A2   j  ; was: loc_3EB50
+Boss_DeepStriderSetNonzeroDiveFacing:                   ; was: loc_3EB50
                                         ; Boss_DeepStriderBeginBattleCycle+2B2   j
                 move.w  #$100,$54(a5)
-Boss_DeepStriderInitializeDiveMotion:                   ; CODE XREF: Boss_DeepStriderBeginBattleCycle+2B8   j  ; was: loc_3EB56
+Boss_DeepStriderInitializeDiveMotion:                   ; was: loc_3EB56
                 bsr.w   Boss_DeepStriderSetupDivePositionAndVelocity
 ; End of function Boss_DeepStriderBeginBattleCycle
 ; Checks dive completion and damage state
-Boss_DeepStriderDiveAttackState:                        ; DATA XREF: ROM:0003E5E6   o  ; was: sub_3EB5A
+Boss_DeepStriderDiveAttackState:                        ; was: sub_3EB5A
                 bsr.w   Boss_DeepStriderDiveSequence
                 bmi.s   Boss_DeepStriderUpdateDiveImpactSignal
                 tst.w   $54(a5)
@@ -456,24 +453,24 @@ Boss_DeepStriderDiveAttackState:                        ; DATA XREF: ROM:0003E5E
                 subq.w  #2,$29C(a5)
                 bra.w   Boss_DeepStriderBeginBattleDecisionState
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderAdvanceDivePhaseIndex:                  ; CODE XREF: Boss_DeepStriderDiveAttackState+A   j  ; was: loc_3EB6E
+Boss_DeepStriderAdvanceDivePhaseIndex:                  ; was: loc_3EB6E
                 addq.w  #2,$29C(a5)
                 bra.w   Boss_DeepStriderBeginBattleDecisionState
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderUpdateDiveImpactSignal:                 ; CODE XREF: Boss_DeepStriderDiveAttackState+4   j  ; was: loc_3EB76
+Boss_DeepStriderUpdateDiveImpactSignal:                 ; was: loc_3EB76
                 tst.w   $17E(a5)
                 bne.s   Boss_DeepStriderPollDiveImpactSignal
                 bclr    #1,$142(a5)
                 beq.s   Boss_DeepStriderDiveAttackStateReturn
                 bset    #1,(ForcedPositionFlags).w
                 move.w  #2,$17E(a5)
-Boss_DeepStriderPollDiveImpactSignal:                   ; CODE XREF: Boss_DeepStriderDiveAttackState+20   j  ; was: loc_3EB90
+Boss_DeepStriderPollDiveImpactSignal:                   ; was: loc_3EB90
                 bclr    #1,(ForcedPositionFlags).w
                 bne.s   Boss_DeepStriderPublishDiveImpactPosition
                 clr.w   $17E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_DeepStriderPublishDiveImpactPosition:              ; CODE XREF: Boss_DeepStriderDiveAttackState+3C   j  ; was: loc_3EB9E
+Boss_DeepStriderPublishDiveImpactPosition:              ; was: loc_3EB9E
                 move.w  #$64,(ForcedPositionTimer).w    ; 'd'
                 bset    #0,(ForcedPositionFlags).w
                 bset    #2,(ForcedPositionFlags).w
@@ -483,6 +480,6 @@ Boss_DeepStriderPublishDiveImpactPosition:              ; CODE XREF: Boss_DeepSt
                 move.w  $134(a5),d0
                 addi.w  #0,d0
                 move.w  d0,(ForcedPositionY).w
-Boss_DeepStriderDiveAttackStateReturn:                  ; CODE XREF: Boss_DeepStriderDiveAttackState+28   j  ; was: locret_3EBC8
+Boss_DeepStriderDiveAttackStateReturn:                  ; was: locret_3EBC8
                 rts
 ; End of function Boss_DeepStriderDiveAttackState

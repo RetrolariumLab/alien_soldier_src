@@ -1,4 +1,4 @@
-Boss_GustheadDetachedSegmentInit:                       ; DATA XREF: ROM:Boss_GustheadDetachedSegmentStates   o  ; was: sub_40132
+Boss_GustheadDetachedSegmentInit:                       ; was: sub_40132
                 addq.w  #2,4(a5)
                 ori.w   #$100,2(a5)
                 lea     (Math_SineTable).l,a1
@@ -14,12 +14,12 @@ Boss_GustheadDetachedSegmentInit:                       ; DATA XREF: ROM:Boss_Gu
                 tst.l   d2
                 bmi.s   Boss_GustheadStoreDetachedSegmentVerticalVelocity
                 neg.l   d2
-Boss_GustheadStoreDetachedSegmentVerticalVelocity:      ; CODE XREF: Boss_GustheadDetachedSegmentInit+2E   j  ; was: loc_40164
+Boss_GustheadStoreDetachedSegmentVerticalVelocity:      ; was: loc_40164
                 move.l  d2,$1C(a5)
                 rts
 ; End of function Boss_GustheadDetachedSegmentInit
 ; Applies gravity to a detached segment and converts it to the shared effect below the arena
-Boss_GustheadDetachedSegmentFallState:                  ; DATA XREF: ROM:0004012E   o  ; was: sub_4016A
+Boss_GustheadDetachedSegmentFallState:                  ; was: sub_4016A
                 addi.l  #$1000,$1C(a5)
                 cmpi.w  #$150,$14(a5)
                 blt.s   Boss_GustheadDetachedSegmentFallReturn
@@ -28,15 +28,15 @@ Boss_GustheadDetachedSegmentFallState:                  ; DATA XREF: ROM:0004012
                 jsr     (Projectile_InitType88FromCurrent).l
                 move.l  #SharedProjectileDuration4Animation,8(a5)
                 move.w  #$4000,$E(a5)
-Boss_GustheadDetachedSegmentFallReturn:                 ; CODE XREF: Boss_GustheadDetachedSegmentFallState+E   j  ; was: locret_40196
+Boss_GustheadDetachedSegmentFallReturn:                 ; was: locret_40196
                 rts
 ; End of function Boss_GustheadDetachedSegmentFallState
-Boss_GustheadDetachedSegmentInactiveState:              ; DATA XREF: ROM:00040130   o  ; was: nullsub_81
+Boss_GustheadDetachedSegmentInactiveState:              ; was: nullsub_81
                 rts
 ; End of function Boss_GustheadDetachedSegmentInactiveState
 
 ; Spawns side debris while arena motion is active
-Boss_GustheadSpawnScrollingDebris:                      ; CODE XREF: Boss_GustheadSweepOuterJointState+C   p  ; was: sub_4019A
+Boss_GustheadSpawnScrollingDebris:                      ; was: sub_4019A
                                         ; Boss_GustheadWaitForMiddleJointZeroState+C   p
                 tst.l   (SharedScratchLong10).w
                 beq.w   Boss_GustheadUpdateSegmentPositionsReturn
@@ -50,7 +50,7 @@ Boss_GustheadSpawnScrollingDebris:                      ; CODE XREF: Boss_Gusthe
                 bne.s   Boss_GustheadSpawnScrollingDebrisObject
                 move.w  #$D1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_GustheadSpawnScrollingDebrisObject:                ; CODE XREF: Boss_GustheadSpawnScrollingDebris+26   j  ; was: loc_401CC
+Boss_GustheadSpawnScrollingDebrisObject:                ; was: loc_401CC
                 move.w  #$1E4,(a0)
                 move.l  #SharedCombatSpriteFrame35,8(a0)
                 move.w  #$480,$E(a0)
@@ -71,12 +71,12 @@ Boss_GustheadSpawnScrollingDebrisObject:                ; CODE XREF: Boss_Gusthe
                 move.w  #$1C4,$10(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadUseLeftDebrisSpawnX:                       ; CODE XREF: Boss_GustheadSpawnScrollingDebris+82   j  ; was: loc_40226
+Boss_GustheadUseLeftDebrisSpawnX:                       ; was: loc_40226
                 move.w  #$7C,$10(a0)                    ; '|'
                 rts
 ; End of function Boss_GustheadSpawnScrollingDebris
 ; Updates type-$1E4 debris spawned by the scrolling arena effect
-Boss_GustheadUpdateScrollingDebris:                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_4022E
+Boss_GustheadUpdateScrollingDebris:                     ; was: sub_4022E
                 subq.w  #1,$48(a5)
                 bmi.s   Boss_GustheadDeactivateScrollingDebris
                 cmpi.w  #$60,$10(a5)                    ; '`'
@@ -93,24 +93,24 @@ Boss_GustheadUpdateScrollingDebris:                     ; DATA XREF: ROM:Entity_
                 btst    #0,$4A(a5)
                 beq.s   Boss_GustheadScrollingDebrisApplyDriftGravity
                 add.l   d0,$18(a5)
-Boss_GustheadScrollingDebrisApplyDriftGravity:          ; CODE XREF: Boss_GustheadUpdateScrollingDebris+36   j  ; was: loc_4026A
+Boss_GustheadScrollingDebrisApplyDriftGravity:          ; was: loc_4026A
                 addi.l  #$400,$1C(a5)
                 bra.s   Boss_GustheadScrollingDebrisIntegrateVerticalPosition
 ; ---------------------------------------------------------------------------
-Boss_GustheadScrollingDebrisApplyStrongGravity:         ; CODE XREF: Boss_GustheadUpdateScrollingDebris+2A   j  ; was: loc_40274
+Boss_GustheadScrollingDebrisApplyStrongGravity:         ; was: loc_40274
                 addi.l  #$2000,$1C(a5)
-Boss_GustheadScrollingDebrisIntegrateVerticalPosition:  ; CODE XREF: Boss_GustheadUpdateScrollingDebris+44   j  ; was: loc_4027C
+Boss_GustheadScrollingDebrisIntegrateVerticalPosition:  ; was: loc_4027C
                 move.l  $1C(a5),d0
                 add.l   d0,$14(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadDeactivateScrollingDebris:                 ; CODE XREF: Boss_GustheadUpdateScrollingDebris+4   j  ; was: loc_40286
+Boss_GustheadDeactivateScrollingDebris:                 ; was: loc_40286
                                         ; Boss_GustheadUpdateScrollingDebris+C   j
                 bset    #4,2(a5)
                 rts
 ; End of function Boss_GustheadUpdateScrollingDebris
 ; Spawns falling debris at the arena edge selected by scroll direction
-Boss_GustheadSpawnEdgeDebris:                           ; CODE XREF: Boss_GustheadWaitForMiddleJointZeroState+18   p  ; was: sub_4028E
+Boss_GustheadSpawnEdgeDebris:                           ; was: sub_4028E
                 move.w  (FrameCounter).w,d0
                 andi.w  #$1F,d0
                 bne.s   Boss_GustheadSpawnEdgeDebrisReturn
@@ -131,16 +131,16 @@ Boss_GustheadSpawnEdgeDebris:                           ; CODE XREF: Boss_Gusthe
                 tst.l   (StageMotionXDelta).w
                 bmi.s   Boss_GustheadUseRightDebrisSpawnX
                 move.w  #$78,$10(a0)                    ; 'x'
-Boss_GustheadSpawnEdgeDebrisReturn:                     ; CODE XREF: Boss_GustheadSpawnEdgeDebris+8   j  ; was: locret_402EE
+Boss_GustheadSpawnEdgeDebrisReturn:                     ; was: locret_402EE
                                         ; Boss_GustheadSpawnEdgeDebris+E   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadUseRightDebrisSpawnX:                      ; CODE XREF: Boss_GustheadSpawnEdgeDebris+58   j  ; was: loc_402F0
+Boss_GustheadUseRightDebrisSpawnX:                      ; was: loc_402F0
                 move.w  #$1C8,$10(a0)
                 rts
 ; End of function Boss_GustheadSpawnEdgeDebris
 ; Assigns one of four random mappings shared by edge and four-way debris
-Boss_GustheadAssignRandomDebrisMapping:                 ; CODE XREF: Boss_GustheadSpawnEdgeDebris+22   p  ; was: sub_402F8
+Boss_GustheadAssignRandomDebrisMapping:                 ; was: sub_402F8
                                         ; Boss_GustheadSpawnFourWayDebris+46   p
                 jsr     (RandomNumber).l
                 move.b  (RandomNumberState).w,d0
@@ -152,41 +152,41 @@ Boss_GustheadAssignRandomDebrisMapping:                 ; CODE XREF: Boss_Gusthe
                 rts
 ; End of function Boss_GustheadAssignRandomDebrisMapping
 ; ---------------------------------------------------------------------------
-Boss_GustheadRandomDebrisMappings:  dc.l    SharedFloaterDebrisProjectileAlternating5And4Animation  ; DATA XREF: Boss_GustheadAssignRandomDebrisMapping+12   r  ; was: off_40318
+Boss_GustheadRandomDebrisMappings:  dc.l    SharedFloaterDebrisProjectileAlternating5And4Animation  ; was: off_40318
                 dc.l    Enemy_Stage10BeetleLoopAnimation
                 dc.l    SharedFloaterDebrisProjectileAlternating3And2Animation
                 dc.l    Enemy_Stage10BeetleLoopAnimation
 
 ; Handles collision and state dispatch for type-$1E8 edge debris
-Boss_GustheadEdgeDebrisMain:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_40328
+Boss_GustheadEdgeDebrisMain:                            ; was: sub_40328
                 tst.w   $24(a5)
                 bmi.s   Boss_GustheadEdgeDebrisBeginPickupRelease
                 bclr    #7,$22(a5)
                 beq.s   Boss_GustheadEdgeDebrisDispatchState
                 bclr    #4,$22(a5)
                 beq.s   Boss_GustheadEdgeDebrisConvertToEffect
-Boss_GustheadEdgeDebrisBeginPickupRelease:              ; CODE XREF: Boss_GustheadEdgeDebrisMain+4   j  ; was: loc_4033E
+Boss_GustheadEdgeDebrisBeginPickupRelease:              ; was: loc_4033E
                 bra.w   Boss_GustheadReleaseDebrisAsPickup
 ; ---------------------------------------------------------------------------
-Boss_GustheadEdgeDebrisConvertToEffect:                 ; CODE XREF: Boss_GustheadEdgeDebrisMain+14   j  ; was: loc_40342
+Boss_GustheadEdgeDebrisConvertToEffect:                 ; was: loc_40342
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Boss_GustheadEdgeDebrisDispatchState:                   ; CODE XREF: Boss_GustheadEdgeDebrisMain+C   j  ; was: loc_40358
+Boss_GustheadEdgeDebrisDispatchState:                   ; was: loc_40358
                 move.w  4(a5),d0
                 lea     Boss_GustheadEdgeDebrisStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function Boss_GustheadEdgeDebrisMain
 ; ---------------------------------------------------------------------------
-Boss_GustheadEdgeDebrisStates:  dc.w    Boss_GustheadInitializeEdgeDebrisMotion-*  ; DATA XREF: Boss_GustheadEdgeDebrisMain+34   o  ; was: off_40364
+Boss_GustheadEdgeDebrisStates:  dc.w    Boss_GustheadInitializeEdgeDebrisMotion-*  ; was: off_40364
                 dc.w    Boss_GustheadUpdateEdgeDebrisPhysics-*
                 dc.w    Boss_GustheadEdgeDebrisInactiveState-*
 
 ; Initializes type-$1E8 edge debris from arena motion and RNG
-Boss_GustheadInitializeEdgeDebrisMotion:                ; DATA XREF: ROM:Boss_GustheadEdgeDebrisStates   o  ; was: sub_4036A
+Boss_GustheadInitializeEdgeDebrisMotion:                ; was: sub_4036A
                 addq.w  #2,4(a5)
                 move.l  (StageMotionXDelta).w,d0
                 add.l   d0,d0
@@ -194,7 +194,7 @@ Boss_GustheadInitializeEdgeDebrisMotion:                ; DATA XREF: ROM:Boss_Gu
                 tst.w   (DifficultyMode).w
                 bne.s   Boss_GustheadStoreEdgeDebrisHorizontalVelocity
                 add.l   d0,d0
-Boss_GustheadStoreEdgeDebrisHorizontalVelocity:         ; CODE XREF: Boss_GustheadInitializeEdgeDebrisMotion+10   j  ; was: loc_4037E
+Boss_GustheadStoreEdgeDebrisHorizontalVelocity:         ; was: loc_4037E
                 move.l  d0,$18(a5)
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$FFF,d0
@@ -204,7 +204,7 @@ Boss_GustheadStoreEdgeDebrisHorizontalVelocity:         ; CODE XREF: Boss_Gusthe
                 rts
 ; End of function Boss_GustheadInitializeEdgeDebrisMotion
 ; Updates type-$1E8 edge-debris bounds, gravity, and floor conversion
-Boss_GustheadUpdateEdgeDebrisPhysics:                   ; DATA XREF: ROM:00040366   o  ; was: sub_40396
+Boss_GustheadUpdateEdgeDebrisPhysics:                   ; was: sub_40396
                 bsr.w   Boss_GustheadUpdateDebrisVerticalFlip
                 cmpi.w  #$60,$10(a5)                    ; '`'
                 bcs.s   Boss_GustheadDeactivateEdgeDebrisOutOfBounds
@@ -220,33 +220,33 @@ Boss_GustheadUpdateEdgeDebrisPhysics:                   ; DATA XREF: ROM:0004036
                 beq.w   Boss_GustheadConvertDebrisToBouncingEffectAtFloor
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadDeactivateEdgeDebrisOutOfBounds:           ; CODE XREF: Boss_GustheadUpdateEdgeDebrisPhysics+A   j  ; was: loc_403CE
+Boss_GustheadDeactivateEdgeDebrisOutOfBounds:           ; was: loc_403CE
                                         ; Boss_GustheadUpdateEdgeDebrisPhysics+12   j
                 bset    #4,2(a5)
                 rts
 ; End of function Boss_GustheadUpdateEdgeDebrisPhysics
-Boss_GustheadEdgeDebrisInactiveState:                   ; DATA XREF: ROM:00040368   o  ; was: nullsub_82
+Boss_GustheadEdgeDebrisInactiveState:                   ; was: nullsub_82
                 rts
 ; End of function Boss_GustheadEdgeDebrisInactiveState
 
 ; Selects the debris vertical flip from the sign of vertical velocity
-Boss_GustheadUpdateDebrisVerticalFlip:                  ; CODE XREF: Boss_GustheadUpdateEdgeDebrisPhysics   p  ; was: sub_403D8
+Boss_GustheadUpdateDebrisVerticalFlip:                  ; was: sub_403D8
                                         ; sub_4046C:Boss_GustheadApplyFourWayDebrisPhysics   p
                 btst    #7,$1C(a5)
                 bne.s   Boss_GustheadClearDebrisVerticalFlip
                 ori.w   #$1000,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadClearDebrisVerticalFlip:                   ; CODE XREF: Boss_GustheadUpdateDebrisVerticalFlip+6   j  ; was: loc_403E8
+Boss_GustheadClearDebrisVerticalFlip:                   ; was: loc_403E8
                 andi.w  #$EFFF,$E(a5)
                 rts
 ; End of function Boss_GustheadUpdateDebrisVerticalFlip
 ; Spawns 4 debris projectiles with trajectories from angle table
-Boss_GustheadSpawnFourWayDebris:                        ; CODE XREF: Boss_GustheadBouncePatternState+2A   p  ; was: sub_403F0
+Boss_GustheadSpawnFourWayDebris:                        ; was: sub_403F0
                 lea     (Math_SineTable).l,a1
                 move.w  #3,d7
                 move.w  #$120,d6
-Boss_GustheadFourWayDebrisLoop:                         ; CODE XREF: Boss_GustheadSpawnFourWayDebris+76   j  ; was: loc_403FE
+Boss_GustheadFourWayDebrisLoop:                         ; was: loc_403FE
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_GustheadFourWayDebrisReturn
                 move.w  (a1,d6.w),d0
@@ -268,27 +268,27 @@ Boss_GustheadFourWayDebrisLoop:                         ; CODE XREF: Boss_Gusthe
                 move.w  #$10,$26(a0)
                 addi.w  #$40,d6                         ; '@'
                 dbf     d7,Boss_GustheadFourWayDebrisLoop
-Boss_GustheadFourWayDebrisReturn:                       ; CODE XREF: Boss_GustheadSpawnFourWayDebris+14   j  ; was: locret_4046A
+Boss_GustheadFourWayDebrisReturn:                       ; was: locret_4046A
                 rts
 ; End of function Boss_GustheadSpawnFourWayDebris
 ; Updates type-$214 four-way debris collision, bounds, gravity, and floor conversion
-Boss_GustheadUpdateFourWayDebris:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_4046C
+Boss_GustheadUpdateFourWayDebris:                       ; was: sub_4046C
                 tst.w   $24(a5)
                 bmi.s   Boss_GustheadFourWayDebrisBeginPickupRelease
                 bclr    #7,$22(a5)
                 beq.s   Boss_GustheadApplyFourWayDebrisPhysics
                 bclr    #4,$22(a5)
                 beq.s   Boss_GustheadFourWayDebrisConvertToEffect
-Boss_GustheadFourWayDebrisBeginPickupRelease:           ; CODE XREF: Boss_GustheadUpdateFourWayDebris+4   j  ; was: loc_40482
+Boss_GustheadFourWayDebrisBeginPickupRelease:           ; was: loc_40482
                 bra.w   Boss_GustheadReleaseDebrisAsPickup
 ; ---------------------------------------------------------------------------
-Boss_GustheadFourWayDebrisConvertToEffect:              ; CODE XREF: Boss_GustheadUpdateFourWayDebris+14   j  ; was: loc_40486
+Boss_GustheadFourWayDebrisConvertToEffect:              ; was: loc_40486
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Boss_GustheadApplyFourWayDebrisPhysics:                 ; CODE XREF: Boss_GustheadUpdateFourWayDebris+C   j  ; was: loc_4049C
+Boss_GustheadApplyFourWayDebrisPhysics:                 ; was: loc_4049C
                 bsr.w   Boss_GustheadUpdateDebrisVerticalFlip
                 cmpi.w  #$60,$10(a5)                    ; '`'
                 bcs.s   Boss_GustheadDeactivateFourWayDebrisOutOfBounds
@@ -303,7 +303,7 @@ Boss_GustheadApplyFourWayDebrisPhysics:                 ; CODE XREF: Boss_Gusthe
                 beq.w   Boss_GustheadConvertDebrisToBouncingEffectAtFloor
                 rts
 ; ---------------------------------------------------------------------------
-Boss_GustheadDeactivateFourWayDebrisOutOfBounds:        ; CODE XREF: Boss_GustheadUpdateFourWayDebris+3A   j  ; was: loc_404D4
+Boss_GustheadDeactivateFourWayDebrisOutOfBounds:        ; was: loc_404D4
                                         ; Boss_GustheadUpdateFourWayDebris+42   j
                 bset    #4,2(a5)
                 rts
@@ -316,7 +316,7 @@ Boss_GustheadConvertCurrentDebrisToEffect:              ; was: sub_404DC
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Boss_GustheadConvertCurrentDebrisToEffect
 ; Converts edge or four-way debris at the floor to an upward type-$88 effect
-Boss_GustheadConvertDebrisToBouncingEffectAtFloor:      ; CODE XREF: Boss_GustheadUpdateEdgeDebrisPhysics+32   j  ; was: sub_404F2
+Boss_GustheadConvertDebrisToBouncingEffectAtFloor:      ; was: sub_404F2
                                         ; Boss_GustheadUpdateFourWayDebris+62   j
                 cmpi.w  #$150,$14(a5)
                 blt.s   Boss_GustheadConvertDebrisToBouncingEffectAtFloor_Return
@@ -325,11 +325,11 @@ Boss_GustheadConvertDebrisToBouncingEffectAtFloor:      ; CODE XREF: Boss_Gusthe
                 move.w  #$C000,$E(a5)
                 move.l  #$FFFD8000,$1C(a5)
                 clr.w   $18(a5)
-Boss_GustheadConvertDebrisToBouncingEffectAtFloor_Return:  ; CODE XREF: Boss_GustheadConvertDebrisToBouncingEffectAtFloor+6   j  ; was: locret_4051A
+Boss_GustheadConvertDebrisToBouncingEffectAtFloor_Return:  ; was: locret_4051A
                 rts
 ; End of function Boss_GustheadConvertDebrisToBouncingEffectAtFloor
 ; Updates boss rotation animation
-Boss_GustheadUpdateSegmentMapping:                      ; CODE XREF: Boss_GustheadSegmentMain+A2   p  ; was: sub_4051C
+Boss_GustheadUpdateSegmentMapping:                      ; was: sub_4051C
                 movea.w a5,a0
                 clr.w   d0
                 move.b  $20(a0),d0
@@ -345,7 +345,7 @@ Boss_GustheadUpdateSegmentMapping:                      ; CODE XREF: Boss_Gusthe
                 rts
 ; End of function Boss_GustheadUpdateSegmentMapping
 ; ---------------------------------------------------------------------------
-Boss_GustheadSegmentMappings:   dc.l    Boss_GustheadSegmentMappingA  ; DATA XREF: Boss_GustheadUpdateSegmentMapping+18   r  ; was: off_4054A
+Boss_GustheadSegmentMappings:   dc.l    Boss_GustheadSegmentMappingA  ; was: off_4054A
                 dc.l    Boss_GustheadSegmentMappingA
                 dc.l    Boss_GustheadSegmentMappingA
                 dc.l    Boss_GustheadSegmentMappingB
@@ -363,46 +363,46 @@ Boss_GustheadSegmentMappings:   dc.l    Boss_GustheadSegmentMappingA  ; DATA XRE
                 dc.l    Boss_GustheadSegmentMappingG
 
 ; Derives arena scroll velocity from the active joint speed
-Boss_GustheadUpdateArenaScrollVelocity:                 ; CODE XREF: Boss_GustheadSweepOuterJointState+8   p  ; was: sub_4058A
+Boss_GustheadUpdateArenaScrollVelocity:                 ; was: sub_4058A
                                         ; Boss_GustheadWaitForMiddleJointZeroState+8   p
                 move.l  (SharedScratchLong3).w,d0
                 bne.s   Boss_GustheadScaleArenaScrollVelocity
                 move.l  (SharedScratchLong5).w,d0
                 beq.s   Boss_GustheadStoreArenaScrollVelocity
-Boss_GustheadScaleArenaScrollVelocity:                  ; CODE XREF: Boss_GustheadUpdateArenaScrollVelocity+4   j  ; was: loc_40596
+Boss_GustheadScaleArenaScrollVelocity:                  ; was: loc_40596
                 tst.w   (DifficultyMode).w
                 bne.s   Boss_GustheadUseFullArenaScrollVelocity
                 asr.l   #5,d0
                 bra.s   Boss_GustheadStoreArenaScrollVelocity
 ; ---------------------------------------------------------------------------
-Boss_GustheadUseFullArenaScrollVelocity:                ; CODE XREF: Boss_GustheadUpdateArenaScrollVelocity+10   j  ; was: loc_405A0
+Boss_GustheadUseFullArenaScrollVelocity:                ; was: loc_405A0
                 asr.l   #4,d0
-Boss_GustheadStoreArenaScrollVelocity:                  ; CODE XREF: Boss_GustheadUpdateArenaScrollVelocity+A   j  ; was: loc_405A2
+Boss_GustheadStoreArenaScrollVelocity:                  ; was: loc_405A2
                                         ; Boss_GustheadUpdateArenaScrollVelocity+14   j
                 move.l  d0,(StageMotionXDelta).w
                 rts
 ; End of function Boss_GustheadUpdateArenaScrollVelocity
 ; Advances the three shared fixed-point joint angles
-Boss_GustheadAdvanceJointAngles:                        ; CODE XREF: Boss_GustheadUpdateFastIntroFlickerAndStartMotion+48   p  ; was: sub_405A8
+Boss_GustheadAdvanceJointAngles:                        ; was: sub_405A8
                                         ; Boss_GustheadBattleStart+20   p
                 tst.l   (SharedScratchLong3).w
                 beq.s   Boss_GustheadAdvanceMiddleJoint
                 move.l  (SharedScratchLong3).w,d0
                 add.l   d0,(SharedScratchLong0).w
                 andi.w  #$1FF,(SharedScratchLong0).w
-Boss_GustheadAdvanceMiddleJoint:                        ; CODE XREF: Boss_GustheadAdvanceJointAngles+4   j  ; was: loc_405BC
+Boss_GustheadAdvanceMiddleJoint:                        ; was: loc_405BC
                 tst.l   (SharedScratchLong4).w
                 beq.s   Boss_GustheadAdvanceInnerJoint
                 move.l  (SharedScratchLong4).w,d0
                 add.l   d0,(SharedScratchLong1).w
                 andi.w  #$1FF,(SharedScratchLong1).w
-Boss_GustheadAdvanceInnerJoint:                         ; CODE XREF: Boss_GustheadAdvanceJointAngles+18   j  ; was: loc_405D0
+Boss_GustheadAdvanceInnerJoint:                         ; was: loc_405D0
                 tst.l   (SharedScratchLong5).w
                 beq.s   Boss_GustheadAdvanceJointAnglesReturn
                 move.l  (SharedScratchLong5).w,d0
                 add.l   d0,(SharedScratchLong2).w
                 andi.w  #$1FF,(SharedScratchLong2).w
-Boss_GustheadAdvanceJointAnglesReturn:                  ; CODE XREF: Boss_GustheadAdvanceJointAngles+2C   j  ; was: locret_405E4
+Boss_GustheadAdvanceJointAnglesReturn:                  ; was: locret_405E4
                 rts
 ; End of function Boss_GustheadAdvanceJointAngles
 ; Sets the first arm's four segment state words to zero
@@ -413,11 +413,11 @@ Boss_GustheadDisableFirstArmSegments:                   ; was: sub_405E6
 ; Sets the first arm's four segment state words to two
 Boss_GustheadEnableFirstArmSegments:                    ; was: sub_405EA
                 move.w  #2,d0
-Boss_GustheadStoreFirstArmSegmentState:                 ; CODE XREF: Boss_GustheadDisableFirstArmSegments+2   j  ; was: loc_405EE
+Boss_GustheadStoreFirstArmSegmentState:                 ; was: loc_405EE
                 move.w  #3,d7
                 movea.l (Entity_ObjectPool).w,a0
                 lea     $60(a0),a0
-Boss_GustheadFirstArmSegmentStateLoop:                  ; CODE XREF: Boss_GustheadEnableFirstArmSegments+18   j  ; was: loc_405FA
+Boss_GustheadFirstArmSegmentStateLoop:                  ; was: loc_405FA
                 move.w  d0,4(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_GustheadFirstArmSegmentStateLoop
@@ -428,7 +428,7 @@ Boss_GustheadSeedFirstArmJointAngles:                   ; was: sub_40608
                 move.w  #3,d7
                 movea.w (Entity_ObjectPool).w,a0
                 lea     $60(a0),a0
-Boss_GustheadSeedFirstArmJointAngleLoop:                ; CODE XREF: Boss_GustheadSeedFirstArmJointAngles+4C   j  ; was: loc_40614
+Boss_GustheadSeedFirstArmJointAngleLoop:                ; was: loc_40614
                 clr.w   d0
                 move.b  $4B(a0),d0
                 add.w   d0,d0
@@ -452,7 +452,7 @@ Boss_GustheadSeedFirstArmJointAngleLoop:                ; CODE XREF: Boss_Gusthe
                 rts
 ; End of function Boss_GustheadSeedFirstArmJointAngles
 ; Recomputes all four arms of four linked segment positions
-Boss_GustheadUpdateSegmentPositions:                    ; CODE XREF: Boss_GustheadUpdateFastIntroFlickerAndStartMotion+4C   p  ; was: sub_4065A
+Boss_GustheadUpdateSegmentPositions:                    ; was: sub_4065A
                                         ; Boss_GustheadBattleStart+24   p
                 move.l  $10(a5),$670(a5)
                 move.l  $14(a5),$674(a5)
@@ -461,10 +461,10 @@ Boss_GustheadUpdateSegmentPositions:                    ; CODE XREF: Boss_Gusthe
                 move.w  #4,$5C(a5)
                 movea.w a5,a0
                 lea     $60(a0),a0
-Boss_GustheadUpdateArmLoop:                             ; CODE XREF: Boss_GustheadUpdateSegmentPositions+10E   j  ; was: loc_4067E
+Boss_GustheadUpdateArmLoop:                             ; was: loc_4067E
                 move.w  #3,d0
                 movea.w a5,a1
-Boss_GustheadUpdateSegmentLoop:                         ; CODE XREF: Boss_GustheadUpdateSegmentPositions+106   j  ; was: loc_40684
+Boss_GustheadUpdateSegmentLoop:                         ; was: loc_40684
                 lea     (Math_SineTable).l,a2
                 move.w  $48(a0),d4
                 move.w  $4E(a0),d5
@@ -489,11 +489,11 @@ Boss_GustheadUpdateSegmentLoop:                         ; CODE XREF: Boss_Gusthe
                 move.w  #$3F,d1                         ; '?'
                 bra.s   Boss_GustheadStoreSegmentFrame
 ; ---------------------------------------------------------------------------
-Boss_GustheadClampSegmentFrameMinimum:                  ; CODE XREF: Boss_GustheadUpdateSegmentPositions+6A   j  ; was: loc_406CC
+Boss_GustheadClampSegmentFrameMinimum:                  ; was: loc_406CC
                 cmpi.w  #$FFC1,d1
                 bgt.s   Boss_GustheadStoreSegmentFrame
                 move.w  #$FFC1,d1
-Boss_GustheadStoreSegmentFrame:                         ; CODE XREF: Boss_GustheadUpdateSegmentPositions+70   j  ; was: loc_406D6
+Boss_GustheadStoreSegmentFrame:                         ; was: loc_406D6
                                         ; Boss_GustheadUpdateSegmentPositions+76   j
                 clr.w   d2
                 move.b  $20(a1),d2
@@ -550,12 +550,12 @@ Boss_GustheadStoreSegmentFrame:                         ; CODE XREF: Boss_Gusthe
                 dbf     d0,Boss_GustheadUpdateSegmentLoop
                 subq.w  #1,$5C(a5)
                 bne.w   Boss_GustheadUpdateArmLoop
-Boss_GustheadUpdateSegmentPositionsReturn:              ; CODE XREF: Boss_GustheadWaitForAssetsAndClearArena+4   j  ; was: locret_4076C
+Boss_GustheadUpdateSegmentPositionsReturn:              ; was: locret_4076C
                                         ; Boss_GustheadBeginOscillationPattern+56   j
                 rts
 ; End of function Boss_GustheadUpdateSegmentPositions
 ; Converts Gusthead debris to a pickup, optionally spawning a shared effect
-Boss_GustheadReleaseDebrisAsPickup:                     ; CODE XREF: Boss_GustheadEdgeDebrisMain:Boss_GustheadEdgeDebrisBeginPickupRelease   j  ; was: sub_4076E
+Boss_GustheadReleaseDebrisAsPickup:                     ; was: sub_4076E
                                         ; sub_4046C:Boss_GustheadFourWayDebrisBeginPickupRelease   j
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
@@ -565,7 +565,7 @@ Boss_GustheadReleaseDebrisAsPickup:                     ; CODE XREF: Boss_Gusthe
                 move.l  #SharedCombatSpriteAnimation05,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-Boss_GustheadSpawnPickupFromDebris:                     ; CODE XREF: Boss_GustheadReleaseDebrisAsPickup+E   j  ; was: loc_40798
+Boss_GustheadSpawnPickupFromDebris:                     ; was: loc_40798
                 jmp     Pickup_SpawnSmallFromCurrentObject
 ; End of function Boss_GustheadReleaseDebrisAsPickup
 ; Main handler for Snake boss

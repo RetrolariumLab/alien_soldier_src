@@ -1,53 +1,53 @@
 ; Bugmax sprite mappings and the two relative-offset projectile animations
 ; Numeric frame suffixes preserve ROM order without guessing overlapping body-part roles
 
-Projectile_BugmaxHitFragmentFrame00:    dc.w    $E8F2, $500, $F8F8  ; DATA XREF: ROM:Boss_BugmaxStandardHitFragmentMappings   o  ; was: word_ECB1C
-Projectile_BugmaxHitFragmentFrame01:    dc.w    $E8F6, 0, $FCFC  ; DATA XREF: ROM:0004DA1E   o  ; was: word_ECB22
+Projectile_BugmaxHitFragmentFrame00:    dc.w    $E8F2, $500, $F8F8  ; was: word_ECB1C
+Projectile_BugmaxHitFragmentFrame01:    dc.w    $E8F6, 0, $FCFC  ; was: word_ECB22
 
-Boss_BugmaxCentralPartToggleFrame00:    dc.w    $68FC, $600, $F0F0  ; DATA XREF: Boss_BugmaxInitializeBattleObjectChains+62   o  ; was: word_ECB28
+Boss_BugmaxCentralPartToggleFrame00:    dc.w    $68FC, $600, $F0F0  ; was: word_ECB28
                                         ; Boss_BugmaxToggleCentralPartMapping+E   o
                 dc.w    $68F8, $500, $F000
                 dc.w    $E8F7, 0, $F010
-Boss_BugmaxCentralPartToggleFrame01:    dc.w    $6902, $500, $F000  ; DATA XREF: Boss_BugmaxToggleCentralPartMapping:Boss_BugmaxSelectAlternateCentralPartMapping   o  ; was: word_ECB3A
+Boss_BugmaxCentralPartToggleFrame01:    dc.w    $6902, $500, $F000  ; was: word_ECB3A
                 dc.w    $E8FC, $600, $F0F0
-Boss_BugmaxSecondaryLinkFrame00:    dc.w    $E907, 0, $FCFC  ; DATA XREF: ROM:Boss_BugmaxSecondaryLinkedPartMappings   o  ; was: word_ECB46
+Boss_BugmaxSecondaryLinkFrame00:    dc.w    $E907, 0, $FCFC  ; was: word_ECB46
                                         ; ROM:0004CB32   o
-Boss_BugmaxSecondaryLinkFrame01:    dc.w    $E906, 0, $FCFC  ; DATA XREF: ROM:0004CB3A   o  ; was: word_ECB4C
+Boss_BugmaxSecondaryLinkFrame01:    dc.w    $E906, 0, $FCFC  ; was: word_ECB4C
                                         ; ROM:0004CB3E   o
-Boss_BugmaxBattleControllerFrame:   dc.w    $E908, $F00, $F0F0  ; DATA XREF: Boss_BugmaxInitializeBattleObjectChains+22   o  ; was: word_ECB52
-Boss_BugmaxPrimaryLinkFrame00:      dc.w    $E918, $A00, $F4F4  ; DATA XREF: ROM:Boss_BugmaxPrimaryLinkedPartDescriptors   o  ; was: word_ECB58
-Boss_BugmaxPrimaryLinkFrame01:      dc.w    $E921, $500, $F8F8  ; DATA XREF: ROM:0004CB0E   o  ; was: word_ECB5E
+Boss_BugmaxBattleControllerFrame:   dc.w    $E908, $F00, $F0F0  ; was: word_ECB52
+Boss_BugmaxPrimaryLinkFrame00:      dc.w    $E918, $A00, $F4F4  ; was: word_ECB58
+Boss_BugmaxPrimaryLinkFrame01:      dc.w    $E921, $500, $F8F8  ; was: word_ECB5E
                                         ; ROM:0004CB16   o
-Boss_BugmaxPrimaryLinkFrame02:  dc.w    $E925, $500, $F8F8  ; DATA XREF: ROM:0004CB1E   o  ; was: word_ECB64
+Boss_BugmaxPrimaryLinkFrame02:  dc.w    $E925, $500, $F8F8  ; was: word_ECB64
                                         ; ROM:0004CB26   o
-Boss_BugmaxCentralPartLowerAngleFrame:  dc.w    $78FC, $600, $F2F4  ; DATA XREF: Boss_BugmaxSelectCentralPartFrameByAngle+4E   o  ; was: word_ECB6A
+Boss_BugmaxCentralPartLowerAngleFrame:  dc.w    $78FC, $600, $F2F4  ; was: word_ECB6A
                 dc.w    $78F8, $500, $FA04
                 dc.w    $F8F7, 0, $214
-Boss_BugmaxCentralPartMiddleAngleFrame: dc.w    $692F, $500, $F8  ; DATA XREF: Boss_BugmaxSelectCentralPartFrameByAngle+2E   o  ; was: word_ECB7C
+Boss_BugmaxCentralPartMiddleAngleFrame: dc.w    $692F, $500, $F8  ; was: word_ECB7C
                 dc.w    $E929, $900, $F0F8
-Boss_BugmaxCentralPartUpperAngleFrame:  dc.w    $6939, 0, $FCF3  ; DATA XREF: Boss_BugmaxInitializeEncounterState+88   o  ; was: word_ECB88
+Boss_BugmaxCentralPartUpperAngleFrame:  dc.w    $6939, 0, $FCF3  ; was: word_ECB88
                                         ; Boss_BugmaxSelectCentralPartFrameByAngle+3E   o
                 dc.w    $E933, $600, $F4FB
-Boss_BugmaxOpeningControllerFrame:  dc.w    $E93A, $F00, $F0F0  ; DATA XREF: Boss_BugmaxInitializeEncounterState+3E   o  ; was: word_ECB94
-Boss_BugmaxOpeningLinkFrame00:      dc.w    $E94A, $A00, $F4F4  ; DATA XREF: ROM:Boss_BugmaxLinkedPartDescriptors   o  ; was: word_ECB9A
-Boss_BugmaxOpeningLinkFrame01:      dc.w    $E953, $500, $F8F8  ; DATA XREF: ROM:0004C5C6   o  ; was: word_ECBA0
+Boss_BugmaxOpeningControllerFrame:  dc.w    $E93A, $F00, $F0F0  ; was: word_ECB94
+Boss_BugmaxOpeningLinkFrame00:      dc.w    $E94A, $A00, $F4F4  ; was: word_ECB9A
+Boss_BugmaxOpeningLinkFrame01:      dc.w    $E953, $500, $F8F8  ; was: word_ECBA0
                                         ; ROM:0004C5CE   o
-Boss_BugmaxOpeningLinkFrame02:  dc.w    $E957, $500, $F8F8  ; DATA XREF: ROM:0004C5D6   o  ; was: word_ECBA6
+Boss_BugmaxOpeningLinkFrame02:  dc.w    $E957, $500, $F8F8  ; was: word_ECBA6
                                         ; ROM:0004C5DE   o
-Projectile_BugmaxSpreadFrame00:         dc.w    $E95B, $A00, $F4F4  ; DATA XREF: ROM:Projectile_BugmaxSpreadSpriteAnimation   o  ; was: word_ECBAC
-Projectile_BugmaxSpreadFrame01:         dc.w    $E976, $500, $F8F8  ; DATA XREF: ROM:000ECBD4   o  ; was: word_ECBB2
-Projectile_BugmaxSineFrame00:           dc.w    $E964, $A00, $F4F4  ; DATA XREF: ROM:Projectile_BugmaxSineSpriteAnimation   o  ; was: word_ECBB8
-Projectile_BugmaxSineFrame01:           dc.w    $E96D, $A00, $F4F4  ; DATA XREF: ROM:000ECBE0   o  ; was: word_ECBBE
-Projectile_BugmaxSineFrame02:           dc.w    $F164, $A00, $F4F4  ; DATA XREF: ROM:000ECBE4   o  ; was: word_ECBC4
-Projectile_BugmaxSineFrame03:           dc.w    $F16D, $A00, $F4F4  ; DATA XREF: ROM:000ECBE8   o  ; was: word_ECBCA
-Projectile_BugmaxSpreadSpriteAnimation: dc.w    Projectile_BugmaxSpreadFrame00-*  ; DATA XREF: Projectile_InitBugmaxSpread+A   o  ; was: off_ECBD0
+Projectile_BugmaxSpreadFrame00:         dc.w    $E95B, $A00, $F4F4  ; was: word_ECBAC
+Projectile_BugmaxSpreadFrame01:         dc.w    $E976, $500, $F8F8  ; was: word_ECBB2
+Projectile_BugmaxSineFrame00:           dc.w    $E964, $A00, $F4F4  ; was: word_ECBB8
+Projectile_BugmaxSineFrame01:           dc.w    $E96D, $A00, $F4F4  ; was: word_ECBBE
+Projectile_BugmaxSineFrame02:           dc.w    $F164, $A00, $F4F4  ; was: word_ECBC4
+Projectile_BugmaxSineFrame03:           dc.w    $F16D, $A00, $F4F4  ; was: word_ECBCA
+Projectile_BugmaxSpreadSpriteAnimation: dc.w    Projectile_BugmaxSpreadFrame00-*  ; was: off_ECBD0
                                         ; ROM:000ECBD8   o
                 dc.w    2
                 dc.w    Projectile_BugmaxSpreadFrame01-*
                 dc.w    2
                 dc.w    Projectile_BugmaxSpreadSpriteAnimation-*
                 dc.w    0
-Projectile_BugmaxSineSpriteAnimation:   dc.w    Projectile_BugmaxSineFrame00-*  ; DATA XREF: Projectile_InitBugmaxSine+A   o  ; was: off_ECBDC
+Projectile_BugmaxSineSpriteAnimation:   dc.w    Projectile_BugmaxSineFrame00-*  ; was: off_ECBDC
                                         ; ROM:000ECBEC   o
                 dc.w    6
                 dc.w    Projectile_BugmaxSineFrame01-*

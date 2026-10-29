@@ -1,4 +1,4 @@
-Boss_ShellshogunMainHandler:                            ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_394D8
+Boss_ShellshogunMainHandler:                            ; was: sub_394D8
                 tst.w   4(a5)
                 beq.w   Boss_ShellshogunDispatchState
                 tst.w   $26(a5)
@@ -9,13 +9,13 @@ Boss_ShellshogunMainHandler:                            ; DATA XREF: ROM:Entity_
                 bne.s   Boss_ShellshogunUpdatePaletteAndScreenPosition
                 tst.w   (BossHealth).w
                 beq.w   Boss_ShellshogunBeginDefeat
-Boss_ShellshogunUpdatePaletteAndScreenPosition:         ; CODE XREF: Boss_ShellshogunMainHandler+16   j  ; was: loc_39500
+Boss_ShellshogunUpdatePaletteAndScreenPosition:         ; was: loc_39500
                                         ; Boss_ShellshogunMainHandler+1E   j
                 jsr     (Gfx_ProcessDefaultColorFade).l
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 move.w  d0,$17E(a5)
-Boss_ShellshogunDispatchState:                          ; CODE XREF: Boss_ShellshogunMainHandler+4   j  ; was: loc_39512
+Boss_ShellshogunDispatchState:                          ; was: loc_39512
                                         ; Boss_ShellshogunMainHandler+C   j
                 move.w  4(a5),d0
                 movea.w Boss_ShellshogunStateOffsets(pc,d0.w),a0
@@ -24,7 +24,6 @@ Boss_ShellshogunDispatchState:                          ; CODE XREF: Boss_Shells
 ; End of function Boss_ShellshogunMainHandler
 ; ---------------------------------------------------------------------------
 Boss_ShellshogunStateOffsets:   dc.w    Boss_ShellshogunInitState-Boss_ShellshogunInitState  ; was: off_39522
-                                        ; DATA XREF: Boss_ShellshogunMainHandler+3E   r
                 dc.w    Boss_ShellshogunSetupPhase-Boss_ShellshogunInitState
                 dc.w    Boss_ShellshogunEntrancePoseState-Boss_ShellshogunInitState
                 dc.w    Boss_ShellshogunPreBattleDelayState-Boss_ShellshogunInitState
@@ -47,7 +46,7 @@ Boss_ShellshogunStateOffsets:   dc.w    Boss_ShellshogunInitState-Boss_Shellshog
                 dc.w    Boss_ShellshogunTimedStageAdvanceState-Boss_ShellshogunInitState
 
 ; Initializes Shellshogun boss state and clears objects
-Boss_ShellshogunInitState:                              ; DATA XREF: Boss_ShellshogunMainHandler+42   o  ; was: sub_3954C
+Boss_ShellshogunInitState:                              ; was: sub_3954C
                                         ; ROM:Boss_ShellshogunStateOffsets   o
                 addq.w  #2,4(a5)
                 move.w  #$40,$48(a5)                    ; '@'
@@ -57,12 +56,12 @@ Boss_ShellshogunInitState:                              ; DATA XREF: Boss_Shells
                 clr.w   8(a5)
                 clr.w   $A(a5)
                 move.b  #1,(SoundFadeOutDelay).w
-Boss_ShellshogunInitializationWaitReturn:               ; CODE XREF: Boss_ShellshogunSetupPhase+4   j  ; was: locret_39570
+Boss_ShellshogunInitializationWaitReturn:               ; was: locret_39570
                                         ; Boss_ShellshogunSetupPhase+C   j
                 rts
 ; End of function Boss_ShellshogunInitState
 ; Sets up boss phase with metasprite initialization
-Boss_ShellshogunSetupPhase:                             ; DATA XREF: ROM:00039524   o  ; was: sub_39572
+Boss_ShellshogunSetupPhase:                             ; was: sub_39572
                 subq.w  #1,$48(a5)
                 bmi.w   Boss_ShellshogunInitializationWaitReturn
                 tst.w   (DataLoaderControl).w
@@ -98,7 +97,7 @@ Boss_ShellshogunSetupPhase:                             ; DATA XREF: ROM:0003952
                 movea.w #(TwentyFifthEntityType-M68K_RAM),a0
                 move.w  #$6464,d0
                 moveq   #2,d7
-Boss_ShellshogunInitializeAuxiliaryParts:               ; CODE XREF: Boss_ShellshogunSetupPhase+C4   j  ; was: loc_39610
+Boss_ShellshogunInitializeAuxiliaryParts:               ; was: loc_39610
                 move.w  #$10,(a0)
                 move.w  #$8000,2(a0)
                 move.w  d0,$E(a0)
@@ -112,7 +111,7 @@ Boss_ShellshogunInitializeAuxiliaryParts:               ; CODE XREF: Boss_Shells
                 move.w  #$FCFC,$9CA(a5)
                 movea.w #(TwentyEighthEntityType-M68K_RAM),a0
                 moveq   #2,d7
-Boss_ShellshogunInitializeSecondaryObjects:             ; CODE XREF: Boss_ShellshogunSetupPhase+10A   j  ; was: loc_3964C
+Boss_ShellshogunInitializeSecondaryObjects:             ; was: loc_3964C
                 move.w  #$10,(a0)
                 clr.w   2(a0)
                 clr.w   $10(a0)
@@ -138,10 +137,9 @@ Boss_ShellshogunInitializeSecondaryObjects:             ; CODE XREF: Boss_Shells
 ; End of function Boss_ShellshogunSetupPhase
 ; ---------------------------------------------------------------------------
 Boss_ShellshogunIntroTileLoadCommand:   dc.b    $61, 0, $20, 0, 2, 1, 3, 1, 2, 4, 5, 6  ; was: byte_396C6
-                                        ; DATA XREF: Boss_ShellshogunSetupPhase+134   o
 
 ; Checks phase conditions and advances state
-Boss_ShellshogunEntrancePoseState:                      ; DATA XREF: ROM:00039526   o  ; was: sub_396D2
+Boss_ShellshogunEntrancePoseState:                      ; was: sub_396D2
                 bsr.w   Boss_ShellshogunUpdateSharedPose
                 tst.w   $17C(a5)
                 beq.s   Boss_ShellshogunEntrancePoseReturn
@@ -155,19 +153,19 @@ Boss_ShellshogunEntrancePoseState:                      ; DATA XREF: ROM:0003952
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 move.w  #$40,$BE(a5)                    ; '@'
-Boss_ShellshogunTriggerEntranceEffect:                  ; CODE XREF: Boss_ShellshogunEntrancePoseState+10   j  ; was: loc_39708
+Boss_ShellshogunTriggerEntranceEffect:                  ; was: loc_39708
                                         ; Boss_ShellshogunEntrancePoseState+20   j
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
                 move.b  #$A1,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunEntrancePoseReturn:                     ; CODE XREF: Boss_ShellshogunEntrancePoseState+8   j  ; was: locret_3971E
+Boss_ShellshogunEntrancePoseReturn:                     ; was: locret_3971E
                                         ; Boss_ShellshogunEntrancePoseState+18   j
                 rts
 ; End of function Boss_ShellshogunEntrancePoseState
 ; Runs the common update during the timed pre-battle delay
-Boss_ShellshogunPreBattleDelayState:                    ; DATA XREF: ROM:00039528   o  ; was: sub_39720
+Boss_ShellshogunPreBattleDelayState:                    ; was: sub_39720
                 move.w  #$10,$BC(a5)
                 move.w  a5,$48(a5)
                 move.w  #$CEC0,$4A(a5)
@@ -180,11 +178,11 @@ Boss_ShellshogunPreBattleDelayState:                    ; DATA XREF: ROM:0003952
                 jsr     (BossMessage_Start).l
                 move.b  #$8A,d0
                 jsr     (Sound_QueueBGMOrStop).l
-Boss_ShellshogunPreBattleDelayReturn:                   ; CODE XREF: Boss_ShellshogunPreBattleDelayState+1E   j  ; was: locret_39756
+Boss_ShellshogunPreBattleDelayReturn:                   ; was: locret_39756
                 rts
 ; End of function Boss_ShellshogunPreBattleDelayState
 ; Waits for the shared stage gate before entering battle
-Boss_ShellshogunWaitForStageReadyState:                 ; DATA XREF: ROM:0003952A   o  ; was: sub_39758
+Boss_ShellshogunWaitForStageReadyState:                 ; was: sub_39758
                 move.w  #$10,$BC(a5)
                 bsr.w   Boss_ShellshogunDecisionState
                 tst.w   (MessageSequenceState).w
@@ -192,11 +190,11 @@ Boss_ShellshogunWaitForStageReadyState:                 ; DATA XREF: ROM:0003952
                 addq.w  #2,4(a5)
                 clr.b   (BossColorEffectFlags).w
                 subi.w  #$40,(CameraXLowerBound).w      ; '@'
-Boss_ShellshogunWaitForStageReadyReturn:                ; CODE XREF: Boss_ShellshogunWaitForStageReadyState+E   j  ; was: locret_39776
+Boss_ShellshogunWaitForStageReadyReturn:                ; was: locret_39776
                 rts
 ; End of function Boss_ShellshogunWaitForStageReadyState
 ; Initializes the defeat launch when shared boss health reaches zero
-Boss_ShellshogunBeginDefeat:                            ; CODE XREF: Boss_ShellshogunMainHandler+24   j  ; was: sub_39778
+Boss_ShellshogunBeginDefeat:                            ; was: sub_39778
                 move.b  #1,(SoundFadeOutDelay).w
                 bset    #0,(StageTimerPauseFlag).w
                 move.b  #2,(BossColorEffectFlags).w
@@ -214,7 +212,7 @@ Boss_ShellshogunBeginDefeat:                            ; CODE XREF: Boss_Shells
                 bra.s   Boss_ShellshogunInitializeDefeatLaunch
 ; End of function Boss_ShellshogunBeginDefeat
 ; Updates the launched boss during the first defeat state
-Boss_ShellshogunDefeatLaunchState:                      ; DATA XREF: ROM:00039534   o  ; was: sub_397C4
+Boss_ShellshogunDefeatLaunchState:                      ; was: sub_397C4
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 tst.w   $BC(a5)
                 bpl.s   Boss_ShellshogunUpdateDefeatLaunch
@@ -230,7 +228,7 @@ Boss_ShellshogunDefeatLaunchState:                      ; DATA XREF: ROM:0003953
                 moveq   #0,d1
                 jmp     Object_ClearEntityRecordsExceptTwoTypes
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunUpdateDefeatLaunch:                     ; CODE XREF: Boss_ShellshogunDefeatLaunchState+A   j  ; was: loc_39802
+Boss_ShellshogunUpdateDefeatLaunch:                     ; was: loc_39802
                                         ; Boss_ShellshogunDefeatLaunchState+1C   j
                 subq.w  #1,$BC(a5)
                 addi.w  #$C,$56(a5)
@@ -240,7 +238,7 @@ Boss_ShellshogunUpdateDefeatLaunch:                     ; CODE XREF: Boss_Shells
                 cmpi.w  #$120,$14(a5)
                 bmi.s   Boss_ShellshogunRenderDefeatLaunch
                 move.w  #$120,$14(a5)
-Boss_ShellshogunInitializeDefeatLaunch:                 ; CODE XREF: Boss_ShellshogunBeginDefeat+4A   j  ; was: loc_3982A
+Boss_ShellshogunInitializeDefeatLaunch:                 ; was: loc_3982A
                 move.l  #$FFFBA000,$1C(a5)
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
@@ -251,14 +249,14 @@ Boss_ShellshogunInitializeDefeatLaunch:                 ; CODE XREF: Boss_Shells
                 bpl.s   Boss_ShellshogunSetNegativeDefeatVelocity
                 btst    #3,(RandomNumberState+1).w
                 bne.s   Boss_ShellshogunSetNegativeDefeatVelocity
-Boss_ShellshogunSetPositiveDefeatVelocity:              ; CODE XREF: Boss_ShellshogunDefeatLaunchState+86   j  ; was: loc_3985C
+Boss_ShellshogunSetPositiveDefeatVelocity:              ; was: loc_3985C
                 move.w  #2,$18(a5)
                 bra.s   Boss_ShellshogunRenderDefeatLaunch
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunSetNegativeDefeatVelocity:              ; CODE XREF: Boss_ShellshogunDefeatLaunchState+8E   j  ; was: loc_39864
+Boss_ShellshogunSetNegativeDefeatVelocity:              ; was: loc_39864
                                         ; Boss_ShellshogunDefeatLaunchState+96   j
                 move.w  #$FFFD,$18(a5)
-Boss_ShellshogunRenderDefeatLaunch:                     ; CODE XREF: Boss_ShellshogunDefeatLaunchState+56   j  ; was: loc_3986A
+Boss_ShellshogunRenderDefeatLaunch:                     ; was: loc_3986A
                                         ; Boss_ShellshogunDefeatLaunchState+5E   j
                 bsr.w   Boss_ShellshogunSpawnDefeatDebris
                 lea     Boss_ShellshogunDefeatLaunchPoses(pc),a1
@@ -267,42 +265,42 @@ Boss_ShellshogunRenderDefeatLaunch:                     ; CODE XREF: Boss_Shells
                 bra.w   Boss_ShellshogunUpdatePhysicsAndRender
 ; End of function Boss_ShellshogunDefeatLaunchState
 ; Advances the palette phase and starts the post-boss player effect
-Boss_ShellshogunDefeatPaletteState:                     ; DATA XREF: ROM:00039536   o  ; was: sub_3987C
+Boss_ShellshogunDefeatPaletteState:                     ; was: sub_3987C
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 subq.w  #1,$BC(a5)
                 bpl.s   Boss_ShellshogunApplyDefeatPaletteFade
                 addq.w  #2,4(a5)
                 jsr     (TransitionEffect_SpawnAtOwner).l
                 move.b  #4,(PlaneAScrollModeFlags).w
-Boss_ShellshogunApplyDefeatPaletteFade:                 ; CODE XREF: Boss_ShellshogunDefeatPaletteState+A   j  ; was: loc_39898
+Boss_ShellshogunApplyDefeatPaletteFade:                 ; was: loc_39898
                 jmp     Boss_ApplyDefeatPaletteFade
 ; End of function Boss_ShellshogunDefeatPaletteState
 ; Reduces the defeat-effect step before the final delay
-Boss_ShellshogunDefeatDissolveState:                    ; DATA XREF: ROM:00039538   o  ; was: sub_3989E
+Boss_ShellshogunDefeatDissolveState:                    ; was: sub_3989E
                 subq.w  #2,6(a5)
                 bne.s   Boss_ShellshogunApplyDefeatDissolvePaletteFade
                 addq.w  #2,4(a5)
                 move.w  #$E0,$BC(a5)
-Boss_ShellshogunApplyDefeatDissolvePaletteFade:         ; CODE XREF: Boss_ShellshogunDefeatDissolveState+4   j  ; was: loc_398AE
+Boss_ShellshogunApplyDefeatDissolvePaletteFade:         ; was: loc_398AE
                 jmp     Boss_ApplyDefeatPaletteFade
 ; End of function Boss_ShellshogunDefeatDissolveState
 ; Waits before marking the defeated boss object complete
-Boss_ShellshogunDefeatCompletionDelayState:             ; DATA XREF: ROM:0003953A   o  ; was: sub_398B4
+Boss_ShellshogunDefeatCompletionDelayState:             ; was: sub_398B4
                 subq.w  #1,$BC(a5)
                 bpl.s   Boss_ShellshogunDefeatCompletionDelayReturn
                 bset    #4,2(a5)
-Boss_ShellshogunDefeatCompletionDelayReturn:            ; CODE XREF: Boss_ShellshogunDefeatCompletionDelayState+4   j  ; was: locret_398C0
+Boss_ShellshogunDefeatCompletionDelayReturn:            ; was: locret_398C0
                 rts
 ; End of function Boss_ShellshogunDefeatCompletionDelayState
 ; Resets Shellshogun boss to idle state with cleared velocities and animations
-Boss_ShellshogunReturnToDecisionState:                  ; CODE XREF: Boss_ShellshogunPoseGateState+2A   j  ; was: sub_398C2
+Boss_ShellshogunReturnToDecisionState:                  ; was: sub_398C2
                                         ; Boss_ShellshogunSlamFollowThroughState+2E   j
                 move.w  #$1E0,d0
                 sub.w   (BossCombatCounter).w,d0
                 asr.w   #4,d0
                 addq.w  #2,d0
                 move.w  d0,$BC(a5)
-Boss_ShellshogunInitializeDecisionState:                ; CODE XREF: Boss_ShellshogunDecisionState+B6   j  ; was: loc_398D2
+Boss_ShellshogunInitializeDecisionState:                ; was: loc_398D2
                                         ; Boss_ShellshogunPoseGateState+52   j
                 move.w  #$A,4(a5)
                 clr.w   $58(a5)
@@ -315,14 +313,13 @@ Boss_ShellshogunInitializeDecisionState:                ; CODE XREF: Boss_Shells
                 move.w  #$148,$8B4(a5)
 ; End of function Boss_ShellshogunReturnToDecisionState
 ; Selects the next combat state after the active decision delay
-Boss_ShellshogunDecisionState:                          ; CODE XREF: Boss_ShellshogunPreBattleDelayState+16   p  ; was: sub_398FE
+Boss_ShellshogunDecisionState:                          ; was: sub_398FE
                                         ; Boss_ShellshogunWaitForStageReadyState+6   p
-                                        ; DATA XREF:
                 move.w  (FrameCounter).w,d0
                 andi.w  #$F,d0
                 bne.s   Boss_ShellshogunCheckDecisionTimer
                 bsr.w   Boss_ShellshogunUpdateFacingPartFlags
-Boss_ShellshogunCheckDecisionTimer:                     ; CODE XREF: Boss_ShellshogunDecisionState+8   j  ; was: loc_3990C
+Boss_ShellshogunCheckDecisionTimer:                     ; was: loc_3990C
                 subq.w  #1,$BC(a5)
                 bpl.s   Boss_ShellshogunUpdateDecisionPose
                 move.w  (BossCombatCounter).w,d0
@@ -331,7 +328,7 @@ Boss_ShellshogunCheckDecisionTimer:                     ; CODE XREF: Boss_Shells
                 bpl.s   Boss_ShellshogunSelectAttackByDistance
                 cmpi.w  #$1D8,d0
                 bpl.w   Boss_ShellshogunInitJumpAttack
-Boss_ShellshogunSelectAttackByDistance:                 ; CODE XREF: Boss_ShellshogunDecisionState+22   j  ; was: loc_3992A
+Boss_ShellshogunSelectAttackByDistance:                 ; was: loc_3992A
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$D0,d0
                 bpl.s   Boss_ShellshogunSelectLongRangeAttack
@@ -344,16 +341,16 @@ Boss_ShellshogunSelectAttackByDistance:                 ; CODE XREF: Boss_Shells
                 beq.w   Boss_ShellshogunSlamAttackInit
                 bra.w   Boss_ShellshogunInitLeapAttack
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunSelectLongRangeAttack:                  ; CODE XREF: Boss_ShellshogunDecisionState+36   j  ; was: loc_39954
+Boss_ShellshogunSelectLongRangeAttack:                  ; was: loc_39954
                 btst    #3,(RandomNumberState).w
                 bne.w   Boss_ShellshogunInitDirectionalAttack
-Boss_ShellshogunBeginPoseGateState:                     ; CODE XREF: Boss_ShellshogunDecisionState+40   j  ; was: loc_3995E
+Boss_ShellshogunBeginPoseGateState:                     ; was: loc_3995E
                 move.w  #$C,4(a5)
                 move.w  #4,$58(a5)
                 move.w  #$FFFF,$C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunUpdateDecisionPose:                     ; CODE XREF: Boss_ShellshogunDecisionState+12   j  ; was: loc_39972
+Boss_ShellshogunUpdateDecisionPose:                     ; was: loc_39972
                 lea     Boss_ShellshogunDecisionPoses(pc),a1
                 nop
                 bsr.w   Boss_ShellshogunUpdatePose
@@ -361,7 +358,7 @@ Boss_ShellshogunUpdateDecisionPose:                     ; CODE XREF: Boss_Shells
                 move.w  #$148,$494(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunBeginTimedStageAdvance:                 ; CODE XREF: Boss_ShellshogunDecisionState+18   j  ; was: loc_39988
+Boss_ShellshogunBeginTimedStageAdvance:                 ; was: loc_39988
                 move.b  #$42,d0                         ; 'B'
                 jsr     (Sound_QueueSFXRequest).l
                 move.w  #$28,4(a5)                      ; '('
@@ -369,13 +366,13 @@ Boss_ShellshogunBeginTimedStageAdvance:                 ; CODE XREF: Boss_Shells
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 ; Shellshogun shell projectile attack with scroll
-Boss_ShellshogunTimedStageAdvanceState:                 ; DATA XREF: ROM:0003954A   o  ; was: loc_399A8
+Boss_ShellshogunTimedStageAdvanceState:                 ; was: loc_399A8
                 subq.w  #1,$BC(a5)
                 bpl.s   Boss_ShellshogunUpdateTimedStageAdvance
                 move.w  #$50,$BC(a5)                    ; 'P'
                 bra.w   Boss_ShellshogunInitializeDecisionState
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunUpdateTimedStageAdvance:                ; CODE XREF: Boss_ShellshogunDecisionState+AE   j  ; was: loc_399B8
+Boss_ShellshogunUpdateTimedStageAdvance:                ; was: loc_399B8
                 addi.w  #3,(BossCombatCounter).w
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
@@ -388,7 +385,7 @@ Boss_ShellshogunUpdateTimedStageAdvance:                ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunDecisionState
 ; Evaluates pose events and position before returning or starting a slam
-Boss_ShellshogunPoseGateState:                          ; DATA XREF: ROM:0003952E   o  ; was: sub_399E8
+Boss_ShellshogunPoseGateState:                          ; was: sub_399E8
                 bsr.w   Boss_ShellshogunUpdateSharedPose
                 tst.w   $17C(a5)
                 beq.s   Boss_ShellshogunPoseGateReturn
@@ -402,7 +399,7 @@ Boss_ShellshogunPoseGateState:                          ; DATA XREF: ROM:0003952
                 move.w  #4,$BC(a5)
                 bra.w   Boss_ShellshogunReturnToDecisionState
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunEvaluatePoseGatePosition:               ; CODE XREF: Boss_ShellshogunPoseGateState+1E   j  ; was: loc_39A16
+Boss_ShellshogunEvaluatePoseGatePosition:               ; was: loc_39A16
                 move.w  $17E(a5),d0
                 tst.w   $54(a5)
                 beq.s   Boss_ShellshogunCheckLeftPoseGateThreshold
@@ -410,26 +407,26 @@ Boss_ShellshogunEvaluatePoseGatePosition:               ; CODE XREF: Boss_Shells
                 bpl.s   Boss_ShellshogunCheckPoseGateSlamDistance
                 bra.s   Boss_ShellshogunReturnFromPoseGate
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunCheckLeftPoseGateThreshold:             ; CODE XREF: Boss_ShellshogunPoseGateState+36   j  ; was: loc_39A28
+Boss_ShellshogunCheckLeftPoseGateThreshold:             ; was: loc_39A28
                 cmpi.w  #$1348,d0
                 bmi.s   Boss_ShellshogunCheckPoseGateSlamDistance
-Boss_ShellshogunReturnFromPoseGate:                     ; CODE XREF: Boss_ShellshogunPoseGateState+3E   j  ; was: loc_39A2E
+Boss_ShellshogunReturnFromPoseGate:                     ; was: loc_39A2E
                 move.w  #4,$58(a5)
                 move.w  #$60,$BC(a5)                    ; '`'
                 bra.w   Boss_ShellshogunInitializeDecisionState
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunTriggerPoseGateEffect:                  ; CODE XREF: Boss_ShellshogunPoseGateState+10   j  ; was: loc_39A3E
+Boss_ShellshogunTriggerPoseGateEffect:                  ; was: loc_39A3E
                                         ; Boss_ShellshogunPoseGateState+74   j
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
                 move.b  #$A1,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunPoseGateReturn:                         ; CODE XREF: Boss_ShellshogunPoseGateState+8   j  ; was: locret_39A54
+Boss_ShellshogunPoseGateReturn:                         ; was: locret_39A54
                                         ; Boss_ShellshogunPoseGateState+18   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunCheckPoseGateSlamDistance:              ; CODE XREF: Boss_ShellshogunPoseGateState+3C   j  ; was: loc_39A56
+Boss_ShellshogunCheckPoseGateSlamDistance:              ; was: loc_39A56
                                         ; Boss_ShellshogunPoseGateState+44   j
                 jsr     (Physics_GetPlayerDelta).l
                 beq.s   Boss_ShellshogunTriggerPoseGateEffect
@@ -439,7 +436,7 @@ Boss_ShellshogunCheckPoseGateSlamDistance:              ; CODE XREF: Boss_Shells
                 bra.s   Boss_ShellshogunTriggerPoseGateEffect
 ; End of function Boss_ShellshogunPoseGateState
 ; Initiates Shellshogun slam attack sequence with physics and sound effects
-Boss_ShellshogunSlamAttackInit:                         ; CODE XREF: Boss_ShellshogunDecisionState+4E   j  ; was: sub_39A6A
+Boss_ShellshogunSlamAttackInit:                         ; was: sub_39A6A
                                         ; Boss_ShellshogunPoseGateState+7C   p
                 move.w  #$E,4(a5)
                 clr.w   $58(a5)
@@ -448,7 +445,7 @@ Boss_ShellshogunSlamAttackInit:                         ; CODE XREF: Boss_Shells
                 move.w  #$CEC0,$4A(a5)
                 move.w  #$148,$8B4(a5)
 ; Shellshogun slam attack preparation
-Boss_ShellshogunSlamPreparationState:                   ; DATA XREF: ROM:00039530   o  ; was: loc_39A8A
+Boss_ShellshogunSlamPreparationState:                   ; was: loc_39A8A
                 bsr.w   Boss_ShellshogunUpdateLinkedPartRotation
                 cmpi.w  #$14,$58(a5)
                 bmi.s   Boss_ShellshogunUpdateSlamAnimation
@@ -462,7 +459,7 @@ Boss_ShellshogunSlamPreparationState:                   ; DATA XREF: ROM:0003953
                 bra.s   Boss_ShellshogunUpdateSlamAnimation
 ; End of function Boss_ShellshogunSlamAttackInit
 ; Updates the slam follow-through pose and linked-part rotation
-Boss_ShellshogunSlamFollowThroughState:                 ; DATA XREF: ROM:00039532   o  ; was: sub_39ABE
+Boss_ShellshogunSlamFollowThroughState:                 ; was: sub_39ABE
                 bsr.s   Boss_ShellshogunUpdateSlamAnimation
                 tst.w   $17C(a5)
                 beq.s   Boss_ShellshogunUpdateSlamRotation
@@ -473,7 +470,7 @@ Boss_ShellshogunSlamFollowThroughState:                 ; DATA XREF: ROM:0003953
                 move.w  #8,(PlaneAShakeLevel).w
                 move.w  #8,(PlaneBShakeLevel).w
                 clr.b   $A41(a5)
-Boss_ShellshogunUpdateSlamRotation:                     ; CODE XREF: Boss_ShellshogunSlamFollowThroughState+6   j  ; was: loc_39AE8
+Boss_ShellshogunUpdateSlamRotation:                     ; was: loc_39AE8
                                         ; Boss_ShellshogunSlamFollowThroughState+E   j
                 tst.w   $58(a5)
                 bmi.w   Boss_ShellshogunReturnToDecisionState
@@ -481,12 +478,12 @@ Boss_ShellshogunUpdateSlamRotation:                     ; CODE XREF: Boss_Shells
                 beq.s   Boss_ShellshogunStoreSlamRotation
                 addi.w  #$10,d0
                 andi.w  #$1F0,d0
-Boss_ShellshogunStoreSlamRotation:                      ; CODE XREF: Boss_ShellshogunSlamFollowThroughState+36   j  ; was: loc_39AFE
+Boss_ShellshogunStoreSlamRotation:                      ; was: loc_39AFE
                 move.w  d0,$29C(a5)
                 rts
 ; End of function Boss_ShellshogunSlamFollowThroughState
 ; Advances and renders the slam pose stream
-Boss_ShellshogunUpdateSlamAnimation:                    ; CODE XREF: Boss_ShellshogunSlamAttackInit+2A   j  ; was: sub_39B04
+Boss_ShellshogunUpdateSlamAnimation:                    ; was: sub_39B04
                                         ; Boss_ShellshogunSlamAttackInit+52   j
                 lea     Boss_ShellshogunSlamPoses(pc),a1
                 nop
@@ -496,7 +493,7 @@ Boss_ShellshogunUpdateSlamAnimation:                    ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunUpdateSlamAnimation
 ; Initializes the facing-dependent directional attack
-Boss_ShellshogunInitDirectionalAttack:                  ; CODE XREF: Boss_ShellshogunDecisionState+46   j  ; was: sub_39B1C
+Boss_ShellshogunInitDirectionalAttack:                  ; was: sub_39B1C
                                         ; Boss_ShellshogunDecisionState+5C   j
                 move.w  #$1A,4(a5)
                 move.w  #1,$11E(a5)
@@ -505,7 +502,7 @@ Boss_ShellshogunInitDirectionalAttack:                  ; CODE XREF: Boss_Shells
                 move.w  #$FFFF,$C(a5)
 ; End of function Boss_ShellshogunInitDirectionalAttack
 ; Advances the directional attack windup pose
-Boss_ShellshogunDirectionalAttackWindupState:           ; DATA XREF: ROM:0003953C   o  ; was: sub_39B38
+Boss_ShellshogunDirectionalAttackWindupState:           ; was: sub_39B38
                 tst.w   $11E(a5)
                 bpl.s   Boss_ShellshogunUpdateDirectionalAttackWindup
                 addq.w  #2,4(a5)
@@ -513,7 +510,7 @@ Boss_ShellshogunDirectionalAttackWindupState:           ; DATA XREF: ROM:0003953
                 move.b  #$C0,$A41(a5)
                 subi.w  #$20,$29C(a5)                   ; ' '
                 andi.w  #$1E0,$29C(a5)
-Boss_ShellshogunUpdateDirectionalAttackWindup:          ; CODE XREF: Boss_ShellshogunDirectionalAttackWindupState+4   j  ; was: loc_39B58
+Boss_ShellshogunUpdateDirectionalAttackWindup:          ; was: loc_39B58
                 lea     Boss_ShellshogunDirectionalAttackPoses(pc),a1
                 nop
                 bsr.w   Boss_ShellshogunUpdatePose
@@ -522,18 +519,18 @@ Boss_ShellshogunUpdateDirectionalAttackWindup:          ; CODE XREF: Boss_Shells
                 rts
 ; End of function Boss_ShellshogunDirectionalAttackWindupState
 ; Applies the facing-dependent horizontal motion and attack effects
-Boss_ShellshogunDirectionalAttackMotionState:           ; DATA XREF: ROM:0003953E   o  ; was: sub_39B70
+Boss_ShellshogunDirectionalAttackMotionState:           ; was: sub_39B70
                 tst.w   $58(a5)
                 bpl.s   Boss_ShellshogunUpdateDirectionalAttackRotation
                 clr.l   $18(a5)
                 bra.w   Boss_ShellshogunReturnToDecisionState
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunUpdateDirectionalAttackRotation:        ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+4   j  ; was: loc_39B7E
+Boss_ShellshogunUpdateDirectionalAttackRotation:        ; was: loc_39B7E
                 tst.w   $29C(a5)
                 beq.s   Boss_ShellshogunCheckDirectionalAttackLaunch
                 subi.w  #$10,$29C(a5)
                 andi.w  #$1E0,$29C(a5)
-Boss_ShellshogunCheckDirectionalAttackLaunch:           ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+12   j  ; was: loc_39B90
+Boss_ShellshogunCheckDirectionalAttackLaunch:           ; was: loc_39B90
                 tst.w   $17C(a5)
                 beq.s   Boss_ShellshogunApplyDirectionalAttackVelocity
                 cmpi.w  #$FFFD,$11E(a5)
@@ -548,23 +545,23 @@ Boss_ShellshogunCheckDirectionalAttackLaunch:           ; CODE XREF: Boss_Shells
                 tst.w   $54(a5)
                 bne.s   Boss_ShellshogunApplyDirectionalAttackVelocity
                 neg.l   $18(a5)
-Boss_ShellshogunApplyDirectionalAttackVelocity:         ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+24   j  ; was: loc_39BD0
+Boss_ShellshogunApplyDirectionalAttackVelocity:         ; was: loc_39BD0
                                         ; Boss_ShellshogunDirectionalAttackMotionState+2C   j
                 tst.w   $54(a5)
                 beq.s   Boss_ShellshogunApplyNegativeDirectionalVelocity
                 addi.l  #$4000,$18(a5)
                 bmi.s   Boss_ShellshogunRenderDirectionalAttack
-Boss_ShellshogunStopDirectionalAttackVelocity:          ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+88   j  ; was: loc_39BE0
+Boss_ShellshogunStopDirectionalAttackVelocity:          ; was: loc_39BE0
                 clr.l   $18(a5)
                 tst.w   $11C(a5)
                 beq.s   Boss_ShellshogunRenderDirectionalAttack
                 clr.b   $A41(a5)
                 bra.s   Boss_ShellshogunRenderDirectionalAttack
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunApplyNegativeDirectionalVelocity:       ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+64   j  ; was: loc_39BF0
+Boss_ShellshogunApplyNegativeDirectionalVelocity:       ; was: loc_39BF0
                 subi.l  #$4000,$18(a5)
                 bmi.s   Boss_ShellshogunStopDirectionalAttackVelocity
-Boss_ShellshogunRenderDirectionalAttack:                ; CODE XREF: Boss_ShellshogunDirectionalAttackMotionState+6E   j  ; was: loc_39BFA
+Boss_ShellshogunRenderDirectionalAttack:                ; was: loc_39BFA
                                         ; Boss_ShellshogunDirectionalAttackMotionState+78   j
                 lea     Boss_ShellshogunDirectionalAttackPoses(pc),a1
                 nop
@@ -574,7 +571,7 @@ Boss_ShellshogunRenderDirectionalAttack:                ; CODE XREF: Boss_Shells
                 bra.w   Boss_ShellshogunUpdateSpriteFlip
 ; End of function Boss_ShellshogunDirectionalAttackMotionState
 ; Initialize Shellshogun jump attack with position and animation setup
-Boss_ShellshogunInitJumpAttack:                         ; CODE XREF: Boss_ShellshogunDecisionState+28   j  ; was: sub_39C14
+Boss_ShellshogunInitJumpAttack:                         ; was: sub_39C14
                 move.w  #$1E,4(a5)
                 move.w  a5,$48(a5)
                 move.w  #$CEC0,$4A(a5)
@@ -587,7 +584,7 @@ Boss_ShellshogunInitJumpAttack:                         ; CODE XREF: Boss_Shells
                 move.w  #$FFFF,$C(a5)
 ; End of function Boss_ShellshogunInitJumpAttack
 ; Advances the jump-attack windup pose
-Boss_ShellshogunJumpAttackWindupState:                  ; DATA XREF: ROM:00039540   o  ; was: sub_39C4C
+Boss_ShellshogunJumpAttackWindupState:                  ; was: sub_39C4C
                 tst.w   $11E(a5)
                 bmi.s   Boss_ShellshogunBeginJumpAttackAirState
                 bsr.w   Boss_ShellshogunUpdateFacingPartFlags
@@ -596,12 +593,12 @@ Boss_ShellshogunJumpAttackWindupState:                  ; DATA XREF: ROM:0003954
                 bne.s   Boss_ShellshogunSetJumpWindupPartFrame
                 move.b  #$D1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_ShellshogunSetJumpWindupPartFrame:                 ; CODE XREF: Boss_ShellshogunJumpAttackWindupState+16   j  ; was: loc_39C6E
+Boss_ShellshogunSetJumpWindupPartFrame:                 ; was: loc_39C6E
                 move.w  #$C860,$23E(a5)
                 cmpi.w  #9,$58(a5)
                 bmi.s   Boss_ShellshogunRenderJumpWindup
                 move.w  #$CC80,$23E(a5)
-Boss_ShellshogunRenderJumpWindup:                       ; CODE XREF: Boss_ShellshogunJumpAttackWindupState+2E   j  ; was: loc_39C82
+Boss_ShellshogunRenderJumpWindup:                       ; was: loc_39C82
                 lea     Boss_ShellshogunJumpWindupPoses(pc),a1
                 nop
                 bsr.w   Boss_ShellshogunUpdatePose
@@ -609,13 +606,13 @@ Boss_ShellshogunRenderJumpWindup:                       ; CODE XREF: Boss_Shells
                 move.l  #Boss_ShellshogunSpriteMapping01,$68(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunBeginJumpAttackAirState:                ; CODE XREF: Boss_ShellshogunJumpAttackWindupState+4   j  ; was: loc_39C9A
+Boss_ShellshogunBeginJumpAttackAirState:                ; was: loc_39C9A
                 addq.w  #2,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 move.w  #$C860,$23E(a5)
 ; Shellshogun jump attack air phase with rotation
-Boss_ShellshogunJumpAttackAirState:                     ; DATA XREF: ROM:00039542   o  ; was: loc_39CAE
+Boss_ShellshogunJumpAttackAirState:                     ; was: loc_39CAE
                 subq.w  #1,(BossCombatCounter).w
                 tst.w   $58(a5)
                 bpl.s   Boss_ShellshogunUpdateJumpAirRotation
@@ -623,27 +620,27 @@ Boss_ShellshogunJumpAttackAirState:                     ; DATA XREF: ROM:0003954
                 clr.b   $A41(a5)
                 bra.w   Boss_ShellshogunReturnToDecisionState
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunUpdateJumpAirRotation:                  ; CODE XREF: Boss_ShellshogunJumpAttackAirState+18   j  ; was: loc_39CC6
+Boss_ShellshogunUpdateJumpAirRotation:                  ; was: loc_39CC6
                 subi.w  #$10,$29C(a5)
                 andi.w  #$1E0,$29C(a5)
                 bne.s   Boss_ShellshogunRenderJumpAir
                 move.b  #$D1,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_ShellshogunRenderJumpAir:                          ; CODE XREF: Boss_ShellshogunJumpAttackAirState+30   j  ; was: loc_39CDE
+Boss_ShellshogunRenderJumpAir:                          ; was: loc_39CDE
                 lea     Boss_ShellshogunJumpAirPoses(pc),a1
                 nop
                 bsr.w   Boss_ShellshogunUpdatePose
                 bra.w   Boss_ShellshogunRenderSprites
 ; End of function Boss_ShellshogunJumpAttackWindupState
 ; Initializes the leap windup selected by the decision state
-Boss_ShellshogunInitLeapAttack:                         ; CODE XREF: Boss_ShellshogunDecisionState+52   j  ; was: sub_39CEC
+Boss_ShellshogunInitLeapAttack:                         ; was: sub_39CEC
                 move.w  #$22,4(a5)                      ; '"'
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 move.w  #2,$11E(a5)
 ; End of function Boss_ShellshogunInitLeapAttack
 ; Advances the leap windup before installing upward velocity
-Boss_ShellshogunLeapWindupState:                        ; DATA XREF: ROM:00039544   o  ; was: sub_39D02
+Boss_ShellshogunLeapWindupState:                        ; was: sub_39D02
                 tst.w   $11E(a5)
                 bmi.s   Boss_ShellshogunBeginLeapFlight
                 lea     Boss_ShellshogunLeapPoses(pc),a1
@@ -653,7 +650,7 @@ Boss_ShellshogunLeapWindupState:                        ; DATA XREF: ROM:0003954
                 move.l  #Boss_ShellshogunSpriteMapping00,$68(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunBeginLeapFlight:                        ; CODE XREF: Boss_ShellshogunLeapWindupState+4   j  ; was: loc_39D20
+Boss_ShellshogunBeginLeapFlight:                        ; was: loc_39D20
                 addq.w  #2,4(a5)
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
@@ -663,7 +660,7 @@ Boss_ShellshogunBeginLeapFlight:                        ; CODE XREF: Boss_Shells
                 bsr.w   Boss_ShellshogunUpdateFacingPartFlags
 ; End of function Boss_ShellshogunLeapWindupState
 ; Applies leap-flight velocity until the landing threshold
-Boss_ShellshogunLeapFlightState:                        ; DATA XREF: ROM:00039546   o  ; was: sub_39D44
+Boss_ShellshogunLeapFlightState:                        ; was: sub_39D44
                 subq.w  #1,$11C(a5)
                 bne.s   Boss_ShellshogunUpdateLeapFlightRotation
                 move.w  #3,(PlaneAShakeLevel).w
@@ -677,7 +674,7 @@ Boss_ShellshogunLeapFlightState:                        ; DATA XREF: ROM:0003954
                 tst.w   $54(a5)
                 beq.s   Boss_ShellshogunUpdateLeapFlightRotation
                 neg.l   $18(a5)
-Boss_ShellshogunUpdateLeapFlightRotation:               ; CODE XREF: Boss_ShellshogunLeapFlightState+4   j  ; was: loc_39D78
+Boss_ShellshogunUpdateLeapFlightRotation:               ; was: loc_39D78
                                         ; Boss_ShellshogunLeapFlightState+2E   j
                 subq.w  #1,$BE(a5)
                 bpl.s   Boss_ShellshogunApplyLeapFlightGravity
@@ -685,19 +682,19 @@ Boss_ShellshogunUpdateLeapFlightRotation:               ; CODE XREF: Boss_Shells
                 bmi.s   Boss_ShellshogunApplyLeapFlightGravity
                 addi.w  #$10,$56(a5)
                 andi.w  #$1F0,$56(a5)
-Boss_ShellshogunApplyLeapFlightGravity:                 ; CODE XREF: Boss_ShellshogunLeapFlightState+38   j  ; was: loc_39D92
+Boss_ShellshogunApplyLeapFlightGravity:                 ; was: loc_39D92
                                         ; Boss_ShellshogunLeapFlightState+40   j
                 addi.l  #$3000,$1C(a5)
                 bmi.s   Boss_ShellshogunRenderLeapFlight
                 cmpi.w  #$148,$8B4(a5)
                 bpl.s   Boss_ShellshogunCompleteLeapLanding
-Boss_ShellshogunRenderLeapFlight:                       ; CODE XREF: Boss_ShellshogunLeapFlightState+56   j  ; was: loc_39DA4
+Boss_ShellshogunRenderLeapFlight:                       ; was: loc_39DA4
                 lea     Boss_ShellshogunLeapPoses(pc),a1
                 nop
                 bsr.w   Boss_ShellshogunUpdatePose
                 bra.w   Boss_ShellshogunUpdatePhysicsAndRender
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunCompleteLeapLanding:                    ; CODE XREF: Boss_ShellshogunLeapFlightState+5E   j  ; was: loc_39DB2
+Boss_ShellshogunCompleteLeapLanding:                    ; was: loc_39DB2
                 addq.w  #2,4(a5)
                 move.w  a5,$48(a5)
                 move.w  #$CEC0,$4A(a5)
@@ -711,19 +708,19 @@ Boss_ShellshogunCompleteLeapLanding:                    ; CODE XREF: Boss_Shells
                 jsr     (Sound_QueueSFXRequest).l
 ; End of function Boss_ShellshogunLeapFlightState
 ; Decelerates horizontal velocity during the leap recovery pose
-Boss_ShellshogunLeapRecoveryState:                      ; DATA XREF: ROM:00039548   o  ; was: sub_39DEA
+Boss_ShellshogunLeapRecoveryState:                      ; was: sub_39DEA
                 tst.w   $18(a5)
                 bpl.s   Boss_ShellshogunReducePositiveLeapRecoveryVelocity
                 addi.l  #$1000,$18(a5)
                 bmi.s   Boss_ShellshogunRenderLeapRecovery
-Boss_ShellshogunStopLeapRecoveryVelocity:               ; CODE XREF: Boss_ShellshogunLeapRecoveryState+1E   j  ; was: loc_39DFA
+Boss_ShellshogunStopLeapRecoveryVelocity:               ; was: loc_39DFA
                 clr.l   $18(a5)
                 bra.s   Boss_ShellshogunRenderLeapRecovery
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunReducePositiveLeapRecoveryVelocity:     ; CODE XREF: Boss_ShellshogunLeapRecoveryState+4   j  ; was: loc_39E00
+Boss_ShellshogunReducePositiveLeapRecoveryVelocity:     ; was: loc_39E00
                 subi.l  #$1000,$18(a5)
                 bmi.s   Boss_ShellshogunStopLeapRecoveryVelocity
-Boss_ShellshogunRenderLeapRecovery:                     ; CODE XREF: Boss_ShellshogunLeapRecoveryState+E   j  ; was: loc_39E0A
+Boss_ShellshogunRenderLeapRecovery:                     ; was: loc_39E0A
                                         ; Boss_ShellshogunLeapRecoveryState+14   j
                 tst.w   $58(a5)
                 bmi.w   Boss_ShellshogunReturnToDecisionState
@@ -733,7 +730,7 @@ Boss_ShellshogunRenderLeapRecovery:                     ; CODE XREF: Boss_Shells
                 bra.w   Boss_ShellshogunUpdatePhysicsAndRender
 ; End of function Boss_ShellshogunLeapRecoveryState
 ; Advances the shared entrance/pose-gate stream and linked-part fields
-Boss_ShellshogunUpdateSharedPose:                       ; CODE XREF: Boss_ShellshogunSetupPhase+150   j  ; was: sub_39E20
+Boss_ShellshogunUpdateSharedPose:                       ; was: sub_39E20
                                         ; sub_396D2   p
                 lea     Boss_ShellshogunSharedPoses(pc),a1
                 nop
@@ -746,11 +743,11 @@ Boss_ShellshogunUpdateSharedPose:                       ; CODE XREF: Boss_Shells
                 move.w  #$148,$8B4(a5)
                 move.w  #$CEC0,$48(a5)
                 move.w  #$CEC0,$4A(a5)
-Boss_ShellshogunUpdateSharedPosePhysics:                ; CODE XREF: Boss_ShellshogunUpdateSharedPose+22   j  ; was: loc_39E56
+Boss_ShellshogunUpdateSharedPosePhysics:                ; was: loc_39E56
                 bra.w   *+4
 ; End of function Boss_ShellshogunUpdateSharedPose
 ; Updates Shellshogun physics before falling through to rendering
-Boss_ShellshogunUpdatePhysicsAndRender:                 ; CODE XREF: Boss_ShellshogunDefeatLaunchState+B4   j  ; was: sub_39E5A
+Boss_ShellshogunUpdatePhysicsAndRender:                 ; was: sub_39E5A
                                         ; Boss_ShellshogunDecisionState+7E   p
                 bsr.w   Boss_ShellshogunUpdateLinkedPartRotation
 ; End of function Boss_ShellshogunUpdatePhysicsAndRender

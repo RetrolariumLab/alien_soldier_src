@@ -1,5 +1,5 @@
 ; Wolf Garopa controller and top-level state dispatcher
-Boss_WolfGaropaUpdate:                                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_4F8F0
+Boss_WolfGaropaUpdate:                                  ; was: sub_4F8F0
                 tst.w   4(a5)
                 beq.w   Boss_WolfGaropaDispatchState
                 tst.w   8(a5)
@@ -10,11 +10,11 @@ Boss_WolfGaropaUpdate:                                  ; DATA XREF: ROM:Entity_
                 bne.s   Boss_WolfGaropaRunDefeatEffects
                 tst.w   (BossHealth).w
                 beq.w   Boss_WolfGaropaBeginDefeatTransition
-Boss_WolfGaropaRunDefeatEffects:                        ; CODE XREF: Boss_WolfGaropaUpdate+14   j  ; was: loc_4F916
+Boss_WolfGaropaRunDefeatEffects:                        ; was: loc_4F916
                                         ; Boss_WolfGaropaUpdate+1C   j
                 bsr.w   Boss_WolfGaropaUpdateDefeatTransition
                 jsr     (Gfx_ProcessDefaultColorFade).l
-Boss_WolfGaropaDispatchState:                           ; CODE XREF: Boss_WolfGaropaUpdate+4   j  ; was: loc_4F920
+Boss_WolfGaropaDispatchState:                           ; was: loc_4F920
                                         ; Boss_WolfGaropaUpdate+C   j
                 move.w  4(a5),d0
                 movea.w Boss_WolfGaropaStateTable(pc,d0.w),a0
@@ -22,7 +22,6 @@ Boss_WolfGaropaDispatchState:                           ; CODE XREF: Boss_WolfGa
                 jmp     (a0)
 ; ---------------------------------------------------------------------------
 Boss_WolfGaropaStateTable:  dc.w    Boss_WolfGaropaInitialize-Boss_WolfGaropaInitialize  ; was: off_4F930
-                                        ; DATA XREF: Boss_WolfGaropaUpdate+34   r
                 dc.w    Boss_WolfGaropaUpdateInitialPose-Boss_WolfGaropaInitialize
                 dc.w    Boss_WolfGaropaUpdateLeftEntry-Boss_WolfGaropaInitialize
                 dc.w    Boss_WolfGaropaUpdateBattleStartWait-Boss_WolfGaropaInitialize
@@ -43,7 +42,7 @@ Boss_WolfGaropaStateTable:  dc.w    Boss_WolfGaropaInitialize-Boss_WolfGaropaIni
                 dc.w    Boss_WolfGaropaEmptyState-Boss_WolfGaropaInitialize
 ; End of function Boss_WolfGaropaUpdate
 ; Build the composite boss object and initialize its auxiliary orb records
-Boss_WolfGaropaInitialize:                              ; DATA XREF: Boss_WolfGaropaUpdate+38   o  ; was: sub_4F956
+Boss_WolfGaropaInitialize:                              ; was: sub_4F956
                                         ; sub_4F8F0:Boss_WolfGaropaStateTable   o
                 tst.w   (DataLoaderControl).w
                 bmi.w   Boss_WolfGaropaReturn
@@ -113,13 +112,11 @@ Boss_WolfGaropaInitialize:                              ; DATA XREF: Boss_WolfGa
                 move.w  #2,$1DE(a5)
                 bra.w   Boss_WolfGaropaBeginLeftEntry
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaReturn:                                  ; CODE XREF: Boss_WolfGaropaInitialize+4   j  ; was: locret_4FA94
-                                        ; DATA XREF: ROM:Boss_WolfGaropaMovementSequenceTable   o
+Boss_WolfGaropaReturn:                                  ; was: locret_4FA94
                 rts
 ; End of function Boss_WolfGaropaInitialize
 ; ---------------------------------------------------------------------------
 Boss_WolfGaropaInitialTileLoad: dc.w    $6220, $2000, $302, 1, $200, $304, $506, $708, $90A  ; was: word_4FA96
-                                        ; DATA XREF: Boss_WolfGaropaInitialize+128   o
 
 ; Unreferenced initializer for state 2 at fixed position ($100,$100)
 Boss_WolfGaropaInitializeAtPosition100:                 ; was: sub_4FAA8
@@ -135,7 +132,7 @@ Boss_WolfGaropaInitializeAtPosition100:                 ; was: sub_4FAA8
                 bsr.w   Boss_WolfGaropaInitializeMovementSequence
 ; End of function Boss_WolfGaropaInitializeAtPosition100
 ; Advance the opening pose script and update the composite frame
-Boss_WolfGaropaUpdateInitialPose:                       ; DATA XREF: Boss_WolfGaropaUpdate+42   o  ; was: sub_4FAD8
+Boss_WolfGaropaUpdateInitialPose:                       ; was: sub_4FAD8
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
                 lea     Boss_WolfGaropaLaunchPoses(pc),a1
@@ -144,7 +141,7 @@ Boss_WolfGaropaUpdateInitialPose:                       ; DATA XREF: Boss_WolfGa
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; End of function Boss_WolfGaropaUpdateInitialPose
 ; Start the left-side entry motion and its pose sequence
-Boss_WolfGaropaBeginLeftEntry:                          ; CODE XREF: Boss_WolfGaropaInitialize+13A   j  ; was: sub_4FAEE
+Boss_WolfGaropaBeginLeftEntry:                          ; was: sub_4FAEE
                 move.w  #4,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -156,7 +153,7 @@ Boss_WolfGaropaBeginLeftEntry:                          ; CODE XREF: Boss_WolfGa
                 bsr.w   Boss_WolfGaropaInitializeMovementSequence
 ; End of function Boss_WolfGaropaBeginLeftEntry
 ; Continue the left-side entry until its pose event advances the state
-Boss_WolfGaropaUpdateLeftEntry:                         ; DATA XREF: Boss_WolfGaropaUpdate+44   o  ; was: sub_4FB1C
+Boss_WolfGaropaUpdateLeftEntry:                         ; was: sub_4FB1C
                 btst    #0,$41C(a5)
                 beq.s   Boss_WolfGaropaUpdateMovementAndOrbTarget
                 btst    #3,$23E(a5)
@@ -167,22 +164,22 @@ Boss_WolfGaropaUpdateLeftEntry:                         ; DATA XREF: Boss_WolfGa
                 bra.s   Boss_WolfGaropaUpdateMovementAndOrbTarget
 ; End of function Boss_WolfGaropaUpdateLeftEntry
 ; Wait for the battle-ready flag, then begin the orb attack cycle
-Boss_WolfGaropaUpdateBattleStartWait:                   ; DATA XREF: Boss_WolfGaropaUpdate+46   o  ; was: sub_4FB3A
+Boss_WolfGaropaUpdateBattleStartWait:                   ; was: sub_4FB3A
                 tst.w   (MessageSequenceState).w
                 bne.s   Boss_WolfGaropaUpdateMovementAndOrbTarget
                 addq.w  #2,4(a5)
                 clr.b   (BossColorEffectFlags).w
                 bra.w   Boss_WolfGaropaBeginOrbAttackCycle
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaUpdateMovementAndOrbTarget:              ; CODE XREF: Boss_WolfGaropaUpdateLeftEntry+6   j  ; was: loc_4FB4C
+Boss_WolfGaropaUpdateMovementAndOrbTarget:              ; was: loc_4FB4C
                                         ; Boss_WolfGaropaUpdateLeftEntry+E   j
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
-Boss_WolfGaropaUpdateOrbTarget:                         ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+BA   j  ; was: loc_4FB50
+Boss_WolfGaropaUpdateOrbTarget:                         ; was: loc_4FB50
                                         ; Boss_WolfGaropaUpdateUpperType424Sequence+2E   j
                 btst    #2,$23E(a5)
                 beq.s   Boss_WolfGaropaChooseRandomOrbAngleTarget
                 move.w  #$1C,$53C(a5)
-Boss_WolfGaropaChooseRandomOrbAngleTarget:              ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+1C   j  ; was: loc_4FB5E
+Boss_WolfGaropaChooseRandomOrbAngleTarget:              ; was: loc_4FB5E
                 move.b  (RandomNumberState).w,d2
                 andi.w  #$E,d2
                 addi.w  #$1A0,d2
@@ -194,7 +191,7 @@ Boss_WolfGaropaChooseRandomOrbAngleTarget:              ; CODE XREF: Boss_WolfGa
                 moveq   #4,d7
                 bra.w   Boss_WolfGaropaApproachOrbAngle
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginOrbAttackCycle:                     ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+E   j  ; was: loc_4FB82
+Boss_WolfGaropaBeginOrbAttackCycle:                     ; was: loc_4FB82
                                         ; Boss_WolfGaropaUpdateUpperType424Sequence+46   j
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$1C0,d0
@@ -204,7 +201,7 @@ Boss_WolfGaropaBeginOrbAttackCycle:                     ; CODE XREF: Boss_WolfGa
                 move.w  #8,4(a5)
                 clr.w   $11E(a5)
 ; Maintain the timed orb attack cycle and its emitted projectile pair
-Boss_WolfGaropaUpdateOrbAttackCycle:                    ; DATA XREF: Boss_WolfGaropaUpdate+48   o  ; was: loc_4FBA2
+Boss_WolfGaropaUpdateOrbAttackCycle:                    ; was: loc_4FBA2
                 tst.w   (BossHealth).w
                 beq.s   Boss_WolfGaropaUpdateOrbCycleMotion
                 subq.w  #1,$11C(a5)
@@ -217,7 +214,7 @@ Boss_WolfGaropaUpdateOrbAttackCycle:                    ; DATA XREF: Boss_WolfGa
                 clr.w   $6BC(a5)
                 bra.w   Boss_WolfGaropaBeginOrbSweepSequence
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaUpdateOrbCycleMotion:                    ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+6C   j  ; was: loc_4FBC6
+Boss_WolfGaropaUpdateOrbCycleMotion:                    ; was: loc_4FBC6
                                         ; Boss_WolfGaropaUpdateBattleStartWait+72   j
                 subq.w  #1,$11E(a5)
                 bpl.s   Boss_WolfGaropaUpdateOrbCycleEffects
@@ -228,7 +225,7 @@ Boss_WolfGaropaUpdateOrbCycleMotion:                    ; CODE XREF: Boss_WolfGa
                 andi.w  #$3F,d0                         ; '?'
                 addi.w  #$C8,d0
                 move.w  d0,$47C(a5)
-Boss_WolfGaropaUpdateOrbCycleEffects:                   ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+90   j  ; was: loc_4FBE8
+Boss_WolfGaropaUpdateOrbCycleEffects:                   ; was: loc_4FBE8
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bsr.w   Boss_WolfGaropaUpdateOrbFacingFlag
                 tst.w   (BossHealth).w
@@ -243,11 +240,11 @@ Boss_WolfGaropaUpdateOrbCycleEffects:                   ; CODE XREF: Boss_WolfGa
                 subq.w  #1,$4DC(a5)
                 bpl.s   Boss_WolfGaropaUpdateOrbChargeEffects
                 move.w  #$14,$4DE(a5)
-Boss_WolfGaropaReturnFromOrbAttackCycle:                ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+F0   j  ; was: locret_4FC1E
+Boss_WolfGaropaReturnFromOrbAttackCycle:                ; was: locret_4FC1E
                                         ; Boss_WolfGaropaUpdateBattleStartWait+12C   j
                 rts
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaUpdateOrbChargeEffects:                  ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+DC   j  ; was: loc_4FC20
+Boss_WolfGaropaUpdateOrbChargeEffects:                  ; was: loc_4FC20
                 cmpi.w  #$40,$4DC(a5)                   ; '@'
                 bmi.w   Boss_WolfGaropaSpawnOrbitStar
                 bne.s   Boss_WolfGaropaReturnFromOrbAttackCycle
@@ -257,14 +254,14 @@ Boss_WolfGaropaUpdateOrbChargeEffects:                  ; CODE XREF: Boss_WolfGa
                 move.b  #$ED,d0
                 jmp     (Sound_QueueSFXRequest).l
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaUpdateOrbShotCountdown:                  ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+D6   j  ; was: loc_4FC48
+Boss_WolfGaropaUpdateOrbShotCountdown:                  ; was: loc_4FC48
                 cmpi.w  #$14,$4DE(a5)
                 bne.s   Boss_WolfGaropaTickOrbShotCountdown
                 tst.w   d3
                 beq.w   Boss_WolfGaropaSpawnOrbitStar
                 clr.b   $65E(a5)
                 clr.w   $6BC(a5)
-Boss_WolfGaropaTickOrbShotCountdown:                    ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+114   j  ; was: loc_4FC5E
+Boss_WolfGaropaTickOrbShotCountdown:                    ; was: loc_4FC5E
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.s   Boss_WolfGaropaReturnFromOrbAttackCycle
@@ -277,12 +274,12 @@ Boss_WolfGaropaTickOrbShotCountdown:                    ; CODE XREF: Boss_WolfGa
                 move.w  #$3F,$5FC(a5)                   ; '?'
                 rts
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginOrbSweepSequence:                   ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+88   j  ; was: loc_4FC88
+Boss_WolfGaropaBeginOrbSweepSequence:                   ; was: loc_4FC88
                 move.w  #$14,4(a5)
                 bset    #3,$9CE(a5)
                 move.w  #$12C,$47C(a5)
 ; Approach the first fixed orb angle in the sweep sequence
-Boss_WolfGaropaApproachInitialOrbAngle140:              ; DATA XREF: Boss_WolfGaropaUpdate+54   o  ; was: loc_4FC9A
+Boss_WolfGaropaApproachInitialOrbAngle140:              ; was: loc_4FC9A
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 move.w  #$140,d2
                 moveq   #0,d3
@@ -292,21 +289,21 @@ Boss_WolfGaropaApproachInitialOrbAngle140:              ; DATA XREF: Boss_WolfGa
                 beq.s   Boss_WolfGaropaReturnFromInitialOrbApproach
                 addq.w  #2,4(a5)
                 move.w  #$20,$11E(a5)                   ; ' '
-Boss_WolfGaropaReturnFromInitialOrbApproach:            ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait+172   j  ; was: locret_4FCB8
+Boss_WolfGaropaReturnFromInitialOrbApproach:            ; was: locret_4FCB8
                 rts
 ; End of function Boss_WolfGaropaUpdateBattleStartWait
 ; Hold the movement sequence for a short delay before the orb sweep
-Boss_WolfGaropaWaitBeforeOrbSweep:                      ; DATA XREF: Boss_WolfGaropaUpdate+56   o  ; was: sub_4FCBA
+Boss_WolfGaropaWaitBeforeOrbSweep:                      ; was: sub_4FCBA
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 subq.w  #1,$11E(a5)
                 bpl.s   Boss_WolfGaropaReturnFromOrbSweepWait
                 addq.w  #2,4(a5)
                 move.w  #1,$11E(a5)
-Boss_WolfGaropaReturnFromOrbSweepWait:                  ; CODE XREF: Boss_WolfGaropaWaitBeforeOrbSweep+8   j  ; was: locret_4FCCE
+Boss_WolfGaropaReturnFromOrbSweepWait:                  ; was: locret_4FCCE
                 rts
 ; End of function Boss_WolfGaropaWaitBeforeOrbSweep
 ; Approach orb angle $C0 and emit the orbit-centered explosion effect
-Boss_WolfGaropaApproachOrbAngleC0AndExplode:            ; DATA XREF: Boss_WolfGaropaUpdate+58   o  ; was: sub_4FCD0
+Boss_WolfGaropaApproachOrbAngleC0AndExplode:            ; was: sub_4FCD0
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 move.w  #$C0,d2
                 moveq   #0,d3
@@ -324,13 +321,13 @@ Boss_WolfGaropaApproachOrbAngleC0AndExplode:            ; DATA XREF: Boss_WolfGa
                 bclr    #3,$AEE(a5)
                 bra.w   Boss_WolfGaropaSelectOrbNeutralMapping
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaAdvanceOrbSweep:                         ; CODE XREF: Boss_WolfGaropaApproachOrbAngleC0AndExplode+28   j  ; was: loc_4FD08
+Boss_WolfGaropaAdvanceOrbSweep:                         ; was: loc_4FD08
                 addq.w  #2,4(a5)
-Boss_WolfGaropaReturnFromOrbAngleC0:                    ; CODE XREF: Boss_WolfGaropaApproachOrbAngleC0AndExplode+12   j  ; was: locret_4FD0C
+Boss_WolfGaropaReturnFromOrbAngleC0:                    ; was: locret_4FD0C
                 rts
 ; End of function Boss_WolfGaropaApproachOrbAngleC0AndExplode
 ; Return the orb toward angle $140 during the repeated sweep
-Boss_WolfGaropaApproachOrbAngle140:                     ; DATA XREF: Boss_WolfGaropaUpdate+5A   o  ; was: sub_4FD0E
+Boss_WolfGaropaApproachOrbAngle140:                     ; was: sub_4FD0E
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bsr.w   Boss_WolfGaropaSelectOrbNeutralMapping
                 move.w  #$140,d2
@@ -340,11 +337,11 @@ Boss_WolfGaropaApproachOrbAngle140:                     ; DATA XREF: Boss_WolfGa
                 tst.w   d3
                 beq.s   Boss_WolfGaropaReturnFromOrbAngle140
                 subq.w  #2,4(a5)
-Boss_WolfGaropaReturnFromOrbAngle140:                   ; CODE XREF: Boss_WolfGaropaApproachOrbAngle140+16   j  ; was: locret_4FD2A
+Boss_WolfGaropaReturnFromOrbAngle140:                   ; was: locret_4FD2A
                 rts
 ; End of function Boss_WolfGaropaApproachOrbAngle140
 ; Finish the orb sweep by approaching angle $180
-Boss_WolfGaropaApproachOrbAngle180:                     ; DATA XREF: Boss_WolfGaropaUpdate+5C   o  ; was: sub_4FD2C
+Boss_WolfGaropaApproachOrbAngle180:                     ; was: sub_4FD2C
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bsr.w   Boss_WolfGaropaSelectOrbNeutralMapping
                 move.w  #$180,d2
@@ -355,11 +352,11 @@ Boss_WolfGaropaApproachOrbAngle180:                     ; DATA XREF: Boss_WolfGa
                 beq.s   Boss_WolfGaropaReturnFromOrbAngle180
                 addq.w  #2,4(a5)
                 move.w  #$30,$11E(a5)                   ; '0'
-Boss_WolfGaropaReturnFromOrbAngle180:                   ; CODE XREF: Boss_WolfGaropaApproachOrbAngle180+16   j  ; was: locret_4FD4E
+Boss_WolfGaropaReturnFromOrbAngle180:                   ; was: locret_4FD4E
                 rts
 ; End of function Boss_WolfGaropaApproachOrbAngle180
 ; After a delay, randomly select the upper or lower type-$424 sequence
-Boss_WolfGaropaSelectType424Sequence:                   ; DATA XREF: Boss_WolfGaropaUpdate+5E   o  ; was: sub_4FD50
+Boss_WolfGaropaSelectType424Sequence:                   ; was: sub_4FD50
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bsr.w   Boss_WolfGaropaSelectOrbNeutralMapping
                 subq.w  #1,$11E(a5)
@@ -370,30 +367,29 @@ Boss_WolfGaropaSelectType424Sequence:                   ; DATA XREF: Boss_WolfGa
                 bra.w   Boss_WolfGaropaBeginUpperType424Sequence
 ; ---------------------------------------------------------------------------
 ; Inactive state-table entry following the type-$424 selector
-Boss_WolfGaropaInactiveState20:                         ; CODE XREF: Boss_WolfGaropaSelectType424Sequence+C   j  ; was: locret_4FD72
-                                        ; DATA XREF: Boss_WolfGaropaUpdate+60   o
+Boss_WolfGaropaInactiveState20:                         ; was: locret_4FD72
                 rts
 ; End of function Boss_WolfGaropaSelectType424Sequence
 ; Empty Wolf Garopa boss movement state
-Boss_WolfGaropaEmptyState:                              ; DATA XREF: Boss_WolfGaropaUpdate+62   o  ; was: nullsub_118
+Boss_WolfGaropaEmptyState:                              ; was: nullsub_118
                                         ; Boss_WolfGaropaUpdate+64   o
                 rts
 ; End of function Boss_WolfGaropaEmptyState
 ; Select the neutral orb mapping pointer
-Boss_WolfGaropaSelectOrbNeutralMapping:                 ; CODE XREF: Boss_WolfGaropaApproachOrbAngleC0AndExplode+34   j  ; was: sub_4FD76
+Boss_WolfGaropaSelectOrbNeutralMapping:                 ; was: sub_4FD76
                                         ; Boss_WolfGaropaApproachOrbAngle140+4   p
                 move.l  #Boss_WolfGaropaOrbNeutralMapping,$AE8(a5)
                 rts
 ; End of function Boss_WolfGaropaSelectOrbNeutralMapping
 ; Optionally place a type-$424 record at Y=$C8 and configure the upper sequence
-Boss_WolfGaropaBeginUpperType424Sequence:               ; CODE XREF: Boss_WolfGaropaSelectType424Sequence+1E   j  ; was: sub_4FD80
+Boss_WolfGaropaBeginUpperType424Sequence:               ; was: sub_4FD80
                 tst.w   (DifficultyMode).w
                 bne.s   Boss_WolfGaropaConfigureUpperType424Sequence
                 jsr     (Projectile_SpawnWolfGaropaType424).l
                 bne.s   Boss_WolfGaropaConfigureUpperType424Sequence
                 move.w  #$1A8,$10(a0)
                 move.w  #$C8,$14(a0)
-Boss_WolfGaropaConfigureUpperType424Sequence:           ; CODE XREF: Boss_WolfGaropaBeginUpperType424Sequence+4   j  ; was: loc_4FD9A
+Boss_WolfGaropaConfigureUpperType424Sequence:           ; was: loc_4FD9A
                                         ; Boss_WolfGaropaBeginUpperType424Sequence+C   j
                 move.w  #$A,4(a5)
                 bset    #1,$41C(a5)
@@ -406,7 +402,7 @@ Boss_WolfGaropaConfigureUpperType424Sequence:           ; CODE XREF: Boss_WolfGa
                 bset    #3,$9CE(a5)
 ; End of function Boss_WolfGaropaBeginUpperType424Sequence
 ; Run the upper type-$424 sequence and lazily initialize attack effect B
-Boss_WolfGaropaUpdateUpperType424Sequence:              ; DATA XREF: Boss_WolfGaropaUpdate+4A   o  ; was: sub_4FDC6
+Boss_WolfGaropaUpdateUpperType424Sequence:              ; was: sub_4FDC6
                 tst.b   (WolfGaropaEffectActive).w
                 bne.s   Boss_WolfGaropaUpdateUpperSequenceMotion
                 tst.w   $11C(a5)
@@ -419,32 +415,32 @@ Boss_WolfGaropaUpdateUpperType424Sequence:              ; DATA XREF: Boss_WolfGa
                 tst.b   (WolfGaropaEffectActive).w
                 beq.s   Boss_WolfGaropaUpdateUpperSequenceMotion
                 subq.w  #1,$11C(a5)
-Boss_WolfGaropaUpdateUpperSequenceMotion:               ; CODE XREF: Boss_WolfGaropaUpdateUpperType424Sequence+4   j  ; was: loc_4FDF0
+Boss_WolfGaropaUpdateUpperSequenceMotion:               ; was: loc_4FDF0
                                         ; Boss_WolfGaropaUpdateUpperType424Sequence+12   j
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bra.w   Boss_WolfGaropaUpdateOrbTarget
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaFinishUpperType424Sequence:              ; CODE XREF: Boss_WolfGaropaUpdateUpperType424Sequence+A   j  ; was: loc_4FDF8
+Boss_WolfGaropaFinishUpperType424Sequence:              ; was: loc_4FDF8
                                         ; Boss_WolfGaropaUpdateUpperType424Sequence+18   j
                 addq.w  #2,4(a5)
                 bclr    #1,$41C(a5)
                 move.w  #$40,$11C(a5)                   ; '@'
 ; Cool down after the upper type-$424 sequence
-Boss_WolfGaropaUpdateUpperSequenceCooldown:             ; DATA XREF: Boss_WolfGaropaUpdate+4C   o  ; was: loc_4FE08
+Boss_WolfGaropaUpdateUpperSequenceCooldown:             ; was: loc_4FE08
                 subq.w  #1,$11C(a5)
                 bmi.w   Boss_WolfGaropaBeginOrbAttackCycle
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bra.w   Boss_WolfGaropaUpdateOrbTarget
 ; End of function Boss_WolfGaropaUpdateUpperType424Sequence
 ; Optionally place a type-$424 record at Y=$130 and configure the lower sequence
-Boss_WolfGaropaBeginLowerType424Sequence:               ; CODE XREF: Boss_WolfGaropaSelectType424Sequence+1A   j  ; was: sub_4FE18
+Boss_WolfGaropaBeginLowerType424Sequence:               ; was: sub_4FE18
                 tst.w   (DifficultyMode).w
                 bne.s   Boss_WolfGaropaConfigureLowerType424Sequence
                 jsr     (Projectile_SpawnWolfGaropaType424).l
                 bne.s   Boss_WolfGaropaConfigureLowerType424Sequence
                 move.w  #$1A8,$10(a0)
                 move.w  #$130,$14(a0)
-Boss_WolfGaropaConfigureLowerType424Sequence:           ; CODE XREF: Boss_WolfGaropaBeginLowerType424Sequence+4   j  ; was: loc_4FE32
+Boss_WolfGaropaConfigureLowerType424Sequence:           ; was: loc_4FE32
                                         ; Boss_WolfGaropaBeginLowerType424Sequence+C   j
                 move.w  #$E,4(a5)
                 bset    #2,$41C(a5)
@@ -454,14 +450,14 @@ Boss_WolfGaropaConfigureLowerType424Sequence:           ; CODE XREF: Boss_WolfGa
                 bset    #3,$9CE(a5)
 ; End of function Boss_WolfGaropaBeginLowerType424Sequence
 ; Run the lower type-$424 sequence until its pose-control flag clears
-Boss_WolfGaropaUpdateLowerType424Sequence:              ; DATA XREF: Boss_WolfGaropaUpdate+4E   o  ; was: sub_4FE50
+Boss_WolfGaropaUpdateLowerType424Sequence:              ; was: sub_4FE50
                 btst    #2,$41C(a5)
                 beq.w   Boss_WolfGaropaBeginOrbAttackCycle
                 bsr.w   Boss_WolfGaropaDispatchMovementSequence
                 bra.w   Boss_WolfGaropaUpdateOrbTarget
 ; End of function Boss_WolfGaropaUpdateLowerType424Sequence
 ; Dispatch the nested movement/pose sequence selected by offset $35C
-Boss_WolfGaropaDispatchMovementSequence:                ; CODE XREF: Boss_WolfGaropaUpdateBattleStartWait:Boss_WolfGaropaUpdateMovementAndOrbTarget   p  ; was: sub_4FE62
+Boss_WolfGaropaDispatchMovementSequence:                ; was: sub_4FE62
                                         ; sub_4FB3A:Boss_WolfGaropaUpdateOrbCycleEffects   p
                 move.w  $35C(a5),d0
                 movea.w Boss_WolfGaropaMovementSequenceTable(pc,d0.w),a0
@@ -470,7 +466,6 @@ Boss_WolfGaropaDispatchMovementSequence:                ; CODE XREF: Boss_WolfGa
 ; End of function Boss_WolfGaropaDispatchMovementSequence
 ; ---------------------------------------------------------------------------
 Boss_WolfGaropaMovementSequenceTable:   dc.w    Boss_WolfGaropaReturn-Boss_WolfGaropaInitializeMovementSequence  ; was: off_4FE72
-                                        ; DATA XREF: Boss_WolfGaropaDispatchMovementSequence+4   r
                 dc.w    Boss_WolfGaropaUpdateHorizontalTargetMotion-Boss_WolfGaropaInitializeMovementSequence
                 dc.w    Boss_WolfGaropaUpdateBallisticTransitionA-Boss_WolfGaropaInitializeMovementSequence
                 dc.w    Boss_WolfGaropaUpdateBallisticTransitionB-Boss_WolfGaropaInitializeMovementSequence
@@ -480,16 +475,15 @@ Boss_WolfGaropaMovementSequenceTable:   dc.w    Boss_WolfGaropaReturn-Boss_WolfG
                 dc.w    Boss_WolfGaropaUpdateLaunchMotion-Boss_WolfGaropaInitializeMovementSequence
 
 ; Reset the nested sequence to its horizontal-targeting state
-Boss_WolfGaropaInitializeMovementSequence:              ; CODE XREF: Boss_WolfGaropaInitializeAtPosition100+2C   p  ; was: sub_4FE82
+Boss_WolfGaropaInitializeMovementSequence:              ; was: sub_4FE82
                                         ; Boss_WolfGaropaBeginLeftEntry+2A   p
-                                        ; DATA XREF:
                 move.w  #2,$35C(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
                 rts
 ; End of function Boss_WolfGaropaInitializeMovementSequence
 ; Steer horizontal velocity toward target X while advancing a pose script
-Boss_WolfGaropaUpdateHorizontalTargetMotion:            ; DATA XREF: ROM:0004FE74   o  ; was: sub_4FE94
+Boss_WolfGaropaUpdateHorizontalTargetMotion:            ; was: sub_4FE94
                 bclr    #0,$41C(a5)
                 move.w  $47C(a5),d0
                 sub.w   $10(a5),d0
@@ -501,19 +495,19 @@ Boss_WolfGaropaUpdateHorizontalTargetMotion:            ; DATA XREF: ROM:0004FE7
                 nop
                 bra.s   Boss_WolfGaropaApplyLeftAcceleration
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaAccelerateTowardLeftTarget:              ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+14   j  ; was: loc_4FEB8
+Boss_WolfGaropaAccelerateTowardLeftTarget:              ; was: loc_4FEB8
                 lea     Boss_WolfGaropaHorizontalMotionPoseB(pc),a1
                 nop
                 tst.l   $18(a5)
                 bpl.s   Boss_WolfGaropaApplyLeftAcceleration
                 cmpi.l  #$FFFFA000,$18(a5)
                 bmi.s   Boss_WolfGaropaAdvanceHorizontalMotionPose
-Boss_WolfGaropaApplyLeftAcceleration:                   ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+22   j  ; was: loc_4FECE
+Boss_WolfGaropaApplyLeftAcceleration:                   ; was: loc_4FECE
                                         ; Boss_WolfGaropaUpdateHorizontalTargetMotion+2E   j
                 subi.l  #$1000,$18(a5)
                 bra.s   Boss_WolfGaropaAdvanceHorizontalMotionPose
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaCheckRightTargetDistance:                ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+E   j  ; was: loc_4FED8
+Boss_WolfGaropaCheckRightTargetDistance:                ; was: loc_4FED8
                 cmpi.w  #4,d0
                 bpl.s   Boss_WolfGaropaAccelerateTowardRightTarget
                 bset    #0,$41C(a5)
@@ -521,16 +515,16 @@ Boss_WolfGaropaCheckRightTargetDistance:                ; CODE XREF: Boss_WolfGa
                 nop
                 bra.s   Boss_WolfGaropaApplyLeftAcceleration
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaAccelerateTowardRightTarget:             ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+48   j  ; was: loc_4FEEC
+Boss_WolfGaropaAccelerateTowardRightTarget:             ; was: loc_4FEEC
                 lea     Boss_WolfGaropaHorizontalMotionAPoses(pc),a1
                 nop
                 tst.l   $18(a5)
                 bmi.s   Boss_WolfGaropaApplyRightAcceleration
                 cmpi.l  #$4000,$18(a5)
                 bpl.s   Boss_WolfGaropaAdvanceHorizontalMotionPose
-Boss_WolfGaropaApplyRightAcceleration:                  ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+62   j  ; was: loc_4FF02
+Boss_WolfGaropaApplyRightAcceleration:                  ; was: loc_4FF02
                 addi.l  #$1000,$18(a5)
-Boss_WolfGaropaAdvanceHorizontalMotionPose:             ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+38   j  ; was: loc_4FF0A
+Boss_WolfGaropaAdvanceHorizontalMotionPose:             ; was: loc_4FF0A
                                         ; Boss_WolfGaropaUpdateHorizontalTargetMotion+42   j
                 move.l  a1,$2FC(a5)
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
@@ -544,7 +538,7 @@ Boss_WolfGaropaAdvanceHorizontalMotionPose:             ; CODE XREF: Boss_WolfGa
                 move.l  #$FFFD0000,$1C(a5)
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginLongBallisticTransition:            ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+92   j  ; was: loc_4FF40
+Boss_WolfGaropaBeginLongBallisticTransition:            ; was: loc_4FF40
                 move.w  #6,$35C(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -552,16 +546,16 @@ Boss_WolfGaropaBeginLongBallisticTransition:            ; CODE XREF: Boss_WolfGa
                 move.l  #$FFFFE800,$1C(a5)
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaSelectPoseLinkedRecord:                  ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+84   j  ; was: loc_4FF64
+Boss_WolfGaropaSelectPoseLinkedRecord:                  ; was: loc_4FF64
                 btst    #3,$23E(a5)
                 beq.s   Boss_WolfGaropaSetCurrentPoseLinkedRecordY
-Boss_WolfGaropaSelectIndexedPoseLinkedRecord:           ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+EE   j  ; was: loc_4FF6C
+Boss_WolfGaropaSelectIndexedPoseLinkedRecord:           ; was: loc_4FF6C
                                         ; Boss_WolfGaropaWaitForLaunchContact+1C   j
                 move.b  $23E(a5),d0
                 andi.w  #3,d0
                 asl.w   #1,d0
                 movea.w Boss_WolfGaropaPoseLinkedRecordTable(pc,d0.w),a0
-Boss_WolfGaropaSetPoseLinkedRecordY:                    ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionA+42   j  ; was: loc_4FF7A
+Boss_WolfGaropaSetPoseLinkedRecordY:                    ; was: loc_4FF7A
                                         ; Boss_WolfGaropaUpdateBallisticTransitionA+50   j
                 move.w  a0,$4A(a5)
                 move.w  #$148,$14(a0)
@@ -571,7 +565,7 @@ Boss_WolfGaropaSetPoseLinkedRecordY:                    ; CODE XREF: Boss_WolfGa
                 jsr     (Sound_QueueSFXRequest).l
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaSetCurrentPoseLinkedRecordY:             ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+D6   j  ; was: loc_4FF9A
+Boss_WolfGaropaSetCurrentPoseLinkedRecordY:             ; was: loc_4FF9A
                                         ; Boss_WolfGaropaUpdateHorizontalTargetMotion+F6   j
                 movea.w $4A(a5),a0
                 move.w  #$148,$14(a0)
@@ -579,10 +573,9 @@ Boss_WolfGaropaSetCurrentPoseLinkedRecordY:             ; CODE XREF: Boss_WolfGa
 ; End of function Boss_WolfGaropaUpdateHorizontalTargetMotion
 ; ---------------------------------------------------------------------------
 Boss_WolfGaropaPoseLinkedRecordTable:   dc.w    $CF20, $CD40, $CB60, $C980  ; was: word_4FFA8
-                                        ; DATA XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+E2   r
 
 ; Apply the first gravity transition until its pose script ends
-Boss_WolfGaropaUpdateBallisticTransitionA:              ; DATA XREF: ROM:0004FE76   o  ; was: sub_4FFB0
+Boss_WolfGaropaUpdateBallisticTransitionA:              ; was: sub_4FFB0
                 subi.l  #$800,$18(a5)
                 addi.l  #$3800,$1C(a5)
                 movea.l $2FC(a5),a1
@@ -598,13 +591,13 @@ Boss_WolfGaropaUpdateBallisticTransitionA:              ; DATA XREF: ROM:0004FE7
                 move.w  #2,$35C(a5)
                 bra.w   Boss_WolfGaropaSetPoseLinkedRecordY
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaContinueAfterBallisticTransitionA:       ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionA+3A   j  ; was: loc_4FFF6
+Boss_WolfGaropaContinueAfterBallisticTransitionA:       ; was: loc_4FFF6
                 move.w  #$C,$35C(a5)
                 clr.w   $11E(a5)
                 bra.w   Boss_WolfGaropaSetPoseLinkedRecordY
 ; End of function Boss_WolfGaropaUpdateBallisticTransitionA
 ; Apply the second gravity transition and react to pose-script events
-Boss_WolfGaropaUpdateBallisticTransitionB:              ; DATA XREF: ROM:0004FE78   o  ; was: sub_50004
+Boss_WolfGaropaUpdateBallisticTransitionB:              ; was: sub_50004
                 subi.l  #$400,$18(a5)
                 addi.l  #$4000,$1C(a5)
                 tst.w   $58(a5)
@@ -613,13 +606,13 @@ Boss_WolfGaropaUpdateBallisticTransitionB:              ; DATA XREF: ROM:0004FE7
                 beq.s   Boss_WolfGaropaAdvanceBallisticTransitionPose
                 move.b  #$EE,d0
                 jsr     (Sound_QueueSFXRequest).l
-Boss_WolfGaropaAdvanceBallisticTransitionPose:          ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+1C   j  ; was: loc_5002C
+Boss_WolfGaropaAdvanceBallisticTransitionPose:          ; was: loc_5002C
                 lea     Boss_WolfGaropaBallisticTransitionBPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginHorizontalAirborneMotion:           ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+14   j  ; was: loc_5003A
+Boss_WolfGaropaBeginHorizontalAirborneMotion:           ; was: loc_5003A
                 addq.w  #2,$35C(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -628,7 +621,7 @@ Boss_WolfGaropaBeginHorizontalAirborneMotion:           ; CODE XREF: Boss_WolfGa
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
 ; Track the target X during the intermediate airborne pose sequence
-Boss_WolfGaropaUpdateHorizontalAirborneMotion:          ; DATA XREF: ROM:0004FE7A   o  ; was: loc_50060
+Boss_WolfGaropaUpdateHorizontalAirborneMotion:          ; was: loc_50060
                 move.w  $47C(a5),d0
                 sub.w   $10(a5),d0
                 bpl.s   Boss_WolfGaropaCheckAirborneRightTarget
@@ -638,20 +631,20 @@ Boss_WolfGaropaUpdateHorizontalAirborneMotion:          ; DATA XREF: ROM:0004FE7
                 bpl.s   Boss_WolfGaropaApplyAirborneLeftAcceleration
                 cmpi.l  #$FFFF0000,$18(a5)
                 bmi.s   Boss_WolfGaropaAdvanceAirbornePose
-Boss_WolfGaropaApplyAirborneLeftAcceleration:           ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+70   j  ; was: loc_50080
+Boss_WolfGaropaApplyAirborneLeftAcceleration:           ; was: loc_50080
                 subi.l  #$1400,$18(a5)
                 bra.s   Boss_WolfGaropaAdvanceAirbornePose
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaCheckAirborneRightTarget:                ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+64   j  ; was: loc_5008A
+Boss_WolfGaropaCheckAirborneRightTarget:                ; was: loc_5008A
                 cmpi.w  #4,d0
                 bmi.s   Boss_WolfGaropaAdvanceAirbornePose
                 tst.l   $18(a5)
                 bmi.s   Boss_WolfGaropaApplyAirborneRightAcceleration
                 cmpi.l  #$E000,$18(a5)
                 bpl.s   Boss_WolfGaropaAdvanceAirbornePose
-Boss_WolfGaropaApplyAirborneRightAcceleration:          ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+90   j  ; was: loc_500A0
+Boss_WolfGaropaApplyAirborneRightAcceleration:          ; was: loc_500A0
                 addi.l  #$1400,$18(a5)
-Boss_WolfGaropaAdvanceAirbornePose:                     ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+6A   j  ; was: loc_500A8
+Boss_WolfGaropaAdvanceAirbornePose:                     ; was: loc_500A8
                                         ; Boss_WolfGaropaUpdateBallisticTransitionB+7A   j
                 lea     Boss_WolfGaropaHorizontalAirbornePoses(pc),a1
                 nop
@@ -664,19 +657,19 @@ Boss_WolfGaropaAdvanceAirbornePose:                     ; CODE XREF: Boss_WolfGa
                 cmpi.w  #2,d0
                 bpl.s   Boss_WolfGaropaApplyPoseEventHorizontalImpulse
                 move.l  #$2000,d1
-Boss_WolfGaropaApplyPoseEventHorizontalImpulse:         ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+CA   j  ; was: loc_500D6
+Boss_WolfGaropaApplyPoseEventHorizontalImpulse:         ; was: loc_500D6
                 add.l   d1,$18(a5)
                 cmpi.w  #2,d0
                 bne.s   Boss_WolfGaropaUpdateAirbornePoseLinkedRecord
                 btst    #1,$41C(a5)
                 beq.s   Boss_WolfGaropaBeginFinalBallisticMotion
-Boss_WolfGaropaUpdateAirbornePoseLinkedRecord:          ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+B4   j  ; was: loc_500E8
+Boss_WolfGaropaUpdateAirbornePoseLinkedRecord:          ; was: loc_500E8
                                         ; Boss_WolfGaropaUpdateBallisticTransitionB+DA   j
                 btst    #3,$23E(a5)
                 beq.w   Boss_WolfGaropaSetCurrentPoseLinkedRecordY
                 bra.w   Boss_WolfGaropaSelectIndexedPoseLinkedRecord
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginFinalBallisticMotion:               ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+E2   j  ; was: loc_500F6
+Boss_WolfGaropaBeginFinalBallisticMotion:               ; was: loc_500F6
                 addq.w  #2,$35C(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -687,7 +680,7 @@ Boss_WolfGaropaBeginFinalBallisticMotion:               ; CODE XREF: Boss_WolfGa
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; End of function Boss_WolfGaropaUpdateBallisticTransitionB
 ; Apply the final gravity transition, then restart horizontal targeting
-Boss_WolfGaropaUpdateFinalBallisticMotion:              ; DATA XREF: ROM:0004FE7C   o  ; was: sub_50120
+Boss_WolfGaropaUpdateFinalBallisticMotion:              ; was: sub_50120
                 subi.l  #$800,$18(a5)
                 addi.l  #$3800,$1C(a5)
                 lea     Boss_WolfGaropaFinalBallisticPoses(pc),a1
@@ -703,7 +696,7 @@ Boss_WolfGaropaUpdateFinalBallisticMotion:              ; DATA XREF: ROM:0004FE7
                 bra.w   Boss_WolfGaropaSetPoseLinkedRecordY
 ; End of function Boss_WolfGaropaUpdateFinalBallisticMotion
 ; Wait for the scripted launch event, then install launch velocity
-Boss_WolfGaropaWaitForLaunchContact:                    ; DATA XREF: ROM:0004FE7E   o  ; was: sub_50160
+Boss_WolfGaropaWaitForLaunchContact:                    ; was: sub_50160
                 lea     Boss_WolfGaropaLaunchPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
@@ -713,7 +706,7 @@ Boss_WolfGaropaWaitForLaunchContact:                    ; DATA XREF: ROM:0004FE7
                 beq.w   Boss_WolfGaropaSetCurrentPoseLinkedRecordY
                 bra.w   Boss_WolfGaropaSelectIndexedPoseLinkedRecord
 ; ---------------------------------------------------------------------------
-Boss_WolfGaropaBeginLaunchMotion:                       ; CODE XREF: Boss_WolfGaropaWaitForLaunchContact+10   j  ; was: loc_50180
+Boss_WolfGaropaBeginLaunchMotion:                       ; was: loc_50180
                 addq.w  #2,$35C(a5)
                 move.w  a5,$4A(a5)
                 move.l  #$14000,$18(a5)
@@ -723,14 +716,14 @@ Boss_WolfGaropaBeginLaunchMotion:                       ; CODE XREF: Boss_WolfGa
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
 ; End of function Boss_WolfGaropaWaitForLaunchContact
 ; Update launch motion, the linked record, and the optional attack effect
-Boss_WolfGaropaUpdateLaunchMotion:                      ; DATA XREF: ROM:0004FE80   o  ; was: sub_501A6
+Boss_WolfGaropaUpdateLaunchMotion:                      ; was: sub_501A6
                 tst.w   $11E(a5)
                 bne.s   Boss_WolfGaropaAdvanceLaunchPose
                 bsr.w   Boss_WolfGaropaTryLoadAttackEffectA
                 tst.b   (WolfGaropaEffectActive).w
                 beq.s   Boss_WolfGaropaAdvanceLaunchPose
                 addq.w  #1,$11E(a5)
-Boss_WolfGaropaAdvanceLaunchPose:                       ; CODE XREF: Boss_WolfGaropaUpdateLaunchMotion+4   j  ; was: loc_501BA
+Boss_WolfGaropaAdvanceLaunchPose:                       ; was: loc_501BA
                                         ; Boss_WolfGaropaUpdateLaunchMotion+E   j
                 movea.w $48(a5),a0
                 subi.l  #$800,$18(a0)
@@ -746,9 +739,9 @@ Boss_WolfGaropaAdvanceLaunchPose:                       ; CODE XREF: Boss_WolfGa
                 beq.s   Boss_WolfGaropaClearLowerSequenceFlag
                 subq.w  #1,$11C(a5)
                 bpl.s   Boss_WolfGaropaResetMovementSequence
-Boss_WolfGaropaClearLowerSequenceFlag:                  ; CODE XREF: Boss_WolfGaropaUpdateLaunchMotion+4A   j  ; was: loc_501F8
+Boss_WolfGaropaClearLowerSequenceFlag:                  ; was: loc_501F8
                 bclr    #2,$41C(a5)
-Boss_WolfGaropaResetMovementSequence:                   ; CODE XREF: Boss_WolfGaropaUpdateLaunchMotion+50   j  ; was: loc_501FE
+Boss_WolfGaropaResetMovementSequence:                   ; was: loc_501FE
                 move.w  #2,$35C(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)

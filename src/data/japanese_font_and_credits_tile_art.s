@@ -3,5 +3,4 @@ JapaneseFontTileArt_End:
 JapaneseFontMappingData:    binclude "data/mappings/font_japanese.bin"
 JapaneseFontMappingData_End:
 SharedCreditsTileArtB000:   dc.b    0, $18, $5F, $33, $33, $5F, $33, $33, $5F, $33, $33, $5F, $33, $33, $5F, $33, $33, $5F, $33, $33, $5F, $33, $33, $57, $33, $33  ; was: byte_14ADEE
-                                        ; DATA XREF: ROM:00020B52   o
                                         ; ROM:Credits_InitialAssetLoadList   o

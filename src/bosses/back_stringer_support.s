@@ -1,4 +1,4 @@
-Boss_BackStringerUpdateRender:                          ; CODE XREF: Boss_BackStringerManualControlState+4C   j  ; was: sub_44F50
+Boss_BackStringerUpdateRender:                          ; was: sub_44F50
                                         ; Boss_BackStringerBeginEntrance+30   j
                 bsr.w   Boss_BackStringerUpdatePalette
                 bsr.w   Boss_BackStringerUpdateArms
@@ -6,7 +6,7 @@ Boss_BackStringerUpdateRender:                          ; CODE XREF: Boss_BackSt
                 jmp     Boss_BackStringerUpdateSegmentChainAndLoadCount
 ; End of function Boss_BackStringerUpdateRender
 ; Updates palette cycling
-Boss_BackStringerUpdatePalette:                         ; CODE XREF: Boss_BackStringerUpdateRender   p  ; was: sub_44F60
+Boss_BackStringerUpdatePalette:                         ; was: sub_44F60
                 move.w  (FrameCounter).w,d0
                 asr.w   #2,d0
                 andi.w  #$E,d0
@@ -21,17 +21,14 @@ Boss_BackStringerUpdatePalette:                         ; CODE XREF: Boss_BackSt
 ; End of function Boss_BackStringerUpdatePalette
 ; ---------------------------------------------------------------------------
 Boss_BackStringerPaletteCycleColor0:    dc.w    $AEA, $4C, $2A, 8, 6, 8, $2A, $4C  ; was: word_44F8E
-                                        ; DATA XREF: Boss_BackStringerUpdatePalette+E   r
                                         ; Boss_BackStringerUpdatePalette+14   r
 Boss_BackStringerPaletteCycleColor1:    dc.w    $8C8, $A, 8, 6, 4, 6, 8, $A  ; was: word_44F9E
-                                        ; DATA XREF: Boss_BackStringerUpdatePalette+18   r
                                         ; Boss_BackStringerUpdatePalette+1E   r
 Boss_BackStringerPaletteCycleColor2:    dc.w    $6A6, 4, 2, 0, 0, 0, 2, 4  ; was: word_44FAE
-                                        ; DATA XREF: Boss_BackStringerUpdatePalette+22   r
                                         ; Boss_BackStringerUpdatePalette+28   r
 
 ; Updates arm sprite orientation
-Boss_BackStringerUpdateArms:                            ; CODE XREF: Boss_BackStringerUpdateRender+4   p  ; was: sub_44FBE
+Boss_BackStringerUpdateArms:                            ; was: sub_44FBE
                 movea.w a5,a0
                 lea     $60(a0),a0
                 move.w  #$8300,$E(a0)
@@ -42,20 +39,20 @@ Boss_BackStringerUpdateArms:                            ; CODE XREF: Boss_BackSt
                 moveq   #$10,d1
 ; End of function Boss_BackStringerUpdateArms
 ; Selects a part frame from its local angle plus the boss body angle
-Boss_BackStringerUpdatePartFrameFromAngle:              ; CODE XREF: Boss_BackStringerUpdateArms+E   p  ; was: sub_44FDA
+Boss_BackStringerUpdatePartFrameFromAngle:              ; was: sub_44FDA
                 move.w  $56(a0),d0
                 add.w   $56(a5),d0
-Boss_BackStringerSelectPartFrameFromAngle:              ; CODE XREF: Projectile_BackStringerChainFalling+36   j  ; was: loc_44FE2
+Boss_BackStringerSelectPartFrameFromAngle:              ; was: loc_44FE2
                 addi.w  #$20,d0                         ; ' '
                 andi.w  #$1FE,d0
                 cmpi.w  #$100,d0
                 bmi.s   Boss_BackStringerApplyPartFacing
                 eori.w  #$1800,$E(a0)
-Boss_BackStringerApplyPartFacing:                       ; CODE XREF: Boss_BackStringerUpdatePartFrameFromAngle+14   j  ; was: loc_44FF6
+Boss_BackStringerApplyPartFacing:                       ; was: loc_44FF6
                 tst.w   $54(a5)
                 bne.s   Boss_BackStringerLoadPartAngleFrame
                 eori.w  #$800,$E(a0)
-Boss_BackStringerLoadPartAngleFrame:                    ; CODE XREF: Boss_BackStringerUpdatePartFrameFromAngle+20   j  ; was: loc_45002
+Boss_BackStringerLoadPartAngleFrame:                    ; was: loc_45002
                 asr.w   #4,d0
                 andi.w  #$C,d0
                 add.w   d1,d0
@@ -63,7 +60,7 @@ Boss_BackStringerLoadPartAngleFrame:                    ; CODE XREF: Boss_BackSt
                 rts
 ; End of function Boss_BackStringerUpdatePartFrameFromAngle
 ; ---------------------------------------------------------------------------
-Boss_BackStringerPartAngleFrameTable:   dc.l    Boss_BackStringerPartAngleMapping0  ; DATA XREF: Boss_BackStringerUpdatePartFrameFromAngle+30   r ; was: off_45012
+Boss_BackStringerPartAngleFrameTable:   dc.l    Boss_BackStringerPartAngleMapping0  ; was: off_45012
                 dc.l    Boss_BackStringerPartAngleMapping1
                 dc.l    Boss_BackStringerPartAngleMapping2
                 dc.l    Boss_BackStringerPartAngleMapping3
@@ -73,11 +70,11 @@ Boss_BackStringerPartAngleFrameTable:   dc.l    Boss_BackStringerPartAngleMappin
                 dc.l    Boss_BackStringerPartAngleMapping7
 
 ; Copies the base colors and applies the timed transformation highlights
-Boss_BackStringerUpdateTransformationPalette:           ; CODE XREF: Boss_BackStringerTransformationState   p  ; was: sub_45032
+Boss_BackStringerUpdateTransformationPalette:           ; was: sub_45032
                 movea.w #(PaletteActiveColor17Hi-M68K_RAM),a0
                 movea.w #(PaletteShadowPair16+2-M68K_RAM),a1
                 moveq   #$B,d7
-Boss_BackStringerCopyTransformationPaletteLoop:         ; CODE XREF: Boss_BackStringerUpdateTransformationPalette+C   j  ; was: loc_4503C
+Boss_BackStringerCopyTransformationPaletteLoop:         ; was: loc_4503C
                 move.w  (a1)+,(a0)+
                 dbf     d7,Boss_BackStringerCopyTransformationPaletteLoop
                 movea.w #(PaletteActiveColor17Hi-M68K_RAM),a0
@@ -86,21 +83,21 @@ Boss_BackStringerCopyTransformationPaletteLoop:         ; CODE XREF: Boss_BackSt
                 cmpi.w  #2,d0
                 bmi.s   Boss_BackStringerCheckSecondTransformationHighlight
                 move.w  #$ECC,(a0,d0.w)
-Boss_BackStringerCheckSecondTransformationHighlight:    ; CODE XREF: Boss_BackStringerUpdateTransformationPalette+20   j  ; was: loc_4505A
+Boss_BackStringerCheckSecondTransformationHighlight:    ; was: loc_4505A
                 cmpi.w  #$16,d0
                 bpl.s   Boss_BackStringerTransformationPaletteReturn
                 cmpi.w  #$C,d0
                 bmi.s   Boss_BackStringerTransformationPaletteReturn
                 move.w  #$A40,2(a0,d0.w)
-Boss_BackStringerTransformationPaletteReturn:           ; CODE XREF: Boss_BackStringerUpdateTransformationPalette+2C   j  ; was: locret_4506C
+Boss_BackStringerTransformationPaletteReturn:           ; was: locret_4506C
                                         ; Boss_BackStringerUpdateTransformationPalette+32   j
                 rts
 ; End of function Boss_BackStringerUpdateTransformationPalette
 ; Initializes the preallocated tail-segment display slots
-Boss_BackStringerInitializeTailSegmentSlots:            ; CODE XREF: Boss_BackStringerInitializeState+64   p  ; was: sub_4506E
+Boss_BackStringerInitializeTailSegmentSlots:            ; was: sub_4506E
                 movea.w #(FiftyThirdEntityType-M68K_RAM),a0
                 moveq   #5,d7
-Boss_BackStringerInitializeTailSegmentSlotsLoop:        ; CODE XREF: Boss_BackStringerInitializeTailSegmentSlots+18   j  ; was: loc_45074
+Boss_BackStringerInitializeTailSegmentSlotsLoop:        ; was: loc_45074
                 move.w  #$10,(a0)
                 clr.w   2(a0)
                 move.w  #$C3E7,$E(a0)
@@ -116,12 +113,12 @@ Boss_BackStringerInitializeTailSegmentSlotsLoop:        ; CODE XREF: Boss_BackSt
                 rts
 ; End of function Boss_BackStringerInitializeTailSegmentSlots
 ; Resets the six tail segments and their contact endpoint
-Boss_BackStringerResetTailSegments:                     ; CODE XREF: Boss_BackStringerResetManualControlState+1E   j  ; was: sub_450B2
+Boss_BackStringerResetTailSegments:                     ; was: sub_450B2
                                         ; Boss_BackStringerDivePreparationState+3EE   p
                 clr.l   $2FC(a5)
                 movea.w #(FiftyThirdEntityType-M68K_RAM),a0
                 moveq   #5,d7
-Boss_BackStringerResetTailSegmentsLoop:                 ; CODE XREF: Boss_BackStringerResetTailSegments+36   j  ; was: loc_450BC
+Boss_BackStringerResetTailSegmentsLoop:                 ; was: loc_450BC
                 move.w  #$10,(a0)
                 move.w  #$8080,2(a0)
                 move.w  #$300,8(a0)
@@ -138,11 +135,11 @@ Boss_BackStringerResetTailSegmentsLoop:                 ; CODE XREF: Boss_BackSt
                 clr.w   $29E(a5)
                 move.b  #2,$21(a0)
                 clr.b   $22(a0)
-Boss_BackStringerResetTailSegmentsReturn:               ; CODE XREF: Boss_BackStringerResetTailSegments+3E   j  ; was: locret_4510C
+Boss_BackStringerResetTailSegmentsReturn:               ; was: locret_4510C
                 rts
 ; End of function Boss_BackStringerResetTailSegments
 ; Updates tail segment positions and publishes endpoint contact state
-Boss_BackStringerUpdateTailSegmentPositions:            ; CODE XREF: Boss_BackStringerManualControlState:Boss_BackStringerUpdateManualControlPose   p  ; was: sub_4510E
+Boss_BackStringerUpdateTailSegmentPositions:            ; was: sub_4510E
                                         ; Boss_BackStringerDiveAttackState:Boss_BackStringerUpdateDiveTail   p
                 move.l  $2FC(a5),d0
                 move.l  d0,d1
@@ -151,10 +148,10 @@ Boss_BackStringerUpdateTailSegmentPositions:            ; CODE XREF: Boss_BackSt
                 btst    #0,(FrameCounter+1).w
                 bne.s   Boss_BackStringerPrepareTailSegmentLoop
                 moveq   #0,d3
-Boss_BackStringerPrepareTailSegmentLoop:                ; CODE XREF: Boss_BackStringerUpdateTailSegmentPositions+12   j  ; was: loc_45124
+Boss_BackStringerPrepareTailSegmentLoop:                ; was: loc_45124
                 movea.w #(FiftyThirdEntityType-M68K_RAM),a0
                 moveq   #5,d7
-Boss_BackStringerUpdateTailSegmentLoop:                 ; CODE XREF: Boss_BackStringerUpdateTailSegmentPositions+30   j  ; was: loc_4512A
+Boss_BackStringerUpdateTailSegmentLoop:                 ; was: loc_4512A
                 andi.w  #$F7FF,$E(a0)
                 bset    d3,$E(a0)
                 move.l  d1,$14(a0)
@@ -173,31 +170,31 @@ Boss_BackStringerUpdateTailSegmentLoop:                 ; CODE XREF: Boss_BackSt
                 bset    #1,(ForcedPositionFlags).w
                 move.w  #2,$29E(a5)
                 bset    #4,(PlayerSpriteAttributes).w
-Boss_BackStringerCheckTailContactRelease:               ; CODE XREF: Boss_BackStringerUpdateTailSegmentPositions+46   j  ; was: loc_45176
+Boss_BackStringerCheckTailContactRelease:               ; was: loc_45176
                 bclr    #1,(ForcedPositionFlags).w
                 bne.s   Boss_BackStringerPublishTailContact
                 clr.w   $29E(a5)
                 bra.s   Boss_BackStringerUpdateTailSegmentsReturn
 ; ---------------------------------------------------------------------------
-Boss_BackStringerPublishTailContact:                    ; CODE XREF: Boss_BackStringerUpdateTailSegmentPositions+6E   j  ; was: loc_45184
+Boss_BackStringerPublishTailContact:                    ; was: loc_45184
                 bset    #7,(PlayerSpriteAttributes).w
                 move.w  #$C8,(ForcedPositionTimer).w
                 bset    #0,(ForcedPositionFlags).w
                 bset    #2,(ForcedPositionFlags).w
                 move.w  $10(a0),(ForcedPositionX).w
                 move.w  $14(a0),(ForcedPositionY).w
-Boss_BackStringerUpdateTailSegmentsReturn:              ; CODE XREF: Boss_BackStringerUpdateTailSegmentPositions+44   j  ; was: locret_451A8
+Boss_BackStringerUpdateTailSegmentsReturn:              ; was: locret_451A8
                                         ; Boss_BackStringerUpdateTailSegmentPositions+4E   j
                 rts
 ; End of function Boss_BackStringerUpdateTailSegmentPositions
 ; Converts the six tail segments into staggered retracting objects
-Boss_BackStringerRetractTailSegments:                   ; CODE XREF: Boss_BackStringerManualControlState+14   p  ; was: sub_451AA
+Boss_BackStringerRetractTailSegments:                   ; was: sub_451AA
                                         ; Boss_BackStringerDiveAttackState+7A   p
                 move.w  #$324,d0
                 moveq   #$FFFFFFFF,d1
                 movea.w #(FiftyThirdEntityType-M68K_RAM),a0
                 moveq   #5,d7
-Boss_BackStringerRetractTailSegmentsLoop:               ; CODE XREF: Boss_BackStringerRetractTailSegments+24   j  ; was: loc_451B6
+Boss_BackStringerRetractTailSegmentsLoop:               ; was: loc_451B6
                 move.w  d0,(a0)
                 move.w  #$8480,2(a0)
                 move.w  #6,$48(a0)
@@ -212,19 +209,19 @@ Boss_BackStringerRetractTailSegmentsLoop:               ; CODE XREF: Boss_BackSt
                 rts
 ; End of function Boss_BackStringerRetractTailSegments
 ; Flashing effect for destroyed BackStringer segment
-Effect_BackStringerSegmentFlash:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_451E6
+Effect_BackStringerSegmentFlash:                        ; was: sub_451E6
                 subq.w  #1,$48(a5)
                 bpl.s   Effect_BackStringerSegmentFlashUpdate
                 move.w  #$10,(a5)
                 clr.w   2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_BackStringerSegmentFlashUpdate:                  ; CODE XREF: Effect_BackStringerSegmentFlash+4   j  ; was: loc_451F6
+Effect_BackStringerSegmentFlashUpdate:                  ; was: loc_451F6
                 bset    #3,$E(a5)
                 btst    #0,(FrameCounter+1).w
                 bne.s   Effect_BackStringerSegmentFlashSelectFrame
                 bclr    #3,$E(a5)
-Effect_BackStringerSegmentFlashSelectFrame:             ; CODE XREF: Effect_BackStringerSegmentFlash+1C   j  ; was: loc_4520A
+Effect_BackStringerSegmentFlashSelectFrame:             ; was: loc_4520A
                 move.w  $48(a5),d0
                 andi.w  #6,d0
                 move.w  Effect_BackStringerSegmentFlashFrameOffsets(pc,d0.w),8(a5)
@@ -232,17 +229,16 @@ Effect_BackStringerSegmentFlashSelectFrame:             ; CODE XREF: Effect_Back
                 rts
 ; End of function Effect_BackStringerSegmentFlash
 ; ---------------------------------------------------------------------------
-Effect_BackStringerSegmentFlashFrameOffsets:    dc.w    0, $100, $200  ; DATA XREF: Effect_BackStringerSegmentFlash+2C   r ; was: word_45220
+Effect_BackStringerSegmentFlashFrameOffsets:    dc.w    0, $100, $200  ; was: word_45220
 Effect_BackStringerSegmentFlashCoordinates:     dc.w    $FCFC, $FCF8, $FCF4  ; was: word_45226
-                                        ; DATA XREF: Effect_BackStringerSegmentFlash+32   r
 
 ; Applies circular motion
-Boss_BackStringerApplyCircularMotion:                   ; CODE XREF: Boss_BackStringerBeginEntrance+2C   p  ; was: sub_4522C
+Boss_BackStringerApplyCircularMotion:                   ; was: sub_4522C
                                         ; Boss_BackStringerRotateToHalfTurnState+DA   p
                 tst.w   $23E(a5)
                 beq.s   Boss_BackStringerApplyCircularMotionStep
                 move.w  #$3C,$3BC(a5)                   ; '<'
-Boss_BackStringerApplyCircularMotionStep:               ; CODE XREF: Boss_BackStringerApplyCircularMotion+4   j  ; was: loc_45238
+Boss_BackStringerApplyCircularMotionStep:               ; was: loc_45238
                 subi.w  #4,$3BC(a5)
                 move.w  $56(a5),d0
                 subi.w  #$80,d0
@@ -259,12 +255,12 @@ Boss_BackStringerApplyCircularMotionStep:               ; CODE XREF: Boss_BackSt
                 rts
 ; End of function Boss_BackStringerApplyCircularMotion
 ; Animates boss pose from script
-Boss_BackStringerAnimatePose:                           ; CODE XREF: Boss_BackStringerManualControlState+42   p  ; was: sub_4526C
+Boss_BackStringerAnimatePose:                           ; was: sub_4526C
                                         ; Boss_BackStringerBeginEntrance+28   p
                 clr.w   $23E(a5)
                 tst.w   $C(a5)
                 bpl.s   Boss_BackStringerApplyPoseInterpolation
-Boss_BackStringerReadNextPoseCommand:                   ; CODE XREF: Boss_BackStringerAnimatePose+4A   j  ; was: loc_45276
+Boss_BackStringerReadNextPoseCommand:                   ; was: loc_45276
                 move.w  $58(a5),d0
                 bmi.w   Boss_BackStringerPublishPoseAngles
                 cmpi.b  #$80,(a1,d0.w)
@@ -273,21 +269,21 @@ Boss_BackStringerReadNextPoseCommand:                   ; CODE XREF: Boss_BackSt
                 jsr     (Sound_QueueSFXRequest).l
                 addq.w  #2,$58(a5)
                 move.w  $58(a5),d0
-Boss_BackStringerDecodePoseCommand:                     ; CODE XREF: Boss_BackStringerAnimatePose+18   j  ; was: loc_45298
+Boss_BackStringerDecodePoseCommand:                     ; was: loc_45298
                 move.w  (a1,d0.w),d3
                 cmpi.w  #$FFFE,d3
                 bne.s   Boss_BackStringerCheckPoseLoopMarker
                 move.w  d3,$58(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Boss_BackStringerCheckPoseLoopMarker:                   ; CODE XREF: Boss_BackStringerAnimatePose+34   j  ; was: loc_452A8
+Boss_BackStringerCheckPoseLoopMarker:                   ; was: loc_452A8
                 cmpi.w  #$FFFF,d3
                 bne.s   Boss_BackStringerStartPoseInterpolation
                 clr.w   $58(a5)
                 clr.w   $29C(a5)
                 bra.s   Boss_BackStringerReadNextPoseCommand
 ; ---------------------------------------------------------------------------
-Boss_BackStringerStartPoseInterpolation:                ; CODE XREF: Boss_BackStringerAnimatePose+40   j  ; was: loc_452B8
+Boss_BackStringerStartPoseInterpolation:                ; was: loc_452B8
                 move.w  d3,(PoseCommandWord).w
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
@@ -303,12 +299,12 @@ Boss_BackStringerStartPoseInterpolation:                ; CODE XREF: Boss_BackSt
                 addq.w  #1,$23E(a5)
                 tst.w   $C(a5)
                 bmi.s   Boss_BackStringerPublishPoseAngles
-Boss_BackStringerApplyPoseInterpolation:                ; CODE XREF: Boss_BackStringerAnimatePose+8   j  ; was: loc_452EE
+Boss_BackStringerApplyPoseInterpolation:                ; was: loc_452EE
                 subq.w  #1,$C(a5)
                 movea.w #(BackStringerPoseBuffer-M68K_RAM),a0
                 moveq   #$13,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
-Boss_BackStringerPublishPoseAngles:                     ; CODE XREF: Boss_BackStringerAnimatePose+E   j  ; was: loc_452FE
+Boss_BackStringerPublishPoseAngles:                     ; was: loc_452FE
                                         ; Boss_BackStringerAnimatePose+80   j
                 move.w  #$1FE,d7
                 movea.w #(BackStringerPoseBuffer-M68K_RAM),a0
@@ -408,7 +404,7 @@ Boss_BackStringerPublishPoseAngles:                     ; CODE XREF: Boss_BackSt
                 rts
 ; End of function Boss_BackStringerAnimatePose
 ; Calculates animation interpolation
-Anim_BackStringerCalcInterpolation:                     ; CODE XREF: Boss_BackStringerAnimatePose+62   p  ; was: sub_45410
+Anim_BackStringerCalcInterpolation:                     ; was: sub_45410
                 movea.l #Boss_BackStringerNeutralPose,a1
                 movea.w #(BackStringerPoseBuffer-M68K_RAM),a2
                 move.w  d3,$C(a5)
@@ -422,27 +418,27 @@ Boss_BackStringerInitializePoseChannels:
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_BackStringerInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_BackStringerManualControlPoses:    dc.w    $2020, 0, $2020, $14, $FFFF  ; DATA XREF: Boss_BackStringerManualControlState+3C   o ; was: word_45432
-Boss_BackStringerOpeningDelayPoses:     dc.w    $2828, $28, $607, 0, $2828, $14, $607, 0, $FFFF  ; DATA XREF: Boss_BackStringerUseOpeningDelayPoseAndRender   o ; was: word_4543C
-Boss_BackStringerCircularMotionPoses:   dc.w    $708, $3C, $708, $50, $708, $64, $708, $78, $FFFF  ; DATA XREF: Boss_BackStringerUpdateCircularMotionAndRender   o ; was: word_4544E
+Boss_BackStringerManualControlPoses:    dc.w    $2020, 0, $2020, $14, $FFFF  ; was: word_45432
+Boss_BackStringerOpeningDelayPoses:     dc.w    $2828, $28, $607, 0, $2828, $14, $607, 0, $FFFF  ; was: word_4543C
+Boss_BackStringerCircularMotionPoses:   dc.w    $708, $3C, $708, $50, $708, $64, $708, $78, $FFFF  ; was: word_4544E
                                         ; Boss_BackStringerTrackingAttackWarmupState+40   o
-Boss_BackStringerIncreasingAnglePoses:  dc.w    $305, $8C, $305, $A0, $305, $B4, $305, $C8, $FFFF  ; DATA XREF: Boss_BackStringerUseIncreasingAnglePose   o ; was: word_45460
+Boss_BackStringerIncreasingAnglePoses:  dc.w    $305, $8C, $305, $A0, $305, $B4, $305, $C8, $FFFF  ; was: word_45460
                                         ; Boss_BackStringerUpdateRotationAttack+1A   o
-Boss_BackStringerDecreasingAnglePoses:  dc.w    $305, $DC, $305, $F0, $305, $104, $305, $118, $FFFF  ; DATA XREF: Boss_BackStringerUpdateRotationAttack+24   o ; was: word_45472
+Boss_BackStringerDecreasingAnglePoses:  dc.w    $305, $DC, $305, $F0, $305, $104, $305, $118, $FFFF  ; was: word_45472
                                         ; Boss_BackStringerTrackingAttackState+122   o
-Boss_BackStringerOpeningPoses:  dc.w    $306, $12C, $606, $12C, $418, $64, $306, $140, $606, $140, $418, $3C, $FFFF  ; DATA XREF: Boss_BackStringerOpeningPoseState+74   o ; was: word_45484
-Boss_BackStringerIdlePoses:     dc.w    $808, 0, $418, $154, $FFFF  ; DATA XREF: Boss_BackStringerOpeningDelayState+A2   o ; was: word_4549E
+Boss_BackStringerOpeningPoses:  dc.w    $306, $12C, $606, $12C, $418, $64, $306, $140, $606, $140, $418, $3C, $FFFF  ; was: word_45484
+Boss_BackStringerIdlePoses:     dc.w    $808, 0, $418, $154, $FFFF  ; was: word_4549E
                                         ; Boss_BackStringerUseIdlePoseAndRender   o
-Boss_BackStringerDivePreparationPoses:  dc.w    $404, 0, $20C, $154, $FFFF  ; DATA XREF: Boss_BackStringerAnimateDivePreparation   o ; was: word_454A8
-Boss_BackStringerDiveAttackPoses:       dc.w    $408, $190, $408, $190, $C0E, $154, $3030, 0, $FFFE  ; DATA XREF: Boss_BackStringerDiveAttackState+22   o ; was: word_454B2
-Boss_BackStringerSweepPoses:            dc.w    $80C, $154, $C0C, $154, $80C, 0, $C0C, 0, $FFFF  ; DATA XREF: Boss_BackStringerAnimateSweepAndRender   o ; was: word_454C4
-Boss_BackStringerTransformationPoses:   dc.w    $1010, $154, $E10, $17C, $707, $17C, $80D9  ; DATA XREF: Boss_BackStringerAnimateTransformationAndRender   o ; was: word_454D6
+Boss_BackStringerDivePreparationPoses:  dc.w    $404, 0, $20C, $154, $FFFF  ; was: word_454A8
+Boss_BackStringerDiveAttackPoses:       dc.w    $408, $190, $408, $190, $C0E, $154, $3030, 0, $FFFE  ; was: word_454B2
+Boss_BackStringerSweepPoses:            dc.w    $80C, $154, $C0C, $154, $80C, 0, $C0C, 0, $FFFF  ; was: word_454C4
+Boss_BackStringerTransformationPoses:   dc.w    $1010, $154, $E10, $17C, $707, $17C, $80D9  ; was: word_454D6
                 dc.w    $C0E, $190, $404, $190, $1010, $154, $FFFE
 Boss_BackStringerPoseTable: binclude "data/other/word_454F2.bin"  ; was: word_454F2
 Boss_BackStringerPoseTable_End:                         ; was: word_454F2_End
 
 ; Updates the detached rope segment and its shared surface reference
-Projectile_BackStringerRopeSegment:                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_45696
+Projectile_BackStringerRopeSegment:                     ; was: sub_45696
                 bclr    #0,$5E(a5)
                 beq.s   Projectile_BackStringerRopeSegmentUpdateSurface
                 move.w  #$1000,d0
@@ -456,7 +452,7 @@ Projectile_BackStringerRopeSegment:                     ; DATA XREF: ROM:Entity_
                 move.w  #$1000,2(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_BackStringerRopeSegmentUpdateSurface:        ; CODE XREF: Projectile_BackStringerRopeSegment+6   j  ; was: loc_456CA
+Projectile_BackStringerRopeSegmentUpdateSurface:        ; was: loc_456CA
                                         ; Projectile_BackStringerRopeSegment+2A   j
                 move.w  #$168,d0
                 add.w   $14(a5),d0
@@ -466,12 +462,12 @@ Projectile_BackStringerRopeSegmentUpdateSurface:        ; CODE XREF: Projectile_
                 cmp.w   $14(a5),d0
                 bpl.s   Projectile_BackStringerRopeSegmentReturn
                 bclr    #7,(PlayerSpriteAttributes).w
-Projectile_BackStringerRopeSegmentReturn:               ; CODE XREF: Projectile_BackStringerRopeSegment+4C   j  ; was: locret_456EA
+Projectile_BackStringerRopeSegmentReturn:               ; was: locret_456EA
                 rts
 ; End of function Projectile_BackStringerRopeSegment
 
 ; Spawns the falling-drop objects used throughout the regular attack loop
-Projectile_BackStringerSpawnFallingDrops:               ; CODE XREF: Boss_BackStringerAttackDelayState   p  ; was: sub_456EC
+Projectile_BackStringerSpawnFallingDrops:               ; was: sub_456EC
                                         ; Boss_BackStringerSweepingAttackState   p
                 tst.w   (SecondaryEntityType).w
                 beq.w   Projectile_BackStringerSpawnFallingDropsReturn
@@ -484,7 +480,7 @@ Projectile_BackStringerSpawnFallingDrops:               ; CODE XREF: Boss_BackSt
                 bpl.s   Projectile_BackStringerSpawnFallingDropsReturn
                 move.w  #7,$47C(a5)
                 move.w  #$B,$47E(a5)
-Projectile_BackStringerSpawnNextFallingDrop:            ; CODE XREF: Projectile_BackStringerSpawnFallingDrops+16   j  ; was: loc_45716
+Projectile_BackStringerSpawnNextFallingDrop:            ; was: loc_45716
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Projectile_BackStringerSpawnFallingDropsReturn
                 subq.w  #1,$47C(a5)
@@ -504,7 +500,7 @@ Projectile_BackStringerSpawnNextFallingDrop:            ; CODE XREF: Projectile_
                 move.w  d0,$10(a0)
                 move.w  $10(a0),$5C(a0)
                 move.w  $10(a0),$5E(a0)
-Projectile_BackStringerSpawnFallingDropsReturn:         ; CODE XREF: Projectile_BackStringerSpawnFallingDrops+4   j  ; was: locret_4577A
+Projectile_BackStringerSpawnFallingDropsReturn:         ; was: locret_4577A
                                         ; Projectile_BackStringerSpawnFallingDrops+10   j
                 rts
 ; End of function Projectile_BackStringerSpawnFallingDrops

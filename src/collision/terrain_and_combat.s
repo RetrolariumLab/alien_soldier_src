@@ -1,9 +1,9 @@
-Collision_PlayerWeaponVsEnemy:                          ; CODE XREF: Collision_UpdateSystem+2A   p  ; was: sub_14190
+Collision_PlayerWeaponVsEnemy:                          ; was: sub_14190
                 movea.w #(PlayerWeaponList-M68K_RAM),a5
                 move.w  (WeaponListCountMinus1).w,d7
                 bmi.w   Collision_PlayerWeaponVsEnemy_Return
                 moveq   #4,d5
-Collision_PlayerWeaponVsEnemy_WeaponLoop:               ; CODE XREF: Collision_PlayerWeaponVsEnemy+5C   j  ; was: loc_1419E
+Collision_PlayerWeaponVsEnemy_WeaponLoop:               ; was: loc_1419E
                 movea.w (a5)+,a3
                 moveq   #$FFFFFFF8,d0
                 add.w   $10(a3),d0
@@ -16,7 +16,7 @@ Collision_PlayerWeaponVsEnemy_WeaponLoop:               ; CODE XREF: Collision_P
                 movea.w #(CollisionTargetList-M68K_RAM),a4
                 move.w  (TargetListCountMinus1).w,d6
                 bmi.w   Collision_PlayerWeaponVsEnemy_Return
-Collision_PlayerWeaponVsEnemy_TargetLoop:               ; CODE XREF: Collision_PlayerWeaponVsEnemy:Collision_PlayerWeaponVsEnemy_NextTarget   j  ; was: loc_141C4
+Collision_PlayerWeaponVsEnemy_TargetLoop:               ; was: loc_141C4
                 movea.w (a4)+,a2
                 cmp.w   $34(a2),d1
                 bmi.s   Collision_PlayerWeaponVsEnemy_NextTarget
@@ -29,20 +29,20 @@ Collision_PlayerWeaponVsEnemy_TargetLoop:               ; CODE XREF: Collision_P
                 btst    d5,$21(a2)
                 bne.s   Collision_PlayerWeaponVsEnemy_ResolveFlaggedTarget
                 beq.w   Collision_PlayerWeaponVsEnemy_ApplyStandardDamage
-Collision_PlayerWeaponVsEnemy_NextTarget:               ; CODE XREF: Collision_PlayerWeaponVsEnemy+3A   j  ; was: loc_141E8
+Collision_PlayerWeaponVsEnemy_NextTarget:               ; was: loc_141E8
                                         ; Collision_PlayerWeaponVsEnemy+40   j
                 dbf     d6,Collision_PlayerWeaponVsEnemy_TargetLoop
                 dbf     d7,Collision_PlayerWeaponVsEnemy_WeaponLoop
-Collision_PlayerWeaponVsEnemy_Return:                   ; CODE XREF: Collision_PlayerWeaponVsEnemy+8   j  ; was: locret_141F0
+Collision_PlayerWeaponVsEnemy_Return:                   ; was: locret_141F0
                                         ; Collision_PlayerWeaponVsEnemy+30   j
                 rts
 ; ---------------------------------------------------------------------------
-Collision_PlayerWeaponVsEnemy_ResolveFlaggedTarget:     ; CODE XREF: Collision_PlayerWeaponVsEnemy+52   j  ; was: loc_141F2
+Collision_PlayerWeaponVsEnemy_ResolveFlaggedTarget:     ; was: loc_141F2
                 btst    #2,(BossColorEffectFlags).w
                 bne.s   Collision_PlayerWeaponVsEnemy_ApplyFlaggedDamage
                 tst.w   (BossHealth).w
                 beq.w   Collision_PlayerWeaponVsEnemy_NextTarget
-Collision_PlayerWeaponVsEnemy_ApplyFlaggedDamage:       ; CODE XREF: Collision_PlayerWeaponVsEnemy+68   j  ; was: loc_14202
+Collision_PlayerWeaponVsEnemy_ApplyFlaggedDamage:       ; was: loc_14202
                 bset    #7,$22(a3)
                 btst    #1,(BossColorEffectFlags).w
                 bne.s   Collision_PlayerWeaponVsEnemy_NextTarget
@@ -71,7 +71,7 @@ Collision_PlayerWeaponVsEnemy_ApplyFlaggedDamage:       ; CODE XREF: Collision_P
                 bsr.w   Results_IncrementDestroyedEnemyCountBCD
                 bra.w   Collision_PlayerWeaponVsEnemy_NextTarget
 ; ---------------------------------------------------------------------------
-Collision_PlayerWeaponVsEnemy_ApplyStandardDamage:      ; CODE XREF: Collision_PlayerWeaponVsEnemy+54   j  ; was: loc_14278
+Collision_PlayerWeaponVsEnemy_ApplyStandardDamage:      ; was: loc_14278
                 tst.w   $24(a2)
                 bmi.w   Collision_PlayerWeaponVsEnemy_NextTarget
                 bset    #7,$22(a3)
@@ -90,7 +90,7 @@ Collision_PlayerWeaponVsEnemy_ApplyStandardDamage:      ; CODE XREF: Collision_P
                 subq.w  #1,(SpecialTargetCount).w
                 bpl.s   Collision_PlayerWeaponVsEnemy_FinishStandardDefeat
                 clr.w   (SpecialTargetCount).w
-Collision_PlayerWeaponVsEnemy_FinishStandardDefeat:     ; CODE XREF: Collision_PlayerWeaponVsEnemy+12A   j  ; was: loc_142C6
+Collision_PlayerWeaponVsEnemy_FinishStandardDefeat:     ; was: loc_142C6
                                         ; Collision_PlayerWeaponVsEnemy+130   j
                 btst    #7,$23(a2)
                 bne.w   Collision_PlayerWeaponVsEnemy_NextTarget
@@ -98,22 +98,21 @@ Collision_PlayerWeaponVsEnemy_FinishStandardDefeat:     ; CODE XREF: Collision_P
                 bra.w   Collision_PlayerWeaponVsEnemy_NextTarget
 ; End of function Collision_PlayerWeaponVsEnemy
 ; Checks the player against objects registered as moving platforms
-Collision_CheckPlayerPlatforms:                         ; CODE XREF: Physics_LowerTerrainCheckWrapper+A   p  ; was: sub_142D8
+Collision_CheckPlayerPlatforms:                         ; was: sub_142D8
                                         ; Physics_DescendingTerrainCheckWrapper+A   p
                 movea.w #(MovingPlatformList-M68K_RAM),a4
                 move.w  (PlatformListCountMinus1).w,d7
                 bmi.s   Collision_CheckPlayerPlatforms_Return
 ; Processes one entry in the moving-platform collision list
-Collision_PlayerPlatformLoop:                           ; CODE XREF: Collision_CheckPlayerPlatforms+E   j  ; was: loc_142E2
+Collision_PlayerPlatformLoop:                           ; was: loc_142E2
                 movea.w (a4)+,a2
                 bsr.s   Collision_DispatchPlatformContact
                 dbf     d7,Collision_PlayerPlatformLoop
-Collision_CheckPlayerPlatforms_Return:                  ; CODE XREF: Collision_CheckPlayerPlatforms+8   j  ; was: locret_142EA
-                                        ; DATA XREF: ROM:Collision_PlatformHandlerOffsets   o
+Collision_CheckPlayerPlatforms_Return:                  ; was: locret_142EA
                 rts
 ; End of function Collision_CheckPlayerPlatforms
 ; Dispatches the platform contact mode stored in the object
-Collision_DispatchPlatformContact:                      ; CODE XREF: Collision_CheckPlayerPlatforms+C   p  ; was: sub_142EC
+Collision_DispatchPlatformContact:                      ; was: sub_142EC
                 move.w  $46(a2),d0
                 movea.w Collision_PlatformHandlerOffsets(pc,d0.w),a0
                 adda.l  #Collision_PlayerLandOnPlatform,a0
@@ -121,13 +120,12 @@ Collision_DispatchPlatformContact:                      ; CODE XREF: Collision_C
 ; End of function Collision_DispatchPlatformContact
 ; ---------------------------------------------------------------------------
 Collision_PlatformHandlerOffsets:   dc.w    Collision_CheckPlayerPlatforms_Return-Collision_PlayerLandOnPlatform  ; was: off_142FC
-                                        ; DATA XREF: Collision_DispatchPlatformContact+4   r
                 dc.w    Collision_PlayerLandOnPlatform-Collision_PlayerLandOnPlatform
                 dc.w    Collision_PlayerHitPlatformUnderside-Collision_PlayerLandOnPlatform
                 dc.w    Collision_PlayerClampToPlatformTop-Collision_PlayerLandOnPlatform
 
 ; Lands the player on top of a moving platform
-Collision_PlayerLandOnPlatform:                         ; DATA XREF: Collision_DispatchPlatformContact+8   o  ; was: sub_14304
+Collision_PlayerLandOnPlatform:                         ; was: sub_14304
                                         ; ROM:Collision_PlatformHandlerOffsets   o
                 tst.w   $1C(a5)
                 bmi.w   Collision_PlayerLandOnPlatform_Return
@@ -166,12 +164,12 @@ Collision_PlayerLandOnPlatform:                         ; DATA XREF: Collision_D
                 move.w  $4A(a2),d0
                 subi.w  #$20,d0                         ; ' '
                 move.w  d0,$14(a5)
-Collision_PlayerLandOnPlatform_Return:                  ; CODE XREF: Collision_PlayerLandOnPlatform+4   j  ; was: locret_14384
+Collision_PlayerLandOnPlatform_Return:                  ; was: locret_14384
                                         ; Collision_PlayerLandOnPlatform+18   j
                 rts
 ; End of function Collision_PlayerLandOnPlatform
 ; Clamps the player to a platform top for either vertical direction
-Collision_PlayerClampToPlatformTop:                     ; DATA XREF: ROM:00014302   o  ; was: sub_14386
+Collision_PlayerClampToPlatformTop:                     ; was: sub_14386
                 move.w  $28(a2),d0
                 add.w   $48(a2),d0
                 move.w  $10(a5),d1
@@ -205,7 +203,7 @@ Collision_PlayerClampToPlatformTop:                     ; DATA XREF: ROM:0001430
                 move.w  d0,$14(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Collision_PlayerClampToPlatformTop_Attach:              ; CODE XREF: Collision_PlayerClampToPlatformTop+4E   j  ; was: loc_143EA
+Collision_PlayerClampToPlatformTop_Attach:              ; was: loc_143EA
                 move.w  $4A(a2),d0
                 subi.w  #$20,d0                         ; ' '
                 move.w  d0,$14(a5)
@@ -216,17 +214,17 @@ Collision_PlayerClampToPlatformTop_Attach:              ; CODE XREF: Collision_P
                 sub.w   $48(a2),d5
                 neg.w   d5
                 add.w   d5,$10(a5)
-Collision_PlayerClampToPlatformTop_Return:              ; CODE XREF: Collision_PlayerClampToPlatformTop+10   j  ; was: locret_14414
+Collision_PlayerClampToPlatformTop_Return:              ; was: locret_14414
                                         ; Collision_PlayerClampToPlatformTop+24   j
                 rts
 ; End of function Collision_PlayerClampToPlatformTop
 ; Resolves contact with the underside of a moving platform
-Collision_PlayerHitPlatformUnderside:                   ; DATA XREF: ROM:00014300   o  ; was: sub_14416
+Collision_PlayerHitPlatformUnderside:                   ; was: sub_14416
                 clr.w   6(a2)
                 tst.l   $1C(a5)
                 beq.s   Collision_PlayerHitPlatformUnderside_CheckBounds
                 bpl.w   Collision_PlayerHitPlatformUnderside_Return
-Collision_PlayerHitPlatformUnderside_CheckBounds:       ; CODE XREF: Collision_PlayerHitPlatformUnderside+8   j  ; was: loc_14424
+Collision_PlayerHitPlatformUnderside_CheckBounds:       ; was: loc_14424
                 move.w  $28(a2),d0
                 add.w   $48(a2),d0
                 move.w  $10(a5),d1
@@ -253,7 +251,7 @@ Collision_PlayerHitPlatformUnderside_CheckBounds:       ; CODE XREF: Collision_P
                 addi.w  #-$1A,d1
                 cmp.w   d1,d0
                 bmi.s   Collision_PlayerHitPlatformUnderside_Return
-Collision_PlayerHitPlatformUnderside_Attach:            ; CODE XREF: Collision_PlayerHitPlatformUnderside+4C   j  ; was: loc_14476
+Collision_PlayerHitPlatformUnderside_Attach:            ; was: loc_14476
                 clr.l   $1C(a5)
                 bset    #1,6(a5)
                 bset    #1,6(a2)
@@ -265,7 +263,7 @@ Collision_PlayerHitPlatformUnderside_Attach:            ; CODE XREF: Collision_P
                 move.w  $4A(a2),d0
                 addi.w  #$20,d0                         ; ' '
                 move.w  d0,$14(a5)
-Collision_PlayerHitPlatformUnderside_Return:            ; CODE XREF: Collision_PlayerHitPlatformUnderside+A   j  ; was: locret_144A4
+Collision_PlayerHitPlatformUnderside_Return:            ; was: locret_144A4
                                         ; Collision_PlayerHitPlatformUnderside+1E   j
                 rts
 ; End of function Collision_PlayerHitPlatformUnderside
@@ -286,7 +284,7 @@ Results_IncrementDestroyedEnemyCountBCD_Return:         ; was: loc_144C6
                 rts
 ; End of function Results_IncrementDestroyedEnemyCountBCD
 ; Gets entity position coordinates for collision detection
-Collision_GetEntityPosition:                            ; CODE XREF: Projectile_UpdateDelayedCollisionShot:Projectile_CheckDelayedCollisionShotTerrainDepth   p  ; was: sub_144CC
+Collision_GetEntityPosition:                            ; was: sub_144CC
                                         ; Projectile_UpdateGravityBounceType84:Projectile_UpdateGravityBounceType84_CheckTerrain   p
                 move.w  $10(a5),d0
                 move.w  $14(a5),d1
@@ -303,13 +301,13 @@ Orphaned_CollisionCheckScreenBounds:
                 rts
 ; End of function Orphaned_CollisionCheckScreenBounds
 ; Adds offset to entity position for collision coordinate calculation
-Physics_AddEntityOffset:                                ; CODE XREF: UI_DebugSpritePositionEditor+50   p  ; was: sub_144EA
+Physics_AddEntityOffset:                                ; was: sub_144EA
                                         ; UI_DebugSpritePositionEditor+68   p
                 add.w   $10(a5),d0
                 add.w   $14(a5),d1
 ; End of function Physics_AddEntityOffset
 ; Checks collision with terrain by reading tilemap and height data
-Collision_CheckTerrainTile:                             ; CODE XREF: Collision_GetEntityPosition+8   j  ; was: sub_144F2
+Collision_CheckTerrainTile:                             ; was: sub_144F2
                                         ; Orphaned_CollisionCheckScreenBounds+C   j
                 movea.l #M68K_RAM,a0
                 movea.l #TerrainCollisionBuffer,a1
@@ -332,7 +330,7 @@ Collision_CheckTerrainTile:                             ; CODE XREF: Collision_G
                 rts
 ; End of function Collision_CheckTerrainTile
 ; Aligns entity Y position to terrain surface clearing velocity
-Physics_AlignToTerrain:                                 ; CODE XREF: Player_InitUpwardTerrainLaunch   p  ; was: sub_14534
+Physics_AlignToTerrain:                                 ; was: sub_14534
                                         ; Enemy_PhasePatternAirborneState+52   p
                 move.w  d1,d4
                 sub.w   (PrimaryCameraYPosition).w,d4
@@ -342,7 +340,7 @@ Physics_AlignToTerrain:                                 ; CODE XREF: Player_Init
                 rts
 ; End of function Physics_AlignToTerrain
 ; Aligns entity to terrain surface from above
-Physics_AlignToTerrainTop:                              ; CODE XREF: Enemy_PhasePatternAirborneState+66   p  ; was: sub_14548
+Physics_AlignToTerrainTop:                              ; was: sub_14548
                 move.w  d1,d4
                 sub.w   (PrimaryCameraYPosition).w,d4
                 neg.w   d4
@@ -362,7 +360,7 @@ Orphaned_PhysicsAlignToWallSurface:
                 sub.w   d4,$10(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Orphaned_PhysicsAlignToWallSurfaceAdjustOpposite:       ; CODE XREF: Orphaned_PhysicsAlignToWallSurface+4   j  ; was: loc_14576
+Orphaned_PhysicsAlignToWallSurfaceAdjustOpposite:       ; was: loc_14576
                 move.w  d0,d4
                 add.w   (PrimaryCameraXPosition).w,d4
                 neg.w   d4
@@ -372,14 +370,14 @@ Orphaned_PhysicsAlignToWallSurfaceAdjustOpposite:       ; CODE XREF: Orphaned_Ph
                 rts
 ; End of function Orphaned_PhysicsAlignToWallSurface
 ; Initializes collision buffer pointers
-Collision_InitBufferPointers:                           ; CODE XREF: Enemy_PhasePatternAirborneState:Enemy_PhasePatternAirborneState_CheckTerrain   p  ; was: sub_1458A
+Collision_InitBufferPointers:                           ; was: sub_1458A
                                         ; Enemy_UpdateBouncingDebrisSpawner+22   p
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
                 move.w  #$80,d7
 ; End of function Collision_InitBufferPointers
 ; Gets terrain tile data at specified position with screen offset
-Physics_GetTerrainTileData:                             ; CODE XREF: Physics_EntityWallCheck+14   p  ; was: sub_1459A
+Physics_GetTerrainTileData:                             ; was: sub_1459A
                                         ; Physics_EntityWallCheck+2C   p
                 add.w   $10(a5),d0
                 add.w   $14(a5),d1
@@ -389,7 +387,7 @@ Physics_GetTerrainTileData:                             ; CODE XREF: Physics_Ent
                 moveq   #0,d3
                 rts
 ; ---------------------------------------------------------------------------
-Physics_GetTerrainTileData_ReadTile:                    ; CODE XREF: Physics_GetTerrainTileData+C   j  ; was: loc_145AE
+Physics_GetTerrainTileData_ReadTile:                    ; was: loc_145AE
                 move.w  d0,d2
                 sub.w   d7,d2
                 add.w   (PrimaryCameraXPosition).w,d2
@@ -410,16 +408,16 @@ Physics_GetTerrainTileData_ReadTile:                    ; CODE XREF: Physics_Get
                 btst    #$B,d3
                 beq.s   Physics_GetTerrainTileData_CheckSecondTileFlag
                 addq.w  #8,d2
-Physics_GetTerrainTileData_CheckSecondTileFlag:         ; CODE XREF: Physics_GetTerrainTileData+4A   j  ; was: loc_145E8
+Physics_GetTerrainTileData_CheckSecondTileFlag:         ; was: loc_145E8
                 btst    #$C,d3
                 beq.s   Physics_GetTerrainTileData_Return
                 addi.w  #$40,d2                         ; '@'
-Physics_GetTerrainTileData_Return:                      ; CODE XREF: Physics_GetTerrainTileData+44   j  ; was: locret_145F2
+Physics_GetTerrainTileData_Return:                      ; was: locret_145F2
                                         ; Physics_GetTerrainTileData+52   j
                 rts
 ; End of function Physics_GetTerrainTileData
 ; Checks projectile collision with terrain tile map
-Collision_CheckProjectileTile:                          ; CODE XREF: Projectile_UpdateTwoSpeedShotCollision:Projectile_CheckTwoSpeedShotTerrain   p  ; was: sub_145F4
+Collision_CheckProjectileTile:                          ; was: sub_145F4
                                         ; sub_2B3E4:Projectile_CheckType254TwoSpeedShotTerrain   p
                 move.w  $10(a5),d0
                 move.w  $14(a5),d1
@@ -445,12 +443,12 @@ Collision_CheckProjectileTile:                          ; CODE XREF: Projectile_
                 cmpi.w  #$80,d2
                 bpl.s   Collision_CheckProjectileTile_Return
                 moveq   #0,d2
-Collision_CheckProjectileTile_Return:                   ; CODE XREF: Collision_CheckProjectileTile+48   j  ; was: locret_14646
+Collision_CheckProjectileTile_Return:                   ; was: locret_14646
                                         ; Collision_CheckProjectileTile+4E   j
                 rts
 ; End of function Collision_CheckProjectileTile
 ; Entity wall collision detection checking left and right sides
-Physics_EntityWallCheck:                                ; CODE XREF: Physics_WallCheckWrapper+A   j  ; was: sub_14648
+Physics_EntityWallCheck:                                ; was: sub_14648
                                         ; sub_2CC34:loc_2CC54   p
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -462,7 +460,7 @@ Physics_EntityWallCheck:                                ; CODE XREF: Physics_Wal
                 bmi.s   Physics_EntityWallCheck_CheckRight
                 bset    #2,7(a5)
                 bsr.w   Physics_ResolveLeftWallCollision
-Physics_EntityWallCheck_CheckRight:                     ; CODE XREF: Physics_EntityWallCheck+1C   j  ; was: loc_14670
+Physics_EntityWallCheck_CheckRight:                     ; was: loc_14670
                 moveq   #8,d0
                 moveq   #0,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -470,17 +468,17 @@ Physics_EntityWallCheck_CheckRight:                     ; CODE XREF: Physics_Ent
                 bmi.s   Physics_EntityWallCheck_Return
                 bset    #3,7(a5)
                 bsr.w   Physics_ResolveRightWallCollision
-Physics_EntityWallCheck_Return:                         ; CODE XREF: Physics_EntityWallCheck+34   j  ; was: locret_14688
+Physics_EntityWallCheck_Return:                         ; was: locret_14688
                 rts
 ; End of function Physics_EntityWallCheck
 ; Extended entity wall check with velocity-dependent vertical probe offsets
-Physics_EntityExtendedWallCheck:                        ; CODE XREF: Physics_ExtendedWallCheckWrapper+A   j  ; was: sub_1468A
+Physics_EntityExtendedWallCheck:                        ; was: sub_1468A
                                         ; sub_2C71E:loc_2C850   p
                 moveq   #$18,d6
                 tst.w   $1C(a5)
                 bmi.s   Physics_EntityExtendedWallCheck_Begin
                 moveq   #$FFFFFFE8,d6
-Physics_EntityExtendedWallCheck_Begin:                  ; CODE XREF: Physics_EntityExtendedWallCheck+6   j  ; was: loc_14694
+Physics_EntityExtendedWallCheck_Begin:                  ; was: loc_14694
                                         ; Physics_FacingExtendedWallCheckWrapper+12   j
                 lea     (M68K_RAM).l,a0
                 lea     (TerrainCollisionBuffer).l,a1
@@ -494,14 +492,14 @@ Physics_EntityExtendedWallCheck_Begin:                  ; CODE XREF: Physics_Ent
                 bsr.w   Physics_ResolveLeftWallCollision
                 bra.s   Physics_EntityExtendedWallCheck_CheckRight
 ; ---------------------------------------------------------------------------
-Physics_EntityExtendedWallCheck_CheckOffsetLeft:        ; CODE XREF: Physics_EntityExtendedWallCheck+26   j  ; was: loc_146BE
+Physics_EntityExtendedWallCheck_CheckOffsetLeft:        ; was: loc_146BE
                 moveq   #$FFFFFFF8,d0
                 move.w  d6,d1
                 bsr.w   Physics_GetTerrainTileData
                 cmpi.w  #$80,d2
                 bmi.s   Physics_EntityExtendedWallCheck_CheckRight
                 bsr.w   Physics_ResolveLeftWallCollision
-Physics_EntityExtendedWallCheck_CheckRight:             ; CODE XREF: Physics_EntityExtendedWallCheck+32   j  ; was: loc_146D0
+Physics_EntityExtendedWallCheck_CheckRight:             ; was: loc_146D0
                                         ; Physics_EntityExtendedWallCheck+40   j
                 moveq   #8,d0
                 moveq   #0,d1
@@ -511,7 +509,7 @@ Physics_EntityExtendedWallCheck_CheckRight:             ; CODE XREF: Physics_Ent
                 bset    #3,7(a5)
                 bra.w   Physics_ResolveRightWallCollision
 ; ---------------------------------------------------------------------------
-Physics_EntityExtendedWallCheck_CheckOffsetRight:       ; CODE XREF: Physics_EntityExtendedWallCheck+52   j  ; was: loc_146E8
+Physics_EntityExtendedWallCheck_CheckOffsetRight:       ; was: loc_146E8
                 moveq   #8,d0
                 move.w  d6,d1
                 bsr.w   Physics_GetTerrainTileData
@@ -519,6 +517,6 @@ Physics_EntityExtendedWallCheck_CheckOffsetRight:       ; CODE XREF: Physics_Ent
                 bmi.s   Physics_EntityExtendedWallCheck_Return
                 bra.w   Physics_ResolveRightWallCollision
 ; ---------------------------------------------------------------------------
-Physics_EntityExtendedWallCheck_Return:                 ; CODE XREF: Physics_EntityExtendedWallCheck+6A   j  ; was: locret_146FA
+Physics_EntityExtendedWallCheck_Return:                 ; was: locret_146FA
                 rts
 ; End of function Physics_EntityExtendedWallCheck

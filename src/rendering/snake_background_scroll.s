@@ -1,5 +1,5 @@
 ; Update the four paired rows of the Snake-stage background
-Scroll_UpdateSnakeBackground:                           ; CODE XREF: Stage12To13_UpdateTeleportAndSnakeScroll   p  ; was: sub_E34E
+Scroll_UpdateSnakeBackground:                           ; was: sub_E34E
                                         ; Stage13_UpdateSnakeEncounterTransition   p
                 movea.w #(SnakeScrollAccumulators-M68K_RAM),a0
                 lea     SnakeBackgroundScrollVelocityDeltas(pc),a1
@@ -8,9 +8,9 @@ Scroll_UpdateSnakeBackground:                           ; CODE XREF: Stage12To13
                 nop
                 movea.w (VDPStagingDataCursor).w,a4
                 moveq   #3,d7
-Scroll_UpdateSnakeBackground_RowPairLoop:               ; CODE XREF: Scroll_UpdateSnakeBackground+56   j  ; was: loc_E364
+Scroll_UpdateSnakeBackground_RowPairLoop:               ; was: loc_E364
                 bsr.w   Scroll_AccumulateSnakeBackgroundOffset
-Scroll_UpdateSnakeBackground_WriteHighNibbles:          ; CODE XREF: Scroll_UpdateSnakeBackground+26   j  ; was: loc_E368
+Scroll_UpdateSnakeBackground_WriteHighNibbles:          ; was: loc_E368
                 andi.w  #7,d0
                 move.b  (a2,d0.w),(a4)
                 addq.w  #1,d0
@@ -19,7 +19,7 @@ Scroll_UpdateSnakeBackground_WriteHighNibbles:          ; CODE XREF: Scroll_Upda
                 adda.l  #8,a2
                 suba.w  #$20,a4                         ; ' '
                 bsr.w   Scroll_AccumulateSnakeBackgroundOffset
-Scroll_UpdateSnakeBackground_MergeLowNibbles:           ; CODE XREF: Scroll_UpdateSnakeBackground+48   j  ; was: loc_E386
+Scroll_UpdateSnakeBackground_MergeLowNibbles:           ; was: loc_E386
                 andi.w  #7,d0
                 move.b  (a4),d1
                 or.b    (a2,d0.w),d1
@@ -38,7 +38,7 @@ Scroll_UpdateSnakeBackground_MergeLowNibbles:           ; CODE XREF: Scroll_Upda
 ; End of function Scroll_UpdateSnakeBackground
 
 ; Accumulate one Snake-background offset and return its integer index
-Scroll_AccumulateSnakeBackgroundOffset:                 ; CODE XREF: Scroll_UpdateSnakeBackground_RowPairLoop   p  ; was: sub_E3C0
+Scroll_AccumulateSnakeBackgroundOffset:                 ; was: sub_E3C0
                                         ; Scroll_UpdateSnakeBackground+34   p
                 move.l  (a0),d0
                 add.l   (a1)+,d0

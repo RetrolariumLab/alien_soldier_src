@@ -1,7 +1,7 @@
 ; Packed-BCD score accumulation and the shared pseudo-random number generator
 
 ; Adds the packed-BCD value in d0 to the eight-digit score and saturates at 99999999
-Score_AddPackedBCD:                                     ; CODE XREF: Results_ApplyRemainingTimeBonus+14   p  ; was: sub_3954
+Score_AddPackedBCD:                                     ; was: sub_3954
                                         ; Collision_CheckWeaponProjectilesAgainstEnemies+E2   p
                 tst.w   (StageTimeRemaining).w
                 beq.s   Score_AddPackedBCD_Return
@@ -16,7 +16,7 @@ Score_AddPackedBCD:                                     ; CODE XREF: Results_App
                 abcd    -(a1),-(a0)
                 bcc.s   Score_AddPackedBCD_Return
                 move.l  #$99999999,(a0)
-Score_AddPackedBCD_Return:                              ; CODE XREF: Score_AddPackedBCD+4   j  ; was: locret_397C
+Score_AddPackedBCD_Return:                              ; was: locret_397C
                                         ; Score_AddPackedBCD+20   j
                 rts
 ; End of function Score_AddPackedBCD
@@ -26,13 +26,13 @@ Numeric_NoOp:                                           ; was: nullsub_14
 ; End of function Numeric_NoOp
 
 ; Advances the shared pseudo-random state and returns a mixed result in d0
-RandomNumber:                                           ; CODE XREF: Sys_VBlankHandler+52   p
+RandomNumber:
                                         ; EndingStarfield_Initialize:EndingStarfield_InitializeNextParticle   p
                 move.l  d1,-(sp)
                 move.l  (RandomNumberState).w,d1
                 bne.s   RandomNumber_AdvanceState
                 move.l  #'*m6Z',d1
-RandomNumber_AdvanceState:                              ; CODE XREF: RandomNumber+6   j  ; was: loc_398E
+RandomNumber_AdvanceState:                              ; was: loc_398E
                 move.l  d1,d0
                 asl.l   #2,d1
                 add.l   d0,d1

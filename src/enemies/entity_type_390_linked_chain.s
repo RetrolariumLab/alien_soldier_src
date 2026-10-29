@@ -2,7 +2,7 @@
 ; Type $390 owns the chain, type $394 updates ordinary segments, and type $398
 ; updates the damageable terminal segment and scatters the chain when it is hit
 ; REVIEWED VIS-001: role-only name; visible bird is separate type $90; see docs/unknowns.md
-EntityType390_ControllerMain:                           ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_310E6
+EntityType390_ControllerMain:                           ; was: sub_310E6
                 bsr.w   EntityType390_CullAtLeftEdge
                 move.w  4(a5),d0
                 lea     EntityType390_ControllerStates(pc,d0.w),a0
@@ -10,24 +10,24 @@ EntityType390_ControllerMain:                           ; DATA XREF: ROM:Entity_
                 jmp     (a0)
 ; End of function EntityType390_ControllerMain
 ; ---------------------------------------------------------------------------
-EntityType390_ControllerStates: dc.w    EntityType390_ControllerInit-*  ; DATA XREF: EntityType390_ControllerMain+8   o  ; was: off_310F6
+EntityType390_ControllerStates: dc.w    EntityType390_ControllerInit-*  ; was: off_310F6
                 dc.w    EntityType390_SpawnSegments-*
                 dc.w    EntityType390_ControllerIdle-*
 
 ; Initializes the invisible chain controller
-EntityType390_ControllerInit:                           ; DATA XREF: ROM:EntityType390_ControllerStates   o  ; was: sub_310FC
+EntityType390_ControllerInit:                           ; was: sub_310FC
                 move.w  #$D00,2(a5)
                 move.b  #$50,$20(a5)                    ; 'P'
                 addq.w  #2,4(a5)
                 rts
 ; End of function EntityType390_ControllerInit
 ; Allocates and links eight segments, promoting the last one to type $398
-EntityType390_SpawnSegments:                            ; DATA XREF: ROM:000310F8   o  ; was: sub_3110E
+EntityType390_SpawnSegments:                            ; was: sub_3110E
                 cmpi.w  #$180,$10(a5)
                 bcc.w   Entity_UpdateReturn
                 move.w  #7,d7
                 move.w  a5,$44(a5)
-EntityType390_SpawnNextSegment:                         ; CODE XREF: EntityType390_SpawnSegments+44   j  ; was: loc_31120
+EntityType390_SpawnNextSegment:                         ; was: loc_31120
                 jsr     (Projectile_FindFreeOrClearReusableSlot).l
                 bne.s   EntityType390_HandleAllocationFailure
                 movea.w $44(a5),a1
@@ -47,38 +47,38 @@ EntityType390_SpawnNextSegment:                         ; CODE XREF: EntityType3
                 addq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-EntityType390_HandleAllocationFailure:                  ; CODE XREF: EntityType390_SpawnSegments+18   j  ; was: loc_31164
+EntityType390_HandleAllocationFailure:                  ; was: loc_31164
                 move.w  #$1000,2(a5)
                 rts
 ; End of function EntityType390_SpawnSegments
-EntityType390_ControllerIdle:                           ; DATA XREF: ROM:000310FA   o  ; was: nullsub_74
+EntityType390_ControllerIdle:                           ; was: nullsub_74
                 rts
 ; End of function EntityType390_ControllerIdle
 
 ; Marks every linked segment for removal after the controller crosses the left edge
-EntityType390_CullAtLeftEdge:                           ; CODE XREF: EntityType390_ControllerMain   p  ; was: sub_3116E
+EntityType390_CullAtLeftEdge:                           ; was: sub_3116E
                 cmpi.w  #$60,$10(a5)                    ; '`'
                 bcc.w   Entity_UpdateReturn
                 movea.w a5,a4
                 move.w  #7,d7
-EntityType390_CullNextSegment:                          ; CODE XREF: EntityType390_CullAtLeftEdge:EntityType390_ContinueCull   j  ; was: loc_3117E
+EntityType390_CullNextSegment:                          ; was: loc_3117E
                 tst.w   $44(a4)
                 beq.s   EntityType390_ContinueCull
                 movea.w $44(a4),a4
                 move.w  #$1000,2(a4)
-EntityType390_ContinueCull:                             ; CODE XREF: EntityType390_CullAtLeftEdge+14   j  ; was: loc_3118E
+EntityType390_ContinueCull:                             ; was: loc_3118E
                 dbf     d7,EntityType390_CullNextSegment
                 rts
 ; End of function EntityType390_CullAtLeftEdge
 ; Dispatches an ordinary type-$394 chain segment
-EntityType390_SegmentMain:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_31194
+EntityType390_SegmentMain:                              ; was: sub_31194
                 move.w  4(a5),d0
                 lea     EntityType390_SegmentStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
 ; End of function EntityType390_SegmentMain
 ; ---------------------------------------------------------------------------
-EntityType390_SegmentStates:    dc.w    EntityType390_SegmentInit-*  ; DATA XREF: EntityType390_SegmentMain+4   o  ; was: off_311A0
+EntityType390_SegmentStates:    dc.w    EntityType390_SegmentInit-*  ; was: off_311A0
                 dc.w    EntityType390_BeginAttackCycle-*
                 dc.w    EntityType390_ExpandRadiusAndFire-*
                 dc.w    EntityType390_SweepAngleBackward-*
@@ -87,7 +87,7 @@ EntityType390_SegmentStates:    dc.w    EntityType390_SegmentInit-*  ; DATA XREF
                 dc.w    EntityType390_SegmentFallAndFire-*
 
 ; Initializes an ordinary chain segment
-EntityType390_SegmentInit:                              ; DATA XREF: ROM:EntityType390_SegmentStates   o  ; was: sub_311AE
+EntityType390_SegmentInit:                              ; was: sub_311AE
                 move.w  #$CD00,2(a5)
                 move.w  #$1B9,$E(a5)
                 move.l  #EntityType390_SegmentMapping,8(a5)
@@ -96,14 +96,14 @@ EntityType390_SegmentInit:                              ; DATA XREF: ROM:EntityT
                 rts
 ; End of function EntityType390_SegmentInit
 ; Counts down the segment delay, then begins its polar attack cycle
-EntityType390_BeginAttackCycle:                         ; DATA XREF: ROM:000311A2   o  ; was: sub_311CE
+EntityType390_BeginAttackCycle:                         ; was: sub_311CE
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 subq.w  #1,$46(a5)
                 bne.w   Entity_UpdateReturn
                 move.w  #$180,$40(a5)
                 clr.w   $42(a5)
                 move.w  #4,4(a5)
-EntityType390_FireRandomShot:                           ; CODE XREF: EntityType390_TerminalBeginAttackCycle+26   j  ; was: loc_311EA
+EntityType390_FireRandomShot:                           ; was: loc_311EA
                                         ; EntityType390_TryRandomShot+8   j
                 jsr     (RandomNumber).l
                 andi.w  #$FE,d0
@@ -114,7 +114,7 @@ EntityType390_FireRandomShot:                           ; CODE XREF: EntityType3
                 jmp     Projectile_SpawnType1A8AtAngle
 ; End of function EntityType390_BeginAttackCycle
 ; Starts the terminal segment's attack cycle and plays its cue
-EntityType390_TerminalBeginAttackCycle:                 ; DATA XREF: ROM:000313B6   o  ; was: sub_31208
+EntityType390_TerminalBeginAttackCycle:                 ; was: sub_31208
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 subq.w  #1,$46(a5)
                 bne.w   Entity_UpdateReturn
@@ -126,7 +126,7 @@ EntityType390_TerminalBeginAttackCycle:                 ; DATA XREF: ROM:000313B
                 bra.w   EntityType390_FireRandomShot
 ; End of function EntityType390_TerminalBeginAttackCycle
 ; Expands the polar radius while periodically firing a random-angle shot
-EntityType390_ExpandRadiusAndFire:                      ; DATA XREF: ROM:000311A4   o  ; was: sub_31232
+EntityType390_ExpandRadiusAndFire:                      ; was: sub_31232
                                         ; ROM:000313B8   o
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 bsr.w   EntityType390_TryRandomShot
@@ -138,7 +138,7 @@ EntityType390_ExpandRadiusAndFire:                      ; DATA XREF: ROM:000311A
                 rts
 ; End of function EntityType390_ExpandRadiusAndFire
 ; Sweeps the polar angle backward from $180 to just below $140
-EntityType390_SweepAngleBackward:                       ; DATA XREF: ROM:000311A6   o  ; was: sub_31254
+EntityType390_SweepAngleBackward:                       ; was: sub_31254
                                         ; ROM:000313BA   o
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 subq.w  #2,$40(a5)
@@ -165,11 +165,11 @@ EntityType390_AimFragmentClusterLeft:                   ; was: loc_31292
                 bra.w   Projectile_SpawnFragmentCluster
 ; End of function EntityType390_EmitFragmentClusterAtAngle
 ; Runs the terminal segment's angle-gated fragment attack, then falls through
-EntityType390_TerminalFragmentAttack:                   ; DATA XREF: ROM:000313BC   o  ; was: sub_3129A
+EntityType390_TerminalFragmentAttack:                   ; was: sub_3129A
                 bsr.w   EntityType390_EmitFragmentClusterAtAngle
 ; End of function EntityType390_TerminalFragmentAttack
 ; Sweeps the polar angle forward to $1A0, repeating the attack three times
-EntityType390_SweepAngleForward:                        ; DATA XREF: ROM:000311A8   o  ; was: sub_3129E
+EntityType390_SweepAngleForward:                        ; was: sub_3129E
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 addq.w  #2,$40(a5)
                 cmpi.w  #$1A0,$40(a5)
@@ -179,12 +179,12 @@ EntityType390_SweepAngleForward:                        ; DATA XREF: ROM:000311A
                 subq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-EntityType390_AdvanceAfterOrbit:                        ; CODE XREF: EntityType390_SweepAngleForward+16   j  ; was: loc_312BC
+EntityType390_AdvanceAfterOrbit:                        ; was: loc_312BC
                 addq.w  #2,4(a5)
                 rts
 ; End of function EntityType390_SweepAngleForward
 ; Retracts an ordinary segment's polar radius through its parent position
-EntityType390_RetractRadius:                            ; DATA XREF: ROM:000311AA   o  ; was: sub_312C2
+EntityType390_RetractRadius:                            ; was: sub_312C2
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 subq.w  #8,$42(a5)
                 cmpi.w  #$FFF8,$42(a5)
@@ -194,7 +194,7 @@ EntityType390_RetractRadius:                            ; DATA XREF: ROM:000311A
                 rts
 ; End of function EntityType390_RetractRadius
 ; Retracts the terminal segment while firing, then plays its cue
-EntityType390_TerminalRetractAndFire:                   ; DATA XREF: ROM:000313BE   o  ; was: sub_312E2
+EntityType390_TerminalRetractAndFire:                   ; was: sub_312E2
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 bsr.w   EntityType390_TryRandomShot
                 subq.w  #8,$42(a5)
@@ -207,7 +207,7 @@ EntityType390_TerminalRetractAndFire:                   ; DATA XREF: ROM:000313B
                 rts
 ; End of function EntityType390_TerminalRetractAndFire
 ; Fires the shared random-angle shot on one frame out of four
-EntityType390_TryRandomShot:                            ; CODE XREF: EntityType390_ExpandRadiusAndFire+4   p  ; was: sub_3130E
+EntityType390_TryRandomShot:                            ; was: sub_3130E
                                         ; EntityType390_TerminalRetractAndFire+4   p
                 move.w  (VBlankFrameCounter).w,d0
                 andi.w  #3,d0
@@ -215,7 +215,7 @@ EntityType390_TryRandomShot:                            ; CODE XREF: EntityType3
                 rts
 ; End of function EntityType390_TryRandomShot
 ; Holds the terminal segment in place and fires until its timer reaches $A0
-EntityType390_TerminalWaitAndFire:                      ; DATA XREF: ROM:000313C0   o  ; was: sub_3131C
+EntityType390_TerminalWaitAndFire:                      ; was: sub_3131C
                 bsr.w   Entity_UpdatePolarPositionFromParent
                 bsr.w   EntityType390_TryRandomShot
                 subq.w  #1,$46(a5)
@@ -226,7 +226,7 @@ EntityType390_TerminalWaitAndFire:                      ; DATA XREF: ROM:000313C
 ; End of function EntityType390_TerminalWaitAndFire
 ; Duplicate of Math_LookupSineCosinePair used by later enemy code
 ; In: d0.w = even angle-table offset. Out: d0.w = cosine, d1.w = sine
-Math_LookupSineCosinePairDuplicate:                     ; CODE XREF: Stage18_SegmentedWormEmitParticle+42   p  ; was: sub_3133A
+Math_LookupSineCosinePairDuplicate:                     ; was: sub_3133A
                                         ; Stage18_SegmentedWormGetRandomScatterVelocity+E   p
                 lea     (Math_QuarterSineTable).l,a0
                 move.w  (a0,d0.w),d1
@@ -236,14 +236,14 @@ Math_LookupSineCosinePairDuplicate:                     ; CODE XREF: Stage18_Seg
                 rts
 ; End of function Math_LookupSineCosinePairDuplicate
 ; Updates the damageable terminal segment and scatters the chain when hit
-EntityType390_TerminalMain:                             ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_31352
+EntityType390_TerminalMain:                             ; was: sub_31352
                 cmpi.w  #$E,4(a5)
                 bcc.w   EntityType390_DispatchTerminalState
                 tst.w   $24(a5)
                 bpl.w   EntityType390_DispatchTerminalState
                 movea.w $48(a5),a4
                 move.w  #7,d7
-EntityType390_ScatterNextSegment:                       ; CODE XREF: EntityType390_TerminalMain+4A   j  ; was: loc_3136C
+EntityType390_ScatterNextSegment:                       ; was: loc_3136C
                 movea.w $44(a4),a4
                 move.w  #$C,4(a4)
                 jsr     (RandomNumber).l
@@ -261,7 +261,7 @@ EntityType390_ScatterNextSegment:                       ; CODE XREF: EntityType3
                 move.w  #$E,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
-EntityType390_DispatchTerminalState:                    ; CODE XREF: EntityType390_TerminalMain+6   j  ; was: loc_313A8
+EntityType390_DispatchTerminalState:                    ; was: loc_313A8
                                         ; EntityType390_TerminalMain+E   j
                 move.w  4(a5),d0
                 lea     EntityType390_TerminalStates(pc,d0.w),a0
@@ -269,7 +269,7 @@ EntityType390_DispatchTerminalState:                    ; CODE XREF: EntityType3
                 jmp     (a0)
 ; End of function EntityType390_TerminalMain
 ; ---------------------------------------------------------------------------
-EntityType390_TerminalStates:   dc.w    EntityType390_TerminalInit-*  ; DATA XREF: EntityType390_TerminalMain+5A   o  ; was: off_313B4
+EntityType390_TerminalStates:   dc.w    EntityType390_TerminalInit-*  ; was: off_313B4
                 dc.w    EntityType390_TerminalBeginAttackCycle-*
                 dc.w    EntityType390_ExpandRadiusAndFire-*
                 dc.w    EntityType390_SweepAngleBackward-*
@@ -279,7 +279,7 @@ EntityType390_TerminalStates:   dc.w    EntityType390_TerminalInit-*  ; DATA XRE
                 dc.w    EntityType390_TerminalFallAndFire-*
 
 ; Initializes the damageable terminal segment
-EntityType390_TerminalInit:                             ; DATA XREF: ROM:EntityType390_TerminalStates   o  ; was: sub_313C4
+EntityType390_TerminalInit:                             ; was: sub_313C4
                 move.w  #$CD00,2(a5)
                 move.w  #$1B9,$E(a5)
                 move.l  #EntityType390_TerminalMapping,8(a5)
@@ -295,7 +295,7 @@ EntityType390_TerminalInit:                             ; DATA XREF: ROM:EntityT
                 rts
 ; End of function EntityType390_TerminalInit
 ; Accelerates downward and spawns doubled-velocity projectiles every 4 frames until Y >= 1A0h
-EntityType390_TerminalFallAndFire:                      ; DATA XREF: ROM:000313C2   o  ; was: sub_31410
+EntityType390_TerminalFallAndFire:                      ; was: sub_31410
                 addi.l  #$1800,$1C(a5)
                 cmpi.w  #$1A0,$14(a5)
                 bcc.w   EntityType390_RemoveSegment
@@ -310,7 +310,7 @@ EntityType390_TerminalFallAndFire:                      ; DATA XREF: ROM:000313C
                 rts
 ; End of function EntityType390_TerminalFallAndFire
 ; Accelerates downward slowly and spawns projectiles every 8 frames until Y >= 180h
-EntityType390_SegmentFallAndFire:                       ; DATA XREF: ROM:000311AC   o  ; was: sub_31446
+EntityType390_SegmentFallAndFire:                       ; was: sub_31446
                 addi.l  #$1000,$1C(a5)
                 cmpi.w  #$180,$14(a5)
                 bcc.s   EntityType390_RemoveSegment
@@ -346,7 +346,7 @@ Projectile_SpawnRandomAngleShot:                        ; was: sub_3146C
                 rts
 ; End of function Projectile_SpawnRandomAngleShot
 ; Marks a falling segment for removal
-EntityType390_RemoveSegment:                            ; CODE XREF: EntityType390_TerminalFallAndFire+E   j  ; was: sub_314BA
+EntityType390_RemoveSegment:                            ; was: sub_314BA
                                         ; EntityType390_SegmentFallAndFire+E   j
                 move.w  #$1000,2(a5)
                 rts

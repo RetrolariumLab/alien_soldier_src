@@ -1,5 +1,5 @@
 ; Select plane table bases and populate their horizontal and vertical scroll buffers
-Scroll_PreparePlaneBuffersAndRegisterShadows:           ; CODE XREF: StoryScreen_Initialize+8A   p  ; was: sub_103FA
+Scroll_PreparePlaneBuffersAndRegisterShadows:           ; was: sub_103FA
                                         ; StoryScreen_MainLoop+56   p
                 move.w  #$8230,(VDPReg2Shadow).w
                 move.w  #$8407,(VDPReg4Shadow).w
@@ -7,7 +7,7 @@ Scroll_PreparePlaneBuffersAndRegisterShadows:           ; CODE XREF: StoryScreen
                 beq.s   Scroll_PreparePlaneBufferValues
                 move.w  #$8238,(VDPReg2Shadow).w
                 move.w  #$8406,(VDPReg4Shadow).w
-Scroll_PreparePlaneBufferValues:                        ; CODE XREF: Scroll_PreparePlaneBuffersAndRegisterShadows+10   j  ; was: loc_10418
+Scroll_PreparePlaneBufferValues:                        ; was: loc_10418
                 move.b  (VDPReg11Shadow+1).w,d3
                 move.b  d3,d4
                 andi.w  #3,d3
@@ -44,7 +44,7 @@ Scroll_PreparePlaneBufferValues:                        ; CODE XREF: Scroll_Prep
                 bra.w   Scroll_WriteVerticalPlaneBuffer
 ; End of function Scroll_PreparePlaneBuffersAndRegisterShadows
 ; Populate one plane's horizontal-scroll entries according to its mode flags
-Scroll_WriteHorizontalPlaneBuffer:                      ; CODE XREF: Scroll_PreparePlaneBuffersAndRegisterShadows+4A   p  ; was: sub_10496
+Scroll_WriteHorizontalPlaneBuffer:                      ; was: sub_10496
                                         ; Scroll_PreparePlaneBuffersAndRegisterShadows+82   p
                 btst    #2,d5
                 bne.w   Scroll_FillHorizontalPlaneBuffer
@@ -53,11 +53,11 @@ Scroll_WriteHorizontalPlaneBuffer:                      ; CODE XREF: Scroll_Prep
                 btst    #0,d5
                 bne.s   Scroll_HorizontalPlaneWriteReturn
                 move.w  d0,(a0)
-Scroll_HorizontalPlaneWriteReturn:                      ; CODE XREF: Scroll_WriteHorizontalPlaneBuffer+14   j  ; was: locret_104AE
+Scroll_HorizontalPlaneWriteReturn:                      ; was: locret_104AE
                 rts
 ; End of function Scroll_WriteHorizontalPlaneBuffer
 ; Populate one plane's vertical-scroll entries according to its mode flags
-Scroll_WriteVerticalPlaneBuffer:                        ; CODE XREF: Scroll_PreparePlaneBuffersAndRegisterShadows+60   p  ; was: sub_104B0
+Scroll_WriteVerticalPlaneBuffer:                        ; was: sub_104B0
                                         ; Scroll_PreparePlaneBuffersAndRegisterShadows+98   j
                 btst    #3,d5
                 bne.w   Scroll_FillVerticalColumnEntries
@@ -66,14 +66,14 @@ Scroll_WriteVerticalPlaneBuffer:                        ; CODE XREF: Scroll_Prep
                 btst    #1,d5
                 bne.s   Scroll_VerticalPlaneWriteReturn
                 move.w  d0,(a0)
-Scroll_VerticalPlaneWriteReturn:                        ; CODE XREF: Scroll_WriteVerticalPlaneBuffer+14   j  ; was: locret_104C8
+Scroll_VerticalPlaneWriteReturn:                        ; was: locret_104C8
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_FillHorizontalPlaneBuffer:                       ; CODE XREF: Scroll_WriteHorizontalPlaneBuffer+4   j  ; was: loc_104CA
+Scroll_FillHorizontalPlaneBuffer:                       ; was: loc_104CA
                 cmpi.b  #2,d3
                 beq.w   Scroll_FillHorizontalCellEntries
                 move.w  #6,d7
-Scroll_FillHorizontalLineEntriesLoop:                   ; CODE XREF: Scroll_FillHorizontalLineEntriesLoop+82   j  ; was: loc_104D6
+Scroll_FillHorizontalLineEntriesLoop:                   ; was: loc_104D6
                 move.w  d0,(a0)
                 move.w  d0,4(a0)
                 move.w  d0,8(a0)
@@ -110,7 +110,7 @@ Scroll_FillHorizontalLineEntriesLoop:                   ; CODE XREF: Scroll_Fill
                 dbf     d7,Scroll_FillHorizontalLineEntriesLoop
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_FillHorizontalCellEntries:                       ; CODE XREF: Scroll_FillHorizontalPlaneBuffer+4   j  ; was: loc_1055E
+Scroll_FillHorizontalCellEntries:                       ; was: loc_1055E
                 move.w  d0,(a0)
                 move.w  d0,$20(a0)
                 move.w  d0,$40(a0)
@@ -141,7 +141,7 @@ Scroll_FillHorizontalCellEntries:                       ; CODE XREF: Scroll_Fill
                 move.w  d0,$360(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_CopyHorizontalProfile:                           ; CODE XREF: Scroll_WriteHorizontalPlaneBuffer+C   j  ; was: loc_105CE
+Scroll_CopyHorizontalProfile:                           ; was: loc_105CE
                 movea.w #(HorizontalScrollProfile-M68K_RAM),a2
                 moveq   #0,d0
                 cmpi.b  #2,d3
@@ -151,21 +151,21 @@ Scroll_CopyHorizontalProfile:                           ; CODE XREF: Scroll_Writ
                 move.w  d0,d6
                 bmi.s   Scroll_SelectHorizontalProfileStart
                 clr.w   d6
-Scroll_SelectHorizontalProfileStart:                    ; CODE XREF: Scroll_CopyHorizontalProfile+14   j  ; was: loc_105E6
+Scroll_SelectHorizontalProfileStart:                    ; was: loc_105E6
                 asl.w   #1,d0
                 adda.l  d0,a2
-Scroll_CopyHorizontalLineProfileLoop:                   ; CODE XREF: Scroll_CopyHorizontalLineProfileLoop+4   j  ; was: loc_105EA
+Scroll_CopyHorizontalLineProfileLoop:                   ; was: loc_105EA
                 move.w  (a2)+,(a1)
                 addq.w  #4,a1
                 dbf     d7,Scroll_CopyHorizontalLineProfileLoop
                 move.w  -2(a2),d0
-Scroll_RepeatHorizontalProfileEdgeLoop:                 ; CODE XREF: Scroll_RepeatHorizontalProfileEdgeLoop+4   j  ; was: loc_105F6
+Scroll_RepeatHorizontalProfileEdgeLoop:                 ; was: loc_105F6
                 move.w  d0,(a1)
                 addq.w  #4,a1
                 dbf     d6,Scroll_RepeatHorizontalProfileEdgeLoop
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_CopyHorizontalCellProfile:                       ; CODE XREF: Scroll_CopyHorizontalProfile+A   j  ; was: loc_10600
+Scroll_CopyHorizontalCellProfile:                       ; was: loc_10600
                 moveq   #$20,d0                         ; ' '
                 move.w  (a2)+,(a1)
                 adda.w  d0,a1
@@ -217,7 +217,7 @@ Scroll_CopyHorizontalCellProfile:                       ; CODE XREF: Scroll_Copy
                 adda.w  d0,a1
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_FillVerticalColumnEntries:                       ; CODE XREF: Scroll_WriteVerticalPlaneBuffer+4   j  ; was: loc_10664
+Scroll_FillVerticalColumnEntries:                       ; was: loc_10664
                 move.w  d0,(a0)
                 move.w  d0,4(a0)
                 move.w  d0,8(a0)
@@ -240,10 +240,10 @@ Scroll_FillVerticalColumnEntries:                       ; CODE XREF: Scroll_Writ
                 move.w  d0,$4C(a0)
                 rts
 ; ---------------------------------------------------------------------------
-Scroll_CopyVerticalColumnProfile:                       ; CODE XREF: Scroll_WriteVerticalPlaneBuffer+C   j  ; was: loc_106B4
+Scroll_CopyVerticalColumnProfile:                       ; was: loc_106B4
                 movea.w #(VerticalScrollProfile-M68K_RAM),a2
                 move.w  #$13,d7
-Scroll_CopyVerticalColumnProfileLoop:                   ; CODE XREF: Scroll_CopyVerticalColumnProfileLoop+4   j  ; was: loc_106BC
+Scroll_CopyVerticalColumnProfileLoop:                   ; was: loc_106BC
                 move.w  (a2)+,(a0)
                 addq.w  #4,a0
                 dbf     d7,Scroll_CopyVerticalColumnProfileLoop
