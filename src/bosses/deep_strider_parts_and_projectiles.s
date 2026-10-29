@@ -7,7 +7,7 @@ Boss_DeepStriderUpdateParts:                            ; CODE XREF: Boss_DeepSt
                 and.w   d0,$1DE(a5)
                 and.w   d0,$23C(a5)
                 and.w   d0,$23E(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.w  $1DC(a5),d0
                 moveq   #2,d7
 ; Updates rotation angles for body parts
@@ -17,11 +17,11 @@ Boss_DeepStriderShiftJointAngleHistory:                 ; CODE XREF: Boss_DeepSt
                 move.w  d1,d0
                 dbf     d7,Boss_DeepStriderShiftJointAngleHistory
                 move.w  $1DC(a5),$B6(a5)
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 move.w  d0,d1
                 add.w   d0,d1
                 move.w  d1,$116(a5)
-                move.w  (SharedPatternRow0Long0+2).w,d0
+                move.w  (SharedScratchLong0+2).w,d0
                 move.w  d0,d1
                 add.w   d0,d1
                 add.w   d0,d1
@@ -30,18 +30,18 @@ Boss_DeepStriderShiftJointAngleHistory:                 ; CODE XREF: Boss_DeepSt
                 move.w  #$100,d1
                 sub.w   d0,d1
                 move.w  d1,$1D6(a5)
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 move.w  #$100,d1
                 sub.w   d0,d1
                 sub.w   d0,d1
                 move.w  d1,$236(a5)
-                move.w  (SharedPatternRow0Long0+2).w,d0
+                move.w  (SharedScratchLong0+2).w,d0
                 move.w  #$100,d1
                 sub.w   d0,d1
                 sub.w   d0,d1
                 sub.w   d0,d1
                 move.w  d1,$296(a5)
-                move.w  (SharedPatternRow0Long1).w,d0
+                move.w  (SharedScratchLong1).w,d0
                 move.w  #$100,d1
                 sub.w   d0,d1
                 sub.w   d0,d1

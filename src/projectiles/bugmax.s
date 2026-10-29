@@ -208,13 +208,13 @@ Projectile_BugmaxSpreadStateHandlers:   dc.w    Projectile_BugmaxUpdateSpreadFli
 Projectile_BugmaxUpdateSpreadFlight:                    ; DATA XREF: ROM:Projectile_BugmaxSpreadStateHandlers   o  ; was: sub_4D608
                 bsr.w   Projectile_BugmaxCycleFlipMask
                 addi.l  #$800,$1C(a5)
-                tst.b   (SharedPatternRow0Long6+3).w
+                tst.b   (SharedScratchLong6+3).w
                 bne.s   Projectile_BugmaxCheckSpreadTerrainOrFinalTransition
                 bclr    #7,$22(a5)
                 beq.s   Projectile_BugmaxCheckSpreadTerrainOrFinalTransition
                 clr.l   $1C(a5)
                 move.w  #$4D80,2(a5)
-                move.b  #1,(SharedPatternRow0Long6+3).w
+                move.b  #1,(SharedScratchLong6+3).w
                 clr.w   $5C(a5)
                 clr.b   $21(a5)
                 addq.w  #2,4(a5)
@@ -234,7 +234,7 @@ Projectile_BugmaxCheckSpreadTerrainOrFinalTransition:   ; CODE XREF: Projectile_
                 jsr     (Collision_InitBufferPointers).l
                 move.w  d2,d2
                 bne.s   Projectile_BugmaxConvertSpreadToParticle
-                tst.w   (SharedPatternRow1Long2+2).w
+                tst.w   (SharedScratchLong10+2).w
                 beq.s   Projectile_BugmaxSpreadFlightReturn
 Projectile_BugmaxConvertSpreadToParticle:               ; CODE XREF: Projectile_BugmaxUpdateSpreadFlight+6C   j  ; was: loc_4D67C
                 move.l  #SharedCombatSpriteAnimation05,8(a5)
@@ -274,7 +274,7 @@ Projectile_BugmaxRestoreImpactPalettes:                 ; DATA XREF: ROM:0004D60
                 addq.w  #2,$5C(a5)
                 cmpi.w  #2,$5C(a5)
                 bne.s   Projectile_BugmaxImpactPaletteRestoreReturn
-                clr.b   (SharedPatternRow0Long6+3).w
+                clr.b   (SharedScratchLong6+3).w
                 bset    #4,2(a5)
                 addq.w  #2,4(a5)
 Projectile_BugmaxImpactPaletteRestoreReturn:            ; CODE XREF: Projectile_BugmaxRestoreImpactPalettes+C   j  ; was: locret_4D6E6
@@ -316,8 +316,8 @@ Projectile_InitBugmaxSine:                              ; CODE XREF: Boss_Bugmax
                 move.w  #$FF,$24(a0)
                 move.w  $10(a5),$10(a0)
                 move.b  (RandomNumberState+1).w,d0
-                addi.w  #$40,(SharedPatternRow1Long2).w  ; '@'
-                move.w  (SharedPatternRow1Long2).w,d0
+                addi.w  #$40,(SharedScratchLong10).w    ; '@'
+                move.w  (SharedScratchLong10).w,d0
                 andi.w  #$1FE,d0
                 lea     (Math_SineTable).l,a2
                 move.w  (a2,d0.w),d0
@@ -332,7 +332,7 @@ Projectile_InitBugmaxSine:                              ; CODE XREF: Boss_Bugmax
 ; Dispatch the type-$340 phase-launched projectile and handle terminal collision flags
 Projectile_BugmaxSineController:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_4D79C
                 addi.l  #$2000,$1C(a5)
-                tst.w   (SharedPatternRow1Long2+2).w
+                tst.w   (SharedScratchLong10+2).w
                 bne.w   Projectile_BugmaxExpireSineProjectile
                 bclr    #4,$22(a5)
                 bne.w   Projectile_BugmaxDropRandomPickupFromSineProjectile
@@ -435,7 +435,7 @@ Boss_BugmaxAimedChainContactReturn:                     ; CODE XREF: Boss_Bugmax
 ; Continue contact handling until the retracting chain reaches the disable threshold
 Boss_BugmaxHandleContactOrDisableChainHitbox:           ; CODE XREF: Boss_BugmaxRetractAimedChainStrike+4   p  ; was: sub_4D8C2
                 movea.w #(FifteenthEntityType-M68K_RAM),a0
-                cmpi.w  #$FFF0,(SharedPatternRow0Long4).w
+                cmpi.w  #$FFF0,(SharedScratchLong4).w
                 bgt.s   Boss_BugmaxHandleAimedChainContactEffect
                 clr.b   $21(a0)
                 rts

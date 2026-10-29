@@ -10,7 +10,7 @@ Boss_AntroidEnterJumpAttackPreparation:                 ; CODE XREF: Boss_Antroi
 Boss_AntroidPrepareJumpAttack:                          ; DATA XREF: ROM:0003751E   o  ; was: sub_379AA
                 cmpi.w  #3,$29C(a5)
                 beq.s   Boss_AntroidJumpAttackLaunch
-                lea     Boss_AntroidJumpAttackPoseCommands(pc),a1
+                lea     Boss_AntroidJumpAttackPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bsr.w   Boss_AntroidRenderPose
@@ -45,7 +45,7 @@ Boss_AntroidJumpAttackApplyGravity:                     ; CODE XREF: Boss_Antroi
 ; ---------------------------------------------------------------------------
 Boss_AntroidJumpAttackAnimateAirborne:                  ; CODE XREF: Boss_AntroidPrepareJumpAttack+62   j  ; was: loc_37A22
                                         ; Boss_AntroidPrepareJumpAttack+70   j
-                lea     Boss_AntroidJumpAttackPoseCommands(pc),a1
+                lea     Boss_AntroidJumpAttackPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -69,7 +69,7 @@ Boss_AntroidJumpAttackLandingState:                     ; DATA XREF: ROM:0003752
                 cmpi.w  #$14E,$14(a0)
                 bpl.w   Boss_AntroidReturnToNeutral
 Boss_AntroidJumpAttackAnimateLandingArc:                ; CODE XREF: Boss_AntroidPrepareJumpAttack+BE   j  ; was: loc_37A78
-                lea     Boss_AntroidReturnPoseCommands(pc),a1
+                lea     Boss_AntroidReturnPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bsr.w   Boss_AntroidRenderPose
@@ -85,7 +85,7 @@ Boss_AntroidEnterJumpSlamPreparation:                   ; CODE XREF: Boss_Antroi
 Boss_AntroidJumpSlamAttack:                             ; DATA XREF: ROM:00037534   o  ; was: sub_37A94
                 cmpi.w  #3,$29C(a5)
                 beq.s   Boss_AntroidJumpSlamLaunch
-                lea     Boss_AntroidJumpSlamFirstArcPoseCommands(pc),a1
+                lea     Boss_AntroidJumpSlamFirstArcPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -114,7 +114,7 @@ Boss_AntroidJumpSlamApplyGravity:                       ; CODE XREF: Boss_Antroi
                 subi.w  #$14A,d0
                 bpl.s   Boss_AntroidJumpSlamResolveFirstLanding
 Boss_AntroidJumpSlamAnimateFirstArc:                    ; CODE XREF: Boss_AntroidJumpSlamAttack+5C   j  ; was: loc_37B00
-                lea     Boss_AntroidJumpSlamFirstArcPoseCommands(pc),a1
+                lea     Boss_AntroidJumpSlamFirstArcPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -163,7 +163,7 @@ Boss_AntroidJumpSlamDecelerateHorizontal:               ; DATA XREF: ROM:0003753
                 neg.l   d0
 Boss_AntroidJumpSlamApplyHorizontalDeceleration:        ; CODE XREF: Boss_AntroidJumpSlamAttack+FC   j  ; was: loc_37B94
                 sub.l   d0,$18(a5)
-                lea     Boss_AntroidJumpSlamDecelerationPoseCommands(pc),a1
+                lea     Boss_AntroidJumpSlamDecelerationPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -193,7 +193,7 @@ Boss_AntroidJumpSlamApplySecondArcGravity:              ; CODE XREF: Boss_Antroi
                 subi.w  #$14C,d0
                 bpl.s   Boss_AntroidJumpSlamResolveSecondLanding
 Boss_AntroidJumpSlamAnimateSecondArc:                   ; CODE XREF: Boss_AntroidJumpSlamAttack+162   j  ; was: loc_37C06
-                lea     Boss_AntroidJumpSlamSecondArcPoseCommands(pc),a1
+                lea     Boss_AntroidJumpSlamSecondArcPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -219,7 +219,7 @@ Boss_AntroidJumpSlamResolveSecondLanding:               ; CODE XREF: Boss_Antroi
 Boss_AntroidJumpSlamImpactDelay:                        ; DATA XREF: ROM:0003753C   o  ; was: loc_37C5E
                 subq.w  #1,$17C(a5)
                 bmi.w   Boss_AntroidReturnToNeutralLoadAnimation
-                lea     Boss_AntroidJumpSlamImpactPoseCommands(pc),a1
+                lea     Boss_AntroidJumpSlamImpactPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -235,7 +235,7 @@ Boss_AntroidJumpSlamBeginRetryWait:                     ; CODE XREF: Boss_Antroi
 Boss_AntroidJumpSlamRetryWait:                          ; DATA XREF: ROM:0003753E   o  ; was: loc_37C8C
                 cmpi.w  #3,$29C(a5)
                 beq.w   Boss_AntroidJumpSlamLaunch
-                lea     Boss_AntroidJumpSlamRetryPosePrefix(pc),a1
+                lea     Boss_AntroidJumpSlamRetryPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -249,7 +249,7 @@ Boss_AntroidEnterWaitState:                             ; CODE XREF: Boss_Antroi
 Boss_AntroidWaitState:                                  ; DATA XREF: ROM:00037524   o  ; was: sub_37CAA
                 tst.w   $58(a5)
                 bmi.s   Boss_AntroidWaitBeginCountdown
-                lea     Boss_AntroidWaitPoseCommands(pc),a1
+                lea     Boss_AntroidWaitPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bra.w   Boss_AntroidRenderPose
@@ -282,7 +282,7 @@ Boss_AntroidWaitUpdateActive:                           ; CODE XREF: Boss_Antroi
                 subq.w  #1,(BossCombatCounter).w
 Boss_AntroidWaitSpawnProjectileAndAnimate:              ; CODE XREF: Boss_AntroidWaitState+68   j  ; was: loc_37D18
                 bsr.w   Boss_AntroidSpawnWaitProjectile
-                lea     Boss_AntroidWaitFiringPoseCommands(pc),a1
+                lea     Boss_AntroidWaitFiringPoses(pc),a1
                 nop
                 bsr.w   Boss_AntroidUpdatePoseAnimation
                 bsr.w   Boss_AntroidRenderPose

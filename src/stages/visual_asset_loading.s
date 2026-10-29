@@ -300,7 +300,7 @@ Stage_LoadStage18VisualAssets:                          ; DATA XREF: ROM:00011E0
 ; End of function Stage_LoadStage18VisualAssets
 ; ---------------------------------------------------------------------------
 Stage18TileAssetCommands:   dc.w    $C, $6000, 7        ; was: word_120E2
-                dc.l    Stage22And24TileArt2
+                dc.l    Stage18WormTileArt
                 dc.w    $7000, $FFFF
                                         ; DATA XREF: Stage_LoadStage18VisualAssets+C   o
 

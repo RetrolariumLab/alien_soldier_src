@@ -18,7 +18,7 @@ SharedFloaterDebrisProjectileSpriteMappingC:    dc.w    $C15C, $B00, $F0F4  ; DA
                                         ; ROM:001A0F3A   o
 ; Direct mappings for individual stage objects
 
-Stage18_MovingPlatformSpriteMapping:    dc.w    $6170, $E00, $F8E0  ; DATA XREF: Stage18_MovingPlatform+36   o  ; was: word_1A0CD0
+Stage10And12_MovingPlatformSpriteMapping:   dc.w    $6170, $E00, $F8E0  ; DATA XREF: Object_MovingPlatform+36   o  ; was: word_1A0CD0
                 dc.w    $E970, $E00, $F800
 Enemy_Stage10BeetleSpriteMappingA:  dc.w    $C949, $800, $FCF4  ; DATA XREF: ROM:Enemy_Stage10BeetleLoopAnimation   o  ; was: word_1A0CDC
                                         ; ROM:001A0F4A   o

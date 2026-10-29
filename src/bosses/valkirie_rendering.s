@@ -155,65 +155,65 @@ Anim_StartValkiriePoseFrame:                            ; CODE XREF: Anim_Proces
                 bmi.s   Anim_PrepareValkiriePosePartTraversal
 Anim_AdvanceValkiriePoseInterpolation:                  ; CODE XREF: Anim_UpdateValkiriePoseScript+8   j  ; was: loc_5620A
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Anim_PrepareValkiriePosePartTraversal:                  ; CODE XREF: Anim_UpdateValkiriePoseScript+E   j  ; was: loc_5621A
                                         ; Anim_UpdateValkiriePoseScript+34   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Anim_ProcessValkiriePoseFrame
 ; Calculate interpolation deltas for the next 19-angle pose frame
 Anim_CalculateValkiriePoseDeltas:                       ; CODE XREF: Anim_ProcessValkiriePoseFrame+24   p  ; was: sub_56224
                 movea.l $2FC(a5),a1
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Anim_CalculateValkiriePoseDeltas
 ; Initialize nineteen Valkirie pose channels from bytes at a0
 Boss_ValkirieInitializePoseChannels:                    ; was: sub_56238
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ValkirieInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Valkirie_State2PoseScript:  dc.w    $A0F, $190, $606, $190, $1C1C, $1A4, $8002, $A0F, $1B8, $606, $1B8, $1C1C, $1CC, $8001, $FFFF  ; was: word_56244
+Valkirie_State2Poses:   dc.w    $A0F, $190, $606, $190, $1C1C, $1A4, $8002, $A0F, $1B8, $606, $1B8, $1C1C, $1CC, $8001, $FFFF  ; was: word_56244
                                         ; DATA XREF: Entity_UpdateValkirieBattleState2:Entity_RenderValkirieBattleState2   o
-Valkirie_State4To8PoseScript:   dc.w    $810, 0, $1010, 0, $8001, $810, $14, $1010, $14, $8001, $FFFF, $810, $140, $1010, $140, $8001  ; was: word_56262
+Valkirie_State4To8Poses:    dc.w    $810, 0, $1010, 0, $8001, $810, $14, $1010, $14, $8001, $FFFF, $810, $140, $1010, $140, $8001  ; was: word_56262
                                         ; DATA XREF: Entity_StartValkirieBattleState4:Entity_RenderValkirieBattleState4   o
                                         ; Entity_UpdateValkirieBattleState6:Entity_RenderValkirieBattleState6   o
                 dc.w    $810, $168, $1010, $168, $8001, $FFFF
-Valkirie_StateAAndCPoseScript:  dc.w    $E12, $154, $8001, $808, $154, $E12, $17C, $8001, $707, $17C, $FFFE  ; was: word_5628E
+Valkirie_StateAAndCPoses:   dc.w    $E12, $154, $8001, $808, $154, $E12, $17C, $8001, $707, $17C, $FFFE  ; was: word_5628E
                                         ; DATA XREF: Entity_UpdateValkirieBattleStateA:Entity_RenderValkirieBattleStateA   o
                                         ; Entity_UpdateValkirieBattleStateC+10   o
-Valkirie_State22PoseScript: dc.w    $101C, $1CC, $808, $1CC, $8081, $50C, $190, $808, $190, $101C, $1A4, $707, $1A4, $8082, $80C, $1B8  ; was: word_562A4
+Valkirie_State22Poses:  dc.w    $101C, $1CC, $808, $1CC, $8081, $50C, $190, $808, $190, $101C, $1A4, $707, $1A4, $8082, $80C, $1B8  ; was: word_562A4
                                         ; DATA XREF: Entity_UpdateValkirieBattleState22:Entity_RenderValkirieBattleState22   o
                 dc.w    $606, $1B8, $FFFF
-Valkirie_State14PoseScript: dc.w    $840, $28, $1018, $1E0, $1818, $1E0, $840, $1F4, $8001, $A0E, $1F4, $606, $1F4, $8008, $507, $208  ; was: word_562CA
+Valkirie_State14Poses:  dc.w    $840, $28, $1018, $1E0, $1818, $1E0, $840, $1F4, $8001, $A0E, $1F4, $606, $1F4, $8008, $507, $208  ; was: word_562CA
                                         ; DATA XREF: Entity_UpdateValkirieBattleState14:Entity_RenderValkirieBattleState14   o
                 dc.w    $808, $208, $FFFE
-Valkirie_State24PoseScript: dc.w    $4058, $21C, $7070, $21C, $FFFF  ; was: word_562F0
+Valkirie_State24Poses:  dc.w    $4058, $21C, $7070, $21C, $FFFF  ; was: word_562F0
                                         ; DATA XREF: Entity_UpdateValkirieBattleState24:Entity_RenderValkirieBattleState24   o
-Valkirie_State18To1EPoseScript: dc.w    $1020, $F0, $712, $244, $A0A, $244, $8001, $1258, $258, $608, $258, $8001, $3838, $258, $1870, $26C  ; was: word_562FA
+Valkirie_State18To1EPoses:  dc.w    $1020, $F0, $712, $244, $A0A, $244, $8001, $1258, $258, $608, $258, $8001, $3838, $258, $1870, $26C  ; was: word_562FA
                                         ; DATA XREF: Entity_UpdateValkirieBattleState18+8   o
                                         ; Entity_UpdateValkirieBattleState18+1E   o
                 dc.w    $8001, $3232, $26C, $FFFE
-Valkirie_State20PoseScript: dc.w    $A10, $280, $1313, $280, $815, $26C, $FFFE  ; was: word_56322
+Valkirie_State20Poses:  dc.w    $A10, $280, $1313, $280, $815, $26C, $FFFE  ; was: word_56322
                                         ; DATA XREF: Entity_UpdateValkirieBattleState20+8   o
-Valkirie_AirbornePattern00PoseScript:   dc.w    $1010, $3C, $210, $50, $8003, $204, $50, $505, $50, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56330
+Valkirie_AirbornePattern00Poses:    dc.w    $1010, $3C, $210, $50, $8003, $204, $50, $505, $50, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56330
                                         ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern00   o
-Valkirie_AirbornePattern01PoseScript:   dc.w    $1010, $3C, $210, $64, $8003, $204, $64, $404, $64, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56350
+Valkirie_AirbornePattern01Poses:    dc.w    $1010, $3C, $210, $64, $8003, $204, $64, $404, $64, $8004, $1418, $3C, $8008, $1818, $17C, $FFFE  ; was: word_56350
                                         ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern01   o
-Valkirie_AirbornePattern02PoseScript:   dc.w    $1A1A, $78, $420, $8C, $8003, $508, $8C, $808, $8C, $8004, $101A, $78, $8008, $1212, $17C, $FFFE  ; was: word_56370
+Valkirie_AirbornePattern02Poses:    dc.w    $1A1A, $78, $420, $8C, $8003, $508, $8C, $808, $8C, $8004, $101A, $78, $8008, $1212, $17C, $FFFE  ; was: word_56370
                                         ; DATA XREF: Entity_StartValkirieBattleStateE:Entity_ValkirieBattleStateEUsePattern02   o
-Valkirie_State12PoseScript: dc.w    $408, $F0, $204, $F0, $303, $F0, $106, $12C, $8001, $204, $12C, $303, $12C, $8002, $306, $F0  ; was: word_56390
+Valkirie_State12Poses:  dc.w    $408, $F0, $204, $F0, $303, $F0, $106, $12C, $8001, $204, $12C, $303, $12C, $8002, $306, $F0  ; was: word_56390
                                         ; DATA XREF: Entity_StartValkirieBattleState12+46   o
                                         ; Entity_UpdateValkirieBattleState12+54   o
                 dc.w    $204, $F0, $202, $F0, $106, $104, $8001, $204, $104, $303, $104, $8002, $106, $F0, $103, $F0
                 dc.w    $202, $F0, $106, $104, $8001, $204, $118, $303, $118, $8002, $FFFF
-Valkirie_PoseFrameData: binclude "data/other/word_563E6.bin"  ; was: word_563E6
+Valkirie_PoseTable: binclude "data/other/word_563E6.bin"  ; was: word_563E6
 Valkirie_PoseFrameDataEnd:                              ; was: word_563E6_End
 
 ; Create and initialize the six-object auxiliary Valkirie group

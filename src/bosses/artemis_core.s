@@ -57,7 +57,7 @@ Boss_InitArtemisState0:                                 ; DATA XREF: Boss_Update
                 movea.l #Boss_ArtemisMetaspritePartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.l  #Boss_ArtemisMetaspritePoseAngles,$2FC(a5)
-                move.l  #Artemis_PoseFrameData,$35C(a5)
+                move.l  #Artemis_PoseTable,$35C(a5)
                 move.w  #$438,(a5)
                 move.w  #$8C00,2(a5)
                 clr.w   6(a5)
@@ -94,7 +94,7 @@ Boss_CheckArtemisState2DownInput:                       ; CODE XREF: Boss_Update
                 subq.w  #2,$56(a5)
 Boss_NormalizeArtemisState2PoseAngle:                   ; CODE XREF: Boss_UpdateArtemisState2+12   j  ; was: loc_57FF2
                 andi.w  #$1FE,$56(a5)
-                lea     Artemis_State2And4PoseScript(pc),a1
+                lea     Artemis_State2And4Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; End of function Boss_UpdateArtemisState2
@@ -123,7 +123,7 @@ Boss_UpdateArtemisState4:                               ; DATA XREF: ROM:00057F2
 Boss_UpdateArtemisState4Motion:                         ; CODE XREF: Boss_UpdateArtemisState4+C   j  ; was: loc_5804E
                 subi.l  #$1000,$1C(a5)
                 subi.w  #$C,$56(a5)
-                lea     Artemis_State2And4PoseScript(pc),a1
+                lea     Artemis_State2And4Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; ---------------------------------------------------------------------------
@@ -137,7 +137,7 @@ Boss_EnterArtemisState6:                                ; CODE XREF: Boss_Update
 Boss_UpdateArtemisState6:                               ; DATA XREF: ROM:00057F24   o  ; was: loc_5807A
                 tst.b   (SceneSequenceFlags).w
                 bne.s   Boss_EnterArtemisState8
-                lea     Artemis_State2And4PoseScript(pc),a1
+                lea     Artemis_State2And4Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ Boss_UpdateArtemisState8:                               ; DATA XREF: ROM:00057F2
                 move.w  $794(a5),d0
                 bsr.w   Boss_CompareArtemisVerticalTarget
                 bpl.s   Boss_EnterArtemisStateA
-                lea     Artemis_State8PoseScript(pc),a1
+                lea     Artemis_State8Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; ---------------------------------------------------------------------------
@@ -302,7 +302,7 @@ Boss_UpdateArtemisState10:                              ; DATA XREF: ROM:00057F2
                 bclr    #0,$23E(a5)
                 bne.s   Boss_EnterArtemisState12
                 addi.l  #$4000,$1C(a5)
-                lea     Artemis_State10And12PoseScript(pc),a1
+                lea     Artemis_State10And12Poses(pc),a1
                 nop
                 bsr.w   Boss_RenderArtemisPose
                 moveq   #0,d0
@@ -340,7 +340,7 @@ Boss_UpdateArtemisState12:                              ; DATA XREF: ROM:00057F3
                 tst.w   $58(a5)
                 bmi.w   Boss_ReturnArtemisToStateEWithRandomPose
                 bsr.w   Boss_ArtemisMergePosePartFlags
-                lea     Artemis_State10And12PoseScript(pc),a1
+                lea     Artemis_State10And12Poses(pc),a1
                 nop
                 bra.w   Boss_SyncArtemisLinkedPartVerticalPosition
 ; End of function Boss_UpdateArtemisState12
@@ -410,7 +410,7 @@ Boss_ProcessArtemisState14PoseFlag1:                    ; CODE XREF: Boss_Update
                 move.b  #3,$3BC(a5)
 Boss_RenderArtemisState14:                              ; CODE XREF: Boss_UpdateArtemisState14+2A   j  ; was: loc_583C2
                 move.b  #1,$3BD(a5)
-                lea     Artemis_State14And16PoseScript(pc),a1
+                lea     Artemis_State14And16Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; End of function Boss_UpdateArtemisState14
@@ -450,7 +450,7 @@ Boss_UpdateArtemisState16:                              ; DATA XREF: ROM:00057F3
 ; ---------------------------------------------------------------------------
 Boss_RenderArtemisState16:                              ; CODE XREF: Boss_UpdateArtemisState16+4   j  ; was: loc_5843E
                 move.b  #1,$3BD(a5)
-                lea     Artemis_State14And16PoseScript(pc),a1
+                lea     Artemis_State14And16Poses(pc),a1
                 nop
                 bra.w   Boss_RenderArtemisPose
 ; End of function Boss_UpdateArtemisState16

@@ -75,13 +75,13 @@ Boss_ShieldViperDefeatObjectIdle:                       ; DATA XREF: ROM:0004F1B
 
 ; Cycle the radial movement step through a signed 32-frame triangle wave
 Boss_ShieldViperUpdateRadialMovementStep:               ; CODE XREF: Boss_ShieldViperUpdate:Boss_ShieldViperUpdateRadialStep   p  ; was: sub_4F26E
-                move.w  (SharedPatternRow0Long7+2).w,d0
+                move.w  (SharedScratchLong7+2).w,d0
                 add.w   d0,d0
                 move.w  Boss_ShieldViperRadialStepTriangleWave(pc,d0.w),d0
                 addi.w  #$10,d0
-                move.w  d0,(SharedPatternRow0Long7).w
-                addq.w  #1,(SharedPatternRow0Long7+2).w
-                andi.w  #$1F,(SharedPatternRow0Long7+2).w
+                move.w  d0,(SharedScratchLong7).w
+                addq.w  #1,(SharedScratchLong7+2).w
+                andi.w  #$1F,(SharedScratchLong7+2).w
                 rts
 ; End of function Boss_ShieldViperUpdateRadialMovementStep
 ; ---------------------------------------------------------------------------
@@ -91,7 +91,7 @@ Boss_ShieldViperRadialStepTriangleWave: dc.w    0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6,
 
 ; Disable linked geometry and seed four trail samples between adjacent records
 Boss_ShieldViperEnableTrailGeometry:                    ; CODE XREF: Boss_ShieldViperEnableTrailGeometryAndAdvance   p  ; was: sub_4F2CC
-                bclr    #0,(SharedPatternRow0Long5+1).w
+                bclr    #0,(SharedScratchLong5+1).w
                 move.w  #$18,d7
                 lea     (a5),a0
                 lea     (ShieldViperTrailAngles).w,a1
@@ -124,7 +124,7 @@ Boss_ShieldViperStoreTrailIntervalSamples:              ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperEnableTrailGeometry
 ; Preserve effective body angles while switching from trail to linked geometry
 Boss_ShieldViperEnableLinkedBodyGeometry:               ; CODE XREF: Boss_ShieldViperWaitForCenterQuarterTurn+22   p  ; was: sub_4F32C
-                bset    #0,(SharedPatternRow0Long5+1).w
+                bset    #0,(SharedScratchLong5+1).w
                 move.w  #$10,d7
                 move.w  $4D6(a5),d0
                 lea     (a5),a0
@@ -153,7 +153,7 @@ Boss_ShieldViperStoreTrailingAngleSample:               ; CODE XREF: Boss_Shield
 ; Advance the controller angle, then move radially at the resulting angle
 Boss_ShieldViperRotateAndMoveRadially:                  ; CODE XREF: Boss_ShieldViperWaitForStageTransitionAndEnterAttackSequence   p  ; was: sub_4F37C
                                         ; Boss_ShieldViperRotateToEntryAngle+6   p
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 add.w   d0,$56(a5)
                 bsr.w   Boss_ShieldViperMoveRadially
                 rts
@@ -169,11 +169,11 @@ Boss_ShieldViperChooseRotationTowardTarget:             ; CODE XREF: Boss_Shield
                 andi.w  #$1FF,d2
                 cmpi.w  #$100,d2
                 bcs.s   Boss_ShieldViperSelectPositiveTargetRotation
-                move.w  #$FFFC,(SharedPatternRow0Long0).w
+                move.w  #$FFFC,(SharedScratchLong0).w
                 bra.s   Boss_ShieldViperTargetRotationSelectionReturn
 ; ---------------------------------------------------------------------------
 Boss_ShieldViperSelectPositiveTargetRotation:           ; CODE XREF: Boss_ShieldViperChooseRotationTowardTarget+1E   j  ; was: loc_4F3B2
-                move.w  #4,(SharedPatternRow0Long0).w
+                move.w  #4,(SharedScratchLong0).w
 Boss_ShieldViperTargetRotationSelectionReturn:          ; CODE XREF: Boss_ShieldViperChooseRotationTowardTarget+26   j  ; was: locret_4F3B8
                 rts
 ; End of function Boss_ShieldViperChooseRotationTowardTarget
@@ -228,7 +228,7 @@ Boss_ShieldViperStoreInterpolatedTrailAngles:           ; CODE XREF: Boss_Shield
                 dbf     d6,Boss_ShieldViperStoreInterpolatedTrailAngles
                 lea     $60(a0),a0
                 dbf     d7,Boss_ShieldViperInterpolateNextBodyAnglePair
-                clr.w   (SharedPatternRow0Long1).w
+                clr.w   (SharedScratchLong1).w
                 rts
 ; End of function Boss_ShieldViperInterpolateTrailAnglesBetweenBodyRecords
 ; Keep record Y strictly inside the boundary values $A0 and $150
@@ -246,7 +246,7 @@ Boss_ShieldViperVerticalBandClampReturn:                ; CODE XREF: Boss_Shield
 ; Store the magnitude and sign of input d0 minus the shared body-bend step
 Boss_ShieldViperStoreBendStepDeltaMagnitudeAndSign:     ; was: sub_4F454
                 clr.w   $48(a5)
-                sub.w   (SharedPatternRow0Long1).w,d0
+                sub.w   (SharedScratchLong1).w,d0
                 beq.w   Boss_ShieldViperBendStepDeltaReturn
                 tst.w   d0
                 bpl.s   Boss_ShieldViperStorePositiveBendStepDeltaSign
@@ -264,7 +264,7 @@ Boss_ShieldViperBendStepDeltaReturn:                    ; CODE XREF: Boss_Shield
 ; Write symmetric target angular offsets across the linked body records
 Boss_ShieldViperSetBodyTargetAngularOffsets:            ; CODE XREF: Boss_ShieldViperConfigureInitialBodyBend:Boss_ShieldViperApplyInitialBodyBend   p  ; was: sub_4F47A
                                         ; sub_4E3FE:Boss_ShieldViperApplyBodyBendPhase   p
-                move.w  (SharedPatternRow0Long1).w,d5
+                move.w  (SharedScratchLong1).w,d5
                 move.w  #2,d7
                 lea     $480(a5),a0
                 movea.w a0,a1
@@ -302,7 +302,7 @@ Boss_ShieldViperMoveRadially:                           ; CODE XREF: Boss_Shield
                 move.w  Math_QuarterSineTable-Math_SineTable(a3,d0.w),d1
 Boss_ShieldViperApplyRadialDisplacement:                ; was: loc_4F4E2
                 move.w  (a3,d0.w),d0
-                move.w  (SharedPatternRow0Long7).w,d2
+                move.w  (SharedScratchLong7).w,d2
                 muls.w  d2,d0
                 muls.w  d2,d1
                 add.l   d0,$10(a5)

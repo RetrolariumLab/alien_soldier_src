@@ -1,10 +1,10 @@
 Boss_ZLeoMainController:                                ; CODE XREF: ZLeoEnding_UpdateScene+6   p  ; was: sub_220D0
-                tst.w   (SharedPatternRow0Long0).w
+                tst.w   (SharedScratchLong0).w
                 beq.w   Boss_ZLeoMainController_DispatchState
                 bsr.w   Boss_ZLeoUpdateScroll
                 bsr.w   Boss_ZLeoPlacePlayerAtMarker
 Boss_ZLeoMainController_DispatchState:                  ; CODE XREF: Boss_ZLeoMainController+4   j  ; was: loc_220E0
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 lea     Boss_ZLeoStateHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
@@ -32,7 +32,7 @@ Boss_ZLeoStateHandlers: dc.w    Boss_ZLeoIntroSequence-*  ; DATA XREF: Boss_ZLeo
 
 ; Initializes the Z-Leo ending sequence, camera, and particle emitter
 Boss_ZLeoIntroSequence:                                 ; DATA XREF: ROM:Boss_ZLeoStateHandlers   o  ; was: sub_22112
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
                 clr.w   (PlayerInvulnTimer).w
                 lea     (Entity_ObjectPool).w,a0
                 move.w  #$10,(a0)
@@ -40,21 +40,21 @@ Boss_ZLeoIntroSequence:                                 ; DATA XREF: ROM:Boss_ZL
                 clr.w   $C(a0)
                 move.w  #$40,$10(a0)                    ; '@'
                 move.w  #$F0,$14(a0)
-                move.w  #1,(SharedPatternRow0Long4).w
-                move.w  #$A0,(SharedPatternRow0Long4+2).w
-                move.w  #$F0,(SharedPatternRow0Long5).w
-                move.w  #$1F,(SharedPatternRow0Long5+2).w
-                move.w  #$7F,(SharedPatternRow0Long6).w
-                move.w  #7,(SharedPatternRow0Long7).w
+                move.w  #1,(SharedScratchLong4).w
+                move.w  #$A0,(SharedScratchLong4+2).w
+                move.w  #$F0,(SharedScratchLong5).w
+                move.w  #$1F,(SharedScratchLong5+2).w
+                move.w  #$7F,(SharedScratchLong6).w
+                move.w  #7,(SharedScratchLong7).w
                 bsr.w   Boss_ZLeoSpawnParticles
-                move.w  #$40,(SharedPatternRow0Long0+2).w  ; '@'
+                move.w  #$40,(SharedScratchLong0+2).w   ; '@'
 ; Emits particles while the intro countdown runs; it touches no palette
 Boss_ZLeoIntroSequence_ParticleWait:                    ; DATA XREF: ROM:000220EE   o  ; was: loc_22166
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoIntroSequence_Return
                 move.w  #4,(PrimaryEntityXVelocity).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
                 bsr.w   Boss_ZLeoSpawnImpactObject
 Boss_ZLeoIntroSequence_Return:                          ; CODE XREF: Boss_ZLeoIntroSequence+5C   j  ; was: locret_2217E
                 rts
@@ -65,45 +65,45 @@ Boss_ZLeoWaitMarkerPosition:                            ; DATA XREF: ROM:000220F
                 cmpi.w  #$1E0,(PrimaryEntityXPos).w
                 bcs.s   Boss_ZLeoWaitMarkerPosition_Return
                 clr.w   (PrimaryEntityXVelocity).w
-                move.w  #$40,(SharedPatternRow0Long0+2).w  ; '@'
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.w  #$40,(SharedScratchLong0+2).w   ; '@'
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitMarkerPosition_Return:                     ; CODE XREF: Boss_ZLeoWaitMarkerPosition+A   j  ; was: locret_2219A
                 rts
 ; End of function Boss_ZLeoWaitMarkerPosition
 ; Emits particles while waiting for the state timer
 Boss_ZLeoWaitTimer:                                     ; DATA XREF: ROM:000220F2   o  ; was: sub_2219C
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoWaitTimer_Return
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitTimer_Return:                              ; CODE XREF: Boss_ZLeoWaitTimer+8   j  ; was: locret_221AA
                 rts
 ; End of function Boss_ZLeoWaitTimer
 ; Scrolls camera upward with acceleration until reaching final position
 Boss_ZLeoCameraScroll:                                  ; DATA XREF: ROM:000220F4   o  ; was: sub_221AC
-                cmpi.w  #$60,(SharedPatternRow0Long4+2).w  ; '`'
+                cmpi.w  #$60,(SharedScratchLong4+2).w   ; '`'
                 blt.s   Boss_ZLeoCameraScroll_ConfigureParticles
-                move.w  (SharedPatternRow0Long2+2).w,d0
-                sub.w   d0,(SharedPatternRow0Long4+2).w
+                move.w  (SharedScratchLong2+2).w,d0
+                sub.w   d0,(SharedScratchLong4+2).w
                 bsr.w   Boss_ZLeoSpawnParticles
                 bra.s   Boss_ZLeoCameraScroll_Accelerate
 ; ---------------------------------------------------------------------------
 Boss_ZLeoCameraScroll_ConfigureParticles:               ; CODE XREF: Boss_ZLeoCameraScroll+6   j  ; was: loc_221C2
-                move.w  #1,(SharedPatternRow0Long4).w
-                move.w  #$160,(SharedPatternRow0Long4+2).w
-                move.w  #$F0,(SharedPatternRow0Long5).w
-                move.w  #$FF,(SharedPatternRow0Long5+2).w
-                move.w  #$7F,(SharedPatternRow0Long6).w
-                move.w  #7,(SharedPatternRow0Long7).w
+                move.w  #1,(SharedScratchLong4).w
+                move.w  #$160,(SharedScratchLong4+2).w
+                move.w  #$F0,(SharedScratchLong5).w
+                move.w  #$FF,(SharedScratchLong5+2).w
+                move.w  #$7F,(SharedScratchLong6).w
+                move.w  #7,(SharedScratchLong7).w
                 bsr.w   Boss_ZLeoSpawnParticles
 Boss_ZLeoCameraScroll_Accelerate:                       ; CODE XREF: Boss_ZLeoCameraScroll+14   j  ; was: loc_221EA
-                addi.l  #$800,(SharedPatternRow0Long2+2).w
-                cmpi.l  #$80000,(SharedPatternRow0Long2+2).w
+                addi.l  #$800,(SharedScratchLong2+2).w
+                cmpi.l  #$80000,(SharedScratchLong2+2).w
                 bne.s   Boss_ZLeoCameraScroll_Return
                 bset    #0,(PrimaryEntityFlags).w
                 move.l  #$78000,(PrimaryEntityXVelocity).w
-                addq.w  #2,(SharedPatternRow0Long0).w
-                move.w  #$160,(SharedPatternRow0Long4+2).w
+                addq.w  #2,(SharedScratchLong0).w
+                move.w  #$160,(SharedScratchLong4+2).w
 Boss_ZLeoCameraScroll_Return:                           ; CODE XREF: Boss_ZLeoCameraScroll+4E   j  ; was: locret_22214
                 rts
 ; End of function Boss_ZLeoCameraScroll
@@ -112,42 +112,42 @@ Boss_ZLeoWaitForScrollThreshold:                        ; DATA XREF: ROM:000220F
                 bsr.w   Boss_ZLeoSpawnParticles
                 cmpi.w  #$120,(PrimaryEntityXPos).w
                 bgt.s   Boss_ZLeoWaitForScrollThreshold_Return
-                move.l  (SharedPatternRow0Long2+2).w,(PrimaryEntityXVelocity).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.l  (SharedScratchLong2+2).w,(PrimaryEntityXVelocity).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitForScrollThreshold_Return:                 ; CODE XREF: Boss_ZLeoWaitForScrollThreshold+A   j  ; was: locret_2222C
                 rts
 ; End of function Boss_ZLeoWaitForScrollThreshold
 ; Configures a two-particle burst
 Boss_ZLeoConfigureParticleBurst:                        ; DATA XREF: ROM:000220F8   o  ; was: sub_2222E
-                move.w  #2,(SharedPatternRow0Long4).w
-                move.w  #$160,(SharedPatternRow0Long4+2).w
-                move.w  #$F0,(SharedPatternRow0Long5).w
-                move.w  #$FF,(SharedPatternRow0Long5+2).w
-                move.w  #$7F,(SharedPatternRow0Long6).w
-                move.w  #7,(SharedPatternRow0Long7).w
+                move.w  #2,(SharedScratchLong4).w
+                move.w  #$160,(SharedScratchLong4+2).w
+                move.w  #$F0,(SharedScratchLong5).w
+                move.w  #$FF,(SharedScratchLong5+2).w
+                move.w  #$7F,(SharedScratchLong6).w
+                move.w  #7,(SharedScratchLong7).w
                 bsr.w   Boss_ZLeoSpawnParticles
-                addq.w  #2,(SharedPatternRow0Long0).w
-                move.w  #$80,(SharedPatternRow0Long0+2).w
+                addq.w  #2,(SharedScratchLong0).w
+                move.w  #$80,(SharedScratchLong0+2).w
                 rts
 ; End of function Boss_ZLeoConfigureParticleBurst
 ; Emits the configured burst until its timer expires
 Boss_ZLeoWaitParticleBurst:                             ; DATA XREF: ROM:000220FA   o  ; was: sub_22262
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoWaitParticleBurst_Return
-                move.w  #$80,(SharedPatternRow0Long0+2).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.w  #$80,(SharedScratchLong0+2).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitParticleBurst_Return:                      ; CODE XREF: Boss_ZLeoWaitParticleBurst+8   j  ; was: locret_22276
                 rts
 ; End of function Boss_ZLeoWaitParticleBurst
 ; Starts the reverse camera scroll
 Boss_ZLeoStartReverseScroll:                            ; DATA XREF: ROM:000220FC   o  ; was: sub_22278
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoStartReverseScroll_Return
                 bclr    #0,(PrimaryEntityFlags).w
                 move.l  #$FFFE0000,(PrimaryEntityXVelocity).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoStartReverseScroll_Return:                     ; CODE XREF: Boss_ZLeoStartReverseScroll+8   j  ; was: locret_22294
                 rts
 ; End of function Boss_ZLeoStartReverseScroll
@@ -159,7 +159,7 @@ Boss_ZLeoWaitForScrollSignChange:                       ; DATA XREF: ROM:000220F
                 bne.s   Boss_ZLeoWaitForScrollSignChange_Return
                 move.b  #$D5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitForScrollSignChange_Return:                ; CODE XREF: Boss_ZLeoWaitForScrollSignChange+12   j  ; was: locret_222B8
                 rts
 ; End of function Boss_ZLeoWaitForScrollSignChange
@@ -169,68 +169,68 @@ Boss_ZLeoWaitForMarkerEnd:                              ; DATA XREF: ROM:0002210
                 addi.l  #$1000,(PrimaryEntityXVelocity).w
                 cmpi.w  #$1E0,(PrimaryEntityXPos).w
                 blt.s   Boss_ZLeoWaitForMarkerEnd_Return
-                addq.w  #1,(SharedPatternRow0Long4).w
-                addq.w  #2,(SharedPatternRow0Long0).w
-                move.w  #$80,(SharedPatternRow0Long0+2).w
+                addq.w  #1,(SharedScratchLong4).w
+                addq.w  #2,(SharedScratchLong0).w
+                move.w  #$80,(SharedScratchLong0+2).w
 Boss_ZLeoWaitForMarkerEnd_Return:                       ; CODE XREF: Boss_ZLeoWaitForMarkerEnd+12   j  ; was: locret_222DC
                 rts
 ; End of function Boss_ZLeoWaitForMarkerEnd
 ; Selects four particles per update after a delay
 Boss_ZLeoSetParticleMode4:                              ; DATA XREF: ROM:00022102   o  ; was: sub_222DE
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoSetParticleMode4_Return
-                move.w  #$80,(SharedPatternRow0Long0+2).w
-                move.w  #4,(SharedPatternRow0Long4).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.w  #$80,(SharedScratchLong0+2).w
+                move.w  #4,(SharedScratchLong4).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoSetParticleMode4_Return:                       ; CODE XREF: Boss_ZLeoSetParticleMode4+8   j  ; was: locret_222F8
                 rts
 ; End of function Boss_ZLeoSetParticleMode4
 ; Emits four particles per update until the timer expires
 Boss_ZLeoWaitParticleMode4:                             ; DATA XREF: ROM:00022104   o  ; was: sub_222FA
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoWaitParticleMode4_Return
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitParticleMode4_Return:                      ; CODE XREF: Boss_ZLeoWaitParticleMode4+8   j  ; was: locret_22308
                 rts
 ; End of function Boss_ZLeoWaitParticleMode4
 ; Starts the final ending delay
 Boss_ZLeoStartFinalDelay:                               ; DATA XREF: ROM:00022106   o  ; was: sub_2230A
                 bsr.w   Boss_ZLeoSpawnParticles
-                move.w  #$40,(SharedPatternRow0Long0+2).w  ; '@'
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.w  #$40,(SharedScratchLong0+2).w   ; '@'
+                addq.w  #2,(SharedScratchLong0).w
                 rts
 ; End of function Boss_ZLeoStartFinalDelay
 ; Waits for the final ending delay
 Boss_ZLeoWaitFinalDelay:                                ; DATA XREF: ROM:00022108   o  ; was: sub_2231A
                 bsr.w   Boss_ZLeoSpawnParticles
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoWaitFinalDelay_Return
-                clr.w   (SharedPatternRow0Long0+2).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                clr.w   (SharedScratchLong0+2).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitFinalDelay_Return:                         ; CODE XREF: Boss_ZLeoWaitFinalDelay+8   j  ; was: locret_2232C
                 rts
 ; End of function Boss_ZLeoWaitFinalDelay
 ; Fades the Z-Leo scene and clears its palette buffer
 Boss_ZLeoFadeToEnding:                                  ; DATA XREF: ROM:0002210A   o  ; was: sub_2232E
-                move.w  (SharedPatternRow0Long0+2).w,d0
+                move.w  (SharedScratchLong0+2).w,d0
                 bsr.w   Credits_ApplyFadeStep
                 btst    #0,(VBlankFrameCounter+1).w
                 bne.s   Boss_ZLeoFadeToEnding_UpdateParticles
                 btst    #1,(VBlankFrameCounter+1).w
                 bne.s   Boss_ZLeoFadeToEnding_UpdateParticles
-                addq.w  #1,(SharedPatternRow0Long0+2).w
-                cmpi.w  #$E,(SharedPatternRow0Long0+2).w
+                addq.w  #1,(SharedScratchLong0+2).w
+                cmpi.w  #$E,(SharedScratchLong0+2).w
                 bls.s   Boss_ZLeoFadeToEnding_Return
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
                 lea     (PaletteShadowBuffer).w,a0
                 move.w  #$1F,d7
                 moveq   #0,d0
 Boss_ZLeoFadeToEnding_ClearPaletteBufferLoop:           ; CODE XREF: Boss_ZLeoFadeToEnding+34   j  ; was: loc_22360
                 move.l  d0,(a0)+
                 dbf     d7,Boss_ZLeoFadeToEnding_ClearPaletteBufferLoop
-                move.w  #$80,(SharedPatternRow0Long0+2).w
+                move.w  #$80,(SharedScratchLong0+2).w
                 move.b  #$C1,d0
                 jsr     (Sound_QueueSFXRequest).l
 Boss_ZLeoFadeToEnding_Return:                           ; CODE XREF: Boss_ZLeoFadeToEnding+22   j  ; was: locret_22376
@@ -245,27 +245,27 @@ Boss_ZLeoFadeToEnding_UpdateParticles:                  ; CODE XREF: Boss_ZLeoFa
 Boss_ZLeoPrepareEndingExit:                             ; DATA XREF: ROM:0002210C   o  ; was: sub_2237E
                 move.w  #$E,d0
                 bsr.w   Credits_ApplyFadeStep
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bne.s   Boss_ZLeoPrepareEndingExit_Return
-                move.w  #$E,(SharedPatternRow0Long0+2).w
-                clr.l   (SharedPatternRow0Long2+2).w
-                clr.w   (SharedPatternRow0Long4).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                move.w  #$E,(SharedScratchLong0+2).w
+                clr.l   (SharedScratchLong2+2).w
+                clr.w   (SharedScratchLong4).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoPrepareEndingExit_Return:                      ; CODE XREF: Boss_ZLeoPrepareEndingExit+C   j  ; was: locret_2239E
                 rts
 ; End of function Boss_ZLeoPrepareEndingExit
 ; Finishes the fade and advances to the post-Z-Leo game mode
 Boss_ZLeoWaitEndingExit:                                ; DATA XREF: ROM:0002210E   o  ; was: sub_223A0
-                move.w  (SharedPatternRow0Long0+2).w,d0
+                move.w  (SharedScratchLong0+2).w,d0
                 bsr.w   Credits_ApplyFadeStep
                 btst    #0,(VBlankFrameCounter+1).w
                 bne.s   Boss_ZLeoWaitEndingExit_Return
                 btst    #1,(VBlankFrameCounter+1).w
                 bne.s   Boss_ZLeoWaitEndingExit_Return
-                subq.w  #1,(SharedPatternRow0Long0+2).w
+                subq.w  #1,(SharedScratchLong0+2).w
                 bpl.s   Boss_ZLeoWaitEndingExit_Return
                 move.w  #$8C,(GameModeIndex).w
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_ZLeoWaitEndingExit_Return:                         ; CODE XREF: Boss_ZLeoWaitEndingExit+E   j  ; was: locret_223C8
                                         ; Boss_ZLeoWaitEndingExit+16   j
                 rts
@@ -285,7 +285,7 @@ Credits_ApplyFadeStep:                                  ; CODE XREF: Boss_ZLeoFa
 ; End of function Credits_ApplyFadeStep
 ; Integrates the Z-Leo scroll velocity
 Boss_ZLeoUpdateScroll:                                  ; CODE XREF: Boss_ZLeoMainController+8   p  ; was: sub_223E2
-                move.l  (SharedPatternRow0Long2+2).w,d0
+                move.l  (SharedScratchLong2+2).w,d0
                 add.l   d0,(PrimaryCameraXPosition).w
                 rts
 ; End of function Boss_ZLeoUpdateScroll
@@ -312,15 +312,15 @@ Orphaned_ZLeoMovePlayerByInput_Return:                  ; CODE XREF: Orphaned_ZL
 ; Unreachable: would drive the player position around a sine orbit
 Orphaned_ZLeoOrbitPlayerPosition:
                 lea     (Math_SineTable).l,a4           ; was: sub_2241E
-                addi.w  #4,(SharedPatternRow0Long1).w
-                addi.w  #2,(SharedPatternRow0Long1+2).w
-                move.w  (SharedPatternRow0Long1).w,d0
+                addi.w  #4,(SharedScratchLong1).w
+                addi.w  #2,(SharedScratchLong1+2).w
+                move.w  (SharedScratchLong1).w,d0
                 addi.w  #$1FE,d0
                 move.w  (a4,d0.w),d0
                 muls.w  #$40,d0                         ; '@'
                 addi.l  #$1200000,d0
                 move.l  d0,(PlayerXPosition).w
-                move.w  (SharedPatternRow0Long1+2).w,d0
+                move.w  (SharedScratchLong1+2).w,d0
                 addi.w  #$1FE,d0
                 move.w  (a4,d0.w),d0
                 muls.w  #$20,d0                         ; ' '
@@ -348,7 +348,7 @@ Boss_ZLeoPlacePlayerAtMarker_HideAndPark:               ; CODE XREF: Boss_ZLeoPl
 ; Spawns randomized Z-Leo ending particles and their periodic sound
 Boss_ZLeoSpawnParticles:                                ; CODE XREF: Boss_ZLeoIntroSequence+4A   p  ; was: sub_2249A
                                         ; sub_22112:loc_22166   p
-                move.w  (SharedPatternRow0Long4).w,d7
+                move.w  (SharedScratchLong4).w,d7
                 subq.w  #1,d7
                 bmi.w   Boss_ZLeoSpawnParticles_Return
 Boss_ZLeoSpawnParticles_Loop:                           ; CODE XREF: Boss_ZLeoSpawnParticles+84   j  ; was: loc_224A4
@@ -361,25 +361,25 @@ Boss_ZLeoSpawnParticles_Loop:                           ; CODE XREF: Boss_ZLeoSp
                 andi.w  #3,d6
                 add.w   d6,d6
                 move.b  (RandomNumberState).w,d0
-                move.w  (SharedPatternRow0Long5+2).w,d1
+                move.w  (SharedScratchLong5+2).w,d1
                 and.w   d1,d0
                 and.w   d1,d0
                 addq.w  #1,d1
                 lsr.w   #1,d1
                 sub.w   d1,d0
-                add.w   (SharedPatternRow0Long4+2).w,d0
+                add.w   (SharedScratchLong4+2).w,d0
                 add.w   Boss_ZLeoParticleXOffsets(pc,d6.w),d0
                 move.w  d0,$10(a0)
                 move.b  (RandomNumberState+1).w,d0
-                move.w  (SharedPatternRow0Long6).w,d1
+                move.w  (SharedScratchLong6).w,d1
                 and.w   d1,d0
                 addq.w  #1,d1
                 lsr.w   #1,d1
                 sub.w   d1,d0
-                add.w   (SharedPatternRow0Long5).w,d0
+                add.w   (SharedScratchLong5).w,d0
                 add.w   Boss_ZLeoParticleYOffsets(pc,d6.w),d0
                 move.w  d0,$14(a0)
-                move.l  (SharedPatternRow0Long2+2).w,d0
+                move.l  (SharedScratchLong2+2).w,d0
                 asr.l   #1,d0
                 move.l  d0,$18(a0)
                 move.b  (RandomNumberState+2).w,d0
@@ -387,12 +387,12 @@ Boss_ZLeoSpawnParticles_Loop:                           ; CODE XREF: Boss_ZLeoSp
                 lsl.w   #2,d0
                 move.l  Boss_ZLeoParticleSpritePointers(pc,d0.w),8(a0)
                 dbf     d7,Boss_ZLeoSpawnParticles_Loop
-                tst.w   (SharedPatternRow0Long7).w
+                tst.w   (SharedScratchLong7).w
                 beq.s   Boss_ZLeoSpawnParticles_Return
                 move.w  (RandomNumberState).w,d0
-                and.w   (SharedPatternRow0Long7).w,d0
+                and.w   (SharedScratchLong7).w,d0
                 bne.s   Boss_ZLeoSpawnParticles_Return
-                cmpi.w  #$18,(SharedPatternRow0Long0).w
+                cmpi.w  #$18,(SharedScratchLong0).w
                 bcc.s   Boss_ZLeoSpawnParticles_SelectFinalSfx
                 move.b  #$30,d0                         ; '0'
                 bra.s   Boss_ZLeoSpawnParticles_PlaySfx

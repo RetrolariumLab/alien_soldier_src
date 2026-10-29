@@ -1,6 +1,6 @@
 ; Dispatches stage asset lists and applies the fixed-layout stage records
-Stage_DispatchAssetListLoaderByGameMode:                ; CODE XREF: Stage_LoadStage1BaseAssets+A   j  ; was: CheckFlagsLoadObjData
-                                        ; Stage_LoadStage1Phase1Assets+E   j
+Stage_DispatchAssetListLoaderByGameMode:                ; CODE XREF: Stage_LoadStage1To4Assets+A   j  ; was: CheckFlagsLoadObjData
+                                        ; Stage_LoadStage4Assets+E   j
                 cmpi.w  #$3C,(GameModeIndex).w          ; '<'
                 beq.s   Stage_ProcessAssetListImmediately
                 cmpi.w  #$C,(GameModeIndex).w

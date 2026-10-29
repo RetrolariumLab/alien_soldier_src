@@ -485,60 +485,60 @@ LockOnTargetList                equ     $FFFF8E80       ; was: byte_FF8E80
 MovingPlatformList              equ     $FFFF8F00       ; was: byte_FF8F00
 PlayerWeaponList                equ     $FFFF8F80       ; was: byte_FF8F80
 GameOverRasterBuffer            equ     $FFFF9000       ; was: byte_FF9000
-SharedPatternRow0Long0          equ     $FFFF9400       ; was: dword_FF9400
-SharedPatternRow0Long1          equ     $FFFF9404       ; was: dword_FF9404
-SharedPatternRow0Long2          equ     $FFFF9408       ; was: dword_FF9408
-SharedPatternRow0Long3          equ     $FFFF940C       ; was: dword_FF940C
-SharedPatternRow0Long4          equ     $FFFF9410       ; was: dword_FF9410
-SharedPatternRow0Long5          equ     $FFFF9414       ; was: dword_FF9414
-SharedPatternRow0Long6          equ     $FFFF9418       ; was: dword_FF9418
-SharedPatternRow0Long7          equ     $FFFF941C       ; was: dword_FF941C
-SharedPatternRow1Long0          equ     $FFFF9420       ; was: dword_FF9420
-SharedPatternRow1Long1          equ     $FFFF9424       ; was: dword_FF9424
-SharedPatternRow1Long2          equ     $FFFF9428       ; was: dword_FF9428
-SharedPatternRow1Long3          equ     $FFFF942C       ; was: dword_FF942C
-SharedPatternRow1Long4          equ     $FFFF9430       ; was: dword_FF9430
-SharedPatternRow1Long5          equ     $FFFF9434       ; was: dword_FF9434
-SharedPatternRow1Long6          equ     $FFFF9438       ; was: dword_FF9438
-SharedPatternRow1Long7          equ     $FFFF943C       ; was: dword_FF943C
-TransitionPatternBuffer         equ     SharedPatternRow0Long0
-TransitionPatternRow0           equ     SharedPatternRow0Long0
-TransitionPatternRow1           equ     SharedPatternRow1Long0
+SharedScratchLong0              equ     $FFFF9400       ; was: dword_FF9400
+SharedScratchLong1              equ     $FFFF9404       ; was: dword_FF9404
+SharedScratchLong2              equ     $FFFF9408       ; was: dword_FF9408
+SharedScratchLong3              equ     $FFFF940C       ; was: dword_FF940C
+SharedScratchLong4              equ     $FFFF9410       ; was: dword_FF9410
+SharedScratchLong5              equ     $FFFF9414       ; was: dword_FF9414
+SharedScratchLong6              equ     $FFFF9418       ; was: dword_FF9418
+SharedScratchLong7              equ     $FFFF941C       ; was: dword_FF941C
+SharedScratchLong8              equ     $FFFF9420       ; was: dword_FF9420
+SharedScratchLong9              equ     $FFFF9424       ; was: dword_FF9424
+SharedScratchLong10             equ     $FFFF9428       ; was: dword_FF9428
+SharedScratchLong11             equ     $FFFF942C       ; was: dword_FF942C
+SharedScratchLong12             equ     $FFFF9430       ; was: dword_FF9430
+SharedScratchLong13             equ     $FFFF9434       ; was: dword_FF9434
+SharedScratchLong14             equ     $FFFF9438       ; was: dword_FF9438
+SharedScratchLong15             equ     $FFFF943C       ; was: dword_FF943C
+TransitionPatternBuffer         equ     SharedScratchLong0
+TransitionPatternRow0           equ     SharedScratchLong0
+TransitionPatternRow1           equ     SharedScratchLong8
 SharedPatternWorkBuffer         equ     $FFFF9440       ; was: word_FF9440
 SharedPatternWorkWord1          equ     $FFFF9442       ; was: word_FF9442
 SharedPatternWorkWord2          equ     $FFFF9444       ; was: word_FF9444
 TransitionPatternRow2           equ     SharedPatternWorkBuffer
 ShieldViperBranchParity         equ     SharedPatternWorkBuffer
 ResultsLayoutModeCopy           equ     SharedPatternWorkWord1
-ResultsDisplayState             equ     SharedPatternRow0Long0
-ResultsRenderedRowCount         equ     SharedPatternRow0Long0+2
-ResultsRowTileOffset            equ     SharedPatternRow0Long1
-ResultsRowBufferOffset          equ     SharedPatternRow0Long1+2
-ResultsHighlightPalette         equ     SharedPatternRow0Long1+2
-ResultsScrollTargetY            equ     SharedPatternRow0Long2
-ResultsStageTimeScratch         equ     SharedPatternRow0Long2+2
-ResultsPhaseTimeScratch         equ     SharedPatternRow0Long3
-ResultsEndTimeScratch           equ     SharedPatternRow0Long3+2
-ResultsBCDEndTime               equ     SharedPatternRow0Long4
-ResultsBCDStartTime             equ     SharedPatternRow0Long4+2
-ResultsViewportRow              equ     SharedPatternRow0Long5
-ResultsSelectedRowData          equ     SharedPatternRow0Long5+2
-ResultsSelectedRowTile          equ     SharedPatternRow0Long6
-ResultsHorizontalStep           equ     SharedPatternRow0Long6+2
-ResultsVerticalStep             equ     SharedPatternRow0Long7
-ResultsDetailTextOffset         equ     SharedPatternRow0Long7+2
-ResultsSelectedTextPos          equ     SharedPatternRow1Long0
-ResultsCurrentRowPtr            equ     SharedPatternRow1Long0+2
-ResultsMusicQueuedFlag          equ     SharedPatternRow1Long1
-ResultsTotalTimeBCD             equ     SharedPatternRow1Long2
-ResultsTotalClearBCD            equ     SharedPatternRow1Long3
-ResultsTotalVisitsBCD           equ     SharedPatternRow1Long4
-ResultsLimitTimeSeconds         equ     SharedPatternRow1Long5
-ResultsClearTimeSeconds         equ     SharedPatternRow1Long5+2
-ResultsTotalVisitCount          equ     SharedPatternRow1Long6
-ResultsHorizontalActive         equ     SharedPatternRow1Long6+2
-ResultsLowerScrollBound         equ     SharedPatternRow1Long7
-ResultsLastScrollRow            equ     SharedPatternRow1Long7+2
+ResultsDisplayState             equ     SharedScratchLong0
+ResultsRenderedRowCount         equ     SharedScratchLong0+2
+ResultsRowTileOffset            equ     SharedScratchLong1
+ResultsRowBufferOffset          equ     SharedScratchLong1+2
+ResultsHighlightPalette         equ     SharedScratchLong1+2
+ResultsScrollTargetY            equ     SharedScratchLong2
+ResultsStageTimeScratch         equ     SharedScratchLong2+2
+ResultsPhaseTimeScratch         equ     SharedScratchLong3
+ResultsEndTimeScratch           equ     SharedScratchLong3+2
+ResultsBCDEndTime               equ     SharedScratchLong4
+ResultsBCDStartTime             equ     SharedScratchLong4+2
+ResultsViewportRow              equ     SharedScratchLong5
+ResultsSelectedRowData          equ     SharedScratchLong5+2
+ResultsSelectedRowTile          equ     SharedScratchLong6
+ResultsHorizontalStep           equ     SharedScratchLong6+2
+ResultsVerticalStep             equ     SharedScratchLong7
+ResultsDetailTextOffset         equ     SharedScratchLong7+2
+ResultsSelectedTextPos          equ     SharedScratchLong8
+ResultsCurrentRowPtr            equ     SharedScratchLong8+2
+ResultsMusicQueuedFlag          equ     SharedScratchLong9
+ResultsTotalTimeBCD             equ     SharedScratchLong10
+ResultsTotalClearBCD            equ     SharedScratchLong11
+ResultsTotalVisitsBCD           equ     SharedScratchLong12
+ResultsLimitTimeSeconds         equ     SharedScratchLong13
+ResultsClearTimeSeconds         equ     SharedScratchLong13+2
+ResultsTotalVisitCount          equ     SharedScratchLong14
+ResultsHorizontalActive         equ     SharedScratchLong14+2
+ResultsLowerScrollBound         equ     SharedScratchLong15
+ResultsLastScrollRow            equ     SharedScratchLong15+2
 Epsilon1TileBandIndex           equ     SharedPatternWorkWord2
 Epsilon1TileDMARecord           equ     $FFFF9446       ; was: word_FF9446
 SharedPatternStateLong0         equ     $FFFF944E       ; was: dword_FF944E

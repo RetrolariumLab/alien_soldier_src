@@ -73,7 +73,7 @@ Boss_WolfGaropaPositionOrbFacingPart:                   ; CODE XREF: Boss_WolfGa
                 add.w   $3BC(a5),d1
                 addi.w  #-$47,d1
                 move.w  d1,$9D4(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  $3C(a0),d5
                 ext.w   d5
                 move.b  $40(a0),d6
@@ -357,7 +357,7 @@ Boss_WolfGaropaBeginPoseCommandInterpolation:           ; CODE XREF: Boss_WolfGa
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_WolfGaropaPoseTargets,d0
+                addi.l  #Boss_WolfGaropaPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_WolfGaropaBeginPoseInterpolation
                 moveq   #0,d0
@@ -369,13 +369,13 @@ Boss_WolfGaropaBeginPoseCommandInterpolation:           ; CODE XREF: Boss_WolfGa
                 bmi.s   Boss_WolfGaropaStorePoseAngleGroup1
 Boss_WolfGaropaTickPoseInterpolation:                   ; CODE XREF: Boss_WolfGaropaAdvancePoseScript+8   j  ; was: loc_5064A
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_WolfGaropaStorePoseAngleGroup1:                    ; CODE XREF: Boss_WolfGaropaAdvancePoseScript+E   j  ; was: loc_5065A
                                         ; Boss_WolfGaropaAdvancePoseScript+76   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.l  #Boss_WolfGaropaPoseAngleOutsideRangeMapping,d5
                 move.l  #Boss_WolfGaropaPoseAngleMidRangeMapping,d6
                 move.b  (a0),d0
@@ -502,39 +502,39 @@ Boss_WolfGaropaPoseScriptReturn:                        ; CODE XREF: Boss_WolfGa
 ; End of function Boss_WolfGaropaAdvancePoseScript
 ; Initialize interpolation deltas for the next pose-script command
 Boss_WolfGaropaBeginPoseInterpolation:                  ; CODE XREF: Boss_WolfGaropaAdvancePoseScript+5C   p  ; was: sub_507C6
-                lea     Boss_WolfGaropaPoseTargets(pc),a1
+                lea     Boss_WolfGaropaPoseTable(pc),a1
                 nop
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_WolfGaropaBeginPoseInterpolation
 ; Initialize nineteen Wolf Garopa pose channels from bytes at a0
 Boss_WolfGaropaInitializePoseChannels:                  ; was: sub_507DC
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_WolfGaropaInitializePoseChannels
 ; ---------------------------------------------------------------------------
                 dc.b    $FF, $FF
-Boss_WolfGaropaHorizontalMotionPoseA:   dc.w    $506, $36, $8089, $303, $48, $808A, $605, $5A, $808B, $205, $6C, $8004, $303, $6C, $80D, $12  ; was: word_507EA
+Boss_WolfGaropaHorizontalMotionAPoses:  dc.w    $506, $36, $8089, $303, $48, $808A, $605, $5A, $808B, $205, $6C, $8004, $303, $6C, $80D, $12  ; was: word_507EA
                                         ; DATA XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+1C   o
                                         ; Boss_WolfGaropaUpdateHorizontalTargetMotion+50   o
                 dc.w    $505, $12, $808, $24, $FFFE
 Boss_WolfGaropaHorizontalMotionPoseB:   dc.w    $90A, $36, $8089, $404, $48, $808A, $807, $5A, $808B, $306, $6C, $8004, $303, $6C, $80D, $12  ; was: word_50814
                                         ; DATA XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion:Boss_WolfGaropaAccelerateTowardLeftTarget   o
                 dc.w    $505, $12, $808, $24, $FFFE
-Boss_WolfGaropaBallisticTransitionBPose:    dc.w    $810, $B4, $606, $B4, $8040, $606, $B4, $8089, $FFFE  ; was: word_5083E
+Boss_WolfGaropaBallisticTransitionBPoses:   dc.w    $810, $B4, $606, $B4, $8040, $606, $B4, $8089, $FFFE  ; was: word_5083E
                                         ; DATA XREF: Boss_WolfGaropaUpdateBallisticTransitionB:Boss_WolfGaropaAdvanceBallisticTransitionPose   o
-Boss_WolfGaropaHorizontalAirbornePose:  dc.w    $C0C, $7E, $808B, $A0A, $90, $8088, $C0C, $A2, $808A, $A0A, $B4, $8089, $FFFF  ; was: word_50850
+Boss_WolfGaropaHorizontalAirbornePoses: dc.w    $C0C, $7E, $808B, $A0A, $90, $8088, $C0C, $A2, $808A, $A0A, $B4, $8089, $FFFF  ; was: word_50850
                                         ; DATA XREF: Boss_WolfGaropaUpdateBallisticTransitionB:Boss_WolfGaropaAdvanceAirbornePose   o
-Boss_WolfGaropaFinalBallisticPose:  dc.w    $408, $24, $808, $24, $FFFE  ; was: word_5086A
+Boss_WolfGaropaFinalBallisticPoses: dc.w    $408, $24, $808, $24, $FFFE  ; was: word_5086A
                                         ; DATA XREF: Boss_WolfGaropaUpdateFinalBallisticMotion+10   o
-Boss_WolfGaropaLaunchPose:  dc.w    $506, $36, $8089, $203, $48, $808A, $405, $5A, $808B, $104, $FC, $8044, $304, $FC, $A12, $C6  ; was: word_50874
+Boss_WolfGaropaLaunchPoses: dc.w    $506, $36, $8089, $203, $48, $808A, $405, $5A, $808B, $104, $FC, $8044, $304, $FC, $A12, $C6  ; was: word_50874
                                         ; DATA XREF: Boss_WolfGaropaUpdateInitialPose+8   o
                                         ; sub_50160   o
                 dc.w    $A0A, $C6, $606, $D8, $606, $EA, $FFFE
-Boss_WolfGaropaPoseTargets: binclude "data/other/word_508A2.bin"  ; was: word_508A2
+Boss_WolfGaropaPoseTable:   binclude "data/other/word_508A2.bin"  ; was: word_508A2
 Boss_WolfGaropaPoseTargetsEnd:                          ; was: word_508A2_End
 
 ; Calculate the player angle and steer the orb toward it

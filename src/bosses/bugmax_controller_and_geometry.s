@@ -195,16 +195,16 @@ Boss_BugmaxInitializePerspectiveRowsLoop:               ; CODE XREF: Boss_Bugmax
                 move.w  d0,(a0)+
                 subq.w  #2,d0
                 dbf     d7,Boss_BugmaxInitializePerspectiveRowsLoop
-                tst.w   (SharedPatternRow0Long0).w
+                tst.w   (SharedScratchLong0).w
                 beq.w   Boss_BugmaxUpdatePerspectiveParametersAndGeometry
-                tst.w   (SharedPatternRow0Long0).w
+                tst.w   (SharedScratchLong0).w
                 bmi.w   Boss_BugmaxInitializeNegativePerspectiveSlope
                 move.w  #$204,d0
                 sub.w   $14(a5),d0
                 move.w  d0,(SecondaryCameraYPos).w
                 moveq   #0,d2
                 move.w  #$400,d2
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 divu.w  d0,d2
                 swap    d2
                 clr.w   d2
@@ -218,7 +218,7 @@ Boss_BugmaxInitializePerspectiveRowsLoop:               ; CODE XREF: Boss_Bugmax
                 andi.w  #$1FE,d0
                 adda.w  d0,a0
                 move.l  (SecondaryCameraYPos).w,d1
-                move.w  (SharedPatternRow0Long0).w,d7
+                move.w  (SharedScratchLong0).w,d7
 Boss_BugmaxFillPerspectiveRowsBackwardLoop:             ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry+82   j  ; was: loc_4C170
                 cmpa.w  a1,a0
                 beq.w   Boss_BugmaxUpdatePerspectiveParametersAndGeometry
@@ -235,7 +235,7 @@ Boss_BugmaxInitializeNegativePerspectiveSlope:          ; CODE XREF: Boss_Bugmax
                 move.w  d0,(SecondaryCameraYPos).w
                 moveq   #0,d2
                 move.w  #$400,d2
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 neg.w   d0
                 divu.w  d0,d2
                 swap    d2
@@ -251,7 +251,7 @@ Boss_BugmaxInitializeNegativePerspectiveSlope:          ; CODE XREF: Boss_Bugmax
                 andi.w  #$1FE,d0
                 adda.w  d0,a0
                 move.l  (SecondaryCameraYPos).w,d1
-                move.w  (SharedPatternRow0Long0).w,d7
+                move.w  (SharedScratchLong0).w,d7
                 neg.w   d7
 Boss_BugmaxFillPerspectiveRowsForwardLoop:              ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry+E0   j  ; was: loc_4C1D0
                 cmpa.w  a1,a0
@@ -307,7 +307,7 @@ Boss_BugmaxShiftPositionHistoryLoop:                    ; CODE XREF: Boss_Bugmax
                 swap    d3
                 swap    d4
                 movea.w #(SecondaryEntityType-M68K_RAM),a0
-                move.w  (SharedPatternRow0Long5+2).w,d0
+                move.w  (SharedScratchLong5+2).w,d0
                 addi.w  #$80,d0
                 move.w  $50(a0),d2
                 bsr.w   Math_BugmaxCalculatePolarOffset
@@ -326,7 +326,7 @@ Boss_BugmaxShiftPositionHistoryLoop:                    ; CODE XREF: Boss_Bugmax
                 swap    d3
                 swap    d4
                 movea.w #(TertiaryEntityType-M68K_RAM),a0
-                move.w  (SharedPatternRow0Long5+2).w,d0
+                move.w  (SharedScratchLong5+2).w,d0
                 subi.w  #$80,d0
                 move.w  $50(a0),d2
                 bsr.w   Math_BugmaxCalculatePolarOffset
@@ -379,16 +379,16 @@ Boss_BugmaxCopySecondaryAnglesToLinkedPartsLoop:        ; CODE XREF: Boss_Bugmax
                 dbf     d7,Boss_BugmaxCopySecondaryAnglesToLinkedPartsLoop
                 move.w  #7,d7
                 movea.w #(EighthEntityType-M68K_RAM),a0
-                move.w  (SharedPatternRow0Long4+2).w,d2
+                move.w  (SharedScratchLong4+2).w,d2
                 movea.w #(SecondaryEntityType-M68K_RAM),a1
 Boss_BugmaxProjectSecondaryLinkedChainLoop:             ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry+28E   j  ; was: loc_4C35C
-                tst.b   (SharedPatternRow0Long6+2).w
+                tst.b   (SharedScratchLong6+2).w
                 bne.s   Boss_BugmaxUseSharedSecondaryChainAngle
                 move.w  $4C(a0),d0
                 bra.s   Boss_BugmaxProjectSecondaryChainPart
 ; ---------------------------------------------------------------------------
 Boss_BugmaxUseSharedSecondaryChainAngle:                ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry+264   j  ; was: loc_4C368
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
 Boss_BugmaxProjectSecondaryChainPart:                   ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry+26A   j  ; was: loc_4C36C
                 add.w   $4E(a0),d0
                 move.l  $10(a1),d3
@@ -412,7 +412,7 @@ Boss_BugmaxCheckForcedFinalState:                       ; CODE XREF: Boss_Bugmax
 Boss_BugmaxEnterForcedFinalState:                       ; was: loc_4C3B0
                 bset    #0,$5A(a5)
                 move.w  #$56,4(a5)                      ; 'V'
-                move.w  #1,(SharedPatternRow1Long2+2).w
+                move.w  #1,(SharedScratchLong10+2).w
                 bset    #0,(StageTimerPauseFlag).w
                 bra.w   *+4
 ; ---------------------------------------------------------------------------

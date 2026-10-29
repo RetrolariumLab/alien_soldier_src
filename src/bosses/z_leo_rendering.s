@@ -56,7 +56,7 @@ Boss_ZLeoSelectRisingReturnPose:                        ; CODE XREF: Boss_ZLeoBe
                 bra.s   Boss_ZLeoCheckRisingReturnComplete
 ; ---------------------------------------------------------------------------
 Boss_ZLeoRenderRisingThresholdPose:                     ; CODE XREF: Boss_ZLeoBeginRisingReturn+6E   j  ; was: loc_525DA
-                lea     Boss_ZLeoRisingThresholdPose(pc),a1
+                lea     Boss_ZLeoRisingThresholdPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -314,7 +314,7 @@ Boss_ZLeoBladeDirectionFrameTable:  dc.l    Boss_ZLeoBladeDirectionMapping0  ; D
 
 ; Position three rows of three sprite objects from the current pose channel
 Boss_ZLeoUpdateThreeSpriteRows:                         ; CODE XREF: Boss_ZLeoBeginRisingReturn+10A   p  ; was: sub_528D8
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  $34(a0),d2
                 ext.w   d2
                 movea.w #(TwentyFirstEntityType-M68K_RAM),a0
@@ -500,7 +500,7 @@ Boss_ZLeoBeginPoseInterpolation:                        ; CODE XREF: Boss_ZLeoIn
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_ZLeoPoseKeyframeData,d0
+                addi.l  #Boss_ZLeoPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_ZLeoCalculatePoseChannelDeltas
                 moveq   #0,d0
@@ -512,14 +512,14 @@ Boss_ZLeoBeginPoseInterpolation:                        ; CODE XREF: Boss_ZLeoIn
                 bmi.s   Boss_ZLeoApplyInterpolatedSegmentPose
 Boss_ZLeoAdvancePoseInterpolation:                      ; CODE XREF: Boss_ZLeoInterpretAndApplyPose+8   j  ; was: loc_52AF8
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$D,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_ZLeoApplyInterpolatedSegmentPose:                  ; CODE XREF: Boss_ZLeoInterpretAndApplyPose+E   j  ; was: loc_52B08
                                         ; Boss_ZLeoInterpretAndApplyPose+76   j
                 moveq   #7,d6
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -633,29 +633,29 @@ Boss_ZLeoInterpretAndApplyPoseReturn:                   ; CODE XREF: Boss_ZLeoIn
 ; End of function Boss_ZLeoInterpretAndApplyPose
 ; Calculate interpolation deltas for all fourteen Z-Leo pose channels
 Boss_ZLeoCalculatePoseChannelDeltas:                    ; CODE XREF: Boss_ZLeoInterpretAndApplyPose+5C   p  ; was: sub_52C34
-                lea     Boss_ZLeoPoseKeyframeData(pc),a1
+                lea     Boss_ZLeoPoseTable(pc),a1
                 nop
                 moveq   #$D,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_ZLeoCalculatePoseChannelDeltas
 ; Initializes fourteen Z-Leo pose channels from bytes at a0
 Boss_ZLeoInitializePoseChannels:
                 moveq   #$D,d7                          ; was: sub_52C4A
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ZLeoInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_ZLeoIntroDescentPose:  dc.w    $810, $E, $1010, $E, $810, $1C, $1010, $1C, $FFFF  ; was: word_52C56
+Boss_ZLeoIntroDescentPoses: dc.w    $810, $E, $1010, $E, $810, $1C, $1010, $1C, $FFFF  ; was: word_52C56
                                         ; DATA XREF: Boss_ZLeoPrepareIntroDescent+4E   o
-Boss_ZLeoDefeatPose:    dc.w    $3030, $62, $C18, $70, $3030, $70, $C18, $62, $FFFF  ; was: word_52C68
+Boss_ZLeoDefeatPoses:   dc.w    $3030, $62, $C18, $70, $3030, $70, $C18, $62, $FFFF  ; was: word_52C68
                                         ; DATA XREF: Boss_ZLeoBeginDefeatSequence+70   o
                                         ; Boss_ZLeoBeginDefeatSequence+A0   o
-Boss_ZLeoBattleEntryPose:   dc.w    $810, $E, $1010, $E, $810, $1C, $1010, $1C, $FFFF  ; was: word_52C7A
+Boss_ZLeoBattleEntryPoses:  dc.w    $810, $E, $1010, $E, $810, $1C, $1010, $1C, $FFFF  ; was: word_52C7A
                                         ; DATA XREF: Boss_ZLeoRunIntroCountdown+1E   o
                                         ; Boss_ZLeoRunBattleEntry+48   o
-Boss_ZLeoPriorityTransitionPose:    dc.w    $1818, $2A, $8001, $1010, $38, $2020, $46, $FFFE  ; was: word_52C8C
+Boss_ZLeoPriorityTransitionPoses:   dc.w    $1818, $2A, $8001, $1010, $38, $2020, $46, $FFFE  ; was: word_52C8C
                                         ; DATA XREF: Boss_ZLeoRunBattlePose:Boss_ZLeoRenderBattlePose   o
 Boss_ZLeoBattleReadyPose:   dc.w    $218, $46, $278, $54, $FFFF, $2020, $54, $1010, $54, $FFFF  ; was: word_52C9C
                                         ; DATA XREF: Boss_ZLeoRunBattleReadyPose+6   o
@@ -672,19 +672,19 @@ Boss_ZLeoOrbOpeningPose2:   dc.w    $2830, $D2, $3030, $D2, $8001, $5060, $E0, $
                                         ; DATA XREF: Boss_ZLeoBeginAttackSelection+A2   o
 Boss_ZLeoOrbOpeningPose3:   dc.w    $2830, $EE, $3030, $EE, $8001, $5060, $FC, $4040, $FC, $FFFE  ; was: word_52D08
                                         ; DATA XREF: Boss_ZLeoBeginAttackSelection+A6   o
-Boss_ZLeoScrollingLaserEntryPose:   dc.w    $1218, $10A, $707, $10A, $1014, $118, $1A1A, $118, $340, $126, $8001, $90E, $126, $1A1A, $126, $1818  ; was: word_52D1C
+Boss_ZLeoScrollingLaserEntryPoses:  dc.w    $1218, $10A, $707, $10A, $1014, $118, $1A1A, $118, $340, $126, $8001, $90E, $126, $1A1A, $126, $1818  ; was: word_52D1C
                                         ; DATA XREF: Boss_ZLeoBeginScrollingLaserAttack+2C   o
                                         ; Boss_ZLeoRunScrollingLaserEntryPose:Boss_ZLeoRenderScrollingLaserEntryPose   o
                 dc.w    $134, $343C, $142, $FFFE
-Boss_ZLeoScrollingLaserBurstPose:   dc.w    $60A, $142, $A0A, $142, $8001, $103, $150, $303, $150, $FFFE  ; was: word_52D44
+Boss_ZLeoScrollingLaserBurstPoses:  dc.w    $60A, $142, $A0A, $142, $8001, $103, $150, $303, $150, $FFFE  ; was: word_52D44
                                         ; DATA XREF: Boss_ZLeoRunScrollingLaserEntryPose:Boss_ZLeoRenderScrollingLaserBurstPose   o
                                         ; Boss_ZLeoRunScrollingLaserEntryPose+D4   o
-Boss_ZLeoRisingThresholdPose:   dc.w    $404, $15E, $FFFE  ; DATA XREF: Boss_ZLeoBeginRisingReturn:Boss_ZLeoRenderRisingThresholdPose   o  ; was: word_52D58
+Boss_ZLeoRisingThresholdPoses:  dc.w    $404, $15E, $FFFE  ; DATA XREF: Boss_ZLeoBeginRisingReturn:Boss_ZLeoRenderRisingThresholdPose   o  ; was: word_52D58
 Boss_ZLeoRisingReturnPose:      dc.w    $810, $16C, $3030, $16C, $FFFE  ; was: word_52D5E
                                         ; DATA XREF: Boss_ZLeoBeginRisingReturn+4A   o
                                         ; Boss_ZLeoBeginRisingReturn:Boss_ZLeoRenderPostAttackDelay   o
-Boss_ZLeoPoseKeyframeData:  binclude "data/other/word_52D68.bin"  ; was: word_52D68
-Boss_ZLeoPoseKeyframeData_End:                          ; was: word_52D68_End
+Boss_ZLeoPoseTable: binclude "data/other/word_52D68.bin"  ; was: word_52D68
+Boss_ZLeoPoseTable_End:                                 ; was: word_52D68_End
 
 ; Empty entity state handler in main dispatch table
 Boss_ZLeoStageScrollControlNoOp:                        ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: nullsub_8

@@ -64,7 +64,7 @@ Boss_InitSireneMetasprite:                              ; CODE XREF: Boss_InitSi
                 movea.l #Boss_SireneMetaspritePartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.l  #Boss_SireneMetaspritePoseAngles,$2FC(a5)
-                move.l  #Sirene_PoseFrameData,$35C(a5)
+                move.l  #Sirene_PoseTable,$35C(a5)
                 move.w  #$434,(a5)
                 move.w  #$CC00,2(a5)
                 clr.w   6(a5)
@@ -99,7 +99,7 @@ Boss_CheckSireneState2DownInput:                        ; CODE XREF: Boss_Update
                 subq.w  #2,$56(a5)
 Boss_NormalizeSireneState2PoseAngle:                    ; CODE XREF: Boss_UpdateSireneState2+12   j  ; was: loc_575CE
                 andi.w  #$1FE,$56(a5)
-                lea     Sirene_State2PoseScript(pc),a1
+                lea     Sirene_State2Poses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -113,7 +113,7 @@ Boss_EnterSireneState4:                                 ; CODE XREF: Boss_InitSi
                 move.w  #$C680,$48(a5)
                 move.w  #$C680,$4A(a5)
                 move.w  #$80,$11C(a5)
-                movea.l #Sirene_PoseFrameData,a0
+                movea.l #Sirene_PoseTable,a0
                 bsr.w   Boss_SireneInitializePoseChannels
 ; End of function Boss_UpdateSireneState2
 ; State four tracks the shared effect coordinates during its opening delay
@@ -125,7 +125,7 @@ Boss_UpdateSireneState4:                                ; DATA XREF: ROM:000574F
                 move.w  d0,$74(a5)
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_EnterSireneState6
-                lea     Sirene_State4And6PoseScript(pc),a1
+                lea     Sirene_State4And6Poses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -139,7 +139,7 @@ Boss_UpdateSireneState6:                                ; DATA XREF: ROM:000574F
                 move.w  $70(a5),(PlayerXPosition).w
                 tst.w   $58(a5)
                 bmi.s   Boss_EnterSireneState8
-                lea     Sirene_State4And6PoseScript(pc),a1
+                lea     Sirene_State4And6Poses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -179,7 +179,7 @@ Boss_InitSireneStateA:                                  ; DATA XREF: ROM:0005750
 Boss_UpdateSireneStateC:                                ; DATA XREF: ROM:00057504   o  ; was: loc_576E4
                 tst.b   (SceneSequenceFlags).w
                 bne.s   Boss_EnterSireneStateE
-                lea     Sirene_ActivePoseScript(pc),a1
+                lea     Sirene_ActivePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -193,7 +193,7 @@ Boss_UpdateSireneStateE:                                ; DATA XREF: ROM:0005750
                 jsr     (Tilemap_QueueNextConstantRow).l
                 tst.w   (TilemapRowCountdown).w
                 bmi.s   Boss_EnterSireneState10
-                lea     Sirene_ActivePoseScript(pc),a1
+                lea     Sirene_ActivePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -221,7 +221,7 @@ Boss_UpdateSireneState10:                               ; DATA XREF: ROM:0005750
                 bra.w   Boss_EnterSireneState12
 ; ---------------------------------------------------------------------------
 Boss_RenderSireneState10:                               ; CODE XREF: Boss_UpdateSireneState10   j  ; was: loc_57780
-                lea     Sirene_ActivePoseScript(pc),a1
+                lea     Sirene_ActivePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -245,7 +245,7 @@ Boss_CheckSireneState12FacingChange:                    ; CODE XREF: Boss_Update
                 bne.s   Boss_EnterSireneState14
                 bsr.w   Boss_SpawnSirenePeriodicProjectile
                 bsr.w   Boss_UpdateSireneBattlePositionsAndDistortion
-                lea     Sirene_ActivePoseScript(pc),a1
+                lea     Sirene_ActivePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSirenePose
 ; ---------------------------------------------------------------------------
@@ -639,41 +639,41 @@ Boss_StartSirenePoseFrame:                              ; CODE XREF: Boss_LoadSi
                 bmi.s   Boss_PrepareSirenePoseRender
 Boss_AdvanceSirenePoseInterpolation:                    ; CODE XREF: Boss_UpdateSirenePoseScript+8   j  ; was: loc_57C60
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #9,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_PrepareSirenePoseRender:                           ; CODE XREF: Boss_UpdateSirenePoseScript+E   j  ; was: loc_57C70
                                         ; Boss_UpdateSirenePoseScript+34   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_LoadSirenePoseFrame
 ; Calculate interpolation deltas for the next Sirene pose frame
 Boss_CalculateSirenePoseInterpolation:                  ; CODE XREF: Boss_LoadSirenePoseFrame+24   p  ; was: sub_57C7A
                 movea.l $2FC(a5),a1
                 moveq   #9,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_CalculateSirenePoseInterpolation
 ; Initialize Sirene's ten fixed-point pose channels from bytes at a0
 Boss_SireneInitializePoseChannels:                      ; CODE XREF: Boss_EnterSireneState4   p  ; was: sub_57C8E
                 moveq   #9,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_SireneInitializePoseChannels
 ; ---------------------------------------------------------------------------
 ; Direct state-selected command streams for Boss_UpdateSirenePoseScript
-Sirene_State2PoseScript:    dc.w    $810, 0, $1010, 0, $810, $A, $1010, $A  ; was: word_57C9A
+Sirene_State2Poses: dc.w    $810, 0, $1010, 0, $810, $A, $1010, $A  ; was: word_57C9A
                                         ; DATA XREF: Boss_UpdateSireneState2+1E   o
                 dc.w    $FFFF
-Sirene_ActivePoseScript:    dc.w    $820, 0, $C0C, 0, $418, $A, $4040, $A  ; was: word_57CAC
+Sirene_ActivePoses: dc.w    $820, 0, $C0C, 0, $418, $A, $4040, $A  ; was: word_57CAC
                                         ; DATA XREF: Boss_UpdateSireneStateC   o
                                         ; Boss_UpdateSireneStateE   o
                                         ; Boss_RenderSireneState10   o
                                         ; Boss_UpdateSireneState12   o
                 dc.w    $FFFF
-Sirene_State4And6PoseScript:    dc.w    $2050, $5A, $2020, $5A, $418, $64, $4040, $64  ; was: word_57CBE
+Sirene_State4And6Poses: dc.w    $2050, $5A, $2020, $5A, $418, $64, $4040, $64  ; was: word_57CBE
                                         ; DATA XREF: Boss_UpdateSireneState4+1C   o
                                         ; Boss_UpdateSireneState6   o
                 dc.w    $2050, $5A, $2020, $5A, $FFFE
@@ -693,7 +693,7 @@ Sirene_State14PoseScript2:  dc.w    $820, $3C, $C0C, $3C, $418, $46, $4040, $46 
 ; Additional words follow the stop marker; no direct symbolic pointer is known
                 dc.w    $820, $50, $1414, $50, $FFFE
 ; Frame-data base saved at $35C(a5), then indexed by signed script offsets
-Sirene_PoseFrameData:   dc.w    $88D2, $40F8, $2E4E, $3024, $B201, $9C00, $A0E0, $E0  ; was: word_57D18
+Sirene_PoseTable:   dc.w    $88D2, $40F8, $2E4E, $3024, $B201, $9C00, $A0E0, $E0  ; was: word_57D18
                                         ; DATA XREF: Boss_InitSireneMetasprite+30   o
                                         ; Boss_EnterSireneState4   o
                 dc.w    $1FFA, $C5F8, $8800, $90D0, $20, $6060, $ACEE, $80E0

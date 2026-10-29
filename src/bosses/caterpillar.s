@@ -354,14 +354,14 @@ Boss_CaterpillarShipController:                         ; DATA XREF: ROM:Entity_
                 move.w  #$A,4(a5)
 Boss_CaterpillarUpdateShipTrailHistory:                 ; CODE XREF: Boss_CaterpillarShipController+1A   j  ; was: loc_3D4EC
                                         ; Boss_CaterpillarShipController+22   j
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 move.w  $10(a5),d0
                 add.w   (PrimaryCameraXPosition).w,d0
                 swap    d0
                 move.w  $14(a5),d0
                 move.w  #6,d7
 Boss_CaterpillarShiftNextShipTrailBlock:                ; CODE XREF: Boss_CaterpillarShipController+5C   j  ; was: loc_3D502
-                move.w  (SharedPatternRow0Long3+2).w,d6
+                move.w  (SharedScratchLong3+2).w,d6
                 subq.w  #1,d6
 Boss_CaterpillarShiftShipTrailHistory:                  ; CODE XREF: Boss_CaterpillarShipController+58   j  ; was: loc_3D508
                 move.l  (a0),d1
@@ -370,9 +370,9 @@ Boss_CaterpillarShiftShipTrailHistory:                  ; CODE XREF: Boss_Caterp
                 dbf     d6,Boss_CaterpillarShiftShipTrailHistory
                 dbf     d7,Boss_CaterpillarShiftNextShipTrailBlock
                 move.w  #6,d7
-                lea     (SharedPatternRow1Long0).w,a1
+                lea     (SharedScratchLong8).w,a1
                 lea     $60(a5),a0
-                move.w  (SharedPatternRow0Long3+2).w,d6
+                move.w  (SharedScratchLong3+2).w,d6
                 add.w   d6,d6
                 add.w   d6,d6
 Boss_CaterpillarPositionShipTrailParts:                 ; CODE XREF: Boss_CaterpillarShipController+8C   j  ; was: loc_3D52A
@@ -404,10 +404,10 @@ Boss_CaterpillarShipInit:                               ; DATA XREF: ROM:Boss_Ca
                 tst.b   (DataLoaderControl).w
                 bmi.w   Boss_CaterpillarShipInitReturn
                 addq.w  #2,4(a5)
-                move.w  #6,(SharedPatternRow0Long3+2).w
-                move.w  #$C,(SharedPatternRow0Long3).w
-                move.w  #$170,(SharedPatternRow0Long2).w
-                move.w  #$100,(SharedPatternRow0Long2+2).w
+                move.w  #6,(SharedScratchLong3+2).w
+                move.w  #$C,(SharedScratchLong3).w
+                move.w  #$170,(SharedScratchLong2).w
+                move.w  #$100,(SharedScratchLong2+2).w
                 move.w  #$4000,(BossMaxHealth).w
                 move.w  #$4000,(BossHealth).w
                 move.w  #$CD00,2(a5)
@@ -448,7 +448,7 @@ Boss_CaterpillarShipBeginOscillationState:              ; DATA XREF: ROM:0003D55
                 move.b  #$80,$23(a5)
                 clr.b   (BossColorEffectFlags).w
                 clr.w   $4A(a5)
-                move.w  #$220,(SharedPatternRow0Long2).w
+                move.w  #$220,(SharedScratchLong2).w
                 move.w  #$80,$48(a5)
                 addq.w  #2,4(a5)
                 rts
@@ -463,20 +463,20 @@ Boss_CaterpillarShipOscillationState:                   ; DATA XREF: ROM:0003D55
                 eori.w  #1,$4A(a5)
                 beq.s   Boss_CaterpillarSelectRightOscillationTarget
                 move.w  #$100,$48(a5)
-                move.w  #$C0,(SharedPatternRow0Long2).w
+                move.w  #$C0,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_CaterpillarSelectRightOscillationTarget:           ; CODE XREF: Boss_CaterpillarShipOscillationState+18   j  ; was: loc_3D67C
                 move.w  #$100,$48(a5)
-                move.w  #$220,(SharedPatternRow0Long2).w
+                move.w  #$220,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_CaterpillarBeginShipCenteringDelay:                ; CODE XREF: Boss_CaterpillarShipOscillationState+A   j  ; was: loc_3D68A
                 clr.w   (BossHealth).w
                 clr.w   (BossMaxHealth).w
                 clr.b   $21(a5)
-                move.w  #$120,(SharedPatternRow0Long2).w
-                move.w  #$F0,(SharedPatternRow0Long2+2).w
+                move.w  #$120,(SharedScratchLong2).w
+                move.w  #$F0,(SharedScratchLong2+2).w
                 bset    #1,$4C(a5)
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
@@ -487,10 +487,10 @@ Boss_CaterpillarShipCenteringDelayState:                ; DATA XREF: ROM:0003D55
                 bsr.w   Boss_CaterpillarUpdateShipSteering
                 subq.w  #1,$48(a5)
                 bne.s   Boss_CaterpillarShipCenteringDelayReturn
-                move.w  #$40,(SharedPatternRow0Long2).w  ; '@'
-                move.w  #$80,(SharedPatternRow0Long2+2).w
+                move.w  #$40,(SharedScratchLong2).w     ; '@'
+                move.w  #$80,(SharedScratchLong2+2).w
                 addq.w  #2,4(a5)
-                addq.w  #3,(SharedPatternRow0Long3).w
+                addq.w  #3,(SharedScratchLong3).w
 Boss_CaterpillarShipCenteringDelayReturn:               ; CODE XREF: Boss_CaterpillarShipCenteringDelayState+8   j  ; was: locret_3D6D2
                 rts
 ; End of function Boss_CaterpillarShipCenteringDelayState
@@ -560,13 +560,13 @@ Boss_CaterpillarUpdateShipSteering:                     ; CODE XREF: Boss_Caterp
                 move.w  (FrameCounter).w,d0
                 andi.w  #$F,d0
                 bne.s   Boss_CaterpillarApplyShipPolarVelocity
-                move.w  (SharedPatternRow0Long2).w,d0
+                move.w  (SharedScratchLong2).w,d0
                 sub.w   (PrimaryCameraXPosition).w,d0
-                move.w  (SharedPatternRow0Long2+2).w,d1
+                move.w  (SharedScratchLong2+2).w,d1
                 sub.w   $10(a5),d0
                 sub.w   $14(a5),d1
                 jsr     (Math_CalculateDirectionIndex).l
-                move.w  (SharedPatternRow0Long0).w,d1
+                move.w  (SharedScratchLong0).w,d1
                 addi.w  #$100,d1
                 sub.w   d2,d1
                 andi.w  #$1FF,d1
@@ -574,23 +574,23 @@ Boss_CaterpillarUpdateShipSteering:                     ; CODE XREF: Boss_Caterp
                 beq.s   Boss_CaterpillarApplyShipPolarVelocity
                 cmpi.w  #$100,d1
                 bcs.s   Boss_CaterpillarSetNegativeShipAngularStep
-                move.w  #8,(SharedPatternRow0Long0+2).w
+                move.w  #8,(SharedScratchLong0+2).w
                 bra.s   Boss_CaterpillarApplyShipPolarVelocity
 ; ---------------------------------------------------------------------------
 Boss_CaterpillarSetNegativeShipAngularStep:             ; CODE XREF: Boss_CaterpillarUpdateShipSteering+3C   j  ; was: loc_3D7D2
-                move.w  #$FFF8,(SharedPatternRow0Long0+2).w
+                move.w  #$FFF8,(SharedScratchLong0+2).w
 Boss_CaterpillarApplyShipPolarVelocity:                 ; CODE XREF: Boss_CaterpillarUpdateShipSteering+8   j  ; was: loc_3D7D8
                                         ; Boss_CaterpillarUpdateShipSteering+36   j
-                move.w  (SharedPatternRow0Long0+2).w,d0
-                add.w   d0,(SharedPatternRow0Long0).w
-                andi.w  #$1FF,(SharedPatternRow0Long0).w
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0+2).w,d0
+                add.w   d0,(SharedScratchLong0).w
+                andi.w  #$1FF,(SharedScratchLong0).w
+                move.w  (SharedScratchLong0).w,d0
                 addi.w  #$100,d0
                 andi.w  #$1FE,d0
                 lea     (Math_SineTable).l,a1
                 move.w  Math_QuarterSineTable-Math_SineTable(a1,d0.w),d1
                 move.w  (a1,d0.w),d0
-                move.w  (SharedPatternRow0Long3).w,d2
+                move.w  (SharedScratchLong3).w,d2
                 muls.w  d2,d0
                 muls.w  d2,d1
                 move.l  d0,$18(a5)

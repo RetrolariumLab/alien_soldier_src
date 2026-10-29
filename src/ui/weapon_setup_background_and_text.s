@@ -79,7 +79,7 @@ WeaponSetup_BuildSecondOffsetTableLoop:                 ; CODE XREF: WeaponSetup
                 add.l   d1,d0
                 cmpi.l  #$600000,d0
                 bmi.s   WeaponSetup_BuildSecondOffsetTableLoop
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.l  #$EEEEEEEE,d0
                 moveq   #$FFFFFFFF,d1
                 moveq   #0,d2
@@ -141,7 +141,7 @@ WeaponSetup_DrawSecondDitherBandColumn:                 ; CODE XREF: WeaponSetup
                 add.l   d1,d0
                 cmpi.l  #Z80_RAM,d0
                 bmi.s   WeaponSetup_DrawSecondDitherBandLoop
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.w  #$7000,d0
                 move.w  #$8F02,d3
                 move.l  #$94019340,d4

@@ -26,7 +26,7 @@ Boss_TerobusterBeginPoseCommand:                        ; CODE XREF: Boss_Terobu
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_TerobusterPoseTargets,d0
+                addi.l  #Boss_TerobusterPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_TerobusterCalculateDeltas
                 move.b  (PoseDurationByte).w,d1
@@ -36,7 +36,7 @@ Boss_TerobusterBeginPoseCommand:                        ; CODE XREF: Boss_Terobu
                 bmi.s   Boss_TerobusterApplyAngles
 Boss_TerobusterAdvancePoseInterpolation:                ; CODE XREF: Boss_TerobusterInterpolateAnimation+8   j  ; was: loc_3922E
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #5,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 ; End of function Boss_TerobusterInterpolateAnimation
@@ -44,8 +44,8 @@ Boss_TerobusterAdvancePoseInterpolation:                ; CODE XREF: Boss_Terobu
 Boss_TerobusterApplyAngles:                             ; CODE XREF: Boss_TerobusterDecisionState:Boss_TerobusterDecisionAnimate   p  ; was: sub_3923E
                                         ; Boss_TerobusterBeginTileReveal:Boss_TerobusterRenderIntroPose   p
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
-                movea.w #(SharedPatternRow0Long3-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
+                movea.w #(SharedScratchLong3-M68K_RAM),a1
                 tst.w   $A(a5)
                 beq.s   Boss_TerobusterApplyPoseSides
                 exg     a0,a1
@@ -87,7 +87,7 @@ Boss_TerobusterApplyPoseSides:                          ; CODE XREF: Boss_Terobu
 ; Calculates interpolation deltas for smooth animation
 Boss_TerobusterCalculateDeltas:                         ; CODE XREF: Boss_TerobusterInterpolateAnimation+4E   p  ; was: sub_392B0
                 movea.l #Boss_TerobusterNeutralPose,a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 moveq   #5,d7
                 jmp     Anim_CalculatePoseChannelDeltas
@@ -95,29 +95,29 @@ Boss_TerobusterCalculateDeltas:                         ; CODE XREF: Boss_Terobu
 ; Expands six packed pose-channel bytes into the interpolation buffer
 Boss_TerobusterInitializePoseChannels:                  ; CODE XREF: Boss_TerobusterSetup+120   p  ; was: sub_392C6
                                         ; Boss_TerobusterIntro+20   p
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 moveq   #5,d7
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_TerobusterInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_TerobusterFallingRockPoseCommands:         dc.w    4, 0, $FFFF  ; DATA XREF: Boss_TerobusterDecisionState:Boss_TerobusterSpawnFallingRocks   o  ; was: word_392D2
-Boss_TerobusterFallingRockFinalePoseCommands:   dc.w    3, 0, 1, $36, $FFFF  ; was: word_392D8
+Boss_TerobusterFallingRockPoses:        dc.w    4, 0, $FFFF  ; DATA XREF: Boss_TerobusterDecisionState:Boss_TerobusterSpawnFallingRocks   o  ; was: word_392D2
+Boss_TerobusterFallingRockFinalePoses:  dc.w    3, 0, 1, $36, $FFFF  ; was: word_392D8
                                         ; DATA XREF: Boss_TerobusterDecisionState+28A   o
-Boss_TerobusterDescentPoseCommands: dc.w    $10, $2A, $20, $30, $FFFE  ; was: word_392E2
+Boss_TerobusterDescentPoses:    dc.w    $10, $2A, $20, $30, $FFFE  ; was: word_392E2
                                         ; DATA XREF: Boss_TerobusterDescentState+28   o
-Boss_TerobusterLandingFirstPoseCommands:    dc.w    $FD12, $30, $34, $30, $F040, $24, $20, $24, $FFFE  ; was: word_392EC
+Boss_TerobusterLandingFirstPoses:   dc.w    $FD12, $30, $34, $30, $F040, $24, $20, $24, $FFFE  ; was: word_392EC
                                         ; DATA XREF: Boss_TerobusterLandingState:Boss_TerobusterSelectLandingPose   o
 Boss_TerobusterLandingSecondPoseCommands:   dc.w    $1C, 0, $FFFE  ; DATA XREF: Boss_TerobusterLandingCheckComplete   o  ; was: word_392FE
-Boss_TerobusterMissileAttackAPoseCommands:  dc.w    5, 0, $FA0E, 0, $E, 6, $14, $C, 5, $12, $FA0E, $12, $E, $18, $14, $1E  ; was: word_39304
+Boss_TerobusterMissileAttackAPoses:         dc.w    5, 0, $FA0E, 0, $E, 6, $14, $C, 5, $12, $FA0E, $12, $E, $18, $14, $1E  ; was: word_39304
                                         ; DATA XREF: Boss_TerobusterDecisionState+FA   o
                 dc.w    $FFFF
-Boss_TerobusterMissileAttackBPoseCommands:  dc.w    $14, $1E, $E, $18, 5, $12, $FA0E, $12, $14, $C, $E, 6, 5, 0, $FA0E, 0  ; was: word_39326
+Boss_TerobusterMissileAttackBPoses: dc.w    $14, $1E, $E, $18, 5, $12, $FA0E, $12, $14, $C, $E, 6, 5, 0, $FA0E, 0  ; was: word_39326
                                         ; DATA XREF: Boss_TerobusterDecisionState+1BA   o
                 dc.w    $FFFF
 Boss_TerobusterMissileAttackBDelayedPoseCommands:   dc.w    6, $1E, 8, $18, 3, $12, $FA08, $12, 6, $C, 8, 6, 3, 0, $FA08, 0  ; was: word_39348
                                         ; DATA XREF: Boss_TerobusterDecisionState+1B4   o
                 dc.w    $FFFF
-Boss_TerobusterPoseTargets: dc.w    $1330, $F840, $30D0, $F460, $C030, $44C8, $3060, $9024  ; was: word_3936A
+Boss_TerobusterPoseTable:   dc.w    $1330, $F840, $30D0, $F460, $C030, $44C8, $3060, $9024  ; was: word_3936A
                                         ; DATA XREF: Boss_TerobusterSetup+11A   o
                                         ; Boss_TerobusterBeginStageGateDelay   o
                 dc.w    $24F8, $4030, $D013, $30F8, $3044, $C8F4, $60C0, $2424

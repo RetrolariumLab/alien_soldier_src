@@ -195,7 +195,7 @@ Boss_SharpsteelAccelerateBladeAssemblyState:            ; DATA XREF: ROM:00047C6
                 bmi.s   Boss_SharpsteelFinishBladeAssemblyAcceleration
                 move.w  (SharpsteelTargetTrail).w,$190(a5)
                 bsr.w   Boss_SharpsteelUpdateBladeTargetVelocity
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -209,7 +209,7 @@ Boss_SharpsteelBladeAssemblyDelayState:                 ; DATA XREF: ROM:00047C7
                 bmi.s   Boss_SharpsteelFinishBladeAssemblyDelay
                 move.w  (SharpsteelTargetTrail).w,$190(a5)
                 bsr.w   Boss_SharpsteelUpdateBladeTargetVelocity
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -229,7 +229,7 @@ Boss_SharpsteelUpdateBladeAssemblyMotion:               ; CODE XREF: Boss_Sharps
                                         ; Boss_SharpsteelWaitForTwoBladeTriggersState+50   j
                 move.w  (SharpsteelTargetTrail).w,$190(a5)
                 bsr.w   Boss_SharpsteelUpdateBladeTargetVelocity
-                lea     Boss_SharpsteelAssemblyTriggerPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyTriggerPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ Boss_SharpsteelAttackSelectionDelayState:               ; DATA XREF: ROM:00047C7
 ; ---------------------------------------------------------------------------
 Boss_SharpsteelUpdateAttackSelectionDelayPose:          ; CODE XREF: Boss_SharpsteelAttackSelectionDelayState+4   j
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; End of function Boss_SharpsteelAttackSelectionDelayState
@@ -439,7 +439,7 @@ Boss_SharpsteelSelectDistanceAttackState:               ; DATA XREF: ROM:00047C8
                 tst.w   $23E(a5)
                 bne.s   Boss_SharpsteelAdvanceAttackSelection
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -498,7 +498,7 @@ Boss_SharpsteelTriggerFarRangeBladeHitbox:              ; CODE XREF: Boss_Sharps
                 bsr.w   Boss_SharpsteelDisableInnerBladeHitboxes
 Boss_SharpsteelUpdateFarRangeBladePose:                 ; CODE XREF: Boss_SharpsteelFarRangeBladeAttackState+2C   j
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelFarRangeAttackPoseCommands(pc),a1
+                lea     Boss_SharpsteelFarRangeAttackPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -529,7 +529,7 @@ Boss_SharpsteelTriggerCloseRangeBladeHitbox:            ; CODE XREF: Boss_Sharps
                 bsr.w   Boss_SharpsteelSetOuterBladeGroupSizes
 Boss_SharpsteelUpdateCloseRangeBladePose:               ; CODE XREF: Boss_SharpsteelCloseRangeBladeAttackState+2C   j
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelCloseRangeAttackPoseCommands(pc),a1
+                lea     Boss_SharpsteelCloseRangeAttackPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; End of function Boss_SharpsteelCloseRangeBladeAttackState
@@ -573,7 +573,7 @@ Boss_SharpsteelDiveAttackState:                         ; DATA XREF: ROM:00047C7
                 jsr     (Sound_QueueSFXRequest).l
 Boss_SharpsteelUpdateDiveAttackPose:                    ; CODE XREF: Boss_SharpsteelDiveAttackState+16   j
                                         ; Boss_SharpsteelDiveAttackState+1E   j
-                lea     Boss_SharpsteelDivePoseCommands(pc),a1
+                lea     Boss_SharpsteelDivePoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; End of function Boss_SharpsteelDiveAttackState
@@ -629,7 +629,7 @@ Boss_SharpsteelInitializeFallingShotCycleFromDelay:     ; CODE XREF: Boss_Sharps
 Boss_SharpsteelOpeningVerticalTurnState:                ; DATA XREF: ROM:00047C62   o  ; was: sub_48346
                 addi.l  #$1400,$DC(a5)
                 bpl.s   Boss_SharpsteelFinishOpeningVerticalTurn
-                lea     Boss_SharpsteelOpeningTurnPoseCommands(pc),a1
+                lea     Boss_SharpsteelOpeningTurnPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -648,7 +648,7 @@ Boss_SharpsteelMoveBladeAssemblyToThresholdState:       ; DATA XREF: ROM:00047C6
                 subi.w  #$20,d0                         ; ' '
                 cmp.w   $D4(a5),d0
                 bmi.s   Boss_SharpsteelBeginBladeAssemblySweep
-                lea     Boss_SharpsteelAssemblyThresholdPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyThresholdPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -687,7 +687,7 @@ Boss_SharpsteelUpdateBladeAssemblySweepPose:            ; CODE XREF: Boss_Sharps
                                         ; Boss_SharpsteelOpeningVerticalTurnState+B8   j
                 cmpi.w  #$240,$D4(a5)
                 bpl.w   Boss_SharpsteelInitializePostDiveDelay
-                lea     Boss_SharpsteelAssemblySweepPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblySweepPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -704,7 +704,7 @@ Boss_SharpsteelFallingShotCycleState:                   ; DATA XREF: ROM:00047C8
                 bsr.w   Boss_SharpsteelFallingShotCycleThresholdHook
 Boss_SharpsteelUpdateFallingShotCyclePose:              ; CODE XREF: Boss_SharpsteelFallingShotCycleState+10   j
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
@@ -717,7 +717,7 @@ Boss_SharpsteelWaitBeforeAttackSelectionState:          ; DATA XREF: ROM:00047C8
                 subq.w  #1,$11C(a5)
                 bmi.w   Boss_SharpsteelInitializeAttackSelection
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
-                lea     Boss_SharpsteelAssemblyDelayPoseCommands(pc),a1
+                lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; End of function Boss_SharpsteelFallingShotCycleState

@@ -6,7 +6,7 @@ EndingSequence_Initialize:                              ; CODE XREF: EndingSeque
                 move.w  #1,(EndingInitWriteOnlyFlag).l
                 movea.l #EndingSequence_AssetLoads,a0
                 jsr     (LoadObjData).l
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 movea.w #(TileInterpSourceB-M68K_RAM),a1
                 move.w  #$20,(TileInterpVRAM).w         ; ' '
                 move.w  #$1F,(TileInterpStepsLeft).w

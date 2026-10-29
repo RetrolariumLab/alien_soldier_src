@@ -157,7 +157,7 @@ Boss_FlyingNeoBeginPoseCommand:                         ; CODE XREF: Boss_Flying
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_FlyingNeoPoseTargets,d0
+                addi.l  #Boss_FlyingNeoPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_FlyingNeoBeginPoseInterpolation
                 moveq   #0,d0
@@ -170,12 +170,12 @@ Boss_FlyingNeoBeginPoseCommand:                         ; CODE XREF: Boss_Flying
                 bmi.s   Boss_FlyingNeoApplyPoseAngles
 Boss_FlyingNeoAdvancePoseInterpolation:                 ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+8   j  ; was: loc_3CF8C
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #3,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_FlyingNeoApplyPoseAngles:                          ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+E   j  ; was: loc_3CF9C
                                         ; Boss_FlyingNeoUpdatePoseAnimation+80   j
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.w  #$1FE,d7
                 move.b  (a0),d0
                 asl.w   #1,d0
@@ -204,38 +204,38 @@ Boss_FlyingNeoApplyPoseAngles:                          ; CODE XREF: Boss_Flying
 ; Begins interpolation from the current channels to the selected pose target
 Boss_FlyingNeoBeginPoseInterpolation:                   ; CODE XREF: Boss_FlyingNeoUpdatePoseAnimation+62   p  ; was: sub_3CFE8
                 movea.l #Boss_FlyingNeoNeutralPose,a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 moveq   #3,d7
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_FlyingNeoBeginPoseInterpolation
 ; Initializes all four Flying Neo pose channels from bytes at a0
 Boss_FlyingNeoInitializePoseChannels:
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1  ; was: sub_3CFFE
+                movea.w #(SharedScratchLong0-M68K_RAM),a1  ; was: sub_3CFFE
                 moveq   #3,d7
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_FlyingNeoInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_FlyingNeoNeutralPoseCommands:  dc.w    $408, 0, $808, 0, $408, 4, $808, 4  ; was: word_3D00A
+Boss_FlyingNeoNeutralPoses: dc.w    $408, 0, $808, 0, $408, 4, $808, 4  ; was: word_3D00A
                                         ; DATA XREF: Boss_FlyingNeoIntroDelayState+A   o
                                         ; Boss_FlyingNeoPlayerControlled:Boss_FlyingNeoApplyPlayerControlPose   o
                 dc.w    $FFFF
-Boss_FlyingNeoHorizontalSwoopPoseCommands:  dc.w    $612, 0, $1212, 0, $612, 4, $1212, 4  ; was: word_3D01C
+Boss_FlyingNeoHorizontalSwoopPoses: dc.w    $612, 0, $1212, 0, $612, 4, $1212, 4  ; was: word_3D01C
                                         ; DATA XREF: Boss_FlyingNeoHorizontalSwoopState:Boss_FlyingNeoUpdateSwoopPose   o
                 dc.w    $FFFF
-Boss_FlyingNeoPartAnchorPoseCommands:   dc.w    $828, 8, $E0E, 8, $A10, $C, $A0A, $C  ; was: word_3D02E
+Boss_FlyingNeoPartAnchorPoses:  dc.w    $828, 8, $E0E, 8, $A10, $C, $A0A, $C  ; was: word_3D02E
                                         ; DATA XREF: Boss_FlyingNeoHoverDecisionState+1F6   o
                 dc.w    $80AF, $828, $10, $E0E, $10, $A10, $14, $A0A
                 dc.w    $14, $80AF, $FFFF
-Boss_FlyingNeoRisingRetreatPoseCommands:    dc.w    $70C, $18, $4040, $18, $FFFE  ; was: word_3D054
+Boss_FlyingNeoRisingRetreatPoses:   dc.w    $70C, $18, $4040, $18, $FFFE  ; was: word_3D054
                                         ; DATA XREF: Boss_FlyingNeoRisingRetreatState:Boss_FlyingNeoRenderRisingRetreat   o
-Boss_FlyingNeoDivingArcPoseCommands:    dc.w    $210, $1C, $606, $1C, $220, $20, $808, $20  ; was: word_3D05E
+Boss_FlyingNeoDivingArcPoses:   dc.w    $210, $1C, $606, $1C, $220, $20, $808, $20  ; was: word_3D05E
                                         ; DATA XREF: Boss_FlyingNeoDivingArcState:Boss_FlyingNeoSelectDivingArcPose   o
                 dc.w    $FFFF
 Boss_FlyingNeoRisingArcPoseCommands:    dc.w    $820, $1C, $1216, $1C, $820, $20, $1216, $20  ; was: word_3D070
                                         ; DATA XREF: Boss_FlyingNeoRisingArcState:Boss_FlyingNeoSelectRisingArcPose   o
                 dc.w    $FFFF
-Boss_FlyingNeoPoseTargets:  dc.w    $868, $1C70, $1C70, $868, $3010, $470, $1020, $501B  ; was: word_3D082
+Boss_FlyingNeoPoseTable:    dc.w    $868, $1C70, $1C70, $868, $3010, $470, $1020, $501B  ; was: word_3D082
                                         ; DATA XREF: Boss_FlyingNeoUpdatePoseAnimation+5A   o
                 dc.w    $470, $3010, $5020, $1020, $6850, $6850, $7800, $870
                 dc.w    $1860, $7008, $6C24, $878, $F860, $6024

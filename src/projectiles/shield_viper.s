@@ -149,7 +149,7 @@ Boss_ShieldViperWaitThenLaunchLinkedPart:               ; DATA XREF: ROM:0004EDA
                 bne.s   Boss_ShieldViperLinkedPartLaunchWaitReturn
                 move.w  $56(a5),d0
                 add.w   $52(a5),d0
-                btst    #7,(SharedPatternRow0Long0).w
+                btst    #7,(SharedScratchLong0).w
                 beq.s   Boss_ShieldViperAddPositiveQuarterTurnToLaunchAngle
                 addi.w  #-$80,d0
                 bra.s   Boss_ShieldViperStoreLinkedPartLaunchVelocity
@@ -352,7 +352,7 @@ Boss_ShieldViperPositionLinkedPartFromBodyRecord:       ; CODE XREF: Boss_Shield
                                         ; Boss_ShieldViperBeginLinkedPartReturn+4A   p
                 move.w  $56(a5),d0
                 add.w   $52(a5),d0
-                btst    #7,(SharedPatternRow0Long0).w
+                btst    #7,(SharedScratchLong0).w
                 beq.s   Boss_ShieldViperAddPositiveQuarterTurnToLinkedPartAngle
                 addi.w  #-$80,d0
                 bra.s   Boss_ShieldViperCalculateLinkedPartPosition

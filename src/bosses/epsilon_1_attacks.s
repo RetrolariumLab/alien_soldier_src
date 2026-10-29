@@ -10,8 +10,8 @@ Boss_Epsilon1OpeningFadeDelayState:                     ; DATA XREF: ROM:00045CF
                 bsr.w   Boss_Epsilon1ApplyPaletteFade
                 subq.w  #1,$48(a5)
                 bne.s   Boss_Epsilon1OpeningFadeDelayReturn
-                move.w  #4,(SharedPatternRow0Long4).w
-                move.w  #4,(SharedPatternRow0Long5+2).w
+                move.w  #4,(SharedScratchLong4).w
+                move.w  #4,(SharedScratchLong5+2).w
                 move.w  #$E,$48(a5)
                 addq.w  #2,4(a5)
 Boss_Epsilon1OpeningFadeDelayReturn:                    ; CODE XREF: Boss_Epsilon1OpeningFadeDelayState+8   j  ; was: locret_461DC
@@ -102,14 +102,14 @@ Boss_Epsilon1SelectAttackReturn:                        ; CODE XREF: Boss_Epsilo
 ; Begins the spread-ring branch by accelerating the angle history
 Boss_Epsilon1BeginSpreadRingAttackState:                ; DATA XREF: ROM:00045D04   o  ; was: sub_462AC
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  #8,(SharedPatternRow0Long4).w
+                move.w  #8,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_Epsilon1BeginSpreadRingAttackState
 ; Waits for the spread-ring angle to wrap below $60
 Boss_Epsilon1WaitForSpreadAttackAngleWrapState:         ; DATA XREF: ROM:00045D06   o  ; was: sub_462BC
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$60,d0                         ; '`'
                 bcc.s   Boss_Epsilon1WaitForSpreadAttackAngleWrapReturn
@@ -120,12 +120,12 @@ Boss_Epsilon1WaitForSpreadAttackAngleWrapReturn:        ; CODE XREF: Boss_Epsilo
 ; Stops at angle $80 and begins collapsing the spread ring
 Boss_Epsilon1PrepareSpreadRingCollapseState:            ; DATA XREF: ROM:00045D08   o  ; was: sub_462D4
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$80,d0
                 bcs.s   Boss_Epsilon1PrepareSpreadRingCollapseReturn
-                clr.w   (SharedPatternRow0Long4).w
-                move.w  #4,(SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong4).w
+                move.w  #4,(SharedScratchLong5+2).w
                 move.w  #1,(SecondaryEntityYVel).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1PrepareSpreadRingCollapseReturn:           ; CODE XREF: Boss_Epsilon1PrepareSpreadRingCollapseState+10   j  ; was: locret_462FA
@@ -137,8 +137,8 @@ Boss_Epsilon1CollapseSpreadRingState:                   ; DATA XREF: ROM:00045D0
                 bsr.w   Boss_Epsilon1CheckAngleHistoryAligned
                 bne.s   Boss_Epsilon1CollapseSpreadRingReturn
                 clr.l   (SecondaryEntityYVel).w
-                move.w  #4,(SharedPatternRow0Long5+2).w
-                move.w  #4,(SharedPatternRow0Long4).w
+                move.w  #4,(SharedScratchLong5+2).w
+                move.w  #4,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1CollapseSpreadRingReturn:                  ; CODE XREF: Boss_Epsilon1CollapseSpreadRingState+C   j  ; was: locret_4631E
                 rts
@@ -170,7 +170,7 @@ Boss_Epsilon1ReserveFirstSpreadSlotState:               ; DATA XREF: ROM:00045D1
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1ReserveFirstSpreadSlotReturn
                 move.w  #$10,(a0)
-                move.w  a0,(SharedPatternRow0Long7).w
+                move.w  a0,(SharedScratchLong7).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1ReserveFirstSpreadSlotReturn:              ; CODE XREF: Boss_Epsilon1ReserveFirstSpreadSlotState+A   j  ; was: locret_46366
                 rts
@@ -181,14 +181,14 @@ Boss_Epsilon1ReserveSecondSpreadSlotState:              ; DATA XREF: ROM:00045D1
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1ReserveSecondSpreadSlotReturn
                 move.w  #$10,(a0)
-                move.w  a0,(SharedPatternRow0Long7+2).w
+                move.w  a0,(SharedScratchLong7+2).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1ReserveSecondSpreadSlotReturn:             ; CODE XREF: Boss_Epsilon1ReserveSecondSpreadSlotState+A   j  ; was: locret_46380
                 rts
 ; End of function Boss_Epsilon1ReserveSecondSpreadSlotState
 ; Aims and launches the reserved spread-projectile pair
 Boss_Epsilon1LaunchSpreadPairState:                     ; DATA XREF: ROM:00045D14   o  ; was: sub_46382
-                movea.w (SharedPatternRow1Long0).w,a0
+                movea.w (SharedScratchLong8).w,a0
                 move.w  $10(a0),d0
                 move.w  $14(a0),d1
                 sub.w   $10(a5),d0
@@ -197,12 +197,12 @@ Boss_Epsilon1LaunchSpreadPairState:                     ; DATA XREF: ROM:00045D1
                 move.w  $10(a5),d0
                 addq.w  #8,d0
                 move.w  $14(a5),d1
-                movea.w (SharedPatternRow0Long7).w,a0
+                movea.w (SharedScratchLong7).w,a0
                 bsr.s   Projectile_PrepareEpsilon1ElevenStepSpread
                 move.w  $10(a5),d0
                 subq.w  #8,d0
                 move.w  $14(a5),d1
-                movea.w (SharedPatternRow0Long7+2).w,a0
+                movea.w (SharedScratchLong7+2).w,a0
                 bsr.s   Projectile_PrepareEpsilon1ElevenStepSpread
                 tst.w   (FifthEntityState).w
                 beq.s   Boss_Epsilon1FinishSpreadPair
@@ -236,14 +236,14 @@ Projectile_InitializeEpsilon1SpreadSlot:                ; CODE XREF: Projectile_
 ; Begins the ring-only attack branch by accelerating the angle history
 Boss_Epsilon1BeginRingCycleAttackState:                 ; DATA XREF: ROM:00045D16   o  ; was: sub_4640A
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  #8,(SharedPatternRow0Long4).w
+                move.w  #8,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_Epsilon1BeginRingCycleAttackState
 ; Waits for the ring-cycle angle to wrap below $60
 Boss_Epsilon1WaitForRingCycleAngleWrapState:            ; DATA XREF: ROM:00045D18   o  ; was: sub_4641A
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$60,d0                         ; '`'
                 bcc.s   Boss_Epsilon1WaitForRingCycleAngleWrapReturn
@@ -254,12 +254,12 @@ Boss_Epsilon1WaitForRingCycleAngleWrapReturn:           ; CODE XREF: Boss_Epsilo
 ; Stops at angle $80 and begins collapsing the ring-only branch
 Boss_Epsilon1PrepareRingCycleCollapseState:             ; DATA XREF: ROM:00045D1A   o  ; was: sub_46432
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$80,d0
                 bcs.s   Boss_Epsilon1PrepareRingCycleCollapseReturn
-                clr.w   (SharedPatternRow0Long4).w
-                move.w  #4,(SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong4).w
+                move.w  #4,(SharedScratchLong5+2).w
                 move.w  #1,(SecondaryEntityYVel).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1PrepareRingCycleCollapseReturn:            ; CODE XREF: Boss_Epsilon1PrepareRingCycleCollapseState+10   j  ; was: locret_46458
@@ -271,8 +271,8 @@ Boss_Epsilon1CollapseRingCycleState:                    ; DATA XREF: ROM:00045D1
                 bsr.w   Boss_Epsilon1CheckAngleHistoryAligned
                 bne.s   Boss_Epsilon1CollapseRingCycleReturn
                 clr.l   (SecondaryEntityYVel).w
-                move.w  #1,(SharedPatternRow0Long5+2).w
-                move.w  #8,(SharedPatternRow0Long4).w
+                move.w  #1,(SharedScratchLong5+2).w
+                move.w  #8,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1CollapseRingCycleReturn:                   ; CODE XREF: Boss_Epsilon1CollapseRingCycleState+C   j  ; was: locret_4647C
                 rts
@@ -301,14 +301,14 @@ Boss_Epsilon1WaitForRingCycleCompleteReturn:            ; CODE XREF: Boss_Epsilo
 ; Begins the vertical-sweep branch by accelerating the angle history
 Boss_Epsilon1BeginVerticalSweepAttackState:             ; DATA XREF: ROM:00045D22   o  ; was: sub_464AE
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  #8,(SharedPatternRow0Long4).w
+                move.w  #8,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_Epsilon1BeginVerticalSweepAttackState
 ; Waits for the vertical-sweep angle to wrap below $60
 Boss_Epsilon1WaitForVerticalSweepAngleWrapState:        ; DATA XREF: ROM:00045D24   o  ; was: sub_464BE
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$60,d0                         ; '`'
                 bcc.s   Boss_Epsilon1WaitForVerticalSweepAngleWrapReturn
@@ -319,12 +319,12 @@ Boss_Epsilon1WaitForVerticalSweepAngleWrapReturn:       ; CODE XREF: Boss_Epsilo
 ; Stops at angle $80 and begins collapsing the vertical-sweep branch
 Boss_Epsilon1PrepareVerticalSweepCollapseState:         ; DATA XREF: ROM:00045D26   o  ; was: sub_464D6
                 bsr.w   Boss_Epsilon1UpdateBattleCenterMotion
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$80,d0
                 bcs.s   Boss_Epsilon1PrepareVerticalSweepCollapseReturn
-                clr.w   (SharedPatternRow0Long4).w
-                move.w  #4,(SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong4).w
+                move.w  #4,(SharedScratchLong5+2).w
                 move.w  #1,(SecondaryEntityYVel).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1PrepareVerticalSweepCollapseReturn:        ; CODE XREF: Boss_Epsilon1PrepareVerticalSweepCollapseState+10   j  ; was: locret_464FC
@@ -336,8 +336,8 @@ Boss_Epsilon1CollapseVerticalSweepRingState:            ; DATA XREF: ROM:00045D2
                 bsr.w   Boss_Epsilon1CheckAngleHistoryAligned
                 bne.s   Boss_Epsilon1CollapseVerticalSweepRingReturn
                 clr.l   (SecondaryEntityYVel).w
-                move.w  #1,(SharedPatternRow0Long5+2).w
-                move.w  #$10,(SharedPatternRow0Long4).w
+                move.w  #1,(SharedScratchLong5+2).w
+                move.w  #$10,(SharedScratchLong4).w
                 move.w  #0,$58(a5)
                 bset    #4,$23(a5)
                 addq.w  #2,4(a5)
@@ -351,9 +351,9 @@ Boss_Epsilon1MoveToUpperSweepHeightState:               ; DATA XREF: ROM:00045D2
                 bgt.s   Boss_Epsilon1MoveToUpperSweepHeightReturn
                 clr.l   (SecondaryEntityYVel).w
                 move.l  #$400000,(SecondaryEntityYPos).w
-                move.w  #$60,(SharedPatternRow0Long5).w  ; '`'
-                move.w  #7,(SharedPatternRow0Long5+2).w
-                clr.w   (SharedPatternRow0Long4).w
+                move.w  #$60,(SharedScratchLong5).w     ; '`'
+                move.w  #7,(SharedScratchLong5+2).w
+                clr.w   (SharedScratchLong4).w
                 clr.w   $48(a5)
                 addq.w  #2,4(a5)
 Boss_Epsilon1MoveToUpperSweepHeightReturn:              ; CODE XREF: Boss_Epsilon1MoveToUpperSweepHeightState+A   j  ; was: locret_4655E
@@ -364,7 +364,7 @@ Boss_Epsilon1ReserveSweepSpreadSlotsState:              ; DATA XREF: ROM:00045D2
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1ReserveSweepSpreadSlotsReturn
                 move.w  #$10,(a0)
-                lea     (SharedPatternRow0Long7).w,a1
+                lea     (SharedScratchLong7).w,a1
                 move.w  $48(a5),d0
                 add.w   d0,d0
                 move.w  a0,(a1,d0.w)
@@ -458,9 +458,9 @@ Boss_Epsilon1CheckAngleHistoryAligned:                  ; CODE XREF: Boss_Epsilo
                                         ; Boss_Epsilon1StartAlignedVerticalSweepState   p
                                         ; Boss_Epsilon1PrepareSweepRecoveryState   p
                                         ; Boss_Epsilon1WaitForTransitionAngleAlignmentState   p
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FE,d0
-                lea     (SharedPatternRow0Long0).w,a0
+                lea     (SharedScratchLong0).w,a0
                 move.w  #5,d7
 Boss_Epsilon1CompareAngleHistoryLoop:                   ; CODE XREF: Boss_Epsilon1CheckAngleHistoryAligned+14   j  ; was: loc_46684
                 cmp.w   (a0)+,d0
@@ -487,17 +487,17 @@ Boss_Epsilon1DescendAndReleaseRingState:                ; DATA XREF: ROM:00045D3
                 bcs.s   Boss_Epsilon1DescendAndReleaseRingReturn
                 bclr    #4,$23(a5)
                 move.l  #$FFFFC000,(Epsilon1VerticalAccel).w
-                move.w  #6,(SharedPatternRow0Long4).w
+                move.w  #6,(SharedScratchLong4).w
                 move.w  $10(a5),d0
                 addq.w  #8,d0
                 move.w  $14(a5),d1
-                movea.w (SharedPatternRow0Long7).w,a0
+                movea.w (SharedScratchLong7).w,a0
                 move.w  #$7C,d2                         ; '|'
                 bsr.w   Projectile_PrepareEpsilon1FiveStepSpread
                 move.w  $10(a5),d0
                 subq.w  #8,d0
                 move.w  $14(a5),d1
-                movea.w (SharedPatternRow0Long7+2).w,a0
+                movea.w (SharedScratchLong7+2).w,a0
                 move.w  #$84,d2
                 bsr.w   Projectile_PrepareEpsilon1FiveStepSpread
                 clr.w   $48(a5)
@@ -521,10 +521,10 @@ Boss_Epsilon1RiseAfterRingReleaseState:                 ; DATA XREF: ROM:00045D3
                 blt.s   Boss_Epsilon1CheckRingReleaseTurnAngle
                 bsr.w   Boss_Epsilon1ApplyVerticalAcceleration
 Boss_Epsilon1CheckRingReleaseTurnAngle:                 ; CODE XREF: Boss_Epsilon1RiseAfterRingReleaseState+8   j  ; was: loc_4671E
-                cmpi.w  #$180,(SharedPatternRow0Long5).w
+                cmpi.w  #$180,(SharedScratchLong5).w
                 bcs.s   Boss_Epsilon1RiseAfterRingReleaseReturn
-                move.w  #6,(SharedPatternRow0Long5+2).w
-                clr.w   (SharedPatternRow0Long4).w
+                move.w  #6,(SharedScratchLong5+2).w
+                clr.w   (SharedScratchLong4).w
                 move.l  #$800,(Epsilon1VerticalAccel).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1RiseAfterRingReleaseReturn:                ; CODE XREF: Boss_Epsilon1RiseAfterRingReleaseState+14   j  ; was: locret_4673C
@@ -555,8 +555,8 @@ Boss_Epsilon1PrepareSweepRecoveryState:                 ; DATA XREF: ROM:00045D3
                 bsr.w   Boss_Epsilon1CheckAngleHistoryAligned
                 bne.s   Boss_Epsilon1PrepareSweepRecoveryReturn
                 clr.l   (SecondaryEntityYVel).w
-                move.w  #1,(SharedPatternRow0Long5+2).w
-                move.w  #$10,(SharedPatternRow0Long4).w
+                move.w  #1,(SharedScratchLong5+2).w
+                move.w  #$10,(SharedScratchLong4).w
                 move.w  #0,$58(a5)
                 move.l  #$3000,(Epsilon1VerticalAccel).w
                 move.w  #$20,$48(a5)                    ; ' '
@@ -577,8 +577,8 @@ Boss_Epsilon1MoveToRecoveryHeight:                      ; CODE XREF: Boss_Epsilo
                 bsr.w   Boss_Epsilon1ApplyDirectionalVerticalStep
                 cmpi.w  #$40,(SecondaryEntityYPos).w    ; '@'
                 bgt.s   Boss_Epsilon1RecoverBattleCenterReturn
-                move.w  #4,(SharedPatternRow0Long5+2).w
-                move.w  #4,(SharedPatternRow0Long4).w
+                move.w  #4,(SharedScratchLong5+2).w
+                move.w  #4,(SharedScratchLong4).w
                 clr.w   (Epsilon1ProximityFlag).w
                 clr.w   (Epsilon1ProximityTimer).w
                 move.w  #$12,4(a5)

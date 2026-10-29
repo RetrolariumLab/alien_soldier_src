@@ -92,10 +92,10 @@ Boss_DestroyerMk2InitializeEncounterState:              ; DATA XREF: ROM:Boss_De
                 bmi.w   Boss_DestroyerMk2InitializeEncounterReturn
                 addq.w  #2,4(a5)
                 moveq   #0,d0
-                move.l  d0,(SharedPatternRow0Long1).w
-                move.l  d0,(SharedPatternRow0Long2).w
-                move.l  d0,(SharedPatternRow0Long3).w
-                clr.w   (SharedPatternRow0Long6).w
+                move.l  d0,(SharedScratchLong1).w
+                move.l  d0,(SharedScratchLong2).w
+                move.l  d0,(SharedScratchLong3).w
+                clr.w   (SharedScratchLong6).w
                 lea     (DestroyerMk2ScrollRows).w,a0
                 lea     (DestroyerMk2RowSpeeds).w,a1
                 move.w  #$7F,d7
@@ -128,7 +128,7 @@ Boss_DestroyerMk2InitializeScrollRowsLoop:              ; CODE XREF: Boss_Destro
                 move.l  #$F808E818,$2C(a5)
                 move.l  #$F40CE020,$28(a5)
                 move.w  #$1C,$24(a5)
-                move.w  #8,(SharedPatternRow0Long4).w
+                move.w  #8,(SharedScratchLong4).w
                 movea.w #(QuaternaryEntityType-M68K_RAM),a0
                 move.w  #$25C,(a0)
                 move.b  #$10,$23(a0)
@@ -170,7 +170,7 @@ Boss_DestroyerMk2InitializeLinkedPartLoop:              ; CODE XREF: Boss_Destro
                 move.w  (a1)+,$E(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_DestroyerMk2InitializeLinkedPartLoop
-                move.w  #$D0,(SharedPatternRow0Long1).w
+                move.w  #$D0,(SharedScratchLong1).w
                 move.w  #7,d7
                 movea.w #(NinthEntityType-M68K_RAM),a0
                 clr.w   d6
@@ -221,7 +221,7 @@ Boss_DestroyerMk2EncounterTileLoadDescriptor:   dc.w    $4480, $2000, $304, $969
 Boss_DestroyerMk2InitializeScrollDeformationState:      ; DATA XREF: ROM:0004A906   o  ; was: sub_4AB70
                 tst.b   (DataLoaderControl).w
                 bmi.s   Boss_DestroyerMk2InitializeScrollDeformationReturn
-                move.w  #8,(SharedPatternRow0Long3).w
+                move.w  #8,(SharedScratchLong3).w
                 bsr.w   Boss_DestroyerMk2UpdateLinkedObjectGeometry
                 bsr.w   Boss_DestroyerMk2InitializeScrollIndexTable
                 move.w  #$80,$48(a5)
@@ -346,8 +346,8 @@ Boss_DestroyerMk2AdvanceOrbitToggle:                    ; CODE XREF: Boss_Destro
 Boss_DestroyerMk2CollapseOrbitingPartsState:            ; DATA XREF: ROM:0004A914   o  ; was: loc_4ACC4
                 bsr.w   Boss_DestroyerMk2UpdateLinkedObjectGeometry
                 bsr.s   Boss_DestroyerMk2ToggleOrbitingPartsActive
-                subq.w  #4,(SharedPatternRow0Long1).w
-                cmpi.w  #$60,(SharedPatternRow0Long1).w  ; '`'
+                subq.w  #4,(SharedScratchLong1).w
+                cmpi.w  #$60,(SharedScratchLong1).w     ; '`'
                 bcc.s   Boss_DestroyerMk2CollapseOrbitingPartsReturn
                 bsr.s   Boss_DestroyerMk2DisableOrbitingParts
                 bsr.s   Boss_DestroyerMk2InitializeScrollIndexTable
@@ -361,7 +361,7 @@ Boss_DestroyerMk2CollapseOrbitingPartsReturn:           ; CODE XREF: Boss_Destro
 Boss_DestroyerMk2InitializeScrollIndexTable:            ; CODE XREF: Boss_DestroyerMk2InitializeScrollDeformationState+10   p  ; was: sub_4ACEA
                                         ; Boss_DestroyerMk2ToggleOrbitingPartsState+2C   p
                 move.w  #$FF,d7
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
 Boss_DestroyerMk2InitializeScrollIndexLoop:             ; CODE XREF: Boss_DestroyerMk2InitializeScrollIndexTable+A   j  ; was: loc_4ACF2
                 move.w  d7,(a0)+
                 dbf     d7,Boss_DestroyerMk2InitializeScrollIndexLoop
@@ -441,7 +441,7 @@ Boss_DestroyerMk2ShuffleScrollIndexPair:                ; CODE XREF: Boss_Destro
                 andi.w  #$FF,d1
                 add.w   d0,d0
                 add.w   d1,d1
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 move.w  (a0,d0.w),d2
                 move.w  (a0,d1.w),(a0,d0.w)
                 move.w  d2,(a0,d1.w)
@@ -461,7 +461,7 @@ Gfx_DestroyerMk2ApplyPaletteFadeWithBase:               ; CODE XREF: Boss_Destro
 ; Writes one value to four selected scroll-offset rows and clears their velocities
 Boss_DestroyerMk2WriteFourScrollOffsets:                ; CODE XREF: Boss_DestroyerMk2WriteInitialScrollBandsState+14   p  ; was: sub_4ADE0
                                         ; sub_4AEFA   p
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 lea     (DestroyerMk2ScrollRows).w,a1
                 lea     (DestroyerMk2RowSpeeds).w,a2
                 move.w  $4A(a5),d1
@@ -478,7 +478,7 @@ Boss_DestroyerMk2WriteFourScrollOffsetsLoop:            ; CODE XREF: Boss_Destro
 ; End of function Boss_DestroyerMk2WriteFourScrollOffsets
 ; Seeds alternating signed velocities in four selected scroll rows
 Boss_DestroyerMk2SeedFourScrollVelocities:              ; CODE XREF: Boss_DestroyerMk2AnimateScrollWaveState+18   p  ; was: sub_4AE0C
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 lea     (DestroyerMk2RowSpeeds).w,a1
                 move.w  $4A(a5),d1
                 add.w   d1,d1
@@ -525,7 +525,7 @@ Boss_DestroyerMk2AdvanceScrollVelocityRow:              ; CODE XREF: Boss_Destro
 Boss_DestroyerMk2SelectScrollWaveParametersState:       ; DATA XREF: ROM:0004A918   o  ; was: sub_4AE68
                 bsr.w   Boss_DestroyerMk2UpdateLinkedObjectGeometry
                 move.w  $56(a5),d0
-                move.w  #$FFE0,(SharedPatternRow0Long5).w
+                move.w  #$FFE0,(SharedScratchLong5).w
                 move.w  Boss_DestroyerMk2ScrollWaveDurationTable(pc,d0.w),$48(a5)
                 addq.w  #2,$56(a5)
                 andi.w  #$E,$56(a5)
@@ -562,7 +562,7 @@ Boss_DestroyerMk2WriteScrollWaveState:                  ; DATA XREF: ROM:0004A91
                 andi.w  #$E,d0
                 move.w  $48(a5),d7
                 bsr.w   Gfx_DestroyerMk2ApplyPaletteFadeWithBase
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
 ; End of function Boss_DestroyerMk2WriteScrollWaveState
 ; Writes four rows for the current scroll-wave batch
 Boss_DestroyerMk2WriteScrollWaveBands:                  ; was: sub_4AEFA
@@ -582,8 +582,8 @@ Boss_DestroyerMk2ExpandOrbitingPartsState:              ; DATA XREF: ROM:0004A91
                 andi.w  #$E,d0
                 bsr.w   Gfx_DestroyerMk2ApplyPaletteFade
                 bsr.w   Boss_DestroyerMk2ToggleOrbitingPartsActive
-                addq.w  #4,(SharedPatternRow0Long1).w
-                cmpi.w  #$D0,(SharedPatternRow0Long1).w
+                addq.w  #4,(SharedScratchLong1).w
+                cmpi.w  #$D0,(SharedScratchLong1).w
                 bne.s   Boss_DestroyerMk2ExpandOrbitingPartsReturn
                 bsr.w   Boss_DestroyerMk2EnableOrbitingParts
                 moveq   #0,d0
@@ -607,7 +607,7 @@ Boss_DestroyerMk2ApplySineScrollWaveState:              ; DATA XREF: ROM:0004A92
                 move.w  $1C(a5),d1
                 andi.w  #$1FE,d1
                 beq.s   Boss_DestroyerMk2AdvanceSineScrollWave
-                move.w  (SharedPatternRow0Long4).w,d6
+                move.w  (SharedScratchLong4).w,d6
                 add.w   d6,d6
                 move.w  Boss_DestroyerMk2ScrollWaveBaseOffsetTable(pc,d6.w),d0
                 lea     (Math_SineTable).l,a3
@@ -626,9 +626,9 @@ Boss_DestroyerMk2ApplySineWaveRowOffset:                ; CODE XREF: Boss_Destro
 ; ---------------------------------------------------------------------------
 Boss_DestroyerMk2AdvanceSineScrollWave:                 ; CODE XREF: Boss_DestroyerMk2ApplySineScrollWaveState+12   j  ; was: loc_4AF9E
                 addq.w  #2,4(a5)
-                clr.w   (SharedPatternRow0Long7).w
-                addq.w  #2,(SharedPatternRow0Long6+2).w
-                andi.w  #$1E,(SharedPatternRow0Long6+2).w
+                clr.w   (SharedScratchLong7).w
+                addq.w  #2,(SharedScratchLong6+2).w
+                andi.w  #$1E,(SharedScratchLong6+2).w
                 move.w  (PlayerCenterX).w,d0
                 sub.w   $10(a5),d0
                 move.w  d0,$48(a5)
@@ -644,7 +644,7 @@ Boss_DestroyerMk2ScrollWaveShiftTable:  dc.w    5, 5, 5, 5, 4, 4, 4, 3, 3  ; was
 ; Dispatches a nested projectile-pattern table selected by phase and timer sign
 Boss_DestroyerMk2DispatchProjectilePatternState:        ; DATA XREF: ROM:0004A924   o  ; was: sub_4AFE2
                 bsr.w   Boss_DestroyerMk2UpdateLinkedObjectGeometry
-                move.w  (SharedPatternRow0Long6+2).w,d0
+                move.w  (SharedScratchLong6+2).w,d0
                 tst.w   $48(a5)
                 bmi.w   Boss_DestroyerMk2DispatchNegativeTimerPattern
                 move.w  d0,d0

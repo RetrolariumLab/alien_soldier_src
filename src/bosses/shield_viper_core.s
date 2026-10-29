@@ -20,19 +20,19 @@ Boss_ShieldViperUpdateGeometryUnlessTransitioning:      ; CODE XREF: Boss_Shield
                 btst    #0,$58(a5)
                 bne.w   Boss_ShieldViperDispatchState
                 lea     (Math_SineTable).l,a3
-                move.w  (SharedPatternRow0Long4).w,d0
+                move.w  (SharedScratchLong4).w,d0
                 andi.w  #$FF,d0
                 add.w   d0,d0
                 move.w  -$80(a3,d0.w),d0
                 ext.l   d0
                 asl.l   #4,d0
                 swap    d0
-                move.w  d0,(SharedPatternRow0Long6+2).w
-                move.w  (SharedPatternRow0Long4+2).w,d0
-                add.w   d0,(SharedPatternRow0Long4).w
+                move.w  d0,(SharedScratchLong6+2).w
+                move.w  (SharedScratchLong4+2).w,d0
+                add.w   d0,(SharedScratchLong4).w
                 movea.w a5,a0
                 bsr.w   Boss_ShieldViperApproachAngularOffsetByTwoSteps
-                btst    #0,(SharedPatternRow0Long5+1).w
+                btst    #0,(SharedScratchLong5+1).w
                 beq.w   Boss_ShieldViperUpdateTrailGeometry
 ; Linked-body mode: accumulate sixteen polar offsets from the controller
                 moveq   #0,d5
@@ -53,14 +53,14 @@ Boss_ShieldViperAccumulateLinkedBodyOffsetsLoop:        ; CODE XREF: Boss_Shield
                 move.l  d6,$4C(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_ShieldViperAccumulateLinkedBodyOffsetsLoop
-                movea.w (SharedPatternRow0Long2).w,a0
+                movea.w (SharedScratchLong2).w,a0
                 cmpa.w  a5,a0
                 beq.s   Boss_ShieldViperAnchorLinkedBodyXToSelectedRecord
                 move.l  $10(a0),d0
                 sub.l   $48(a0),d0
                 move.l  d0,$10(a5)
 Boss_ShieldViperAnchorLinkedBodyXToSelectedRecord:      ; CODE XREF: Boss_ShieldViperUpdate+C6   j  ; was: loc_4DEA6
-                movea.w (SharedPatternRow0Long2+2).w,a0
+                movea.w (SharedScratchLong2+2).w,a0
                 cmpa.w  a5,a0
                 beq.s   Boss_ShieldViperApplyLinkedBodyPositions
                 move.l  $14(a0),d0
@@ -131,9 +131,9 @@ Boss_ShieldViperUpdateTrailGeometry:                    ; CODE XREF: Boss_Shield
                 move.w  $10(a5),d2
                 swap    d2
                 move.w  $14(a5),d2
-                cmp.l   (SharedPatternRow0Long3).w,d2
+                cmp.l   (SharedScratchLong3).w,d2
                 beq.s   Boss_ShieldViperApplyTrailPoseHistory
-                move.l  d2,(SharedPatternRow0Long3).w
+                move.l  d2,(SharedScratchLong3).w
                 move.w  #$60,d7                         ; '`'
 Boss_ShieldViperShiftTrailPoseHistoryLoop:              ; CODE XREF: Boss_ShieldViperUpdate+1D0   j  ; was: loc_4DF96
                 move.w  (a1),d1
@@ -238,12 +238,12 @@ Boss_ShieldViperInitialize:                             ; DATA XREF: ROM:Boss_Sh
                 move.w  #$34C,d0
                 moveq   #0,d1
                 jsr     (Object_ClearEntityRecordsExceptTwoTypes).l
-                clr.w   (SharedPatternRow0Long1).w
+                clr.w   (SharedScratchLong1).w
                 move.b  #4,(PlayerOAMBucketOffset).w
-                move.w  #$50,(SharedPatternRow0Long6).w  ; 'P'
-                move.w  #$14,(SharedPatternRow0Long7).w
-                move.w  a5,(SharedPatternRow0Long2).w
-                move.w  a5,(SharedPatternRow0Long2+2).w
+                move.w  #$50,(SharedScratchLong6).w     ; 'P'
+                move.w  #$14,(SharedScratchLong7).w
+                move.w  a5,(SharedScratchLong2).w
+                move.w  a5,(SharedScratchLong2+2).w
                 move.w  #$160,$10(a5)
                 move.w  #$180,$14(a5)
                 move.w  #$A300,$E(a5)
@@ -423,7 +423,7 @@ Boss_ShieldViperMoveIntroToYThreshold:                  ; DATA XREF: ROM:0004DFE
                 cmpi.w  #$E0,$14(a5)
                 bgt.s   Boss_ShieldViperIntroMovementReturn
                 addq.w  #2,4(a5)
-                move.w  #$FFF8,(SharedPatternRow0Long0).w
+                move.w  #$FFF8,(SharedScratchLong0).w
                 move.w  #3,d0
                 jsr     (BossMessage_Start).l
 Boss_ShieldViperIntroMovementReturn:                    ; CODE XREF: Boss_ShieldViperMoveIntroToYThreshold+A   j  ; was: locret_4E2EE
@@ -450,27 +450,27 @@ Boss_ShieldViperSharedNoOpState:                        ; DATA XREF: ROM:0004DFF
 
 ; Alternate the entry side, angular direction, and target angle
 Boss_ShieldViperSelectAlternatingEntrySide:             ; DATA XREF: ROM:0004DFF8   o  ; was: sub_4E30A
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 addq.w  #2,4(a5)
                 move.w  #$180,$14(a5)
                 move.w  #$80,$56(a5)
-                addq.b  #1,(SharedPatternRow0Long5+2).w
-                btst    #0,(SharedPatternRow0Long5+2).w
+                addq.b  #1,(SharedScratchLong5+2).w
+                btst    #0,(SharedScratchLong5+2).w
                 beq.s   Boss_ShieldViperConfigureLeftEntry
                 move.w  #$180,$10(a5)
-                move.w  #$FFFC,(SharedPatternRow0Long0).w
+                move.w  #$FFFC,(SharedScratchLong0).w
                 move.w  #$100,$4A(a5)
                 rts
 ; ---------------------------------------------------------------------------
 Boss_ShieldViperConfigureLeftEntry:                     ; CODE XREF: Boss_ShieldViperSelectAlternatingEntrySide+20   j  ; was: loc_4E340
                 move.w  #$C0,$10(a5)
-                move.w  #4,(SharedPatternRow0Long0).w
+                move.w  #4,(SharedScratchLong0).w
                 move.w  #0,$4A(a5)
                 rts
 ; End of function Boss_ShieldViperSelectAlternatingEntrySide
 ; Move radially until controller Y reaches $140
 Boss_ShieldViperMoveToEntryYThreshold:                  ; DATA XREF: ROM:0004DFFA   o  ; was: sub_4E354
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 bsr.w   Boss_ShieldViperMoveRadially
                 cmpi.w  #$140,$14(a5)
                 bgt.s   Boss_ShieldViperEntryApproachReturn
@@ -480,7 +480,7 @@ Boss_ShieldViperEntryApproachReturn:                    ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperMoveToEntryYThreshold
 ; Rotate and move radially until the controller reaches its entry angle
 Boss_ShieldViperRotateToEntryAngle:                     ; DATA XREF: ROM:0004DFFC   o  ; was: sub_4E36C
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 bsr.w   Boss_ShieldViperRotateAndMoveRadially
                 move.w  $56(a5),d0
                 andi.w  #$1FC,d0
@@ -492,7 +492,7 @@ Boss_ShieldViperEntryAngleWaitReturn:                   ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperRotateToEntryAngle
 ; Wait for the center record's quarter turn, then switch to linked-body geometry
 Boss_ShieldViperWaitForCenterQuarterTurn:               ; DATA XREF: ROM:0004DFFE   o  ; was: sub_4E38A
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 bsr.w   Boss_ShieldViperRotateAndMoveRadially
                 move.w  $4D6(a5),d0
                 andi.w  #$1FC,d0
@@ -503,26 +503,26 @@ Boss_ShieldViperWaitForCenterQuarterTurn:               ; DATA XREF: ROM:0004DFF
                 bsr.w   Boss_ShieldViperEnableLinkedBodyGeometry
                 lea     $480(a5),a0
                 lea     $480(a5),a1
-                move.w  a0,(SharedPatternRow0Long2).w
-                move.w  a1,(SharedPatternRow0Long2+2).w
+                move.w  a0,(SharedScratchLong2).w
+                move.w  a1,(SharedScratchLong2+2).w
 Boss_ShieldViperCenterQuarterTurnWaitReturn:            ; CODE XREF: Boss_ShieldViperWaitForCenterQuarterTurn+16   j  ; was: locret_4E3C0
                 rts
 ; End of function Boss_ShieldViperWaitForCenterQuarterTurn
 ; Configure the first signed body-bend step for the selected entry side
 Boss_ShieldViperConfigureInitialBodyBend:               ; DATA XREF: ROM:0004E000   o  ; was: sub_4E3C2
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 addq.w  #2,4(a5)
-                move.w  #$18,(SharedPatternRow0Long1).w
-                btst    #0,(SharedPatternRow0Long5+2).w
+                move.w  #$18,(SharedScratchLong1).w
+                btst    #0,(SharedScratchLong5+2).w
                 bne.s   Boss_ShieldViperApplyInitialBodyBend
-                neg.w   (SharedPatternRow0Long1).w
+                neg.w   (SharedScratchLong1).w
 Boss_ShieldViperApplyInitialBodyBend:                   ; CODE XREF: Boss_ShieldViperConfigureInitialBodyBend+16   j  ; was: loc_4E3DE
                 bsr.w   Boss_ShieldViperSetBodyTargetAngularOffsets
                 rts
 ; End of function Boss_ShieldViperConfigureInitialBodyBend
 ; Wait until the controller's current angular offset reaches its target
 Boss_ShieldViperWaitForInitialBodyBend:                 ; DATA XREF: ROM:0004E002   o  ; was: sub_4E3E4
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 move.w  $54(a5),d0
                 sub.w   $52(a5),d0
                 andi.w  #$1FF,d0
@@ -533,22 +533,22 @@ Boss_ShieldViperInitialBodyBendWaitReturn:              ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperWaitForInitialBodyBend
 ; Seed a three-phase body-bend sequence
 Boss_ShieldViperBeginThreePhaseBodyBend:                ; DATA XREF: ROM:0004E004   o  ; was: sub_4E3FE
-                move.w  #$14,(SharedPatternRow0Long7).w
-                move.w  a5,(SharedPatternRow0Long2).w
+                move.w  #$14,(SharedScratchLong7).w
+                move.w  a5,(SharedScratchLong2).w
                 addq.w  #2,4(a5)
-                move.w  #$10,(SharedPatternRow0Long4+2).w
-                move.w  #$28,(SharedPatternRow0Long1).w  ; '('
+                move.w  #$10,(SharedScratchLong4+2).w
+                move.w  #$28,(SharedScratchLong1).w     ; '('
                 move.w  #3,$4A(a5)
 ; Select and apply the current signed body-bend step
 Boss_ShieldViperConfigureBodyBendPhase:                 ; DATA XREF: ROM:0004E006   o  ; was: loc_4E41E
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 move.w  #3,d0
                 sub.w   $4A(a5),d0
                 add.w   d0,d0
-                move.w  Boss_ShieldViperBodyBendStepTable(pc,d0.w),(SharedPatternRow0Long1).w
-                btst    #0,(SharedPatternRow0Long5+2).w
+                move.w  Boss_ShieldViperBodyBendStepTable(pc,d0.w),(SharedScratchLong1).w
+                btst    #0,(SharedScratchLong5+2).w
                 bne.s   Boss_ShieldViperApplyBodyBendPhase
-                neg.w   (SharedPatternRow0Long1).w
+                neg.w   (SharedScratchLong1).w
 Boss_ShieldViperApplyBodyBendPhase:                     ; CODE XREF: Boss_ShieldViperBeginThreePhaseBodyBend+3C   j  ; was: loc_4E440
                 bsr.w   Boss_ShieldViperSetBodyTargetAngularOffsets
                 addq.w  #2,4(a5)
@@ -560,7 +560,7 @@ Boss_ShieldViperBodyBendStepTable:  dc.w    $20, $3C, $20, $3C, $20  ; was: word
 
 ; Wait for a bend phase to settle, then repeat or advance
 Boss_ShieldViperWaitForBodyBendPhaseAndLoop:            ; DATA XREF: ROM:0004E008   o  ; was: sub_4E454
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 move.w  $54(a5),d0
                 sub.w   $52(a5),d0
                 andi.w  #$1FF,d0
@@ -577,11 +577,11 @@ Boss_ShieldViperFinishBodyBendPhases:                   ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperWaitForBodyBendPhaseAndLoop
 ; Configure and apply the final signed body-bend step
 Boss_ShieldViperConfigureFinalBodyBend:                 ; DATA XREF: ROM:0004E00A   o  ; was: sub_4E47A
-                move.w  #$14,(SharedPatternRow0Long7).w
-                move.w  #$20,(SharedPatternRow0Long1).w  ; ' '
-                btst    #0,(SharedPatternRow0Long5+2).w
+                move.w  #$14,(SharedScratchLong7).w
+                move.w  #$20,(SharedScratchLong1).w     ; ' '
+                btst    #0,(SharedScratchLong5+2).w
                 bne.s   Boss_ShieldViperApplyFinalBodyBend
-                neg.w   (SharedPatternRow0Long1).w
+                neg.w   (SharedScratchLong1).w
 Boss_ShieldViperApplyFinalBodyBend:                     ; CODE XREF: Boss_ShieldViperConfigureFinalBodyBend+12   j  ; was: loc_4E492
                 bsr.w   Boss_ShieldViperSetBodyTargetAngularOffsets
                 addq.w  #2,4(a5)
@@ -589,7 +589,7 @@ Boss_ShieldViperApplyFinalBodyBend:                     ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperConfigureFinalBodyBend
 ; Wait until the final controller angular offset reaches its target
 Boss_ShieldViperWaitForFinalBodyBend:                   ; DATA XREF: ROM:0004E00C   o  ; was: sub_4E49C
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 move.w  $54(a5),d0
                 sub.w   $52(a5),d0
                 andi.w  #$1FF,d0
@@ -600,7 +600,7 @@ Boss_ShieldViperFinalBodyBendWaitReturn:                ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperWaitForFinalBodyBend
 ; Seed the 64-frame delay before the orbit-shot burst
 Boss_ShieldViperBeginOrbitShotBurstDelay:               ; DATA XREF: ROM:0004E00E   o  ; was: sub_4E4B6
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 move.w  #$40,$48(a5)                    ; '@'
                 bsr.w   Gfx_ShieldViperUpdateHorizontalFlipFromFrameBit
                 addq.w  #2,4(a5)
@@ -608,7 +608,7 @@ Boss_ShieldViperBeginOrbitShotBurstDelay:               ; DATA XREF: ROM:0004E00
 ; End of function Boss_ShieldViperBeginOrbitShotBurstDelay
 ; Animate horizontal flip while waiting, then seed a sixteen-shot burst
 Boss_ShieldViperWaitOrbitShotBurstDelay:                ; DATA XREF: ROM:0004E010   o  ; was: sub_4E4CC
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 bsr.w   Gfx_ShieldViperUpdateHorizontalFlipFromFrameBit
                 subq.w  #1,$48(a5)
                 bne.s   Boss_ShieldViperOrbitShotBurstDelayReturn
@@ -645,7 +645,7 @@ Boss_ShieldViperHideOrbitingRecord:                     ; CODE XREF: Boss_Shield
 ; End of function Boss_ShieldViperHideOrbitingRecord
 ; Emit sixteen timed shots from the orbiting record, then hide it and advance
 Boss_ShieldViperEmitOrbitShotBurst:                     ; DATA XREF: ROM:0004E012   o  ; was: sub_4E532
-                move.w  #$14,(SharedPatternRow0Long7).w
+                move.w  #$14,(SharedScratchLong7).w
                 bsr.w   Boss_ShieldViperUpdateOrbitingRecord
                 bsr.w   Gfx_ShieldViperUpdateHorizontalFlipFromFrameBit
                 subq.w  #1,$48(a5)
@@ -662,8 +662,8 @@ Boss_ShieldViperEmitOrbitShotBurst:                     ; DATA XREF: ROM:0004E01
                 add.w   $52(a5),d0
                 addi.w  #$120,d0
                 andi.w  #$1C0,d0
-                add.w   (SharedPatternRow0Long6+2).w,d0
-                add.w   (SharedPatternRow0Long6+2).w,d0
+                add.w   (SharedScratchLong6+2).w,d0
+                add.w   (SharedScratchLong6+2).w,d0
                 andi.w  #$1FE,d0
                 move.w  -$80(a3,d0.w),d1
                 move.w  (a3,d0.w),d0

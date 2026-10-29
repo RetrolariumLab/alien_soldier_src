@@ -1,4 +1,4 @@
-Gfx_AdjustSelectedTileBlocks:                           ; CODE XREF: Stage_LoadStage10EnemyAssets+1C   j  ; was: sub_11170
+Gfx_AdjustSelectedTileBlocks:                           ; CODE XREF: Stage_LoadStage10To12Assets+1C   j  ; was: sub_11170
                                         ; Boss_ViblackInit+BC   p
                 moveq   #$FFFFFFFF,d1
                 move.w  (a0)+,d1

@@ -10,7 +10,7 @@ bytes.
 | Second archive ROM address | First symbol                               | Second symbol                           | Decoded tiles |
 | -------------------------- | ------------------------------------------ | --------------------------------------- | ------------: |
 | `$104F32`                  | `Stage15TileArt`                           | `Stage15TileArt2`                       |            28 |
-| `$105B9E`                  | `Stage22And24TileArt`                      | `Stage22And24TileArt2`                  |           123 |
+| `$105B9E`                  | `Stage22And24TileArt`                      | `Stage18WormTileArt`                    |           123 |
 | `$123172`                  | `Boss_BackStringerTileArt`                 | `Boss_BackStringerTileArt2`             |            27 |
 | `$1291DE`                  | `EntityType3F0TileArt`                     | `UnreferencedEntityType3F0TileArt2`     |           303 |
 | `$138EE4`                  | `Boss_WolfGaropaTileArt1`                  | `UnreferencedWolfGaropaTileArt2`        |            75 |
@@ -31,7 +31,7 @@ the first archive's length. They now name the archive directly:
 | -------------------------- | ------------------------------ | --------------------------- |
 | `Stage7TileAssetCommands`  | `Stage15TileArt+$410`          | `Stage15TileArt2`           |
 | `Stage16TileAssetCommands` | `Boss_VictorTileArt_End+$1840` | `Boss_BackStringerTileArt2` |
-| `Stage18TileAssetCommands` | `Stage22And24TileArt+$A08`     | `Stage22And24TileArt2`      |
+| `Stage18TileAssetCommands` | `Stage22And24TileArt+$A08`     | `Stage18WormTileArt`        |
 
 The original expression and direct symbol have exactly the same canonical
 address. This fixes a source-level relocation hazard but does not establish that
@@ -40,13 +40,12 @@ it caused any observed rendering failure.
 Two purported archive ends also had non-archive data after the compressed
 stream. The archive at `$1BE2CA` ends at `$1BE722`; its 64-byte remainder is
 `UnreferencedSevenForceCutscenePostArtData`. The archive at `$19BF9E` ends at
-`$19C492`; its 18-byte remainder is `UnreferencedPostStageTileArtSpriteMapping`.
-The latter has three six-byte sprite-command-shaped records, with the final
-record's high bit set. The 64-byte tail also begins with command-shaped records,
-but its full purpose and visual owner remain unverified. Both retain
-role-neutral names pending a reader trace. All 128 `artcomp` assets now end
-exactly at the first archive's header-defined boundary. The extracted asset
-count is 589.
+`$19C492`; its 18-byte remainder is `Stage4_StampObjectSpriteMapping`. The
+latter has three six-byte sprite-command-shaped records, with the final record's
+high bit set. The 64-byte tail also begins with command-shaped records, but its
+full purpose and visual owner remain unverified. Both retain role-neutral names
+pending a reader trace. All 128 `artcomp` assets now end exactly at the first
+archive's header-defined boundary. The extracted asset count is 589.
 
 ## Stage 4 rendering report: not reproduced in controlled shifts
 

@@ -491,7 +491,7 @@ Boss_SniperHoneyviperTentacleShiftRotationHistory:      ; CODE XREF: Boss_Sniper
                 move.l  d0,$10(a0)
                 move.l  d1,$14(a0)
                 movea.w #(EleventhEntityType-M68K_RAM),a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 movea.w #(SniperHoneyviperCosineTable-M68K_RAM),a3
                 movea.w #(SniperHoneyviperRotationHistory-M68K_RAM),a4
                 move.w  #$200,d3

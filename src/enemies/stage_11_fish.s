@@ -11,9 +11,9 @@ Stage11_FishWaveStateOffsets:   dc.w    Stage11_FishWaveInitState-*  ; DATA XREF
 
 ; Initializes the Stage 11 fish-wave slots and spawn delay
 Stage11_FishWaveInitState:                              ; DATA XREF: ROM:Stage11_FishWaveStateOffsets   o  ; was: sub_2EA0E
-                clr.w   (SharedPatternRow0Long0).w
-                clr.w   (SharedPatternRow0Long0+2).w
-                move.w  #$FFFF,(SharedPatternRow0Long1).w
+                clr.w   (SharedScratchLong0).w
+                clr.w   (SharedScratchLong0+2).w
+                move.w  #$FFFF,(SharedScratchLong1).w
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
                 rts
@@ -22,7 +22,7 @@ Stage11_FishWaveInitState:                              ; DATA XREF: ROM:Stage11
 Stage11_FishWaveSpawnState:                             ; DATA XREF: ROM:0002EA0A   o  ; was: sub_2EA28
                 subq.w  #1,$48(a5)
                 bne.s   Stage11_FishWaveSpawnState_Return
-                lea     (SharedPatternRow0Long0).w,a4
+                lea     (SharedScratchLong0).w,a4
                 adda.w  $4C(a5),a4
                 tst.w   (a4)
                 bmi.s   Stage11_FishWaveSpawnState_Finish
@@ -62,7 +62,7 @@ Stage11_FishSpawnXPositions:    dc.w    $1A0, $A0, $1A0, $A0, $1A0, $A0, $1A0, $
 
 ; Replaces the first fish no longer using entity type $44C
 Stage11_FishWaveMaintainPopulationState:                ; DATA XREF: ROM:0002EA0C   o  ; was: sub_2EA9A
-                lea     (SharedPatternRow0Long0).w,a4
+                lea     (SharedScratchLong0).w,a4
 Stage11_FishWaveMaintainPopulationState_NextSlot:       ; CODE XREF: Stage11_FishWaveMaintainPopulationState+12   j  ; was: loc_2EA9E
                 movea.w (a4),a0
                 cmpi.w  #$44C,(a0)

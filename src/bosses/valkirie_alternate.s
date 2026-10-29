@@ -43,7 +43,7 @@ Boss_ValkirieAlternateInit:                             ; DATA XREF: Boss_Valkir
                 movea.l #Boss_ValkirieAlternateMetaspritePartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.l  #Boss_ValkirieAlternateMetaspritePoseAngles,$2FC(a5)
-                move.l  #Boss_ValkirieAlternatePoseKeyframeData,$35C(a5)
+                move.l  #Boss_ValkirieAlternatePoseTable,$35C(a5)
                 move.w  #$440,(a5)
                 move.w  #$CC00,2(a5)
                 clr.w   6(a5)
@@ -69,7 +69,7 @@ Boss_ValkirieAlternateInitState2:
 ; End of function Boss_ValkirieAlternateInitState2
 ; Render dispatch state 2 with the shared looping pose
 Boss_ValkirieAlternateRenderState2:                     ; DATA XREF: ROM:00059040   o  ; was: sub_590DA
-                lea     Boss_ValkirieAlternateStatePose(pc),a1
+                lea     Boss_ValkirieAlternateStatePoses(pc),a1
                 nop
                 bra.w   Boss_ValkirieAlternateRenderFrame
 ; ---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ Boss_ValkirieAlternateInitState4:                       ; CODE XREF: Boss_Valkir
                 move.w  #$70,$11C(a5)                   ; 'p'
 ; Render dispatch state 4 with the shared looping pose
 Boss_ValkirieAlternateRenderState4:                     ; DATA XREF: ROM:00059042   o  ; was: loc_5911A
-                lea     Boss_ValkirieAlternateStatePose(pc),a1
+                lea     Boss_ValkirieAlternateStatePoses(pc),a1
                 nop
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
@@ -301,34 +301,34 @@ Boss_ValkirieAlternateBeginPoseInterpolation:           ; CODE XREF: Boss_Valkir
                 bmi.s   Boss_ValkirieAlternatePreparePartAngleProjection
 Boss_ValkirieAlternateAdvancePoseInterpolation:         ; CODE XREF: Boss_ValkirieAlternateUpdatePose+8   j  ; was: loc_59378
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$B,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_ValkirieAlternatePreparePartAngleProjection:       ; CODE XREF: Boss_ValkirieAlternateUpdatePose+E   j  ; was: loc_59388
                                         ; Boss_ValkirieAlternateUpdatePose+34   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_ValkirieAlternateHandlePoseLoopOrInterpolation
 ; Calculate deltas for the alternate 12-channel pose buffer
 Boss_ValkirieAlternateCalculatePoseDeltas:              ; CODE XREF: Boss_ValkirieAlternateHandlePoseLoopOrInterpolation+24   p  ; was: sub_59392
                 movea.l $2FC(a5),a1
                 moveq   #$B,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_ValkirieAlternateCalculatePoseDeltas
 ; Initialize the alternate twelve-channel pose buffer from bytes at a0
 Boss_ValkirieAlternateInitializePoseChannels:
                 moveq   #$B,d7                          ; was: sub_593A6
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ValkirieAlternateInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_ValkirieAlternateStatePose:    dc.w    $2020, 0, $2020, $C, $FFFF  ; was: word_593B2
+Boss_ValkirieAlternateStatePoses:   dc.w    $2020, 0, $2020, $C, $FFFF  ; was: word_593B2
                                         ; DATA XREF: Boss_ValkirieAlternateRenderState2   o
                                         ; Boss_ValkirieAlternateRenderState4   o
-Boss_ValkirieAlternatePoseKeyframeData: dc.w    $8080, $8080, $8040, $6060, $A040, 0, $8080, $8080  ; was: word_593BC
+Boss_ValkirieAlternatePoseTable:    dc.w    $8080, $8080, $8040, $6060, $A040, 0, $8080, $8080  ; was: word_593BC
                                         ; DATA XREF: Boss_ValkirieAlternateInit+30   o
                 dc.w    $8040, $6060, $A040, 0
 

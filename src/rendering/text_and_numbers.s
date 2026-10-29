@@ -376,13 +376,13 @@ Text_Options:   dc.b    $19, $1A, $1E, $13, $19, $18, $1D, $FF  ; was: byte_46A3
                                         ; UI_InitOptionsScreen+BE   o
 Text_Password:  dc.b    $1A, $B, $1D, $1D, $21, $19, $1C, $E, $FF  ; was: byte_46AB
                                         ; DATA XREF: TitleScreen_QueuePassword   o
-Text_TitleFeatureList:  dc.b    $20, $13, $1D, $1F, $B, $16, $1D, $12  ; was: byte_46B4
+Text_VisualSpeedSoundShock: dc.b    $20, $13, $1D, $1F, $B, $16, $1D, $12  ; was: byte_46B4
                                         ; DATA XREF: TitleScreen_Initialize+CE   o
                 dc.b    $19, $D, $15, $29, 0, $1D, $1A, $F
                 dc.b    $F, $E, $1D, $12, $19, $D, $15, $29
                 dc.b    0, $1D, $19, $1F, $18, $E, $1D, $12
                 dc.b    $19, $D, $15, $29, $FF
-Text_MegaDriveTagline:  dc.b    $18, $19, $21, 0, $13, $1D, 0, $1E  ; was: byte_46D9
+Text_HeartOnFire:   dc.b    $18, $19, $21, 0, $13, $1D, 0, $1E  ; was: byte_46D9
                                         ; DATA XREF: TitleScreen_Initialize+E2   o
                 dc.b    $13, $17, $F, 0, $1E, $19, 0, $1E
                 dc.b    $12, $F, 0, 7, 9, 1, 1, 1
@@ -423,15 +423,15 @@ Text_PressStartToExit:  dc.b    $1A, $1C, $F, $1D, $1D, 0, $1D, $1E, $B, $1C  ; 
                 dc.b    $1E, 0, $1E, $19, 0, $F, $22, $13, $1E, $FF
 Text_Continue:  dc.b    $D, $19, $18, $1E, $13, $18, $1F, $F, $FF  ; was: byte_4790
                                         ; DATA XREF: Continue_RenderPrompt+4   o
-Text_GameEnd:       dc.b    $11, $B, $17, $F, $F, $18, $E, $FF
-Text_StagePeriod:   dc.b    $1D, $1E, $B, $11, $F, $2E, $FF  ; was: byte_47A1
+Text_GameEnd:   dc.b    $11, $B, $17, $F, $F, $18, $E, $FF
+Text_StageDash: dc.b    $1D, $1E, $B, $11, $F, $2E, $FF  ; was: byte_47A1
                                         ; DATA XREF: Continue_RenderStageAndDifficulty   o
-Text_PasswordPeriod:    dc.b    $1A, $B, $1D, $1D, $21, $19, $1C, $E  ; was: byte_47A8
+Text_PasswordDash:  dc.b    $1A, $B, $1D, $1D, $21, $19, $1C, $E  ; was: byte_47A8
                                         ; DATA XREF: Continue_RenderPassword   o
                 dc.b    $2E, $FF
-Text_CreditPeriod:  dc.b    $D, $1C, $F, $E, $13, $1E, $2E, $FF  ; was: byte_47B2
+Text_CreditDash:    dc.b    $D, $1C, $F, $E, $13, $1E, $2E, $FF  ; was: byte_47B2
                                         ; DATA XREF: Continue_RenderCreditHeader   o
-Text_LevelPeriod:   dc.b    $16, $F, $20, $F, $16, $2E, $FF  ; was: byte_47BA
+Text_LevelDash: dc.b    $16, $F, $20, $F, $16, $2E, $FF  ; was: byte_47BA
                                         ; DATA XREF: Continue_RenderStageAndDifficulty+46   o
 Text_Easy:      dc.b    $F, $B, $1D, $23, $FF           ; was: byte_47C1
                                         ; DATA XREF: Continue_RenderStageAndDifficulty+5A   o

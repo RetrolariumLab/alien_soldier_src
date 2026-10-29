@@ -50,11 +50,11 @@ TitleScreen_FinalizeInitialization:                     ; CODE XREF: TitleScreen
                 jsr     (Sound_QueueRequest).l
                 jsr     (Scroll_PreparePlaneBuffersAndRegisterShadows).l
                 if      BuildProfileJP
-                lea     (Text_TitleFeatureList).l,a0
+                lea     (Text_VisualSpeedSoundShock).l,a0
                 move.w  #$A300,d0
                 move.w  #$4086,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
-                lea     (Text_MegaDriveTagline).l,a0
+                lea     (Text_HeartOnFire).l,a0
                 move.w  #$A300,d0
                 move.w  #$4202,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l

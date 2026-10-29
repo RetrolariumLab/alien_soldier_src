@@ -40,7 +40,7 @@ Boss_XiTigerDefeatLeapState:                            ; DATA XREF: ROM:0003D8A
                 jsr     (Sound_QueueSFXRequest).l
 Boss_XiTigerUpdateDefeatLeapPose:                       ; CODE XREF: Boss_XiTigerDefeatLeapState+E   j  ; was: loc_3DF6A
                                         ; Boss_XiTigerDefeatLeapState+18   j
-                lea     Boss_XiTigerLoopingAirbornePoseCommands(pc),a1
+                lea     Boss_XiTigerLoopingAirbornePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bsr.w   Boss_XiTigerUpdateSprites
@@ -66,7 +66,7 @@ Boss_XiTigerDeceleratePositiveDefeatVelocity:           ; CODE XREF: Boss_XiTige
                 subi.l  #$1000,$18(a5)
 Boss_XiTigerUpdateDefeatLandingPose:                    ; CODE XREF: Boss_XiTigerDefeatLandingDelayState+22   j  ; was: loc_3DFB4
                                         ; Boss_XiTigerDefeatLandingDelayState+2E   j
-                lea     Boss_XiTigerDefeatPoseCommands(pc),a1
+                lea     Boss_XiTigerDefeatPoses(pc),a1
                 nop
 Boss_XiTigerUpdateDefeatPoseAndProjectile:              ; CODE XREF: Boss_XiTigerDefeatFadeState+40   j  ; was: loc_3DFBA
                 move.w  #2,(PlaneAShakeLevel).w
@@ -92,7 +92,7 @@ Boss_XiTigerDefeatFadeState:                            ; DATA XREF: ROM:0003D8A
                 jmp     Object_ClearEntityRecordsExceptTwoTypes
 ; ---------------------------------------------------------------------------
 Boss_XiTigerUpdateDefeatFadePose:                       ; CODE XREF: Boss_XiTigerDefeatFadeState+14   j  ; was: loc_3E00C
-                lea     Boss_XiTigerDefeatPoseCommands(pc),a1
+                lea     Boss_XiTigerDefeatPoses(pc),a1
                 nop
                 bra.s   Boss_XiTigerUpdateDefeatPoseAndProjectile
 ; End of function Boss_XiTigerDefeatFadeState

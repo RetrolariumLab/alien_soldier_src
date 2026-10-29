@@ -1,6 +1,6 @@
 Boss_Epsilon1BeginForcedTransitionState:                ; DATA XREF: ROM:00045D3E   o  ; was: sub_467D8
-                clr.w   (SharedPatternRow0Long4).w
-                move.w  #0,(SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong4).w
+                move.w  #0,(SharedScratchLong5+2).w
                 addq.w  #2,4(a5)
                 move.l  #$FFFF0000,(SecondaryEntityYVel).w
                 bclr    #0,(CombatHitFlags).w
@@ -16,7 +16,7 @@ Boss_Epsilon1SetLeftwardTransitionVelocity:             ; CODE XREF: Boss_Epsilo
 Boss_Epsilon1WaitForTransitionAngleAlignmentState:      ; DATA XREF: ROM:00045D40   o  ; was: sub_46806
                 bsr.w   Boss_Epsilon1CheckAngleHistoryAligned
                 bne.s   Boss_Epsilon1WaitForTransitionAngleAlignmentReturn
-                move.w  #$14,(SharedPatternRow0Long4).w
+                move.w  #$14,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
 Boss_Epsilon1WaitForTransitionAngleAlignmentReturn:     ; CODE XREF: Boss_Epsilon1WaitForTransitionAngleAlignmentState+4   j  ; was: locret_46816
                 rts
@@ -336,11 +336,11 @@ Boss_Epsilon1FinalDespawnReturn:                        ; CODE XREF: Boss_Epsilo
 ; End of function Boss_Epsilon1FinalDespawnState
 ; Updates the angle-derived body field and horizontal body-motion state
 Boss_Epsilon1UpdateBodyPose:                            ; CODE XREF: Boss_Epsilon1Main+124   p  ; was: sub_46B64
-                move.w  (SharedPatternRow0Long5+2).w,d0
+                move.w  (SharedScratchLong5+2).w,d0
                 add.w   d0,d0
                 lea     (Epsilon1AngleHistory).w,a0
                 move.w  (a0,d0.w),$56(a5)
-                move.w  (SharedPatternRow0Long6+2).w,d0
+                move.w  (SharedScratchLong6+2).w,d0
                 lea     Boss_Epsilon1BodyPoseStates(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
@@ -370,8 +370,8 @@ Boss_Epsilon1SelectBodyPoseReturn:                      ; CODE XREF: Boss_Epsilo
 Boss_Epsilon1UseAlternateBodyPose:                      ; CODE XREF: Boss_Epsilon1SelectBodyPoseState+12   j  ; was: loc_46BAA
                                         ; Boss_Epsilon1SelectBodyPoseState+1C   j
                 move.l  #Boss_Epsilon1AlternateBodyMapping,8(a5)
-                move.w  #8,(SharedPatternRow1Long0+2).w
-                move.w  #2,(SharedPatternRow0Long6+2).w
+                move.w  #8,(SharedScratchLong8+2).w
+                move.w  #2,(SharedScratchLong6+2).w
                 cmpi.w  #$10,4(a5)
                 bls.s   Boss_Epsilon1SelectBodyPoseReturn
                 move.b  #$51,d0                         ; 'Q'
@@ -380,18 +380,18 @@ Boss_Epsilon1UseAlternateBodyPose:                      ; CODE XREF: Boss_Epsilo
 ; ---------------------------------------------------------------------------
 Boss_Epsilon1StartHorizontalBodySway:                   ; CODE XREF: Boss_Epsilon1SelectBodyPoseState+6   j  ; was: loc_46BD2
                 move.l  #Boss_Epsilon1AlternateBodyMapping,8(a5)
-                move.w  #2,(SharedPatternRow1Long0+2).w
-                move.w  #4,(SharedPatternRow0Long6+2).w
+                move.w  #2,(SharedScratchLong8+2).w
+                move.w  #4,(SharedScratchLong6+2).w
                 move.b  #$52,d0                         ; 'R'
                 jsr     (Sound_QueueSFXRequest).l
                 rts
 ; End of function Boss_Epsilon1SelectBodyPoseState
 ; Holds the alternate pose until its countdown expires
 Boss_Epsilon1HoldAlternateBodyPoseState:                ; DATA XREF: ROM:00046B82   o  ; was: sub_46BF2
-                subq.w  #1,(SharedPatternRow1Long0+2).w
+                subq.w  #1,(SharedScratchLong8+2).w
                 bne.s   Boss_Epsilon1HoldAlternateBodyPoseReturn
                 move.l  #Boss_Epsilon1PrimaryBodyMapping,8(a5)
-                move.w  #0,(SharedPatternRow0Long6+2).w
+                move.w  #0,(SharedScratchLong6+2).w
 Boss_Epsilon1HoldAlternateBodyPoseReturn:               ; CODE XREF: Boss_Epsilon1HoldAlternateBodyPoseState+4   j  ; was: locret_46C06
                 rts
 ; End of function Boss_Epsilon1HoldAlternateBodyPoseState
@@ -400,7 +400,7 @@ Boss_Epsilon1IncrementBodyOffsetState:                  ; DATA XREF: ROM:00046B8
                 addq.w  #2,(SecondaryEntityWork4C).w
                 cmpi.w  #8,(SecondaryEntityWork4C).w
                 bne.s   Boss_Epsilon1IncrementBodyOffsetReturn
-                addq.w  #2,(SharedPatternRow0Long6+2).w
+                addq.w  #2,(SharedScratchLong6+2).w
 Boss_Epsilon1IncrementBodyOffsetReturn:                 ; CODE XREF: Boss_Epsilon1IncrementBodyOffsetState+A   j  ; was: locret_46C18
                 rts
 ; End of function Boss_Epsilon1IncrementBodyOffsetState
@@ -409,7 +409,7 @@ Boss_Epsilon1DecrementBodyOffsetState:                  ; DATA XREF: ROM:00046B8
                 subq.w  #2,(SecondaryEntityWork4C).w
                 cmpi.w  #$FFF8,(SecondaryEntityWork4C).w
                 bne.s   Boss_Epsilon1DecrementBodyOffsetReturn
-                addq.w  #2,(SharedPatternRow0Long6+2).w
+                addq.w  #2,(SharedScratchLong6+2).w
 Boss_Epsilon1DecrementBodyOffsetReturn:                 ; CODE XREF: Boss_Epsilon1DecrementBodyOffsetState+A   j  ; was: locret_46C2A
                 rts
 ; End of function Boss_Epsilon1DecrementBodyOffsetState
@@ -418,15 +418,15 @@ Boss_Epsilon1ReturnBodyOffsetToCenterState:             ; DATA XREF: ROM:00046B8
                 addq.w  #2,(SecondaryEntityWork4C).w
                 cmpi.w  #0,(SecondaryEntityWork4C).w
                 bne.s   Boss_Epsilon1ReturnBodyOffsetToCenterReturn
-                subq.w  #1,(SharedPatternRow1Long0+2).w
+                subq.w  #1,(SharedScratchLong8+2).w
                 beq.s   Boss_Epsilon1FinishHorizontalBodySway
-                move.w  #4,(SharedPatternRow0Long6+2).w
+                move.w  #4,(SharedScratchLong6+2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_Epsilon1FinishHorizontalBodySway:                  ; CODE XREF: Boss_Epsilon1ReturnBodyOffsetToCenterState+10   j  ; was: loc_46C46
                 move.l  #Boss_Epsilon1PrimaryBodyMapping,8(a5)
                 bclr    #6,$22(a5)
-                move.w  #0,(SharedPatternRow0Long6+2).w
+                move.w  #0,(SharedScratchLong6+2).w
 Boss_Epsilon1ReturnBodyOffsetToCenterReturn:            ; CODE XREF: Boss_Epsilon1ReturnBodyOffsetToCenterState+A   j  ; was: locret_46C5A
                 rts
 ; End of function Boss_Epsilon1ReturnBodyOffsetToCenterState

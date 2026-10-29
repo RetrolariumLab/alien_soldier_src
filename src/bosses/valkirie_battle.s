@@ -63,7 +63,7 @@ Entity_InitValkirieBattleState0:                        ; DATA XREF: Entity_Upda
                 movea.l #Boss_ValkirieMetaspritePartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.l  #Boss_ValkirieMetaspritePoseAngles,$2FC(a5)
-                move.l  #Valkirie_PoseFrameData,$35C(a5)
+                move.l  #Valkirie_PoseTable,$35C(a5)
                 move.w  #$42C,(a5)
                 move.w  #$CC00,2(a5)
                 clr.w   6(a5)
@@ -101,7 +101,7 @@ Entity_ValkirieBattleState2CheckSecondPart:             ; CODE XREF: Entity_Upda
                 move.w  #$CC80,$4A(a5)
                 move.w  #$140,$674(a5)
 Entity_RenderValkirieBattleState2:                      ; CODE XREF: Entity_UpdateValkirieBattleState2+1A   j  ; was: loc_558AA
-                lea     Valkirie_State2PoseScript(pc),a1
+                lea     Valkirie_State2Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; End of function Entity_UpdateValkirieBattleState2
@@ -125,7 +125,7 @@ Entity_UpdateValkirieBattleState4:                      ; DATA XREF: ROM:000557B
                 moveq   #8,d0
                 jsr     (BossMessage_Start).l
 Entity_RenderValkirieBattleState4:                      ; CODE XREF: Entity_StartValkirieBattleState4+3E   j  ; was: loc_55900
-                lea     Valkirie_State4To8PoseScript(pc),a1
+                lea     Valkirie_State4To8Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; End of function Entity_StartValkirieBattleState4
@@ -140,7 +140,7 @@ Entity_UpdateValkirieBattleState6:                      ; DATA XREF: ROM:000557C
                 bra.w   Entity_StartValkirieBattleState8
 ; ---------------------------------------------------------------------------
 Entity_RenderValkirieBattleState6:                      ; CODE XREF: Entity_UpdateValkirieBattleState6+4   j  ; was: loc_55926
-                lea     Valkirie_State4To8PoseScript(pc),a1
+                lea     Valkirie_State4To8Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -188,7 +188,7 @@ Entity_ValkirieBattleState8SelectStateA:                ; CODE XREF: Entity_Upda
 ; ---------------------------------------------------------------------------
 Entity_RenderValkirieBattleState8:                      ; CODE XREF: Entity_UpdateValkirieBattleState8+6   j  ; was: loc_559AA
                 bsr.w   Entity_SetFacingField54FromPlayerXDelta
-                lea     Valkirie_State4To8PoseScript(pc),a1
+                lea     Valkirie_State4To8Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -244,7 +244,7 @@ Entity_ValkirieBattleStateASelectStateCRise:            ; CODE XREF: Entity_Upda
                 bra.s   Entity_StartValkirieBattleStateC
 ; ---------------------------------------------------------------------------
 Entity_RenderValkirieBattleStateA:                      ; CODE XREF: Entity_UpdateValkirieBattleStateA+10   j  ; was: loc_55A32
-                lea     Valkirie_StateAAndCPoseScript(pc),a1
+                lea     Valkirie_StateAAndCPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -265,7 +265,7 @@ Entity_UpdateValkirieBattleStateC:                      ; DATA XREF: ROM:000557C
                 addi.l  #$2000,$1C(a5)
                 bclr    #0,$23E(a5)
                 bne.s   Entity_CompleteValkirieBattleStateC
-                lea     Valkirie_StateAAndCPoseScript(pc),a1
+                lea     Valkirie_StateAAndCPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -321,7 +321,7 @@ Entity_ValkirieBattleState22CheckSecondPart:            ; CODE XREF: Entity_Upda
                 bsr.w   Entity_SelectValkirieActivePartPairAtY140
 Entity_RenderValkirieBattleState22:                     ; CODE XREF: Entity_UpdateValkirieBattleState22+38   j  ; was: loc_55B1C
                                         ; Entity_UpdateValkirieBattleState22+40   j
-                lea     Valkirie_State22PoseScript(pc),a1
+                lea     Valkirie_State22Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; End of function Entity_UpdateValkirieBattleState22
@@ -342,7 +342,7 @@ Entity_StartValkirieBattleStateE:                       ; CODE XREF: Entity_Upda
                 tst.w   (PlayerYVelocity).w
                 bmi.s   Entity_ValkirieBattleStateEUsePattern01
 Entity_ValkirieBattleStateEUsePattern00:                ; CODE XREF: Entity_StartValkirieBattleStateE+6E   j  ; was: loc_55B62
-                move.l  #Valkirie_AirbornePattern00PoseScript,$41C(a5)
+                move.l  #Valkirie_AirbornePattern00Poses,$41C(a5)
                 bra.s   Entity_UpdateValkirieAirborneStateEOr16
 ; ---------------------------------------------------------------------------
 Entity_ValkirieBattleStateECheckMidPattern:             ; CODE XREF: Entity_StartValkirieBattleStateE+34   j  ; was: loc_55B6C
@@ -354,7 +354,7 @@ Entity_ValkirieBattleStateECheckMidPattern:             ; CODE XREF: Entity_Star
                 bmi.s   Entity_ValkirieBattleStateEUsePattern02
 Entity_ValkirieBattleStateEUsePattern01:                ; CODE XREF: Entity_StartValkirieBattleStateE+3A   j  ; was: loc_55B82
                                         ; Entity_StartValkirieBattleStateE+54   j
-                move.l  #Valkirie_AirbornePattern01PoseScript,$41C(a5)
+                move.l  #Valkirie_AirbornePattern01Poses,$41C(a5)
                 bra.s   Entity_UpdateValkirieAirborneStateEOr16
 ; ---------------------------------------------------------------------------
 Entity_ValkirieBattleStateEChooseRandomPattern:         ; CODE XREF: Entity_StartValkirieBattleStateE+4C   j  ; was: loc_55B8C
@@ -362,7 +362,7 @@ Entity_ValkirieBattleStateEChooseRandomPattern:         ; CODE XREF: Entity_Star
                 andi.w  #3,d0
                 beq.s   Entity_ValkirieBattleStateEUsePattern00
 Entity_ValkirieBattleStateEUsePattern02:                ; CODE XREF: Entity_StartValkirieBattleStateE+5A   j  ; was: loc_55B96
-                move.l  #Valkirie_AirbornePattern02PoseScript,$41C(a5)
+                move.l  #Valkirie_AirbornePattern02Poses,$41C(a5)
 ; Apply gravity in the shared state-$E/state-$16 airborne updater
 Entity_UpdateValkirieAirborneStateEOr16:                ; CODE XREF: Entity_StartValkirieBattleStateE+44   j  ; was: loc_55B9E
                                         ; Entity_StartValkirieBattleStateE+64   j
@@ -488,7 +488,7 @@ Entity_UpdateValkirieState14Timer:                      ; CODE XREF: Entity_Upda
                 bne.s   Entity_RenderValkirieBattleState14
                 bset    #4,(ValkirieAuxFlags).w
 Entity_RenderValkirieBattleState14:                     ; CODE XREF: Entity_UpdateValkirieBattleState14+32   j  ; was: loc_55D10
-                lea     Valkirie_State14PoseScript(pc),a1
+                lea     Valkirie_State14Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -521,7 +521,7 @@ Entity_CheckValkirieState24Arrival:                     ; CODE XREF: Entity_Upda
                 tst.w   d1
                 bne.s   Entity_CompleteValkirieBattleState24
 Entity_RenderValkirieBattleState24:                     ; CODE XREF: Entity_UpdateValkirieBattleState14+84   j  ; was: loc_55D60
-                lea     Valkirie_State24PoseScript(pc),a1
+                lea     Valkirie_State24Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -551,7 +551,7 @@ Entity_SelectValkirieState12ActiveParts:                ; CODE XREF: Entity_Star
                 move.w  #$C6E0,d0
                 move.w  #$CEC0,d1
                 bsr.w   Entity_SelectValkirieActivePartPairAtY140
-                lea     Valkirie_State12PoseScript(pc),a1
+                lea     Valkirie_State12Poses(pc),a1
                 nop
                 bsr.w   Entity_RenderValkirieBattleAnimation
                 move.w  #$CEC0,d0
@@ -585,7 +585,7 @@ Entity_CheckValkirieState12ExitEvent:                   ; CODE XREF: Entity_Upda
 Entity_RenderValkirieBattleState12:                     ; CODE XREF: Entity_UpdateValkirieBattleState12+22   j  ; was: loc_55E20
                                         ; Entity_UpdateValkirieBattleState12+3A   j
                 bsr.w   Projectile_SpawnValkirieBullet
-                lea     Valkirie_State12PoseScript(pc),a1
+                lea     Valkirie_State12Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -679,7 +679,7 @@ Entity_StartValkirieBattleState18:                      ; CODE XREF: Entity_Upda
 Entity_UpdateValkirieBattleState18:                     ; DATA XREF: ROM:000557D2   o  ; was: sub_55EF0
                 bclr    #0,$23E(a5)
                 bne.s   Entity_AdvanceValkirieBattleState1A
-                lea     Valkirie_State18To1EPoseScript(pc),a1
+                lea     Valkirie_State18To1EPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -689,7 +689,7 @@ Entity_AdvanceValkirieBattleState1A:                    ; CODE XREF: Entity_Upda
 Entity_UpdateValkirieBattleState1A:                     ; DATA XREF: ROM:000557D4   o  ; was: loc_55F06
                 bclr    #0,$23E(a5)
                 bne.s   Entity_AdvanceValkirieBattleState1C
-                lea     Valkirie_State18To1EPoseScript(pc),a1
+                lea     Valkirie_State18To1EPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -707,7 +707,7 @@ Entity_UpdateValkirieBattleState1C:                     ; DATA XREF: ROM:000557D
                 bne.s   Entity_AdvanceValkirieBattleState1E
                 addq.w  #6,$11C(a5)
                 bsr.w   Entity_ApplyValkirieState1CPartOffsets
-                lea     Valkirie_State18To1EPoseScript(pc),a1
+                lea     Valkirie_State18To1EPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -719,7 +719,7 @@ Entity_UpdateValkirieBattleState1E:                     ; DATA XREF: ROM:000557D
                 subi.w  #$A,$11C(a5)
                 bmi.s   Entity_AdvanceValkirieBattleState20
                 bsr.w   Entity_ApplyValkirieState1CPartOffsets
-                lea     Valkirie_State18To1EPoseScript(pc),a1
+                lea     Valkirie_State18To1EPoses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; ---------------------------------------------------------------------------
@@ -737,7 +737,7 @@ Entity_AdvanceValkirieBattleState20:                    ; CODE XREF: Entity_Upda
 Entity_UpdateValkirieBattleState20:                     ; DATA XREF: ROM:000557DA   o  ; was: sub_55F96
                 tst.w   $58(a5)
                 bmi.w   Entity_StartValkirieBattleState8
-                lea     Valkirie_State20PoseScript(pc),a1
+                lea     Valkirie_State20Poses(pc),a1
                 nop
                 bra.w   Entity_RenderValkirieBattleAnimation
 ; End of function Entity_UpdateValkirieBattleState20

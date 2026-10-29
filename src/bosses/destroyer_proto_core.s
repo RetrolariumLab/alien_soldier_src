@@ -22,7 +22,7 @@ Boss_DestroyerProtoMain:                                ; DATA XREF: ROM:Entity_
                 tst.w   (BossHealth).w
                 bne.s   Boss_DestroyerProtoDispatchState
                 bset    #0,(StageTimerPauseFlag).w
-                move.w  #1,(SharedPatternRow0Long5+2).w
+                move.w  #1,(SharedScratchLong5+2).w
                 move.w  #$2E,4(a5)                      ; '.'
 Boss_DestroyerProtoDispatchState:                       ; CODE XREF: Boss_DestroyerProtoMain+10   j  ; was: loc_31502
                                         ; Boss_DestroyerProtoMain+16   j
@@ -63,13 +63,13 @@ Boss_DestroyerProtoCycleArenaEffect:                    ; CODE XREF: Boss_Destro
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.w   Entity_UpdateReturn
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 addq.w  #2,d0
                 cmpi.w  #$14,d0
                 bcs.s   Boss_DestroyerProtoStoreArenaEffectPhase
                 clr.w   d0
 Boss_DestroyerProtoStoreArenaEffectPhase:               ; CODE XREF: Boss_DestroyerProtoCycleArenaEffect+16   j  ; was: loc_3155A
-                move.w  d0,(SharedPatternRow0Long0).w
+                move.w  d0,(SharedScratchLong0).w
                 move.w  Boss_DestroyerProtoArenaEffectValueATable(pc,d0.w),(PaletteActiveColor51).w
                 move.w  Boss_DestroyerProtoArenaEffectValueBTable(pc,d0.w),(PaletteActiveColor52).w
                 rts
@@ -82,7 +82,7 @@ Boss_DestroyerProtoArenaEffectValueBTable:  dc.w    $64, $44, $42, $22, $20, 0, 
 
 ; Initializes the root and six linked parts for the intro
 Boss_DestroyerProtoInitializeIntro:                     ; DATA XREF: ROM:Boss_DestroyerProtoStates   o  ; was: sub_31594
-                clr.w   (SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong5+2).w
                 move.w  #$E0,$14(a5)
                 move.w  #$200,$10(a5)
                 bsr.w   Boss_DestroyerProtoUpdateViewportOffset

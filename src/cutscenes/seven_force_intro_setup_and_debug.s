@@ -92,93 +92,93 @@ Debug_SevenForceScrollTableTest:                        ; was: sub_54C82
                 beq.s   Debug_SevenForceScrollTableTestCheckAlternateLayerInput
                 btst    #0,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckVerticalPositiveInput
-                subi.l  #$800,(SharedPatternRow0Long1).w
-                subi.l  #$400,(SharedPatternRow0Long3).w
+                subi.l  #$800,(SharedScratchLong1).w
+                subi.l  #$400,(SharedScratchLong3).w
 Debug_SevenForceScrollTableTestCheckVerticalPositiveInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+E   j  ; was: loc_54CA2
                 btst    #1,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckHorizontalPositiveInput
-                addi.l  #$800,(SharedPatternRow0Long1).w
-                addi.l  #$400,(SharedPatternRow0Long3).w
+                addi.l  #$800,(SharedScratchLong1).w
+                addi.l  #$400,(SharedScratchLong3).w
 Debug_SevenForceScrollTableTestCheckHorizontalPositiveInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+26   j  ; was: loc_54CBA
                 btst    #3,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckHorizontalNegativeInput
-                addi.l  #$800,(SharedPatternRow0Long0).w
-                addi.l  #$400,(SharedPatternRow0Long2).w
+                addi.l  #$800,(SharedScratchLong0).w
+                addi.l  #$400,(SharedScratchLong2).w
 Debug_SevenForceScrollTableTestCheckHorizontalNegativeInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+3E   j  ; was: loc_54CD2
                 btst    #2,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckAlternateLayerInput
-                subi.l  #$800,(SharedPatternRow0Long0).w
-                subi.l  #$400,(SharedPatternRow0Long2).w
+                subi.l  #$800,(SharedScratchLong0).w
+                subi.l  #$400,(SharedScratchLong2).w
 Debug_SevenForceScrollTableTestCheckAlternateLayerInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+6   j  ; was: loc_54CEA
                                         ; Debug_SevenForceScrollTableTest+56   j
                 btst    #4,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckResetInput
                 btst    #0,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckAlternateVerticalPositiveInput
-                subi.l  #$800,(SharedPatternRow0Long5).w
-                subi.l  #$400,(SharedPatternRow0Long7).w
+                subi.l  #$800,(SharedScratchLong5).w
+                subi.l  #$400,(SharedScratchLong7).w
 Debug_SevenForceScrollTableTestCheckAlternateVerticalPositiveInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+76   j  ; was: loc_54D0A
                 btst    #1,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckAlternateHorizontalPositiveInput
-                addi.l  #$800,(SharedPatternRow0Long5).w
-                addi.l  #$400,(SharedPatternRow0Long7).w
+                addi.l  #$800,(SharedScratchLong5).w
+                addi.l  #$400,(SharedScratchLong7).w
 Debug_SevenForceScrollTableTestCheckAlternateHorizontalPositiveInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+8E   j  ; was: loc_54D22
                 btst    #3,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckAlternateHorizontalNegativeInput
-                addi.l  #$800,(SharedPatternRow0Long4).w
-                addi.l  #$400,(SharedPatternRow0Long6).w
+                addi.l  #$800,(SharedScratchLong4).w
+                addi.l  #$400,(SharedScratchLong6).w
 Debug_SevenForceScrollTableTestCheckAlternateHorizontalNegativeInput:  ; CODE XREF: Debug_SevenForceScrollTableTest+A6   j  ; was: loc_54D3A
                 btst    #2,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestCheckResetInput
-                subi.l  #$800,(SharedPatternRow0Long4).w
-                subi.l  #$400,(SharedPatternRow0Long6).w
+                subi.l  #$800,(SharedScratchLong4).w
+                subi.l  #$400,(SharedScratchLong6).w
 Debug_SevenForceScrollTableTestCheckResetInput:         ; CODE XREF: Debug_SevenForceScrollTableTest+6E   j  ; was: loc_54D52
                                         ; Debug_SevenForceScrollTableTest+BE   j
                 btst    #5,(ControllerHeldState).w
                 beq.s   Debug_SevenForceScrollTableTestAccumulateOffsets
-                clr.l   (SharedPatternRow0Long0).w
-                clr.l   (SharedPatternRow0Long2).w
-                clr.l   (SharedPatternRow0Long4).w
-                clr.l   (SharedPatternRow0Long6).w
-                clr.l   (SharedPatternRow0Long1).w
-                clr.l   (SharedPatternRow0Long3).w
-                clr.l   (SharedPatternRow0Long5).w
-                clr.l   (SharedPatternRow0Long7).w
-                clr.l   (SharedPatternRow1Long0).w
-                clr.l   (SharedPatternRow1Long2).w
-                clr.l   (SharedPatternRow1Long4).w
-                clr.l   (SharedPatternRow1Long6).w
-                clr.l   (SharedPatternRow1Long1).w
-                clr.l   (SharedPatternRow1Long3).w
-                clr.l   (SharedPatternRow1Long5).w
-                clr.l   (SharedPatternRow1Long7).w
+                clr.l   (SharedScratchLong0).w
+                clr.l   (SharedScratchLong2).w
+                clr.l   (SharedScratchLong4).w
+                clr.l   (SharedScratchLong6).w
+                clr.l   (SharedScratchLong1).w
+                clr.l   (SharedScratchLong3).w
+                clr.l   (SharedScratchLong5).w
+                clr.l   (SharedScratchLong7).w
+                clr.l   (SharedScratchLong8).w
+                clr.l   (SharedScratchLong10).w
+                clr.l   (SharedScratchLong12).w
+                clr.l   (SharedScratchLong14).w
+                clr.l   (SharedScratchLong9).w
+                clr.l   (SharedScratchLong11).w
+                clr.l   (SharedScratchLong13).w
+                clr.l   (SharedScratchLong15).w
 Debug_SevenForceScrollTableTestAccumulateOffsets:       ; CODE XREF: Debug_SevenForceScrollTableTest+D6   j  ; was: loc_54D9A
-                move.l  (SharedPatternRow0Long0).w,d0
-                add.l   d0,(SharedPatternRow1Long0).w
-                move.l  (SharedPatternRow0Long2).w,d0
-                add.l   d0,(SharedPatternRow1Long2).w
-                move.l  (SharedPatternRow0Long1).w,d0
-                add.l   d0,(SharedPatternRow1Long1).w
-                move.l  (SharedPatternRow0Long3).w,d0
-                add.l   d0,(SharedPatternRow1Long3).w
-                move.l  (SharedPatternRow0Long4).w,d0
-                add.l   d0,(SharedPatternRow1Long4).w
-                move.l  (SharedPatternRow0Long6).w,d0
-                add.l   d0,(SharedPatternRow1Long6).w
-                move.l  (SharedPatternRow0Long5).w,d0
-                add.l   d0,(SharedPatternRow1Long5).w
-                move.l  (SharedPatternRow0Long7).w,d0
-                add.l   d0,(SharedPatternRow1Long7).w
-                move.l  (SharedPatternRow1Long0).w,d3
-                move.l  (SharedPatternRow1Long4).w,d4
-                move.l  (SharedPatternRow1Long1).w,d5
-                move.l  (SharedPatternRow1Long5).w,d6
+                move.l  (SharedScratchLong0).w,d0
+                add.l   d0,(SharedScratchLong8).w
+                move.l  (SharedScratchLong2).w,d0
+                add.l   d0,(SharedScratchLong10).w
+                move.l  (SharedScratchLong1).w,d0
+                add.l   d0,(SharedScratchLong9).w
+                move.l  (SharedScratchLong3).w,d0
+                add.l   d0,(SharedScratchLong11).w
+                move.l  (SharedScratchLong4).w,d0
+                add.l   d0,(SharedScratchLong12).w
+                move.l  (SharedScratchLong6).w,d0
+                add.l   d0,(SharedScratchLong14).w
+                move.l  (SharedScratchLong5).w,d0
+                add.l   d0,(SharedScratchLong13).w
+                move.l  (SharedScratchLong7).w,d0
+                add.l   d0,(SharedScratchLong15).w
+                move.l  (SharedScratchLong8).w,d3
+                move.l  (SharedScratchLong12).w,d4
+                move.l  (SharedScratchLong9).w,d5
+                move.l  (SharedScratchLong13).w,d6
                 btst    #0,(FrameCounter+1).w
                 bne.s   Debug_SevenForceScrollTableTestBuildTables
-                move.l  (SharedPatternRow1Long2).w,d3
-                move.l  (SharedPatternRow1Long6).w,d4
-                move.l  (SharedPatternRow1Long3).w,d5
-                move.l  (SharedPatternRow1Long7).w,d6
+                move.l  (SharedScratchLong10).w,d3
+                move.l  (SharedScratchLong14).w,d4
+                move.l  (SharedScratchLong11).w,d5
+                move.l  (SharedScratchLong15).w,d6
 Debug_SevenForceScrollTableTestBuildTables:             ; CODE XREF: Debug_SevenForceScrollTableTest+16E   j  ; was: loc_54E02
                 movea.w #(HScrollBuffer-M68K_RAM),a0
                 movea.w #(HScrollAuxBuffer-M68K_RAM),a1

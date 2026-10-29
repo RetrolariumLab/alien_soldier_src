@@ -50,7 +50,7 @@ Boss_ShellshogunStartPoseInterpolation:                 ; CODE XREF: Boss_Shells
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_ShellshogunPoseTargets,d0
+                addi.l  #Boss_ShellshogunPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_ShellshogunCalculatePoseDeltas
                 move.b  (PoseDurationByte).w,d1
@@ -60,13 +60,13 @@ Boss_ShellshogunStartPoseInterpolation:                 ; CODE XREF: Boss_Shells
                 bmi.s   Boss_ShellshogunPublishPoseAngles
 Boss_ShellshogunAdvancePoseInterpolation:               ; CODE XREF: Boss_ShellshogunUpdatePose+8   j  ; was: loc_3A1D4
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$E,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_ShellshogunPublishPoseAngles:                      ; CODE XREF: Boss_ShellshogunUpdatePose+E   j  ; was: loc_3A1E4
                                         ; Boss_ShellshogunUpdatePose+60   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -146,36 +146,36 @@ Boss_ShellshogunPublishPoseAngles:                      ; CODE XREF: Boss_Shells
 ; Calculates per-channel deltas toward Shellshogun's neutral pose
 Boss_ShellshogunCalculatePoseDeltas:                    ; CODE XREF: Boss_ShellshogunUpdatePose+4E   p  ; was: sub_3A2CC
                 movea.l #Boss_ShellshogunNeutralPose,a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 subq.w  #1,$C(a5)
                 moveq   #$E,d7
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_ShellshogunCalculatePoseDeltas
 ; ---------------------------------------------------------------------------
-Boss_ShellshogunDecisionPoseCommands:   dc.w    $10, $F, $18, 0, $FFFF  ; was: word_3A2E6
+Boss_ShellshogunDecisionPoses:  dc.w    $10, $F, $18, 0, $FFFF  ; was: word_3A2E6
                                         ; DATA XREF: ROM:Entity_UpdateHandlerTable   o
                                         ; Boss_ShellshogunDecisionState:Boss_ShellshogunUpdateDecisionPose   o
-Boss_ShellshogunTimedStageAdvancePoseCommands:  dc.w    $F030, $1E, $70, $1E, $FFFE  ; was: word_3A2F0
+Boss_ShellshogunTimedStageAdvancePoses: dc.w    $F030, $1E, $70, $1E, $FFFE  ; was: word_3A2F0
                                         ; DATA XREF: Boss_ShellshogunDecisionState+CC   o
-Boss_ShellshogunSlamPoseCommands:   dc.w    $EF11, $5A, $E830, $87, $E, $87, $9080, $96, $12, $96, $9080, $87, $FFFE  ; was: word_3A2FA
+Boss_ShellshogunSlamPoses:  dc.w    $EF11, $5A, $E830, $87, $E, $87, $9080, $96, $12, $96, $9080, $87, $FFFE  ; was: word_3A2FA
                                         ; DATA XREF: Boss_ShellshogunUpdateSlamAnimation   o
-Boss_ShellshogunSharedPoseCommands: dc.w    $17, $2D, $10, $3C, $1B, $4B, $21, $5A, $FFFF  ; was: word_3A314
+Boss_ShellshogunSharedPoses:    dc.w    $17, $2D, $10, $3C, $1B, $4B, $21, $5A, $FFFF  ; was: word_3A314
                                         ; DATA XREF: Boss_ShellshogunUpdateSharedPose   o
-Boss_ShellshogunJumpWindupPoseCommands: dc.w    $FE14, $69, 6, $69, $FE12, $78, 6, $78, $FFFF  ; was: word_3A326
+Boss_ShellshogunJumpWindupPoses:    dc.w    $FE14, $69, 6, $69, $FE12, $78, 6, $78, $FFFF  ; was: word_3A326
                                         ; DATA XREF: Boss_ShellshogunJumpAttackWindupState:Boss_ShellshogunRenderJumpWindup   o
-Boss_ShellshogunJumpAirPoseCommands:            dc.w    $FE28, $F, $FFFE  ; DATA XREF: Boss_ShellshogunJumpAttackAirState:Boss_ShellshogunRenderJumpAir   o  ; was: word_3A338
-Boss_ShellshogunDirectionalAttackPoseCommands:  dc.w    $FC18, $A6, $FD18, $A6, $13, $A6, $FF0E, $B5, $A, $B5, $D840, $A6, $FFFE  ; was: word_3A33E
+Boss_ShellshogunJumpAirPoses:           dc.w    $FE28, $F, $FFFE  ; DATA XREF: Boss_ShellshogunJumpAttackAirState:Boss_ShellshogunRenderJumpAir   o  ; was: word_3A338
+Boss_ShellshogunDirectionalAttackPoses: dc.w    $FC18, $A6, $FD18, $A6, $13, $A6, $FF0E, $B5, $A, $B5, $D840, $A6, $FFFE  ; was: word_3A33E
                                         ; DATA XREF: Boss_ShellshogunDirectionalAttackWindupState:Boss_ShellshogunUpdateDirectionalAttackWindup   o
                                         ; Boss_ShellshogunDirectionalAttackMotionState:Boss_ShellshogunRenderDirectionalAttack   o
-Boss_ShellshogunLeapPoseCommands:   dc.w    $FC18, $E2, $FD18, $E2, $FE0E, $D3, $FF0E, $C4, $18, $C4, $16, $E2, $FFFE  ; was: word_3A358
+Boss_ShellshogunLeapPoses:  dc.w    $FC18, $E2, $FD18, $E2, $FE0E, $D3, $FF0E, $C4, $18, $C4, $16, $E2, $FFFE  ; was: word_3A358
                                         ; DATA XREF: Boss_ShellshogunLeapWindupState+6   o
                                         ; Boss_ShellshogunLeapFlightState:Boss_ShellshogunRenderLeapFlight   o
-Boss_ShellshogunLeapRecoveryPoseCommands:   dc.w    $FC0C, $E2, $18, $E2, $FC0C, $F, $FFFE  ; was: word_3A372
+Boss_ShellshogunLeapRecoveryPoses:  dc.w    $FC0C, $E2, $18, $E2, $FC0C, $F, $FFFE  ; was: word_3A372
                                         ; DATA XREF: Boss_ShellshogunLeapRecoveryState+28   o
-Boss_ShellshogunDefeatLaunchPoseCommands:   dc.w    $C, $C4, $C, $E2, $FFFF  ; was: word_3A380
+Boss_ShellshogunDefeatLaunchPoses:  dc.w    $C, $C4, $C, $E2, $FFFF  ; was: word_3A380
                                         ; DATA XREF: Boss_ShellshogunDefeatLaunchState+AA   o
-Boss_ShellshogunPoseTargets:    dc.w    $CCE8, $20E8, $2013, $FE2, $A870, $3060, $78B8, $4CC0, $E010, $F020, $1400, $F0A0, $7844, $6080, $BC40, $C0D0  ; was: word_3A38A
+Boss_ShellshogunPoseTable:  dc.w    $CCE8, $20E8, $2013, $FE2, $A870, $3060, $78B8, $4CC0, $E010, $F020, $1400, $F0A0, $7844, $6080, $BC40, $C0D0  ; was: word_3A38A
                                         ; DATA XREF: Boss_ShellshogunUpdatePose+46   o
                 dc.w    $F0E0, $2020, $20C0, $B090, $2060, $60E0, $40CC, $E810, $F020, $F870, $F0A8, $7030, $5060, $F030, $D0E0, $20F8
                 dc.w    $2010, $28C0, $B090, $5860, $70E8, $30CE, $E418, $FC20, $2840, $A0B8, $8018, $5090, $9010, $BCD4, $D0, $3030

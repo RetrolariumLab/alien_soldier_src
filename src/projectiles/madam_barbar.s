@@ -272,23 +272,23 @@ Boss_MadamBarbarAnimationEffectFrames:  dc.l    $163BC, $FCFC, $163BD, $FCFC, $1
                                         ; DATA XREF: Boss_MadamBarbarSpawnAnimationEffect+8   o
                 dc.l    $500F8F8, $163BE, $FCFC, $163BD, $FCFC, $163BC, $FCFC
                 dc.w    $FFFF
-Boss_MadamBarbarIntroIdlePoseCommands:  dc.l    $100000, $10000C  ; DATA XREF: Boss_MadamBarbarIntroApproachState:Boss_MadamBarbarUpdateIntroPose   o  ; was: dword_3B1B2
+Boss_MadamBarbarIntroIdlePoses: dc.l    $100000, $10000C  ; DATA XREF: Boss_MadamBarbarIntroApproachState:Boss_MadamBarbarUpdateIntroPose   o  ; was: dword_3B1B2
                                         ; Boss_MadamBarbarIdleProgressState+1E   o
                 dc.w    $FFFF
-Boss_MadamBarbarDropProjectilePoseCommands: dc.l    $70000, $7000C  ; DATA XREF: Boss_MadamBarbarSelectAttackState+248   o  ; was: dword_3B1BC
+Boss_MadamBarbarDropProjectilePoses:    dc.l    $70000, $7000C  ; DATA XREF: Boss_MadamBarbarSelectAttackState+248   o  ; was: dword_3B1BC
                 dc.w    $FFFF
-Boss_MadamBarbarBulletBarragePoseCommands:  dc.l    $40018, $4000C  ; DATA XREF: Boss_MadamBarbarBulletBarrageState+58   o  ; was: dword_3B1C6
+Boss_MadamBarbarBulletBarragePoses: dc.l    $40018, $4000C  ; DATA XREF: Boss_MadamBarbarBulletBarrageState+58   o  ; was: dword_3B1C6
                 dc.w    $FFFF
-Boss_MadamBarbarCenterSpinPoseCommands: dc.l    $F70D0018, $220018, $E3200024, $FE0E0024, $180024, $F0200018  ; was: dword_3B1D0
+Boss_MadamBarbarCenterSpinPoses:    dc.l    $F70D0018, $220018, $E3200024, $FE0E0024, $180024, $F0200018  ; was: dword_3B1D0
                                         ; DATA XREF: Boss_MadamBarbarSelectAttackState+1F6   o
                 dc.w    $FFFE
-Boss_MadamBarbarPlayerLeftPoseCommands: dc.l    $100030, $10003C, $100048, $100054  ; was: dword_3B1EA
+Boss_MadamBarbarPlayerLeftPoses:    dc.l    $100030, $10003C, $100048, $100054  ; was: dword_3B1EA
                                         ; DATA XREF: Boss_MadamBarbarSelectAttackState:Boss_MadamBarbarUpdatePlayerLeftSidePose   o
                 dc.w    $FFFF
-Boss_MadamBarbarPlayerRightPoseCommands:    dc.l    $100060, $10006C, $100078, $100084  ; was: dword_3B1FC
+Boss_MadamBarbarPlayerRightPoses:   dc.l    $100060, $10006C, $100078, $100084  ; was: dword_3B1FC
                                         ; DATA XREF: Boss_MadamBarbarSelectAttackState:Boss_MadamBarbarUpdatePlayerRightSidePose   o
                 dc.w    $FFFF
-Boss_MadamBarbarPoseTargets:    dc.w    $D828, $A8D8, $8818, $D820, $A8E0, $F8E8, $E028, $A0D8  ; was: word_3B20E
+Boss_MadamBarbarPoseTable:  dc.w    $D828, $A8D8, $8818, $D820, $A8E0, $F8E8, $E028, $A0D8  ; was: word_3B20E
                                         ; DATA XREF: Boss_MadamBarbarSetupState+CA   o
                                         ; Boss_MadamBarbarUpdatePose+5A   o
                 dc.w    $9020, $D020, $B0E0, $F0E0, $A028, $E0D8, $8010, $E028

@@ -67,7 +67,7 @@ Boss_BugmaxOpeningObjectHorizontalBounds:   dc.w    8, 8, $C, 8, $C, $C, $10, $1
 
 ; Convert signed wave displacement into a palette offset for color word 3E2E
 Gfx_BugmaxApplyWavePaletteOffset:                       ; CODE XREF: Boss_BugmaxUpdatePerspectiveAndLinkedGeometry:Boss_BugmaxUpdatePerspectiveParametersAndGeometry   p  ; was: sub_4DAEE
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 beq.s   Gfx_BugmaxWavePaletteOffsetReturn
                 tst.w   d0
                 bpl.s   Gfx_BugmaxSelectPositiveWavePaletteOffsets
@@ -145,21 +145,21 @@ Boss_BugmaxUpdateBattleMovement:                        ; CODE XREF: Boss_Bugmax
 ; Integrate the wave phase and scale its displacement by the signed amplitude
 Boss_BugmaxUpdateWaveDisplacement:                      ; CODE XREF: Boss_BugmaxUpdateFinalWaveDescentAndCompleteEncounter   p  ; was: sub_4DBB0
                                         ; Boss_BugmaxUpdateBattleMovement   p
-                move.l  (SharedPatternRow0Long2).w,d0
-                add.l   d0,(SharedPatternRow0Long1).w
-                move.w  (SharedPatternRow0Long1).w,d0
+                move.l  (SharedScratchLong2).w,d0
+                add.l   d0,(SharedScratchLong1).w
+                move.w  (SharedScratchLong1).w,d0
                 andi.w  #$1FE,d0
                 lea     (Math_SineTable).l,a0
                 move.w  Math_QuarterSineTable-Math_SineTable(a0,d0.w),d0
                 tst.w   d0
                 bmi.s   Boss_BugmaxScaleWaveByNegativeAmplitude
-                muls.w  (SharedPatternRow0Long3).w,d0
+                muls.w  (SharedScratchLong3).w,d0
                 bra.s   Boss_BugmaxStoreWaveDisplacement
 ; ---------------------------------------------------------------------------
 Boss_BugmaxScaleWaveByNegativeAmplitude:                ; CODE XREF: Boss_BugmaxUpdateWaveDisplacement+1C   j  ; was: loc_4DBD4
-                muls.w  (SharedPatternRow0Long3+2).w,d0
+                muls.w  (SharedScratchLong3+2).w,d0
 Boss_BugmaxStoreWaveDisplacement:                       ; CODE XREF: Boss_BugmaxUpdateWaveDisplacement+22   j  ; was: loc_4DBD8
-                move.l  d0,(SharedPatternRow0Long0).w
+                move.l  d0,(SharedScratchLong0).w
                 rts
 ; End of function Boss_BugmaxUpdateWaveDisplacement
 ; Update bounded horizontal steering toward the explicit target or player X
@@ -201,9 +201,9 @@ Boss_BugmaxSteerRightFromLowerHorizontalBound:          ; CODE XREF: Boss_Bugmax
 ; ---------------------------------------------------------------------------
 Boss_BugmaxHandleInBoundsHorizontalMode:                ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+2E   j  ; was: loc_4DC34
                                         ; Boss_BugmaxUpdateHorizontalSteering+40   j
-                btst    #0,(SharedPatternRow0Long6+1).w
+                btst    #0,(SharedScratchLong6+1).w
                 bne.s   Boss_BugmaxSelectHorizontalSteeringTarget
-                btst    #1,(SharedPatternRow0Long6+1).w
+                btst    #1,(SharedScratchLong6+1).w
                 beq.s   Boss_BugmaxGateHorizontalTargetUpdate
                 tst.l   $18(a5)
                 beq.w   Boss_BugmaxHorizontalSteeringReturn
@@ -217,7 +217,7 @@ Boss_BugmaxGateHorizontalTargetUpdate:                  ; CODE XREF: Boss_Bugmax
                 andi.w  #$7F,d7
                 bne.s   Boss_BugmaxApplyHorizontalAcceleration
 Boss_BugmaxSelectHorizontalSteeringTarget:              ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+5C   j  ; was: loc_4DC6A
-                move.w  (SharedPatternRow1Long1).w,d0
+                move.w  (SharedScratchLong9).w,d0
                 beq.s   Boss_BugmaxUsePlayerHorizontalTarget
                 sub.w   (PrimaryCameraXPosition).w,d0
                 bra.s   Boss_BugmaxMeasureHorizontalTargetDelta
@@ -232,7 +232,7 @@ Boss_BugmaxMeasureHorizontalTargetDelta:                ; CODE XREF: Boss_Bugmax
 Boss_BugmaxUseAbsoluteHorizontalTargetDelta:            ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+A2   j  ; was: loc_4DC84
                 cmpi.w  #$10,d1
                 bcc.s   Boss_BugmaxSelectHorizontalAccelerationDirection
-                bset    #0,(SharedPatternRow0Long7).w
+                bset    #0,(SharedScratchLong7).w
 Boss_BugmaxSelectHorizontalAccelerationDirection:       ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+AA   j  ; was: loc_4DC90
                 tst.w   d0
                 beq.s   Boss_BugmaxHorizontalSteeringReturn
@@ -240,15 +240,15 @@ Boss_BugmaxSelectHorizontalAccelerationDirection:       ; CODE XREF: Boss_Bugmax
                 bmi.s   Boss_BugmaxSelectNegativeHorizontalAcceleration
 Boss_BugmaxSelectPositiveHorizontalAcceleration:        ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+52   j  ; was: loc_4DC98
                                         ; Boss_BugmaxUpdateHorizontalSteering+7A   j
-                clr.b   (SharedPatternRow0Long6).w
+                clr.b   (SharedScratchLong6).w
                 bra.s   Boss_BugmaxApplyHorizontalAcceleration
 ; ---------------------------------------------------------------------------
 Boss_BugmaxSelectNegativeHorizontalAcceleration:        ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+48   j  ; was: loc_4DC9E
                                         ; Boss_BugmaxUpdateHorizontalSteering+7E   j
-                move.b  #1,(SharedPatternRow0Long6).w
+                move.b  #1,(SharedScratchLong6).w
 Boss_BugmaxApplyHorizontalAcceleration:                 ; CODE XREF: Boss_BugmaxUpdateHorizontalSteering+8A   j  ; was: loc_4DCA4
                                         ; Boss_BugmaxUpdateHorizontalSteering+BE   j
-                tst.b   (SharedPatternRow0Long6).w
+                tst.b   (SharedScratchLong6).w
                 bne.s   Boss_BugmaxApplyNegativeHorizontalAcceleration
                 add.l   d6,$18(a5)
                 bra.s   Boss_BugmaxClampPositiveHorizontalVelocity
@@ -273,14 +273,14 @@ Boss_BugmaxHorizontalSteeringReturn:                    ; CODE XREF: Boss_Bugmax
 Boss_BugmaxUpdateVerticalBandSteering:                  ; CODE XREF: Boss_BugmaxSpawnSineProjectile+4   p  ; was: sub_4DCDC
                                         ; Boss_BugmaxUpdateBattleMovement+6   p
                 move.l  #$2000,d7
-                move.w  (SharedPatternRow1Long0).w,d0
+                move.w  (SharedScratchLong8).w,d0
                 move.w  $14(a5),d1
                 cmp.w   d0,d1
                 blt.s   Boss_BugmaxAccelerateDownTowardVerticalBand
-                add.w   (SharedPatternRow1Long0+2).w,d0
+                add.w   (SharedScratchLong8+2).w,d0
                 cmp.w   d0,d1
                 bgt.s   Boss_BugmaxAccelerateUpTowardVerticalBand
-                move.w  (SharedPatternRow0Long1).w,d0
+                move.w  (SharedScratchLong1).w,d0
                 subi.w  #$80,d0
                 andi.w  #$1FF,d0
                 cmpi.w  #$100,d0
@@ -346,7 +346,7 @@ Boss_BugmaxCheckPositionUpOrWaveIncreaseInput:          ; CODE XREF: Boss_Bugmax
                 bra.s   Boss_BugmaxCheckPositionDownOrWaveDecreaseInput
 ; ---------------------------------------------------------------------------
 Boss_BugmaxIncreaseWaveFromModifiedUpInput:             ; CODE XREF: Boss_BugmaxAdjustPositionOrWaveFromInput+2A   j  ; was: loc_4DDA4
-                addi.l  #$A0000,(SharedPatternRow0Long0).w
+                addi.l  #$A0000,(SharedScratchLong0).w
 Boss_BugmaxCheckPositionDownOrWaveDecreaseInput:        ; CODE XREF: Boss_BugmaxAdjustPositionOrWaveFromInput+22   j  ; was: loc_4DDAC
                                         ; Boss_BugmaxAdjustPositionOrWaveFromInput+32   j
                 btst    #1,(ControllerHeldState).w
@@ -357,8 +357,8 @@ Boss_BugmaxCheckPositionDownOrWaveDecreaseInput:        ; CODE XREF: Boss_Bugmax
                 rts
 ; ---------------------------------------------------------------------------
 Boss_BugmaxDecreaseWaveFromModifiedDownInput:           ; CODE XREF: Boss_BugmaxAdjustPositionOrWaveFromInput+4A   j  ; was: loc_4DDC4
-                addi.l  #-$A0000,(SharedPatternRow0Long0).w
-                tst.l   (SharedPatternRow0Long0).w
+                addi.l  #-$A0000,(SharedScratchLong0).w
+                tst.l   (SharedScratchLong0).w
 Boss_BugmaxInputAdjustmentReturn:                       ; CODE XREF: Boss_BugmaxAdjustPositionOrWaveFromInput+42   j  ; was: locret_4DDD0
                 rts
 ; End of function Boss_BugmaxAdjustPositionOrWaveFromInput

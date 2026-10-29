@@ -30,14 +30,14 @@ Boss_JampanBackwardAngularVelocityTable:    dc.l    $800, $1000, $2000, $2000, $
 ; gameplay purpose is not claimed without runtime evidence
 ;
 ; Controller Input Mapping (ControllerHeldState = Controller 1 input):
-; UP + A      : Decrease SharedPatternRow0Long0 by 2
-; UP + B      : Decrease SharedPatternRow0Long1 by 2
-; UP + C      : Decrease SharedPatternRow0Long2 by 2
-; DOWN + A    : Increase SharedPatternRow0Long0 by 2
-; DOWN + B    : Increase SharedPatternRow0Long1 by 2
-; DOWN + C    : Increase SharedPatternRow0Long2 by 2
-; LEFT + START : Increase SharedPatternRow1Long1 by 2
-; RIGHT + START: Decrease SharedPatternRow1Long1 by 2
+; UP + A      : Decrease SharedScratchLong0 by 2
+; UP + B      : Decrease SharedScratchLong1 by 2
+; UP + C      : Decrease SharedScratchLong2 by 2
+; DOWN + A    : Increase SharedScratchLong0 by 2
+; DOWN + B    : Increase SharedScratchLong1 by 2
+; DOWN + C    : Increase SharedScratchLong2 by 2
+; LEFT + START : Increase SharedScratchLong9 by 2
+; RIGHT + START: Decrease SharedScratchLong9 by 2
 ;
 ; Button bit mapping:
 ; Bit 0 = LEFT, Bit 1 = RIGHT, Bit 2 = UP, Bit 3 = DOWN
@@ -48,44 +48,44 @@ Boss_JampanAdjustOrbitParametersFromInput:              ; CODE XREF: Boss_Jampan
                 beq.s   Boss_JampanCheckDownOrbitAdjustments
                 btst    #6,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckUpBOrbitAdjustment
-                subq.w  #2,(SharedPatternRow0Long0).w
+                subq.w  #2,(SharedScratchLong0).w
 Boss_JampanCheckUpBOrbitAdjustment:                     ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+E   j  ; was: loc_4A672
                 btst    #4,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckUpCOrbitAdjustment
-                subq.w  #2,(SharedPatternRow0Long1).w
+                subq.w  #2,(SharedScratchLong1).w
 Boss_JampanCheckUpCOrbitAdjustment:                     ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+1A   j  ; was: loc_4A67E
                 btst    #5,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckDownOrbitAdjustments
-                subq.w  #2,(SharedPatternRow0Long2).w
+                subq.w  #2,(SharedScratchLong2).w
 Boss_JampanCheckDownOrbitAdjustments:                   ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+6   j  ; was: loc_4A68A
                                         ; Boss_JampanAdjustOrbitParametersFromInput+26   j
                 btst    #3,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckLeftStartOffsetAdjustment
                 btst    #6,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckDownBOrbitAdjustment
-                addq.w  #2,(SharedPatternRow0Long0).w
+                addq.w  #2,(SharedScratchLong0).w
 Boss_JampanCheckDownBOrbitAdjustment:                   ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+3A   j  ; was: loc_4A69E
                 btst    #4,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckDownCOrbitAdjustment
-                addq.w  #2,(SharedPatternRow0Long1).w
+                addq.w  #2,(SharedScratchLong1).w
 Boss_JampanCheckDownCOrbitAdjustment:                   ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+46   j  ; was: loc_4A6AA
                 btst    #5,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckLeftStartOffsetAdjustment
-                addq.w  #2,(SharedPatternRow0Long2).w
+                addq.w  #2,(SharedScratchLong2).w
 Boss_JampanCheckLeftStartOffsetAdjustment:              ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+32   j  ; was: loc_4A6B6
                                         ; Boss_JampanAdjustOrbitParametersFromInput+52   j
                 btst    #0,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckRightStartOffsetAdjustment
                 btst    #7,(ControllerHeldState).w
                 beq.s   Boss_JampanCheckRightStartOffsetAdjustment
-                addq.w  #2,(SharedPatternRow1Long1).w
+                addq.w  #2,(SharedScratchLong9).w
 Boss_JampanCheckRightStartOffsetAdjustment:             ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+5E   j  ; was: loc_4A6CA
                                         ; Boss_JampanAdjustOrbitParametersFromInput+66   j
                 btst    #1,(ControllerHeldState).w
                 beq.s   Boss_JampanAdjustOrbitParametersFromInputReturn
                 btst    #7,(ControllerHeldState).w
                 beq.s   Boss_JampanAdjustOrbitParametersFromInputReturn
-                subq.w  #2,(SharedPatternRow1Long1).w
+                subq.w  #2,(SharedScratchLong9).w
 Boss_JampanAdjustOrbitParametersFromInputReturn:        ; CODE XREF: Boss_JampanAdjustOrbitParametersFromInput+72   j  ; was: locret_4A6DE
                                         ; Boss_JampanAdjustOrbitParametersFromInput+7A   j
                 rts
@@ -103,40 +103,40 @@ Boss_JampanPublishStageCoordinates:                     ; CODE XREF: Boss_Jampan
 ; Advances shared angles and projects all sixteen orbiting parts
 Boss_JampanUpdateOrbitingPartGeometry:                  ; CODE XREF: Boss_JampanInitializeEncounterState+1E2   p  ; was: sub_4A6FA
                                         ; sub_4953E   p
-                tst.l   (SharedPatternRow0Long3).w
+                tst.l   (SharedScratchLong3).w
                 beq.s   Boss_JampanUpdateSecondaryOrbitAngle
-                move.l  (SharedPatternRow0Long3).w,d0
-                add.l   d0,(SharedPatternRow0Long0).w
+                move.l  (SharedScratchLong3).w,d0
+                add.l   d0,(SharedScratchLong0).w
 Boss_JampanUpdateSecondaryOrbitAngle:                   ; CODE XREF: Boss_JampanUpdateOrbitingPartGeometry+4   j  ; was: loc_4A708
-                tst.l   (SharedPatternRow0Long4).w
+                tst.l   (SharedScratchLong4).w
                 beq.s   Boss_JampanUpdateTertiaryOrbitAngle
-                move.l  (SharedPatternRow0Long4).w,d0
-                add.l   d0,(SharedPatternRow0Long1).w
+                move.l  (SharedScratchLong4).w,d0
+                add.l   d0,(SharedScratchLong1).w
 Boss_JampanUpdateTertiaryOrbitAngle:                    ; CODE XREF: Boss_JampanUpdateOrbitingPartGeometry+12   j  ; was: loc_4A716
-                tst.l   (SharedPatternRow0Long5).w
+                tst.l   (SharedScratchLong5).w
                 beq.s   Boss_JampanNormalizeOrbitAngles
-                move.l  (SharedPatternRow0Long5).w,d0
-                add.l   d0,(SharedPatternRow0Long2).w
+                move.l  (SharedScratchLong5).w,d0
+                add.l   d0,(SharedScratchLong2).w
 Boss_JampanNormalizeOrbitAngles:                        ; CODE XREF: Boss_JampanUpdateOrbitingPartGeometry+20   j  ; was: loc_4A724
-                andi.w  #$1FF,(SharedPatternRow0Long0).w
-                andi.w  #$1FF,(SharedPatternRow0Long1).w
-                andi.w  #$1FF,(SharedPatternRow0Long2).w
+                andi.w  #$1FF,(SharedScratchLong0).w
+                andi.w  #$1FF,(SharedScratchLong1).w
+                andi.w  #$1FF,(SharedScratchLong2).w
                 movea.w a5,a1
                 lea     (SeventhEntityType).w,a0
                 move.w  #$F,d0
 Boss_JampanProjectNextOrbitingPart:                     ; CODE XREF: Boss_JampanUpdateOrbitingPartGeometry+8A   j  ; was: loc_4A740
                 lea     (Math_SineTable).l,a2
                 move.w  $48(a0),d4
-                add.w   (SharedPatternRow1Long1).w,d4
+                add.w   (SharedScratchLong9).w,d4
                 move.w  $4A(a0),d5
                 move.w  $4C(a0),d6
                 move.w  $4E(a0),d7
-                add.w   (SharedPatternRow0Long0).w,d5
-                add.w   (SharedPatternRow1Long1+2).w,d5
-                add.w   (SharedPatternRow0Long1).w,d6
-                add.w   (SharedPatternRow1Long2).w,d6
-                add.w   (SharedPatternRow0Long2).w,d7
-                add.w   (SharedPatternRow1Long2+2).w,d6
+                add.w   (SharedScratchLong0).w,d5
+                add.w   (SharedScratchLong9+2).w,d5
+                add.w   (SharedScratchLong1).w,d6
+                add.w   (SharedScratchLong10).w,d6
+                add.w   (SharedScratchLong2).w,d7
+                add.w   (SharedScratchLong10+2).w,d6
                 andi.w  #$1FE,d5
                 andi.w  #$1FE,d6
                 andi.w  #$1FE,d7

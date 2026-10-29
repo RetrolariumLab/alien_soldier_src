@@ -24,7 +24,7 @@ Continue_RenderCreditCount_QueueDigits:                 ; was: loc_1D966
 
 ; Renders the CREDIT header and its two-digit placeholder
 Continue_RenderCreditHeader:                            ; was: sub_1D978
-                lea     (Text_CreditPeriod).l,a0
+                lea     (Text_CreditDash).l,a0
                 move.w  #$2300,d0
                 move.w  #$6B34,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
@@ -53,7 +53,7 @@ Continue_RenderCountdownDigit:                          ; was: sub_1D9B4
 
 ; Renders the current stage number and difficulty on the continue screen
 Continue_RenderStageAndDifficulty:                      ; was: sub_1D9CA
-                lea     (Text_StagePeriod).l,a0
+                lea     (Text_StageDash).l,a0
                 move.w  #$2300,d0
                 move.w  #$6B06,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
@@ -69,7 +69,7 @@ Continue_RenderStageAndDifficulty:                      ; was: sub_1D9CA
                 move.w  #$300,d0
                 move.w  #$6B12,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
-                lea     (Text_LevelPeriod).l,a0
+                lea     (Text_LevelDash).l,a0
                 move.w  #$2300,d0
                 move.w  #$6B1A,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l
@@ -85,7 +85,7 @@ Continue_RenderStageAndDifficulty_RenderDifficulty:     ; was: loc_1DA36
 
 ; Renders the password associated with the current stage and difficulty
 Continue_RenderPassword:                                ; was: sub_1DA44
-                lea     (Text_PasswordPeriod).l,a0
+                lea     (Text_PasswordDash).l,a0
                 move.w  #$2300,d0
                 move.w  #$6B32,d4
                 jsr     (Text_QueueDoubleHeightStringWrapped).l

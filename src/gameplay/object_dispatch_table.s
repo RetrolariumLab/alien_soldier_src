@@ -82,7 +82,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Boss_CaterpillarFourPhaseSegment
                 dc.l    Boss_CaterpillarTwoPhaseSegment
                 dc.l    Projectile_UpdateTwoSpeedShotCollision
-                dc.l    Boss_ShellshogunDecisionPoseCommands
+                dc.l    Boss_ShellshogunDecisionPoses
                 dc.l    TransitionEffect_ObjectMain
                 dc.l    Boss_FlyingNeoMain
                 dc.l    Projectile_AntroidUpdate
@@ -246,7 +246,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Boss_MissirayMain
                 dc.l    Segment_MissirayMain
                 dc.l    Entity_NullUpdateHandler4
-                dc.l    Stage18_MovingPlatform
+                dc.l    Object_MovingPlatform
                 dc.l    StageTransition_UpdateMissiraySceneObject
                 dc.l    StageTransition_AdvanceStateFromObject
                 dc.l    Boss_WolfGaropaUpdate

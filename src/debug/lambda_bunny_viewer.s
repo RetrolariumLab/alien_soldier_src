@@ -112,7 +112,7 @@ Debug_LambdaBunnyViewerCheckAngleDecreaseInput:         ; CODE XREF: Debug_Lambd
                 subq.b  #1,$29F(a5)
 Debug_LambdaBunnyViewerPreparePoseUpdate:               ; CODE XREF: Debug_LambdaBunnyViewerInitialize+17C   j  ; was: loc_51152
                 andi.w  #$1FE,$56(a5)
-                lea     Debug_LambdaBunnyViewerPoseScript(pc),a1
+                lea     Debug_LambdaBunnyViewerPoses(pc),a1
                 nop
                 bra.w   *+4
 ; ---------------------------------------------------------------------------
@@ -120,7 +120,7 @@ Debug_LambdaBunnyViewerUpdatePoseAndParts:              ; CODE XREF: Debug_Lambd
                 bsr.w   Debug_LambdaBunnyViewerAdvancePoseScript
                 moveq   #$14,d7
                 jsr     (Sprite_SetMetaspriteTraversalPointers).l
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.w  #$FFF3,d7
                 tst.w   $54(a5)
                 beq.s   Debug_LambdaBunnyViewerPositionUpperPartPair
@@ -328,7 +328,7 @@ Debug_LambdaBunnyViewerBeginPoseCommandInterpolation:   ; CODE XREF: Debug_Lambd
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Debug_LambdaBunnyViewerPoseTargets,d0
+                addi.l  #Debug_LambdaBunnyViewerPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Debug_LambdaBunnyViewerBeginPoseInterpolation
                 moveq   #0,d0
@@ -340,13 +340,13 @@ Debug_LambdaBunnyViewerBeginPoseCommandInterpolation:   ; CODE XREF: Debug_Lambd
                 bmi.s   Debug_LambdaBunnyViewerStorePoseComponents
 Debug_LambdaBunnyViewerTickPoseInterpolation:           ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+8   j  ; was: loc_51432
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$10,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Debug_LambdaBunnyViewerStorePoseComponents:             ; CODE XREF: Debug_LambdaBunnyViewerAdvancePoseScript+E   j  ; was: loc_51442
                                         ; Debug_LambdaBunnyViewerAdvancePoseScript+76   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -418,24 +418,24 @@ Debug_LambdaBunnyViewerBeginPoseInterpolation:          ; CODE XREF: Debug_Lambd
                 lea     Debug_LambdaBunnyViewerPoseBaseValues(pc),a1
                 nop
                 moveq   #$10,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Debug_LambdaBunnyViewerBeginPoseInterpolation
 ; Initialize the viewer's seventeen fixed-point pose channels from bytes at a0
 Debug_LambdaBunnyViewerInitializePoseChannels:          ; was: sub_5152A
                 moveq   #$10,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Debug_LambdaBunnyViewerInitializePoseChannels
 ; ---------------------------------------------------------------------------
 Debug_LambdaBunnyViewerPoseBaseValues:  dc.b    $40, $C0, $80, $80, $A0, $80, $A0, $80, $80, $A0, $80, 0, $A0, $80, $80, $80  ; was: byte_51536
                                         ; DATA XREF: Debug_LambdaBunnyViewerBeginPoseInterpolation   o
-Debug_LambdaBunnyViewerPoseScript:  dc.b    $10, $18, 0, 0, $10, $10, 0, 0, $10, $18, 0, $10, $20, $20, 0, $10  ; was: byte_51546
+Debug_LambdaBunnyViewerPoses:   dc.b    $10, $18, 0, 0, $10, $10, 0, 0, $10, $18, 0, $10, $20, $20, 0, $10  ; was: byte_51546
                                         ; DATA XREF: Debug_LambdaBunnyViewerInitialize+188   o
                 dc.b    $FF, $FF, 8, $C, 0, $20, $12, $12, 0, $20, 2, 4, 0, $30, 9, 9
                 dc.b    0, $30, $10, $30, 0, $20, $FF, $FE
-Debug_LambdaBunnyViewerPoseTargets: dc.b    $BC, $4A, $11, $F, $2C, $98, $78, $A8, $E8, $36, 3, $90, $54, 4, 2, 3  ; was: byte_5156E
+Debug_LambdaBunnyViewerPoseTable:   dc.b    $BC, $4A, $11, $F, $2C, $98, $78, $A8, $E8, $36, 3, $90, $54, 4, 2, 3  ; was: byte_5156E
                                         ; DATA XREF: Debug_LambdaBunnyViewerAdvancePoseScript+54   o
                 dc.b    $CA, $41, $E, $12, $30, $96, $78, $AC, $D8, $1A, $FC, $A0, $3A, $FC, $A, 0
                 dc.b    $C0, $46, $10, $12, 8, $F8, $50, $18, $E0, $50, 4, $A0, $20, 4, 0, 4

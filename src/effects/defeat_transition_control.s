@@ -318,7 +318,7 @@ TransitionEffect_BuildSymmetricRamp_StorePair:          ; CODE XREF: TransitionE
                 swap    d0
                 dbf     d7,TransitionEffect_BuildSymmetricRamp_Loop
 TransitionEffect_SetOutputBufferPointers:               ; CODE XREF: Effect_SetupScrollPointers   j  ; was: loc_26C3C
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 movea.w #(TransitionHScrollBuffer-M68K_RAM),a2
                 movea.w #(TransitionVScrollBuffer-M68K_RAM),a3
                 rts

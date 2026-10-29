@@ -15,12 +15,12 @@ Projectile_Epsilon1GlobalModeReturn:                    ; CODE XREF: Projectile_
 Boss_Epsilon1ApplyDirectionalVerticalStep:              ; CODE XREF: Boss_Epsilon1MoveToUpperSweepHeightState   p  ; was: sub_477F8
                                         ; Boss_Epsilon1RecoverBattleCenterState:Boss_Epsilon1MoveToRecoveryHeight   p
                                         ; Boss_Epsilon1ReturnToUpperBoundaryState   p
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 addi.w  #$40,d0                         ; '@'
                 andi.w  #$180,d0
                 lsr.w   #6,d0
                 move.w  Boss_Epsilon1VerticalStepSigns(pc,d0.w),d0
-                move.w  (SharedPatternRow0Long4).w,d1
+                move.w  (SharedScratchLong4).w,d1
                 muls.w  d0,d1
                 cmpi.w  #0,$58(a5)
                 bne.s   Boss_Epsilon1CheckPositiveVerticalStep
@@ -133,7 +133,7 @@ Boss_Epsilon1InitializeScrollProfileLoop:               ; CODE XREF: Boss_Epsilo
                 move.w  (SecondaryCameraYPos).w,d2
                 lea     (VerticalScrollProfile).w,a1
                 lea     (Math_SineTable).l,a2
-                lea     (SharedPatternRow1Long3).w,a3
+                lea     (SharedScratchLong11).w,a3
                 lea     (Epsilon1RowOffsetTable).w,a4
                 move.w  (SecondaryEntityXPos).w,d6
                 subi.w  #$40,d6                         ; '@'
@@ -154,7 +154,7 @@ Boss_Epsilon1AdvanceCenterScrollSpan:                   ; CODE XREF: Boss_Epsilo
                 move.w  d2,d3
                 subq.w  #8,d3
                 move.w  #5,d7
-                lea     (SharedPatternRow0Long0).w,a0
+                lea     (SharedScratchLong0).w,a0
                 move.w  (SecondaryEntityXPos).w,d5
                 move.w  d5,d6
                 subi.w  #$60,d5                         ; '`'
@@ -307,7 +307,7 @@ Boss_Epsilon1SelectAnimatedTilePair2:                   ; CODE XREF: Boss_Epsilo
                 move.w  #4,(Epsilon1TileBandIndex).w
 Boss_Epsilon1QueueAnimatedTilePair:                     ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands+CA   j  ; was: loc_47AE8
                                         ; Boss_Epsilon1UpdateVisibleTileBands+D2   j
-                move.w  #2,(SharedPatternRow0Long6).w
+                move.w  #2,(SharedScratchLong6).w
 Boss_Epsilon1QueueAnimatedTilePairLoop:                 ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands+F6   j  ; was: loc_47AEE
                 move.w  (Epsilon1TileBandIndex).w,d0
                 bsr.s   Boss_Epsilon1QueueAnimatedTileTransfer
@@ -315,7 +315,7 @@ Boss_Epsilon1QueueAnimatedTilePairLoop:                 ; CODE XREF: Boss_Epsilo
                 addq.w  #6,d0
                 bsr.s   Boss_Epsilon1QueueAnimatedTileTransfer
                 addq.w  #1,(Epsilon1TileBandIndex).w
-                subq.w  #1,(SharedPatternRow0Long6).w
+                subq.w  #1,(SharedScratchLong6).w
                 bne.s   Boss_Epsilon1QueueAnimatedTilePairLoop
 Boss_Epsilon1TileStreamingReturn:                       ; CODE XREF: Boss_Epsilon1UpdateVisibleTileBands+4   j  ; was: locret_47B06
                                         ; Boss_Epsilon1UpdateVisibleTileBands+1A   j
@@ -338,7 +338,7 @@ Boss_Epsilon1QueueAnimatedTileTransfer:                 ; CODE XREF: Boss_Epsilo
                 bcs.s   Boss_Epsilon1UseRotationSampleForTileFrame
                 subi.w  #$C,d0
 Boss_Epsilon1UseRotationSampleForTileFrame:             ; CODE XREF: Boss_Epsilon1QueueAnimatedTileTransfer+2A   j  ; was: loc_47B38
-                lea     (SharedPatternRow0Long0).w,a1
+                lea     (SharedScratchLong0).w,a1
                 move.w  (a1,d0.w),d1
 Boss_Epsilon1SelectAnimatedTileFrame:                   ; CODE XREF: Boss_Epsilon1QueueAnimatedTileTransfer+24   j  ; was: loc_47B40
                 addi.w  #$10,d1

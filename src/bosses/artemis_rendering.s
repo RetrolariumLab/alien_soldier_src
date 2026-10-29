@@ -235,7 +235,7 @@ Boss_StartArtemisPoseFrame:                             ; CODE XREF: Boss_LoadAr
                 bmi.s   Boss_PrepareArtemisPoseRender
 Boss_AdvanceArtemisPoseInterpolation:                   ; CODE XREF: Boss_UpdateArtemisPoseScript+8   j  ; was: loc_58734
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$13,d7
                 tst.b   $3BD(a5)
                 beq.s   Boss_ApplyArtemisPoseInterpolation
@@ -245,7 +245,7 @@ Boss_ApplyArtemisPoseInterpolation:                     ; CODE XREF: Boss_LoadAr
 Boss_PrepareArtemisPoseRender:                          ; CODE XREF: Boss_UpdateArtemisPoseScript+E   j  ; was: loc_5874C
                                         ; Boss_UpdateArtemisPoseScript+34   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_LoadArtemisPoseFrame
 ; Calculate interpolation deltas for the next Artemis pose frame
@@ -256,7 +256,7 @@ Boss_CalculateArtemisPoseInterpolation:                 ; CODE XREF: Boss_LoadAr
                 beq.s   Boss_PrepareArtemisPoseInterpolationBuffer
                 addq.w  #1,d7
 Boss_PrepareArtemisPoseInterpolationBuffer:             ; CODE XREF: Boss_CalculateArtemisPoseInterpolation+A   j  ; was: loc_58764
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_CalculateArtemisPoseInterpolation
@@ -267,14 +267,14 @@ Boss_ArtemisInitializePoseChannels:                     ; was: sub_58772
                 beq.s   Boss_ArtemisInitializePoseChannelBuffer
                 addq.w  #1,d7
 Boss_ArtemisInitializePoseChannelBuffer:                ; CODE XREF: Boss_ArtemisInitializePoseChannels+6   j  ; was: loc_5877C
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ArtemisInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Artemis_State2And4PoseScript:   dc.w    $1010, $50, $4040, $64, $FFFE  ; was: word_58786
+Artemis_State2And4Poses:    dc.w    $1010, $50, $4040, $64, $FFFE  ; was: word_58786
                                         ; DATA XREF: Boss_UpdateArtemisState2+1E   o
                                         ; Boss_UpdateArtemisState4+20   o
-Artemis_State8PoseScript:   dc.w    $808, $50, $E10, $64, $4040, $64, $FFFE  ; was: word_58790
+Artemis_State8Poses:    dc.w    $808, $50, $E10, $64, $4040, $64, $FFFE  ; was: word_58790
                                         ; DATA XREF: Boss_UpdateArtemisState4+8C   o
 Artemis_StateAPoseScript:   dc.w    $C0C, $78, $1212, $8C, $840, $A0, $1818, $A0  ; was: word_5879E
                                         ; DATA XREF: Boss_UpdateArtemisStateA+6   o
@@ -299,15 +299,15 @@ Artemis_StateEPoseScript2:  dc.w    $1034, 0, $30C, $28, $1010, $28, $410, $3C  
                 dc.w    $FFFE
 Artemis_StateEPoseScript1:  dc.w    $818, $28, $2020, $28, $1818, $3C, $FFFE  ; was: word_58818
                                         ; DATA XREF: Boss_UpdateArtemisStateE+84   o
-Artemis_State10And12PoseScript: dc.w    $A0A, $B4, $808, $C8, $1515, $DC, $8001, $A0E  ; was: word_58826
+Artemis_State10And12Poses:  dc.w    $A0A, $B4, $808, $C8, $1515, $DC, $8001, $A0E  ; was: word_58826
                                         ; DATA XREF: Boss_UpdateArtemisState10+10   o
                                         ; Boss_UpdateArtemisState12+C   o
                 dc.w    $F0, $505, $F0, $800F, $818, $104, $A0A, $104
                 dc.w    $FFFE
-Artemis_State14And16PoseScript: dc.w    $820, $118, $1A1A, $118, $8001, $E0E, $12C, $8002  ; was: word_58848
+Artemis_State14And16Poses:  dc.w    $820, $118, $1A1A, $118, $8001, $E0E, $12C, $8002  ; was: word_58848
                                         ; DATA XREF: Boss_UpdateArtemisState14+44   o
                                         ; Boss_UpdateArtemisState16+14   o
                 dc.w    $1111, $140, $1212, $154, $8080, $80E, $168, $C0C
                 dc.w    $168, $FFFE
-Artemis_PoseFrameData:  binclude "data/other/word_5886C.bin"  ; was: word_5886C
+Artemis_PoseTable:  binclude "data/other/word_5886C.bin"  ; was: word_5886C
 Artemis_PoseFrameDataEnd:                               ; was: word_5886C_End

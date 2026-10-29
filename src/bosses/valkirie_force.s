@@ -106,13 +106,13 @@ Boss_ValkirieForceBeginPoseInterpolation:               ; CODE XREF: Boss_Valkir
                 bmi.s   Boss_ValkirieForceApplyInterpolatedPartAngles
 Boss_ValkirieForceAdvancePoseInterpolation:             ; CODE XREF: Boss_ValkirieForceUpdatePose+8   j  ; was: loc_53636
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_ValkirieForceApplyInterpolatedPartAngles:          ; CODE XREF: Boss_ValkirieForceUpdatePose+E   j  ; was: loc_53646
                                         ; Boss_ValkirieForceUpdatePose+76   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -208,14 +208,14 @@ Boss_ValkirieForceApplyInterpolatedPartAngles:          ; CODE XREF: Boss_Valkir
 Boss_ValkirieForceCalculatePoseDeltas:                  ; CODE XREF: Boss_ValkirieForceUpdatePose+5C   p  ; was: sub_53758
                 lea     (Boss_ZLeoValkirieForceSharedMetaspriteData).l,a1
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_ValkirieForceCalculatePoseDeltas
 ; Unreferenced wrapper that initializes nineteen pose channels from bytes at a0
 Boss_ValkirieForceInitializePoseChannels:               ; was: sub_5376E
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_ValkirieForceInitializePoseChannels
 ; ---------------------------------------------------------------------------

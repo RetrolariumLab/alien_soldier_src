@@ -139,7 +139,7 @@ GameOver_ResetLandscapeRows:                            ; DATA XREF: ROM:000276A
 ; End of function GameOver_ResetLandscapeRows
 ; Initializes first set of dither patterns for 3D rendering
 GameOver_InitializeDitherPatterns:                      ; CODE XREF: GameOver_InitializeScreen+76   p  ; was: sub_27778
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.l  #$1010101,d4
                 move.l  #$10101010,d5
                 bsr.s   GameOver_FillAlternatingPattern
@@ -176,7 +176,7 @@ GameOver_FillAlternatingPattern_Loop:                   ; CODE XREF: GameOver_Fi
 ; End of function GameOver_FillAlternatingPattern
 ; Initializes second set of dither patterns for 3D rendering
 UnreferencedGameOver_InitializeDitherPatterns:          ; was: sub_27806
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #0,d0
                 move.l  #$11000000,d1
                 move.l  #$11110000,d2

@@ -155,7 +155,7 @@ Boss_XiTigerFallingLanding:                             ; DATA XREF: ROM:0003D88
 ; ---------------------------------------------------------------------------
 Boss_XiTigerUpdateFallingPose:                          ; CODE XREF: Boss_XiTigerFallingLanding+10   j  ; was: loc_3DA30
                                         ; Boss_XiTigerFallingLanding+1A   j
-                lea     Boss_XiTigerAirbornePoseCommands(pc),a1
+                lea     Boss_XiTigerAirbornePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -175,7 +175,7 @@ Boss_XiTigerBattleStart:                                ; DATA XREF: ROM:0003D88
 ; ---------------------------------------------------------------------------
 Boss_XiTigerUpdateBattleStartPose:                      ; CODE XREF: Boss_XiTigerSetup+EC   j  ; was: loc_3DA64
                                         ; Boss_XiTigerFallingLanding+5E   j
-                lea     Boss_XiTigerBattleStartPoseCommands(pc),a1
+                lea     Boss_XiTigerBattleStartPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -189,7 +189,7 @@ Boss_XiTigerStartBossMessage:                           ; DATA XREF: ROM:0003D89
                 jsr     (BossMessage_Start).l
 Boss_XiTigerUpdateActiveBattlePose:                     ; CODE XREF: Boss_XiTigerBattleStart+24   j  ; was: loc_3DA86
                                         ; Boss_XiTigerStartBossMessage+6   j
-                lea     Boss_XiTigerIdlePoseCommands(pc),a1
+                lea     Boss_XiTigerIdlePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -216,7 +216,7 @@ Orphaned_XiTigerUpdateFixedPositionRecoveryPose:        ; CODE XREF: Orphaned_Xi
                 move.w  #$CF20,$4A(a5)
                 move.w  #$120,$10(a5)
                 move.w  #$148,$914(a5)
-                lea     Boss_XiTigerLandingRecoveryPoseCommands(pc),a1
+                lea     Boss_XiTigerLandingRecoveryPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -229,7 +229,7 @@ Orphaned_XiTigerStepStateBackOnButtonPress:
                 clr.w   $58(a5)
                 move.w  #$FFFE,$C(a5)
 Orphaned_XiTigerUpdateButtonRewindPose:                 ; CODE XREF: Orphaned_XiTigerStepStateBackOnButtonPress+6   j  ; was: loc_3DAF8
-                lea     Boss_XiTigerLoopingAirbornePoseCommands(pc),a1
+                lea     Boss_XiTigerLoopingAirbornePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -268,7 +268,7 @@ Boss_XiTigerIdleAttackDecisionState:                    ; DATA XREF: ROM:0003D89
 ; ---------------------------------------------------------------------------
 Boss_XiTigerUpdateIdlePose:                             ; CODE XREF: Boss_XiTigerEnterIdleState+52   j  ; was: loc_3DB8A
                                         ; Boss_XiTigerEnterIdleState+60   j
-                lea     Boss_XiTigerIdlePoseCommands(pc),a1
+                lea     Boss_XiTigerIdlePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bsr.w   Boss_XiTigerUpdateSprites
@@ -308,7 +308,7 @@ Boss_XiTigerDashPrep:                                   ; DATA XREF: ROM:0003D89
                 neg.l   $498(a5)
 Boss_XiTigerUpdateDashPreparationPose:                  ; CODE XREF: Boss_XiTigerDashPrep+4   j  ; was: loc_3DC24
                                         ; Boss_XiTigerDashPrep+38   j
-                lea     Boss_XiTigerDashPreparationPoseCommands(pc),a1
+                lea     Boss_XiTigerDashPreparationPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -352,7 +352,7 @@ Boss_XiTigerBeginDashRecoveryPose:                      ; CODE XREF: Boss_XiTige
 Boss_XiTigerDashRecoveryPoseState:                      ; DATA XREF: ROM:0003D896   o  ; was: loc_3DCA8
                 tst.w   $58(a5)
                 bmi.s   Boss_XiTigerBeginCloseRangeDecisionState
-                lea     Boss_XiTigerDashRecoveryPoseCommands(pc),a1
+                lea     Boss_XiTigerDashRecoveryPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -389,7 +389,7 @@ Boss_XiTigerChooseDistantCloseRangeAttack:              ; CODE XREF: Boss_XiTige
                 bra.w   Boss_XiTigerBeginDashPreparation
 ; ---------------------------------------------------------------------------
 Boss_XiTigerUpdateCloseRangeAttackPose:                 ; CODE XREF: Boss_XiTigerCloseRangeAttackState+4   j  ; was: loc_3DD1A
-                lea     Boss_XiTigerCloseRangeAttackPoseCommands(pc),a1
+                lea     Boss_XiTigerCloseRangeAttackPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 move.w  $58(a5),d0
@@ -430,7 +430,7 @@ Boss_XiTigerCloseRangeJumpPreparationState:             ; DATA XREF: ROM:0003D89
                 neg.l   $498(a5)
 Boss_XiTigerUpdateCloseRangeJumpPreparationPose:        ; CODE XREF: Boss_XiTigerCloseRangeAttackState+AC   j  ; was: loc_3DDB6
                                         ; Boss_XiTigerCloseRangeAttackState+CA   j
-                lea     Boss_XiTigerCloseRangeJumpPreparationPoseCommands(pc),a1
+                lea     Boss_XiTigerCloseRangeJumpPreparationPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -448,7 +448,7 @@ Boss_XiTigerJumpRise:                                   ; DATA XREF: ROM:0003D89
                 move.b  #$D0,d0
                 jsr     (Sound_QueueSFXRequest).l
 Boss_XiTigerUpdateJumpAirbornePose:                     ; CODE XREF: Boss_XiTigerJumpDescendAndLand+10   j  ; was: loc_3DDFA
-                lea     Boss_XiTigerAirbornePoseCommands(pc),a1
+                lea     Boss_XiTigerAirbornePoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites
@@ -473,7 +473,7 @@ Boss_XiTigerJumpDescendAndLand:                         ; DATA XREF: ROM:0003D8A
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 Boss_XiTigerUpdateLandingRecoveryPose:                  ; CODE XREF: Boss_XiTigerLandedState+48   j  ; was: loc_3DE62
-                lea     Boss_XiTigerLandingRecoveryPoseCommands(pc),a1
+                lea     Boss_XiTigerLandingRecoveryPoses(pc),a1
                 nop
                 bsr.w   Boss_XiTigerUpdatePoseAnimation
                 bra.w   Boss_XiTigerUpdateSprites

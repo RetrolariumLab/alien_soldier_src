@@ -107,13 +107,13 @@ Debug_ValkirieSecondaryViewerBeginPoseCommandInterpolation:  ; CODE XREF: Debug_
                 bmi.s   Debug_ValkirieSecondaryViewerStorePoseComponents
 Debug_ValkirieSecondaryViewerTickPoseInterpolation:     ; CODE XREF: Debug_ValkirieSecondaryViewerAdvancePoseScript+8   j  ; was: loc_516D0
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Debug_ValkirieSecondaryViewerStorePoseComponents:       ; CODE XREF: Debug_ValkirieSecondaryViewerAdvancePoseScript+E   j  ; was: loc_516E0
                                         ; Debug_ValkirieSecondaryViewerAdvancePoseScript+76   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -210,14 +210,14 @@ Debug_ValkirieSecondaryViewerBeginPoseInterpolation:    ; CODE XREF: Debug_Valki
                 lea     Debug_ValkirieSecondaryViewerPoseTargets(pc),a1
                 nop
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Debug_ValkirieSecondaryViewerBeginPoseInterpolation
 ; Initialize the secondary viewer's nineteen pose channels from bytes at a0
 Debug_ValkirieSecondaryViewerInitializePoseChannels:    ; was: sub_51808
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Debug_ValkirieSecondaryViewerInitializePoseChannels
 ; ---------------------------------------------------------------------------

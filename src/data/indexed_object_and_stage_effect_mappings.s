@@ -217,9 +217,9 @@ Midgame_LightningSpriteAnimation03: dc.w    Midgame_LightningSpriteMapping00-*  
                 dc.w    $FF
 Stage8_FlyingNeoCompositeSpriteAnimation:   dc.w    Stage8_FlyingNeoCompositeSpriteMapping-*  ; DATA XREF: Stage8_InitializeFlyingNeoComposite+12   o  ; was: off_19C720
                 dc.w    $FF
-Stage1BaseMappingData7800:  dc.b    0, $2E, 0, 0, $5B, $82, $82, $25, 2, $5F, 0, 0, $5A, 0, 0, $40, $82, 0, $5F, 0, 0, $A0, $BF, $FC, $CC, $5F, 0, 0, $5F, 0, 0, $5F  ; was: byte_19C724
+Stage1To4MappingData7800:   dc.b    0, $2E, 0, 0, $5B, $82, $82, $25, 2, $5F, 0, 0, $5A, 0, 0, $40, $82, 0, $5F, 0, 0, $A0, $BF, $FC, $CC, $5F, 0, 0, $5F, 0, 0, $5F  ; was: byte_19C724
                                         ; DATA XREF: ROM:000117D0   o
                 dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $8E, $B8
-Stage1Phase2MappingData7800:    dc.b    0, $28, 0, 0, $5F, $82, $82, $E8, $41, $5F, 0, 0, $5F, 0, 0, $F0, $83, $FC, $A2, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F  ; was: byte_19C754
+Stage5To7MappingData7800:   dc.b    0, $28, 0, 0, $5F, $82, $82, $E8, $41, $5F, 0, 0, $5F, 0, 0, $F0, $83, $FC, $A2, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F  ; was: byte_19C754
                                         ; DATA XREF: ROM:0001187A   o
                 dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $BA, $90

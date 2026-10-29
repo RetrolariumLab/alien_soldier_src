@@ -130,26 +130,26 @@ Boss_JampanInitializeEncounterState:                    ; DATA XREF: ROM:000491D
                 jsr     (Sound_QueueSFXRequest).l
                 addq.w  #2,4(a5)
                 move.w  #$80,$48(a5)
-                clr.l   (SharedPatternRow0Long0).w
-                clr.l   (SharedPatternRow0Long1).w
-                clr.l   (SharedPatternRow0Long2).w
-                clr.l   (SharedPatternRow0Long3).w
-                clr.l   (SharedPatternRow0Long4).w
-                clr.l   (SharedPatternRow0Long5).w
-                clr.l   (SharedPatternRow0Long6).w
-                clr.l   (SharedPatternRow0Long7).w
-                clr.l   (SharedPatternRow1Long0).w
-                clr.w   (SharedPatternRow1Long1).w
-                clr.w   (SharedPatternRow1Long1+2).w
-                clr.w   (SharedPatternRow1Long2).w
-                clr.w   (SharedPatternRow1Long2+2).w
-                clr.w   (SharedPatternRow1Long3).w
+                clr.l   (SharedScratchLong0).w
+                clr.l   (SharedScratchLong1).w
+                clr.l   (SharedScratchLong2).w
+                clr.l   (SharedScratchLong3).w
+                clr.l   (SharedScratchLong4).w
+                clr.l   (SharedScratchLong5).w
+                clr.l   (SharedScratchLong6).w
+                clr.l   (SharedScratchLong7).w
+                clr.l   (SharedScratchLong8).w
+                clr.w   (SharedScratchLong9).w
+                clr.w   (SharedScratchLong9+2).w
+                clr.w   (SharedScratchLong10).w
+                clr.w   (SharedScratchLong10+2).w
+                clr.w   (SharedScratchLong11).w
                 bsr.w   Boss_JampanLoadEncounterTiles
                 move.b  #4,(PlayerOAMBucketOffset).w
                 move.w  #$1E8,$10(a5)
                 move.w  #$F0,$14(a5)
-                move.w  #$100,(SharedPatternRow0Long1).w
-                move.w  #$100,(SharedPatternRow0Long2).w
+                move.w  #$100,(SharedScratchLong1).w
+                move.w  #$100,(SharedScratchLong2).w
                 move.b  #$40,$20(a5)                    ; '@'
                 move.w  #$D00,2(a5)
                 move.b  #$10,$21(a5)
@@ -278,8 +278,8 @@ Boss_JampanWaitForOpeningDelayState:                    ; DATA XREF: ROM:000491D
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
                 move.w  #1,(TertiaryEntityWork52).w
                 move.w  #1,(FifthEntityWork52).w
-                move.w  #4,(SharedPatternRow0Long4).w
-                move.w  #4,(SharedPatternRow0Long5).w
+                move.w  #4,(SharedScratchLong4).w
+                move.w  #4,(SharedScratchLong5).w
                 move.w  #3,$48(a5)
                 addq.w  #2,4(a5)
 Boss_JampanWaitForOpeningDelayReturn:                   ; CODE XREF: Boss_JampanWaitForOpeningDelayState+8   j
@@ -322,8 +322,8 @@ Boss_JampanFinishOpeningBounces:                        ; CODE XREF: Boss_Jampan
                 bset    #2,$4C(a5)
                 move.l  #$FFFF0000,$1C(a5)
                 move.l  #$2000,$54(a5)
-                clr.w   (SharedPatternRow0Long4).w
-                clr.w   (SharedPatternRow0Long5).w
+                clr.w   (SharedScratchLong4).w
+                clr.w   (SharedScratchLong5).w
                 addq.w  #2,4(a5)
 Boss_JampanOpeningBounceApexReturn:                     ; CODE XREF: Boss_JampanOpeningBounceApexState+18   j
                 rts
@@ -331,17 +331,17 @@ Boss_JampanOpeningBounceApexReturn:                     ; CODE XREF: Boss_Jampan
 ; Converges two opening-sequence angle accumulators on $100
 Boss_JampanNormalizeOpeningAnglesState:                 ; DATA XREF: ROM:000491E0   o  ; was: sub_49610
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
-                cmpi.w  #$100,(SharedPatternRow0Long1).w
+                cmpi.w  #$100,(SharedScratchLong1).w
                 beq.s   Boss_JampanFinishOpeningAngleNormalization
-                cmpi.w  #$100,(SharedPatternRow0Long1).w
+                cmpi.w  #$100,(SharedScratchLong1).w
                 bcs.s   Boss_JampanIncreaseOpeningAngles
-                subq.w  #4,(SharedPatternRow0Long1).w
-                subq.w  #4,(SharedPatternRow0Long2).w
+                subq.w  #4,(SharedScratchLong1).w
+                subq.w  #4,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanIncreaseOpeningAngles:                       ; CODE XREF: Boss_JampanNormalizeOpeningAnglesState+12   j
-                addq.w  #4,(SharedPatternRow0Long1).w
-                addq.w  #4,(SharedPatternRow0Long2).w
+                addq.w  #4,(SharedScratchLong1).w
+                addq.w  #4,(SharedScratchLong2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanFinishOpeningAngleNormalization:             ; CODE XREF: Boss_JampanNormalizeOpeningAnglesState+A   j
@@ -366,15 +366,15 @@ Boss_JampanWaitForOpeningSidePartReturn:                ; CODE XREF: Boss_Jampan
 Boss_JampanNormalizeOpeningOffsetState:                 ; DATA XREF: ROM:000491E4   o  ; was: sub_49666
                 bsr.w   Boss_JampanTrackVerticalOrbitOffset
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
-                move.w  (SharedPatternRow1Long1+2).w,d0
+                move.w  (SharedScratchLong9+2).w,d0
                 beq.s   Boss_JampanFinishOpeningOffsetNormalization
                 tst.w   d0
                 bmi.s   Boss_JampanIncreaseOpeningOffset
-                subq.w  #1,(SharedPatternRow1Long1+2).w
+                subq.w  #1,(SharedScratchLong9+2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanIncreaseOpeningOffset:                       ; CODE XREF: Boss_JampanNormalizeOpeningOffsetState+10   j
-                addq.w  #1,(SharedPatternRow1Long1+2).w
+                addq.w  #1,(SharedScratchLong9+2).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanFinishOpeningOffsetNormalization:            ; CODE XREF: Boss_JampanNormalizeOpeningOffsetState+C   j
@@ -475,30 +475,30 @@ Boss_JampanSelectAttackReturn:                          ; CODE XREF: Boss_Jampan
 ; Converges both signed orbit offsets on zero before recovery movement
 Boss_JampanDampOrbitOffsetsState:                       ; DATA XREF: ROM:000491EC   o  ; was: sub_497AA
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
-                tst.w   (SharedPatternRow1Long1+2).w
+                tst.w   (SharedScratchLong9+2).w
                 beq.s   Boss_JampanUpdateSecondaryOrbitOffset
-                tst.w   (SharedPatternRow1Long1+2).w
+                tst.w   (SharedScratchLong9+2).w
                 bpl.s   Boss_JampanDecreasePrimaryOrbitOffset
-                addq.w  #1,(SharedPatternRow1Long1+2).w
+                addq.w  #1,(SharedScratchLong9+2).w
                 bra.s   Boss_JampanUpdateSecondaryOrbitOffset
 ; ---------------------------------------------------------------------------
 Boss_JampanDecreasePrimaryOrbitOffset:                  ; CODE XREF: Boss_JampanDampOrbitOffsetsState+E   j
-                subq.w  #1,(SharedPatternRow1Long1+2).w
+                subq.w  #1,(SharedScratchLong9+2).w
 Boss_JampanUpdateSecondaryOrbitOffset:                  ; CODE XREF: Boss_JampanDampOrbitOffsetsState+8   j
                                         ; Boss_JampanDampOrbitOffsetsState+14   j
-                tst.w   (SharedPatternRow1Long2).w
+                tst.w   (SharedScratchLong10).w
                 beq.s   Boss_JampanCheckOrbitOffsetsSettled
-                tst.w   (SharedPatternRow1Long2).w
+                tst.w   (SharedScratchLong10).w
                 bpl.s   Boss_JampanDecreaseSecondaryOrbitOffset
-                addq.w  #1,(SharedPatternRow1Long2).w
+                addq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanDecreaseSecondaryOrbitOffset:                ; CODE XREF: Boss_JampanDampOrbitOffsetsState+24   j
-                subq.w  #1,(SharedPatternRow1Long2).w
+                subq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanCheckOrbitOffsetsSettled:                    ; CODE XREF: Boss_JampanDampOrbitOffsetsState+1E   j
-                tst.w   (SharedPatternRow1Long1+2).w
+                tst.w   (SharedScratchLong9+2).w
                 bne.s   Boss_JampanDampOrbitOffsetsReturn
                 bclr    #2,$4C(a5)
                 clr.l   $54(a5)
@@ -541,12 +541,12 @@ Boss_JampanBounceUntilSettledReturn:                    ; CODE XREF: Boss_Jampan
 Boss_JampanMoveToScreenThresholdState:                  ; DATA XREF: ROM:000491F0   o  ; was: sub_49862
                 cmpi.w  #$13A0,$58(a5)
                 bcs.s   Boss_JampanMoveRightTowardScreenThreshold
-                subq.w  #2,(SharedPatternRow0Long2).w
+                subq.w  #2,(SharedScratchLong2).w
                 subi.l  #$8000,$10(a5)
                 bra.s   Boss_JampanUpdateScreenThresholdMovement
 ; ---------------------------------------------------------------------------
 Boss_JampanMoveRightTowardScreenThreshold:              ; CODE XREF: Boss_JampanMoveToScreenThresholdState+6   j
-                addq.w  #2,(SharedPatternRow0Long2).w
+                addq.w  #2,(SharedScratchLong2).w
                 addi.l  #$8000,$10(a5)
 Boss_JampanUpdateScreenThresholdMovement:               ; CODE XREF: Boss_JampanMoveToScreenThresholdState+14   j
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry
@@ -572,14 +572,14 @@ Boss_JampanWaitForBossCounterMaxFlagReturn:             ; CODE XREF: Boss_Jampan
 ; End of function Boss_JampanWaitForBossCounterMaxFlagState
 ; Converges the horizontal-angle accumulator on $100 while moving
 Boss_JampanBalanceHorizontalAngleState:                 ; DATA XREF: ROM:000491F4   o  ; was: sub_498C0
-                cmpi.w  #$100,(SharedPatternRow0Long2).w
+                cmpi.w  #$100,(SharedScratchLong2).w
                 bcc.s   Boss_JampanDecreaseHorizontalAngle
-                addq.w  #2,(SharedPatternRow0Long2).w
+                addq.w  #2,(SharedScratchLong2).w
                 addi.l  #$8000,$10(a5)
                 bra.s   Boss_JampanUpdateHorizontalAngleMovement
 ; ---------------------------------------------------------------------------
 Boss_JampanDecreaseHorizontalAngle:                     ; CODE XREF: Boss_JampanBalanceHorizontalAngleState+6   j
-                subq.w  #2,(SharedPatternRow0Long2).w
+                subq.w  #2,(SharedScratchLong2).w
                 subi.l  #$8000,$10(a5)
 Boss_JampanUpdateHorizontalAngleMovement:               ; CODE XREF: Boss_JampanBalanceHorizontalAngleState+14   j
                 bsr.w   Boss_JampanUpdateOrbitingPartGeometry

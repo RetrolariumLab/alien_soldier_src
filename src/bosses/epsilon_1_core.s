@@ -37,7 +37,7 @@ Boss_Epsilon1UpdatePresentation:                        ; CODE XREF: Boss_Epsilo
                 move.w  (SecondaryEntityXPos).w,d0
                 add.w   (PrimaryCameraXPosition).w,d0
                 move.w  d0,$4E(a5)
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 lea     (Math_SineTable).l,a2
                 andi.w  #$1FE,d0
                 move.w  -$80(a2,d0.w),d0
@@ -45,13 +45,13 @@ Boss_Epsilon1UpdatePresentation:                        ; CODE XREF: Boss_Epsilo
                 asl.l   #5,d0
                 swap    d0
                 add.w   (SecondaryEntityYPos).w,d0
-                move.w  d0,(SharedPatternRow0Long3+2).w
-                move.w  (SecondaryEntityXPos).w,(SharedPatternRow0Long3).w
+                move.w  d0,(SharedScratchLong3+2).w
+                move.w  (SecondaryEntityXPos).w,(SharedScratchLong3).w
                 move.w  #$180,d0
-                sub.w   (SharedPatternRow0Long3).w,d0
+                sub.w   (SharedScratchLong3).w,d0
                 move.w  d0,(SecondaryCameraXPos).w
                 move.w  #$1C8,d0
-                sub.w   (SharedPatternRow0Long3+2).w,d0
+                sub.w   (SharedScratchLong3+2).w,d0
                 move.w  d0,(SecondaryCameraYPos).w
                 bsr.w   Boss_Epsilon1BuildScrollProfile
                 bsr.w   Boss_Epsilon1UpdateVisibleTileBands
@@ -71,8 +71,8 @@ Boss_Epsilon1UpdatePresentation:                        ; CODE XREF: Boss_Epsilo
 ; ---------------------------------------------------------------------------
 Boss_Epsilon1UpdateBodyAndAngleHistory:                 ; CODE XREF: Boss_Epsilon1Main+BE   j  ; was: loc_45BC4
                                         ; Boss_Epsilon1Main+CE   j
-                move.w  (SharedPatternRow0Long3).w,d2
-                move.w  (SharedPatternRow0Long3+2).w,d3
+                move.w  (SharedScratchLong3).w,d2
+                move.w  (SharedScratchLong3+2).w,d3
                 move.w  d2,$10(a5)
                 move.w  d3,$14(a5)
                 move.w  $56(a5),d0
@@ -84,7 +84,7 @@ Boss_Epsilon1UpdateBodyAndAngleHistory:                 ; CODE XREF: Boss_Epsilo
                 add.w   d0,$10(a5)
                 add.w   d1,$14(a5)
                 bsr.w   Boss_Epsilon1UpdateBodyPose
-                move.w  (SharedPatternRow0Long5).w,d0
+                move.w  (SharedScratchLong5).w,d0
                 andi.w  #$1FE,d0
                 lea     (Epsilon1AngleHistory).w,a0
                 move.w  #$2F,d7                         ; '/'
@@ -94,17 +94,17 @@ Boss_Epsilon1ShiftAngleHistoryLoop:                     ; CODE XREF: Boss_Epsilo
                 move.w  d1,d0
                 dbf     d7,Boss_Epsilon1ShiftAngleHistoryLoop
                 lea     (Epsilon1AngleHistory).w,a0
-                lea     (SharedPatternRow0Long0).w,a1
+                lea     (SharedScratchLong0).w,a1
                 move.w  #5,d7
 Boss_Epsilon1SampleAngleHistoryLoop:                    ; CODE XREF: Boss_Epsilon1Main+15A   j  ; was: loc_45C1E
-                move.w  (SharedPatternRow0Long5+2).w,d6
+                move.w  (SharedScratchLong5+2).w,d6
 Boss_Epsilon1AdvanceAngleHistorySample:                 ; CODE XREF: Boss_Epsilon1Main+154   j  ; was: loc_45C22
                 move.w  (a0)+,d0
                 dbf     d6,Boss_Epsilon1AdvanceAngleHistorySample
                 move.w  d0,(a1)+
                 dbf     d7,Boss_Epsilon1SampleAngleHistoryLoop
-                move.w  (SharedPatternRow0Long4).w,d0
-                add.w   d0,(SharedPatternRow0Long5).w
+                move.w  (SharedScratchLong4).w,d0
+                add.w   d0,(SharedScratchLong5).w
                 cmpi.w  #$12,4(a5)
                 bcs.s   Boss_Epsilon1CheckForcedStateSignal
                 bsr.w   Boss_Epsilon1CyclePaletteColor
@@ -118,8 +118,8 @@ Boss_Epsilon1CheckForcedStateSignal:                    ; CODE XREF: Boss_Epsilo
 Boss_Epsilon1UpdateLinkedParts:                         ; CODE XREF: Boss_Epsilon1Main+C6   j  ; was: loc_45C5E
                                         ; Boss_Epsilon1Main+F0   j
                 lea     (Math_SineTable).l,a2
-                move.w  (SharedPatternRow0Long3).w,d2
-                move.w  (SharedPatternRow0Long3+2).w,d3
+                move.w  (SharedScratchLong3).w,d2
+                move.w  (SharedScratchLong3+2).w,d3
                 movea.w #(TertiaryEntityType-M68K_RAM),a1
                 move.w  $52(a1),d0
                 move.w  -$80(a2,d0.w),d1
@@ -262,9 +262,9 @@ Boss_Epsilon1InitializeBattleObjectsState:              ; DATA XREF: ROM:00045CF
                 cmpi.w  #$F,$48(a5)
                 bne.w   Boss_Epsilon1InitializeBattleObjectsReturn
                 addq.w  #2,4(a5)
-                clr.l   (SharedPatternRow0Long0).w
-                clr.l   (SharedPatternRow0Long1).w
-                clr.l   (SharedPatternRow0Long2).w
+                clr.l   (SharedScratchLong0).w
+                clr.l   (SharedScratchLong1).w
+                clr.l   (SharedScratchLong2).w
                 clr.l   (Epsilon1RingPhaseTable).w
                 clr.l   (Epsilon1RingPhaseTable+4).w
                 clr.l   (Epsilon1RingPhaseTable+8).w
@@ -276,20 +276,20 @@ Boss_Epsilon1InitializeBattleObjectsState:              ; DATA XREF: ROM:00045CF
                 lea     (Epsilon1AngleHistory).w,a0
                 move.w  #5,d7
 Boss_Epsilon1ClearAngleHistoryRowsLoop:                 ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+70   j  ; was: loc_45E00
-                move.w  (SharedPatternRow0Long5+2).w,d6
+                move.w  (SharedScratchLong5+2).w,d6
 Boss_Epsilon1ClearAngleHistoryRowLoop:                  ; CODE XREF: Boss_Epsilon1InitializeBattleObjectsState+6C   j  ; was: loc_45E04
                 move.w  d0,(a0)+
                 dbf     d6,Boss_Epsilon1ClearAngleHistoryRowLoop
                 dbf     d7,Boss_Epsilon1ClearAngleHistoryRowsLoop
-                clr.w   (SharedPatternRow0Long6+2).w
+                clr.w   (SharedScratchLong6+2).w
                 move.b  #4,(PlayerOAMBucketOffset).w
                 move.w  #$264,d0
                 moveq   #0,d1
                 jsr     (Object_ClearEntityRecordsExceptTwoTypes).l
                 move.w  #$120,$10(a5)
                 move.w  #$F0,$14(a5)
-                move.w  $10(a5),(SharedPatternRow0Long3).w
-                move.w  $14(a5),(SharedPatternRow0Long3+2).w
+                move.w  $10(a5),(SharedScratchLong3).w
+                move.w  $14(a5),(SharedScratchLong3+2).w
                 move.w  #2,$48(a5)
                 move.b  #$40,$20(a5)                    ; '@'
                 move.l  #Boss_Epsilon1PrimaryBodyMapping,8(a5)

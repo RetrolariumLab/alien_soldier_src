@@ -657,7 +657,7 @@
     },
     "Stage11_RisingHazardLauncherSpriteMapping": {
       "attribute": "$08C2",
-      "art": [["Stage10EnemyTileArt1", "$1840"]],
+      "art": [["Stage10To12TileArt1", "$1840"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Projectile_MissirayVerticalShotSpriteMapping00": {
@@ -682,72 +682,72 @@
     },
     "Stage18_SegmentedWormSpriteMapping00": {
       "attribute": "$0380",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping01": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping02": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping03": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping04": {
       "attribute": "$0380",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping05": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping06": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping07": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping08": {
       "attribute": "$0380",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping09": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping10": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormSpriteMapping11": {
       "attribute": "$0B80",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
     "Stage18_SegmentedWormParticleSpriteMapping00": {
       "attribute": "$0380",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["Stage17PaletteCommandBank", 32]]
     },
     "Stage18_SegmentedWormParticleSpriteMapping01": {
       "attribute": "$0380",
-      "art": [["Stage22And24TileArt2", "$7000"]],
+      "art": [["Stage18WormTileArt", "$7000"]],
       "palettes": [["Stage17PaletteCommandBank", 32]]
     },
     "Boss_Stage3OrbitingFormationSpriteMapping00": {
@@ -2023,57 +2023,57 @@
     },
     "IndexedObjectSpriteMapping00": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping01": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping02": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping03": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping04": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping05": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping06": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping07": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "IndexedObjectSpriteMapping08": {
       "attribute": "$02DF",
-      "art": [["Stage1Phase2TileArt1", "$5BE0"]],
+      "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
     "Stage8_FlyingNeoCompositeSpriteMapping": {
       "attribute": "$81E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 618]]
     },
     "Midgame_LightningSpriteMapping00": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2082,7 +2082,7 @@
     },
     "Midgame_LightningSpriteMapping01": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2091,7 +2091,7 @@
     },
     "Midgame_LightningSpriteMapping02": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2100,7 +2100,7 @@
     },
     "Midgame_LightningSpriteMapping03": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2109,7 +2109,7 @@
     },
     "Midgame_LightningSpriteMapping04": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2118,7 +2118,7 @@
     },
     "Midgame_LightningSpriteMapping05": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2127,7 +2127,7 @@
     },
     "Midgame_LightningSpriteMapping06": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2136,7 +2136,7 @@
     },
     "Midgame_LightningSpriteMapping07": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 160],
@@ -2145,7 +2145,7 @@
     },
     "Midgame_LightningSpriteMapping08": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2154,7 +2154,7 @@
     },
     "Midgame_LightningSpriteMapping09": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["CreditsAndEarlyStagePaletteCommandBank", 366],
@@ -2163,7 +2163,7 @@
     },
     "Midgame_LightningSpriteMapping10": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2172,7 +2172,7 @@
     },
     "Midgame_LightningSpriteMapping11": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2181,7 +2181,7 @@
     },
     "Midgame_LightningSpriteMapping12": {
       "attribute": "$01E8",
-      "art": [["Stage1Phase3AndStage8TileArt2", "$3D00"]],
+      "art": [["Stage8And9TileArt2", "$3D00"]],
       "palettes": [
         ["CreditsAndEarlyStagePaletteCommandBank", 618],
         ["Stage17PaletteCommandBank", 32],
@@ -2190,37 +2190,37 @@
     },
     "SharedProjectileSpriteMappingB": {
       "attribute": "$5000",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
     },
     "SharedProjectileSpriteMappingC": {
       "attribute": "$5000",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
     },
     "SharedProjectileSpriteMappingD": {
       "attribute": "$5000",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
     },
-    "Stage18_MovingPlatformSpriteMapping": {
+    "Stage10And12_MovingPlatformSpriteMapping": {
       "attribute": "$4000",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["FlyingNeoAndMidgamePaletteCommandBank", 78]]
     },
     "Enemy_Stage10BeetleSpriteMappingA": {
       "attribute": "$8000",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
     "Enemy_Stage10BeetleSpriteMappingB": {
       "attribute": "$8800",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
     "Enemy_Stage10BeetleSpriteMappingC": {
       "attribute": "$8800",
-      "art": [["Stage10AndTeleportTileArt0000", "$0000"]],
+      "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
     "Stage21_AsteroidLargeMapping": {
@@ -2254,7 +2254,7 @@
     },
     "MissirayEntrySecondarySpriteMapping": {
       "attribute": "$8200",
-      "art": [["Stage3Phase3Tiles", "$4000"]],
+      "art": [["Stage24Tiles", "$4000"]],
       "palettes": [["SireneAndLateStagePaletteCommandBank", 134]]
     },
     "Player_PhoenixDashAttackSpriteMapping": {
@@ -3301,7 +3301,7 @@
       "index": 24,
       "type": "$134",
       "parameter": "$8000",
-      "mapping": "UnreferencedPostStageTileArtSpriteMapping",
+      "mapping": "Stage4_StampObjectSpriteMapping",
       "frame": 0,
       "attribute": "$02D6"
     },
@@ -3832,7 +3832,7 @@
       "index": 7,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "mapping": "Stage10And12_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4000"
     },
@@ -3886,7 +3886,7 @@
       "index": 13,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "mapping": "Stage10And12_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4000"
     },
@@ -4165,7 +4165,7 @@
       "index": 3,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "mapping": "Stage10And12_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4000"
     },
@@ -4201,7 +4201,7 @@
       "index": 7,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18_MovingPlatformSpriteMapping",
+      "mapping": "Stage10And12_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4000"
     },
@@ -4570,7 +4570,7 @@
       "index": 20,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4470"
     },
@@ -4597,7 +4597,7 @@
       "index": 23,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4470"
     },
@@ -4858,7 +4858,7 @@
       "index": 52,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$4470"
     },
@@ -4867,7 +4867,7 @@
       "index": 0,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -4894,7 +4894,7 @@
       "index": 3,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -4903,7 +4903,7 @@
       "index": 4,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -4912,7 +4912,7 @@
       "index": 5,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -4948,7 +4948,7 @@
       "index": 9,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -4966,7 +4966,7 @@
       "index": 11,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -5020,7 +5020,7 @@
       "index": 17,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },
@@ -5029,7 +5029,7 @@
       "index": 18,
       "type": "$3DC",
       "parameter": "$1",
-      "mapping": "Stage18MovingPlatformSpriteMapping",
+      "mapping": "Stage18And19_MovingPlatformSpriteMapping",
       "frame": 0,
       "attribute": "$C470"
     },

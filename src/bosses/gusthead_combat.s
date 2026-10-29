@@ -73,8 +73,8 @@ Boss_GustheadDecelerateFragmentPatternRotationState:    ; DATA XREF: ROM:0003F27
                 bne.s   Boss_GustheadReduceFragmentPatternRotationSpeed
                 eori.w  #$8000,2(a5)
 Boss_GustheadReduceFragmentPatternRotationSpeed:        ; CODE XREF: Boss_GustheadDecelerateFragmentPatternRotationState+1C   j  ; was: loc_3FB52
-                subi.l  #$2000,(SharedPatternRow0Long3).w
-                cmpi.l  #$80000,(SharedPatternRow0Long3).w
+                subi.l  #$2000,(SharedScratchLong3).w
+                cmpi.l  #$80000,(SharedScratchLong3).w
                 bne.s   Boss_GustheadFragmentPatternRotationReturn
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
@@ -114,15 +114,15 @@ Boss_GustheadReturnAfterFragmentsReturn:                ; CODE XREF: Boss_Gusthe
 ; Begins an arena-boundary transition by damping all three joint speeds
 Boss_GustheadBeginArenaTransitionState:                 ; CODE XREF: Boss_GustheadMoveTowardPatternTargetAlt+C   j  ; was: sub_3FBCA
                                         ; DATA XREF: ROM:0003F284   o
-                move.l  (SharedPatternRow0Long3).w,d0
+                move.l  (SharedScratchLong3).w,d0
                 asr.l   #2,d0
-                move.l  d0,(SharedPatternRow0Long3).w
-                move.l  (SharedPatternRow0Long4).w,d0
+                move.l  d0,(SharedScratchLong3).w
+                move.l  (SharedScratchLong4).w,d0
                 asr.l   #2,d0
-                move.l  d0,(SharedPatternRow0Long4).w
-                move.l  (SharedPatternRow0Long5).w,d0
+                move.l  d0,(SharedScratchLong4).w
+                move.l  (SharedScratchLong5).w,d0
                 asr.l   #2,d0
-                move.l  d0,(SharedPatternRow0Long5).w
+                move.l  d0,(SharedScratchLong5).w
                 addq.w  #2,4(a5)
 ; Waits for the arena transition signal before returning to pattern selection
 Boss_GustheadWaitForArenaTransitionState:               ; DATA XREF: ROM:0003F286   o  ; was: loc_3FBEC
@@ -155,8 +155,8 @@ Boss_GustheadFinalPhaseRiseState:                       ; DATA XREF: ROM:0003F28
                 bsr.w   Boss_GustheadSpawnScrollingDebris
                 bsr.w   Boss_GustheadUpdateVerticalBounce
                 eori.w  #$8000,2(a5)
-                addi.l  #$2000,(SharedPatternRow0Long3).w
-                cmpi.l  #$100000,(SharedPatternRow0Long3).w
+                addi.l  #$2000,(SharedScratchLong3).w
+                cmpi.l  #$100000,(SharedScratchLong3).w
                 bne.s   Boss_GustheadFinalPhaseRiseReturn
                 addq.w  #2,4(a5)
                 move.w  #$40,$48(a5)                    ; '@'
@@ -211,8 +211,8 @@ Boss_GustheadDecelerateFinalPhaseRotationState:         ; DATA XREF: ROM:0003F29
                 bne.s   Boss_GustheadReduceFinalPhaseRotationSpeed
                 eori.w  #$8000,2(a5)
 Boss_GustheadReduceFinalPhaseRotationSpeed:             ; CODE XREF: Boss_GustheadDecelerateFinalPhaseRotationState+1C   j  ; was: loc_3FCFA
-                subi.l  #$2000,(SharedPatternRow0Long3).w
-                cmpi.l  #$80000,(SharedPatternRow0Long3).w
+                subi.l  #$2000,(SharedScratchLong3).w
+                cmpi.l  #$80000,(SharedScratchLong3).w
                 bne.s   Boss_GustheadFinalPhaseRotationReturn
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
@@ -263,12 +263,12 @@ Boss_GustheadInitializeFinalBattleMotion:               ; CODE XREF: Boss_Gusthe
                 move.l  #$FFFF0000,$1C(a5)
                 move.l  #$2000,$4C(a5)
                 clr.l   (StageMotionXDelta).w
-                clr.l   (SharedPatternRow0Long3).w
-                clr.l   (SharedPatternRow0Long4).w
-                clr.l   (SharedPatternRow0Long5).w
-                andi.l  #$1F80000,(SharedPatternRow0Long0).w
-                andi.l  #$1F80000,(SharedPatternRow0Long1).w
-                andi.l  #$1F80000,(SharedPatternRow0Long2).w
+                clr.l   (SharedScratchLong3).w
+                clr.l   (SharedScratchLong4).w
+                clr.l   (SharedScratchLong5).w
+                andi.l  #$1F80000,(SharedScratchLong0).w
+                andi.l  #$1F80000,(SharedScratchLong1).w
+                andi.l  #$1F80000,(SharedScratchLong2).w
                 move.w  #$F0,$14(a5)
                 move.w  #$E,$24(a5)
 ; Aligns the middle joint before the final battle rotation
@@ -276,9 +276,9 @@ Boss_GustheadAlignJointsForFinalBattleState:            ; DATA XREF: ROM:0003F29
                 bsr.w   Boss_GustheadAdvanceJointAngles
                 bsr.w   Boss_GustheadUpdateSegmentPositions
                 bsr.w   Boss_GustheadMoveTowardVerticalTarget
-                subi.w  #8,(SharedPatternRow0Long1).w
-                andi.w  #$1F8,(SharedPatternRow0Long1).w
-                cmpi.w  #$1E0,(SharedPatternRow0Long1).w
+                subi.w  #8,(SharedScratchLong1).w
+                andi.w  #$1F8,(SharedScratchLong1).w
+                cmpi.w  #$1E0,(SharedScratchLong1).w
                 bne.s   Boss_GustheadAlignJointsForFinalBattleReturn
                 addq.w  #2,4(a5)
 Boss_GustheadAlignJointsForFinalBattleReturn:           ; CODE XREF: Boss_GustheadBeginFinalBattle+76   j  ; was: locret_3FDF2
@@ -295,10 +295,10 @@ Boss_GustheadAccelerateFinalBattleRotationState:        ; DATA XREF: ROM:0003F2A
                 addi.l  #$200,(GustheadArenaVelocity).w
 Boss_GustheadAccelerateFinalBattleSpin:                 ; CODE XREF: Boss_GustheadAccelerateFinalBattleRotationState+18   j  ; was: loc_3FE16
                 move.b  #$88,$23(a5)
-                subi.l  #$800,(SharedPatternRow0Long3).w
-                cmpi.l  #$FFF00000,(SharedPatternRow0Long3).w
+                subi.l  #$800,(SharedScratchLong3).w
+                cmpi.l  #$FFF00000,(SharedScratchLong3).w
                 bcs.s   Boss_GustheadAccelerateFinalBattleRotationReturn
-                move.l  #$FFF00000,(SharedPatternRow0Long3).w
+                move.l  #$FFF00000,(SharedScratchLong3).w
                 addq.w  #2,4(a5)
 Boss_GustheadAccelerateFinalBattleRotationReturn:       ; CODE XREF: Boss_GustheadAccelerateFinalBattleRotationState+38   j  ; was: locret_3FE3A
                 rts
@@ -452,10 +452,10 @@ Boss_DefeatExplosionDebrisAnimations:   dc.l    SharedCombatSpriteAnimation00  ;
 ; Advance Gusthead's defeat palette step and start its four-frame hold
 Boss_GustheadAdvanceDefeatPaletteFadeState:             ; DATA XREF: ROM:0003F2AE   o  ; was: sub_3FFE4
                 bsr.s   Boss_GustheadApplyDefeatPaletteStep
-                addq.w  #1,(SharedPatternRow1Long1).w
-                cmpi.w  #$F,(SharedPatternRow1Long1).w
+                addq.w  #1,(SharedScratchLong9).w
+                cmpi.w  #$F,(SharedScratchLong9).w
                 bne.s   Boss_GustheadAdvanceDefeatPaletteFadeReturn
-                move.w  #4,(SharedPatternRow1Long1+2).w
+                move.w  #4,(SharedScratchLong9+2).w
                 addq.w  #2,4(a5)
 Boss_GustheadAdvanceDefeatPaletteFadeReturn:            ; CODE XREF: Boss_GustheadAdvanceDefeatPaletteFadeState+C   j  ; was: locret_3FFFC
                 rts
@@ -463,7 +463,7 @@ Boss_GustheadAdvanceDefeatPaletteFadeReturn:            ; CODE XREF: Boss_Gusthe
 ; Apply the current Gusthead defeat step to the complete active palette
 Boss_GustheadApplyDefeatPaletteStep:                    ; CODE XREF: Boss_GustheadAdvanceDefeatPaletteFadeState   p  ; was: sub_3FFFE
                                         ; Boss_GustheadHoldDefeatPaletteState   p
-                move.w  (SharedPatternRow1Long1).w,d0
+                move.w  (SharedScratchLong9).w,d0
                 andi.w  #$E,d0
                 move.w  #$3F,d5                         ; '?'
                 move.w  #$E000,d7
@@ -473,7 +473,7 @@ Boss_GustheadApplyDefeatPaletteStep:                    ; CODE XREF: Boss_Gusthe
 ; Hold the terminal defeat palette for four frames
 Boss_GustheadHoldDefeatPaletteState:                    ; DATA XREF: ROM:0003F2B0   o  ; was: sub_40018
                 bsr.s   Boss_GustheadApplyDefeatPaletteStep
-                subq.w  #1,(SharedPatternRow1Long1+2).w
+                subq.w  #1,(SharedScratchLong9+2).w
                 bne.s   Boss_GustheadDefeatPaletteHoldReturn
                 addq.w  #2,4(a5)
 Boss_GustheadDefeatPaletteHoldReturn:                   ; CODE XREF: Boss_GustheadHoldDefeatPaletteState+6   j  ; was: locret_40024
@@ -482,7 +482,7 @@ Boss_GustheadDefeatPaletteHoldReturn:                   ; CODE XREF: Boss_Gusthe
 ; Reverse the defeat palette step, then clear non-preserved objects
 Boss_GustheadReverseDefeatPaletteAndClearObjectsState:  ; DATA XREF: ROM:0003F2B2   o  ; was: sub_40026
                 bsr.s   Boss_GustheadApplyDefeatPaletteStep
-                subq.w  #1,(SharedPatternRow1Long1).w
+                subq.w  #1,(SharedScratchLong9).w
                 bpl.s   Boss_GustheadDefeatPaletteReverseReturn
                 addq.w  #2,4(a5)
                 move.w  #$1B0,d0
@@ -530,14 +530,14 @@ Boss_GustheadSegmentMain:                               ; DATA XREF: ROM:Entity_
                 bne.s   Boss_GustheadSegmentReadPreviousAngles
                 move.b  $4B(a5),d1
                 add.w   d1,d1
-                add.w   (SharedPatternRow0Long0).w,d1
+                add.w   (SharedScratchLong0).w,d1
                 andi.w  #$1FF,d1
                 move.w  d1,$4E(a5)
                 asr.w   #1,d1
-                move.w  (SharedPatternRow0Long1).w,d2
+                move.w  (SharedScratchLong1).w,d2
                 move.w  d2,$50(a5)
                 asr.w   #1,d2
-                move.w  (SharedPatternRow0Long2).w,d3
+                move.w  (SharedScratchLong2).w,d3
                 move.w  d3,$52(a5)
                 asr.w   #1,d3
                 bra.s   Boss_GustheadSegmentShiftJointAngles

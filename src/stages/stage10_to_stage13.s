@@ -243,7 +243,7 @@ Stage12_UpdateScrollToExitTiles:                        ; DATA XREF: ROM:0000D97
 ; ---------------------------------------------------------------------------
 Stage12_ExitTileAssetLoadList:  dc.w    7               ; field_0  ; was: stru_DB5A
                                         ; DATA XREF: Stage12_UpdateScrollToExitTiles+20   o
-                dc.l    Stage12AndTeleportTileArt0000   ; field_2
+                dc.l    Stage12And13TileArt0000         ; field_2
                 dc.w    0                               ; field_6
                 dc.w    $FFFF
 
@@ -328,7 +328,7 @@ Stage12To13_AdvanceTeleportFadeDelay:                   ; CODE XREF: Stage12To13
                 move.w  #$4000,(TilemapTransferBase).w
                 move.w  #0,(TilemapRowXOrFillWord).w
                 jsr     (Tilemap_FillPlaneDirectToVRAM).l
-                jsr     (Stage_LoadTeleportAssets).l
+                jsr     (Stage_LoadStage13Assets).l
 Stage12To13_ApplyTeleportFadeLevel:                     ; CODE XREF: Stage12To13_UpdateTeleportFadeIn+6   j  ; was: loc_DC5E
                                         ; Stage12To13_UpdateTeleportFadeIn+12   j
                 move.w  (Stage12TeleportFade).w,d0

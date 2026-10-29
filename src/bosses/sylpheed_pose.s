@@ -198,53 +198,53 @@ Boss_StartSylpheedPoseFrame:                            ; CODE XREF: Boss_LoadSy
                 bmi.s   Boss_PrepareSylpheedPoseRender
 Boss_AdvanceSylpheedPoseInterpolation:                  ; CODE XREF: Boss_UpdateSylpheedPoseScript+8   j  ; was: loc_59BEC
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$B,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_PrepareSylpheedPoseRender:                         ; CODE XREF: Boss_UpdateSylpheedPoseScript+E   j  ; was: loc_59BFC
                                         ; Boss_UpdateSylpheedPoseScript+34   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 rts
 ; End of function Boss_LoadSylpheedPoseFrame
 ; Calculate interpolation deltas for the 12-channel pose buffer
 Boss_CalculateSylpheedPoseInterpolation:                ; CODE XREF: Boss_LoadSylpheedPoseFrame+24   p  ; was: sub_59C06
                 movea.l $2FC(a5),a1
                 moveq   #$B,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_CalculateSylpheedPoseInterpolation
 ; Initialize the twelve-channel Sylpheed pose buffer from bytes at a0
 Boss_SylpheedInitializePoseChannels:                    ; was: sub_59C1A
                 moveq   #$B,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_SylpheedInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Sylpheed_InteractiveState2PoseScript:   dc.w    $2020, $18, $2020, $24, $FFFF  ; was: word_59C26
+Sylpheed_InteractiveState2Poses:    dc.w    $2020, $18, $2020, $24, $FFFF  ; was: word_59C26
                                         ; DATA XREF: Boss_RenderSylpheedInteractiveState2   o
-Sylpheed_EntrancePoseScript:    dc.w    $810, 0, $808, 0, $810, $C, $808, $C  ; was: word_59C30
+Sylpheed_EntrancePoses: dc.w    $810, 0, $808, 0, $810, $C, $808, $C  ; was: word_59C30
                                         ; DATA XREF: Boss_EnterSylpheedEntranceState12+50   o
                                         ; Boss_EnterSylpheedEntranceState12+8E   o
                 dc.w    $FFFF
-Sylpheed_AttackAndRecoveryPoseScript:   dc.w    $1060, $18, $3030, $18, $1060, $24, $3030, $24  ; was: word_59C42
+Sylpheed_AttackAndRecoveryPoses:    dc.w    $1060, $18, $3030, $18, $1060, $24, $3030, $24  ; was: word_59C42
                                         ; DATA XREF: Boss_EnterSylpheedAttackLaunchState1A+4E   o
                                         ; Boss_EnterSylpheedAttackLaunchState1A+98   o
                 dc.w    $FFFF
-Sylpheed_DecisionPoseScript:    dc.w    $1060, $30, $3030, $30, $1060, $3C, $3030, $3C  ; was: word_59C54
+Sylpheed_DecisionPoses: dc.w    $1060, $30, $3030, $30, $1060, $3C, $3030, $3C  ; was: word_59C54
                                         ; DATA XREF: Boss_EnterSylpheedDecisionState4+80   o
                 dc.w    $FFFF
-Sylpheed_ChargePoseScript:      dc.w    $808, $18, $FFFE  ; DATA XREF: Boss_EnterSylpheedDecisionState4+B2   o  ; was: word_59C66
-Sylpheed_JumpRisePoseScript:    dc.w    $810, $48, $2020, $48, $FFFE  ; was: word_59C6C
+Sylpheed_ChargePoses:   dc.w    $808, $18, $FFFE        ; DATA XREF: Boss_EnterSylpheedDecisionState4+B2   o  ; was: word_59C66
+Sylpheed_JumpRisePoses: dc.w    $810, $48, $2020, $48, $FFFE  ; was: word_59C6C
                                         ; DATA XREF: Boss_UpdateSylpheedJumpRiseStateA+18   o
-Sylpheed_JumpFallPoseScript:    dc.w    $640, $54, $C0E, $54, $E0E, $54, $FFFE  ; was: word_59C76
+Sylpheed_JumpFallPoses: dc.w    $640, $54, $C0E, $54, $E0E, $54, $FFFE  ; was: word_59C76
                                         ; DATA XREF: Boss_UpdateSylpheedJumpFallStateC+18   o
-Sylpheed_DivePoseScript:    dc.w    $810, $60, $2020, $60, $FFFE  ; was: word_59C84
+Sylpheed_DivePoses: dc.w    $810, $60, $2020, $60, $FFFE  ; was: word_59C84
                                         ; DATA XREF: Boss_UpdateSylpheedDiveStateE+18   o
-Sylpheed_ClimbPoseScript:   dc.w    $640, $6C, $C0E, $6C, $E0E, $6C, $FFFE  ; was: word_59C8E
+Sylpheed_ClimbPoses:    dc.w    $640, $6C, $C0E, $6C, $E0E, $6C, $FFFE  ; was: word_59C8E
                                         ; DATA XREF: Boss_UpdateSylpheedClimbState10+18   o
-Sylpheed_PoseFrameData: dc.w    $70F0, $50F8, $C0D0, $F840, $1010, $8F8, $9010, $3008  ; was: word_59C9C
+Sylpheed_PoseTable: dc.w    $70F0, $50F8, $C0D0, $F840, $1010, $8F8, $9010, $3008  ; was: word_59C9C
                                         ; DATA XREF: Boss_InitSylpheed+30   o
                 dc.w    $C0B0, $840, $F0F0, $8F8, $B020, $60F8, $A0A0, $860
                 dc.w    $E014, $14EC, $A034, $5010, $A0B0, $F060, $E010, $EF2

@@ -162,11 +162,11 @@ Projectile_Epsilon1SpreadOrBarrageReturn:               ; CODE XREF: Boss_Epsilo
 ; Signals the saved aim-marker entity, then clears the shared marker pointer
 Projectile_Epsilon1ReleaseSpreadAimMarker:              ; CODE XREF: Projectile_Epsilon1ConvertSpreadProjectileToDebris+32   p  ; was: sub_472AA
                                         ; Projectile_Epsilon1MarkSpreadProjectileOutOfBounds+6   p
-                tst.w   (SharedPatternRow1Long0).w
+                tst.w   (SharedScratchLong8).w
                 beq.s   Projectile_Epsilon1ReleaseSpreadAimMarkerReturn
-                movea.w (SharedPatternRow1Long0).w,a0
+                movea.w (SharedScratchLong8).w,a0
                 bset    #4,2(a0)
-                clr.w   (SharedPatternRow1Long0).w
+                clr.w   (SharedScratchLong8).w
 Projectile_Epsilon1ReleaseSpreadAimMarkerReturn:        ; CODE XREF: Projectile_Epsilon1ReleaseSpreadAimMarker+4   j
                 rts
 ; End of function Projectile_Epsilon1ReleaseSpreadAimMarker
@@ -384,7 +384,7 @@ Boss_Epsilon1WaitForRingAngleThresholdState:            ; DATA XREF: ROM:000474F
                 subq.w  #6,d0
 Boss_Epsilon1SelectRingAngleSample:                     ; CODE XREF: Boss_Epsilon1WaitForRingAngleThresholdState+8   j
                 add.w   d0,d0
-                lea     (SharedPatternRow0Long0).w,a0
+                lea     (SharedScratchLong0).w,a0
                 move.w  (a0,d0.w),d1
                 cmpi.w  #$80,d1
                 bcs.s   Boss_Epsilon1WaitForRingAngleThresholdReturn
@@ -402,7 +402,7 @@ Boss_Epsilon1WaitForRingLaunchWindowState:              ; DATA XREF: ROM:000474F
                 subq.w  #6,d0
 Boss_Epsilon1SelectRingLaunchAngleSample:               ; CODE XREF: Boss_Epsilon1WaitForRingLaunchWindowState+8   j
                 add.w   d0,d0
-                lea     (SharedPatternRow0Long0).w,a0
+                lea     (SharedScratchLong0).w,a0
                 move.w  (a0,d0.w),d1
                 cmpi.w  #$120,d1
                 bcs.w   Boss_Epsilon1WaitForRingLaunchWindowReturn
@@ -436,14 +436,14 @@ Boss_Epsilon1PositionRingObjectFromSamples:             ; CODE XREF: Boss_Epsilo
                                         ; Boss_Epsilon1LaunchRingObjectState+6   p
                 move.w  $4A(a5),d0
                 add.w   d0,d0
-                lea     (SharedPatternRow1Long3).w,a1
+                lea     (SharedScratchLong11).w,a1
                 move.w  (a1,d0.w),d0
                 move.w  (SecondaryEntityXPos).w,d0
                 add.w   $4C(a5),d0
                 move.w  d0,$10(a5)
                 move.w  $4A(a5),d0
                 add.w   d0,d0
-                lea     (SharedPatternRow1Long3).w,a0
+                lea     (SharedScratchLong11).w,a0
                 move.w  #$1E0,d1
                 sub.w   (a0,d0.w),d1
                 subi.w  #$20,d1                         ; ' '
@@ -574,7 +574,7 @@ Boss_Epsilon1AdvanceRingObjectDefeatPosition:           ; CODE XREF: Boss_Epsilo
                 move.w  d0,$10(a5)
                 move.w  $4A(a5),d0
                 add.w   d0,d0
-                lea     (SharedPatternRow1Long3).w,a0
+                lea     (SharedScratchLong11).w,a0
                 move.w  #$1E0,d1
                 sub.w   (a0,d0.w),d1
                 subi.w  #$20,d1                         ; ' '

@@ -38,10 +38,10 @@ the 1,000-line ceiling.
 The former 889-line `ui/options_screen.s` had a real ownership boundary at ROM
 `$009F8E`: both options-menu controllers and their selection table end before
 the shared BCD/DMA, cursor, and UI asset helpers begin. The ordered
-`options_menu_controllers.s` and `options_shared_helpers_and_assets.s` modules
-preserve that exact byte sequence at 560 and 329 lines respectively. In
-contrast, the long player sprite-mapping family remains together because a
-line-count-only split would obscure its shared consumer.
+`options_menu_controllers.s` and `options_screen.s` modules preserve that exact
+byte sequence at 560 and 329 lines respectively. In contrast, the long player
+sprite-mapping family remains together because a line-count-only split would
+obscure its shared consumer.
 
 The transition dispatcher and the asteroid, Destroyer Proto, Shield Viper, and
 Wolf Garopa entry states now end at ROM `$00F7F9`. The Missiray, Stage 24, and

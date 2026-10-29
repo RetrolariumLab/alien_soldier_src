@@ -258,7 +258,7 @@ Boss_ZLeoUpdateIntroDescentPose:                        ; CODE XREF: Boss_ZLeoPr
                 move.w  $5B4(a5),d0
                 addi.w  #0,d0
                 move.w  d0,(Entity57YPos).w
-                lea     Boss_ZLeoIntroDescentPose(pc),a1
+                lea     Boss_ZLeoIntroDescentPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; End of function Boss_ZLeoPrepareIntroDescent
@@ -310,7 +310,7 @@ Boss_ZLeoAdvanceIntroCountdown:                         ; CODE XREF: Boss_ZLeoRu
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_ZLeoBeginBattleEntry
                 move.w  #2,(PlaneBShakeLevel).w
-                lea     Boss_ZLeoBattleEntryPose(pc),a1
+                lea     Boss_ZLeoBattleEntryPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -345,13 +345,13 @@ Boss_ZLeoRenderBattleEntry:                             ; CODE XREF: Boss_ZLeoRu
                 move.w  $11C(a5),$59C(a5)
                 move.w  #3,(PlaneAShakeLevel).w
                 move.w  #1,(PlaneBShakeLevel).w
-                lea     Boss_ZLeoBattleEntryPose(pc),a1
+                lea     Boss_ZLeoBattleEntryPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
 Boss_ZLeoBattleEntryEffectDescriptor:   dc.w    6       ; field_0  ; was: stru_51F50
                                         ; DATA XREF: Boss_ZLeoRunIntroCountdown+3C   o
-                dc.l    Stage3Phase6AndZLeoEntryMappingData2020  ; field_2
+                dc.l    Stage25ZLeoEntryMappingData2020  ; field_2
                 dc.w    $4020                           ; field_6
                 dc.w    $FFFF
 ; ---------------------------------------------------------------------------
@@ -365,7 +365,7 @@ Boss_ZLeoFinishBattleEntry:                             ; CODE XREF: Boss_ZLeoRu
 Boss_ZLeoWaitForBattlePose:                             ; DATA XREF: ROM:00051B96   o  ; was: loc_51F76
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_ZLeoBeginBattlePose
-                lea     Boss_ZLeoBattleEntryPose(pc),a1
+                lea     Boss_ZLeoBattleEntryPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -386,7 +386,7 @@ Boss_ZLeoRunBattlePose:                                 ; DATA XREF: ROM:00051B9
                 beq.s   Boss_ZLeoRenderBattlePose
                 bsr.w   Boss_ZLeoSetSixPartsHighPriority
 Boss_ZLeoRenderBattlePose:                              ; CODE XREF: Boss_ZLeoRunBattlePose+C   j  ; was: loc_51FBC
-                lea     Boss_ZLeoPriorityTransitionPose(pc),a1
+                lea     Boss_ZLeoPriorityTransitionPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -463,7 +463,7 @@ Boss_ZLeoRunDefeatTransition:                           ; DATA XREF: ROM:00051B8
                 jsr     (Gfx_UpdateRandomizedPaletteRange).l
                 bsr.w   Boss_ZLeoSpawnDefeatEffect
                 bsr.w   Boss_ZLeoUpdateDefeatStageScroll
-                lea     Boss_ZLeoDefeatPose(pc),a1
+                lea     Boss_ZLeoDefeatPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -481,7 +481,7 @@ Boss_ZLeoRunDefeatFade:                                 ; DATA XREF: ROM:00051B8
 Boss_ZLeoUpdateDefeatFade:                              ; CODE XREF: Boss_ZLeoBeginDefeatSequence+8A   j  ; was: loc_520DE
                 bsr.w   Boss_ZLeoUpdateDefeatPaletteFadeAndShake
                 bsr.w   Boss_ZLeoSpawnDefeatEffect
-                lea     Boss_ZLeoDefeatPose(pc),a1
+                lea     Boss_ZLeoDefeatPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -680,7 +680,7 @@ Boss_ZLeoBeginScrollingLaserAttack:                     ; CODE XREF: Boss_ZLeoBe
 Boss_ZLeoWaitForScrollingLaserCue:                      ; DATA XREF: ROM:00051BA8   o  ; was: loc_5231A
                 bclr    #0,$23E(a5)
                 bne.s   Boss_ZLeoStartScrollingLaserAttack
-                lea     Boss_ZLeoScrollingLaserEntryPose(pc),a1
+                lea     Boss_ZLeoScrollingLaserEntryPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoSyncStageCoordinateAndRender
 ; ---------------------------------------------------------------------------
@@ -709,7 +709,7 @@ Boss_ZLeoRunScrollingLaserEntryPose:                    ; DATA XREF: ROM:00051BA
                 move.w  d0,(PlayerYPosition).w
                 clr.l   (Entity57YVel).w
 Boss_ZLeoRenderScrollingLaserEntryPose:                 ; CODE XREF: Boss_ZLeoRunScrollingLaserEntryPose+C   j  ; was: loc_5238C
-                lea     Boss_ZLeoScrollingLaserEntryPose(pc),a1
+                lea     Boss_ZLeoScrollingLaserEntryPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -737,7 +737,7 @@ Boss_ZLeoLoopScrollingLaserBurstPose:                   ; CODE XREF: Boss_ZLeoRu
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
 Boss_ZLeoRenderScrollingLaserBurstPose:                 ; CODE XREF: Boss_ZLeoRunScrollingLaserEntryPose+6E   j  ; was: loc_523E2
-                lea     Boss_ZLeoScrollingLaserBurstPose(pc),a1
+                lea     Boss_ZLeoScrollingLaserBurstPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
@@ -763,7 +763,7 @@ Boss_ZLeoApplyScrollAcceleration:                       ; CODE XREF: Boss_ZLeoRu
                 move.w  #$180,$35C(a5)
 Boss_ZLeoRenderScrollAcceleration:                      ; CODE XREF: Boss_ZLeoRunScrollingLaserEntryPose+C8   j  ; was: loc_52438
                 bsr.w   Boss_ZLeoAdvanceVerticalScrollAndQueueRow
-                lea     Boss_ZLeoScrollingLaserBurstPose(pc),a1
+                lea     Boss_ZLeoScrollingLaserBurstPoses(pc),a1
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------

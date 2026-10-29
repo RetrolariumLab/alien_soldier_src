@@ -21,7 +21,7 @@ Boss_VictorMain:                                        ; DATA XREF: ROM:Entity_
                 bcc.s   Boss_VictorDispatchState
                 tst.w   (BossHealth).w
                 bne.s   Boss_VictorDispatchState
-                move.w  #1,(SharedPatternRow0Long5+2).w
+                move.w  #1,(SharedScratchLong5+2).w
                 bset    #0,(StageTimerPauseFlag).w
                 move.w  #$1E,4(a5)
 Boss_VictorDispatchState:                               ; CODE XREF: Boss_VictorMain+C   j  ; was: loc_32420
@@ -52,14 +52,14 @@ Boss_VictorStates:  dc.w    Boss_VictorInit-*           ; DATA XREF: Boss_Victor
 
 ; Initializes Victor, its two core parts, and eight orbiting parts
 Boss_VictorInit:                                        ; DATA XREF: ROM:Boss_VictorStates   o  ; was: sub_3244E
-                clr.w   (SharedPatternRow0Long5+2).w
+                clr.w   (SharedScratchLong5+2).w
                 move.w  #$100,$14(a5)
                 move.w  #$200,$10(a5)
                 bsr.w   Boss_VictorUpdateViewportOffset
                 tst.w   (DataLoaderControl).w
                 bmi.w   Entity_UpdateReturn
-                move.l  #Boss_VictorAnimationTimingScript,(SharedPatternRow0Long0).w
-                move.w  #1,(SharedPatternRow0Long1).w
+                move.l  #Boss_VictorAnimationTimingScript,(SharedScratchLong0).w
+                move.w  #1,(SharedScratchLong1).w
                 move.b  #4,(PlaneAScrollModeFlags).w
                 move.b  #$50,$21(a5)                    ; 'P'
                 move.b  #$98,$23(a5)
@@ -75,7 +75,7 @@ Boss_VictorInit:                                        ; DATA XREF: ROM:Boss_Vi
                 movea.l #Boss_VictorInitialGraphicsLoadDescriptor,a0
                 jsr     (Tilemap_QueueIndexedRows).l
                 move.w  #$FFFE,$18(a5)
-                move.l  #$80000,(SharedPatternRow0Long3+2).w
+                move.l  #$80000,(SharedScratchLong3+2).w
                 addq.w  #2,4(a5)
                 movea.w a5,a4
                 adda.w  #$60,a4                         ; '`'
@@ -142,16 +142,16 @@ Boss_VictorUpdateViewportOffset:                        ; CODE XREF: Boss_Victor
 ; Updates boss animation frames by loading compressed tile data on timer
 Boss_VictorUpdateAnimation:                             ; CODE XREF: Boss_VictorFlyIn+8   p  ; was: sub_325DA
                                         ; Boss_VictorWaitForArenaReady+8   p
-                subq.w  #1,(SharedPatternRow0Long1).w
+                subq.w  #1,(SharedScratchLong1).w
                 bne.w   Entity_UpdateReturn
-                movea.l (SharedPatternRow0Long0).w,a0
+                movea.l (SharedScratchLong0).w,a0
                 tst.w   (a0)
                 bpl.s   Boss_VictorRestartAnimationScript
                 movea.l #Boss_VictorAnimationTimingScript,a0
 Boss_VictorRestartAnimationScript:                      ; CODE XREF: Boss_VictorUpdateAnimation+E   j  ; was: loc_325F0
-                move.w  (a0)+,(SharedPatternRow0Long1).w
+                move.w  (a0)+,(SharedScratchLong1).w
                 move.w  (a0)+,d0
-                move.l  a0,(SharedPatternRow0Long0).w
+                move.l  a0,(SharedScratchLong0).w
                 movea.l Boss_VictorAnimationGraphicsTable(pc,d0.w),a0
                 jmp     Tilemap_QueueIndexedRows
 ; End of function Boss_VictorUpdateAnimation
@@ -249,7 +249,7 @@ Boss_VictorInitNextRingSegment:                         ; CODE XREF: Boss_Victor
                 move.w  #$40,$4A(a4)                    ; '@'
                 move.w  #1,$4C(a4)
                 move.w  d5,$40(a4)
-                add.w   (SharedPatternRow0Long2+2).w,d5
+                add.w   (SharedScratchLong2+2).w,d5
                 clr.w   $42(a4)
                 move.w  a0,$44(a4)
                 movea.w a4,a0
@@ -257,7 +257,7 @@ Boss_VictorInitNextRingSegment:                         ; CODE XREF: Boss_Victor
                 move.w  #$CC00,2(a4)
                 move.l  #SharedVictorSunsetStingSegmentMappingA,8(a4)
                 move.w  #$2300,$E(a4)
-                tst.w   (SharedPatternRow0Long2).w
+                tst.w   (SharedScratchLong2).w
                 bpl.s   Boss_VictorFinishRingDeployment
                 ori.w   #$1000,$E(a4)
 Boss_VictorFinishRingDeployment:                        ; CODE XREF: Boss_VictorDeployRing+78   j  ; was: loc_32788
@@ -276,36 +276,36 @@ Boss_VictorConfigureRingPattern:                        ; CODE XREF: Boss_Victor
                 andi.w  #1,d0
                 bne.s   Boss_VictorConfigureLeftClockwiseRing
                 move.w  #$1FC,d5
-                move.w  #$1FC,(SharedPatternRow0Long1+2).w
-                move.w  #$FFFE,(SharedPatternRow0Long2+2).w
-                move.w  #2,(SharedPatternRow0Long2).w
-                move.w  #$180,(SharedPatternRow0Long3).w
+                move.w  #$1FC,(SharedScratchLong1+2).w
+                move.w  #$FFFE,(SharedScratchLong2+2).w
+                move.w  #2,(SharedScratchLong2).w
+                move.w  #$180,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_VictorConfigureLeftClockwiseRing:                  ; CODE XREF: Boss_VictorConfigureRingPattern+12   j  ; was: loc_327D6
                 move.w  #4,d5
-                move.w  #4,(SharedPatternRow0Long1+2).w
-                move.w  #2,(SharedPatternRow0Long2+2).w
-                move.w  #$FFFE,(SharedPatternRow0Long2).w
-                move.w  #$180,(SharedPatternRow0Long3).w
+                move.w  #4,(SharedScratchLong1+2).w
+                move.w  #2,(SharedScratchLong2+2).w
+                move.w  #$FFFE,(SharedScratchLong2).w
+                move.w  #$180,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_VictorConfigureRightRing:                          ; CODE XREF: Boss_VictorConfigureRingPattern+C   j  ; was: loc_327F4
                 andi.w  #1,d0
                 bne.s   Boss_VictorConfigureRightCounterclockwiseRing
                 move.w  #$104,d5
-                move.w  #$104,(SharedPatternRow0Long1+2).w
-                move.w  #2,(SharedPatternRow0Long2+2).w
-                move.w  #2,(SharedPatternRow0Long2).w
-                move.w  #$C0,(SharedPatternRow0Long3).w
+                move.w  #$104,(SharedScratchLong1+2).w
+                move.w  #2,(SharedScratchLong2+2).w
+                move.w  #2,(SharedScratchLong2).w
+                move.w  #$C0,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_VictorConfigureRightCounterclockwiseRing:          ; CODE XREF: Boss_VictorConfigureRingPattern+54   j  ; was: loc_32818
                 move.w  #$FC,d5
-                move.w  #$FC,(SharedPatternRow0Long1+2).w
-                move.w  #$FFFE,(SharedPatternRow0Long2+2).w
-                move.w  #$FFFE,(SharedPatternRow0Long2).w
-                move.w  #$C0,(SharedPatternRow0Long3).w
+                move.w  #$FC,(SharedScratchLong1+2).w
+                move.w  #$FFFE,(SharedScratchLong2+2).w
+                move.w  #$FFFE,(SharedScratchLong2).w
+                move.w  #$C0,(SharedScratchLong3).w
                 rts
 ; End of function Boss_VictorConfigureRingPattern
 ; Reverses and relinks the twelve-part ring
@@ -334,7 +334,7 @@ Boss_VictorLinkNextRingSegment:                         ; CODE XREF: Boss_Victor
                 adda.w  #$60,a4                         ; '`'
                 dbf     d6,Boss_VictorLinkNextRingSegment
                 move.l  #SharedVictorSunsetStingSegmentMappingB,(VictorRingEndMapping).w
-                move.w  (SharedPatternRow0Long1+2).w,d0
+                move.w  (SharedScratchLong1+2).w,d0
                 eori.w  #$100,d0
                 move.w  d0,$40(a5)
                 move.w  #$C0,$42(a5)
@@ -353,7 +353,7 @@ Boss_VictorRetractRing:                                 ; DATA XREF: ROM:0003243
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
                 subq.w  #3,$42(a5)
-                cmpi.w  #$120,(SharedPatternRow0Long3).w
+                cmpi.w  #$120,(SharedScratchLong3).w
                 bcc.s   Boss_VictorClampRetractionFromRight
                 cmpi.w  #$C0,$10(a5)
                 bhi.w   Entity_UpdateReturn
@@ -381,7 +381,7 @@ Boss_VictorLinkPreviousRingSegment:                     ; CODE XREF: Boss_Victor
                 dbf     d6,Boss_VictorLinkPreviousRingSegment
                 lea     (Entity_ObjectPool).w,a3
                 move.w  a3,$44(a4)
-                move.w  (SharedPatternRow0Long1+2).w,$40(a4)
+                move.w  (SharedScratchLong1+2).w,$40(a4)
                 move.w  $42(a3),$42(a4)
                 move.w  #$10,$4A(a4)
                 addq.w  #2,4(a4)

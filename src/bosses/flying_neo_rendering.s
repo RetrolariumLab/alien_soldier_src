@@ -7,7 +7,7 @@ Boss_FlyingNeoHoverDecisionState:                       ; DATA XREF: ROM:0003C0C
                 bra.w   Boss_FlyingNeoBeginPursuitState
 ; ---------------------------------------------------------------------------
 Boss_FlyingNeoUpdateHoverDecisionPose:                  ; CODE XREF: Boss_FlyingNeoHoverDecisionState+4   j  ; was: loc_3C7C8
-                lea     Boss_FlyingNeoNeutralPoseCommands(pc),a1
+                lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
@@ -38,7 +38,7 @@ Boss_FlyingNeoSetRisingRetreatRightVelocity:            ; CODE XREF: Boss_Flying
 Boss_FlyingNeoStoreRisingRetreatRightVelocity:          ; CODE XREF: Boss_FlyingNeoSetRisingRetreatRightVelocity+6   j  ; was: loc_3C82E
                 move.l  #$22000,$18(a5)
 Boss_FlyingNeoRenderRisingRetreat:                      ; CODE XREF: Boss_FlyingNeoRisingRetreatState+18   j  ; was: loc_3C836
-                lea     Boss_FlyingNeoRisingRetreatPoseCommands(pc),a1
+                lea     Boss_FlyingNeoRisingRetreatPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bsr.w   Boss_FlyingNeoUpdateSprites
@@ -72,7 +72,7 @@ Boss_FlyingNeoUpdateDivingArcSound:                     ; CODE XREF: Boss_Flying
                 move.b  #$D1,d0
                 jsr     (Sound_QueueSFXRequest).l
 Boss_FlyingNeoSelectDivingArcPose:                      ; CODE XREF: Boss_FlyingNeoDivingArcState+20   j  ; was: loc_3C8A8
-                lea     Boss_FlyingNeoDivingArcPoseCommands(pc),a1
+                lea     Boss_FlyingNeoDivingArcPoses(pc),a1
                 nop
 Boss_FlyingNeoRenderArc:                                ; CODE XREF: Boss_FlyingNeoRisingArcState+38   j  ; was: loc_3C8AE
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
@@ -150,7 +150,7 @@ Boss_FlyingNeoBindPartAnchorRecord:                     ; CODE XREF: Boss_Flying
                 move.w  (PrimaryCameraYPosition).w,d0
                 addi.w  #$BC,d0
                 move.w  d0,$14(a0)
-                lea     Boss_FlyingNeoPartAnchorPoseCommands(pc),a1
+                lea     Boss_FlyingNeoPartAnchorPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bsr.w   Boss_FlyingNeoUpdateSprites

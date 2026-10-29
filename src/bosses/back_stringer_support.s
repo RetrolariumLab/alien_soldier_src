@@ -292,7 +292,7 @@ Boss_BackStringerStartPoseInterpolation:                ; CODE XREF: Boss_BackSt
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_BackStringerPoseFrameData,d0
+                addi.l  #Boss_BackStringerPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Anim_BackStringerCalcInterpolation
                 moveq   #0,d0
@@ -422,24 +422,24 @@ Boss_BackStringerInitializePoseChannels:
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_BackStringerInitializePoseChannels
 ; ---------------------------------------------------------------------------
-Boss_BackStringerManualControlPoseScript:   dc.w    $2020, 0, $2020, $14, $FFFF  ; DATA XREF: Boss_BackStringerManualControlState+3C   o ; was: word_45432
-Boss_BackStringerOpeningDelayPoseScript:    dc.w    $2828, $28, $607, 0, $2828, $14, $607, 0, $FFFF  ; DATA XREF: Boss_BackStringerUseOpeningDelayPoseAndRender   o ; was: word_4543C
-Boss_BackStringerCircularMotionPoseScript:  dc.w    $708, $3C, $708, $50, $708, $64, $708, $78, $FFFF  ; DATA XREF: Boss_BackStringerUpdateCircularMotionAndRender   o ; was: word_4544E
+Boss_BackStringerManualControlPoses:    dc.w    $2020, 0, $2020, $14, $FFFF  ; DATA XREF: Boss_BackStringerManualControlState+3C   o ; was: word_45432
+Boss_BackStringerOpeningDelayPoses:     dc.w    $2828, $28, $607, 0, $2828, $14, $607, 0, $FFFF  ; DATA XREF: Boss_BackStringerUseOpeningDelayPoseAndRender   o ; was: word_4543C
+Boss_BackStringerCircularMotionPoses:   dc.w    $708, $3C, $708, $50, $708, $64, $708, $78, $FFFF  ; DATA XREF: Boss_BackStringerUpdateCircularMotionAndRender   o ; was: word_4544E
                                         ; Boss_BackStringerTrackingAttackWarmupState+40   o
-Boss_BackStringerIncreasingAnglePoseScript: dc.w    $305, $8C, $305, $A0, $305, $B4, $305, $C8, $FFFF  ; DATA XREF: Boss_BackStringerUseIncreasingAnglePose   o ; was: word_45460
+Boss_BackStringerIncreasingAnglePoses:  dc.w    $305, $8C, $305, $A0, $305, $B4, $305, $C8, $FFFF  ; DATA XREF: Boss_BackStringerUseIncreasingAnglePose   o ; was: word_45460
                                         ; Boss_BackStringerUpdateRotationAttack+1A   o
-Boss_BackStringerDecreasingAnglePoseScript: dc.w    $305, $DC, $305, $F0, $305, $104, $305, $118, $FFFF  ; DATA XREF: Boss_BackStringerUpdateRotationAttack+24   o ; was: word_45472
+Boss_BackStringerDecreasingAnglePoses:  dc.w    $305, $DC, $305, $F0, $305, $104, $305, $118, $FFFF  ; DATA XREF: Boss_BackStringerUpdateRotationAttack+24   o ; was: word_45472
                                         ; Boss_BackStringerTrackingAttackState+122   o
-Boss_BackStringerOpeningPoseScript: dc.w    $306, $12C, $606, $12C, $418, $64, $306, $140, $606, $140, $418, $3C, $FFFF  ; DATA XREF: Boss_BackStringerOpeningPoseState+74   o ; was: word_45484
-Boss_BackStringerIdlePoseScript:    dc.w    $808, 0, $418, $154, $FFFF  ; DATA XREF: Boss_BackStringerOpeningDelayState+A2   o ; was: word_4549E
+Boss_BackStringerOpeningPoses:  dc.w    $306, $12C, $606, $12C, $418, $64, $306, $140, $606, $140, $418, $3C, $FFFF  ; DATA XREF: Boss_BackStringerOpeningPoseState+74   o ; was: word_45484
+Boss_BackStringerIdlePoses:     dc.w    $808, 0, $418, $154, $FFFF  ; DATA XREF: Boss_BackStringerOpeningDelayState+A2   o ; was: word_4549E
                                         ; Boss_BackStringerUseIdlePoseAndRender   o
-Boss_BackStringerDivePreparationPoseScript: dc.w    $404, 0, $20C, $154, $FFFF  ; DATA XREF: Boss_BackStringerAnimateDivePreparation   o ; was: word_454A8
-Boss_BackStringerDiveAttackPoseScript:      dc.w    $408, $190, $408, $190, $C0E, $154, $3030, 0, $FFFE  ; DATA XREF: Boss_BackStringerDiveAttackState+22   o ; was: word_454B2
-Boss_BackStringerSweepPoseScript:           dc.w    $80C, $154, $C0C, $154, $80C, 0, $C0C, 0, $FFFF  ; DATA XREF: Boss_BackStringerAnimateSweepAndRender   o ; was: word_454C4
-Boss_BackStringerTransformationPoseScript:  dc.w    $1010, $154, $E10, $17C, $707, $17C, $80D9  ; DATA XREF: Boss_BackStringerAnimateTransformationAndRender   o ; was: word_454D6
+Boss_BackStringerDivePreparationPoses:  dc.w    $404, 0, $20C, $154, $FFFF  ; DATA XREF: Boss_BackStringerAnimateDivePreparation   o ; was: word_454A8
+Boss_BackStringerDiveAttackPoses:       dc.w    $408, $190, $408, $190, $C0E, $154, $3030, 0, $FFFE  ; DATA XREF: Boss_BackStringerDiveAttackState+22   o ; was: word_454B2
+Boss_BackStringerSweepPoses:            dc.w    $80C, $154, $C0C, $154, $80C, 0, $C0C, 0, $FFFF  ; DATA XREF: Boss_BackStringerAnimateSweepAndRender   o ; was: word_454C4
+Boss_BackStringerTransformationPoses:   dc.w    $1010, $154, $E10, $17C, $707, $17C, $80D9  ; DATA XREF: Boss_BackStringerAnimateTransformationAndRender   o ; was: word_454D6
                 dc.w    $C0E, $190, $404, $190, $1010, $154, $FFFE
-Boss_BackStringerPoseFrameData: binclude "data/other/word_454F2.bin"  ; was: word_454F2
-Boss_BackStringerPoseFrameData_End:                     ; was: word_454F2_End
+Boss_BackStringerPoseTable: binclude "data/other/word_454F2.bin"  ; was: word_454F2
+Boss_BackStringerPoseTable_End:                         ; was: word_454F2_End
 
 ; Updates the detached rope segment and its shared surface reference
 Projectile_BackStringerRopeSegment:                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_45696

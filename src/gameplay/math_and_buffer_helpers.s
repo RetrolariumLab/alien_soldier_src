@@ -169,7 +169,7 @@ VDP_QueueCommand_Build:                                 ; CODE XREF: StageTransi
                 rts
 ; End of function VDP_QueueCommand
 ; Halts the Z80, programs a DMA transfer to VDP memory, then restores both
-Gfx_DmaTransferWithZ80Halt:                             ; CODE XREF: Gfx_PrepareStage3Phase2ResampledTiles+54   j  ; was: sub_1B7DC
+Gfx_DmaTransferWithZ80Halt:                             ; CODE XREF: Gfx_PrepareStage21And22ResampledTiles+54   j  ; was: sub_1B7DC
                 move.w  #$8F02,d3
                 move    sr,-(sp)
                 move    #$2700,sr

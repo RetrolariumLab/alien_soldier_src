@@ -150,7 +150,7 @@ Boss_JokerPhaseGateCompletionDelayState:                ; DATA XREF: ROM:0003B30
 ; ---------------------------------------------------------------------------
 Boss_JokerUpdatePhaseGatePose:                          ; CODE XREF: Boss_JokerPhaseGateDelayState+4   j  ; was: loc_3B464
                                         ; Boss_JokerWaitForPlayerSequenceState+4   j
-                lea     Boss_JokerPhaseGatePoseCommands(pc),a1
+                lea     Boss_JokerPhaseGatePoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 move.w  $58(a5),d7
@@ -255,7 +255,7 @@ Boss_JokerClampDefeatFallY:                             ; CODE XREF: Boss_JokerU
                 move.l  #$FFFCC000,$1C(a5)
 Boss_JokerAnimateDefeatFall:                            ; CODE XREF: Boss_JokerDefeatFallDelayState+2A   j  ; was: loc_3B5C6
                                         ; Boss_JokerDefeatFallDelayState+34   j
-                lea     Boss_JokerDefeatFallPoseCommands(pc),a1
+                lea     Boss_JokerDefeatFallPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -365,7 +365,7 @@ Boss_JokerInterruptWaitState:                           ; DATA XREF: ROM:0003B30
                 bclr    #0,(BossCounterMaxFlag).w
                 bne.w   Boss_JokerSelectNextState
                 addi.w  #2,(BossCombatCounter).w
-                lea     Boss_JokerInterruptWaitPoseCommands(pc),a1
+                lea     Boss_JokerInterruptWaitPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -385,7 +385,7 @@ Boss_JokerBeginDiveState:                               ; CODE XREF: Boss_JokerS
 Boss_JokerDivePrep:                                     ; DATA XREF: ROM:0003B2EC   o  ; was: sub_3B748
                 tst.w   $58(a5)
                 bmi.s   Boss_JokerInitializeDiveMotion
-                lea     Boss_JokerDiveAndJumpPreparationPoseCommands(pc),a1
+                lea     Boss_JokerDiveAndJumpPreparationPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -425,7 +425,7 @@ Boss_JokerDiveMotionState:                              ; CODE XREF: Boss_JokerD
                                         ; DATA XREF: ROM:0003B2EE   o
                 bsr.s   Boss_JokerUpdateDiveBodyMotion
                 bpl.s   Boss_JokerAdvanceToDiveDescentState
-                lea     Boss_JokerDiveMotionPoseCommands(pc),a1
+                lea     Boss_JokerDiveMotionPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -450,7 +450,7 @@ Boss_JokerDiveDescentState:                             ; DATA XREF: ROM:0003B2F
                 bsr.s   Boss_JokerUpdateDiveBodyMotion
                 cmpi.w  #$144,$374(a5)
                 bpl.s   Boss_JokerBeginStretchState
-                lea     Boss_JokerDiveDescentAndBouncePoseCommands(pc),a1
+                lea     Boss_JokerDiveDescentAndBouncePoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -485,7 +485,7 @@ Boss_JokerContractStretchBodyHeight:                    ; CODE XREF: Boss_JokerS
 Boss_JokerUpdateStretchPose:                            ; CODE XREF: Boss_JokerStretchState+12   j  ; was: loc_3B874
                                         ; Boss_JokerStretchState+18   j
                 bsr.w   Boss_JokerSlowHorizontalVelocity
-                lea     Boss_JokerStretchPoseCommands(pc),a1
+                lea     Boss_JokerStretchPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -515,7 +515,7 @@ Boss_JokerJumpPreparationState:                         ; DATA XREF: ROM:0003B2F
                 tst.w   $58(a5)
                 bmi.s   Boss_JokerInitializeJumpAscent
                 subi.l  #$8000,$1DC(a5)
-                lea     Boss_JokerDiveAndJumpPreparationPoseCommands(pc),a1
+                lea     Boss_JokerDiveAndJumpPreparationPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -544,7 +544,7 @@ Boss_JokerJumpAscentState:                              ; DATA XREF: ROM:0003B2F
                 add.w   $14(a5),d0
                 cmpi.w  #$C8,d0
                 bmi.s   Boss_JokerBeginBodyHeightCompression
-                lea     Boss_JokerJumpAscentPoseCommands(pc),a1
+                lea     Boss_JokerJumpAscentPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -569,7 +569,7 @@ Boss_JokerUpdateBodyHeightCompressionPose:              ; CODE XREF: Boss_JokerJ
                 bsr.w   Boss_JokerDeriveYFromBodyHeight
                 tst.w   $58(a5)
                 bmi.s   Boss_JokerBeginBodyHeightRecovery
-                lea     Boss_JokerBodyHeightCompressionPoseCommands(pc),a1
+                lea     Boss_JokerBodyHeightCompressionPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -585,7 +585,7 @@ Boss_JokerBodyHeightRecoveryState:                      ; DATA XREF: ROM:0003B2F
                 cmpi.w  #$40,$1DC(a5)                   ; '@'
                 bpl.s   Boss_JokerAdvanceToBounceMotionState
                 bsr.w   Boss_JokerDeriveYFromBodyHeight
-                lea     Boss_JokerBodyHeightRecoveryPoseCommands(pc),a1
+                lea     Boss_JokerBodyHeightRecoveryPoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   Boss_JokerRenderBody
@@ -611,7 +611,7 @@ Boss_JokerBounceMotionState:                            ; DATA XREF: ROM:0003B2F
                 addi.l  #$2000,$1C(a5)
                 cmpi.w  #$140,$374(a5)
                 bpl.w   Boss_JokerBeginStretchState
-                lea     Boss_JokerDiveDescentAndBouncePoseCommands(pc),a1
+                lea     Boss_JokerDiveDescentAndBouncePoses(pc),a1
                 nop
                 bsr.w   Boss_JokerUpdatePose
                 bra.w   *+4

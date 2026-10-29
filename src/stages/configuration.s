@@ -398,27 +398,27 @@ Stage_ApplyStage26Configuration:                        ; DATA XREF: ROM:0001229
                 bra.w   Stage_ApplyConfigurationRecord
 ; End of function Stage_ApplyStage26Configuration
 ; Builds the Stage 3 phase-2 resampling steps, transforms its tiles, and uploads them
-Gfx_PrepareStage3Phase2ResampledTiles:                  ; CODE XREF: Stage_LoadStage3Phase2Assets+12   p  ; was: sub_125EE
+Gfx_PrepareStage21And22ResampledTiles:                  ; CODE XREF: Stage_LoadStage21And22Assets+12   p  ; was: sub_125EE
                 movea.w #(Stage3ScaleStepTable-M68K_RAM),a0
                 move.l  #$600000,d0
                 move.w  #$2000,d1
                 move.w  #$1A0,d3
                 moveq   #$5F,d7                         ; '_'
-Gfx_BuildStage3Phase2ScaleStepTable:                    ; CODE XREF: Gfx_PrepareStage3Phase2ResampledTiles+20   j  ; was: loc_12602
+Gfx_BuildStage21And22ScaleStepTable:                    ; CODE XREF: Gfx_PrepareStage21And22ResampledTiles+20   j  ; was: loc_12602
                 move.l  d0,d2
                 divu.w  d1,d2
                 ext.l   d2
                 asl.l   #8,d2
                 move.l  d2,(a0)+
                 add.w   d3,d1
-                dbf     d7,Gfx_BuildStage3Phase2ScaleStepTable
-                move.l  #Stage3Phase2PackedTileSource,(Stage3PackedTilePtr).w
+                dbf     d7,Gfx_BuildStage21And22ScaleStepTable
+                move.l  #Stage21And22PackedTileSource,(Stage3PackedTilePtr).w
                 move.l  #Stage3ScaleStepTable,(Stage3ScaleTablePtr).w
                 move.w  #$5F,(Stage3ResampleGroupsM1).w  ; '_'
                 move.w  #3,(Stage3ResamplePassesM1).w
-                bsr.w   Gfx_ResampleStage3Phase2Tiles
+                bsr.w   Gfx_ResampleStage21And22Tiles
                 movea.l #M68K_RAM,a0
                 move.w  #$3C00,d5
                 move.l  #$93009412,d4
                 jmp     Gfx_DmaTransferWithZ80Halt
-; End of function Gfx_PrepareStage3Phase2ResampledTiles
+; End of function Gfx_PrepareStage21And22ResampledTiles

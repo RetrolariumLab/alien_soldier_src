@@ -111,7 +111,7 @@ Object_DestroyerMk2ReleaseCentralPart:                  ; DATA XREF: ROM:Object_
 Object_DestroyerMk2ReleaseCentralPartNow:               ; CODE XREF: Object_DestroyerMk2ReleaseCentralPart+6   j  ; was: loc_4B76E
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
-                subq.w  #1,(SharedPatternRow0Long4).w
+                subq.w  #1,(SharedScratchLong4).w
                 addq.w  #2,4(a5)
                 move.w  #$FFFC,$1C(a5)
                 move.w  (PlayerXPosition).w,d0
@@ -251,7 +251,7 @@ Object_DestroyerMk2BouncingPartAFallReturn:             ; CODE XREF: Object_Dest
 Object_DestroyerMk2BouncingPartBStateDispatch:          ; DATA XREF: ROM:0004B74C   o  ; was: sub_4B904
                 cmpi.w  #8,4(a5)
                 bcc.s   Object_DestroyerMk2DispatchBouncingPartBState
-                tst.w   (SharedPatternRow0Long7+2).w
+                tst.w   (SharedScratchLong7+2).w
                 beq.s   Object_DestroyerMk2CheckBouncingPartBCollision
                 move.w  $44(a5),$1C(a5)
                 bra.s   Object_DestroyerMk2ReflectBouncingPartB
@@ -264,7 +264,7 @@ Object_DestroyerMk2CheckBouncingPartBCollision:         ; CODE XREF: Object_Dest
                 move.l  #$FFFC0000,$1C(a5)
 Object_DestroyerMk2ReflectBouncingPartB:                ; CODE XREF: Object_DestroyerMk2BouncingPartBStateDispatch+14   j  ; was: loc_4B932
                                         ; Object_DestroyerMk2BouncingPartBStateDispatch+24   j
-                move.w  #1,(SharedPatternRow0Long7+2).w
+                move.w  #1,(SharedScratchLong7+2).w
                 neg.l   $18(a5)
                 clr.b   $21(a5)
                 move.w  #8,4(a5)
@@ -550,13 +550,13 @@ Gfx_DestroyerMk2CyclePaletteWords:                      ; CODE XREF: Boss_Destro
                 move.w  (FrameCounter).w,d0
                 andi.w  #3,d0
                 bne.s   Gfx_DestroyerMk2PaletteCycleReturn
-                move.w  (SharedPatternRow0Long6).w,d0
+                move.w  (SharedScratchLong6).w,d0
                 move.w  Gfx_DestroyerMk2PrimaryPaletteCycleTable(pc,d0.w),(PaletteActiveColor51).w
                 move.w  Gfx_DestroyerMk2SecondaryPaletteCycleTable(pc,d0.w),(PaletteActiveColor52).w
-                addq.w  #2,(SharedPatternRow0Long6).w
-                cmpi.w  #$14,(SharedPatternRow0Long6).w
+                addq.w  #2,(SharedScratchLong6).w
+                cmpi.w  #$14,(SharedScratchLong6).w
                 bne.s   Gfx_DestroyerMk2PaletteCycleReturn
-                clr.w   (SharedPatternRow0Long6).w
+                clr.w   (SharedScratchLong6).w
 Gfx_DestroyerMk2PaletteCycleReturn:                     ; CODE XREF: Gfx_DestroyerMk2CyclePaletteWords+8   j  ; was: locret_4BC1A
                                         ; Gfx_DestroyerMk2CyclePaletteWords+24   j
                 rts
@@ -604,14 +604,14 @@ Boss_DestroyerMk2UpdateLinkedComponentPosition:         ; CODE XREF: Boss_Destro
                 add.w   d0,$14(a0)
                 lea     $60(a0),a0
                 dbf     d7,Boss_DestroyerMk2UpdateLinkedComponentLoop
-                move.l  (SharedPatternRow0Long3).w,d0
-                add.l   d0,(SharedPatternRow0Long2).w
-                andi.w  #$1FF,(SharedPatternRow0Long2).w
+                move.l  (SharedScratchLong3).w,d0
+                add.l   d0,(SharedScratchLong2).w
+                andi.w  #$1FF,(SharedScratchLong2).w
                 clr.w   d3
                 move.b  $20(a5),d3
                 movea.w #(NinthEntityType-M68K_RAM),a0
-                move.w  (SharedPatternRow0Long1).w,d5
-                move.w  (SharedPatternRow0Long2).w,d6
+                move.w  (SharedScratchLong1).w,d5
+                move.w  (SharedScratchLong2).w,d6
                 lea     (Math_SineTable).l,a1
                 move.w  #7,d7
 Boss_DestroyerMk2UpdateOrbitingPartLoop:                ; CODE XREF: Boss_DestroyerMk2UpdateLinkedObjectGeometry+106   j  ; was: loc_4BCF0

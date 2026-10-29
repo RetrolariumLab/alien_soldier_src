@@ -140,7 +140,7 @@ Boss_TerobusterBindActivePart:                          ; CODE XREF: Boss_Terobu
                 move.w  a0,$48(a5)
                 move.w  a0,$4A(a5)
                 move.w  #$14C,$14(a0)
-                lea     Boss_TerobusterPoseTargets(pc),a0
+                lea     Boss_TerobusterPoseTable(pc),a0
                 nop
                 bsr.w   Boss_TerobusterInitializePoseChannels
 ; End of function Boss_TerobusterSetup
@@ -229,7 +229,7 @@ Boss_TerobusterMissileAttackAExitByPose:                ; CODE XREF: Boss_Terobu
 Boss_TerobusterMissileAttackAUpdate:                    ; CODE XREF: Boss_TerobusterDecisionState+AA   j  ; was: loc_387E4
                                         ; Boss_TerobusterDecisionState+B0   j
                 bsr.w   Boss_TerobusterSpawnHomingMissile
-                lea     Boss_TerobusterMissileAttackAPoseCommands(pc),a1
+                lea     Boss_TerobusterMissileAttackAPoses(pc),a1
                 nop
                 bsr.w   Boss_TerobusterInterpolateAnimation
                 movea.w #(SixthEntityType-M68K_RAM),a0
@@ -298,7 +298,7 @@ Boss_TerobusterMissileAttackBUpdate:                    ; CODE XREF: Boss_Terobu
                 bsr.w   Boss_TerobusterSpawnHomingMissile
                 lea     Boss_TerobusterMissileAttackBDelayedPoseCommands(pc),a0
                 nop
-                lea     Boss_TerobusterMissileAttackBPoseCommands(pc),a1
+                lea     Boss_TerobusterMissileAttackBPoses(pc),a1
                 nop
                 cmpi.w  #8,4(a5)
                 beq.s   Boss_TerobusterMissileAttackBSelectPoseCommands
@@ -357,7 +357,7 @@ Boss_TerobusterSelectFallingRockPattern:                ; CODE XREF: Boss_Terobu
                 bmi.s   Boss_TerobusterSpawnFallingRocks
                 move.w  #$1E0,(BossCombatCounter).w
 Boss_TerobusterSpawnFallingRocks:                       ; CODE XREF: Boss_TerobusterDecisionState+268   j  ; was: loc_3895E
-                lea     Boss_TerobusterFallingRockPoseCommands(pc),a1
+                lea     Boss_TerobusterFallingRockPoses(pc),a1
                 nop
                 bsr.w   Boss_TerobusterInterpolateAnimation
                 bsr.w   Boss_TerobusterSpawnFallingRock
@@ -366,7 +366,7 @@ Boss_TerobusterSpawnFallingRocks:                       ; CODE XREF: Boss_Terobu
 Boss_TerobusterFallingRockFinale:                       ; CODE XREF: Boss_TerobusterDecisionState+25A   j  ; was: loc_3896E
                 subi.w  #$E,(BossCombatCounter).w
                 bmi.w   Boss_TerobusterEnterDecisionState
-                lea     Boss_TerobusterFallingRockFinalePoseCommands(pc),a1
+                lea     Boss_TerobusterFallingRockFinalePoses(pc),a1
                 nop
                 bsr.w   Boss_TerobusterInterpolateAnimation
                 bsr.w   Boss_TerobusterSpawnMultiDirectional
@@ -414,7 +414,7 @@ Boss_TerobusterDescentState:                            ; DATA XREF: ROM:0003858
                 addi.l  #$4000,$1C(a5)
                 cmpi.w  #$14C,$3D4(a5)
                 bpl.s   Boss_TerobusterBeginLanding
-                lea     Boss_TerobusterDescentPoseCommands(pc),a1
+                lea     Boss_TerobusterDescentPoses(pc),a1
                 nop
                 bsr.w   Boss_TerobusterInterpolateAnimation
                 bra.w   Boss_TerobusterUpdateMetaspriteAndProjectile
@@ -445,7 +445,7 @@ Boss_TerobusterLandingBeginSecondPose:                  ; CODE XREF: Boss_Terobu
                 bra.w   Boss_TerobusterLandingCheckComplete
 ; ---------------------------------------------------------------------------
 Boss_TerobusterSelectLandingPose:                       ; CODE XREF: Boss_TerobusterLandingBeginSecondPose   j  ; was: loc_38A54
-                lea     Boss_TerobusterLandingFirstPoseCommands(pc),a1
+                lea     Boss_TerobusterLandingFirstPoses(pc),a1
                 nop
 Boss_TerobusterUpdateLandingPose:                       ; CODE XREF: Boss_TerobusterLandingCheckComplete   j  ; was: loc_38A5A
                 bsr.w   Boss_TerobusterInterpolateAnimation
@@ -458,7 +458,7 @@ Boss_TerobusterBeginStageGateDelay:                     ; CODE XREF: Boss_Terobu
                 addq.w  #2,4(a5)
                 move.w  a5,$4A(a5)
                 move.w  #$30,$11C(a5)                   ; '0'
-                lea     Boss_TerobusterPoseTargets(pc),a0
+                lea     Boss_TerobusterPoseTable(pc),a0
                 nop
                 bsr.w   Boss_TerobusterInitializePoseChannels
 ; End of function Boss_TerobusterLandingState

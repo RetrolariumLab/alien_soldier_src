@@ -16,7 +16,7 @@ Boss_BugmaxInitializeBattleObjectChains:                ; DATA XREF: ROM:0004C3F
                 move.l  (SeventhEntityYVel).w,d0
                 asr.l   #1,d0
                 move.l  d0,$1C(a5)
-                move.w  #$100,(SharedPatternRow0Long5+2).w
+                move.w  #$100,(SharedScratchLong5+2).w
                 move.b  #$40,$20(a5)                    ; '@'
                 move.l  #Boss_BugmaxBattleControllerFrame,8(a5)
                 move.w  #$300,$E(a5)
@@ -78,7 +78,7 @@ Boss_BugmaxInitializeSecondaryLinkedChainLoop:          ; CODE XREF: Boss_Bugmax
                 move.l  #$FF01FF01,-$34(a0)
                 move.w  #$10,-$3A(a0)
                 move.b  #$40,-$3F(a0)                   ; '@'
-                move.w  #$20,(SharedPatternRow0Long4).w  ; ' '
+                move.w  #$20,(SharedScratchLong4).w     ; ' '
                 addq.w  #2,$5E(a5)
                 move.w  $5C(a5),$4A(a5)
                 move.w  #$180,(SecondaryEntityWork4C).w
@@ -132,9 +132,9 @@ Boss_BugmaxSecondaryLinkedPartMappings: dc.l    Boss_BugmaxSecondaryLinkFrame00 
 ; Advance the linked assembly rotation until shared angle $140
 Boss_BugmaxRotateLinkedAssemblyToward140:               ; DATA XREF: ROM:0004C3F2   o  ; was: sub_4CB4E
                 addi.l  #$1800,$1C(a5)
-                addi.w  #$10,(SharedPatternRow0Long5+2).w
-                andi.w  #$1F0,(SharedPatternRow0Long5+2).w
-                cmpi.w  #$140,(SharedPatternRow0Long5+2).w
+                addi.w  #$10,(SharedScratchLong5+2).w
+                andi.w  #$1F0,(SharedScratchLong5+2).w
+                cmpi.w  #$140,(SharedScratchLong5+2).w
                 bne.w   Boss_BugmaxRotateToward140Return
                 addq.w  #2,4(a5)
 Boss_BugmaxRotateToward140Return:                       ; CODE XREF: Boss_BugmaxRotateLinkedAssemblyToward140+1A   j  ; was: locret_4CB70
@@ -144,9 +144,9 @@ Boss_BugmaxRotateToward140Return:                       ; CODE XREF: Boss_Bugmax
 Boss_BugmaxRotateLinkedAssemblyToward180AndStartBattle:  ; DATA XREF: ROM:0004C3F4   o  ; was: sub_4CB72
                 addi.l  #$1800,$1C(a5)
                 bsr.w   Boss_BugmaxUpdateBodyAnchorFromScrollPhase
-                subi.w  #8,(SharedPatternRow0Long5+2).w
-                andi.w  #$1F8,(SharedPatternRow0Long5+2).w
-                cmpi.w  #$180,(SharedPatternRow0Long5+2).w
+                subi.w  #8,(SharedScratchLong5+2).w
+                andi.w  #$1F8,(SharedScratchLong5+2).w
+                cmpi.w  #$180,(SharedScratchLong5+2).w
                 bne.w   Boss_BugmaxRotateToward180Return
                 addq.w  #2,4(a5)
                 bsr.w   Gfx_BugmaxTransferBattleTileBlock
@@ -165,9 +165,9 @@ Boss_BugmaxEnablePrimaryLinkedPartCollisionLoop:        ; CODE XREF: Boss_Bugmax
                 clr.w   (RasterEffectInitState).w
                 move.b  #2,(PlaneBScrollModeFlags).w
                 move.w  #$E,(RasterLayoutOffset).w
-                move.w  #$140,(SharedPatternRow0Long3).w
-                move.w  #$140,(SharedPatternRow0Long3+2).w
-                move.l  #$C0000,(SharedPatternRow0Long2).w
+                move.w  #$140,(SharedScratchLong3).w
+                move.w  #$140,(SharedScratchLong3+2).w
+                move.l  #$C0000,(SharedScratchLong2).w
                 addq.w  #2,$5E(a5)
 Boss_BugmaxRotateToward180Return:                       ; CODE XREF: Boss_BugmaxRotateLinkedAssemblyToward180AndStartBattle+1E   j  ; was: locret_4CBFC
                 rts
@@ -205,19 +205,19 @@ Gfx_BugmaxQueuedBattleTileLoadReturn:                   ; CODE XREF: Gfx_BugmaxL
 ; Settle the distributed chain bend from $20 to the battle baseline $18
 Boss_BugmaxSettleChainBendAtBattleBaseline:             ; DATA XREF: ROM:0004C3FA   o  ; was: sub_4CC54
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                subq.w  #1,(SharedPatternRow0Long4).w
+                subq.w  #1,(SharedScratchLong4).w
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
-                cmpi.w  #$18,(SharedPatternRow0Long4).w
+                cmpi.w  #$18,(SharedScratchLong4).w
                 bne.s   Boss_BugmaxChainBendSettlementReturn
-                clr.w   (SharedPatternRow1Long1+2).w
+                clr.w   (SharedScratchLong9+2).w
                 addq.w  #2,4(a5)
 Boss_BugmaxChainBendSettlementReturn:                   ; CODE XREF: Boss_BugmaxSettleChainBendAtBattleBaseline+12   j  ; was: locret_4CC70
                 rts
 ; End of function Boss_BugmaxSettleChainBendAtBattleBaseline
 ; Select the next battle pattern preset from player position and the fixed sequence
 Boss_BugmaxSelectBattlePattern:                         ; DATA XREF: ROM:0004C3FC   o  ; was: sub_4CC72
-                clr.b   (SharedPatternRow0Long6+1).w
-                clr.w   (SharedPatternRow1Long1).w
+                clr.b   (SharedScratchLong6+1).w
+                clr.w   (SharedScratchLong9).w
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 move.w  (PlayerCenterX).w,d0
                 add.w   (PrimaryCameraXPosition).w,d0
@@ -226,7 +226,7 @@ Boss_BugmaxSelectBattlePattern:                         ; DATA XREF: ROM:0004C3F
 Boss_BugmaxApplyNextBattlePatternPreset:                ; CODE XREF: Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady+48   j  ; was: loc_4CC8E
                 clr.w   $54(a5)
                 move.w  $56(a5),d0
-                move.w  Boss_BugmaxBattlePatternPresetSequence(pc,d0.w),(SharedPatternRow1Long1+2).w
+                move.w  Boss_BugmaxBattlePatternPresetSequence(pc,d0.w),(SharedScratchLong9+2).w
                 bsr.s   Boss_BugmaxDispatchBattlePatternPreset
                 addq.w  #2,$56(a5)
                 andi.w  #$1E,$56(a5)
@@ -234,7 +234,7 @@ Boss_BugmaxApplyNextBattlePatternPreset:                ; CODE XREF: Boss_Bugmax
 ; End of function Boss_BugmaxSelectBattlePattern
 ; Dispatch one of the three battle movement presets
 Boss_BugmaxDispatchBattlePatternPreset:                 ; CODE XREF: Boss_BugmaxSelectBattlePattern+2A   p  ; was: sub_4CCAA
-                move.w  (SharedPatternRow1Long1+2).w,d0
+                move.w  (SharedScratchLong9+2).w,d0
                 lea     Boss_BugmaxBattlePatternPresetHandlers(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
@@ -250,16 +250,16 @@ Boss_BugmaxBattlePatternPresetSequence: dc.w    4, 0, 4, 2, 4, 0, 4, 2, 4, 2, 4,
 Boss_BugmaxEnterSineVolleyMovementPreset:               ; CODE XREF: Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady+16   j  ; was: sub_4CCDC
                                         ; Boss_BugmaxApplyUpperMovementBandPreset+12   j
                                         ; DATA XREF:
-                move.w  #$80,(SharedPatternRow0Long3).w
-                move.w  #$80,(SharedPatternRow0Long3+2).w
-                move.w  #$B0,(SharedPatternRow1Long0).w
-                move.w  #$20,(SharedPatternRow1Long0+2).w  ; ' '
+                move.w  #$80,(SharedScratchLong3).w
+                move.w  #$80,(SharedScratchLong3+2).w
+                move.w  #$B0,(SharedScratchLong8).w
+                move.w  #$20,(SharedScratchLong8+2).w   ; ' '
                 move.w  #$44,4(a5)                      ; 'D'
                 rts
 ; End of function Boss_BugmaxEnterSineVolleyMovementPreset
 ; Enter the spread volley only while its shared inhibit flag is clear
 Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady:    ; DATA XREF: ROM:0004CCBA   o  ; was: sub_4CCFC
-                tst.b   (SharedPatternRow0Long6+3).w
+                tst.b   (SharedScratchLong6+3).w
                 beq.s   Boss_BugmaxConfigureSpreadVolleyMovementPreset
                 bne.w   Boss_BugmaxBattlePatternPresetReturn
                 move.w  (PlayerCenterY).w,d0
@@ -269,10 +269,10 @@ Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady:    ; DATA XREF: ROM:0004CCB
                 bra.w   Boss_BugmaxChooseRetryOrChainStrikePattern
 ; ---------------------------------------------------------------------------
 Boss_BugmaxConfigureSpreadVolleyMovementPreset:         ; CODE XREF: Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady+4   j  ; was: loc_4CD1A
-                move.w  #$80,(SharedPatternRow0Long3).w
-                move.w  #$140,(SharedPatternRow0Long3+2).w
-                move.w  #$C0,(SharedPatternRow1Long0).w
-                move.w  #$20,(SharedPatternRow1Long0+2).w  ; ' '
+                move.w  #$80,(SharedScratchLong3).w
+                move.w  #$140,(SharedScratchLong3+2).w
+                move.w  #$C0,(SharedScratchLong8).w
+                move.w  #$20,(SharedScratchLong8+2).w   ; ' '
                 move.w  #$26,4(a5)                      ; '&'
                 rts
 ; ---------------------------------------------------------------------------
@@ -281,16 +281,16 @@ Boss_BugmaxChooseRetryOrChainStrikePattern:             ; CODE XREF: Boss_Bugmax
                 addq.w  #1,$54(a5)
                 andi.w  #3,$54(a5)
                 beq.w   Boss_BugmaxApplyNextBattlePatternPreset
-                move.w  #$140,(SharedPatternRow0Long3).w
-                move.w  #$100,(SharedPatternRow0Long3+2).w
-                move.w  #$E0,(SharedPatternRow1Long0).w
-                move.w  #$20,(SharedPatternRow1Long0+2).w  ; ' '
+                move.w  #$140,(SharedScratchLong3).w
+                move.w  #$100,(SharedScratchLong3+2).w
+                move.w  #$E0,(SharedScratchLong8).w
+                move.w  #$20,(SharedScratchLong8+2).w   ; ' '
                 move.w  #$32,4(a5)                      ; '2'
                 rts
 ; End of function Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady
 ; Apply the upper movement band, or redirect an inhibited selection
 Boss_BugmaxApplyUpperMovementBandPreset:                ; DATA XREF: ROM:Boss_BugmaxBattlePatternPresetHandlers   o  ; was: sub_4CD68
-                tst.b   (SharedPatternRow0Long6+3).w
+                tst.b   (SharedScratchLong6+3).w
                 beq.s   Boss_BugmaxConfigureUpperMovementBandPreset
                 move.w  (PlayerCenterY).w,d0
                 add.w   (PrimaryCameraXPosition).w,d0
@@ -299,30 +299,30 @@ Boss_BugmaxApplyUpperMovementBandPreset:                ; DATA XREF: ROM:Boss_Bu
                 bra.w   Boss_BugmaxChooseRetryOrChainStrikePattern
 ; ---------------------------------------------------------------------------
 Boss_BugmaxConfigureUpperMovementBandPreset:            ; CODE XREF: Boss_BugmaxApplyUpperMovementBandPreset+4   j  ; was: loc_4CD82
-                move.w  #$140,(SharedPatternRow0Long3).w
-                move.w  #$140,(SharedPatternRow0Long3+2).w
-                move.w  #$C0,(SharedPatternRow1Long0).w
-                move.w  #$80,(SharedPatternRow1Long0+2).w
+                move.w  #$140,(SharedScratchLong3).w
+                move.w  #$140,(SharedScratchLong3+2).w
+                move.w  #$C0,(SharedScratchLong8).w
+                move.w  #$80,(SharedScratchLong8+2).w
 Boss_BugmaxBattlePatternPresetReturn:                   ; CODE XREF: Boss_BugmaxEnterSpreadVolleyMovementPresetWhenReady+6   j  ; was: locret_4CD9A
                 rts
 ; End of function Boss_BugmaxApplyUpperMovementBandPreset
 ; Begin the spread-projectile volley stance
 Boss_BugmaxBeginSpreadVolleyStance:                     ; DATA XREF: ROM:0004C3FE   o  ; was: sub_4CD9C
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                bset    #1,(SharedPatternRow0Long6+1).w
+                bset    #1,(SharedScratchLong6+1).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_BugmaxBeginSpreadVolleyStance
 ; Increase the wave step from $0C to $18 and arm the spread volley
 Boss_BugmaxIncreaseWaveStepForSpreadVolley:             ; DATA XREF: ROM:0004C400   o  ; was: sub_4CDAC
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                addq.w  #1,(SharedPatternRow0Long2).w
-                cmpi.w  #$18,(SharedPatternRow0Long2).w
+                addq.w  #1,(SharedScratchLong2).w
+                cmpi.w  #$18,(SharedScratchLong2).w
                 bne.s   Boss_BugmaxSpreadVolleyWaveStepReturn
-                clr.b   (SharedPatternRow0Long6+1).w
-                clr.w   (SharedPatternRow1Long1).w
-                bset    #0,(SharedPatternRow0Long6+1).w
-                bclr    #0,(SharedPatternRow0Long7).w
+                clr.b   (SharedScratchLong6+1).w
+                clr.w   (SharedScratchLong9).w
+                bset    #0,(SharedScratchLong6+1).w
+                bclr    #0,(SharedScratchLong7).w
                 move.w  #$10,$4A(a5)
                 move.w  #$80,$48(a5)
                 addq.w  #2,4(a5)
@@ -335,7 +335,7 @@ Boss_BugmaxApproachSpreadVolleyTarget:                  ; DATA XREF: ROM:0004C40
                 bsr.w   Boss_BugmaxUpdateHorizontalSteering
                 subq.w  #1,$48(a5)
                 beq.s   Boss_BugmaxFinishSpreadVolleyApproach
-                bclr    #0,(SharedPatternRow0Long7).w
+                bclr    #0,(SharedScratchLong7).w
                 beq.s   Boss_BugmaxSpreadVolleyApproachReturn
 Boss_BugmaxFinishSpreadVolleyApproach:                  ; CODE XREF: Boss_BugmaxApproachSpreadVolleyTarget+C   j  ; was: loc_4CDF8
                 addq.w  #2,4(a5)
@@ -358,7 +358,7 @@ Boss_BugmaxSpreadProjectileSpawnReturn:                 ; CODE XREF: Boss_Bugmax
 Boss_BugmaxRepeatSpreadProjectileVolley:                ; DATA XREF: ROM:0004C406   o  ; was: sub_4CE1E
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 bsr.w   Boss_BugmaxUpdateHorizontalSteering
-                tst.b   (SharedPatternRow0Long6+3).w
+                tst.b   (SharedScratchLong6+3).w
                 bne.s   Boss_BugmaxFinishSpreadProjectileVolley
                 jsr     (Physics_GetPlayerDelta).l
                 subq.w  #1,$48(a5)
@@ -377,8 +377,8 @@ Boss_BugmaxFinishSpreadProjectileVolley:                ; CODE XREF: Boss_Bugmax
 ; Reduce the wave step back to $0C after the spread volley
 Boss_BugmaxReduceWaveStepAfterSpreadVolley:             ; DATA XREF: ROM:0004C408   o  ; was: sub_4CE4A
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                subq.w  #1,(SharedPatternRow0Long2).w
-                cmpi.w  #$C,(SharedPatternRow0Long2).w
+                subq.w  #1,(SharedScratchLong2).w
+                cmpi.w  #$C,(SharedScratchLong2).w
                 bne.s   Boss_BugmaxSpreadVolleyWaveReductionReturn
                 move.w  #$24,4(a5)                      ; '$'
 Boss_BugmaxSpreadVolleyWaveReductionReturn:             ; CODE XREF: Boss_BugmaxReduceWaveStepAfterSpreadVolley+E   j  ; was: locret_4CE60
@@ -387,13 +387,13 @@ Boss_BugmaxSpreadVolleyWaveReductionReturn:             ; CODE XREF: Boss_Bugmax
 ; Set the horizontal approach target used by the aimed linked-chain strike
 Boss_BugmaxSetChainStrikeApproachTarget:                ; DATA XREF: ROM:0004C40A   o  ; was: sub_4CE62
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                clr.b   (SharedPatternRow0Long6+1).w
-                bclr    #0,(SharedPatternRow0Long7).w
-                bset    #0,(SharedPatternRow0Long6+1).w
+                clr.b   (SharedScratchLong6+1).w
+                bclr    #0,(SharedScratchLong7).w
+                bset    #0,(SharedScratchLong6+1).w
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   (PlayerCenterX).w,d0
                 subi.w  #$80,d0
-                move.w  d0,(SharedPatternRow1Long1).w
+                move.w  d0,(SharedScratchLong9).w
                 move.w  #$80,$48(a5)
                 addq.w  #2,4(a5)
                 rts
@@ -402,13 +402,13 @@ Boss_BugmaxSetChainStrikeApproachTarget:                ; DATA XREF: ROM:0004C40
 Boss_BugmaxApproachChainStrikeTarget:                   ; DATA XREF: ROM:0004C40C   o  ; was: sub_4CE92
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 bsr.w   Boss_BugmaxUpdateHorizontalSteering
-                bclr    #0,(SharedPatternRow0Long7).w
+                bclr    #0,(SharedScratchLong7).w
                 bne.s   Boss_BugmaxFinishChainStrikeApproach
                 subq.w  #1,$48(a5)
                 bne.s   Boss_BugmaxChainStrikeApproachReturn
 Boss_BugmaxFinishChainStrikeApproach:                   ; CODE XREF: Boss_BugmaxApproachChainStrikeTarget+E   j  ; was: loc_4CEA8
-                clr.b   (SharedPatternRow0Long6+1).w
-                bset    #1,(SharedPatternRow0Long6+1).w
+                clr.b   (SharedScratchLong6+1).w
+                bset    #1,(SharedScratchLong6+1).w
                 addq.w  #2,4(a5)
 Boss_BugmaxChainStrikeApproachReturn:                   ; CODE XREF: Boss_BugmaxApproachChainStrikeTarget+14   j  ; was: locret_4CEB6
                 rts
@@ -417,7 +417,7 @@ Boss_BugmaxChainStrikeApproachReturn:                   ; CODE XREF: Boss_Bugmax
 Boss_BugmaxBeginAimedChainStrike:                       ; DATA XREF: ROM:0004C40E   o  ; was: sub_4CEB8
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 move.w  #$60,$48(a5)                    ; '`'
-                move.b  #1,(SharedPatternRow0Long6+2).w
+                move.b  #1,(SharedScratchLong6+2).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_BugmaxBeginAimedChainStrike
@@ -425,7 +425,7 @@ Boss_BugmaxBeginAimedChainStrike:                       ; DATA XREF: ROM:0004C40
 Boss_BugmaxAnimateAndAimChainStrike:                    ; DATA XREF: ROM:0004C410   o  ; was: sub_4CECE
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 move.w  $48(a5),d0
-                move.w  Boss_BugmaxChainStrikeBendSequence(pc,d0.w),(SharedPatternRow0Long4).w
+                move.w  Boss_BugmaxChainStrikeBendSequence(pc,d0.w),(SharedScratchLong4).w
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
                 subq.w  #2,$48(a5)
                 bpl.s   Boss_BugmaxChainStrikeAimReturn
@@ -443,7 +443,7 @@ Boss_BugmaxClampStrikeAngleToUpperBoundary:             ; CODE XREF: Boss_Bugmax
                 move.w  #$1C0,d2
 Boss_BugmaxStoreAimedChainStrikeAngle:                  ; CODE XREF: Boss_BugmaxAnimateAndAimChainStrike+28   j  ; was: loc_4CF08
                                         ; Boss_BugmaxAnimateAndAimChainStrike+2E   j
-                move.w  d2,(SharedPatternRow0Long5).w
+                move.w  d2,(SharedScratchLong5).w
                 bsr.w   Boss_BugmaxConfigureAimedChainHitbox
                 addq.w  #2,4(a5)
                 move.b  #$E2,d0
@@ -464,9 +464,9 @@ Boss_BugmaxChainStrikeBendSequence: dc.w    $18, $19, $1A, $1B, $1C, $1D, $1E, $
 Boss_BugmaxExtendAimedChainStrike:                      ; DATA XREF: ROM:0004C412   o  ; was: sub_4CF80
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 bsr.w   Boss_BugmaxHandleAimedChainContactEffect
-                subq.w  #1,(SharedPatternRow0Long4).w
+                subq.w  #1,(SharedScratchLong4).w
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
-                tst.w   (SharedPatternRow0Long4).w
+                tst.w   (SharedScratchLong4).w
                 bne.s   Boss_BugmaxChainStrikeExtensionReturn
                 move.w  #8,$48(a5)
                 addq.w  #2,4(a5)
@@ -487,9 +487,9 @@ Boss_BugmaxExtendedChainStrikeHoldReturn:               ; CODE XREF: Boss_Bugmax
 Boss_BugmaxRetractAimedChainStrike:                     ; DATA XREF: ROM:0004C416   o  ; was: sub_4CFB6
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 bsr.w   Boss_BugmaxHandleContactOrDisableChainHitbox
-                subq.w  #1,(SharedPatternRow0Long4).w
+                subq.w  #1,(SharedScratchLong4).w
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
-                cmpi.w  #$FFE0,(SharedPatternRow0Long4).w
+                cmpi.w  #$FFE0,(SharedScratchLong4).w
                 bne.s   Boss_BugmaxChainStrikeRetractionReturn
                 addq.w  #2,4(a5)
 Boss_BugmaxChainStrikeRetractionReturn:                 ; CODE XREF: Boss_BugmaxRetractAimedChainStrike+16   j  ; was: locret_4CFD2
@@ -498,19 +498,19 @@ Boss_BugmaxChainStrikeRetractionReturn:                 ; CODE XREF: Boss_Bugmax
 ; Reset the chain bend before its settling phase
 Boss_BugmaxResetChainStrikeBend:                        ; DATA XREF: ROM:0004C418   o  ; was: sub_4CFD4
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                move.w  #$20,(SharedPatternRow0Long4).w  ; ' '
+                move.w  #$20,(SharedScratchLong4).w     ; ' '
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_BugmaxResetChainStrikeBend
 ; Settle the chain bend at $18 and return to battle selection
 Boss_BugmaxSettleChainAfterStrike:                      ; DATA XREF: ROM:0004C41A   o  ; was: sub_4CFE4
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                subq.w  #1,(SharedPatternRow0Long4).w
+                subq.w  #1,(SharedScratchLong4).w
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
-                cmpi.w  #$18,(SharedPatternRow0Long4).w
+                cmpi.w  #$18,(SharedScratchLong4).w
                 bne.s   Boss_BugmaxChainStrikeSettlementReturn
-                clr.b   (SharedPatternRow0Long6+2).w
-                clr.w   (SharedPatternRow0Long5).w
+                clr.b   (SharedScratchLong6+2).w
+                clr.w   (SharedScratchLong5).w
                 move.w  #$24,4(a5)                      ; '$'
 Boss_BugmaxChainStrikeSettlementReturn:                 ; CODE XREF: Boss_BugmaxSettleChainAfterStrike+12   j  ; was: locret_4D006
                 rts
@@ -519,21 +519,21 @@ Boss_BugmaxChainStrikeSettlementReturn:                 ; CODE XREF: Boss_Bugmax
 Boss_BugmaxAdjustChainBendFromInput:                    ; was: sub_4D008
                 btst    #2,(ControllerHeldState).w
                 beq.s   Boss_BugmaxCheckChainBendIncreaseInput
-                addi.w  #-2,(SharedPatternRow0Long4).w
+                addi.w  #-2,(SharedScratchLong4).w
 Boss_BugmaxCheckChainBendIncreaseInput:                 ; CODE XREF: Boss_BugmaxAdjustChainBendFromInput+6   j  ; was: loc_4D016
                 btst    #3,(ControllerHeldState).w
                 beq.s   Boss_BugmaxClampInputChainBendRange
-                addi.w  #2,(SharedPatternRow0Long4).w
+                addi.w  #2,(SharedScratchLong4).w
 Boss_BugmaxClampInputChainBendRange:                    ; CODE XREF: Boss_BugmaxAdjustChainBendFromInput+14   j  ; was: loc_4D024
-                cmpi.w  #$40,(SharedPatternRow0Long4).w  ; '@'
+                cmpi.w  #$40,(SharedScratchLong4).w     ; '@'
                 blt.w   Boss_BugmaxClampInputChainBendMinimum
-                move.w  #$40,(SharedPatternRow0Long4).w  ; '@'
+                move.w  #$40,(SharedScratchLong4).w     ; '@'
                 bra.s   Boss_BugmaxApplyInputChainBend
 ; ---------------------------------------------------------------------------
 Boss_BugmaxClampInputChainBendMinimum:                  ; CODE XREF: Boss_BugmaxAdjustChainBendFromInput+22   j  ; was: loc_4D036
-                cmpi.w  #$FFC0,(SharedPatternRow0Long4).w
+                cmpi.w  #$FFC0,(SharedScratchLong4).w
                 bge.w   Boss_BugmaxApplyInputChainBend
-                move.w  #$FFC0,(SharedPatternRow0Long4).w
+                move.w  #$FFC0,(SharedScratchLong4).w
 Boss_BugmaxApplyInputChainBend:                         ; CODE XREF: Boss_BugmaxAdjustChainBendFromInput+2C   j  ; was: loc_4D046
                                         ; Boss_BugmaxAdjustChainBendFromInput+34   j
                 bsr.w   Boss_BugmaxDistributeSecondaryChainAngleOffsets
@@ -542,14 +542,14 @@ Boss_BugmaxApplyInputChainBend:                         ; CODE XREF: Boss_Bugmax
 ; Distribute the shared bend as increasing angle offsets across eight linked records
 Boss_BugmaxDistributeSecondaryChainAngleOffsets:        ; CODE XREF: Boss_BugmaxSettleChainBendAtBattleBaseline+8   p  ; was: sub_4D04C
                                         ; Boss_BugmaxAnimateAndAimChainStrike+E   p
-                move.w  (SharedPatternRow0Long4).w,d0
+                move.w  (SharedScratchLong4).w,d0
                 add.w   d0,d0
                 bpl.s   Boss_BugmaxInitializeAngleOffsetDistribution
                 neg.w   d0
 Boss_BugmaxInitializeAngleOffsetDistribution:           ; CODE XREF: Boss_BugmaxDistributeSecondaryChainAngleOffsets+6   j  ; was: loc_4D056
-                move.w  #$40,(SharedPatternRow0Long4+2).w  ; '@'
-                sub.w   d0,(SharedPatternRow0Long4+2).w
-                move.w  (SharedPatternRow0Long4).w,d0
+                move.w  #$40,(SharedScratchLong4+2).w   ; '@'
+                sub.w   d0,(SharedScratchLong4+2).w
+                move.w  (SharedScratchLong4).w,d0
                 moveq   #0,d6
                 movea.w #(EighthEntityType-M68K_RAM),a0
                 move.w  #2,d7
@@ -581,15 +581,15 @@ Boss_BugmaxDistributeFinalAngleOffsetGroupLoop:         ; CODE XREF: Boss_Bugmax
 ; Begin the sine-projectile volley stance
 Boss_BugmaxBeginSineProjectileVolleyStance:             ; DATA XREF: ROM:0004C41C   o  ; was: sub_4D0AE
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                bset    #1,(SharedPatternRow0Long6+1).w
+                bset    #1,(SharedScratchLong6+1).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_BugmaxBeginSineProjectileVolleyStance
 ; Increase the wave step from $0C to $20 for the sine volley
 Boss_BugmaxIncreaseWaveStepForSineVolley:               ; DATA XREF: ROM:0004C41E   o  ; was: sub_4D0BE
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                addq.w  #1,(SharedPatternRow0Long2).w
-                cmpi.w  #$20,(SharedPatternRow0Long2).w  ; ' '
+                addq.w  #1,(SharedScratchLong2).w
+                cmpi.w  #$20,(SharedScratchLong2).w     ; ' '
                 bne.s   Boss_BugmaxSineVolleyWaveStepReturn
                 addq.w  #2,4(a5)
 Boss_BugmaxSineVolleyWaveStepReturn:                    ; CODE XREF: Boss_BugmaxIncreaseWaveStepForSineVolley+E   j  ; was: locret_4D0D2
@@ -600,12 +600,12 @@ Boss_BugmaxChooseSineVolleySideTarget:                  ; DATA XREF: ROM:0004C42
                 bsr.w   Boss_BugmaxUpdateBattleMovement
                 addq.w  #2,4(a5)
                 move.w  #$80,$48(a5)
-                clr.b   (SharedPatternRow0Long6+1).w
-                bclr    #0,(SharedPatternRow0Long7).w
-                bset    #0,(SharedPatternRow0Long6+1).w
-                tst.b   (SharedPatternRow0Long6+3).w
+                clr.b   (SharedScratchLong6+1).w
+                bclr    #0,(SharedScratchLong7).w
+                bset    #0,(SharedScratchLong6+1).w
+                tst.b   (SharedScratchLong6+3).w
                 bne.w   Boss_BugmaxUsePlayerPositionForSineVolley
-                cmpi.b  #2,(SharedPatternRow1Long1+2).w
+                cmpi.b  #2,(SharedScratchLong9+2).w
                 bne.w   Boss_BugmaxUsePlayerPositionForSineVolley
                 cmpi.w  #$3C0,(PrimaryCameraXPosition).w
                 beq.s   Boss_BugmaxSetSineVolleyRightSideTarget
@@ -617,7 +617,7 @@ Boss_BugmaxChooseSineVolleySideTarget:                  ; DATA XREF: ROM:0004C42
                 bne.s   Boss_BugmaxSetSineVolleyLeftSideTarget
 Boss_BugmaxUsePlayerPositionForSineVolley:              ; CODE XREF: Boss_BugmaxChooseSineVolleySideTarget+22   j  ; was: loc_4D124
                                         ; Boss_BugmaxChooseSineVolleySideTarget+2C   j
-                clr.w   (SharedPatternRow1Long1).w
+                clr.w   (SharedScratchLong9).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_BugmaxSetSineVolleyRightSideTarget:                ; CODE XREF: Boss_BugmaxChooseSineVolleySideTarget+36   j  ; was: loc_4D12A
@@ -625,7 +625,7 @@ Boss_BugmaxSetSineVolleyRightSideTarget:                ; CODE XREF: Boss_Bugmax
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   (PlayerCenterX).w,d0
                 addi.w  #$D0,d0
-                move.w  d0,(SharedPatternRow1Long1).w
+                move.w  d0,(SharedScratchLong9).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_BugmaxSetSineVolleyLeftSideTarget:                 ; CODE XREF: Boss_BugmaxChooseSineVolleySideTarget+3E   j  ; was: loc_4D13C
@@ -633,7 +633,7 @@ Boss_BugmaxSetSineVolleyLeftSideTarget:                 ; CODE XREF: Boss_Bugmax
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   (PlayerCenterX).w,d0
                 addi.w  #-$D0,d0
-                move.w  d0,(SharedPatternRow1Long1).w
+                move.w  d0,(SharedScratchLong9).w
                 rts
 ; End of function Boss_BugmaxChooseSineVolleySideTarget
 ; Approach the sine-volley target until close, reached, or timed out
@@ -643,15 +643,15 @@ Boss_BugmaxApproachSineVolleyTarget:                    ; DATA XREF: ROM:0004C42
                 jsr     (Physics_GetPlayerDelta).l
                 cmpi.w  #$20,d0                         ; ' '
                 bcs.s   Boss_BugmaxFinishSineVolleyApproach
-                bclr    #0,(SharedPatternRow0Long7).w
+                bclr    #0,(SharedScratchLong7).w
                 bne.s   Boss_BugmaxFinishSineVolleyApproach
                 subq.w  #1,$48(a5)
                 bne.s   Boss_BugmaxSineVolleyApproachReturn
 Boss_BugmaxFinishSineVolleyApproach:                    ; CODE XREF: Boss_BugmaxApproachSineVolleyTarget+12   j  ; was: loc_4D170
                                         ; Boss_BugmaxApproachSineVolleyTarget+1A   j
                 move.w  #8,$48(a5)
-                clr.b   (SharedPatternRow0Long6+1).w
-                bset    #1,(SharedPatternRow0Long6+1).w
+                clr.b   (SharedScratchLong6+1).w
+                bset    #1,(SharedScratchLong6+1).w
                 addq.w  #2,4(a5)
 Boss_BugmaxSineVolleyApproachReturn:                    ; CODE XREF: Boss_BugmaxApproachSineVolleyTarget+20   j  ; was: locret_4D184
                 rts
@@ -697,8 +697,8 @@ Boss_BugmaxFinishSineProjectileVolley:                  ; CODE XREF: Boss_Bugmax
 ; Reduce the wave step back to $0C after the sine volley
 Boss_BugmaxReduceWaveStepAfterSineVolley:               ; DATA XREF: ROM:0004C42A   o  ; was: sub_4D1DC
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                subq.w  #1,(SharedPatternRow0Long2).w
-                cmpi.w  #$C,(SharedPatternRow0Long2).w
+                subq.w  #1,(SharedScratchLong2).w
+                cmpi.w  #$C,(SharedScratchLong2).w
                 bne.s   Boss_BugmaxSineVolleyWaveReductionReturn
                 addq.w  #2,4(a5)
 Boss_BugmaxSineVolleyWaveReductionReturn:               ; CODE XREF: Boss_BugmaxReduceWaveStepAfterSineVolley+E   j  ; was: locret_4D1F0
@@ -713,9 +713,9 @@ Boss_BugmaxReturnToBattlePatternSelection:              ; DATA XREF: ROM:0004C42
 ; Wait for the wave displacement to enter the final-transition band
 Boss_BugmaxWaitForFinalWaveBand:                        ; DATA XREF: ROM:0004C42E   o  ; was: sub_4D1FE
                 bsr.w   Boss_BugmaxUpdateBattleMovement
-                tst.w   (SharedPatternRow0Long0).w
+                tst.w   (SharedScratchLong0).w
                 bmi.s   Boss_BugmaxFinalWaveBandWaitReturn
-                cmpi.w  #$20,(SharedPatternRow0Long0).w  ; ' '
+                cmpi.w  #$20,(SharedScratchLong0).w     ; ' '
                 bgt.s   Boss_BugmaxFinalWaveBandWaitReturn
                 clr.b   $21(a5)
                 clr.l   $18(a5)
@@ -728,7 +728,7 @@ Boss_BugmaxFinalWaveBandWaitReturn:                     ; CODE XREF: Boss_Bugmax
 ; End of function Boss_BugmaxWaitForFinalWaveBand
 ; Apply the final-transition palette pulse
 Boss_BugmaxRunFinalPalettePulse:                        ; DATA XREF: ROM:0004C430   o  ; was: sub_4D228
-                tst.b   (SharedPatternRow0Long6+3).w
+                tst.b   (SharedScratchLong6+3).w
                 bne.s   Boss_BugmaxFinishFinalPalettePulse
                 subq.w  #2,$48(a5)
                 bmi.s   Boss_BugmaxFinishFinalPalettePulse
@@ -796,9 +796,9 @@ Boss_BugmaxRiseWithFinalParticles:                      ; DATA XREF: ROM:0004C43
                 move.w  d0,$10(a5)
                 andi.w  #$7FFF,2(a5)
                 clr.l   $1C(a5)
-                move.w  #2,(SharedPatternRow0Long2).w
-                move.w  #$40,(SharedPatternRow0Long3).w  ; '@'
-                move.w  #$40,(SharedPatternRow0Long3+2).w  ; '@'
+                move.w  #2,(SharedScratchLong2).w
+                move.w  #$40,(SharedScratchLong3).w     ; '@'
+                move.w  #$40,(SharedScratchLong3+2).w   ; '@'
                 move.w  #$80,$48(a5)
                 addq.w  #2,4(a5)
                 jsr     (Projectile_FindFreeSlotForward).l
@@ -834,7 +834,7 @@ Boss_BugmaxFinalDescentAccelerationReturn:              ; CODE XREF: Boss_Bugmax
 ; Apply wave-driven descent and complete the encounter below screen Y $170
 Boss_BugmaxUpdateFinalWaveDescentAndCompleteEncounter:  ; DATA XREF: ROM:0004C43A   o  ; was: sub_4D39E
                 bsr.w   Boss_BugmaxUpdateWaveDisplacement
-                move.l  (SharedPatternRow0Long0).w,d0
+                move.l  (SharedScratchLong0).w,d0
                 asr.l   #4,d0
                 move.l  d0,$18(a5)
                 cmpi.w  #$170,$14(a5)

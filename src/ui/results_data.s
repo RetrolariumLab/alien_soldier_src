@@ -72,7 +72,7 @@ Results_AdvanceStageSummaryInput:                       ; CODE XREF: Results_Com
 Results_BuildSummaryRows:                               ; CODE XREF: Results_ComputeSummaryData+C8   p  ; was: sub_20318
                 lea     (ResultsStageRowBuffer).w,a0
                 adda.w  #(ResultsSummaryRowBuffer-ResultsStageRowBuffer),a0
-                lea     Results_TotalTimeLabel(pc),a1
+                lea     Results_TotalLimitTimeLabel(pc),a1
                 nop
                 move.w  #$15,d7
 Results_CopyTotalTimeLabelLoop:                         ; CODE XREF: Results_BuildSummaryRows+14   j  ; was: loc_2032A
@@ -256,7 +256,7 @@ Results_RenderEnteringPrimaryLine:                      ; CODE XREF: Results_Upd
                 move.w  (ResultsViewportRow).w,d0
                 cmpi.w  #$1B,d0
                 bne.s   Results_CheckTotalClearTimeRow
-                lea     Results_TotalTimeLabel(pc),a0
+                lea     Results_TotalLimitTimeLabel(pc),a0
                 nop
                 bra.s   Results_RenderEnteringSummaryLabel
 ; ---------------------------------------------------------------------------
@@ -397,7 +397,7 @@ Results_MissingDetailText:  dc.w    $2A2A, $2A2A, $2A2A, $2A2A, 0, 0, 0, 0, 0, 0
                                         ; sub_1FEE2:Results_SelectScrolledMissingDetailText   o
 Results_StageDetailTextTable:   binclude "data/other/results_stage_detail_text.bin"  ; was: word_20666
 Results_StageDetailTextTableEnd:                        ; was: word_20666_End
-Results_TotalTimeLabel:         dc.w    0, $1E19, $1E0B, $1600, $1613, $1713, $1E00, $1E13, $170F, 0, 0  ; was: word_20910
+Results_TotalLimitTimeLabel:    dc.w    0, $1E19, $1E0B, $1600, $1613, $1713, $1E00, $1E13, $170F, 0, 0  ; was: word_20910
                                         ; DATA XREF: Results_BuildSummaryRows+8   o
                                         ; Results_UpdateViewport+D2   o
                 dc.b    $FF

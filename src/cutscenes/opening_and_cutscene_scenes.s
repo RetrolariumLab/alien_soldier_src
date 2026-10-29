@@ -81,13 +81,13 @@ CutsceneSceneAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1
 Cutscene_UpdateFrameSelectionFromInput:                 ; was: sub_1D4B4
                 btst    #0,(ControllerHeldState).w
                 beq.s   Cutscene_UpdateFrameSelectionFromInput_CheckDecrease
-                addi.l  #$1000,(SharedPatternRow0Long2).w
+                addi.l  #$1000,(SharedScratchLong2).w
 Cutscene_UpdateFrameSelectionFromInput_CheckDecrease:   ; was: loc_1D4C4
                 btst    #1,(ControllerHeldState).w
                 beq.s   Cutscene_UpdateFrameSelectionFromInput_ClampUpperBound
-                subi.l  #$1000,(SharedPatternRow0Long2).w
+                subi.l  #$1000,(SharedScratchLong2).w
 Cutscene_UpdateFrameSelectionFromInput_ClampUpperBound:  ; was: loc_1D4D4
-                move.l  (SharedPatternRow0Long2).w,d0
+                move.l  (SharedScratchLong2).w,d0
                 cmpi.l  #$20000,d0
                 bmi.s   Cutscene_UpdateFrameSelectionFromInput_WrapNegative
                 move.l  #$20000,d0
@@ -96,11 +96,11 @@ Cutscene_UpdateFrameSelectionFromInput_WrapNegative:    ; was: loc_1D4E6
                 bpl.s   Cutscene_UpdateFrameSelectionFromInput_SelectCodeWord
                 move.l  #$20000,d0
 Cutscene_UpdateFrameSelectionFromInput_SelectCodeWord:  ; was: loc_1D4F0
-                move.l  d0,(SharedPatternRow0Long2).w
+                move.l  d0,(SharedScratchLong2).w
                 asr.l   #8,d0
                 asr.w   #4,d0
                 andi.w  #$C,d0
-                move.l  Cutscene_ScrollAndPlaneUpdateCode(pc,d0.w),(SharedPatternRow0Long0).w
+                move.l  Cutscene_ScrollAndPlaneUpdateCode(pc,d0.w),(SharedScratchLong0).w
                 jmp     CutsceneProjection_BuildFrame
 ; End of function Cutscene_UpdateFrameSelectionFromInput
 

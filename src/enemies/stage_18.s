@@ -48,104 +48,104 @@ OrphanedFloatingOscillator_Return:                      ; CODE XREF: OrphanedFlo
                 rts
 ; End of function OrphanedFloatingOscillator
 ; Stage 18 moving platform used before and during the Destroyer-Mk2 arena
-; Pinned TAS evidence: active at frame 41500 with mapping Stage18MovingPlatformSpriteMapping
-Stage18_MovingPlatform:                                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FDAA
+; Pinned TAS evidence: active at frame 41500 with mapping Stage18And19_MovingPlatformSpriteMapping
+Object_MovingPlatform:                                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FDAA
                 bclr    #7,$E(a5)
                 move.w  (GlobalSpritePriorityBit).w,d0
                 or.w    d0,$E(a5)
                 tst.w   4(a5)
-                bne.w   Stage18_MovingPlatform_Update
+                bne.w   Object_MovingPlatform_Update
                 addq.w  #2,4(a5)
                 move.w  #$CD00,2(a5)
-                move.l  #Stage18MovingPlatformSpriteMapping,8(a5)
+                move.l  #Stage18And19_MovingPlatformSpriteMapping,8(a5)
                 move.w  #$4470,$E(a5)
                 cmpi.w  #$18,(StageTableIndex).w
-                bcc.s   Stage18_MovingPlatform_FinishInit
-                move.l  #Stage18_MovingPlatformSpriteMapping,8(a5)
+                bcc.s   Object_MovingPlatform_FinishInit
+                move.l  #Stage10And12_MovingPlatformSpriteMapping,8(a5)
                 move.w  #$4000,$E(a5)
-Stage18_MovingPlatform_FinishInit:                      ; CODE XREF: Stage18_MovingPlatform+34   j
+Object_MovingPlatform_FinishInit:                       ; CODE XREF: Object_MovingPlatform+34   j
                 move.b  #$20,$21(a5)                    ; ' '
                 move.w  #2,$46(a5)
                 move.l  #$FFE00020,$28(a5)
                 move.w  $10(a5),$4C(a5)
                 move.w  $14(a5),$4E(a5)
                 move.w  $4E(a5),$52(a5)
-Stage18_MovingPlatform_Update:                          ; CODE XREF: Stage18_MovingPlatform+12   j
+Object_MovingPlatform_Update:                           ; CODE XREF: Object_MovingPlatform+12   j
                 bclr    #0,6(a5)
-                bne.s   Stage18_MovingPlatform_ApplyCollisionBob
+                bne.s   Object_MovingPlatform_ApplyCollisionBob
                 subq.w  #1,$50(a5)
-                bpl.s   Stage18_MovingPlatform_UpdatePosition
+                bpl.s   Object_MovingPlatform_UpdatePosition
                 clr.w   $50(a5)
-                bra.s   Stage18_MovingPlatform_UpdatePosition
+                bra.s   Object_MovingPlatform_UpdatePosition
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_ApplyCollisionBob:               ; CODE XREF: Stage18_MovingPlatform+70   j
+Object_MovingPlatform_ApplyCollisionBob:                ; CODE XREF: Object_MovingPlatform+70   j
                 cmpi.w  #6,$50(a5)
-                bpl.s   Stage18_MovingPlatform_UpdatePosition
+                bpl.s   Object_MovingPlatform_UpdatePosition
                 addq.w  #1,$50(a5)
-Stage18_MovingPlatform_UpdatePosition:                  ; CODE XREF: Stage18_MovingPlatform+76   j
-                                        ; Stage18_MovingPlatform+7C   j
+Object_MovingPlatform_UpdatePosition:                   ; CODE XREF: Object_MovingPlatform+76   j
+                                        ; Object_MovingPlatform+7C   j
                 move.w  $50(a5),d0
                 add.w   $52(a5),d0
                 move.w  d0,$14(a5)
                 btst    #0,$5F(a5)
-                bne.w   Stage18_MovingPlatform_UpdateVisibility
+                bne.w   Object_MovingPlatform_UpdateVisibility
                 move.w  (PlayerXPosition).w,d0
                 sub.w   $10(a5),d0
                 move.w  d0,d5
-                bpl.s   Stage18_MovingPlatform_CheckHorizontalVelocity
+                bpl.s   Object_MovingPlatform_CheckHorizontalVelocity
                 neg.w   d0
-Stage18_MovingPlatform_CheckHorizontalVelocity:         ; CODE XREF: Stage18_MovingPlatform+AA   j
+Object_MovingPlatform_CheckHorizontalVelocity:          ; CODE XREF: Object_MovingPlatform+AA   j
                 cmpi.w  #$10,d0
-                bpl.s   Stage18_MovingPlatform_AccelerateRight
+                bpl.s   Object_MovingPlatform_AccelerateRight
                 move.l  $18(a5),d0
                 move.l  d0,d1
-                bpl.s   Stage18_MovingPlatform_StopIfSlow
+                bpl.s   Object_MovingPlatform_StopIfSlow
                 neg.l   d0
-Stage18_MovingPlatform_StopIfSlow:                      ; CODE XREF: Stage18_MovingPlatform+BA   j
+Object_MovingPlatform_StopIfSlow:                       ; CODE XREF: Object_MovingPlatform+BA   j
                 cmpi.l  #$2000,d0
-                bpl.s   Stage18_MovingPlatform_SelectAcceleration
+                bpl.s   Object_MovingPlatform_SelectAcceleration
                 clr.l   $18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_SelectAcceleration:              ; CODE XREF: Stage18_MovingPlatform+C4   j
+Object_MovingPlatform_SelectAcceleration:               ; CODE XREF: Object_MovingPlatform+C4   j
                 tst.l   d1
-                bmi.s   Stage18_MovingPlatform_IncreaseHorizontalVelocity
-                bpl.s   Stage18_MovingPlatform_DecreaseHorizontalVelocity
-Stage18_MovingPlatform_AccelerateRight:                 ; CODE XREF: Stage18_MovingPlatform+B2   j
+                bmi.s   Object_MovingPlatform_IncreaseHorizontalVelocity
+                bpl.s   Object_MovingPlatform_DecreaseHorizontalVelocity
+Object_MovingPlatform_AccelerateRight:                  ; CODE XREF: Object_MovingPlatform+B2   j
                 tst.w   d5
-                bmi.s   Stage18_MovingPlatform_AccelerateLeft
+                bmi.s   Object_MovingPlatform_AccelerateLeft
                 tst.w   $18(a5)
-                bmi.s   Stage18_MovingPlatform_IncreaseHorizontalVelocity
+                bmi.s   Object_MovingPlatform_IncreaseHorizontalVelocity
                 cmpi.w  #2,$18(a5)
-                bmi.s   Stage18_MovingPlatform_IncreaseHorizontalVelocity
+                bmi.s   Object_MovingPlatform_IncreaseHorizontalVelocity
                 move.l  #$20000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_IncreaseHorizontalVelocity:      ; CODE XREF: Stage18_MovingPlatform+CE   j
-                                        ; Stage18_MovingPlatform+DA   j
+Object_MovingPlatform_IncreaseHorizontalVelocity:       ; CODE XREF: Object_MovingPlatform+CE   j
+                                        ; Object_MovingPlatform+DA   j
                 addi.l  #$1200,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_AccelerateLeft:                  ; CODE XREF: Stage18_MovingPlatform+D4   j
+Object_MovingPlatform_AccelerateLeft:                   ; CODE XREF: Object_MovingPlatform+D4   j
                 tst.w   $18(a5)
-                bpl.s   Stage18_MovingPlatform_DecreaseHorizontalVelocity
+                bpl.s   Object_MovingPlatform_DecreaseHorizontalVelocity
                 cmpi.w  #$FFFE,$18(a5)
-                bpl.s   Stage18_MovingPlatform_DecreaseHorizontalVelocity
+                bpl.s   Object_MovingPlatform_DecreaseHorizontalVelocity
                 move.l  #$FFFE0000,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_DecreaseHorizontalVelocity:      ; CODE XREF: Stage18_MovingPlatform+D0   j
-                                        ; Stage18_MovingPlatform+FC   j
+Object_MovingPlatform_DecreaseHorizontalVelocity:       ; CODE XREF: Object_MovingPlatform+D0   j
+                                        ; Object_MovingPlatform+FC   j
                 subi.l  #$1200,$18(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Stage18_MovingPlatform_UpdateVisibility:                ; CODE XREF: Stage18_MovingPlatform+9C   j
+Object_MovingPlatform_UpdateVisibility:                 ; CODE XREF: Object_MovingPlatform+9C   j
                 cmpi.w  #$70,$10(a5)                    ; 'p'
-                bpl.s   Stage18_MovingPlatform_Return
+                bpl.s   Object_MovingPlatform_Return
                 bset    #4,2(a5)
-Stage18_MovingPlatform_Return:                          ; CODE XREF: Stage18_MovingPlatform+120   j
+Object_MovingPlatform_Return:                           ; CODE XREF: Object_MovingPlatform+120   j
                 rts
-; End of function Stage18_MovingPlatform
+; End of function Object_MovingPlatform
 ; Dispatches the Stage 18 segmented-worm head and its linked segments
 ; Pinned TAS evidence: two twelve-segment chains are visible at frame 41220
 Stage18_SegmentedWormMain:                              ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FED4

@@ -57,16 +57,16 @@ Boss_JampanTrackPlayerAimOffset:                        ; CODE XREF: Boss_Jampan
                 bcc.s   Boss_JampanConvergePlayerAimOffset
                 neg.w   d0
 Boss_JampanConvergePlayerAimOffset:                     ; CODE XREF: Boss_JampanTrackPlayerAimOffset+16   j  ; was: loc_4A0E0
-                move.w  (SharedPatternRow1Long1+2).w,d1
+                move.w  (SharedScratchLong9+2).w,d1
                 sub.w   d1,d0
                 beq.s   Boss_JampanTrackPlayerAimOffsetReturn
                 tst.w   d0
                 bmi.s   Boss_JampanDecreasePlayerAimOffset
-                addq.w  #1,(SharedPatternRow1Long1+2).w
+                addq.w  #1,(SharedScratchLong9+2).w
                 bra.s   Boss_JampanTrackPlayerAimOffsetReturn
 ; ---------------------------------------------------------------------------
 Boss_JampanDecreasePlayerAimOffset:                     ; CODE XREF: Boss_JampanTrackPlayerAimOffset+24   j  ; was: loc_4A0F2
-                subq.w  #1,(SharedPatternRow1Long1+2).w
+                subq.w  #1,(SharedScratchLong9+2).w
 Boss_JampanTrackPlayerAimOffsetReturn:                  ; CODE XREF: Boss_JampanTrackPlayerAimOffset+20   j  ; was: locret_4A0F6
                                         ; Boss_JampanTrackPlayerAimOffset+2A   j
                 rts
@@ -76,15 +76,15 @@ Boss_JampanTrackVerticalOrbitOffset:                    ; CODE XREF: Boss_Jampan
                                         ; sub_49666   p
                 move.w  $14(a5),d0
                 subi.w  #$F0,d0
-                sub.w   (SharedPatternRow1Long2).w,d0
+                sub.w   (SharedScratchLong10).w,d0
                 beq.s   Boss_JampanTrackVerticalOrbitOffsetReturn
                 tst.w   d0
                 bmi.s   Boss_JampanDecreaseVerticalOrbitOffset
-                addq.w  #1,(SharedPatternRow1Long2).w
+                addq.w  #1,(SharedScratchLong10).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_JampanDecreaseVerticalOrbitOffset:                 ; CODE XREF: Boss_JampanTrackVerticalOrbitOffset+10   j  ; was: loc_4A110
-                subq.w  #1,(SharedPatternRow1Long2).w
+                subq.w  #1,(SharedScratchLong10).w
 Boss_JampanTrackVerticalOrbitOffsetReturn:              ; CODE XREF: Boss_JampanTrackVerticalOrbitOffset+C   j  ; was: locret_4A114
                 rts
 ; End of function Boss_JampanTrackVerticalOrbitOffset
@@ -122,16 +122,16 @@ Boss_JampanDisableShieldLoop:                           ; CODE XREF: Boss_Jampan
 ; Projects the six shield objects from the shared radius and angle fields
 Boss_JampanUpdateShieldFormationGeometry:               ; CODE XREF: Boss_JampanShieldCycleDelayState+16   p  ; was: sub_4A160
                                         ; Boss_JampanExpandShieldRadiusState+C   p
-                move.w  (SharedPatternRow1Long3).w,d4
+                move.w  (SharedScratchLong11).w,d4
                 move.w  (SeventhEntityWork4A).w,d5
                 move.w  (SeventhEntityWork4C).w,d6
                 move.w  (SeventhEntityWork4E).w,d7
-                add.w   (SharedPatternRow0Long0).w,d5
-                add.w   (SharedPatternRow0Long1).w,d6
-                add.w   (SharedPatternRow0Long2).w,d7
-                add.w   (SharedPatternRow1Long1+2).w,d5
-                add.w   (SharedPatternRow1Long2).w,d6
-                add.w   (SharedPatternRow1Long2+2).w,d7
+                add.w   (SharedScratchLong0).w,d5
+                add.w   (SharedScratchLong1).w,d6
+                add.w   (SharedScratchLong2).w,d7
+                add.w   (SharedScratchLong9+2).w,d5
+                add.w   (SharedScratchLong10).w,d6
+                add.w   (SharedScratchLong10+2).w,d7
                 andi.w  #$1FE,d5
                 andi.w  #$1FE,d6
                 andi.w  #$1FE,d7

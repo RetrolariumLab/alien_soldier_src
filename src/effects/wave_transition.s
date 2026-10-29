@@ -394,7 +394,7 @@ Gfx_UnusedWaveTileData: binclude "data/other/unused_6.bin"  ; was: unused_6
 
 ; Main loop for loading tiles to VRAM
 Gfx_LoadTilesLoop:                                      ; CODE XREF: EndingSequence_Initialize+3E   p  ; was: sub_2667C
-                                        ; Stage_LoadTeleportAssets+2C   j
+                                        ; Stage_LoadStage13Assets+2C   j
                 move.w  #1,(a0)
                 move.w  #$20,(TileInterpSpan).w         ; ' '
 Gfx_LoadTilesLoop_NextStep:                             ; CODE XREF: Gfx_LoadTilesLoop+48   j  ; was: loc_26686

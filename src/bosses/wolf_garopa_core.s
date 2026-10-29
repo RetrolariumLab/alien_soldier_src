@@ -138,7 +138,7 @@ Boss_WolfGaropaInitializeAtPosition100:                 ; was: sub_4FAA8
 Boss_WolfGaropaUpdateInitialPose:                       ; DATA XREF: Boss_WolfGaropaUpdate+42   o  ; was: sub_4FAD8
                 move.w  a5,$48(a5)
                 move.w  a5,$4A(a5)
-                lea     Boss_WolfGaropaLaunchPose(pc),a1
+                lea     Boss_WolfGaropaLaunchPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
@@ -497,7 +497,7 @@ Boss_WolfGaropaUpdateHorizontalTargetMotion:            ; DATA XREF: ROM:0004FE7
                 cmpi.w  #$FFFC,d0
                 bmi.s   Boss_WolfGaropaAccelerateTowardLeftTarget
                 bset    #0,$41C(a5)
-                lea     Boss_WolfGaropaHorizontalMotionPoseA(pc),a1
+                lea     Boss_WolfGaropaHorizontalMotionAPoses(pc),a1
                 nop
                 bra.s   Boss_WolfGaropaApplyLeftAcceleration
 ; ---------------------------------------------------------------------------
@@ -517,12 +517,12 @@ Boss_WolfGaropaCheckRightTargetDistance:                ; CODE XREF: Boss_WolfGa
                 cmpi.w  #4,d0
                 bpl.s   Boss_WolfGaropaAccelerateTowardRightTarget
                 bset    #0,$41C(a5)
-                lea     Boss_WolfGaropaHorizontalMotionPoseA(pc),a1
+                lea     Boss_WolfGaropaHorizontalMotionAPoses(pc),a1
                 nop
                 bra.s   Boss_WolfGaropaApplyLeftAcceleration
 ; ---------------------------------------------------------------------------
 Boss_WolfGaropaAccelerateTowardRightTarget:             ; CODE XREF: Boss_WolfGaropaUpdateHorizontalTargetMotion+48   j  ; was: loc_4FEEC
-                lea     Boss_WolfGaropaHorizontalMotionPoseA(pc),a1
+                lea     Boss_WolfGaropaHorizontalMotionAPoses(pc),a1
                 nop
                 tst.l   $18(a5)
                 bmi.s   Boss_WolfGaropaApplyRightAcceleration
@@ -614,7 +614,7 @@ Boss_WolfGaropaUpdateBallisticTransitionB:              ; DATA XREF: ROM:0004FE7
                 move.b  #$EE,d0
                 jsr     (Sound_QueueSFXRequest).l
 Boss_WolfGaropaAdvanceBallisticTransitionPose:          ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+1C   j  ; was: loc_5002C
-                lea     Boss_WolfGaropaBallisticTransitionBPose(pc),a1
+                lea     Boss_WolfGaropaBallisticTransitionBPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 bra.w   Boss_WolfGaropaUpdateMetaspriteAndOrb
@@ -653,7 +653,7 @@ Boss_WolfGaropaApplyAirborneRightAcceleration:          ; CODE XREF: Boss_WolfGa
                 addi.l  #$1400,$18(a5)
 Boss_WolfGaropaAdvanceAirbornePose:                     ; CODE XREF: Boss_WolfGaropaUpdateBallisticTransitionB+6A   j  ; was: loc_500A8
                                         ; Boss_WolfGaropaUpdateBallisticTransitionB+7A   j
-                lea     Boss_WolfGaropaHorizontalAirbornePose(pc),a1
+                lea     Boss_WolfGaropaHorizontalAirbornePoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 btst    #3,$23E(a5)
@@ -690,7 +690,7 @@ Boss_WolfGaropaBeginFinalBallisticMotion:               ; CODE XREF: Boss_WolfGa
 Boss_WolfGaropaUpdateFinalBallisticMotion:              ; DATA XREF: ROM:0004FE7C   o  ; was: sub_50120
                 subi.l  #$800,$18(a5)
                 addi.l  #$3800,$1C(a5)
-                lea     Boss_WolfGaropaFinalBallisticPose(pc),a1
+                lea     Boss_WolfGaropaFinalBallisticPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 tst.w   $58(a5)
@@ -704,7 +704,7 @@ Boss_WolfGaropaUpdateFinalBallisticMotion:              ; DATA XREF: ROM:0004FE7
 ; End of function Boss_WolfGaropaUpdateFinalBallisticMotion
 ; Wait for the scripted launch event, then install launch velocity
 Boss_WolfGaropaWaitForLaunchContact:                    ; DATA XREF: ROM:0004FE7E   o  ; was: sub_50160
-                lea     Boss_WolfGaropaLaunchPose(pc),a1
+                lea     Boss_WolfGaropaLaunchPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 btst    #6,$23E(a5)
@@ -735,7 +735,7 @@ Boss_WolfGaropaAdvanceLaunchPose:                       ; CODE XREF: Boss_WolfGa
                 movea.w $48(a5),a0
                 subi.l  #$800,$18(a0)
                 addi.l  #$6800,$1C(a5)
-                lea     Boss_WolfGaropaLaunchPose(pc),a1
+                lea     Boss_WolfGaropaLaunchPoses(pc),a1
                 nop
                 bsr.w   Boss_WolfGaropaAdvancePoseScript
                 tst.w   $58(a5)

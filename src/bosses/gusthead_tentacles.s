@@ -38,7 +38,7 @@ Boss_GustheadDetachedSegmentInactiveState:              ; DATA XREF: ROM:0004013
 ; Spawns side debris while arena motion is active
 Boss_GustheadSpawnScrollingDebris:                      ; CODE XREF: Boss_GustheadSweepOuterJointState+C   p  ; was: sub_4019A
                                         ; Boss_GustheadWaitForMiddleJointZeroState+C   p
-                tst.l   (SharedPatternRow1Long2).w
+                tst.l   (SharedScratchLong10).w
                 beq.w   Boss_GustheadUpdateSegmentPositionsReturn
                 move.w  (FrameCounter).w,d0
                 andi.w  #7,d0
@@ -62,11 +62,11 @@ Boss_GustheadSpawnScrollingDebrisObject:                ; CODE XREF: Boss_Gusthe
                 subi.w  #$80,d0
                 addi.w  #$F0,d0
                 move.w  d0,$14(a0)
-                move.l  (SharedPatternRow1Long2).w,d0
+                move.l  (SharedScratchLong10).w,d0
                 add.l   d0,d0
                 move.l  d0,$18(a0)
                 move.l  #$FFFFF000,$1C(a0)
-                btst    #7,(SharedPatternRow1Long2).w
+                btst    #7,(SharedScratchLong10).w
                 beq.s   Boss_GustheadUseLeftDebrisSpawnX
                 move.w  #$1C4,$10(a0)
                 rts
@@ -87,7 +87,7 @@ Boss_GustheadUpdateScrollingDebris:                     ; DATA XREF: ROM:Entity_
                 bcs.s   Boss_GustheadDeactivateScrollingDebris
                 cmpi.w  #$180,$14(a5)
                 bhi.s   Boss_GustheadDeactivateScrollingDebris
-                move.l  (SharedPatternRow1Long2).w,d0
+                move.l  (SharedScratchLong10).w,d0
                 beq.s   Boss_GustheadScrollingDebrisApplyStrongGravity
                 addq.b  #1,$4A(a5)
                 btst    #0,$4A(a5)
@@ -365,9 +365,9 @@ Boss_GustheadSegmentMappings:   dc.l    Boss_GustheadSegmentMappingA  ; DATA XRE
 ; Derives arena scroll velocity from the active joint speed
 Boss_GustheadUpdateArenaScrollVelocity:                 ; CODE XREF: Boss_GustheadSweepOuterJointState+8   p  ; was: sub_4058A
                                         ; Boss_GustheadWaitForMiddleJointZeroState+8   p
-                move.l  (SharedPatternRow0Long3).w,d0
+                move.l  (SharedScratchLong3).w,d0
                 bne.s   Boss_GustheadScaleArenaScrollVelocity
-                move.l  (SharedPatternRow0Long5).w,d0
+                move.l  (SharedScratchLong5).w,d0
                 beq.s   Boss_GustheadStoreArenaScrollVelocity
 Boss_GustheadScaleArenaScrollVelocity:                  ; CODE XREF: Boss_GustheadUpdateArenaScrollVelocity+4   j  ; was: loc_40596
                 tst.w   (DifficultyMode).w
@@ -385,23 +385,23 @@ Boss_GustheadStoreArenaScrollVelocity:                  ; CODE XREF: Boss_Gusthe
 ; Advances the three shared fixed-point joint angles
 Boss_GustheadAdvanceJointAngles:                        ; CODE XREF: Boss_GustheadUpdateFastIntroFlickerAndStartMotion+48   p  ; was: sub_405A8
                                         ; Boss_GustheadBattleStart+20   p
-                tst.l   (SharedPatternRow0Long3).w
+                tst.l   (SharedScratchLong3).w
                 beq.s   Boss_GustheadAdvanceMiddleJoint
-                move.l  (SharedPatternRow0Long3).w,d0
-                add.l   d0,(SharedPatternRow0Long0).w
-                andi.w  #$1FF,(SharedPatternRow0Long0).w
+                move.l  (SharedScratchLong3).w,d0
+                add.l   d0,(SharedScratchLong0).w
+                andi.w  #$1FF,(SharedScratchLong0).w
 Boss_GustheadAdvanceMiddleJoint:                        ; CODE XREF: Boss_GustheadAdvanceJointAngles+4   j  ; was: loc_405BC
-                tst.l   (SharedPatternRow0Long4).w
+                tst.l   (SharedScratchLong4).w
                 beq.s   Boss_GustheadAdvanceInnerJoint
-                move.l  (SharedPatternRow0Long4).w,d0
-                add.l   d0,(SharedPatternRow0Long1).w
-                andi.w  #$1FF,(SharedPatternRow0Long1).w
+                move.l  (SharedScratchLong4).w,d0
+                add.l   d0,(SharedScratchLong1).w
+                andi.w  #$1FF,(SharedScratchLong1).w
 Boss_GustheadAdvanceInnerJoint:                         ; CODE XREF: Boss_GustheadAdvanceJointAngles+18   j  ; was: loc_405D0
-                tst.l   (SharedPatternRow0Long5).w
+                tst.l   (SharedScratchLong5).w
                 beq.s   Boss_GustheadAdvanceJointAnglesReturn
-                move.l  (SharedPatternRow0Long5).w,d0
-                add.l   d0,(SharedPatternRow0Long2).w
-                andi.w  #$1FF,(SharedPatternRow0Long2).w
+                move.l  (SharedScratchLong5).w,d0
+                add.l   d0,(SharedScratchLong2).w
+                andi.w  #$1FF,(SharedScratchLong2).w
 Boss_GustheadAdvanceJointAnglesReturn:                  ; CODE XREF: Boss_GustheadAdvanceJointAngles+2C   j  ; was: locret_405E4
                 rts
 ; End of function Boss_GustheadAdvanceJointAngles
@@ -432,19 +432,19 @@ Boss_GustheadSeedFirstArmJointAngleLoop:                ; CODE XREF: Boss_Gusthe
                 clr.w   d0
                 move.b  $4B(a0),d0
                 add.w   d0,d0
-                add.w   (SharedPatternRow0Long0).w,d0
+                add.w   (SharedScratchLong0).w,d0
                 andi.w  #$1FF,d0
                 move.w  d0,$4E(a0)
                 clr.w   d0
                 move.b  $4C(a0),d0
                 add.w   d0,d0
-                add.w   (SharedPatternRow0Long1).w,d0
+                add.w   (SharedScratchLong1).w,d0
                 andi.w  #$1FF,d0
                 move.w  d0,$50(a0)
                 clr.w   d0
                 move.b  $4C(a0),d0
                 add.w   d0,d0
-                add.w   (SharedPatternRow0Long2).w,d0
+                add.w   (SharedScratchLong2).w,d0
                 andi.w  #$1FF,d0
                 move.w  d0,$52(a0)
                 lea     $60(a0),a0

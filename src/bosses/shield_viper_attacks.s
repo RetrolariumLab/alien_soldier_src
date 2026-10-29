@@ -158,8 +158,8 @@ Boss_ShieldViperSelectAlternatingReentrySide:           ; DATA XREF: ROM:0004E02
                 addq.w  #2,4(a5)
                 move.w  #$60,$14(a5)                    ; '`'
                 move.w  #$180,$56(a5)
-                addq.b  #1,(SharedPatternRow0Long5+2).w
-                btst    #1,(SharedPatternRow0Long5+2).w
+                addq.b  #1,(SharedScratchLong5+2).w
+                btst    #1,(SharedScratchLong5+2).w
                 beq.s   Boss_ShieldViperConfigureRightReentry
                 move.w  #$A0,$10(a5)
                 move.w  #$FFFE,$4A(a5)
@@ -175,7 +175,7 @@ Boss_ShieldViperMoveToReentryYThreshold:                ; DATA XREF: ROM:0004E02
                 bsr.w   Boss_ShieldViperMoveRadially
                 cmpi.w  #$D0,$14(a5)
                 blt.s   Boss_ShieldViperReentryMovementReturn
-                move.w  $4A(a5),(SharedPatternRow0Long0).w
+                move.w  $4A(a5),(SharedScratchLong0).w
                 move.w  #2,$48(a5)
                 addq.w  #2,4(a5)
 Boss_ShieldViperReentryMovementReturn:                  ; CODE XREF: Boss_ShieldViperMoveToReentryYThreshold+A   j  ; was: locret_4E7A0
@@ -187,8 +187,8 @@ Boss_ShieldViperDoubleAngularStepAtHalfTurns:           ; DATA XREF: ROM:0004E02
                 move.w  $56(a5),d0
                 andi.w  #$FE,d0
                 bne.s   Boss_ShieldViperAngularStepDoublingReturn
-                move.w  (SharedPatternRow0Long0).w,d0
-                add.w   d0,(SharedPatternRow0Long0).w
+                move.w  (SharedScratchLong0).w,d0
+                add.w   d0,(SharedScratchLong0).w
                 subq.w  #1,$48(a5)
                 bne.s   Boss_ShieldViperAngularStepDoublingReturn
                 move.w  #$40,$48(a5)                    ; '@'
@@ -255,8 +255,8 @@ Boss_ShieldViperLowerBoundaryMovementReturn:            ; CODE XREF: Boss_Shield
 Boss_ShieldViperDoubleAngularStepAndBeginDelay:         ; DATA XREF: ROM:0004E034   o  ; was: sub_4E846
                 addq.w  #2,4(a5)
                 move.w  #$80,$48(a5)
-                move.w  (SharedPatternRow0Long0).w,d0
-                add.w   d0,(SharedPatternRow0Long0).w
+                move.w  (SharedScratchLong0).w,d0
+                add.w   d0,(SharedScratchLong0).w
 ; Move throughout the delay, then seed a sixteen-frame flip wait
 Boss_ShieldViperWaitAfterAngularStepDoubling:           ; DATA XREF: ROM:0004E036   o  ; was: loc_4E858
                 bsr.w   Boss_ShieldViperRotateAndMoveRadially
@@ -312,7 +312,7 @@ Boss_ShieldViperLinkedRecordActivationWaitReturn:       ; CODE XREF: Boss_Shield
 Boss_ShieldViperSpawnPatternProjectileSet:              ; DATA XREF: ROM:0004E03E   o  ; was: sub_4E8D2
                 bsr.w   Boss_ShieldViperRotateAndMoveRadially
                 bsr.w   Boss_ShieldViperBuildPatternProjectileIndexOrder
-                lea     (SharedPatternRow1Long0).w,a1
+                lea     (SharedScratchLong8).w,a1
                 lea     Boss_ShieldViperPatternProjectileRecords(pc),a2
                 nop
                 move.w  #$B,d7
@@ -348,7 +348,7 @@ Boss_ShieldViperPatternProjectileRecordsEnd:            ; was: word_4E944_End
 
 ; Build sixteen group-selected indices and perform eight random swaps
 Boss_ShieldViperBuildPatternProjectileIndexOrder:       ; CODE XREF: Boss_ShieldViperSpawnPatternProjectileSet+4   p  ; was: sub_4EAC4
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 move.w  #9,d7
                 moveq   #0,d6
 Boss_ShieldViperBuildFirstPatternIndexGroupLoop:        ; CODE XREF: Boss_ShieldViperBuildPatternProjectileIndexOrder+22   j  ; was: loc_4EACE
@@ -373,7 +373,7 @@ Boss_ShieldViperStoreSecondPatternIndex:                ; CODE XREF: Boss_Shield
                 move.w  d0,(a0)+
                 addq.w  #1,d6
                 dbf     d7,Boss_ShieldViperBuildSecondPatternIndexGroupLoop
-                lea     (SharedPatternRow1Long0).w,a0
+                lea     (SharedScratchLong8).w,a0
                 move.w  #7,d7
                 moveq   #0,d6
 Boss_ShieldViperShufflePatternIndexLoop:                ; CODE XREF: Boss_ShieldViperBuildPatternProjectileIndexOrder+74   j  ; was: loc_4EB18
@@ -411,8 +411,8 @@ Boss_ShieldViperSteerTowardCenterAndDoubleStepAtQuarterTurn:  ; DATA XREF: ROM:0
                 andi.w  #$1FC,d0
                 cmpi.w  #$80,d0
                 bne.s   Boss_ShieldViperCenterSteeringReturn
-                move.w  (SharedPatternRow0Long0).w,d0
-                add.w   d0,(SharedPatternRow0Long0).w
+                move.w  (SharedScratchLong0).w,d0
+                add.w   d0,(SharedScratchLong0).w
                 addq.w  #2,4(a5)
 Boss_ShieldViperCenterSteeringReturn:                   ; CODE XREF: Boss_ShieldViperSteerTowardCenterAndDoubleStepAtQuarterTurn+14   j  ; was: locret_4EB7A
                 rts
@@ -488,8 +488,8 @@ Boss_ShieldViperWaitAfterLinkedRecordReleaseAndDoubleAngularStep:  ; DATA XREF: 
                 subq.w  #1,$48(a5)
                 bne.s   Boss_ShieldViperPostReleaseAngularStepReturn
                 bsr.w   Gfx_ShieldViperForceHorizontalFlip
-                move.w  (SharedPatternRow0Long0).w,d0
-                add.w   d0,(SharedPatternRow0Long0).w
+                move.w  (SharedScratchLong0).w,d0
+                add.w   d0,(SharedScratchLong0).w
                 move.w  #$40,$48(a5)                    ; '@'
                 addq.w  #2,4(a5)
 Boss_ShieldViperPostReleaseAngularStepReturn:           ; CODE XREF: Boss_ShieldViperWaitAfterLinkedRecordReleaseAndDoubleAngularStep+C   j  ; was: locret_4EC40
@@ -500,9 +500,9 @@ Boss_ShieldViperWaitThenHalveAngularStepAndRestartTracking:  ; DATA XREF: ROM:00
                 bsr.w   Boss_ShieldViperRotateAndMoveRadially
                 subq.w  #1,$48(a5)
                 bne.s   Boss_ShieldViperTrackingRestartDelayReturn
-                move.w  (SharedPatternRow0Long0).w,d0
+                move.w  (SharedScratchLong0).w,d0
                 asr.w   #1,d0
-                move.w  d0,(SharedPatternRow0Long0).w
+                move.w  d0,(SharedScratchLong0).w
                 move.w  #$32,4(a5)                      ; '2'
 Boss_ShieldViperTrackingRestartDelayReturn:             ; CODE XREF: Boss_ShieldViperWaitThenHalveAngularStepAndRestartTracking+8   j  ; was: locret_4EC5C
                 rts

@@ -10,9 +10,9 @@ Boss_VictorResetNextOrbitingPart:                       ; CODE XREF: Boss_Victor
                 adda.w  #$60,a4                         ; '`'
                 dbf     d6,Boss_VictorResetNextOrbitingPart
                 lea     (TwentyFirstEntityType).w,a4
-                move.w  a4,(SharedPatternRow0Long5).w
-                move.l  #$80000,(SharedPatternRow0Long3+2).w
-                move.w  #4,(SharedPatternRow0Long4+2).w
+                move.w  a4,(SharedScratchLong5).w
+                move.l  #$80000,(SharedScratchLong3+2).w
+                move.w  #4,(SharedScratchLong4+2).w
                 addq.w  #2,4(a5)
                 rts
 ; End of function Boss_VictorPreparePartLaunch
@@ -20,8 +20,8 @@ Boss_VictorResetNextOrbitingPart:                       ; CODE XREF: Boss_Victor
 Boss_VictorContractPartFormation:                       ; DATA XREF: ROM:0003243E   o  ; was: sub_329E0
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
-                subi.l  #$10000,(SharedPatternRow0Long3+2).w
-                cmpi.l  #$FFF00000,(SharedPatternRow0Long3+2).w
+                subi.l  #$10000,(SharedScratchLong3+2).w
+                cmpi.l  #$FFF00000,(SharedScratchLong3+2).w
                 bne.w   Entity_UpdateReturn
                 bsr.w   Boss_VictorLaunchOrbitingPart
                 addq.w  #2,4(a5)
@@ -31,17 +31,17 @@ Boss_VictorContractPartFormation:                       ; DATA XREF: ROM:0003243
 Boss_VictorExpandPartFormation:                         ; DATA XREF: ROM:00032440   o  ; was: sub_32A06
                 bsr.w   Boss_VictorUpdateViewportOffset
                 bsr.w   Boss_VictorUpdateAnimation
-                addi.l  #$10000,(SharedPatternRow0Long3+2).w
-                cmpi.l  #$80000,(SharedPatternRow0Long3+2).w
+                addi.l  #$10000,(SharedScratchLong3+2).w
+                cmpi.l  #$80000,(SharedScratchLong3+2).w
                 beq.s   Boss_VictorFinishPartLaunchCycles
-                cmpi.l  #$100000,(SharedPatternRow0Long3+2).w
+                cmpi.l  #$100000,(SharedScratchLong3+2).w
                 bne.w   Entity_UpdateReturn
                 bsr.w   Boss_VictorLaunchOrbitingPart
                 subq.w  #2,4(a5)
                 rts
 ; ---------------------------------------------------------------------------
 Boss_VictorFinishPartLaunchCycles:                      ; CODE XREF: Boss_VictorExpandPartFormation+18   j  ; was: loc_32A36
-                subq.w  #1,(SharedPatternRow0Long4+2).w
+                subq.w  #1,(SharedScratchLong4+2).w
                 bne.w   Entity_UpdateReturn
                 lea     (FifthEntityType).w,a4
                 move.w  #7,d6
@@ -58,8 +58,8 @@ Boss_VictorLaunchOrbitingPart:                          ; CODE XREF: Boss_Victor
                                         ; Boss_VictorExpandPartFormation+26   p
                 move.b  #$CC,d0
                 jsr     (Sound_QueueSFXRequest).l
-                movea.w (SharedPatternRow0Long5).w,a4
-                addi.w  #$60,(SharedPatternRow0Long5).w  ; '`'
+                movea.w (SharedScratchLong5).w,a4
+                addi.w  #$60,(SharedScratchLong5).w     ; '`'
                 bsr.w   Boss_VictorInitPart
                 move.w  #$A,$48(a4)
                 move.w  #$500,8(a4)
@@ -286,7 +286,7 @@ Boss_VictorOrbitRadiusStates:   dc.w    Boss_VictorRetractOrbitRadius-*  ; DATA 
 
 ; Contracts an orbiting part to radius $80
 Boss_VictorRetractOrbitRadius:                          ; DATA XREF: ROM:Boss_VictorOrbitRadiusStates   o  ; was: sub_32CF6
-                move.w  (SharedPatternRow0Long3+2).w,d0
+                move.w  (SharedScratchLong3+2).w,d0
                 add.w   d0,$40(a5)
                 subq.w  #1,$42(a5)
                 cmpi.w  #$80,$42(a5)
@@ -296,7 +296,7 @@ Boss_VictorRetractOrbitRadius:                          ; DATA XREF: ROM:Boss_Vi
 ; End of function Boss_VictorRetractOrbitRadius
 ; Expands an orbiting part to radius $A8
 Boss_VictorExpandOrbitRadius:                           ; DATA XREF: ROM:00032CF2   o  ; was: sub_32D12
-                move.w  (SharedPatternRow0Long3+2).w,d0
+                move.w  (SharedScratchLong3+2).w,d0
                 add.w   d0,$40(a5)
                 addq.w  #1,$42(a5)
                 cmpi.w  #$A8,$42(a5)
@@ -306,7 +306,7 @@ Boss_VictorExpandOrbitRadius:                           ; DATA XREF: ROM:00032CF
 ; End of function Boss_VictorExpandOrbitRadius
 ; Rotates an orbiting part while expanding its radius toward $A8
 Boss_VictorExpandOrbitRadiusClamped:                    ; DATA XREF: ROM:00032CF4   o  ; was: sub_32D2E
-                move.w  (SharedPatternRow0Long3+2).w,d0
+                move.w  (SharedScratchLong3+2).w,d0
                 add.w   d0,$40(a5)
                 cmpi.w  #$A8,$42(a5)
                 beq.w   Entity_UpdateReturn
@@ -372,7 +372,7 @@ Boss_VictorRemovePartOutsideArena:                      ; CODE XREF: Boss_Victor
 ; Removes an entity with a type-$160 explosion while the effect gate is active
 Entity_RemoveWithExplosionWhenEnabled:                  ; CODE XREF: Projectile_DestroyerProtoMain   p  ; was: sub_32DCC
                                         ; sub_32382   p
-                tst.w   (SharedPatternRow0Long5+2).w
+                tst.w   (SharedScratchLong5+2).w
                 beq.w   Entity_UpdateReturn
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Entity_RemoveAfterExplosionAttempt

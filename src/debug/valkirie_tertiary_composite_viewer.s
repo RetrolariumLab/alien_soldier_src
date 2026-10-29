@@ -107,13 +107,13 @@ Debug_ValkirieTertiaryViewerBeginPoseCommandInterpolation:  ; CODE XREF: Debug_V
                 bmi.s   Debug_ValkirieTertiaryViewerStorePoseComponents
 Debug_ValkirieTertiaryViewerTickPoseInterpolation:      ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+8   j  ; was: loc_51964
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$12,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Debug_ValkirieTertiaryViewerStorePoseComponents:        ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+E   j  ; was: loc_51974
                                         ; Debug_ValkirieTertiaryViewerAdvancePoseScript+76   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -209,14 +209,14 @@ Debug_ValkirieTertiaryViewerStorePoseComponents:        ; CODE XREF: Debug_Valki
 Debug_ValkirieTertiaryViewerBeginPoseInterpolation:     ; CODE XREF: Debug_ValkirieTertiaryViewerAdvancePoseScript+5C   p  ; was: sub_51A86
                 lea     (Boss_ValkirieAlternateRotationFramesAndNeutralPose).l,a1
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Debug_ValkirieTertiaryViewerBeginPoseInterpolation
 ; Initialize the tertiary viewer's nineteen pose channels from bytes at a0
 Debug_ValkirieTertiaryViewerInitializePoseChannels:     ; was: sub_51A9C
                 moveq   #$12,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Debug_ValkirieTertiaryViewerInitializePoseChannels
 ; ---------------------------------------------------------------------------

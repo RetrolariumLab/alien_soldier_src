@@ -493,7 +493,7 @@ Anim_AdvancePoseChannelInterpolationNextChannel:        ; CODE XREF: Anim_Advanc
 Anim_ClearInterpolationBuffer:                          ; was: sub_348EC
                 move.w  #$10,d7
                 moveq   #0,d0
-                movea.l #SharedPatternRow0Long0,a0
+                movea.l #SharedScratchLong0,a0
 Anim_ClearInterpolationBufferNextLongword:              ; CODE XREF: Anim_ClearInterpolationBuffer+E   j  ; was: loc_348F8
                 move.l  d0,(a0)+
                 dbf     d7,Anim_ClearInterpolationBufferNextLongword

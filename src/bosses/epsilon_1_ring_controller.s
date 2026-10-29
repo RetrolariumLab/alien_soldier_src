@@ -6,11 +6,11 @@ Boss_Epsilon1RingController:                            ; DATA XREF: ROM:Entity_
 Boss_Epsilon1DeactivateRingController:                  ; CODE XREF: Boss_Epsilon1RingController+6   j  ; was: loc_46D78
                 andi.w  #$7FFF,2(a5)
                 clr.w   4(a5)
-                tst.w   (SharedPatternRow1Long0).w
+                tst.w   (SharedScratchLong8).w
                 beq.s   Boss_Epsilon1DispatchRingMode
-                movea.w (SharedPatternRow1Long0).w,a0
+                movea.w (SharedScratchLong8).w,a0
                 bset    #4,2(a0)
-                clr.w   (SharedPatternRow1Long0).w
+                clr.w   (SharedScratchLong8).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_Epsilon1DispatchRingMode:                          ; CODE XREF: Boss_Epsilon1RingController+E   j  ; was: loc_46D98
@@ -71,7 +71,7 @@ Boss_Epsilon1TickRingTrackingTimeout:                   ; CODE XREF: Boss_Epsilo
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_Epsilon1TrackPlayerWithRingReturn
 Boss_Epsilon1StopRingAtTarget:                          ; CODE XREF: Boss_Epsilon1TrackPlayerWithRingState+28   j  ; was: loc_46E16
-                tst.w   (SharedPatternRow1Long0).w
+                tst.w   (SharedScratchLong8).w
                 bne.s   Boss_Epsilon1TrackPlayerWithRingReturn
                 move.w  #$10,$48(a5)
                 clr.l   $18(a5)
@@ -130,7 +130,7 @@ Boss_Epsilon1CreateSpreadAimMarkerState:                ; DATA XREF: ROM:00046DB
                 bpl.w   Boss_Epsilon1CreateSpreadAimMarkerReturn
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1CreateSpreadAimMarkerReturn
-                move.w  a0,(SharedPatternRow1Long0).w
+                move.w  a0,(SharedScratchLong8).w
                 move.w  #$10,(a0)
                 move.w  #$C3C9,$E(a0)
                 move.w  #$A00,8(a0)

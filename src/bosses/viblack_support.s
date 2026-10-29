@@ -121,8 +121,8 @@ Boss_ViblackClearNextScrollSamplesLoop:                 ; CODE XREF: Boss_Viblac
                 add.w   $14(a5),d0
                 move.w  d0,(SecondaryCameraYPos).w
                 neg.w   d0
-                movea.w #(SharedPatternRow0Long4-M68K_RAM),a0
-                movea.w #(SharedPatternRow0Long6-M68K_RAM),a1
+                movea.w #(SharedScratchLong4-M68K_RAM),a0
+                movea.w #(SharedScratchLong6-M68K_RAM),a1
                 lea     Boss_ViblackScrollProfileSteps(pc),a2
                 nop
                 move.w  $4E(a5),d1
@@ -137,8 +137,8 @@ Boss_ViblackBuildUpperScrollProfileLoop:                ; CODE XREF: Boss_Viblac
                 move.w  d0,-(a0)
                 move.w  d0,(a1)+
                 dbf     d7,Boss_ViblackBuildUpperScrollProfileLoop
-                movea.w #(SharedPatternRow0Long4-M68K_RAM),a0
-                movea.w #(SharedPatternRow0Long6-M68K_RAM),a1
+                movea.w #(SharedScratchLong4-M68K_RAM),a0
+                movea.w #(SharedScratchLong6-M68K_RAM),a1
                 moveq   #0,d0
                 move.w  (SecondaryCameraYPos).w,d0
                 neg.w   d0
@@ -150,7 +150,7 @@ Boss_ViblackBuildLowerScrollProfileLoop:                ; CODE XREF: Boss_Viblac
                 move.w  d0,(a0)+
                 move.w  d0,-(a1)
                 dbf     d7,Boss_ViblackBuildLowerScrollProfileLoop
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 movea.w #(ViblackScrollSamples-M68K_RAM),a1
                 moveq   #$13,d7
                 move.w  (SecondaryCameraXPos).w,d0

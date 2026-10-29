@@ -64,7 +64,7 @@ Boss_InitSylpheed:                                      ; DATA XREF: Boss_Update
                 movea.l #Boss_SylpheedMetaspritePartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.l  #Boss_SylpheedMetaspritePoseAngles,$2FC(a5)
-                move.l  #Sylpheed_PoseFrameData,$35C(a5)
+                move.l  #Sylpheed_PoseTable,$35C(a5)
                 move.w  #$444,(a5)
                 move.w  #$CC00,2(a5)
                 clr.w   6(a5)
@@ -96,7 +96,7 @@ Boss_InitSylpheedInteractiveState2:                     ; was: sub_594D0
 ; End of function Boss_InitSylpheedInteractiveState2
 ; Render controller-driven state $2 with its looping pose
 Boss_RenderSylpheedInteractiveState2:                   ; DATA XREF: ROM:00059444   o  ; was: sub_59512
-                lea     Sylpheed_InteractiveState2PoseScript(pc),a1
+                lea     Sylpheed_InteractiveState2Poses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_RenderSylpheedInteractiveState2
@@ -121,7 +121,7 @@ Boss_UpdateSylpheedEntranceState12:                     ; DATA XREF: ROM:0005945
 Boss_AccelerateSylpheedEntranceUpward:                  ; CODE XREF: Boss_EnterSylpheedEntranceState12+3E   j  ; was: loc_59560
                 subi.l  #$1000,$1C(a5)
                 bsr.w   Boss_AdjustSylpheedHorizontalVelocityTowardTarget
-                lea     Sylpheed_EntrancePoseScript(pc),a1
+                lea     Sylpheed_EntrancePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -139,7 +139,7 @@ Boss_EnterSylpheedEntrancePauseState14:                 ; CODE XREF: Boss_EnterS
 Boss_UpdateSylpheedEntrancePauseState14:                ; DATA XREF: ROM:00059456   o  ; was: loc_595A4
                 subq.w  #1,$11C(a5)
                 bmi.s   Boss_EnterSylpheedPlayerTrackingState16
-                lea     Sylpheed_EntrancePoseScript(pc),a1
+                lea     Sylpheed_EntrancePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ Boss_UpdateSylpheedPlayerTrackingState16:               ; DATA XREF: ROM:0005945
                 subi.w  #$20,d0                         ; ' '
                 cmp.w   $14(a5),d0
                 bmi.w   Boss_EnterSylpheedAttackApproachState18
-                lea     Sylpheed_EntrancePoseScript(pc),a1
+                lea     Sylpheed_EntrancePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -180,7 +180,7 @@ Boss_UpdateSylpheedAttackApproachState18:               ; DATA XREF: ROM:0005945
                 addi.w  #$20,d0                         ; ' '
                 move.w  d0,(PlayerYPosition).w
                 clr.l   (PlayerYVelocity).w
-                lea     Sylpheed_EntrancePoseScript(pc),a1
+                lea     Sylpheed_EntrancePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_UpdateSylpheedAttackApproachState18
@@ -242,7 +242,7 @@ Boss_UpdateSylpheedAttackLaunchState1A:                 ; DATA XREF: ROM:0005945
                 subi.l  #$1000,$1C(a5)
                 subi.w  #8,$56(a5)
                 bmi.s   Boss_EnterSylpheedAttackHoldState1C
-                lea     Sylpheed_AttackAndRecoveryPoseScript(pc),a1
+                lea     Sylpheed_AttackAndRecoveryPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ Boss_UpdateSylpheedAttackHoldState1C:                   ; DATA XREF: ROM:0005945
 ; ---------------------------------------------------------------------------
 Boss_UpdateSylpheedAttackHoldMotion:                    ; CODE XREF: Boss_EnterSylpheedAttackLaunchState1A+7E   j  ; was: loc_5972A
                 bsr.w   Boss_AdjustSylpheedVerticalVelocityTowardTarget
-                lea     Sylpheed_AttackAndRecoveryPoseScript(pc),a1
+                lea     Sylpheed_AttackAndRecoveryPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_EnterSylpheedAttackLaunchState1A
@@ -313,7 +313,7 @@ Boss_CountDownSylpheedDecisionTimer:                    ; CODE XREF: Boss_EnterS
 Boss_RenderSylpheedDecisionPose:                        ; CODE XREF: Boss_EnterSylpheedDecisionState4+46   j  ; was: loc_597B4
                                         ; Boss_EnterSylpheedDecisionState4+6C   j
                 bsr.w   Boss_RandomizeSylpheedTargetOffsets
-                lea     Sylpheed_DecisionPoseScript(pc),a1
+                lea     Sylpheed_DecisionPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -327,7 +327,7 @@ Boss_UpdateSylpheedChargeState6:                        ; DATA XREF: ROM:0005944
                 tst.w   $58(a5)
                 bmi.w   Boss_EnterSylpheedRecoveryState8
                 subi.l  #$1800,$18(a5)
-                lea     Sylpheed_ChargePoseScript(pc),a1
+                lea     Sylpheed_ChargePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -349,7 +349,7 @@ Boss_UpdateSylpheedRecoveryState8:                      ; DATA XREF: ROM:0005944
                 move.w  #$60,$11C(a5)                   ; '`'
 Boss_UpdateSylpheedRecoveryTarget:                      ; CODE XREF: Boss_UpdateSylpheedRecoveryState8+E   j  ; was: loc_5982E
                 bsr.w   Boss_RandomizeSylpheedTargetOffsets
-                lea     Sylpheed_AttackAndRecoveryPoseScript(pc),a1
+                lea     Sylpheed_AttackAndRecoveryPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_UpdateSylpheedRecoveryState8
@@ -369,7 +369,7 @@ Boss_UpdateSylpheedJumpRiseStateA:                      ; DATA XREF: ROM:0005944
                 bmi.w   Boss_EnterSylpheedJumpFallStateC
                 subi.l  #$1C00,$18(a5)
                 subi.l  #$E00,$1C(a5)
-                lea     Sylpheed_JumpRisePoseScript(pc),a1
+                lea     Sylpheed_JumpRisePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -387,7 +387,7 @@ Boss_UpdateSylpheedJumpFallStateC:                      ; DATA XREF: ROM:0005944
                 bmi.w   Boss_EnterSylpheedDecisionState4
                 addi.l  #$1E00,$18(a5)
                 addi.l  #$1600,$1C(a5)
-                lea     Sylpheed_JumpFallPoseScript(pc),a1
+                lea     Sylpheed_JumpFallPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_UpdateSylpheedJumpFallStateC
@@ -407,7 +407,7 @@ Boss_UpdateSylpheedDiveStateE:                          ; DATA XREF: ROM:0005945
                 bmi.w   Boss_EnterSylpheedClimbState10
                 subi.l  #$1C00,$18(a5)
                 addi.l  #$1200,$1C(a5)
-                lea     Sylpheed_DivePoseScript(pc),a1
+                lea     Sylpheed_DivePoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; ---------------------------------------------------------------------------
@@ -425,7 +425,7 @@ Boss_UpdateSylpheedClimbState10:                        ; DATA XREF: ROM:0005945
                 bmi.w   Boss_EnterSylpheedDecisionState4
                 addi.l  #$1E00,$18(a5)
                 subi.l  #$1600,$1C(a5)
-                lea     Sylpheed_ClimbPoseScript(pc),a1
+                lea     Sylpheed_ClimbPoses(pc),a1
                 nop
                 bra.w   Boss_RenderSylpheedPose
 ; End of function Boss_UpdateSylpheedClimbState10

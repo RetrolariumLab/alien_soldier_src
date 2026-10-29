@@ -85,22 +85,22 @@ Segment_MissirayStepOffsetTowardTargetReturn:           ; CODE XREF: Segment_Mis
 ; Advances the 15-entry palette-wave index used by Missiray fades
 Boss_MissirayAdvancePaletteWaveIndex:                   ; CODE XREF: Boss_MissirayShuffleSegmentActivationOrder   p  ; was: sub_5450E
                                         ; Boss_MissirayActivateNextShuffledSegment   p
-                addq.w  #2,(SharedPatternRow0Long4).w
-                cmpi.w  #$1E,(SharedPatternRow0Long4).w
+                addq.w  #2,(SharedScratchLong4).w
+                cmpi.w  #$1E,(SharedScratchLong4).w
                 bne.s   Boss_MissirayStorePaletteWaveIndex
-                clr.w   (SharedPatternRow0Long4).w
+                clr.w   (SharedScratchLong4).w
 Boss_MissirayStorePaletteWaveIndex:                     ; CODE XREF: Boss_MissirayAdvancePaletteWaveIndex+A   j  ; was: loc_5451E
-                move.w  (SharedPatternRow0Long4).w,d0
-                move.w  Boss_MissirayPaletteWaveIndices(pc,d0.w),(SharedPatternRow0Long3+2).w
+                move.w  (SharedScratchLong4).w,d0
+                move.w  Boss_MissirayPaletteWaveIndices(pc,d0.w),(SharedScratchLong3+2).w
 ; End of function Boss_MissirayAdvancePaletteWaveIndex
 ; Applies one Missiray palette step to the 15-color range at PaletteActiveColor48
 Boss_MissirayApplyPaletteFadeStep:                      ; CODE XREF: Boss_MissirayInitializeSequentialSegmentAttack:Boss_MissirayFadeAndInitializeSegmentOrder   p  ; was: sub_54528
                                         ; Boss_MissirayFadePrimaryModePalette   p
-                move.w  (SharedPatternRow0Long3+2).w,d0
+                move.w  (SharedScratchLong3+2).w,d0
                 andi.w  #$E,d0
                 move.w  #$F,d5
                 lea     (PaletteActiveColor48).w,a0
-                move.w  (SharedPatternRow0Long4+2).w,d7
+                move.w  (SharedScratchLong4+2).w,d7
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Boss_MissirayApplyPaletteFadeStep
 ; ---------------------------------------------------------------------------
@@ -215,9 +215,9 @@ Segment_MissirayWaitForDefeatLaunch:                    ; DATA XREF: ROM:Segment
                 subq.w  #1,$48(a5)
                 bne.s   Segment_MissirayDefeatLaunchWaitReturn
                 addq.w  #2,4(a5)
-                tst.w   (SharedPatternRow0Long1).w
+                tst.w   (SharedScratchLong1).w
                 bne.s   Segment_MissirayDefeatLaunchWaitReturn
-                tst.w   (SharedPatternRow0Long2+2).w
+                tst.w   (SharedScratchLong2+2).w
                 bne.s   Segment_MissirayDefeatLaunchWaitReturn
                 move.l  #$FFFC0000,$1C(a5)
 Segment_MissirayDefeatLaunchWaitReturn:                 ; CODE XREF: Segment_MissirayWaitForDefeatLaunch+4   j  ; was: locret_5467A
@@ -289,9 +289,9 @@ Orphaned_ObjectVerticalPositionAdjustmentReturn:        ; CODE XREF: Orphaned_Ad
 ; End of function Orphaned_AdjustObjectVerticalPositionFromInput
 ; Advances a proximity-gated cooldown and spawns a pair of attached shots
 Boss_MissirayTrySpawnProximityShotPair:                 ; CODE XREF: Boss_MissirayRunSelectedAttack   p  ; was: sub_5472E
-                tst.w   (SharedPatternRow0Long2+2).w
+                tst.w   (SharedScratchLong2+2).w
                 bne.w   Boss_MissirayProximityShotPairReturn
-                tst.w   (SharedPatternRow0Long3).w
+                tst.w   (SharedScratchLong3).w
                 bmi.s   Boss_MissirayPrepareProximityShotPair
                 jsr     (Physics_GetPlayerDelta).l
                 move.w  #$20,d1                         ; ' '
@@ -301,22 +301,22 @@ Boss_MissirayTrySpawnProximityShotPair:                 ; CODE XREF: Boss_Missir
 Boss_MissirayCheckProximityThreshold:                   ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+1C   j  ; was: loc_5474E
                 cmp.w   d1,d0
                 bhi.w   Boss_MissirayProximityShotPairReturn
-                subq.w  #1,(SharedPatternRow0Long3).w
+                subq.w  #1,(SharedScratchLong3).w
                 rts
 ; ---------------------------------------------------------------------------
 Boss_MissirayPrepareProximityShotPair:                  ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+C   j  ; was: loc_5475A
-                tst.w   (SharedPatternRow0Long1).w
+                tst.w   (SharedScratchLong1).w
                 beq.s   Boss_MissirayUseLongProximityShotCooldown
-                move.w  #$40,(SharedPatternRow0Long3).w  ; '@'
+                move.w  #$40,(SharedScratchLong3).w     ; '@'
                 bra.s   Boss_MissirayConfigureFirstProximityShot
 ; ---------------------------------------------------------------------------
 Boss_MissirayUseLongProximityShotCooldown:              ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+30   j  ; was: loc_54768
-                move.w  #$80,(SharedPatternRow0Long3).w
+                move.w  #$80,(SharedScratchLong3).w
 Boss_MissirayConfigureFirstProximityShot:               ; CODE XREF: Boss_MissirayTrySpawnProximityShotPair+38   j  ; was: loc_5476E
                 move.w  #$C,d5
                 add.w   $10(a5),d5
                 move.l  #$F010F804,d3
-                tst.w   (SharedPatternRow0Long1).w
+                tst.w   (SharedScratchLong1).w
                 bne.s   Boss_MissirayConfigureAlternateFirstShotOffset
                 move.w  #$FFE0,d6
                 add.w   $14(a5),d6
@@ -333,7 +333,7 @@ Boss_MissiraySpawnFirstAndConfigureSecondShot:          ; CODE XREF: Boss_Missir
                 move.w  #$FFF4,d5
                 add.w   $10(a5),d5
                 move.l  #$F010FC08,d3
-                tst.w   (SharedPatternRow0Long1).w
+                tst.w   (SharedScratchLong1).w
                 bne.s   Boss_MissirayConfigureAlternateSecondShotOffset
                 move.w  #$FFE0,d6
                 add.w   $14(a5),d6

@@ -14,15 +14,15 @@ StageSharedTileArtSource0A:             binclude "data/artcomp/tiles_103124.bin"
 StageSharedTileArtSource0A_End:                         ; was: tiles_103124_End
 StageSharedTileArtSource0C:             binclude "data/artcomp/tiles_103A26.bin"  ; was: tiles_103A26
 StageSharedTileArtSource0C_End:                         ; was: tiles_103A26_End
-Stage10EnemyTileArt0:                   binclude "data/artcomp/tiles_104310.bin"  ; was: tiles_104310
-Stage10EnemyTileArt0_End:                               ; was: tiles_104310_End
-Stage10EnemyTileArt1:                   binclude "data/artcomp/tiles_104784.bin"  ; was: tiles_104784
-Stage10EnemyTileArt1_End:                               ; was: tiles_104784_End
+Stage10To12TileArt0:                    binclude "data/artcomp/tiles_104310.bin"  ; was: tiles_104310
+Stage10To12TileArt0_End:                                ; was: tiles_104310_End
+Stage10To12TileArt1:                    binclude "data/artcomp/tiles_104784.bin"  ; was: tiles_104784
+Stage10To12TileArt1_End:                                ; was: tiles_104784_End
 Stage15TileArt:                         binclude "data/artcomp/tiles_104B22.bin"  ; was: tiles_104B22
 Stage15TileArt2:                        binclude "data/artcomp/tiles_104F32.bin"  ; second archive at original ROM $104F32
 Stage15TileArt_End:                                     ; was: tiles_104B22_End
 Stage22And24TileArt:                    binclude "data/artcomp/tiles_105196.bin"  ; was: tiles_105196
-Stage22And24TileArt2:                   binclude "data/artcomp/tiles_105B9E.bin"  ; second archive at original ROM $105B9E
+Stage18WormTileArt:                     binclude "data/artcomp/tiles_105B9E.bin"  ; second archive at original ROM $105B9E
 Stage22And24TileArt_End:                                ; was: tiles_105196_End
 Boss_JetsripperTileArt:                 binclude "data/artcomp/tiles_1067C2.bin"  ; was: tiles_1067C2
 Boss_JetsripperTileArt_End:                             ; was: tiles_1067C2_End

@@ -212,7 +212,7 @@ Boss_FlyingNeoIntroDelayState:                          ; DATA XREF: ROM:0003C0A
 Boss_FlyingNeoUpdateIntroPose:                          ; CODE XREF: Boss_FlyingNeoWaitForPlayerSequenceState+4   j  ; was: loc_3C2A2
                                         ; Boss_FlyingNeoWaitForPlayerSequenceState+1E   j
                 bsr.w   Boss_FlyingNeoUpdateVerticalOscillation
-                lea     Boss_FlyingNeoNeutralPoseCommands(pc),a1
+                lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
@@ -435,7 +435,7 @@ Boss_FlyingNeoPlayerControlCheckLeft:                   ; CODE XREF: Boss_Flying
                 move.w  #0,$54(a5)
                 bsr.w   Boss_FlyingNeoApplyFacingGraphics
 Boss_FlyingNeoApplyPlayerControlPose:                   ; CODE XREF: Boss_FlyingNeoPlayerControlled+5A   j  ; was: loc_3C54E
-                lea     Boss_FlyingNeoNeutralPoseCommands(pc),a1
+                lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
@@ -469,7 +469,7 @@ Boss_FlyingNeoPursuitState:                             ; DATA XREF: ROM:0003C0C
                 rts
 ; ---------------------------------------------------------------------------
 Boss_FlyingNeoUpdatePursuitPose:                        ; CODE XREF: Boss_FlyingNeoPursuitState+18   j  ; was: loc_3C5AE
-                lea     Boss_FlyingNeoNeutralPoseCommands(pc),a1
+                lea     Boss_FlyingNeoNeutralPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites
@@ -624,7 +624,7 @@ Boss_FlyingNeoUpdateRightwardSwoop:                     ; CODE XREF: Boss_Flying
                 addi.l  #$4200,$18(a5)
 Boss_FlyingNeoUpdateSwoopPose:                          ; CODE XREF: Boss_FlyingNeoHorizontalSwoopState+20   j  ; was: loc_3C762
                                         ; Boss_FlyingNeoHorizontalSwoopState+2A   j
-                lea     Boss_FlyingNeoHorizontalSwoopPoseCommands(pc),a1
+                lea     Boss_FlyingNeoHorizontalSwoopPoses(pc),a1
                 nop
                 bsr.w   Boss_FlyingNeoUpdatePoseAnimation
                 bra.w   Boss_FlyingNeoUpdateSprites

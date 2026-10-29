@@ -69,7 +69,7 @@ Boss_AntroidDefeatFadeUpdateEffects:                    ; CODE XREF: Boss_Antroi
 ; Updates the ram-attack pose, debris, and alternating sprite flip
 Boss_AntroidUpdateRamAttackPose:                        ; CODE XREF: Boss_AntroidRamAttack+18   p  ; was: sub_37E2A
                 bsr.w   Boss_AntroidSpawnRamDebris
-                lea     Boss_AntroidRamPoseCommands(pc),a1
+                lea     Boss_AntroidRamPoses(pc),a1
                 nop
                 jsr     Boss_AntroidUpdatePoseAnimation(pc)  ; (pc)
                 nop

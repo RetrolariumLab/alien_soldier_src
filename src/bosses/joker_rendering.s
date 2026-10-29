@@ -234,7 +234,7 @@ Boss_JokerStartPoseInterpolation:                       ; CODE XREF: Boss_JokerU
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_JokerPoseTargets,d0
+                addi.l  #Boss_JokerPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_JokerCalculatePoseDeltas
                 moveq   #0,d0
@@ -247,12 +247,12 @@ Boss_JokerStartPoseInterpolation:                       ; CODE XREF: Boss_JokerU
                 bmi.s   Boss_JokerPublishPoseAngles
 Boss_JokerAdvancePoseInterpolation:                     ; CODE XREF: Boss_JokerUpdatePose+8   j  ; was: loc_3BD36
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #9,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_JokerPublishPoseAngles:                            ; CODE XREF: Boss_JokerUpdatePose+E   j  ; was: loc_3BD46
                                         ; Boss_JokerUpdatePose+80   j
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #1,d6
                 move.w  #$1FE,d7
                 move.b  (a0),d0
@@ -314,14 +314,14 @@ Boss_JokerPublishPoseAngles:                            ; CODE XREF: Boss_JokerU
 ; Calculates the ten channel deltas toward the selected pose target
 Boss_JokerCalculatePoseDeltas:                          ; CODE XREF: Boss_JokerUpdatePose+62   p  ; was: sub_3BDF4
                 movea.l #Boss_JokerNeutralPose,a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 moveq   #9,d7
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_JokerCalculatePoseDeltas
 ; Initializes the ten fixed-point pose channels from the source record in A0
 Boss_JokerInitializePoseChannels:
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1  ; was: sub_3BE0A
+                movea.w #(SharedScratchLong0-M68K_RAM),a1  ; was: sub_3BE0A
                 moveq   #9,d7
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_JokerInitializePoseChannels
@@ -401,27 +401,27 @@ Projectile_JokerDescendingShotEmitterUpdatePreShotJitter:  ; CODE XREF: Projecti
                 rts
 ; End of function Projectile_JokerDescendingShotEmitter
 ; ---------------------------------------------------------------------------
-Boss_JokerPhaseGatePoseCommands:    dc.w    $1818, 0, $814, $A, $1919, $A, $1818, 0, $814, $A, $1919, $A, $FFFF  ; was: word_3BF14
+Boss_JokerPhaseGatePoses:   dc.w    $1818, 0, $814, $A, $1919, $A, $1818, 0, $814, $A, $1919, $A, $FFFF  ; was: word_3BF14
                                         ; DATA XREF: Boss_JokerUpdatePhaseGatePose   o
-Boss_JokerInterruptWaitPoseCommands:    dc.w    $2020, $14, $2020, $1E, $FFFF  ; was: word_3BF2E
+Boss_JokerInterruptWaitPoses:   dc.w    $2020, $14, $2020, $1E, $FFFF  ; was: word_3BF2E
                                         ; DATA XREF: Boss_JokerBeginInterruptWaitState+1C   o
-Boss_JokerDiveAndJumpPreparationPoseCommands:   dc.w    $1018, $28, $2424, $28, $FFFE  ; was: word_3BF38
+Boss_JokerDiveAndJumpPreparationPoses:  dc.w    $1018, $28, $2424, $28, $FFFE  ; was: word_3BF38
                                         ; DATA XREF: Boss_JokerDivePrep+6   o
                                         ; Boss_JokerJumpPreparationState+E   o
-Boss_JokerDiveMotionPoseCommands:   dc.w    $E12, $32, $1C1C, $32, $FFFE  ; was: word_3BF42
+Boss_JokerDiveMotionPoses:  dc.w    $E12, $32, $1C1C, $32, $FFFE  ; was: word_3BF42
                                         ; DATA XREF: Boss_JokerDiveMotionState+1C   o
-Boss_JokerDiveDescentAndBouncePoseCommands: dc.w    $E38, $3C, $E0E, $3C, $FFFE  ; was: word_3BF4C
+Boss_JokerDiveDescentAndBouncePoses:    dc.w    $E38, $3C, $E0E, $3C, $FFFE  ; was: word_3BF4C
                                         ; DATA XREF: Boss_JokerDiveDescentState+A   o
                                         ; Boss_JokerBounceMotionState+1C   o
-Boss_JokerJumpAscentPoseCommands:               dc.w    $F0F, $32, $FFFE  ; DATA XREF: Boss_JokerJumpAscentState+20   o  ; was: word_3BF56
-Boss_JokerBodyHeightCompressionPoseCommands:    dc.w    $80C, $3C, $2424, $3C, $FFFE  ; was: word_3BF5C
+Boss_JokerJumpAscentPoses:              dc.w    $F0F, $32, $FFFE  ; DATA XREF: Boss_JokerJumpAscentState+20   o  ; was: word_3BF56
+Boss_JokerBodyHeightCompressionPoses:   dc.w    $80C, $3C, $2424, $3C, $FFFE  ; was: word_3BF5C
                                         ; DATA XREF: Boss_JokerJumpAscentState+7A   o
-Boss_JokerBodyHeightRecoveryPoseCommands:   dc.w    $6868, $32, $FFFE  ; DATA XREF: Boss_JokerJumpAscentState+A8   o  ; was: word_3BF66
-Boss_JokerStretchPoseCommands:              dc.w    $508, $28, $1616, $28, $810, $1E, $2020, $1E, $FFFE  ; was: word_3BF6C
+Boss_JokerBodyHeightRecoveryPoses:  dc.w    $6868, $32, $FFFE  ; DATA XREF: Boss_JokerJumpAscentState+A8   o  ; was: word_3BF66
+Boss_JokerStretchPoses:             dc.w    $508, $28, $1616, $28, $810, $1E, $2020, $1E, $FFFE  ; was: word_3BF6C
                                         ; DATA XREF: Boss_JokerStretchState+2A   o
-Boss_JokerDefeatFallPoseCommands:   dc.w    $E0E, $5A, $E0E, $64, $FFFF  ; was: word_3BF7E
+Boss_JokerDefeatFallPoses:  dc.w    $E0E, $5A, $E0E, $64, $FFFF  ; was: word_3BF7E
                                         ; DATA XREF: Boss_JokerUpdateDefeatDescent:Boss_JokerAnimateDefeatFall   o
-Boss_JokerPoseTargets:  dc.w    $40D8, $4028, $64F0, $301C, $10D0, $7000, $C060, $78FA  ; was: word_3BF88
+Boss_JokerPoseTable:    dc.w    $40D8, $4028, $64F0, $301C, $10D0, $7000, $C060, $78FA  ; was: word_3BF88
                                         ; DATA XREF: Boss_JokerUpdatePose+5A   o
                 dc.w    $3CF0, $68A8, $40F0, $4010, $9098, $58F0, $68A8, $80B0
                 dc.w    $50, $78B4, $5808, $4CA8, $9020, $F0E0, $A890, $48D8

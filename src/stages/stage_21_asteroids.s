@@ -13,12 +13,12 @@ Stage21_AsteroidFieldUpdateDirection:                   ; CODE XREF: Stage21_Ast
                 beq.s   Stage21_AsteroidFieldSelectAlternateSide
                 btst    #7,(AsteroidFieldVelocity).w
                 beq.s   Stage21_AsteroidFieldSelectAlternateSide
-                bclr    #0,(SharedPatternRow0Long4).w
+                bclr    #0,(SharedScratchLong4).w
                 bra.s   Stage21_AsteroidFieldSpawnAndDispatch
 ; ---------------------------------------------------------------------------
 Stage21_AsteroidFieldSelectAlternateSide:               ; CODE XREF: Stage21_AsteroidFieldControllerMain+1C   j  ; was: loc_330D4
                                         ; Stage21_AsteroidFieldControllerMain+24   j
-                bset    #0,(SharedPatternRow0Long4).w
+                bset    #0,(SharedScratchLong4).w
 Stage21_AsteroidFieldSpawnAndDispatch:                  ; CODE XREF: Stage21_AsteroidFieldControllerMain+2C   j  ; was: loc_330DA
                 bsr.w   Stage21_AsteroidFieldSpawnAmbientRock
                 move.w  4(a5),d0
@@ -46,7 +46,7 @@ Stage21_AsteroidFieldInit:                              ; DATA XREF: ROM:Stage21
 ; End of function Stage21_AsteroidFieldInit
 ; Waits for the negative V-scroll direction and a speed of at least four pixels
 Stage21_AsteroidFieldWaitForNegativeVScroll:            ; DATA XREF: ROM:000330EC   o  ; was: sub_33124
-                btst    #0,(SharedPatternRow0Long4).w
+                btst    #0,(SharedScratchLong4).w
                 bne.s   Stage21_AsteroidFieldWaitForNegativeVScroll_Return
                 cmpi.w  #$FFFC,(AsteroidVScrollSpeed).w
                 bgt.s   Stage21_AsteroidFieldWaitForNegativeVScroll_Return
@@ -339,7 +339,7 @@ Stage21_AsteroidFieldSpawnAmbientRock:                  ; CODE XREF: Stage21_Ast
                 andi.w  #7,d0
                 add.w   d0,d0
                 add.w   d0,d0
-                btst    #0,(SharedPatternRow0Long4).w
+                btst    #0,(SharedScratchLong4).w
                 bne.s   Stage21_AsteroidSelectAlternateAmbientPositions
                 lea     Stage21_AsteroidAmbientPositionTableA(pc),a1
                 nop

@@ -102,7 +102,7 @@ Boss_MadamBarbarSetupState:                             ; DATA XREF: ROM:0003A4E
                 jsr     (Tilemap_QueueIndexedRows).l
                 bsr.w   Boss_MadamBarbarApplyPartFlagArrangement
                 bsr.w   Boss_MadamBarbarUpdateWobble
-                lea     Boss_MadamBarbarPoseTargets(pc),a0
+                lea     Boss_MadamBarbarPoseTable(pc),a0
                 nop
                 bsr.w   Boss_MadamBarbarInitializePoseChannels
                 bra.s   Boss_MadamBarbarIntroApproachState
@@ -137,7 +137,7 @@ Boss_MadamBarbarIntroCompletionState:                   ; DATA XREF: ROM:0003A4E
                 jsr     (Sound_QueueBGMOrStop).l
 Boss_MadamBarbarUpdateIntroPose:                        ; CODE XREF: Boss_MadamBarbarIntroApproachState+40   j  ; was: loc_3A65C
                                         ; Boss_MadamBarbarWaitForPlayerSequence+8   j
-                lea     Boss_MadamBarbarIntroIdlePoseCommands(pc),a1
+                lea     Boss_MadamBarbarIntroIdlePoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bra.w   Boss_MadamBarbarUpdateParts
@@ -168,7 +168,7 @@ Boss_MadamBarbarBulletBarrageState:                     ; DATA XREF: ROM:0003A4E
                 move.w  #$30,$11C(a5)                   ; '0'
 Boss_MadamBarbarUpdateBulletBarrage:                    ; CODE XREF: Boss_MadamBarbarBulletBarrageState+8   j  ; was: loc_3A6BE
                 bsr.w   Boss_MadamBarbarSpawnBarrageParticle
-                lea     Boss_MadamBarbarBulletBarragePoseCommands(pc),a1
+                lea     Boss_MadamBarbarBulletBarragePoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bsr.w   Boss_MadamBarbarUpdateParts
@@ -228,7 +228,7 @@ Boss_MadamBarbarIdleProgressState:                      ; DATA XREF: ROM:0003A4F
 Boss_MadamBarbarUpdateIdleProgress:                     ; CODE XREF: Boss_MadamBarbarIdleProgressState+4   j  ; was: loc_3A75E
                 addi.w  #2,(BossCombatCounter).w
                 bsr.w   Boss_MadamBarbarSpawnAnimationEffect
-                lea     Boss_MadamBarbarIntroIdlePoseCommands(pc),a1
+                lea     Boss_MadamBarbarIntroIdlePoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bra.w   Boss_MadamBarbarUpdateParts
@@ -272,7 +272,7 @@ Boss_MadamBarbarSelectPlayerSidePose:                   ; CODE XREF: Boss_MadamB
                 bra.w   Boss_MadamBarbarBeginPlayerLeftSidePose
 ; ---------------------------------------------------------------------------
 Boss_MadamBarbarUpdateAttackSelectionPose:              ; CODE XREF: Boss_MadamBarbarSelectAttackState+4   j  ; was: loc_3A7DE
-                lea     Boss_MadamBarbarIntroIdlePoseCommands(pc),a1
+                lea     Boss_MadamBarbarIntroIdlePoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bra.w   Boss_MadamBarbarUpdateParts
@@ -297,7 +297,7 @@ Boss_MadamBarbarPlayerLeftSidePoseState:                ; DATA XREF: ROM:0003A4F
                 move.w  #3,$17E(a5)
 Boss_MadamBarbarUpdatePlayerLeftSidePose:               ; CODE XREF: Boss_MadamBarbarIntroApproachState+4   j  ; was: loc_3A830
                                         ; Boss_MadamBarbarIntroApproachState+14   j
-                lea     Boss_MadamBarbarPlayerLeftPoseCommands(pc),a1
+                lea     Boss_MadamBarbarPlayerLeftPoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bsr.w   Boss_MadamBarbarPlayRotationSound
@@ -333,7 +333,7 @@ Boss_MadamBarbarPlayerRightSidePoseState:               ; DATA XREF: ROM:0003A4F
                 bmi.w   Boss_MadamBarbarPrepareAIState
                 move.w  #3,$17E(a5)
 Boss_MadamBarbarUpdatePlayerRightSidePose:              ; CODE XREF: Boss_MadamBarbarSelectAttackState+EE   j  ; was: loc_3A8AC
-                lea     Boss_MadamBarbarPlayerRightPoseCommands(pc),a1
+                lea     Boss_MadamBarbarPlayerRightPoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bsr.w   Boss_MadamBarbarPlayRotationSound
@@ -410,7 +410,7 @@ Boss_MadamBarbarStoreCenterSpinAngles:                  ; CODE XREF: Boss_MadamB
                 andi.w  #$1FE,d2
                 move.w  d1,$1DC(a5)
                 move.w  d2,$1DE(a5)
-                lea     Boss_MadamBarbarCenterSpinPoseCommands(pc),a1
+                lea     Boss_MadamBarbarCenterSpinPoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bra.w   Boss_MadamBarbarApplyPartLayout
@@ -434,7 +434,7 @@ Boss_MadamBarbarDropProjectileState:                    ; DATA XREF: ROM:0003A4F
                 tst.w   $17E(a5)
                 bmi.w   Boss_MadamBarbarPrepareAIState
                 bsr.w   Boss_MadamBarbarSpawnDropProjectile
-                lea     Boss_MadamBarbarDropProjectilePoseCommands(pc),a1
+                lea     Boss_MadamBarbarDropProjectilePoses(pc),a1
                 nop
                 bsr.w   Boss_MadamBarbarUpdatePose
                 bra.w   *+4
@@ -651,7 +651,7 @@ Boss_MadamBarbarStartPoseInterpolation:                 ; CODE XREF: Boss_MadamB
                 andi.w  #$FF,d3
                 move.w  2(a1,d0.w),d0
                 ext.l   d0
-                addi.l  #Boss_MadamBarbarPoseTargets,d0
+                addi.l  #Boss_MadamBarbarPoseTable,d0
                 movea.l d0,a0
                 bsr.w   Boss_MadamBarbarCalculatePoseDeltas
                 move.b  (PoseDurationByte).w,d1
@@ -665,13 +665,13 @@ Boss_MadamBarbarStartPoseInterpolation:                 ; CODE XREF: Boss_MadamB
                 bmi.s   Boss_MadamBarbarPublishPoseAngles
 Boss_MadamBarbarAdvancePoseInterpolation:               ; CODE XREF: Boss_MadamBarbarUpdatePose+8   j  ; was: loc_3AC6A
                 subq.w  #1,$C(a5)
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$B,d7
                 jsr     (Anim_AdvancePoseChannelInterpolation).l
 Boss_MadamBarbarPublishPoseAngles:                      ; CODE XREF: Boss_MadamBarbarUpdatePose+E   j  ; was: loc_3AC7A
                                         ; Boss_MadamBarbarUpdatePose+84   j
                 move.w  #$1FE,d7
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 move.b  (a0),d0
                 asl.w   #1,d0
                 and.w   d7,d0
@@ -769,14 +769,14 @@ Boss_MadamBarbarPublishPoseAngles:                      ; CODE XREF: Boss_MadamB
 ; Calculates the 12 channel deltas toward the selected pose target
 Boss_MadamBarbarCalculatePoseDeltas:                    ; CODE XREF: Boss_MadamBarbarUpdatePose+62   p  ; was: sub_3AD8E
                 lea     (Boss_MadamBarbarNeutralPose).l,a1
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a2
+                movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)
                 moveq   #$B,d7
                 jmp     Anim_CalculatePoseChannelDeltas
 ; End of function Boss_MadamBarbarCalculatePoseDeltas
 ; Initializes the 12 fixed-point pose channels from the first target record
 Boss_MadamBarbarInitializePoseChannels:                 ; CODE XREF: Boss_MadamBarbarSetupState+D0   p  ; was: sub_3ADA4
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a1
+                movea.w #(SharedScratchLong0-M68K_RAM),a1
                 moveq   #$B,d7
                 jmp     Anim_InitializePoseChannelsFromBytes
 ; End of function Boss_MadamBarbarInitializePoseChannels

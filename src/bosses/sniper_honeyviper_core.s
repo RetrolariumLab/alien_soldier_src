@@ -89,7 +89,7 @@ Boss_SniperHoneyviperLoadInitialAssetsAfterBackgroundRows:  ; DATA XREF: ROM:000
                 movea.l #Boss_SniperHoneyviperInitialAssetDescriptors,a0
                 jsr     (Data_ProcessPointer).l
                 movem.l (sp)+,a5
-                movea.w #(SharedPatternRow0Long0-M68K_RAM),a0
+                movea.w #(SharedScratchLong0-M68K_RAM),a0
                 moveq   #$10,d0
                 jmp     Math_CalculateSineCosineTable
 ; ---------------------------------------------------------------------------
