@@ -648,7 +648,7 @@ their verified byte order rather than receiving invented codec meanings.
 | `ResultsTimeBonusBCD`     | `$FFFF822C` | Results preserves the masked stage time here and renders its four packed-BCD digits.                                                                                                         |
 | `StageNumberBCD`          | `$FFFF8232` | The stage-index conversion writes a packed-BCD stage number that the message renderer splits into two digits.                                                                                |
 | `ContactDamageCooldown`   | `$FFFF825D` | Hostile collision permits contact damage only after this signed byte expires; cutscene exit reloads `$30`.                                                                                   |
-| `SpecialTargetCount`      | `$FFFF829E` | Stage 12 initializes fifteen marked targets, defeat collision decrements only objects with flag bit six, the HUD renders the remaining count, and the Sharpssteel transition waits for zero. |
+| `SpecialTargetCount`      | `$FFFF829E` | Stage 12 initializes fifteen marked targets, defeat collision decrements only objects with flag bit six, the HUD renders the remaining count, and the Sharpsteel transition waits for zero. |
 | `StageAssetCommandBuffer` | `$FFFF82A0` | The stage loader expands compact commands into terminated eight-byte load records beginning here.                                                                                            |
 | `RasterLayoutOffset`      | `$FFFF8090` | VBlank uses this even word directly as the byte offset into `RasterBuffer_LayoutOffsets`; scene, boss, and transition initializers select the required copy layout.                          |
 | `AsteroidBoundaryFlag`    | `$FFFFA96A` | The asteroid-field updater clears it each step and sets it when the accumulated scroll crosses the tested `$100` boundary; the transition state waits for that event.                        |
@@ -820,7 +820,7 @@ repeats the resulting four-word group into `HorizontalScrollProfile`.
 | `FlyingNeoAngleTapBase`                                                                                              |                                                     `$FFFF9806` | Flying Neo starts eight stride-eight word reads here; each sample supplies a delayed angular step for one linked part before sine/cosine position lookup.                                                                                              |
 | `JetsripperAngleTapBase`                                                                                             |                                                     `$FFFF9808` | Jetsripper starts seventeen stride-eight word reads here; each delayed angle is combined with the segment phase before sine/cosine placement.                                                                                                          |
 | `SunsetStingWaveTable` / `SunsetStingWaveTableEnd`                                                                   |                                           `$FFFF9810-$FFFF99A0` | The wave generator writes 400 bytes backward from the exclusive end to the base; the following 25-row merge reads sixteen bytes per row across exactly the same range.                                                                                 |
-| `SharpssteelTargetTail`                                                                                              |                                                     `$FFFF960A` | The attack selector loads this sixth blade-target history word into its active target field.                                                                                                                                                           |
+| `SharpsteelTargetTail`                                                                                               |                                                     `$FFFF960A` | The attack selector loads this sixth blade-target history word into its active target field.                                                                                                                                                           |
 | `ResultsSummaryRowBuffer`                                                                                            |                                                     `$FFFF9852` | Results appends the three aggregate label/value rows from this exact workspace destination.                                                                                                                                                            |
 | `DestroyerMK2ScrollTable`                                                                                            |                                                     `$FFFF98B0` | Destroyer MK2 walks this word table while constructing its paired scroll-row effect.                                                                                                                                                                   |
 | `BossBackdropBandBufferA`                                                                                            |                                                     `$FFFF981E` | The transition builder fills 96 words with the current fixed-point backdrop displacement, repeating each of 24 samples four times.                                                                                                                     |
@@ -1242,7 +1242,7 @@ dormant family; Madam Barbar uses the structural word separately.
 | Symbol                    |     Address | Record | Static evidence                                                              |
 | ------------------------- | ----------: | -----: | ---------------------------------------------------------------------------- |
 | `ThirteenthEntityType`    | `$FFFFCAA0` |     13 | Flying Neo traverses ordinary linked-object fields from this record base.    |
-| `FourteenthEntityType`    | `$FFFFCB00` |     14 | Sharpssteel and linked-object code use this fixed record base.               |
+| `FourteenthEntityType`    | `$FFFFCB00` |     14 | Sharpsteel and linked-object code use this fixed record base.                |
 | `FourteenthEntityXPos`    | `$FFFFCB10` |     14 | Valkirie targeting reads the record's integer X coordinate.                  |
 | `FourteenthEntityYPos`    | `$FFFFCB14` |     14 | Valkirie targeting reads the record's integer Y coordinate.                  |
 | `FifteenthEntityType`     | `$FFFFCB60` |     15 | Bugmax and Antroid select this fixed object record.                          |
@@ -1302,14 +1302,14 @@ dormant family; Madam Barbar uses the structural word separately.
 | `Entity57State`          | `$FFFFDB24` |  `$04` | Even state index cleared by transitions and advanced by Stage 12 logic.            |
 | `Entity57XPos`           | `$FFFFDB30` |  `$10` | Signed 16.16 X position copied or compared by multiple owners.                     |
 | `Entity57YPos`           | `$FFFFDB34` |  `$14` | Signed 16.16 Y position and shared vertical reference.                             |
-| `Entity57XVel`           | `$FFFFDB38` |  `$18` | Signed 16.16 horizontal velocity used by Sharpssteel.                              |
-| `Entity57YVel`           | `$FFFFDB3C` |  `$1C` | Signed 16.16 vertical velocity used by Z-Leo and Sharpssteel.                      |
+| `Entity57XVel`           | `$FFFFDB38` |  `$18` | Signed 16.16 horizontal velocity used by Sharpsteel.                               |
+| `Entity57YVel`           | `$FFFFDB3C` |  `$1C` | Signed 16.16 vertical velocity used by Z-Leo and Sharpsteel.                       |
 | `Entity57Status`         | `$FFFFDB41` |  `$21` | Status byte cleared during record reconfiguration.                                 |
 | `Entity57CollisionFlags` | `$FFFFDB42` |  `$22` | Object collision flags; the rising-shot path sets bit six.                         |
 | `Entity57Work24`         | `$FFFFDB44` |  `$24` | Owner-dependent work word initialized by Stage 10-to-13 setup.                     |
 | `Entity57Work56`         | `$FFFFDB76` |  `$56` | Owner-dependent Medusa pose and movement gate byte.                                |
-| `Entity57Work58`         | `$FFFFDB78` |  `$58` | Owner-dependent Sharpssteel phase-control word.                                    |
-| `Entity57Work5A`         | `$FFFFDB7A` |  `$5A` | Owner-dependent Sharpssteel complex-phase flag byte.                               |
+| `Entity57Work58`         | `$FFFFDB78` |  `$58` | Owner-dependent Sharpsteel phase-control word.                                     |
+| `Entity57Work5A`         | `$FFFFDB7A` |  `$5A` | Owner-dependent Sharpsteel complex-phase flag byte.                                |
 
 ## Reviewed entity records 58–60
 
@@ -1318,11 +1318,11 @@ dormant family; Madam Barbar uses the structural word separately.
 | `Entity58Type`  | `$FFFFDB80` |      58/`$00` | Shared Valkirie, Z-Leo, transition, and arena-boundary record.                                                                         |
 | `Entity58YPos`  | `$FFFFDB94` |      58/`$14` | Integer Y coordinate of the companion created by the Stage 24 scene transition; the scene-object growth state also writes it directly. |
 | `Entity59Type`  | `$FFFFDBE0` |      59/`$00` | Shared transition and arena-boundary record type.                                                                                      |
-| `Entity59State` | `$FFFFDBE4` |      59/`$04` | Even object state advanced by Sharpssteel.                                                                                             |
-| `Entity59XPos`  | `$FFFFDBF0` |      59/`$10` | Integer X coordinate computed by Sharpssteel.                                                                                          |
-| `Entity59YPos`  | `$FFFFDBF4` |      59/`$14` | Integer Y coordinate computed by Sharpssteel.                                                                                          |
-| `Entity59XVel`  | `$FFFFDBF8` |      59/`$18` | Signed 16.16 horizontal velocity initialized by Sharpssteel.                                                                           |
-| `Entity59YVel`  | `$FFFFDBFC` |      59/`$1C` | Signed 16.16 vertical velocity initialized by Sharpssteel.                                                                             |
+| `Entity59State` | `$FFFFDBE4` |      59/`$04` | Even object state advanced by Sharpsteel.                                                                                              |
+| `Entity59XPos`  | `$FFFFDBF0` |      59/`$10` | Integer X coordinate computed by Sharpsteel.                                                                                           |
+| `Entity59YPos`  | `$FFFFDBF4` |      59/`$14` | Integer Y coordinate computed by Sharpsteel.                                                                                           |
+| `Entity59XVel`  | `$FFFFDBF8` |      59/`$18` | Signed 16.16 horizontal velocity initialized by Sharpsteel.                                                                            |
+| `Entity59YVel`  | `$FFFFDBFC` |      59/`$1C` | Signed 16.16 vertical velocity initialized by Sharpsteel.                                                                              |
 | `Entity60Type`  | `$FFFFDC40` |      60/`$00` | Shared Seven Forces and late-boss record type.                                                                                         |
 | `Entity60XPos`  | `$FFFFDC50` |      60/`$10` | Integer X coordinate checked during Wolf Garopa transition.                                                                            |
 | `Entity60XVel`  | `$FFFFDC58` |      60/`$18` | Signed 16.16 horizontal velocity consumed by Sylpheed.                                                                                 |
@@ -1502,7 +1502,7 @@ following contextual views:
 | `SevenForcesPattern`      | The debug path fills and queues 64 bytes of C-nibble pattern data before applying its parity-selected marker words.                           |
 | `JokerTileWordGroupA`     | Joker writes the first of two cycling tile-word groups here; the paired group starts at `$FFFF9610`.                                          |
 | `ZLeoTileScrollIndex`     | Z-Leo adjusts this even table index when camera Y crosses forward or reverse tile-stream thresholds.                                          |
-| `SharpssteelTargetTrail`  | Sharpssteel fills and shifts six blade-target samples and consumes the first or tail sample during blade motion.                              |
+| `SharpsteelTargetTrail`   | Sharpsteel fills and shifts six blade-target samples and consumes the first or tail sample during blade motion.                               |
 | `FlyCorridorTilemap`      | Stage 9 clears one selected column across 23 rows with a `$20`-byte row stride.                                                               |
 | `TileInterpSourceB`       | Ending and teleport setup pass this as the second source pattern to the tile interpolator.                                                    |
 

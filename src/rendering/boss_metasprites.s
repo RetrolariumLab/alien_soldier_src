@@ -426,8 +426,8 @@ Sprite_ApplyAnchorOffsetToLinkedPartsNextPart:          ; CODE XREF: Sprite_Appl
                 rts
 ; End of function Sprite_ApplyAnchorOffsetToLinkedParts
 ; Selects one of four directional frames and flip flags from combined angles
-Sprite_UpdateFourDirectionFrame:                        ; CODE XREF: Boss_SharpssteelUpdateCoreSpriteFrames+10   p  ; was: sub_34874
-                                        ; Boss_SharpssteelUpdateCoreSpriteFrames+20   j
+Sprite_UpdateFourDirectionFrame:                        ; CODE XREF: Boss_SharpsteelUpdateCoreSpriteFrames+10   p  ; was: sub_34874
+                                        ; Boss_SharpsteelUpdateCoreSpriteFrames+20   j
                 move.w  $56(a0),d0
                 add.w   $56(a5),d0
                 addi.w  #$20,d0                         ; ' '

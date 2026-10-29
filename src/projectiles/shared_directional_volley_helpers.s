@@ -2,7 +2,7 @@
 Projectile_SpawnFourDirectionalShots:
                 moveq   #8,d3                           ; was: sub_E288
 ; Alternate entry accepting the projectile subtype in D3
-Projectile_SpawnFourDirectionalShotsWithSubtypeInD3:    ; CODE XREF: Boss_SharpssteelDiveAttackState+32   p  ; was: loc_E28A
+Projectile_SpawnFourDirectionalShotsWithSubtypeInD3:    ; CODE XREF: Boss_SharpsteelDiveAttackState+32   p  ; was: loc_E28A
                 moveq   #0,d4
                 moveq   #3,d7
                 lea     Projectile_FourDirectionalShotVelocities(pc),a4

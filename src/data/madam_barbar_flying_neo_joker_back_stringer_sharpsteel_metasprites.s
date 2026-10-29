@@ -1,5 +1,5 @@
 ; Metasprite definitions for Madam Barbar, Flying Neo, Joker,
-; Back Stringer, and Sharpssteel
+; Back Stringer, and Sharpsteel
 ; Madam Barbar directional frames and metasprite definition
 Boss_MadamBarbarRotationFramesA:    dc.l    Boss_MadamBarbarRotationSetAFrame07  ; DATA XREF: ROM:00034E60   o  ; was: off_34DB6
                                         ; ROM:00034E78   o
@@ -282,40 +282,40 @@ Boss_BackStringerNeutralPose:   dc.w    $40C0, $80, $8080  ; DATA XREF: Anim_Bac
                 dc.w    $8080, $80, $8080
                 dc.w    $8080, $80, $8080
                 dc.w    $8080
-; Sharpssteel metasprite definition and neutral pose
+; Sharpsteel metasprite definition and neutral pose
 ; Tagged inline child records: three words copied to fields $E, $8, and $A
-Boss_SharpssteelInlineSpriteDescriptorA:    dc.w    $63F9, $A00, $F4F4  ; DATA XREF: ROM:00035238   o  ; was: word_35214
+Boss_SharpsteelInlineSpriteDescriptorA: dc.w    $63F9, $A00, $F4F4  ; DATA XREF: ROM:00035238   o  ; was: word_35214
                                         ; ROM:0003523C   o
-Boss_SharpssteelInlineSpriteDescriptorB:    dc.w    $6402, $500, $F8F8  ; DATA XREF: ROM:00035240   o  ; was: word_3521A
+Boss_SharpsteelInlineSpriteDescriptorB: dc.w    $6402, $500, $F8F8  ; DATA XREF: ROM:00035240   o  ; was: word_3521A
                                         ; ROM:00035250   o
-Boss_SharpssteelMetaspriteDescriptors:  dc.l    Boss_SharpssteelBladeGraphicsAMapping0+$400000  ; DATA XREF: Boss_SharpssteelInitializeState+E   o  ; was: off_35220
-                dc.l    Boss_SharpssteelBladeGraphicsAMapping1+$400000
-                dc.l    Boss_SharpssteelBladeGraphicsAMapping2+$400000
-                dc.l    Boss_SharpssteelBladeGraphicsAMapping3+$400000
-                dc.l    Boss_SharpssteelBladeGraphicsAMapping4+$400000
-                dc.l    Boss_SharpssteelBladeGraphicsAMapping5+$400000
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorA+1
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorA+1
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorB+1
-                dc.l    Boss_SharpssteelCoreDirectionalMapping0+$400000
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorA+1
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorA+1
-                dc.l    Boss_SharpssteelInlineSpriteDescriptorB+1
-                dc.l    Boss_SharpssteelCoreDirectionalMapping0+$400000
+Boss_SharpsteelMetaspriteDescriptors:   dc.l    Boss_SharpsteelBladeGraphicsAMapping0+$400000  ; DATA XREF: Boss_SharpsteelInitializeState+E   o  ; was: off_35220
+                dc.l    Boss_SharpsteelBladeGraphicsAMapping1+$400000
+                dc.l    Boss_SharpsteelBladeGraphicsAMapping2+$400000
+                dc.l    Boss_SharpsteelBladeGraphicsAMapping3+$400000
+                dc.l    Boss_SharpsteelBladeGraphicsAMapping4+$400000
+                dc.l    Boss_SharpsteelBladeGraphicsAMapping5+$400000
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorA+1
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorA+1
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorB+1
+                dc.l    Boss_SharpsteelCoreDirectionalMapping0+$400000
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorA+1
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorA+1
+                dc.l    Boss_SharpsteelInlineSpriteDescriptorB+1
+                dc.l    Boss_SharpsteelCoreDirectionalMapping0+$400000
                 dc.l    0
                 dc.l    0
                 dc.l    0
                 dc.l    0
-Boss_SharpssteelPartRadii:  dc.w    $809C, $A098, $9894  ; was: word_35268
-                                        ; DATA XREF: Boss_SharpssteelInitializeState+14   o
+Boss_SharpsteelPartRadii:   dc.w    $809C, $A098, $9894  ; was: word_35268
+                                        ; DATA XREF: Boss_SharpsteelInitializeState+14   o
                 dc.w    $9C90, $8E92, $9C90
                 dc.w    $8E92, $A0A0, $C0C0
-Boss_SharpssteelPartLinks:  dc.w    $8007, $8006, $8065  ; was: word_3527A
-                                        ; DATA XREF: Boss_SharpssteelInitializeState+1A   o
+Boss_SharpsteelPartLinks:   dc.w    $8007, $8006, $8065  ; was: word_3527A
+                                        ; DATA XREF: Boss_SharpsteelInitializeState+1A   o
                 dc.w    $8007, $8127, $8187
                 dc.w    $8066, $246, $2A6
                 dc.w    $8304, $8066, $3C6
                 dc.w    $426, $8484, $360
                 dc.w    $4E0, $360, $4E0
-Boss_SharpssteelNeutralPose:    dc.w    $8080, $8080, $8080, $8080  ; was: word_3529E
-                                        ; DATA XREF: Boss_SharpssteelInitializeBladePoseInterpolation   o
+Boss_SharpsteelNeutralPose: dc.w    $8080, $8080, $8080, $8080  ; was: word_3529E
+                                        ; DATA XREF: Boss_SharpsteelInitializeBladePoseInterpolation   o

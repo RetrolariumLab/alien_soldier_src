@@ -134,7 +134,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Projectile_ViblackMissileMain
                 dc.l    Boss_GustheadUpdateFourWayDebris
                 dc.l    Boss_JampanMain
-                dc.l    Boss_SharpssteelMain
+                dc.l    Boss_SharpsteelMain
                 dc.l    Boss_JampanRadialLinkedObjectMain
                 dc.l    Boss_JampanLinkedAnimationObjectMain
                 dc.l    Boss_JampanOrbitGroupControllerMain
@@ -216,7 +216,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Projectile_BackStringerChainFalling
                 dc.l    Projectile_SniperHoneyviperBouncingShot
                 dc.l    Projectile_BackStringerReboundShotMain
-                dc.l    Projectile_SharpssteelFallingShotMain
+                dc.l    Projectile_SharpsteelFallingShotMain
                 dc.l    Stage12_TeddyBearMain
                 dc.l    Enemy_ShipPatrolController
                 dc.l    Boss_ShieldViperBodyRecordMain
@@ -238,7 +238,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Stage21_AsteroidMain
                 dc.l    Enemy_FormationWaveMain
                 dc.l    Entity_DispatchStoredSubtype
-                dc.l    Effect_SharpssteelDefeatFragmentMain
+                dc.l    Effect_SharpsteelDefeatFragmentMain
                 dc.l    Entity_VictorSubtypeDispatcher
                 dc.l    Projectile_MissirayAndRisingShotMain
                 dc.l    Effect_RisingShotWaveControllerMain
@@ -260,7 +260,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Projectile_WolfGaropaOrbShot
                 dc.l    Boss_ZLeoStageScrollControlNoOp
                 dc.l    Stage24SceneObject_DispatchState
-                dc.l    Projectile_SharpssteelBladeShotMain
+                dc.l    Projectile_SharpsteelBladeShotMain
                 dc.l    Effect_WolfGaropaBoundaryMain
                 dc.l    Stage23_UpdateWolfGaropaArenaBoundary
                 dc.l    Effect_WolfGaropaBoundaryFollowerMain

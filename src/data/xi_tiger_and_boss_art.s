@@ -20,8 +20,8 @@ Boss_SunsetStingTileArt:    binclude "data/artcomp/tiles_11D002.bin"  ; was: til
 Boss_SunsetStingTileArt_End:                            ; was: tiles_11D002_End
 Boss_GustheadTileArt:       binclude "data/artcomp/tiles_11E5E0.bin"  ; was: tiles_11E5E0
 Boss_GustheadTileArt_End:                               ; was: tiles_11E5E0_End
-Boss_SharpssteelTileArt:    binclude "data/artcomp/tiles_11F310.bin"  ; was: tiles_11F310
-Boss_SharpssteelTileArt_End:                            ; was: tiles_11F310_End
+Boss_SharpsteelTileArt:     binclude "data/artcomp/tiles_11F310.bin"  ; was: tiles_11F310
+Boss_SharpsteelTileArt_End:                             ; was: tiles_11F310_End
 TeleportTileArt:            binclude "data/artcomp/tiles_120E1C.bin"  ; was: tiles_120E1C
 TeleportTileArt_End:                                    ; was: tiles_120E1C_End
 Boss_VictorTileArt:         binclude "data/artcomp/tiles_120FF8.bin"  ; was: tiles_120FF8

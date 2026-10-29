@@ -30,7 +30,7 @@ Enemy_ApplyBouncingObjectGravity:                       ; CODE XREF: Enemy_Updat
                 bmi.s   Enemy_UpdateBouncingObjectReturn
                 clr.l   $18(a5)
                 move.l  #$FFFC0000,$1C(a5)
-Projectile_ConvertCurrentToSharedEffect:                ; CODE XREF: Projectile_SharpssteelFallingShotMain+C0   p  ; was: loc_3F182
+Projectile_ConvertCurrentToSharedEffect:                ; CODE XREF: Projectile_SharpsteelFallingShotMain+C0   p  ; was: loc_3F182
                 move.l  #SharedProjectileDuration4Animation,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 move.w  #$4000,$E(a5)

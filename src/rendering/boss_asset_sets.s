@@ -129,13 +129,13 @@ Boss_GustheadGraphicsLoadList:  dc.w    7               ; field_0  ; was: stru_1
                 dc.l    Boss_GustheadTileArt            ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    $FFFF
-Boss_SharpssteelAssetSet:   dc.w    $21C                ; field_0  ; was: stru_11468
-                                        ; DATA XREF: Stage12_InitializeSharpssteelEncounter   o
-                dc.l    Boss_SharpssteelGraphicsLoadList  ; field_2
-                dc.l    Boss_SharpssteelPaletteCommand  ; field_6
-Boss_SharpssteelGraphicsLoadList:   dc.w    7           ; field_0  ; was: stru_11472
-                                        ; DATA XREF: ROM:Boss_SharpssteelAssetSet   o
-                dc.l    Boss_SharpssteelTileArt         ; field_2
+Boss_SharpsteelAssetSet:    dc.w    $21C                ; field_0  ; was: stru_11468
+                                        ; DATA XREF: Stage12_InitializeSharpsteelEncounter   o
+                dc.l    Boss_SharpsteelGraphicsLoadList  ; field_2
+                dc.l    Boss_SharpsteelPaletteCommand   ; field_6
+Boss_SharpsteelGraphicsLoadList:    dc.w    7           ; field_0  ; was: stru_11472
+                                        ; DATA XREF: ROM:Boss_SharpsteelAssetSet   o
+                dc.l    Boss_SharpsteelTileArt          ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    $FFFF
 Boss_BugmaxAssetSet:    dc.w    $300                    ; field_0  ; was: stru_1147C

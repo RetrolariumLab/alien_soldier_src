@@ -1,27 +1,27 @@
-; Sharpssteel falling shots, defeat fragments, and blade shots
+; Sharpsteel falling shots, defeat fragments, and blade shots
 ; Emits two groups totalling ten type-$364 falling shots
-Boss_SharpssteelSpawnTenFallingShots:                   ; CODE XREF: Boss_SharpssteelPostDiveDelayState+76   p  ; was: sub_48DA0
+Boss_SharpsteelSpawnTenFallingShots:                    ; CODE XREF: Boss_SharpsteelPostDiveDelayState+76   p  ; was: sub_48DA0
                 lea     (Math_SineTable).l,a4
                 moveq   #0,d5
                 moveq   #0,d6
                 moveq   #$12,d4
                 moveq   #5,d7
-                bsr.s   Projectile_SharpssteelEmitFallingShotLoop
+                bsr.s   Projectile_SharpsteelEmitFallingShotLoop
                 moveq   #$10,d4
                 moveq   #3,d7
-; End of function Boss_SharpssteelSpawnTenFallingShots
+; End of function Boss_SharpsteelSpawnTenFallingShots
 ; Emits one configured group using sine-derived velocities and fixed spawn offsets
-Projectile_SharpssteelEmitFallingShotLoop:              ; CODE XREF: Boss_SharpssteelSpawnTenFallingShots+E   p  ; was: sub_48DB4
-                                        ; Projectile_SharpssteelEmitFallingShotLoop+70   j
+Projectile_SharpsteelEmitFallingShotLoop:               ; CODE XREF: Boss_SharpsteelSpawnTenFallingShots+E   p  ; was: sub_48DB4
+                                        ; Projectile_SharpsteelEmitFallingShotLoop+70   j
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Projectile_SharpssteelEmitFallingShotReturn
+                bne.s   Projectile_SharpsteelEmitFallingShotReturn
                 move.w  #$364,(a0)
                 move.w  #$EC00,2(a0)
                 move.w  #0,$E(a0)
                 move.l  #SharedFloaterDebrisProjectileAlternating5And4Animation,8(a0)
                 move.b  #$20,$20(a0)                    ; ' '
                 moveq   #0,d0
-                move.b  Projectile_SharpssteelFallingShotAngleIndices(pc,d5.w),d0
+                move.b  Projectile_SharpsteelFallingShotAngleIndices(pc,d5.w),d0
                 asl.w   #1,d0
                 move.w  -$80(a4,d0.w),d1
                 move.w  (a4,d0.w),d2
@@ -32,40 +32,40 @@ Projectile_SharpssteelEmitFallingShotLoop:              ; CODE XREF: Boss_Sharps
                 move.l  d1,$1C(a0)
                 asr.l   #1,d2
                 move.l  d2,$18(a0)
-                move.b  Projectile_SharpssteelFallingShotSpawnOffsets(pc,d6.w),d0
+                move.b  Projectile_SharpsteelFallingShotSpawnOffsets(pc,d6.w),d0
                 ext.w   d0
-                bpl.s   Projectile_SharpssteelSetFallingShotSpawnPosition
+                bpl.s   Projectile_SharpsteelSetFallingShotSpawnPosition
                 ori.w   #$800,$E(a0)
-Projectile_SharpssteelSetFallingShotSpawnPosition:      ; CODE XREF: Projectile_SharpssteelEmitFallingShotLoop+4E   j
+Projectile_SharpsteelSetFallingShotSpawnPosition:       ; CODE XREF: Projectile_SharpsteelEmitFallingShotLoop+4E   j
                 addi.w  #$120,d0
                 move.w  d0,$10(a0)
-                move.b  Projectile_SharpssteelFallingShotSpawnOffsets+1(pc,d6.w),d0
+                move.b  Projectile_SharpsteelFallingShotSpawnOffsets+1(pc,d6.w),d0
                 ext.w   d0
                 addi.w  #$160,d0
                 move.w  d0,$14(a0)
                 addq.w  #1,d5
                 addq.w  #2,d6
-                dbf     d7,Projectile_SharpssteelEmitFallingShotLoop
-Projectile_SharpssteelEmitFallingShotReturn:            ; CODE XREF: Projectile_SharpssteelEmitFallingShotLoop+6   j
+                dbf     d7,Projectile_SharpsteelEmitFallingShotLoop
+Projectile_SharpsteelEmitFallingShotReturn:             ; CODE XREF: Projectile_SharpsteelEmitFallingShotLoop+6   j
                 rts
-; End of function Projectile_SharpssteelEmitFallingShotLoop
+; End of function Projectile_SharpsteelEmitFallingShotLoop
 ; ---------------------------------------------------------------------------
-Projectile_SharpssteelFallingShotAngleIndices:  dc.b    $B4, $B8, $BC, $C4, $C8, $CC, $B6, $BA, $C6, $CA
-                                        ; DATA XREF: Projectile_SharpssteelEmitFallingShotLoop+28   r
-Projectile_SharpssteelFallingShotSpawnOffsets:  dc.b    $D0, 0, $E0, $F8, $F0, $F0, $10, $F0, $20, $F8
-                                        ; DATA XREF: Projectile_SharpssteelEmitFallingShotLoop+48   r
-                                        ; Projectile_SharpssteelEmitFallingShotLoop+5E   r
+Projectile_SharpsteelFallingShotAngleIndices:   dc.b    $B4, $B8, $BC, $C4, $C8, $CC, $B6, $BA, $C6, $CA
+                                        ; DATA XREF: Projectile_SharpsteelEmitFallingShotLoop+28   r
+Projectile_SharpsteelFallingShotSpawnOffsets:   dc.b    $D0, 0, $E0, $F8, $F0, $F0, $10, $F0, $20, $F8
+                                        ; DATA XREF: Projectile_SharpsteelEmitFallingShotLoop+48   r
+                                        ; Projectile_SharpsteelEmitFallingShotLoop+5E   r
                 dc.b    $30, 0, $C0, $24, $D0, $20, $30, $20, $40, $24
 
-; Type-$364 Sharpssteel shot: rises, arms while falling, and handles hits or bounds
-Projectile_SharpssteelFallingShotMain:                  ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_48E48
+; Type-$364 Sharpsteel shot: rises, arms while falling, and handles hits or bounds
+Projectile_SharpsteelFallingShotMain:                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_48E48
                 tst.w   (StageSpawnCountdown).w
-                bpl.w   Projectile_SharpssteelConvertFallingShotToDebris
+                bpl.w   Projectile_SharpsteelConvertFallingShotToDebris
                 addi.l  #$B00,$1C(a5)
                 tst.w   4(a5)
-                bne.s   Projectile_SharpssteelHandleFallingShotCollision
+                bne.s   Projectile_SharpsteelHandleFallingShotCollision
                 tst.w   $1C(a5)
-                bmi.s   Projectile_SharpssteelFallingShotReturn
+                bmi.s   Projectile_SharpsteelFallingShotReturn
                 addq.w  #2,4(a5)
                 bset    #4,$E(a5)
                 bset    #7,$E(a5)
@@ -74,38 +74,38 @@ Projectile_SharpssteelFallingShotMain:                  ; DATA XREF: ROM:Entity_
                 move.w  #$64,$26(a5)                    ; 'd'
                 move.l  #$F60AF60A,$28(a5)
                 move.l  #$FC04FC04,$2C(a5)
-Projectile_SharpssteelFallingShotReturn:                ; CODE XREF: Projectile_SharpssteelFallingShotMain+1A   j
-                                        ; Projectile_SharpssteelFallingShotMain+D4   j
+Projectile_SharpsteelFallingShotReturn:                 ; CODE XREF: Projectile_SharpsteelFallingShotMain+1A   j
+                                        ; Projectile_SharpsteelFallingShotMain+D4   j
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SharpssteelHandleFallingShotCollision:       ; CODE XREF: Projectile_SharpssteelFallingShotMain+14   j
+Projectile_SharpsteelHandleFallingShotCollision:        ; CODE XREF: Projectile_SharpsteelFallingShotMain+14   j
                 bclr    #7,$22(a5)
-                beq.s   Projectile_SharpssteelCheckFallingShotDurability
+                beq.s   Projectile_SharpsteelCheckFallingShotDurability
                 bclr    #4,$22(a5)
-                beq.s   Projectile_SharpssteelConvertFallingShotToDebris
-                bra.s   Projectile_SharpssteelSpawnPickupFromFallingShot
+                beq.s   Projectile_SharpsteelConvertFallingShotToDebris
+                bra.s   Projectile_SharpsteelSpawnPickupFromFallingShot
 ; ---------------------------------------------------------------------------
-Projectile_SharpssteelCheckFallingShotDurability:       ; CODE XREF: Projectile_SharpssteelFallingShotMain+56   j
+Projectile_SharpsteelCheckFallingShotDurability:        ; CODE XREF: Projectile_SharpsteelFallingShotMain+56   j
                 tst.w   $24(a5)
-                bpl.s   Projectile_SharpssteelHandleFallingShotLowerBoundary
-Projectile_SharpssteelSpawnPickupFromFallingShot:       ; CODE XREF: Projectile_SharpssteelFallingShotMain+60   j
+                bpl.s   Projectile_SharpsteelHandleFallingShotLowerBoundary
+Projectile_SharpsteelSpawnPickupFromFallingShot:        ; CODE XREF: Projectile_SharpsteelFallingShotMain+60   j
                 jsr     (Projectile_FindFreeSlotForward).l
-                bne.s   Projectile_SharpssteelConvertFallingShotToDebris
+                bne.s   Projectile_SharpsteelConvertFallingShotToDebris
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 moveq   #$15,d0
                 jsr     (Pickup_SelectRandomSize).l
                 move.w  #$E440,2(a0)
                 move.l  #$2000,$1C(a0)
-Projectile_SharpssteelConvertFallingShotToDebris:       ; CODE XREF: Projectile_SharpssteelFallingShotMain+4   j
-                                        ; Projectile_SharpssteelFallingShotMain+5E   j
+Projectile_SharpsteelConvertFallingShotToDebris:        ; CODE XREF: Projectile_SharpsteelFallingShotMain+4   j
+                                        ; Projectile_SharpsteelFallingShotMain+5E   j
                 clr.l   $1C(a5)
                 move.l  #SharedCombatSpriteAnimation03,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_SharpssteelHandleFallingShotLowerBoundary:   ; CODE XREF: Projectile_SharpssteelFallingShotMain+66   j
+Projectile_SharpsteelHandleFallingShotLowerBoundary:    ; CODE XREF: Projectile_SharpsteelFallingShotMain+66   j
                 cmpi.w  #$150,$14(a5)
-                bmi.s   Projectile_SharpssteelCheckFallingShotDeflectionRegion
+                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionRegion
                 move.w  $E(a5),d0
                 andi.w  #$8000,d0
                 movem.l d0,-(sp)
@@ -115,32 +115,32 @@ Projectile_SharpssteelHandleFallingShotLowerBoundary:   ; CODE XREF: Projectile_
                 or.w    d0,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SharpssteelCheckFallingShotDeflectionRegion:  ; CODE XREF: Projectile_SharpssteelFallingShotMain+AA   j
+Projectile_SharpsteelCheckFallingShotDeflectionRegion:  ; CODE XREF: Projectile_SharpsteelFallingShotMain+AA   j
                 tst.w   $48(a5)
-                bne.w   Projectile_SharpssteelFallingShotReturn
+                bne.w   Projectile_SharpsteelFallingShotReturn
                 movea.w #(Entity57Type-M68K_RAM),a0
                 move.w  $10(a0),d0
                 cmp.w   $10(a5),d0
-                bpl.s   Projectile_SharpssteelCheckFallingShotDeflectionReturn
+                bpl.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
                 addi.w  #$F0,d0
                 cmp.w   $10(a5),d0
-                bmi.s   Projectile_SharpssteelCheckFallingShotDeflectionReturn
+                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
                 move.w  $14(a0),d0
                 subi.w  #$A,d0
                 cmp.w   $14(a5),d0
-                bpl.s   Projectile_SharpssteelCheckFallingShotDeflectionReturn
+                bpl.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
                 addi.w  #$10,d0
                 cmp.w   $14(a5),d0
-                bmi.s   Projectile_SharpssteelCheckFallingShotDeflectionReturn
+                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
                 addq.w  #1,$48(a5)
                 bclr    #4,$E(a5)
                 move.w  #$FFFE,$1C(a5)
-Projectile_SharpssteelCheckFallingShotDeflectionReturn:  ; CODE XREF: Projectile_SharpssteelFallingShotMain+E4   j
-                                        ; Projectile_SharpssteelFallingShotMain+EE   j
+Projectile_SharpsteelCheckFallingShotDeflectionReturn:  ; CODE XREF: Projectile_SharpsteelFallingShotMain+E4   j
+                                        ; Projectile_SharpsteelFallingShotMain+EE   j
                 rts
-; End of function Projectile_SharpssteelFallingShotMain
+; End of function Projectile_SharpsteelFallingShotMain
 ; Starts defeat presentation and initializes fourteen embedded type-$3BC fragments
-Boss_SharpssteelBeginDefeatFragmentBurst:               ; CODE XREF: Boss_SharpssteelMain+22   j  ; was: sub_48F62
+Boss_SharpsteelBeginDefeatFragmentBurst:                ; CODE XREF: Boss_SharpsteelMain+22   j  ; was: sub_48F62
                 move.b  #1,(SoundFadeOutDelay).w
                 clr.w   8(a5)
                 bset    #0,(StageTimerPauseFlag).w
@@ -154,7 +154,7 @@ Boss_SharpssteelBeginDefeatFragmentBurst:               ; CODE XREF: Boss_Sharps
                 moveq   #0,d5
                 moveq   #0,d6
                 moveq   #$D,d7
-Boss_SharpssteelInitializeDefeatFragmentLoop:           ; CODE XREF: Boss_SharpssteelBeginDefeatFragmentBurst+98   j
+Boss_SharpsteelInitializeDefeatFragmentLoop:            ; CODE XREF: Boss_SharpsteelBeginDefeatFragmentBurst+98   j
                 movem.l d6-d7/a0,-(sp)
                 jsr     (RandomNumber).l
                 movem.l (sp)+,d6-d7/a0
@@ -174,37 +174,37 @@ Boss_SharpssteelInitializeDefeatFragmentLoop:           ; CODE XREF: Boss_Sharps
                 andi.w  #$F,d0
                 addq.w  #1,d6
                 btst    #0,d6
-                bne.s   Boss_SharpssteelApplyDefeatFragmentVerticalVelocity
+                bne.s   Boss_SharpsteelApplyDefeatFragmentVerticalVelocity
                 neg.w   d0
-Boss_SharpssteelApplyDefeatFragmentVerticalVelocity:    ; CODE XREF: Boss_SharpssteelBeginDefeatFragmentBurst+8A   j
+Boss_SharpsteelApplyDefeatFragmentVerticalVelocity:     ; CODE XREF: Boss_SharpsteelBeginDefeatFragmentBurst+8A   j
                 swap    d0
                 asr.l   #2,d0
                 move.l  d0,$1C(a0)
                 addq.w  #1,d5
-                dbf     d7,Boss_SharpssteelInitializeDefeatFragmentLoop
+                dbf     d7,Boss_SharpsteelInitializeDefeatFragmentLoop
                 rts
-; End of function Boss_SharpssteelBeginDefeatFragmentBurst
+; End of function Boss_SharpsteelBeginDefeatFragmentBurst
 ; Type-$3BC defeat fragment: flashes, emits debris, and curves as X velocity changes
-Effect_SharpssteelDefeatFragmentMain:                   ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_49000
+Effect_SharpsteelDefeatFragmentMain:                    ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_49000
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #2,(PlaneBShakeLevel).w
                 addq.w  #1,$48(a5)
                 move.w  $48(a5),d0
                 bset    #7,2(a5)
                 btst    #0,d0
-                beq.s   Effect_SharpssteelApplyDefeatFragmentFlashPhase
+                beq.s   Effect_SharpsteelApplyDefeatFragmentFlashPhase
                 bclr    #7,2(a5)
-Effect_SharpssteelApplyDefeatFragmentFlashPhase:        ; CODE XREF: Effect_SharpssteelDefeatFragmentMain+1E   j
+Effect_SharpsteelApplyDefeatFragmentFlashPhase:         ; CODE XREF: Effect_SharpsteelDefeatFragmentMain+1E   j
                 andi.w  #7,d0
-                bne.s   Effect_SharpssteelUpdateDefeatFragmentVelocity
+                bne.s   Effect_SharpsteelUpdateDefeatFragmentVelocity
                 move.w  (FrameCounter).w,d0
                 andi.w  #$F,d0
-                bne.s   Effect_SharpssteelTryEmitDefeatFragmentDebris
+                bne.s   Effect_SharpsteelTryEmitDefeatFragmentDebris
                 move.b  #$BC,d0
                 jsr     (Sound_QueueSFXRequest).l
-Effect_SharpssteelTryEmitDefeatFragmentDebris:          ; CODE XREF: Effect_SharpssteelDefeatFragmentMain+34   j
+Effect_SharpsteelTryEmitDefeatFragmentDebris:           ; CODE XREF: Effect_SharpsteelDefeatFragmentMain+34   j
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Effect_SharpssteelUpdateDefeatFragmentVelocity
+                bne.s   Effect_SharpsteelUpdateDefeatFragmentVelocity
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.l  $18(a5),d0
@@ -213,32 +213,32 @@ Effect_SharpssteelTryEmitDefeatFragmentDebris:          ; CODE XREF: Effect_Shar
                 move.l  d0,$18(a0)
                 move.l  #SharedCombatSpriteAnimation05,8(a0)
                 jsr     (Projectile_InitType88).l
-Effect_SharpssteelUpdateDefeatFragmentVelocity:         ; CODE XREF: Effect_SharpssteelDefeatFragmentMain+2A   j
-                                        ; Effect_SharpssteelDefeatFragmentMain+46   j
+Effect_SharpsteelUpdateDefeatFragmentVelocity:          ; CODE XREF: Effect_SharpsteelDefeatFragmentMain+2A   j
+                                        ; Effect_SharpsteelDefeatFragmentMain+46   j
                 subi.l  #$4000,$18(a5)
                 tst.w   $18(a5)
-                bpl.s   Effect_SharpssteelAccelerateDefeatFragmentUpward
+                bpl.s   Effect_SharpsteelAccelerateDefeatFragmentUpward
                 addi.l  #$1000,$1C(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_SharpssteelAccelerateDefeatFragmentUpward:       ; CODE XREF: Effect_SharpssteelDefeatFragmentMain+7A   j
+Effect_SharpsteelAccelerateDefeatFragmentUpward:        ; CODE XREF: Effect_SharpsteelDefeatFragmentMain+7A   j
                 subi.l  #$1000,$1C(a5)
                 rts
-; End of function Effect_SharpssteelDefeatFragmentMain
-; Emits six type-$414 shots from Sharpssteel's final blade part
-Boss_SharpssteelSpawnSixBladeShots:                     ; CODE XREF: Boss_SharpssteelWaitForComplexAlignmentState+D2   p  ; was: sub_49090
+; End of function Effect_SharpsteelDefeatFragmentMain
+; Emits six type-$414 shots from Sharpsteel's final blade part
+Boss_SharpsteelSpawnSixBladeShots:                      ; CODE XREF: Boss_SharpsteelWaitForComplexAlignmentState+D2   p  ; was: sub_49090
                 move.l  #$FFFA0000,d6
                 moveq   #5,d7
-Boss_SharpssteelSpawnSixBladeShotsLoop:                 ; CODE XREF: Boss_SharpssteelSpawnSixBladeShots+10   j
-                bsr.s   Projectile_SharpssteelInitializeBladeShot
+Boss_SharpsteelSpawnSixBladeShotsLoop:                  ; CODE XREF: Boss_SharpsteelSpawnSixBladeShots+10   j
+                bsr.s   Projectile_SharpsteelInitializeBladeShot
                 addi.l  #$8000,d6
-                dbf     d7,Boss_SharpssteelSpawnSixBladeShotsLoop
+                dbf     d7,Boss_SharpsteelSpawnSixBladeShotsLoop
                 rts
-; End of function Boss_SharpssteelSpawnSixBladeShots
+; End of function Boss_SharpsteelSpawnSixBladeShots
 ; Initializes one blade shot with the caller-provided vertical velocity
-Projectile_SharpssteelInitializeBladeShot:              ; CODE XREF: Boss_SharpssteelSpawnSixBladeShots:Boss_SharpssteelSpawnSixBladeShotsLoop   p  ; was: sub_490A6
+Projectile_SharpsteelInitializeBladeShot:               ; CODE XREF: Boss_SharpsteelSpawnSixBladeShots:Boss_SharpsteelSpawnSixBladeShotsLoop   p  ; was: sub_490A6
                 jsr     (Projectile_FindFreeSlotForward).l
-                bne.s   Projectile_SharpssteelInitializeBladeShotReturn
+                bne.s   Projectile_SharpsteelInitializeBladeShotReturn
                 move.w  #$414,(a0)
                 move.w  #$C480,2(a0)
                 move.b  #0,$20(a0)
@@ -253,24 +253,24 @@ Projectile_SharpssteelInitializeBladeShot:              ; CODE XREF: Boss_Sharps
                 move.w  d7,$48(a0)
                 andi.w  #1,$48(a0)
                 move.w  #$F,$4A(a0)
-Projectile_SharpssteelInitializeBladeShotReturn:        ; CODE XREF: Projectile_SharpssteelInitializeBladeShot+6   j
+Projectile_SharpsteelInitializeBladeShotReturn:         ; CODE XREF: Projectile_SharpsteelInitializeBladeShot+6   j
                 rts
-; End of function Projectile_SharpssteelInitializeBladeShot
+; End of function Projectile_SharpsteelInitializeBladeShot
 ; Type-$414 blade shot: flashes for its configured lifetime, then removes itself
-Projectile_SharpssteelBladeShotMain:                    ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_49100
+Projectile_SharpsteelBladeShotMain:                     ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_49100
                 tst.w   (StageSpawnCountdown).w
-                bpl.s   Projectile_SharpssteelMarkBladeShotForRemoval
+                bpl.s   Projectile_SharpsteelMarkBladeShotForRemoval
                 bset    #7,2(a5)
                 move.w  $4A(a5),d0
                 andi.w  #1,d0
                 cmp.w   $48(a5),d0
-                beq.s   Projectile_SharpssteelTickBladeShotLifetime
+                beq.s   Projectile_SharpsteelTickBladeShotLifetime
                 bclr    #7,2(a5)
-Projectile_SharpssteelTickBladeShotLifetime:            ; CODE XREF: Projectile_SharpssteelBladeShotMain+18   j
+Projectile_SharpsteelTickBladeShotLifetime:             ; CODE XREF: Projectile_SharpsteelBladeShotMain+18   j
                 subq.w  #1,$4A(a5)
-                bpl.s   Projectile_SharpssteelBladeShotReturn
-Projectile_SharpssteelMarkBladeShotForRemoval:          ; CODE XREF: Projectile_SharpssteelBladeShotMain+4   j
+                bpl.s   Projectile_SharpsteelBladeShotReturn
+Projectile_SharpsteelMarkBladeShotForRemoval:           ; CODE XREF: Projectile_SharpsteelBladeShotMain+4   j
                 bset    #4,2(a5)
-Projectile_SharpssteelBladeShotReturn:                  ; CODE XREF: Projectile_SharpssteelBladeShotMain+24   j
+Projectile_SharpsteelBladeShotReturn:                   ; CODE XREF: Projectile_SharpsteelBladeShotMain+24   j
                 rts
-; End of function Projectile_SharpssteelBladeShotMain
+; End of function Projectile_SharpsteelBladeShotMain

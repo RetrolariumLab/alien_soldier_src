@@ -8,7 +8,7 @@ SharedProjectileSpriteMappingC: dc.w    $E912, $A00, $F4F4  ; DATA XREF: ROM:001
                                         ; ROM:001A0E9E   o
 SharedProjectileSpriteMappingD: dc.w    $E91B, $A00, $F4F4  ; DATA XREF: ROM:001A0E92   o  ; was: word_1A0CB8
                                         ; ROM:001A0EA2   o
-; Mappings shared by the Stage 12 floater, Gusthead debris, and a Sharpssteel projectile
+; Mappings shared by the Stage 12 floater, Gusthead debris, and a Sharpsteel projectile
 
 SharedFloaterDebrisProjectileSpriteMappingA:    dc.w    $C950, $B00, $F0F4  ; DATA XREF: ROM:SharedFloaterDebrisProjectileAlternating5And4Animation   o  ; was: word_1A0CBE
                                         ; ROM:001A0F22   o

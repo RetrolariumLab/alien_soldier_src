@@ -39,11 +39,11 @@ Stage_MidgameStateHandlerOffsets:
                 dc.w    Stage12_InitializeScroll-Stage10_Initialize
                 dc.w    Stage12_UpdateScrollToExit-Stage10_Initialize
                 dc.w    Stage12_UpdateScrollToExitTiles-Stage10_Initialize
-                dc.w    Stage12_UpdateScrollToSharpssteel-Stage10_Initialize
-                dc.w    Stage12_InitializeSharpssteelArena-Stage10_Initialize
+                dc.w    Stage12_UpdateScrollToSharpsteel-Stage10_Initialize
+                dc.w    Stage12_InitializeSharpsteelArena-Stage10_Initialize
                 dc.w    Stage12_EmptyState1E-Stage10_Initialize
-                dc.w    Stage12_InitializeSharpssteelEncounter-Stage10_Initialize
-                dc.w    Stage12_UpdatePostSharpssteel-Stage10_Initialize
+                dc.w    Stage12_InitializeSharpsteelEncounter-Stage10_Initialize
+                dc.w    Stage12_UpdatePostSharpsteel-Stage10_Initialize
                 dc.w    Stage12_StartTeleportTransitionToStage13-Stage10_Initialize
                 dc.w    Stage12To13_UpdateTeleportFadeIn-Stage10_Initialize
                 dc.w    Stage12To13_UpdateTeleportFadeOut-Stage10_Initialize
@@ -247,50 +247,50 @@ Stage12_ExitTileAssetLoadList:  dc.w    7               ; field_0  ; was: stru_D
                 dc.w    0                               ; field_6
                 dc.w    $FFFF
 
-; Continue Stage 12 from the tile handoff to the Sharpssteel approach
-Stage12_UpdateScrollToSharpssteel:                      ; DATA XREF: ROM:0000D976   o  ; was: sub_DB64
+; Continue Stage 12 from the tile handoff to the Sharpsteel approach
+Stage12_UpdateScrollToSharpsteel:                       ; DATA XREF: ROM:0000D976   o  ; was: sub_DB64
                 bsr.w   Camera_UpdateAndRenderStageTilemap
                 bsr.w   Scroll_AccumulateQuarterHorizontalDelta
                 bsr.w   Stage12_DecrementExitTimer
                 cmpi.w  #$1760,(PrimaryCameraXPosition).w
-                bmi.s   Stage12_UpdateScrollToSharpssteel_Return
+                bmi.s   Stage12_UpdateScrollToSharpsteel_Return
                 addq.w  #2,(StageStateOffset).w
-Stage12_UpdateScrollToSharpssteel_Return:               ; CODE XREF: Stage12_UpdateScrollToSharpssteel+12   j  ; was: locret_DB7C
+Stage12_UpdateScrollToSharpsteel_Return:                ; CODE XREF: Stage12_UpdateScrollToSharpsteel+12   j  ; was: locret_DB7C
                 rts
-; End of function Stage12_UpdateScrollToSharpssteel
-; Clamp the Stage 12 camera at the Sharpssteel arena boundary
-Stage12_InitializeSharpssteelArena:                     ; DATA XREF: ROM:0000D978   o  ; was: sub_DB7E
+; End of function Stage12_UpdateScrollToSharpsteel
+; Clamp the Stage 12 camera at the Sharpsteel arena boundary
+Stage12_InitializeSharpsteelArena:                      ; DATA XREF: ROM:0000D978   o  ; was: sub_DB7E
                 bsr.w   Camera_UpdateBossApproachAndRenderTilemap
                 bsr.w   Scroll_AccumulateQuarterHorizontalDelta
                 move.w  #$17A0,d0
                 cmp.w   (PrimaryCameraXPosition).w,d0
-                bpl.s   Stage12_InitializeSharpssteelArena_Return
+                bpl.s   Stage12_InitializeSharpsteelArena_Return
                 addq.w  #2,(StageStateOffset).w
                 clr.l   (CameraXDelta).w
                 move.w  d0,(PrimaryCameraXPosition).w
-Stage12_InitializeSharpssteelArena_Return:              ; CODE XREF: Stage12_InitializeSharpssteelArena+10   j  ; was: locret_DB9C
+Stage12_InitializeSharpsteelArena_Return:               ; CODE XREF: Stage12_InitializeSharpsteelArena+10   j  ; was: locret_DB9C
                 rts
-; End of function Stage12_InitializeSharpssteelArena
+; End of function Stage12_InitializeSharpsteelArena
 ; Empty Stage 12 state at table offset $1E
 Stage12_EmptyState1E:                                   ; DATA XREF: ROM:0000D97A   o  ; was: nullsub_24
                 rts
 ; End of function Stage12_EmptyState1E
-; Submit the Sharpssteel asset set when its external trigger clears
-Stage12_InitializeSharpssteelEncounter:                 ; DATA XREF: ROM:0000D97C   o  ; was: sub_DBA0
+; Submit the Sharpsteel asset set when its external trigger clears
+Stage12_InitializeSharpsteelEncounter:                  ; DATA XREF: ROM:0000D97C   o  ; was: sub_DBA0
                 tst.w   (SpecialTargetCount).w
                 bne.w   Stage_MidgameStateReturn
                 move.w  #9,(StageSpawnCountdown).w
                 bsr.w   Stage_TransitionToNextPhase
-                lea     (Boss_SharpssteelAssetSet).l,a1
+                lea     (Boss_SharpsteelAssetSet).l,a1
                 bra.w   Boss_LoadAssetSet
-; End of function Stage12_InitializeSharpssteelEncounter
-; Track Sharpssteel's removal and begin the post-boss bonus
-Stage12_UpdatePostSharpssteel:                          ; DATA XREF: ROM:0000D97E   o  ; was: sub_DBBC
+; End of function Stage12_InitializeSharpsteelEncounter
+; Track Sharpsteel's removal and begin the post-boss bonus
+Stage12_UpdatePostSharpsteel:                           ; DATA XREF: ROM:0000D97E   o  ; was: sub_DBBC
                 tst.w   (Entity_ObjectPool).w
                 bne.w   Stage_MidgameStateReturn
                 move.w  #$FFFF,(Entity57Work24).w
                 bra.w   Stage_StartTimeBonusAndPreloadNextPhase
-; End of function Stage12_UpdatePostSharpssteel
+; End of function Stage12_UpdatePostSharpsteel
 ; Leave Stage 12 and start the teleport transition into Stage 13
 Stage12_StartTeleportTransitionToStage13:               ; DATA XREF: ROM:0000D980   o  ; was: sub_DBCE
                 tst.w   (MessageSequenceState).w
@@ -392,7 +392,7 @@ Stage12To13_UpdateTeleportAndSnakeScroll:               ; CODE XREF: Stage12To13
 ; End of function Stage12To13_UpdateTeleportAndSnakeScroll
 ; Decrement the Stage 12 exit timer when it is active
 Stage12_DecrementExitTimer:                             ; CODE XREF: Stage12_UpdateScrollToExitTiles+8   p  ; was: sub_DCFC
-                                        ; Stage12_UpdateScrollToSharpssteel+8   p
+                                        ; Stage12_UpdateScrollToSharpsteel+8   p
                 tst.w   (StageEventTimer).w
                 bmi.w   Stage_MidgameStateReturn
                 subq.w  #1,(StageEventTimer).w

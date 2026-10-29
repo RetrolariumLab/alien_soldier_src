@@ -273,8 +273,8 @@ Boss_DeepStriderPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, 8, $88, $E, $AA,
 Boss_GustheadPaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, $C, $AA, $A, $88, 8, $66, $F, $FF, 6, $44  ; was: byte_C3B0
                                         ; DATA XREF: ROM:Boss_GustheadAssetSet   o
                 dc.b    4, $22, 4, 0, $A, $22, $E, $66, 0, $24, 0, $46, 0, $8A, 0, $CE
-Boss_SharpssteelPaletteCommand: dc.b    $62, $E, 0, 0, $C, $EC, 8, $C8, 6, $64, 2, $20, $F, $FF, 8, $EE  ; was: byte_C3D0
-                                        ; DATA XREF: ROM:Boss_SharpssteelAssetSet   o
+Boss_SharpsteelPaletteCommand:  dc.b    $62, $E, 0, 0, $C, $EC, 8, $C8, 6, $64, 2, $20, $F, $FF, 8, $EE  ; was: byte_C3D0
+                                        ; DATA XREF: ROM:Boss_SharpsteelAssetSet   o
                 dc.b    4, $AA, 0, $66, 0, $22, 0, 4, 0, $28, 0, $4C, 4, $8E, 8, $CE
 Boss_SnakePaletteCommand:   dc.b    $62, 8, 0, 0, $E, $EE, 8, $CE, 6, $8C, 6, $6C, $F, $FF, 4, $26  ; was: byte_C3F0
                                         ; DATA XREF: Stage_LoadStage13Palette   o

@@ -147,8 +147,8 @@ Boss_DeepStriderObjectInitTable:    dc.w    $C740, $103C, $F010, $F010, $FD0C, $
                 dc.w    $C860, $1008, $F808, $F808, 0, 0, 0
                 dc.w    $C8C0, $1008, $FC04, $FC04, 0, 0, 0
                 dc.w    $FFFE
-Boss_SharpssteelObjectInitTable:    dc.w    $C620, $1014, $F010, $F010, $F010, $F010, $4700  ; was: word_1BCB2
-                                        ; DATA XREF: Boss_SharpssteelInitializeState+4A   o
+Boss_SharpsteelObjectInitTable: dc.w    $C620, $1014, $F010, $F010, $F010, $F010, $4700  ; was: word_1BCB2
+                                        ; DATA XREF: Boss_SharpsteelInitializeState+4A   o
                 dc.w    $C680, $1014, $E41C, $E41C, $F010, $F010, $4700
                 dc.w    $C6E0, $1028, $EC14, $EC14, $F010, $F010, $4780
                 dc.w    $C740, $1014, $F010, $F010, $F010, $F010, $4700

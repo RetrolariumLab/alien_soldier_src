@@ -589,7 +589,7 @@ BackStringerPoseBuffer          equ     SharedSceneWorkspace
 SevenForcesPattern              equ     SharedSceneWorkspace
 JokerTileWordGroupA             equ     SharedSceneWorkspace
 ZLeoTileScrollIndex             equ     SharedSceneWorkspace
-SharpssteelTargetTrail          equ     SharedSceneWorkspace
+SharpsteelTargetTrail           equ     SharedSceneWorkspace
 FlyCorridorTilemap              equ     SharedSceneWorkspace
 TileInterpSourceB               equ     SharedSceneWorkspace
 SharedCameraPatternWord         equ     $FFFF9602       ; was: word_FF9602
@@ -599,7 +599,7 @@ ZLeoTileDMARecord               equ     $FFFF9604       ; was: byte_FF9604
 SharedPosePatternBase           equ     $FFFF9608       ; was: word_FF9608
 BackStringerPoseGroup           equ     SharedPosePatternBase
 SevenForcesPatchA               equ     SharedPosePatternBase
-SharpssteelTargetTail           equ     $FFFF960A       ; was: word_FF960A
+SharpsteelTargetTail            equ     $FFFF960A       ; was: word_FF960A
 SharedScrollPatternLong         equ     $FFFF9610       ; was: dword_FF9610
 SevenForcesMedusaSpeed          equ     SharedScrollPatternLong
 SevenForcesAltPatchA            equ     SharedScrollPatternLong
