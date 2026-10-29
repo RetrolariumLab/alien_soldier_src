@@ -24,8 +24,8 @@ Tilemap_QueuePrimaryCameraRowOffset60:                  ; CODE XREF: Stage16_Sta
 Tilemap_SelectPrimaryRowDescriptor:                     ; CODE XREF: UnreferencedTilemapQueuePrimaryCameraRowOffset60F8+10   j  ; was: loc_109DA
                 lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0
                 nop
-Tilemap_QueueRowFromDescriptor:                         ; CODE XREF: Stage_SevenForcesUpdateSylpheedPrimaryPlane+4A   j  ; was: loc_109E0
-                                        ; Stage_SevenForcesUpdateSylpheedSecondaryPlane+20   j
+Tilemap_QueueRowFromDescriptor:                         ; CODE XREF: Stage_SevenForceUpdateSylpheedPrimaryPlane+4A   j  ; was: loc_109E0
+                                        ; Stage_SevenForceUpdateSylpheedSecondaryPlane+20   j
                 neg.w   d1
                 moveq   #$F,d7
                 move.w  d1,d2

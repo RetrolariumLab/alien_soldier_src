@@ -353,41 +353,41 @@ Boss_MissirayGraphicsLoadList:  dc.w    7               ; field_0  ; was: stru_1
                 dc.l    SharedLateBossMappingData2020   ; field_2
                 dc.w    $2020                           ; field_6
                 dc.w    $FFFF
-SevenForcesValkirieAssetSet:    dc.w    $42C            ; field_0  ; was: stru_11658
-                                        ; DATA XREF: Entity_SevenForcesValkirieFadeInStateC   o
-                dc.l    SevenForcesValkirieGraphicsLoadList  ; field_2
-                dc.l    SevenForcesValkiriePaletteCommand  ; field_6
-SevenForcesValkirieGraphicsLoadList:    dc.w    7       ; field_0  ; was: stru_11662
-                                        ; DATA XREF: ROM:SevenForcesValkirieAssetSet   o
-                                        ; SevenForcesSireneTimedAssetSetA   o
-                                        ; ROM:SevenForcesSireneTimedAssetSetA   o
-                dc.l    SevenForcesValkirieTileArt      ; field_2
+SevenForceValkirieAssetSet: dc.w    $42C                ; field_0  ; was: stru_11658
+                                        ; DATA XREF: Entity_SevenForceValkirieFadeInStateC   o
+                dc.l    SevenForceValkirieGraphicsLoadList  ; field_2
+                dc.l    SevenForceValkiriePaletteCommand  ; field_6
+SevenForceValkirieGraphicsLoadList: dc.w    7           ; field_0  ; was: stru_11662
+                                        ; DATA XREF: ROM:SevenForceValkirieAssetSet   o
+                                        ; SevenForceSireneTimedAssetSetA   o
+                                        ; ROM:SevenForceSireneTimedAssetSetA   o
+                dc.l    SevenForceValkirieTileArt       ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    $FFFF
-SevenForcesMedusaAssetSet:  dc.w    $430                ; field_0  ; was: stru_1166C
-                                        ; DATA XREF: Entity_SevenForcesUpdateMedusaEntranceState12   o
+SevenForceMedusaAssetSet:   dc.w    $430                ; field_0  ; was: stru_1166C
+                                        ; DATA XREF: Entity_SevenForceUpdateMedusaEntranceState12   o
                 dc.l    0                               ; field_2
-                dc.l    SevenForcesMedusaPaletteCommand  ; field_6
-SevenForcesSireneAssetSet:  dc.w    $434                ; field_0  ; was: stru_11676
-                                        ; DATA XREF: Entity_SevenForcesSireneHoldState2E   o
+                dc.l    SevenForceMedusaPaletteCommand  ; field_6
+SevenForceSireneAssetSet:   dc.w    $434                ; field_0  ; was: stru_11676
+                                        ; DATA XREF: Entity_SevenForceSireneHoldState2E   o
                 dc.l    0                               ; field_2
-                dc.l    SevenForcesSirenePaletteCommand  ; field_6
-SevenForcesArtemisAssetSet: dc.w    $438                ; field_0  ; was: stru_11680
-                                        ; DATA XREF: Entity_SevenForcesUpdateArtemisEntranceState24   o
+                dc.l    SevenForceSirenePaletteCommand  ; field_6
+SevenForceArtemisAssetSet:  dc.w    $438                ; field_0  ; was: stru_11680
+                                        ; DATA XREF: Entity_SevenForceUpdateArtemisEntranceState24   o
                 dc.l    0                               ; field_2
-                dc.l    SevenForcesArtemisPaletteCommand  ; field_6
-SevenForcesSireneTimedAssetSetB:    dc.w    $43C        ; field_0  ; was: stru_1168A
-                                        ; DATA XREF: Entity_SevenForcesSirenePaletteEventState34+1C   o
+                dc.l    SevenForceArtemisPaletteCommand  ; field_6
+SevenForceSireneTimedAssetSetB: dc.w    $43C            ; field_0  ; was: stru_1168A
+                                        ; DATA XREF: Entity_SevenForceSirenePaletteEventState34+1C   o
                 dc.l    0                               ; field_2
-                dc.l    SevenForcesSireneTimedPaletteCommandB  ; field_6
-SevenForcesSireneTimedAssetSetA:    dc.w    $440        ; field_0  ; was: stru_11694
-                                        ; DATA XREF: Entity_SevenForcesSirenePaletteEventState32+1C   o
-                dc.l    SevenForcesValkirieGraphicsLoadList  ; field_2
-                dc.l    SevenForcesSireneTimedPaletteCommandA  ; field_6
-SevenForcesSylpheedAssetSet:    dc.w    $444            ; field_0  ; was: stru_1169E
-                                        ; DATA XREF: Entity_SevenForcesUpdateSylpheedEntranceState1A   o
+                dc.l    SevenForceSireneTimedPaletteCommandB  ; field_6
+SevenForceSireneTimedAssetSetA: dc.w    $440            ; field_0  ; was: stru_11694
+                                        ; DATA XREF: Entity_SevenForceSirenePaletteEventState32+1C   o
+                dc.l    SevenForceValkirieGraphicsLoadList  ; field_2
+                dc.l    SevenForceSireneTimedPaletteCommandA  ; field_6
+SevenForceSylpheedAssetSet: dc.w    $444                ; field_0  ; was: stru_1169E
+                                        ; DATA XREF: Entity_SevenForceUpdateSylpheedEntranceState1A   o
                 dc.l    0                               ; field_2
-                dc.l    SevenForcesSylpheedPaletteCommand  ; field_6
+                dc.l    SevenForceSylpheedPaletteCommand  ; field_6
 
 ; Clears an object record, installs its entity type, loads graphics, then loads
 ; the optional palette command and resets the default color-fade state

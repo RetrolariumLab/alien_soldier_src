@@ -2,24 +2,24 @@
 Stage24SceneObject_DispatchState:                       ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_549E2
                 move.w  4(a5),d0
                 movea.w Stage24SceneObject_StateOffsets(pc,d0.w),a0
-                adda.l  #Entity_SevenForcesNoOpState,a0
+                adda.l  #Entity_SevenForceNoOpState,a0
                 jmp     (a0)
 ; End of function Stage24SceneObject_DispatchState
 ; ---------------------------------------------------------------------------
-Stage24SceneObject_StateOffsets:    dc.w    Stage24SceneObject_Initialize-Entity_SevenForcesNoOpState  ; was: off_549F2
+Stage24SceneObject_StateOffsets:    dc.w    Stage24SceneObject_Initialize-Entity_SevenForceNoOpState  ; was: off_549F2
                                         ; DATA XREF: Stage24SceneObject_DispatchState+4   r
-                dc.w    Stage24SceneObject_MoveToY120-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_DecelerateTowardY140-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_GrowTileAnimation-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_HoldExpandedFrame-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_MoveLeftToX150-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_ShrinkTilesAndLaunchCompanion-Entity_SevenForcesNoOpState
-                dc.w    Stage24SceneObject_SignalSequenceCompletion-Entity_SevenForcesNoOpState
+                dc.w    Stage24SceneObject_MoveToY120-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_DecelerateTowardY140-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_GrowTileAnimation-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_HoldExpandedFrame-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_MoveLeftToX150-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_ShrinkTilesAndLaunchCompanion-Entity_SevenForceNoOpState
+                dc.w    Stage24SceneObject_SignalSequenceCompletion-Entity_SevenForceNoOpState
 
-Entity_SevenForcesNoOpState:                            ; CODE XREF: Stage24SceneObject_HoldExpandedFrame+4   j  ; was: nullsub_126
+Entity_SevenForceNoOpState:                             ; CODE XREF: Stage24SceneObject_HoldExpandedFrame+4   j  ; was: nullsub_126
                                         ; Stage24SceneObject_MoveLeftToX150+A   j
                 rts
-; End of function Entity_SevenForcesNoOpState
+; End of function Entity_SevenForceNoOpState
 
 ; Initializes the Stage 24 scene object with downward motion and composite sprite data
 Stage24SceneObject_Initialize:                          ; DATA XREF: ROM:Stage24SceneObject_StateOffsets   o  ; was: sub_54A04
@@ -78,7 +78,7 @@ Stage24SceneObject_TransferGrowthFrame:                 ; CODE XREF: Stage24Scen
 ; Holds the fully expanded frame before selecting the sprite animation
 Stage24SceneObject_HoldExpandedFrame:                   ; DATA XREF: ROM:000549FA   o  ; was: sub_54AAA
                 subq.w  #1,$4A(a5)
-                bpl.w   Entity_SevenForcesNoOpState
+                bpl.w   Entity_SevenForceNoOpState
                 addq.w  #2,4(a5)
                 move.l  #Stage24SceneObject_SpriteAnimation,8(a5)
                 clr.w   $C(a5)
@@ -88,7 +88,7 @@ Stage24SceneObject_HoldExpandedFrame:                   ; DATA XREF: ROM:000549F
 Stage24SceneObject_MoveLeftToX150:                      ; DATA XREF: ROM:000549FC   o  ; was: sub_54AC4
                 bsr.w   Stage24SceneObject_AccelerateLeft
                 cmpi.w  #$150,$10(a5)
-                bpl.w   Entity_SevenForcesNoOpState
+                bpl.w   Entity_SevenForceNoOpState
                 addq.w  #2,4(a5)
                 rts
 ; End of function Stage24SceneObject_MoveLeftToX150

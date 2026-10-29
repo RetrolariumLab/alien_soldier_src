@@ -1,105 +1,105 @@
 ; Seven Forces Sirene and finale states with palette and particle effects
 ; State $2A: launch the Sirene entrance trajectory
-Entity_SevenForcesStartSireneEntranceState2A:           ; DATA XREF: ROM:00054BC2   o  ; was: sub_5523C
+Entity_SevenForceStartSireneEntranceState2A:           ; DATA XREF: ROM:00054BC2   o  ; was: sub_5523C
                 addq.w  #2,4(a5)
                 move.w  #$34,(PlayerScriptStateOffset).w  ; '4'
                 move.l  #$FFFC8000,$1C(a5)
                 move.l  #$22000,$18(a5)
                 cmpi.w  #$120,$10(a5)
-                bmi.s   Entity_SevenForcesUpdateSireneEntranceState2C
+                bmi.s   Entity_SevenForceUpdateSireneEntranceState2C
                 neg.l   $18(a5)
 ; State $2C: apply gravity until Sirene reaches the lower threshold
-Entity_SevenForcesUpdateSireneEntranceState2C:          ; CODE XREF: Entity_SevenForcesStartSireneEntranceState2A+20   j  ; was: loc_55262
+Entity_SevenForceUpdateSireneEntranceState2C:          ; CODE XREF: Entity_SevenForcesStartSireneEntranceState2A+20   j  ; was: loc_55262
                                         ; DATA XREF: ROM:00054BC4   o
                 addi.l  #$2000,$1C(a5)
-                bmi.s   Entity_SevenForcesUpdateSireneEntrancePalette
+                bmi.s   Entity_SevenForceUpdateSireneEntrancePalette
                 cmpi.w  #$170,$14(a5)
-                bmi.s   Entity_SevenForcesUpdateSireneEntrancePalette
+                bmi.s   Entity_SevenForceUpdateSireneEntrancePalette
                 addq.w  #2,4(a5)
                 clr.w   2(a5)
                 move.w  #$40,$48(a5)                    ; '@'
-Entity_SevenForcesUpdateSireneEntrancePalette:          ; CODE XREF: Entity_SevenForcesStartSireneEntranceState2A+2E   j  ; was: loc_55282
+Entity_SevenForceUpdateSireneEntrancePalette:          ; CODE XREF: Entity_SevenForcesStartSireneEntranceState2A+2E   j  ; was: loc_55282
                                         ; Entity_SevenForcesStartSireneEntranceState2A+36   j
-                bra.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+                bra.w   Gfx_UpdateSevenForceArtemisPaletteFade
 ; End of function Entity_SevenForcesStartSireneEntranceState2A
 ; State $2E: hold Sirene while advancing its palette counter
-Entity_SevenForcesSireneHoldState2E:                    ; DATA XREF: ROM:00054BC6   o  ; was: sub_55286
+Entity_SevenForceSireneHoldState2E:                    ; DATA XREF: ROM:00054BC6   o  ; was: sub_55286
                 subq.w  #1,$48(a5)
-                bpl.s   Entity_SevenForcesSireneHoldUpdatePalette
+                bpl.s   Entity_SevenForceSireneHoldUpdatePalette
                 addq.w  #2,4(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 move.b  #$28,d0                         ; '('
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesSireneAssetSet).l,a1
+                lea     (SevenForceSireneAssetSet).l,a1
                 jsr     (Boss_LoadAssetSet).l
-Entity_SevenForcesSireneHoldUpdatePalette:              ; CODE XREF: Entity_SevenForcesSireneHoldState2E+4   j  ; was: loc_552AC
+Entity_SevenForceSireneHoldUpdatePalette:              ; CODE XREF: Entity_SevenForcesSireneHoldState2E+4   j  ; was: loc_552AC
                 addq.w  #1,$5E(a5)
-                beq.w   Gfx_UpdateSevenForcesArtemisPaletteFade
-                bmi.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+                beq.w   Gfx_UpdateSevenForceArtemisPaletteFade
+                bmi.w   Gfx_UpdateSevenForceArtemisPaletteFade
                 rts
 ; End of function Entity_SevenForcesSireneHoldState2E
 ; State $30: reset the Seven Forces intro controller
-Entity_SevenForcesResetState30:                         ; DATA XREF: ROM:00054BC8   o  ; was: sub_552BA
-                bra.w   Entity_SevenForcesResetState
+Entity_SevenForceResetState30:                         ; DATA XREF: ROM:00054BC8   o  ; was: sub_552BA
+                bra.w   Entity_SevenForceResetState
 ; End of function Entity_SevenForcesResetState30
 ; State $32: apply the first timed Sirene palette and sound event
-Entity_SevenForcesSirenePaletteEventState32:            ; DATA XREF: ROM:00054BCA   o  ; was: sub_552BE
+Entity_SevenForceSirenePaletteEventState32:            ; DATA XREF: ROM:00054BCA   o  ; was: sub_552BE
                 cmpi.w  #$9C,(StageStateOffset).w
-                bne.s   Entity_SevenForcesSirenePaletteEventState32Return
+                bne.s   Entity_SevenForceSirenePaletteEventState32Return
                 move.b  #$27,d0                         ; '''
                 jsr     (Sound_QueueSFXRequest).l
                 move.b  #$A5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesSireneTimedAssetSetA).l,a1
+                lea     (SevenForceSireneTimedAssetSetA).l,a1
                 jsr     (Boss_LoadAssetSet).l
-                bra.w   Entity_SevenForcesResetState
+                bra.w   Entity_SevenForceResetState
 ; ---------------------------------------------------------------------------
-Entity_SevenForcesSirenePaletteEventState32Return:      ; CODE XREF: Entity_SevenForcesSirenePaletteEventState32+6   j  ; was: locret_552EA
+Entity_SevenForceSirenePaletteEventState32Return:      ; CODE XREF: Entity_SevenForcesSirenePaletteEventState32+6   j  ; was: locret_552EA
                 rts
 ; End of function Entity_SevenForcesSirenePaletteEventState32
 ; State $34: apply the second timed Sirene palette and sound event
-Entity_SevenForcesSirenePaletteEventState34:            ; DATA XREF: ROM:00054BCC   o  ; was: sub_552EC
+Entity_SevenForceSirenePaletteEventState34:            ; DATA XREF: ROM:00054BCC   o  ; was: sub_552EC
                 cmpi.w  #$A6,(StageStateOffset).w
-                bne.s   Entity_SevenForcesSirenePaletteEventState34Return
+                bne.s   Entity_SevenForceSirenePaletteEventState34Return
                 move.b  #$26,d0                         ; '&'
                 jsr     (Sound_QueueSFXRequest).l
                 move.b  #$A5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesSireneTimedAssetSetB).l,a1
+                lea     (SevenForceSireneTimedAssetSetB).l,a1
                 jsr     (Boss_LoadAssetSet).l
-                bra.w   Entity_SevenForcesResetState
+                bra.w   Entity_SevenForceResetState
 ; ---------------------------------------------------------------------------
-Entity_SevenForcesSirenePaletteEventState34Return:      ; CODE XREF: Entity_SevenForcesSirenePaletteEventState34+6   j  ; was: locret_55318
+Entity_SevenForceSirenePaletteEventState34Return:      ; CODE XREF: Entity_SevenForcesSirenePaletteEventState34+6   j  ; was: locret_55318
                 rts
 ; End of function Entity_SevenForcesSirenePaletteEventState34
 ; State $36: run the random explosion sequence and arm its wait state
-Entity_SevenForcesExplosionSequenceState36:             ; DATA XREF: ROM:00054BCE   o  ; was: sub_5531A
+Entity_SevenForceExplosionSequenceState36:             ; DATA XREF: ROM:00054BCE   o  ; was: sub_5531A
                 addq.w  #1,$48(a5)
                 cmpi.w  #2,$48(a5)
-                bne.s   Entity_SevenForcesExplosionSequenceCheckTransition
+                bne.s   Entity_SevenForceExplosionSequenceCheckTransition
                 move.b  #3,d0
                 jsr     (Sound_QueueSFXRequest).l
-Entity_SevenForcesExplosionSequenceCheckTransition:     ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+A   j  ; was: loc_55330
-                bsr.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+Entity_SevenForceExplosionSequenceCheckTransition:     ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+A   j  ; was: loc_55330
+                bsr.w   Gfx_UpdateSevenForceArtemisPaletteFade
                 cmpi.w  #$98,(StageStateOffset).w
-                bne.s   Entity_SevenForcesSpawnRandomExplosion
+                bne.s   Entity_SevenForceSpawnRandomExplosion
                 addq.w  #2,4(a5)
                 move.w  #$200,$48(a5)
                 move.b  #1,(SoundFadeOutDelay).w
                 move.w  #$C0,(ExplosionSoundDelay).w
-Entity_SevenForcesSpawnRandomExplosion:                 ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+20   j  ; was: loc_55352
+Entity_SevenForceSpawnRandomExplosion:                 ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+20   j  ; was: loc_55352
                                         ; sub_553CC:Entity_SevenForcesExplosionWaitUpdate   p
                 move.w  #2,(PlaneAShakeLevel).w
                 move.w  #2,(PlaneBShakeLevel).w
                 jsr     (Projectile_PrepareImpactSpawnOrPlaySound).l
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Entity_SevenForcesSpawnRandomExplosionReturn
+                bne.s   Entity_SevenForceSpawnRandomExplosionReturn
                 jsr     (Sprite_InitType160).l
                 move.l  #SharedCombatSpriteAnimation00,8(a0)
                 btst    #0,(RandomNumberState).w
-                beq.s   Entity_SevenForcesInitRandomExplosionMotion
+                beq.s   Entity_SevenForceInitRandomExplosionMotion
                 move.l  #SharedCombatSpriteAnimation01,8(a0)
-Entity_SevenForcesInitRandomExplosionMotion:            ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+66   j  ; was: loc_5538A
+Entity_SevenForceInitRandomExplosionMotion:            ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+66   j  ; was: loc_5538A
                 move.b  #0,$20(a0)
                 moveq   #0,d0
                 move.w  (RandomNumberState).w,d0
@@ -116,42 +116,42 @@ Entity_SevenForcesInitRandomExplosionMotion:            ; CODE XREF: Entity_Seve
                 addi.w  #$F0,d1
                 move.w  d0,$10(a0)
                 move.w  d1,$14(a0)
-Entity_SevenForcesSpawnRandomExplosionReturn:           ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+50   j  ; was: locret_553CA
+Entity_SevenForceSpawnRandomExplosionReturn:           ; CODE XREF: Entity_SevenForcesExplosionSequenceState36+50   j  ; was: locret_553CA
                 rts
 ; End of function Entity_SevenForcesExplosionSequenceState36
 ; State $38: keep spawning explosions until the wait timer expires
-Entity_SevenForcesExplosionWaitState38:                 ; DATA XREF: ROM:00054BD0   o  ; was: sub_553CC
+Entity_SevenForceExplosionWaitState38:                 ; DATA XREF: ROM:00054BD0   o  ; was: sub_553CC
                 subq.w  #1,$48(a5)
-                bpl.s   Entity_SevenForcesExplosionWaitUpdate
+                bpl.s   Entity_SevenForceExplosionWaitUpdate
                 addq.w  #2,4(a5)
                 move.b  #1,(SceneSequenceFlags).w
-Entity_SevenForcesExplosionWaitUpdate:                  ; CODE XREF: Entity_SevenForcesExplosionWaitState38+4   j  ; was: loc_553DC
-                bsr.w   Entity_SevenForcesSpawnRandomExplosion
+Entity_SevenForceExplosionWaitUpdate:                  ; CODE XREF: Entity_SevenForcesExplosionWaitState38+4   j  ; was: loc_553DC
+                bsr.w   Entity_SevenForceSpawnRandomExplosion
                 addq.w  #1,$5E(a5)
-                beq.w   Gfx_UpdateSevenForcesArtemisPaletteFade
-                bmi.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+                beq.w   Gfx_UpdateSevenForceArtemisPaletteFade
+                bmi.w   Gfx_UpdateSevenForceArtemisPaletteFade
                 rts
 ; End of function Entity_SevenForcesExplosionWaitState38
 ; State $3A: wait for the final-fade trigger and arm shared transition work
-Entity_SevenForcesArmFinalFadeState3A:                  ; DATA XREF: ROM:00054BD2   o  ; was: sub_553EE
+Entity_SevenForceArmFinalFadeState3A:                  ; DATA XREF: ROM:00054BD2   o  ; was: sub_553EE
                 cmpi.w  #$A2,(StageStateOffset).w
-                bne.s   Entity_SevenForcesArmFinalFadeReturn
+                bne.s   Entity_SevenForceArmFinalFadeReturn
                 addq.w  #2,4(a5)
                 clr.w   $5E(a5)
                 move.w  #$2E,(MessageSequenceState).w   ; '.'
                 move.b  #1,(AlternateTimeBonusSound).w
-Entity_SevenForcesArmFinalFadeReturn:                   ; CODE XREF: Entity_SevenForcesArmFinalFadeState3A+6   j  ; was: locret_5540A
+Entity_SevenForceArmFinalFadeReturn:                   ; CODE XREF: Entity_SevenForcesArmFinalFadeState3A+6   j  ; was: locret_5540A
                 rts
 ; End of function Entity_SevenForcesArmFinalFadeState3A
 ; State $3C: spawn transition particles while fading the palette
-Entity_SevenForcesFinalFadeState3C:                     ; DATA XREF: ROM:00054BD4   o  ; was: sub_5540C
-                bsr.w   Effect_SpawnSevenForcesTransitionParticle
+Entity_SevenForceFinalFadeState3C:                     ; DATA XREF: ROM:00054BD4   o  ; was: sub_5540C
+                bsr.w   Effect_SpawnSevenForceTransitionParticle
                 subq.w  #1,$5E(a5)
                 cmpi.w  #$FFF2,$5E(a5)
-                bpl.s   Entity_SevenForcesApplyFinalFade
+                bpl.s   Entity_SevenForceApplyFinalFade
                 addq.w  #2,4(a5)
                 move.w  #$210,$48(a5)
-Entity_SevenForcesApplyFinalFade:                       ; CODE XREF: Entity_SevenForcesFinalFadeState3C+E   j  ; was: loc_55426
+Entity_SevenForceApplyFinalFade:                       ; CODE XREF: Entity_SevenForcesFinalFadeState3C+E   j  ; was: loc_55426
                 move.w  $5E(a5),d0
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a0
                 moveq   #$1F,d5
@@ -159,22 +159,22 @@ Entity_SevenForcesApplyFinalFade:                       ; CODE XREF: Entity_Seve
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Entity_SevenForcesFinalFadeState3C
 ; State $3E: spawn transition particles and enter the next stage state
-Entity_SevenForcesFinishIntroState3E:                   ; DATA XREF: ROM:00054BD6   o  ; was: sub_5543A
-                bsr.w   Effect_SpawnSevenForcesTransitionParticle
+Entity_SevenForceFinishIntroState3E:                   ; DATA XREF: ROM:00054BD6   o  ; was: sub_5543A
+                bsr.w   Effect_SpawnSevenForceTransitionParticle
                 subq.w  #1,$48(a5)
-                bpl.s   Entity_SevenForcesFinishIntroReturn
+                bpl.s   Entity_SevenForceFinishIntroReturn
                 tst.w   (GameplayExitMode).w
-                bne.s   Entity_SevenForcesFinishIntroReturn
+                bne.s   Entity_SevenForceFinishIntroReturn
                 move.b  #$93,(PendingStageBGMRequest).w
                 move.l  #StageTransitionMessageSequence_Shared,(StageMessageCursor).w
                 jmp     Stage_StartInterstageTransition
 ; ---------------------------------------------------------------------------
-Entity_SevenForcesFinishIntroReturn:                    ; CODE XREF: Entity_SevenForcesFinishIntroState3E+8   j  ; was: locret_5545E
+Entity_SevenForceFinishIntroReturn:                    ; CODE XREF: Entity_SevenForcesFinishIntroState3E+8   j  ; was: locret_5545E
                                         ; Entity_SevenForcesFinishIntroState3E+E   j
                 rts
 ; End of function Entity_SevenForcesFinishIntroState3E
 ; Apply Valkirie's single-range intro palette fade
-Gfx_UpdateSevenForcesValkiriePaletteFade:               ; CODE XREF: Entity_SevenForcesValkirieFadeInStateC:Entity_SevenForcesValkirieFadeInApplyPalette   j  ; was: sub_55460
+Gfx_UpdateSevenForceValkiriePaletteFade:               ; CODE XREF: Entity_SevenForcesValkirieFadeInStateC:Entity_SevenForcesValkirieFadeInApplyPalette   j  ; was: sub_55460
                                         ; Entity_SevenForcesValkirieFadeOutStateE+4   j
                 move.w  $5E(a5),d0
                 movea.w #(PaletteActiveBuffer-M68K_RAM),a0
@@ -185,7 +185,7 @@ Gfx_UpdateSevenForcesValkiriePaletteFade:               ; CODE XREF: Entity_Seve
                 rts
 ; End of function Gfx_UpdateSevenForcesValkiriePaletteFade
 ; Apply the shared three-range Seven Forces palette fade
-Gfx_UpdateSevenForcesMultiRangePaletteFade:             ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10:Entity_SevenForcesUpdateMedusaEntrancePalette   j  ; was: sub_5547C
+Gfx_UpdateSevenForceMultiRangePaletteFade:             ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10:Entity_SevenForcesUpdateMedusaEntrancePalette   j  ; was: sub_5547C
                                         ; sub_5505A:Entity_SevenForcesMedusaHoldApplyPalette   j
                 movea.w #(PaletteActiveColor16-M68K_RAM),a0
                 moveq   #$F,d5
@@ -206,7 +206,7 @@ Gfx_UpdateSevenForcesMultiRangePaletteFade:             ; CODE XREF: Entity_Seve
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Gfx_UpdateSevenForcesMultiRangePaletteFade
 ; Apply Artemis's four-range intro palette fade
-Gfx_UpdateSevenForcesArtemisPaletteFade:                ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+A   j  ; was: sub_554C0
+Gfx_UpdateSevenForceArtemisPaletteFade:                ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+A   j  ; was: sub_554C0
                                         ; sub_551F6:Entity_SevenForcesArtemisFadeOutApplyPalette   j
                 move.w  $5E(a5),d0
                 movea.w #(PaletteActiveColor01-M68K_RAM),a0
@@ -232,7 +232,7 @@ Gfx_UpdateSevenForcesArtemisPaletteFade:                ; CODE XREF: Entity_Seve
                 jmp     (Gfx_ApplyPaletteFade).l
 ; End of function Gfx_UpdateSevenForcesArtemisPaletteFade
 ; Initialize the shared form-transition sprite from camera coordinates
-Entity_InitSevenForcesTransitionSprite:                 ; CODE XREF: Entity_StartSevenForcesMedusaTransition+6   p  ; was: sub_55518
+Entity_InitSevenForceTransitionSprite:                 ; CODE XREF: Entity_StartSevenForcesMedusaTransition+6   p  ; was: sub_55518
                                         ; Entity_StartSevenForcesSylpheedTransition+6   p
                 move.b  #$14,$20(a5)
                 clr.w   $C(a5)
@@ -246,10 +246,10 @@ Entity_InitSevenForcesTransitionSprite:                 ; CODE XREF: Entity_Star
                 rts
 ; End of function Entity_InitSevenForcesTransitionSprite
 ; Spawn a randomized particle during the final Seven Forces transition
-Effect_SpawnSevenForcesTransitionParticle:              ; CODE XREF: Entity_SevenForcesFinalFadeState3C   p  ; was: sub_5554C
+Effect_SpawnSevenForceTransitionParticle:              ; CODE XREF: Entity_SevenForcesFinalFadeState3C   p  ; was: sub_5554C
                                         ; sub_5543A   p
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Effect_SpawnSevenForcesTransitionParticleReturn
+                bne.s   Effect_SpawnSevenForceTransitionParticleReturn
                 move.w  #$188,(a0)
                 move.w  #$8400,2(a0)
                 move.w  #$10,$48(a0)
@@ -273,11 +273,11 @@ Effect_SpawnSevenForcesTransitionParticle:              ; CODE XREF: Entity_Seve
                 move.w  d1,$14(a0)
                 move.w  #$44F4,$E(a0)
                 btst    #0,(RandomNumberState).w
-                bne.s   Effect_InitSevenForcesTransitionParticleMapping
+                bne.s   Effect_InitSevenForceTransitionParticleMapping
                 move.w  #$44F5,$E(a0)
-Effect_InitSevenForcesTransitionParticleMapping:        ; CODE XREF: Effect_SpawnSevenForcesTransitionParticle+66   j  ; was: loc_555BA
+Effect_InitSevenForceTransitionParticleMapping:        ; CODE XREF: Effect_SpawnSevenForcesTransitionParticle+66   j  ; was: loc_555BA
                 move.w  #0,8(a0)
                 move.w  #$FCFC,$A(a0)
-Effect_SpawnSevenForcesTransitionParticleReturn:        ; CODE XREF: Effect_SpawnSevenForcesTransitionParticle+6   j  ; was: locret_555C6
+Effect_SpawnSevenForceTransitionParticleReturn:        ; CODE XREF: Effect_SpawnSevenForcesTransitionParticle+6   j  ; was: locret_555C6
                 rts
 ; End of function Effect_SpawnSevenForcesTransitionParticle

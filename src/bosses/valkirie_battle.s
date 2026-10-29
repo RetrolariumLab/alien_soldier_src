@@ -10,14 +10,14 @@ Entity_UpdateValkirieBattle:                            ; DATA XREF: ROM:Entity_
                 tst.w   (BossHealth).w
                 bne.s   Entity_UpdateValkirieBattleActive
                 moveq   #2,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Entity_UpdateValkirieBattleActive:                      ; CODE XREF: Entity_UpdateValkirieBattle+14   j  ; was: loc_5578A
                                         ; Entity_UpdateValkirieBattle+1C   j
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #0,d0
-                jsr     Gfx_UpdateSevenForcesBattlePalette(pc)  ; (pc)
+                jsr     Gfx_UpdateSevenForceBattlePalette(pc)  ; (pc)
                 nop
                 move.w  $10(a5),d0
                 add.w   (PrimaryCameraXPosition).w,d0

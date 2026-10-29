@@ -29,7 +29,7 @@ Tilemap_QueuePrimaryCameraColumnOffset158:              ; CODE XREF: Stage_InitT
 ; End of function Tilemap_QueuePrimaryCameraColumnOffset158
 ; Select the primary-plane descriptor and queue one streamed tilemap column
 Tilemap_QueuePrimaryPlaneColumn:                        ; CODE XREF: Stage12To13_UpdateTeleportFadeOut+4A   j  ; was: sub_106FE
-                                        ; Stage_SevenForcesUpdateMedusaCameraAndParallax+46   p
+                                        ; Stage_SevenForceUpdateMedusaCameraAndParallax+46   p
                 lea     Gfx_TitleAndZLeoVRAMTransferParameters(pc),a0
                 nop
 Tilemap_QueueColumnFromDescriptor:                      ; CODE XREF: Stage9_UpdateCaterpillarShipTraversal+52   p  ; was: loc_10704
@@ -184,7 +184,7 @@ Tilemap_PopulateStage18UnqueuedColumn:                  ; CODE XREF: Stage18_Upd
                 addi.w  #$158,d0
                 move.w  (PrimaryCameraYPosition).w,d1
                 subi.w  #$1000,d1
-Tilemap_PopulateUnqueuedColumnFromDescriptor:           ; CODE XREF: Stage_SevenForcesUpdateMedusaCameraAndParallax+62   p  ; was: loc_108A4
+Tilemap_PopulateUnqueuedColumnFromDescriptor:           ; CODE XREF: Stage_SevenForceUpdateMedusaCameraAndParallax+62   p  ; was: loc_108A4
                                         ; UnreferencedPopulateUnqueuedColumnOffset1000+10   j
                 lea     Gfx_DefaultVRAMTransferParameters(pc),a0
                 nop

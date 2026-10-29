@@ -975,7 +975,7 @@
       "palettes": [
         ["Boss_TerobusterPaletteCommand", 0],
         ["Stage15PaletteCommands", 0],
-        ["SevenForcesValkiriePaletteCommand", 0]
+        ["SevenForceValkiriePaletteCommand", 0]
       ]
     },
     "Boss_XiTigerClawMappingB": {
@@ -1106,7 +1106,7 @@
     "SharedVictorSunsetStingSegmentMappingB": {
       "attribute": "$2300",
       "art": [["Boss_VictorTileArt", "$6000"]],
-      "palettes": [["SevenForcesSireneTimedPaletteCommandB", 0]]
+      "palettes": [["SevenForceSireneTimedPaletteCommandB", 0]]
     },
     "Boss_Epsilon1PrimaryBodyMapping": {
       "attribute": "$4300",
@@ -1226,10 +1226,10 @@
       "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
       "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
     },
-    "SevenForcesRotationSpriteFrame00": {
+    "SevenForceRotationSpriteFrame00": {
       "attribute": "$6300",
       "art": [
-        ["SevenForcesValkirieTileArt", "$6000"],
+        ["SevenForceValkirieTileArt", "$6000"],
         ["Stage20TileArt", "$6000"]
       ],
       "palettes": [
@@ -1238,10 +1238,10 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame01": {
+    "SevenForceRotationSpriteFrame01": {
       "attribute": "$6300",
       "art": [
-        ["SevenForcesValkirieTileArt", "$6000"],
+        ["SevenForceValkirieTileArt", "$6000"],
         ["Stage20TileArt", "$6000"]
       ],
       "palettes": [
@@ -1250,37 +1250,37 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame02": {
+    "SevenForceRotationSpriteFrame02": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame03": {
+    "SevenForceRotationSpriteFrame03": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame04": {
+    "SevenForceRotationSpriteFrame04": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame05": {
+    "SevenForceRotationSpriteFrame05": {
       "attribute": "$6B00",
       "art": [
-        ["SevenForcesValkirieTileArt", "$6000"],
+        ["SevenForceValkirieTileArt", "$6000"],
         ["Stage20TileArt", "$6000"]
       ],
       "palettes": [
@@ -1289,10 +1289,10 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame06": {
+    "SevenForceRotationSpriteFrame06": {
       "attribute": "$6B00",
       "art": [
-        ["SevenForcesValkirieTileArt", "$6000"],
+        ["SevenForceValkirieTileArt", "$6000"],
         ["Stage20TileArt", "$6000"]
       ],
       "palettes": [
@@ -1301,10 +1301,10 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame07": {
+    "SevenForceRotationSpriteFrame07": {
       "attribute": "$6B00",
       "art": [
-        ["SevenForcesValkirieTileArt", "$6000"],
+        ["SevenForceValkirieTileArt", "$6000"],
         ["Stage20TileArt", "$6000"]
       ],
       "palettes": [
@@ -1313,37 +1313,37 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame08": {
+    "SevenForceRotationSpriteFrame08": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame09": {
+    "SevenForceRotationSpriteFrame09": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesValkiriePaletteCommand", 0],
+        ["SevenForceValkiriePaletteCommand", 0],
         ["EntityType3F4PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame10": {
+    "SevenForceRotationSpriteFrame10": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
-      "palettes": [["SevenForcesValkiriePaletteCommand", 0]]
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
+      "palettes": [["SevenForceValkiriePaletteCommand", 0]]
     },
-    "SevenForcesRotationSpriteFrame11": {
+    "SevenForceRotationSpriteFrame11": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesValkiriePaletteCommand", 0],
+        ["SevenForceValkiriePaletteCommand", 0],
         ["EntityType3F4PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame12": {
+    "SevenForceRotationSpriteFrame12": {
       "attribute": "$7300",
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
@@ -1351,7 +1351,7 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame13": {
+    "SevenForceRotationSpriteFrame13": {
       "attribute": "$7300",
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
@@ -1359,7 +1359,7 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame14": {
+    "SevenForceRotationSpriteFrame14": {
       "attribute": "$7300",
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
@@ -1367,225 +1367,225 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame15": {
+    "SevenForceRotationSpriteFrame15": {
       "attribute": "$7300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame16": {
+    "SevenForceRotationSpriteFrame16": {
       "attribute": "$7300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame17": {
+    "SevenForceRotationSpriteFrame17": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame18": {
+    "SevenForceRotationSpriteFrame18": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame19": {
+    "SevenForceRotationSpriteFrame19": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame20": {
+    "SevenForceRotationSpriteFrame20": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame21": {
+    "SevenForceRotationSpriteFrame21": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame22": {
+    "SevenForceRotationSpriteFrame22": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame23": {
+    "SevenForceRotationSpriteFrame23": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame24": {
+    "SevenForceRotationSpriteFrame24": {
       "attribute": "$7300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame25": {
+    "SevenForceRotationSpriteFrame25": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame26": {
+    "SevenForceRotationSpriteFrame26": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame27": {
+    "SevenForceRotationSpriteFrame27": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame28": {
+    "SevenForceRotationSpriteFrame28": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame29": {
+    "SevenForceRotationSpriteFrame29": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame30": {
+    "SevenForceRotationSpriteFrame30": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame31": {
+    "SevenForceRotationSpriteFrame31": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame32": {
+    "SevenForceRotationSpriteFrame32": {
       "attribute": "$7300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame33": {
+    "SevenForceRotationSpriteFrame33": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame34": {
+    "SevenForceRotationSpriteFrame34": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame35": {
+    "SevenForceRotationSpriteFrame35": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame36": {
+    "SevenForceRotationSpriteFrame36": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame37": {
+    "SevenForceRotationSpriteFrame37": {
       "attribute": "$6300",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame38": {
+    "SevenForceRotationSpriteFrame38": {
       "attribute": "$6B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SevenForcesRotationSpriteFrame39": {
+    "SevenForceRotationSpriteFrame39": {
       "attribute": "$7B00",
-      "art": [["SevenForcesValkirieTileArt", "$6000"]],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
@@ -1601,15 +1601,15 @@
       "attribute": "$2300",
       "art": [["Stage20TileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesSylpheedPaletteCommand", 0],
-        ["SevenForcesSireneTimedPaletteCommandB", 0]
+        ["SevenForceSylpheedPaletteCommand", 0],
+        ["SevenForceSireneTimedPaletteCommandB", 0]
       ]
     },
     "Stage24SceneObject_SpriteFrame02": {
       "attribute": "$2300",
       "art": [["Stage20TileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesIntroPaletteCommand", 0],
+        ["SevenForceIntroPaletteCommand", 0],
         ["Stage17PaletteCommandBank", 0]
       ]
     },
@@ -1617,7 +1617,7 @@
       "attribute": "$2300",
       "art": [["Stage20TileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesIntroPaletteCommand", 0],
+        ["SevenForceIntroPaletteCommand", 0],
         ["Stage17PaletteCommandBank", 0]
       ]
     },
@@ -1625,7 +1625,7 @@
       "attribute": "$2300",
       "art": [["Stage20TileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesIntroPaletteCommand", 0],
+        ["SevenForceIntroPaletteCommand", 0],
         ["Stage17PaletteCommandBank", 0]
       ]
     },
@@ -1633,7 +1633,7 @@
       "attribute": "$2300",
       "art": [["Stage20TileArt", "$6000"]],
       "palettes": [
-        ["SevenForcesIntroPaletteCommand", 0],
+        ["SevenForceIntroPaletteCommand", 0],
         ["Stage17PaletteCommandBank", 0]
       ]
     },

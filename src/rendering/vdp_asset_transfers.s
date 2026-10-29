@@ -38,7 +38,7 @@ Gfx_AdjustTileIndexRows_WordLoop:                       ; CODE XREF: Gfx_AdjustT
 ; End of function Gfx_AdjustTileIndexRows
 ; Updates tilemap tile indices and palette bits with offset
 Gfx_UpdateTilemapIndices:                               ; CODE XREF: TitleScreen_Initialize+78   p  ; was: sub_111B4
-                                        ; Stage_SevenForcesInitializeVictoryTransition+2C   p
+                                        ; Stage_SevenForceInitializeVictoryTransition+2C   p
                 moveq   #$F,d6
 Gfx_UpdateTilemapIndices_WordLoop:                      ; CODE XREF: Gfx_UpdateTilemapIndices+1C   j  ; was: loc_111B6
                 move.w  (a0),d2

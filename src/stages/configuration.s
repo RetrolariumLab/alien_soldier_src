@@ -311,7 +311,7 @@ UnreferencedStage20Write0300ToFourWordRanges:           ; CODE XREF: Unreference
                 move.w  d1,(a2)+
                 move.w  d1,(a3)+
                 dbf     d7,UnreferencedStage20Write0300ToFourWordRanges
-                move.b  #$82,(SevenForcesTilemapMode).l
+                move.b  #$82,(SevenForceTilemapMode).l
                 rts
 ; End of function UnreferencedApplyStage20Variant2Configuration
 ; Unreferenced wrapper for the third Stage 20 configuration variant

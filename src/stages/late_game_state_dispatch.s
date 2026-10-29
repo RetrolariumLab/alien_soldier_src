@@ -61,31 +61,31 @@ Stage_LateGameStateHandlerOffsets:  dc.w    Stage18_UpdateInitialScroll-Stage_La
                 dc.w    Stage_LateGameStateReturn-Stage_LateGameStateReturn
                 dc.w    Stage_LateGameStateReturn-Stage_LateGameStateReturn
                 dc.w    Stage_LateGameStateReturn-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesInitializeStage20-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesUpdateStage20Scroll-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesAdvanceToMedusa-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesFinishMedusaScroll-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesInitializeSylpheedScroll-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesUpdateSylpheedScroll-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesAdvanceSylpheedForeground-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesFinishSylpheedForeground-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesBeginArtemisTransition-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesWaitForArtemisBackground-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesWaitForArtemisTrigger-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesScrollArtemisBackground-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesScrollArtemisForeground-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesBeginSireneTransition-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesAdvanceSireneTransition-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesFinishSireneTransition-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesWaitBeforeVictory-Stage_LateGameStateReturn
-                dc.w    Stage_SevenForcesInitializeVictoryTransition-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState0-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState1-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState2-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState3-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState4-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState5-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryState6-Stage_LateGameStateReturn
-                dc.w    Cutscene_SevenForcesVictoryIdleState-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceInitializeStage20-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceUpdateStage20Scroll-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceAdvanceToMedusa-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceFinishMedusaScroll-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceInitializeSylpheedScroll-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceUpdateSylpheedScroll-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceAdvanceSylpheedForeground-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceFinishSylpheedForeground-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceBeginArtemisTransition-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceWaitForArtemisBackground-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceWaitForArtemisTrigger-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceScrollArtemisBackground-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceScrollArtemisForeground-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceBeginSireneTransition-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceAdvanceSireneTransition-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceFinishSireneTransition-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceWaitBeforeVictory-Stage_LateGameStateReturn
+                dc.w    Stage_SevenForceInitializeVictoryTransition-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState0-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState1-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState2-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState3-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState4-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState5-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryState6-Stage_LateGameStateReturn
+                dc.w    Cutscene_SevenForceVictoryIdleState-Stage_LateGameStateReturn
 
 ; Empty handler implementation begins the following ROM-ordered module

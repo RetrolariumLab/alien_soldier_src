@@ -108,9 +108,9 @@ UnreferencedStage20VariantPaletteOffsetList:    dc.w    (Stage17PaletteCommandBa
                                         ; ROM:UnreferencedStage20Variant4ConfigRecord   o
 Stage20PaletteOffsetLists:  dc.w    (Stage17PaletteCommandBank+$A0)-Gfx_LoadPalettePreservingSharedColor  ; DATA XREF: ROM:Stage20ConfigRecord   o  ; was: word_B9B8
                 dc.w    0
-                dc.w    SevenForcesArtemisTransitionPaletteCommand-Gfx_LoadPalettePreservingSharedColor
+                dc.w    SevenForceArtemisTransitionPaletteCommand-Gfx_LoadPalettePreservingSharedColor
                 dc.w    0
-SevenForcesCutscenePaletteOffsetList:   dc.w    (SireneAndLateStagePaletteCommandBank+$1E)-Gfx_LoadPalettePreservingSharedColor  ; DATA XREF: Cutscene_SevenForcesLoadGraphics   o  ; was: word_B9C0
+SevenForceCutscenePaletteOffsetList:    dc.w    (SireneAndLateStagePaletteCommandBank+$1E)-Gfx_LoadPalettePreservingSharedColor  ; DATA XREF: Cutscene_SevenForceLoadGraphics   o  ; was: word_B9C0
                 dc.w    (SireneAndLateStagePaletteCommandBank+$3E)-Gfx_LoadPalettePreservingSharedColor
                 dc.w    0
 Stage21And23PaletteOffsetList:  dc.w    (SireneAndLateStagePaletteCommandBank+$46)-Gfx_LoadPalettePreservingSharedColor  ; DATA XREF: ROM:Stage21ConfigRecord   o  ; was: word_B9C6
@@ -213,10 +213,10 @@ Stage17PaletteCommandBank:              dc.b    $62, $E, 2, 0, $E, $EE, 0, $6E, 
                 dc.b    $E, $EC, $E, $EE, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
                 dc.b    2, $22, $E, $CC, 2, $24, 2, $66, 4, $88, $C, $CC, 0, $44, 8, $AA
                 dc.b    4, $46, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, 2, $44, 2, $42
-SevenForcesSylpheedTransitionPaletteCommand:    dc.b    $22, 6, 8, $CC, 2, $44, 4, $66, 6, $88, 8, $AA, 4, $66, 6, $88  ; was: byte_C00C
-                                        ; DATA XREF: Entity_StartSevenForcesSylpheedTransition+16   o
-SevenForcesArtemisTransitionPaletteCommand: dc.b    2, $1E, 0, 0, 0, $22, 2, $42, 6, $64, 0, $22, 2, $44, 4, $66  ; was: byte_C01C
-                                        ; DATA XREF: Entity_StartSevenForcesArtemisTransition+1C   o
+SevenForceSylpheedTransitionPaletteCommand: dc.b    $22, 6, 8, $CC, 2, $44, 4, $66, 6, $88, 8, $AA, 4, $66, 6, $88  ; was: byte_C00C
+                                        ; DATA XREF: Entity_StartSevenForceSylpheedTransition+16   o
+SevenForceArtemisTransitionPaletteCommand:  dc.b    2, $1E, 0, 0, 0, $22, 2, $42, 6, $64, 0, $22, 2, $44, 4, $66  ; was: byte_C01C
+                                        ; DATA XREF: Entity_StartSevenForceArtemisTransition+1C   o
                 dc.b    6, $88, $FF, $FF, 0, $22, 2, $44, 2, $66, 4, $AC, $A, $CE, $FF, $FF
                 dc.b    0, 0, 0, 0, 2, 0, 2, $22, 6, $44, 2, 0, 4, 0, 6, 0
                 dc.b    6, $20, 8, $42, $A, $64, $C, $86, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
@@ -341,26 +341,26 @@ EntityType3FCPaletteCommands:   dc.b    $62, $E, 0, 0, $E, $EE, 2, $20, 4, $42, 
                 dc.b    4, $CE, 2, $8C, 2, $6A, 2, $46, 4, $24, 4, $44, 6, $66, $A, $AA
                 dc.b    $62, $E, 0, 0, $E, $EE, 8, $6E, 4, $2C, 2, 8, $F, $FF, 2, $24
                 dc.b    0, $46, 2, $8A, 6, $CC, 0, $6E, 0, $2C, 0, 6, 2, 4, $A, $86
-SevenForcesValkiriePaletteCommand:  dc.b    $62, $E, 2, 4, $E, $EE, $A, $CA, 4, $66, 0, $44, $F, $FF, 2, $CE  ; was: byte_C67E
-                                        ; DATA XREF: ROM:SevenForcesValkirieAssetSet   o
+SevenForceValkiriePaletteCommand:   dc.b    $62, $E, 2, 4, $E, $EE, $A, $CA, 4, $66, 0, $44, $F, $FF, 2, $CE  ; was: byte_C67E
+                                        ; DATA XREF: ROM:SevenForceValkirieAssetSet   o
                 dc.b    0, $8C, 0, $8E, 0, $4C, 0, $2A, 2, 8, 0, $68, 6, $AE, $A, $EE
-SevenForcesMedusaPaletteCommand:    dc.b    $62, $E, 6, 0, $E, $EE, 6, $66, 4, $44, 4, $42, $F, $FF, $A, $AA  ; was: byte_C69E
-                                        ; DATA XREF: ROM:SevenForcesMedusaAssetSet   o
+SevenForceMedusaPaletteCommand: dc.b    $62, $E, 6, 0, $E, $EE, 6, $66, 4, $44, 4, $42, $F, $FF, $A, $AA  ; was: byte_C69E
+                                        ; DATA XREF: ROM:SevenForceMedusaAssetSet   o
                 dc.b    8, $66, $E, $48, $C, $26, $A, $24, 8, 2, 0, $26, 0, $8C, $E, $AC
-SevenForcesSylpheedPaletteCommand:  dc.b    $62, $E, 2, $20, $E, $EE, 2, $8C, 0, $46, 2, $42, $F, $FF, 0, $C8  ; was: byte_C6BE
-                                        ; DATA XREF: ROM:SevenForcesSylpheedAssetSet   o
+SevenForceSylpheedPaletteCommand:   dc.b    $62, $E, 2, $20, $E, $EE, 2, $8C, 0, $46, 2, $42, $F, $FF, 0, $C8  ; was: byte_C6BE
+                                        ; DATA XREF: ROM:SevenForceSylpheedAssetSet   o
                 dc.b    0, $84, 4, $C6, 2, $84, 0, $62, 0, $42, 0, $40, 0, $6C, 4, $EA
-SevenForcesArtemisPaletteCommand:   dc.b    $62, $E, 4, 2, $E, $EE, 6, $6C, 4, $48, 2, $24, $F, $FF, $A, $8A  ; was: byte_C6DE
-                                        ; DATA XREF: ROM:SevenForcesArtemisAssetSet   o
+SevenForceArtemisPaletteCommand:    dc.b    $62, $E, 4, 2, $E, $EE, 6, $6C, 4, $48, 2, $24, $F, $FF, $A, $8A  ; was: byte_C6DE
+                                        ; DATA XREF: ROM:SevenForceArtemisAssetSet   o
                 dc.b    6, $68, $C, $CA, $A, $88, 8, $66, 2, $22, 0, $28, 0, $6E, $C, $CC
-SevenForcesSirenePaletteCommand:    dc.b    $62, $E, 2, 2, $E, $EE, 6, $EE, 2, $8A, 2, $22, $F, $FF, $E, $A8  ; was: byte_C6FE
-                                        ; DATA XREF: ROM:SevenForcesSireneAssetSet   o
+SevenForceSirenePaletteCommand: dc.b    $62, $E, 2, 2, $E, $EE, 6, $EE, 2, $8A, 2, $22, $F, $FF, $E, $A8  ; was: byte_C6FE
+                                        ; DATA XREF: ROM:SevenForceSireneAssetSet   o
                 dc.b    $A, $64, $E, $A8, $E, $62, $C, $22, 8, 2, 4, 2, 4, $84, $E, $EC
-SevenForcesSireneTimedPaletteCommandA:  dc.b    $62, $E, 0, 2, $E, $EE, $E, $A4, 8, $62, 4, $22, $F, $FF, 0, $AC  ; was: byte_C71E
-                                        ; DATA XREF: ROM:SevenForcesSireneTimedAssetSetA   o
+SevenForceSireneTimedPaletteCommandA:   dc.b    $62, $E, 0, 2, $E, $EE, $E, $A4, 8, $62, 4, $22, $F, $FF, 0, $AC  ; was: byte_C71E
+                                        ; DATA XREF: ROM:SevenForceSireneTimedAssetSetA   o
                 dc.b    0, $46, 4, $8E, 0, $4E, 0, $A, 0, 6, 0, 2, 0, $6C, 4, $EE
-SevenForcesSireneTimedPaletteCommandB:  dc.b    $62, $E, 2, $22, $E, $EC, 0, $6C, 0, $26, 2, $22, $F, $FF, 4, $86  ; was: byte_C73E
-                                        ; DATA XREF: ROM:SevenForcesSireneTimedAssetSetB   o
+SevenForceSireneTimedPaletteCommandB:   dc.b    $62, $E, 2, $22, $E, $EC, 0, $6C, 0, $26, 2, $22, $F, $FF, 4, $86  ; was: byte_C73E
+                                        ; DATA XREF: ROM:SevenForceSireneTimedAssetSetB   o
                 dc.b    2, $44, $A, $44, 4, $20, 2, 2, 2, 0, 0, 2, 0, $AE, 8, $AA
 Boss_DestroyerProtoPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $80, 0, $28, $F, $FF, 0, $6C  ; was: byte_C75E
                                         ; DATA XREF: ROM:Boss_DestroyerProtoAssetSet   o
@@ -379,8 +379,8 @@ Boss_ZLeoPaletteCommands:   dc.b    $62, $E, 0, 0, $E, $EE, $E, $88, 8, $44, 4, 
                 dc.b    0, 2, 0, 4, 0, $24, 0, $46, 2, $68, 4, $AC, 6, $CE, 0, $AE
                 dc.b    $62, $E, 0, 0, $E, $EE, $F, $FF, $F, $FF, 0, $28, 0, 8, 0, $6C
                 dc.b    0, $AE, 4, 2, 6, $24, 8, $46, $C, $8A, 0, 6, 2, $C, 6, $6E
-SevenForcesIntroPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $A, $CE, 4, $8C, 2, $68, $FF, $FF, $A, $AA  ; was: byte_C81E
-                                        ; DATA XREF: Entity_InitSevenForcesIntro+36   o
+SevenForceIntroPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $A, $CE, 4, $8C, 2, $68, $FF, $FF, $A, $AA  ; was: byte_C81E
+                                        ; DATA XREF: Entity_InitSevenForceIntro+36   o
                 dc.b    6, $66, $E, $CC, $C, $AA, 8, $66, 6, $42, 4, $22, $E, $CC, $FF, $FF
 
 ; Main stage dispatcher jump table

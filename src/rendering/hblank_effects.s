@@ -265,9 +265,9 @@ HBlank_ApplyZLeoRasterCommands:                         ; was: sub_1B7A
                 rte
 ; End of function HBlank_ApplyZLeoRasterCommands
 ; Installs the Seven Force intro's delayed window-position HBlank handler
-VBlank_InitSevenForcesWindowEffect:                     ; DATA XREF: VBlank_DispatchRasterEffect+62   o  ; was: sub_1C1E
+VBlank_InitSevenForceWindowEffect:                      ; DATA XREF: VBlank_DispatchRasterEffect+62   o  ; was: sub_1C1E
                 move.w  (RasterEffectInitState).w,d0
-                bne.w   VBlank_InitSevenForcesWindowEffect_UpdateRegisters
+                bne.w   VBlank_InitSevenForceWindowEffect_UpdateRegisters
                 addq.w  #4,(RasterEffectInitState).w
                 move.b  #$80,(VDPReg10Shadow+1).w
                 lea     HBlank_SetWindowPositionAfterDelay_InstallList(pc),a0
@@ -275,16 +275,16 @@ VBlank_InitSevenForcesWindowEffect:                     ; DATA XREF: VBlank_Disp
                 jsr     (LoadObjData).l
                 ori.b   #$10,(VDPReg0Shadow+1).w
                 move.w  (VDPReg0Shadow).w,(VDP_CTRL).l
-VBlank_InitSevenForcesWindowEffect_UpdateRegisters:     ; CODE XREF: VBlank_InitSevenForcesWindowEffect+4   j  ; was: loc_1C4A
+VBlank_InitSevenForceWindowEffect_UpdateRegisters:      ; CODE XREF: VBlank_InitSevenForceWindowEffect+4   j  ; was: loc_1C4A
                 move.w  (VDPReg2Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg4Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg17Shadow).w,(VDP_CTRL).l
                 move.w  (VDPReg18Shadow).w,(VDP_CTRL).l
                 rts
-; End of function VBlank_InitSevenForcesWindowEffect
+; End of function VBlank_InitSevenForceWindowEffect
 ; ---------------------------------------------------------------------------
 HBlank_SetWindowPositionAfterDelay_InstallList: dc.w    0  ; LoadFuncToRAM  ; was: stru_1C6C
-                                        ; DATA XREF: VBlank_InitSevenForcesWindowEffect+12   o
+                                        ; DATA XREF: VBlank_InitSevenForceWindowEffect+12   o
                 dc.l    HBlank_SetWindowPositionAfterDelay_CopyLength  ; ROM source
                 dc.w    $EE00                           ; RAM destination
                 dc.w    $FFFF                           ; end of list

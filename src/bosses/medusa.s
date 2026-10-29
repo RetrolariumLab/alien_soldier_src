@@ -11,14 +11,14 @@ Boss_UpdateMedusa:                                      ; DATA XREF: ROM:Entity_
                 tst.w   (BossHealth).w
                 bne.s   Boss_UpdateMedusaBattleEffects
                 moveq   #4,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Boss_UpdateMedusaBattleEffects:                         ; CODE XREF: Boss_UpdateMedusa+14   j  ; was: loc_569C8
                                         ; Boss_UpdateMedusa+1C   j
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #6,d0
-                jsr     (Gfx_UpdateSevenForcesBattlePalette).l
+                jsr     (Gfx_UpdateSevenForceBattlePalette).l
                 bsr.w   Entity_UpdateMedusaScriptedSpawnSequence
 ; Resolve the even-numbered state offset and jump to its handler
 Boss_DispatchMedusaState:                               ; CODE XREF: Boss_UpdateMedusa+4   j  ; was: loc_569E0

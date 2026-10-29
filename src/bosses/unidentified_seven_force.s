@@ -4,10 +4,10 @@ Boss_UnidentifiedSevenForceMain:                        ; DATA XREF: ROM:Entity_
                 beq.w   Boss_UnidentifiedSevenForceDispatchState
                 tst.w   8(a5)
                 beq.s   Boss_UnidentifiedSevenForceDispatchState
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #$18,d0
-                jsr     (Gfx_UpdateSevenForcesBattlePalette).l
+                jsr     (Gfx_UpdateSevenForceBattlePalette).l
 Boss_UnidentifiedSevenForceDispatchState:               ; CODE XREF: Boss_UnidentifiedSevenForceMain+4   j  ; was: loc_58C84
                                         ; Boss_UnidentifiedSevenForceMain+C   j
                 move.w  4(a5),d0
@@ -88,7 +88,7 @@ Boss_UnidentifiedSevenForceInitTimedState4:
                 subq.w  #1,$11C(a5)
                 bpl.s   Boss_UnidentifiedSevenForceRenderTimedState4Frame
                 moveq   #8,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Boss_UnidentifiedSevenForceRenderTimedState4Frame:      ; CODE XREF: Boss_UnidentifiedSevenForceInitTimedState4+42   j  ; was: loc_58DA0
                 lea     Boss_UnidentifiedSevenForceSharedPose(pc),a1

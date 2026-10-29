@@ -16,7 +16,7 @@ bytes.
 | `$138EE4`                  | `Boss_WolfGaropaTileArt1`                   | `UnreferencedWolfGaropaTileArt2`         |            75 |
 | `$13D42A`                  | `Boss_ZLeoTileArt1`                         | `UnreferencedZLeoTileArt2`               |           322 |
 | `$188A16`                  | `StoryScreenMappingData6000`                | `UnreferencedIntroSceneSpriteArt`        |           194 |
-| `$1BE2CA`                  | `SevenForcesVictoryCutsceneMappingData4020` | `UnreferencedSevenForcesCutsceneTileArt` |            44 |
+| `$1BE2CA`                  | `SevenForceVictoryCutsceneMappingData4020` | `UnreferencedSevenForceCutsceneTileArt` |            44 |
 
 The first six second archives are in `data/artcomp/`; the last two follow
 mapping payloads in `data/mappings/`. Their tile counts come from decoding the
@@ -39,7 +39,7 @@ it caused any observed rendering failure.
 
 Two purported archive ends also had non-archive data after the compressed
 stream. The archive at `$1BE2CA` ends at `$1BE722`; its 64-byte remainder is
-`UnreferencedSevenForcesCutscenePostArtData`. The archive at `$19BF9E` ends at
+`UnreferencedSevenForceCutscenePostArtData`. The archive at `$19BF9E` ends at
 `$19C492`; its 18-byte remainder is `UnreferencedPostStageTileArtSpriteMapping`.
 The latter has three six-byte sprite-command-shaped records, with the final
 record's high bit set. The 64-byte tail also begins with command-shaped records,

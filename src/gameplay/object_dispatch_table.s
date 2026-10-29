@@ -265,7 +265,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Stage23_UpdateWolfGaropaArenaBoundary
                 dc.l    Effect_WolfGaropaBoundaryFollowerMain
                 dc.l    Projectile_UpdateType424Visibility
-                dc.l    Entity_UpdateSevenForcesIntro
+                dc.l    Entity_UpdateSevenForceIntro
                 dc.l    Entity_UpdateValkirieBattle
                 dc.l    Boss_UpdateMedusa
                 dc.l    Boss_UpdateSirene

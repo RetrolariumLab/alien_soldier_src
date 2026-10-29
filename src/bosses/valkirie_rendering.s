@@ -422,25 +422,25 @@ Entity_AimValkirieAuxiliaryAtPlayer:                    ; CODE XREF: Entity_Upda
                 sub.w   $1F4(a5),d1
                 jmp     (Math_CalculateDirectionIndex).l
 ; End of function Entity_AimValkirieAuxiliaryAtPlayer
-; Restore the shared Seven Forces colors or apply the caller-selected flash set
-Gfx_UpdateSevenForcesBattlePalette:                     ; CODE XREF: Entity_UpdateValkirieBattle+3A   p  ; was: sub_56942
+; Restore the shared Seven Force colors or apply the caller-selected flash set
+Gfx_UpdateSevenForceBattlePalette:                      ; CODE XREF: Entity_UpdateValkirieBattle+3A   p  ; was: sub_56942
                                         ; Boss_UpdateMedusa+3A   p
                 btst    #0,(FrameCounter+1).w
-                bne.s   Gfx_ApplySevenForcesBattleFlashPalette
+                bne.s   Gfx_ApplySevenForceBattleFlashPalette
                 move.w  (PaletteShadowColor61).w,(PaletteActiveColor61).w
                 move.w  (PaletteShadowColor62).w,(PaletteActiveColor62).w
                 move.w  (PaletteShadowColor63).w,(PaletteActiveColor63).w
                 rts
 ; ---------------------------------------------------------------------------
-Gfx_ApplySevenForcesBattleFlashPalette:                 ; CODE XREF: Gfx_UpdateSevenForcesBattlePalette+6   j  ; was: loc_5695E
-                move.w  SevenForces_BattleFlashPaletteColors(pc,d0.w),(PaletteActiveColor61).w
-                move.w  SevenForces_BattleFlashPaletteColors+2(pc,d0.w),(PaletteActiveColor62).w
-                move.w  SevenForces_BattleFlashPaletteColors+4(pc,d0.w),(PaletteActiveColor63).w
+Gfx_ApplySevenForceBattleFlashPalette:                  ; CODE XREF: Gfx_UpdateSevenForceBattlePalette+6   j  ; was: loc_5695E
+                move.w  SevenForce_BattleFlashPaletteColors(pc,d0.w),(PaletteActiveColor61).w
+                move.w  SevenForce_BattleFlashPaletteColors+2(pc,d0.w),(PaletteActiveColor62).w
+                move.w  SevenForce_BattleFlashPaletteColors+4(pc,d0.w),(PaletteActiveColor63).w
                 rts
-; End of function Gfx_UpdateSevenForcesBattlePalette
+; End of function Gfx_UpdateSevenForceBattlePalette
 ; ---------------------------------------------------------------------------
-SevenForces_BattleFlashPaletteColors:   dc.w    $28A, $8EE, $CEE, $28A, $8EE, $CEE, $68  ; was: word_56972
-                                        ; DATA XREF: Gfx_UpdateSevenForcesBattlePalette:Gfx_ApplySevenForcesBattleFlashPalette   r
-                                        ; Gfx_UpdateSevenForcesBattlePalette+22   r
+SevenForce_BattleFlashPaletteColors:    dc.w    $28A, $8EE, $CEE, $28A, $8EE, $CEE, $68  ; was: word_56972
+                                        ; DATA XREF: Gfx_UpdateSevenForceBattlePalette:Gfx_ApplySevenForceBattleFlashPalette   r
+                                        ; Gfx_UpdateSevenForceBattlePalette+22   r
                 dc.w    $4CE, $6EC, $A8, $6E, $8AC, $28A, $8EE
                 dc.w    $CEE, $28A, $8EE, $CEE, $28A, $8EE, $CEE

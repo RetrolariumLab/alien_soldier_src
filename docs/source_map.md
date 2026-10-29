@@ -18,7 +18,7 @@ listing up to tag 3.0; keep them current by hand when modules move.
 | `0x013ADE-0x0146FB` | entity, terrain, and combat collision                                                                           |     2 | static/hypothesis        |
 | `0x0146FC-0x016F35` | player terrain and state families                                                                               |     9 | hypothesis               |
 | `0x016F36-0x0199F3` | player rendering, weapons, projectiles, and weapon UI                                                           |     8 | hypothesis               |
-| `0x0199F4-0x01C3F9` | player scripts, stage intros, Seven Forces states, object utilities, and projectile slots                       |     6 | hypothesis               |
+| `0x0199F4-0x01C3F9` | player scripts, stage intros, Seven Force states, object utilities, and projectile slots                        |     6 | hypothesis               |
 | `0x01C3FA-0x01E869` | gameplay entry states, main loop, debug helpers, plane shake, frontend, results, and transitions                |    17 | static/hypothesis        |
 | `0x01E86A-0x020249` | cutscenes, stage initialization, menus, and results scrolling                                                   |     5 | hypothesis               |
 | `0x02024A-0x023CB9` | results data, credits, selection UI, and floating icons                                                         |     5 | hypothesis               |
@@ -44,10 +44,10 @@ listing up to tag 3.0; keep them current by hand when modules move.
 | `0x04BEBC-0x04DDD1` | Bugmax systems                                                                                                  |     5 | hypothesis               |
 | `0x04DDD2-0x050CD3` | Shield Viper and Wolf Garopa systems                                                                            |     8 | hypothesis               |
 | `0x050CD4-0x0537A7` | Valkirie transition, Z-Leo, and Valkirie Force                                                                  |     8 | hypothesis               |
-| `0x0537A8-0x05575D` | Missiray and Seven Forces projectile/introduction controller                                                    |     9 | hypothesis               |
+| `0x0537A8-0x05575D` | Missiray and Seven Force projectile/introduction controller                                                     |     9 | hypothesis               |
 | `0x05575E-0x057497` | Valkirie battle/rendering and Medusa                                                                            |     3 | hypothesis               |
 | `0x057498-0x058FED` | Sirene, Artemis, and an unidentified Seven Force                                                                |     5 | hypothesis               |
-| `0x058FEE-0x05A43B` | alternate Valkirie, Sylpheed, and shared Seven Forces metasprite data                                           |     4 | static/hypothesis        |
+| `0x058FEE-0x05A43B` | alternate Valkirie, Sylpheed, and shared Seven Force metasprite data                                            |     4 | static/hypothesis        |
 | `0x05A43C-0x082323` | final entity stub, packed-BCD lookup with opaque tail, and first padding gap                                    |     1 | static                   |
 | `0x082324-0x083E6F` | 68k sound driver, playback, and sequence commands                                                               |     7 | static                   |
 | `0x083E70-0x084A6F` | embedded Z80 sound program                                                                                      |     1 | static                   |

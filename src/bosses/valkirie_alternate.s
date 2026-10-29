@@ -10,14 +10,14 @@ Boss_ValkirieAlternateMain:                             ; DATA XREF: ROM:Entity_
                 tst.w   (BossHealth).w
                 bne.s   Boss_ValkirieAlternateUpdatePalette
                 moveq   #$C,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Boss_ValkirieAlternateUpdatePalette:                    ; CODE XREF: Boss_ValkirieAlternateMain+14   j  ; was: loc_5901A
                                         ; Boss_ValkirieAlternateMain+1C   j
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #$1E,d0
-                jsr     (Gfx_UpdateSevenForcesBattlePalette).l
+                jsr     (Gfx_UpdateSevenForceBattlePalette).l
 Boss_ValkirieAlternateDispatchState:                    ; CODE XREF: Boss_ValkirieAlternateMain+4   j  ; was: loc_5902E
                                         ; Boss_ValkirieAlternateMain+C   j
                 move.w  4(a5),d0

@@ -1,11 +1,11 @@
 ; Seven Forces Valkirie, Medusa, Sylpheed, and Artemis form states
 ; State C: fade in the Valkirie palette, then arm its hold timer
-Entity_SevenForcesValkirieFadeInStateC:                 ; DATA XREF: ROM:00054BA4   o  ; was: sub_54F9E
+Entity_SevenForceValkirieFadeInStateC:                 ; DATA XREF: ROM:00054BA4   o  ; was: sub_54F9E
                 subq.w  #1,$48(a5)
-                bpl.w   Entity_SevenForcesNoOpState
+                bpl.w   Entity_SevenForceNoOpState
                 addq.w  #1,$5E(a5)
                 cmpi.w  #$E,$5E(a5)
-                bmi.s   Entity_SevenForcesValkirieFadeInApplyPalette
+                bmi.s   Entity_SevenForceValkirieFadeInApplyPalette
                 addq.w  #2,4(a5)
                 move.w  #$34,$48(a5)                    ; '4'
                 clr.w   2(a5)
@@ -13,127 +13,127 @@ Entity_SevenForcesValkirieFadeInStateC:                 ; DATA XREF: ROM:00054BA
                 jsr     (Sound_QueueBGMRequest).l
                 move.b  #$23,d0                         ; '#'
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesValkirieAssetSet).l,a1
+                lea     (SevenForceValkirieAssetSet).l,a1
                 jsr     (Boss_LoadAssetSet).l
-Entity_SevenForcesValkirieFadeInApplyPalette:           ; CODE XREF: Entity_SevenForcesValkirieFadeInStateC+12   j  ; was: loc_54FE0
-                bra.w   Gfx_UpdateSevenForcesValkiriePaletteFade
+Entity_SevenForceValkirieFadeInApplyPalette:           ; CODE XREF: Entity_SevenForcesValkirieFadeInStateC+12   j  ; was: loc_54FE0
+                bra.w   Gfx_UpdateSevenForceValkiriePaletteFade
 ; End of function Entity_SevenForcesValkirieFadeInStateC
 ; State E: count down Valkirie hold and fade-out values, then reset
-Entity_SevenForcesValkirieFadeOutStateE:                ; DATA XREF: ROM:00054BA6   o  ; was: sub_54FE4
+Entity_SevenForceValkirieFadeOutStateE:                ; DATA XREF: ROM:00054BA6   o  ; was: sub_54FE4
                 subq.w  #1,$48(a5)
-                bpl.w   Gfx_UpdateSevenForcesValkiriePaletteFade
+                bpl.w   Gfx_UpdateSevenForceValkiriePaletteFade
                 subq.w  #1,$5E(a5)
-                bpl.w   Gfx_UpdateSevenForcesValkiriePaletteFade
-Entity_SevenForcesResetState:                           ; CODE XREF: Entity_SevenForcesMedusaFadeOutState16+16   j  ; was: loc_54FF4
+                bpl.w   Gfx_UpdateSevenForceValkiriePaletteFade
+Entity_SevenForceResetState:                           ; CODE XREF: Entity_SevenForcesMedusaFadeOutState16+16   j  ; was: loc_54FF4
                                         ; Entity_SevenForcesSylpheedFadeOutState20+16   j
                 clr.w   4(a5)
                 rts
 ; End of function Entity_SevenForcesValkirieFadeOutStateE
 ; State $10: launch the Medusa entrance trajectory
-Entity_SevenForcesStartMedusaEntranceState10:           ; DATA XREF: ROM:00054BA8   o  ; was: sub_54FFA
+Entity_SevenForceStartMedusaEntranceState10:           ; DATA XREF: ROM:00054BA8   o  ; was: sub_54FFA
                 addq.w  #2,4(a5)
                 move.l  #$FFFCC000,$1C(a5)
                 move.l  #$12000,$18(a5)
                 cmpi.w  #$150,$10(a5)
-                bmi.s   Entity_SevenForcesUpdateMedusaEntranceState12
+                bmi.s   Entity_SevenForceUpdateMedusaEntranceState12
                 neg.l   $18(a5)
 ; State $12: apply gravity until Medusa reaches the landing threshold
-Entity_SevenForcesUpdateMedusaEntranceState12:          ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10+1A   j  ; was: loc_5501A
+Entity_SevenForceUpdateMedusaEntranceState12:          ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10+1A   j  ; was: loc_5501A
                                         ; DATA XREF: ROM:00054BAA   o
                 addi.l  #$2800,$1C(a5)
-                bmi.s   Entity_SevenForcesUpdateMedusaEntrancePalette
+                bmi.s   Entity_SevenForceUpdateMedusaEntrancePalette
                 cmpi.w  #$F0,$14(a5)
-                bmi.s   Entity_SevenForcesUpdateMedusaEntrancePalette
+                bmi.s   Entity_SevenForceUpdateMedusaEntrancePalette
                 addq.w  #2,4(a5)
                 clr.w   2(a5)
                 move.w  #$40,$48(a5)                    ; '@'
                 move.b  #$A5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesMedusaAssetSet).l,a1
+                lea     (SevenForceMedusaAssetSet).l,a1
                 jsr     (Boss_LoadAssetSet).l
                 move.b  #1,(SceneSequenceFlags).w
-Entity_SevenForcesUpdateMedusaEntrancePalette:          ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10+28   j  ; was: loc_55056
+Entity_SevenForceUpdateMedusaEntrancePalette:          ; CODE XREF: Entity_SevenForcesStartMedusaEntranceState10+28   j  ; was: loc_55056
                                         ; Entity_SevenForcesStartMedusaEntranceState10+30   j
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesStartMedusaEntranceState10
 ; State $14: hold Medusa, play the timed cue, and update its palette
-Entity_SevenForcesMedusaHoldState14:                    ; DATA XREF: ROM:00054BAC   o  ; was: sub_5505A
+Entity_SevenForceMedusaHoldState14:                    ; DATA XREF: ROM:00054BAC   o  ; was: sub_5505A
                 subq.w  #1,$48(a5)
-                bpl.s   Entity_SevenForcesMedusaHoldCheckSound
+                bpl.s   Entity_SevenForceMedusaHoldCheckSound
                 addq.w  #2,4(a5)
-Entity_SevenForcesMedusaHoldCheckSound:                 ; CODE XREF: Entity_SevenForcesMedusaHoldState14+4   j  ; was: loc_55064
+Entity_SevenForceMedusaHoldCheckSound:                 ; CODE XREF: Entity_SevenForcesMedusaHoldState14+4   j  ; was: loc_55064
                 cmpi.w  #$38,$48(a5)                    ; '8'
-                bne.s   Entity_SevenForcesMedusaHoldApplyPalette
+                bne.s   Entity_SevenForceMedusaHoldApplyPalette
                 move.b  #$25,d0                         ; '%'
                 jsr     (Sound_QueueSFXRequest).l
-Entity_SevenForcesMedusaHoldApplyPalette:               ; CODE XREF: Entity_SevenForcesMedusaHoldState14+10   j  ; was: loc_55076
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+Entity_SevenForceMedusaHoldApplyPalette:               ; CODE XREF: Entity_SevenForcesMedusaHoldState14+10   j  ; was: loc_55076
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesMedusaHoldState14
 ; State $16: advance Medusa's fade value on alternate frames, then reset
-Entity_SevenForcesMedusaFadeOutState16:                 ; DATA XREF: ROM:00054BAE   o  ; was: sub_5507A
+Entity_SevenForceMedusaFadeOutState16:                 ; DATA XREF: ROM:00054BAE   o  ; was: sub_5507A
                 btst    #0,(FrameCounter+1).w
-                beq.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+                beq.w   Gfx_UpdateSevenForceMultiRangePaletteFade
                 addq.w  #1,$5E(a5)
-                beq.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
-                bmi.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
-                bra.w   Entity_SevenForcesResetState
+                beq.w   Gfx_UpdateSevenForceMultiRangePaletteFade
+                bmi.w   Gfx_UpdateSevenForceMultiRangePaletteFade
+                bra.w   Entity_SevenForceResetState
 ; End of function Entity_SevenForcesMedusaFadeOutState16
 ; State $18: launch the Sylpheed entrance trajectory
-Entity_SevenForcesStartSylpheedEntranceState18:         ; DATA XREF: ROM:00054BB0   o  ; was: sub_55094
+Entity_SevenForceStartSylpheedEntranceState18:         ; DATA XREF: ROM:00054BB0   o  ; was: sub_55094
                 move.b  #1,(SceneSequenceFlags).w
                 addq.w  #2,4(a5)
                 move.l  #$FFFC8000,$1C(a5)
                 move.l  #$18000,$18(a5)
                 cmpi.w  #$120,$10(a5)
-                bmi.s   Entity_SevenForcesUpdateSylpheedEntranceState1A
+                bmi.s   Entity_SevenForceUpdateSylpheedEntranceState1A
                 neg.l   $18(a5)
 ; State $1A: apply gravity until Sylpheed reaches the landing threshold
-Entity_SevenForcesUpdateSylpheedEntranceState1A:        ; CODE XREF: Entity_SevenForcesStartSylpheedEntranceState18+20   j  ; was: loc_550BA
+Entity_SevenForceUpdateSylpheedEntranceState1A:        ; CODE XREF: Entity_SevenForcesStartSylpheedEntranceState18+20   j  ; was: loc_550BA
                                         ; DATA XREF: ROM:00054BB2   o
                 addi.l  #$2800,$1C(a5)
-                bmi.s   Entity_SevenForcesUpdateSylpheedEntrancePalette
+                bmi.s   Entity_SevenForceUpdateSylpheedEntrancePalette
                 cmpi.w  #$F0,$14(a5)
-                bmi.s   Entity_SevenForcesUpdateSylpheedEntrancePalette
+                bmi.s   Entity_SevenForceUpdateSylpheedEntrancePalette
                 addq.w  #2,4(a5)
                 clr.w   2(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 move.b  #$A5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesSylpheedAssetSet).l,a1
+                lea     (SevenForceSylpheedAssetSet).l,a1
                 jsr     (Boss_LoadAssetSet).l
-Entity_SevenForcesUpdateSylpheedEntrancePalette:        ; CODE XREF: Entity_SevenForcesStartSylpheedEntranceState18+2E   j  ; was: loc_550F0
+Entity_SevenForceUpdateSylpheedEntrancePalette:        ; CODE XREF: Entity_SevenForcesStartSylpheedEntranceState18+2E   j  ; was: loc_550F0
                                         ; Entity_SevenForcesStartSylpheedEntranceState18+36   j
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesStartSylpheedEntranceState18
 ; State $1C: hold Sylpheed, play the timed cue, and update its palette
-Entity_SevenForcesSylpheedHoldState1C:                  ; DATA XREF: ROM:00054BB4   o  ; was: sub_550F4
+Entity_SevenForceSylpheedHoldState1C:                  ; DATA XREF: ROM:00054BB4   o  ; was: sub_550F4
                 subq.w  #1,$48(a5)
-                bpl.s   Entity_SevenForcesSylpheedHoldApplyPalette
+                bpl.s   Entity_SevenForceSylpheedHoldApplyPalette
                 addq.w  #2,4(a5)
                 move.b  #$24,d0                         ; '$'
                 jsr     (Sound_QueueSFXRequest).l
-Entity_SevenForcesSylpheedHoldApplyPalette:             ; CODE XREF: Entity_SevenForcesSylpheedHoldState1C+4   j  ; was: loc_55108
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+Entity_SevenForceSylpheedHoldApplyPalette:             ; CODE XREF: Entity_SevenForcesSylpheedHoldState1C+4   j  ; was: loc_55108
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesSylpheedHoldState1C
 ; State $1E: wait for the Sylpheed scroll threshold
-Entity_SevenForcesWaitForSylpheedScrollState1E:         ; DATA XREF: ROM:00054BB6   o  ; was: sub_5510C
+Entity_SevenForceWaitForSylpheedScrollState1E:         ; DATA XREF: ROM:00054BB6   o  ; was: sub_5510C
                 cmpi.w  #$F760,(PrimaryCameraYPosition).w
-                bpl.s   Entity_SevenForcesWaitForSylpheedScrollApplyPalette
+                bpl.s   Entity_SevenForceWaitForSylpheedScrollApplyPalette
                 addq.w  #2,4(a5)
-Entity_SevenForcesWaitForSylpheedScrollApplyPalette:    ; CODE XREF: Entity_SevenForcesWaitForSylpheedScrollState1E+6   j  ; was: loc_55118
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+Entity_SevenForceWaitForSylpheedScrollApplyPalette:    ; CODE XREF: Entity_SevenForcesWaitForSylpheedScrollState1E+6   j  ; was: loc_55118
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesWaitForSylpheedScrollState1E
 ; State $20: advance Sylpheed's fade value on alternate frames, then reset
-Entity_SevenForcesSylpheedFadeOutState20:               ; DATA XREF: ROM:00054BB8   o  ; was: sub_5511C
+Entity_SevenForceSylpheedFadeOutState20:               ; DATA XREF: ROM:00054BB8   o  ; was: sub_5511C
                 btst    #0,(FrameCounter+1).w
-                beq.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+                beq.w   Gfx_UpdateSevenForceMultiRangePaletteFade
                 addq.w  #1,$5E(a5)
-                beq.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
-                bmi.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
-                bra.w   Entity_SevenForcesResetState
+                beq.w   Gfx_UpdateSevenForceMultiRangePaletteFade
+                bmi.w   Gfx_UpdateSevenForceMultiRangePaletteFade
+                bra.w   Entity_SevenForceResetState
 ; End of function Entity_SevenForcesSylpheedFadeOutState20
 ; State $22: configure and launch the Artemis entrance trajectory
-Entity_SevenForcesStartArtemisEntranceState22:          ; DATA XREF: ROM:00054BBA   o  ; was: sub_55136
+Entity_SevenForceStartArtemisEntranceState22:          ; DATA XREF: ROM:00054BBA   o  ; was: sub_55136
                 addq.w  #2,4(a5)
                 bclr    #0,(PlayerModeFlags).w
                 bclr    #4,(PlayerSpriteAttributes).w
@@ -146,31 +146,31 @@ Entity_SevenForcesStartArtemisEntranceState22:          ; DATA XREF: ROM:00054BB
                 move.l  #$38000,$1C(a5)
                 move.l  #$22000,$18(a5)
                 cmpi.w  #$120,$10(a5)
-                bmi.s   Entity_SevenForcesUpdateArtemisEntranceState24
+                bmi.s   Entity_SevenForceUpdateArtemisEntranceState24
                 neg.l   $18(a5)
 ; State $24: decelerate Artemis upward until it reaches the height threshold
-Entity_SevenForcesUpdateArtemisEntranceState24:         ; CODE XREF: Entity_SevenForcesStartArtemisEntranceState22+46   j  ; was: loc_55182
+Entity_SevenForceUpdateArtemisEntranceState24:         ; CODE XREF: Entity_SevenForcesStartArtemisEntranceState22+46   j  ; was: loc_55182
                                         ; DATA XREF: ROM:00054BBC   o
                 subi.l  #$1000,(PlayerYVelocity).w
                 subi.l  #$2000,$1C(a5)
-                bpl.s   Entity_SevenForcesUpdateArtemisEntrancePalette
+                bpl.s   Entity_SevenForceUpdateArtemisEntrancePalette
                 cmpi.w  #$100,$14(a5)
-                bpl.s   Entity_SevenForcesUpdateArtemisEntrancePalette
+                bpl.s   Entity_SevenForceUpdateArtemisEntrancePalette
                 addq.w  #2,4(a5)
                 clr.w   2(a5)
                 move.b  #$A5,d0
                 jsr     (Sound_QueueSFXRequest).l
-                lea     (SevenForcesArtemisAssetSet).l,a1
+                lea     (SevenForceArtemisAssetSet).l,a1
                 jsr     (Boss_LoadAssetSet).l
-Entity_SevenForcesUpdateArtemisEntrancePalette:         ; CODE XREF: Entity_SevenForcesStartArtemisEntranceState22+5C   j  ; was: loc_551BA
+Entity_SevenForceUpdateArtemisEntrancePalette:         ; CODE XREF: Entity_SevenForcesStartArtemisEntranceState22+5C   j  ; was: loc_551BA
                                         ; Entity_SevenForcesStartArtemisEntranceState22+64   j
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesStartArtemisEntranceState22
 ; State $26: wait for the Artemis completion signal and configure its hold
-Entity_SevenForcesWaitForArtemisSignalState26:          ; DATA XREF: ROM:00054BBE   o  ; was: sub_551BE
+Entity_SevenForceWaitForArtemisSignalState26:          ; DATA XREF: ROM:00054BBE   o  ; was: sub_551BE
                 subi.l  #$1000,(PlayerYVelocity).w
                 tst.b   (SceneSequenceFlags).w
-                bne.s   Entity_SevenForcesWaitForArtemisSignalApplyPalette
+                bne.s   Entity_SevenForceWaitForArtemisSignalApplyPalette
                 addq.w  #2,4(a5)
                 move.w  #$40,$48(a5)                    ; '@'
                 move.w  #$10,$4A(a5)
@@ -178,30 +178,30 @@ Entity_SevenForcesWaitForArtemisSignalState26:          ; DATA XREF: ROM:00054BB
                 move.w  #$FF84,(PlayerYPosition).w
                 move.w  #$D0,(PlayerXPosition).w
                 bset    #0,(PlayerObjectFlags).w
-Entity_SevenForcesWaitForArtemisSignalApplyPalette:     ; CODE XREF: Entity_SevenForcesWaitForArtemisSignalState26+C   j  ; was: loc_551F2
-                bra.w   Gfx_UpdateSevenForcesMultiRangePaletteFade
+Entity_SevenForceWaitForArtemisSignalApplyPalette:     ; CODE XREF: Entity_SevenForcesWaitForArtemisSignalState26+C   j  ; was: loc_551F2
+                bra.w   Gfx_UpdateSevenForceMultiRangePaletteFade
 ; End of function Entity_SevenForcesWaitForArtemisSignalState26
 ; State $28: run Artemis hold timers and fade-out, then reset
-Entity_SevenForcesArtemisFadeOutState28:                ; DATA XREF: ROM:00054BC0   o  ; was: sub_551F6
+Entity_SevenForceArtemisFadeOutState28:                ; DATA XREF: ROM:00054BC0   o  ; was: sub_551F6
                 tst.w   $48(a5)
-                bmi.s   Entity_SevenForcesArtemisFadeOutUpdateTimer
+                bmi.s   Entity_SevenForceArtemisFadeOutUpdateTimer
                 subq.w  #1,$48(a5)
-                bpl.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+                bpl.w   Gfx_UpdateSevenForceArtemisPaletteFade
                 move.b  #1,(SceneSequenceFlags).w
                 bclr    #2,(PlayerRestrictionFlags).w
-Entity_SevenForcesArtemisFadeOutUpdateTimer:            ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+4   j  ; was: loc_55210
+Entity_SevenForceArtemisFadeOutUpdateTimer:            ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+4   j  ; was: loc_55210
                 subq.w  #1,$4A(a5)
-                bne.s   Entity_SevenForcesArtemisFadeOutApplyPalette
+                bne.s   Entity_SevenForceArtemisFadeOutApplyPalette
                 jsr     (Gfx_QueueArtemisIndexedRows).l
-                bra.s   Entity_SevenForcesArtemisFadeOutCheckReset
+                bra.s   Entity_SevenForceArtemisFadeOutCheckReset
 ; ---------------------------------------------------------------------------
-Entity_SevenForcesArtemisFadeOutApplyPalette:           ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+1E   j  ; was: loc_5521E
-                bpl.w   Gfx_UpdateSevenForcesArtemisPaletteFade
-Entity_SevenForcesArtemisFadeOutCheckReset:             ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+26   j  ; was: loc_55222
+Entity_SevenForceArtemisFadeOutApplyPalette:           ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+1E   j  ; was: loc_5521E
+                bpl.w   Gfx_UpdateSevenForceArtemisPaletteFade
+Entity_SevenForceArtemisFadeOutCheckReset:             ; CODE XREF: Entity_SevenForcesArtemisFadeOutState28+26   j  ; was: loc_55222
                 btst    #0,(FrameCounter+1).w
-                beq.w   Gfx_UpdateSevenForcesArtemisPaletteFade
+                beq.w   Gfx_UpdateSevenForceArtemisPaletteFade
                 addq.w  #1,$5E(a5)
-                beq.w   Gfx_UpdateSevenForcesArtemisPaletteFade
-                bmi.w   Gfx_UpdateSevenForcesArtemisPaletteFade
-                bra.w   Entity_SevenForcesResetState
+                beq.w   Gfx_UpdateSevenForceArtemisPaletteFade
+                bmi.w   Gfx_UpdateSevenForceArtemisPaletteFade
+                bra.w   Entity_SevenForceResetState
 ; End of function Entity_SevenForcesArtemisFadeOutState28

@@ -11,14 +11,14 @@ Boss_UpdateArtemis:                                     ; DATA XREF: ROM:Entity_
                 tst.w   (BossHealth).w
                 bne.s   Boss_UpdateArtemisBattleEffects
                 moveq   #8,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Boss_UpdateArtemisBattleEffects:                        ; CODE XREF: Boss_UpdateArtemis+14   j  ; was: loc_57EEA
                                         ; Boss_UpdateArtemis+1C   j
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #$12,d0
-                jsr     (Gfx_UpdateSevenForcesBattlePalette).l
+                jsr     (Gfx_UpdateSevenForceBattlePalette).l
                 move.w  (PrimaryCameraXPosition).w,d0
                 add.w   $10(a5),d0
                 move.w  d0,$BC(a5)

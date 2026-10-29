@@ -26,7 +26,7 @@ VBlankRasterEffectHandlerTable: dc.l    VBlank_DisableHBlankEffect  ; was: off_1
                 dc.l    VBlank_InitGameOverVScrollPairEffect
                 dc.l    VBlank_InitDestroyerProtoVScrollEffect
                 dc.l    VBlank_InitZLeoRasterEffect
-                dc.l    VBlank_InitSevenForcesWindowEffect
+                dc.l    VBlank_InitSevenForceWindowEffect
 ; End of function VBlank_DispatchRasterEffect
 ; Disables the installed HBlank effect and replaces its RAM entry with RTE
 VBlank_DisableHBlankEffect:                             ; DATA XREF: VBlank_DispatchRasterEffect:VBlankRasterEffectHandlerTable   o  ; was: sub_13BC

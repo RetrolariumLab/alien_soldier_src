@@ -50,8 +50,8 @@ EntityType3FCTileArt_End:                               ; was: tiles_12D012_End
 EntityType3F4TileArt:   binclude "data/artcomp/tiles_12E96C.bin"  ; entity type $3F4 art  ; was: tiles_12E96C
                                         ; Referenced by EntityType3F4GraphicsLoadList
 EntityType3F4TileArt_End:                               ; was: tiles_12E96C_End
-SevenForcesValkirieTileArt:     binclude "data/artcomp/tiles_130B4E.bin"  ; was: tiles_130B4E
-SevenForcesValkirieTileArt_End:                         ; was: tiles_130B4E_End
+SevenForceValkirieTileArt:      binclude "data/artcomp/tiles_130B4E.bin"  ; was: tiles_130B4E
+SevenForceValkirieTileArt_End:                          ; was: tiles_130B4E_End
 Stage20TileArt:                 binclude "data/artcomp/tiles_132E9A.bin"  ; was: tiles_132E9A
 Stage20TileArt_End:                                     ; was: tiles_132E9A_End
 Boss_ShieldViperTileArt:        binclude "data/artcomp/tiles_1338F2.bin"  ; was: tiles_1338F2

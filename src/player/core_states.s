@@ -60,9 +60,9 @@ Player_Update_CheckGameplayReady:                       ; CODE XREF: Player_Upda
                 tst.w   (PlayerHealth).w
                 beq.w   Player_InitDefeatExitState
                 btst    #0,(PlayerModeFlags).w
-                bne.w   Player_UpdateSevenForcesBattle
+                bne.w   Player_UpdateSevenForceBattle
                 btst    #2,(PlayerModeFlags).w
-                bne.w   Player_UpdateSevenForcesBattleVisible
+                bne.w   Player_UpdateSevenForceBattleVisible
                 bsr.w   Gfx_LoadPlayerPaletteData
                 bsr.w   Input_ProcessDirectionInput
                 bclr    #6,$22(a5)

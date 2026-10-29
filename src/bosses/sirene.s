@@ -14,14 +14,14 @@ Boss_UpdateSirene:                                      ; DATA XREF: ROM:Entity_
                 jsr     (Sound_QueueSFXRequest).l
                 bclr    #7,(PlayerRestrictionFlags).w
                 moveq   #$E,d0
-                jmp     Boss_QueueSevenForcesPostBattleTransition
+                jmp     Boss_QueueSevenForcePostBattleTransition
 ; ---------------------------------------------------------------------------
 Boss_UpdateSireneBattleEffects:                         ; CODE XREF: Boss_UpdateSirene+14   j  ; was: loc_574D4
                                         ; Boss_UpdateSirene+1C   j
-                lea     (PaletteFade_SevenForcesEntryOffsets).l,a2
+                lea     (PaletteFade_SevenForceEntryOffsets).l,a2
                 jsr     (Gfx_UpdateBossPaletteColorFade).l
                 moveq   #$C,d0
-                jsr     (Gfx_UpdateSevenForcesBattlePalette).l
+                jsr     (Gfx_UpdateSevenForceBattlePalette).l
 ; Resolve the even-numbered state offset and jump to its handler
 Boss_DispatchSireneState:                               ; CODE XREF: Boss_UpdateSirene+4   j  ; was: loc_574E8
                                         ; Boss_UpdateSirene+C   j
