@@ -4,7 +4,7 @@ UnreferencedInitializeNineAuxiliarySprites:             ; was: sub_548EE
                 lea     $360(a5),a0
 UnreferencedInitializeNineAuxiliarySpritesLoop:         ; was: loc_548F6
                 move.w  #$10,(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 clr.w   $C(a0)
                 move.w  #$EC80,2(a0)
                 move.w  #$8480,$E(a0)

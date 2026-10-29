@@ -1,6 +1,6 @@
-; Four complete mappings immediately precede the referenced Stage 10 wasp group,
+; Four complete mappings immediately precede the referenced beak walker group,
 ; but have no static consumers. Their visual owner therefore remains unresolved
-UnreferencedPreWaspSpriteMappingA:
+UnreferencedPreBeakWalkerSpriteMappingA:
                 dc.w    $680C, $F00, $EFE9
                 dc.w    $6808, $500, $DFF9
                 dc.w    $6800, $700, $D709
@@ -8,7 +8,7 @@ UnreferencedPreWaspSpriteMappingA:
                 dc.w    $6824, 0, $18
                 dc.w    $6825, $D00, $F8
                 dc.w    $E81C, $D00, $F008
-UnreferencedPreWaspSpriteMappingB:
+UnreferencedPreBeakWalkerSpriteMappingB:
                 dc.w    $680C, $F00, $F0EA
                 dc.w    $6808, $500, $E0FA
                 dc.w    $6800, $700, $D80A
@@ -16,7 +16,7 @@ UnreferencedPreWaspSpriteMappingB:
                 dc.w    $6824, 0, $FF17
                 dc.w    $6825, $D00, $FFF7
                 dc.w    $E81C, $D00, $EF07
-UnreferencedPreWaspSpriteMappingC:
+UnreferencedPreBeakWalkerSpriteMappingC:
                 dc.w    $680C, $F00, $F1EA
                 dc.w    $6808, $500, $E1FA
                 dc.w    $6800, $700, $D90A
@@ -24,7 +24,7 @@ UnreferencedPreWaspSpriteMappingC:
                 dc.w    $682D, $500, $FE0B
                 dc.w    $6837, $A00, $E60B
                 dc.w    $E831, $600, $F6FB
-UnreferencedPreWaspSpriteMappingD:
+UnreferencedPreBeakWalkerSpriteMappingD:
                 dc.w    $680C, $F00, $F2EB
                 dc.w    $6808, $500, $E2FB
                 dc.w    $6800, $700, $DA0B
@@ -32,10 +32,10 @@ UnreferencedPreWaspSpriteMappingD:
                 dc.w    $682D, $500, $FE0A
                 dc.w    $6837, $A00, $E60A
                 dc.w    $E831, $600, $F6FA
-; Referenced mappings and streams selected by Enemy_Stage10WaspAnimationMappings
+; Referenced mappings and streams selected by Enemy_BeakWalkerAnimationMappings
 ; Selector suffixes record the exact $5C value used by the caller
-Enemy_Stage10WaspSpriteMappingA:    dc.w    $604D, $500, $6F4  ; was: word_EAF1E
-                                        ; ROM:Enemy_Stage10WaspSelector10Animation   o
+Enemy_BeakWalkerSpriteMappingA: dc.w    $604D, $500, $6F4  ; was: word_EAF1E
+                                        ; ROM:Enemy_BeakWalkerSelector10Animation   o
                 dc.w    $6851, $D00, $13ED
                 dc.w    $6841, $500, $FCF3
                 dc.w    $6849, $500, $2EC
@@ -46,7 +46,7 @@ Enemy_Stage10WaspSpriteMappingA:    dc.w    $604D, $500, $6F4  ; was: word_EAF1E
                 dc.w    $6824, 0, $FF12
                 dc.w    $6825, $D00, $FFF2
                 dc.w    $E81C, $D00, $EF02
-Enemy_Stage10WaspSpriteMappingB:    dc.w    $604D, $500, $7F6  ; was: word_EAF60
+Enemy_BeakWalkerSpriteMappingB: dc.w    $604D, $500, $7F6  ; was: word_EAF60
                                         ; ROM:000EB28C   o
                 dc.w    $6851, $D00, $13ED
                 dc.w    $6841, $500, $FEF5
@@ -58,7 +58,7 @@ Enemy_Stage10WaspSpriteMappingB:    dc.w    $604D, $500, $7F6  ; was: word_EAF60
                 dc.w    $6824, 0, $FF13
                 dc.w    $6825, $D00, $FFF3
                 dc.w    $E81C, $D00, $EF03
-Enemy_Stage10WaspSpriteMappingC:    dc.w    $7049, $500, $AF7  ; was: word_EAFA2
+Enemy_BeakWalkerSpriteMappingC: dc.w    $7049, $500, $AF7  ; was: word_EAFA2
                                         ; ROM:000EB288   o
                 dc.w    $6851, $D00, $13ED
                 dc.w    $6041, $500, $5FD
@@ -70,7 +70,7 @@ Enemy_Stage10WaspSpriteMappingC:    dc.w    $7049, $500, $AF7  ; was: word_EAFA2
                 dc.w    $682D, $500, $FE09
                 dc.w    $6837, $A00, $E609
                 dc.w    $E831, $600, $F6F9
-Enemy_Stage10WaspSpriteMappingD:    dc.w    $6841, $500, $902  ; was: word_EAFE4
+Enemy_BeakWalkerSpriteMappingD: dc.w    $6841, $500, $902  ; was: word_EAFE4
                                         ; ROM:000EB29C   o
                 dc.w    $7845, $500, $DF8
                 dc.w    $6845, $500, $6F8
@@ -82,7 +82,7 @@ Enemy_Stage10WaspSpriteMappingD:    dc.w    $6841, $500, $902  ; was: word_EAFE4
                 dc.w    $682D, $500, $FE0A
                 dc.w    $6837, $A00, $E60A
                 dc.w    $E831, $600, $F6FA
-Enemy_Stage10WaspSpriteMappingE:    dc.w    $7049, $500, $BF9  ; was: word_EB026
+Enemy_BeakWalkerSpriteMappingE: dc.w    $7049, $500, $BF9  ; was: word_EB026
                 dc.w    $6841, $500, $402
                 dc.w    $6845, $500, $3FB
                 dc.w    $6851, $D00, $13ED
@@ -93,7 +93,7 @@ Enemy_Stage10WaspSpriteMappingE:    dc.w    $7049, $500, $BF9  ; was: word_EB026
                 dc.w    $682D, $500, $FA0E
                 dc.w    $6837, $A00, $E20E
                 dc.w    $E831, $600, $F2FE
-Enemy_Stage10WaspSpriteMappingF:    dc.w    $7049, $500, $AF9  ; was: word_EB068
+Enemy_BeakWalkerSpriteMappingF: dc.w    $7049, $500, $AF9  ; was: word_EB068
                 dc.w    $6851, $D00, $13ED
                 dc.w    $6841, $500, $300
                 dc.w    $6049, $500, $FBF9
@@ -104,8 +104,8 @@ Enemy_Stage10WaspSpriteMappingF:    dc.w    $7049, $500, $AF9  ; was: word_EB068
                 dc.w    $682D, $500, $F410
                 dc.w    $6837, $A00, $DC10
                 dc.w    $E831, $600, $EC00
-Enemy_Stage10WaspSpriteMappingG:    dc.w    $7049, $500, $9F0  ; was: word_EB0AA
-                                        ; ROM:Enemy_Stage10WaspSelector0CAnimation   o
+Enemy_BeakWalkerSpriteMappingG: dc.w    $7049, $500, $9F0  ; was: word_EB0AA
+                                        ; ROM:Enemy_BeakWalkerSelector0CAnimation   o
                 dc.w    $6859, $A00, $12E5
                 dc.w    $604D, $500, $F9F5
                 dc.w    $6841, $500, $3F4
@@ -116,7 +116,7 @@ Enemy_Stage10WaspSpriteMappingG:    dc.w    $7049, $500, $9F0  ; was: word_EB0AA
                 dc.w    $682D, $500, $EE0E
                 dc.w    $6837, $A00, $D60E
                 dc.w    $E831, $600, $E6FE
-Enemy_Stage10WaspSpriteMappingH:    dc.w    $6841, $500, $9FF  ; was: word_EB0EC
+Enemy_BeakWalkerSpriteMappingH: dc.w    $6841, $500, $9FF  ; was: word_EB0EC
                 dc.w    $7845, $500, $DF5
                 dc.w    $6845, $500, $7F5
                 dc.w    $6851, $D00, $13ED
@@ -127,7 +127,7 @@ Enemy_Stage10WaspSpriteMappingH:    dc.w    $6841, $500, $9FF  ; was: word_EB0EC
                 dc.w    $682D, $500, $206
                 dc.w    $6837, $A00, $EA06
                 dc.w    $E831, $600, $FAF6
-Enemy_Stage10WaspSpriteMappingI:    dc.w    $7049, $500, $BF3  ; was: word_EB12E
+Enemy_BeakWalkerSpriteMappingI: dc.w    $7049, $500, $BF3  ; was: word_EB12E
                 dc.w    $6859, $A00, $14E8
                 dc.w    $604D, $500, $FBF3
                 dc.w    $6841, $500, $5F5
@@ -138,7 +138,7 @@ Enemy_Stage10WaspSpriteMappingI:    dc.w    $7049, $500, $BF3  ; was: word_EB12E
                 dc.w    $682D, $500, $F00C
                 dc.w    $6837, $A00, $D80C
                 dc.w    $E831, $600, $E8FC
-Enemy_Stage10WaspSpriteMappingJ:    dc.w    $604D, $500, $EF5  ; was: word_EB170
+Enemy_BeakWalkerSpriteMappingJ: dc.w    $604D, $500, $EF5  ; was: word_EB170
                 dc.w    $6859, $A00, $1AEE
                 dc.w    $604D, $500, $FCF4
                 dc.w    $6841, $500, $5F5
@@ -149,7 +149,7 @@ Enemy_Stage10WaspSpriteMappingJ:    dc.w    $604D, $500, $EF5  ; was: word_EB170
                 dc.w    $682D, $500, $F10B
                 dc.w    $6837, $A00, $D90B
                 dc.w    $E831, $600, $E9FB
-Enemy_Stage10WaspSpriteMappingK:    dc.w    $6049, $500, $FBF6  ; was: word_EB1B2
+Enemy_BeakWalkerSpriteMappingK: dc.w    $6049, $500, $FBF6  ; was: word_EB1B2
                 dc.w    $604D, $500, $BFA
                 dc.w    $6859, $A00, $17F2
                 dc.w    $6841, $500, $4FB
@@ -160,7 +160,7 @@ Enemy_Stage10WaspSpriteMappingK:    dc.w    $6049, $500, $FBF6  ; was: word_EB1B
                 dc.w    $682D, $500, $F10A
                 dc.w    $6837, $A00, $D90A
                 dc.w    $E831, $600, $E9FA
-Enemy_Stage10WaspSpriteMappingL:    dc.w    $6845, $500, $FAF6  ; was: word_EB1F4
+Enemy_BeakWalkerSpriteMappingL: dc.w    $6845, $500, $FAF6  ; was: word_EB1F4
                 dc.w    $604D, $500, $7FF
                 dc.w    $6859, $A00, $13F7
                 dc.w    $6841, $500, $FEFE
@@ -171,7 +171,7 @@ Enemy_Stage10WaspSpriteMappingL:    dc.w    $6845, $500, $FAF6  ; was: word_EB1F
                 dc.w    $682D, $500, $F209
                 dc.w    $6837, $A00, $DA09
                 dc.w    $E831, $600, $EAF9
-Enemy_Stage10WaspSpriteMappingM:    dc.w    $6049, $500, $305  ; was: word_EB236
+Enemy_BeakWalkerSpriteMappingM: dc.w    $6049, $500, $305  ; was: word_EB236
                 dc.w    $6851, $D00, $D04
                 dc.w    $6845, $500, $FAF7
                 dc.w    $6841, $500, $FDFF
@@ -182,59 +182,59 @@ Enemy_Stage10WaspSpriteMappingM:    dc.w    $6049, $500, $305  ; was: word_EB236
                 dc.w    $682D, $500, $F208
                 dc.w    $6837, $A00, $DA08
                 dc.w    $E831, $600, $EAF8
-Enemy_Stage10WaspSelector04Animation:   dc.w    Enemy_Stage10WaspSpriteMappingA-*  ; was: off_EB278
+Enemy_BeakWalkerSelector04Animation:    dc.w    Enemy_BeakWalkerSpriteMappingA-*  ; was: off_EB278
                                         ; ROM:000EB290   o
                 dc.w    4
-                dc.w    Enemy_Stage10WaspSpriteMappingB-*
+                dc.w    Enemy_BeakWalkerSpriteMappingB-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingC-*
+                dc.w    Enemy_BeakWalkerSpriteMappingC-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingD-*
+                dc.w    Enemy_BeakWalkerSpriteMappingD-*
                 dc.w    4
-                dc.w    Enemy_Stage10WaspSpriteMappingC-*
+                dc.w    Enemy_BeakWalkerSpriteMappingC-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingB-*
+                dc.w    Enemy_BeakWalkerSpriteMappingB-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSelector04Animation-*
+                dc.w    Enemy_BeakWalkerSelector04Animation-*
                 dc.w    0
-Enemy_Stage10WaspSelector08Animation:   dc.w    Enemy_Stage10WaspSpriteMappingB-*  ; was: off_EB294
+Enemy_BeakWalkerSelector08Animation:    dc.w    Enemy_BeakWalkerSpriteMappingB-*  ; was: off_EB294
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingC-*
+                dc.w    Enemy_BeakWalkerSpriteMappingC-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingD-*
+                dc.w    Enemy_BeakWalkerSpriteMappingD-*
                 dc.w    3
-                dc.w    Enemy_Stage10WaspSpriteMappingH-*
+                dc.w    Enemy_BeakWalkerSpriteMappingH-*
                 dc.w    4
-                dc.w    Enemy_Stage10WaspSpriteMappingD-*
+                dc.w    Enemy_BeakWalkerSpriteMappingD-*
                 dc.w    3
-                dc.w    Enemy_Stage10WaspSpriteMappingE-*
+                dc.w    Enemy_BeakWalkerSpriteMappingE-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingF-*
+                dc.w    Enemy_BeakWalkerSpriteMappingF-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingG-*
+                dc.w    Enemy_BeakWalkerSpriteMappingG-*
                 dc.w    $FF
-Enemy_Stage10WaspSelector0CAnimation:   dc.w    Enemy_Stage10WaspSpriteMappingG-*  ; was: off_EB2B4
-                                        ; Enemy_ConvertStage10WaspToDefeatDebris+10   o
+Enemy_BeakWalkerSelector0CAnimation:    dc.w    Enemy_BeakWalkerSpriteMappingG-*  ; was: off_EB2B4
+                                        ; Enemy_ConvertBeakWalkerToDefeatDebris+10   o
                 dc.w    6
-                dc.w    Enemy_Stage10WaspSpriteMappingI-*
+                dc.w    Enemy_BeakWalkerSpriteMappingI-*
                 dc.w    6
-                dc.w    Enemy_Stage10WaspSpriteMappingJ-*
+                dc.w    Enemy_BeakWalkerSpriteMappingJ-*
                 dc.w    6
-                dc.w    Enemy_Stage10WaspSpriteMappingK-*
+                dc.w    Enemy_BeakWalkerSpriteMappingK-*
                 dc.w    6
-                dc.w    Enemy_Stage10WaspSpriteMappingL-*
+                dc.w    Enemy_BeakWalkerSpriteMappingL-*
                 dc.w    6
-                dc.w    Enemy_Stage10WaspSpriteMappingM-*
+                dc.w    Enemy_BeakWalkerSpriteMappingM-*
                 dc.w    $FF
-Enemy_Stage10WaspSelector10Animation:   dc.w    Enemy_Stage10WaspSpriteMappingA-*  ; was: off_EB2CC
+Enemy_BeakWalkerSelector10Animation:    dc.w    Enemy_BeakWalkerSpriteMappingA-*  ; was: off_EB2CC
                 dc.w    1
-                dc.w    Enemy_Stage10WaspSpriteMappingB-*
+                dc.w    Enemy_BeakWalkerSpriteMappingB-*
                 dc.w    2
-                dc.w    Enemy_Stage10WaspSpriteMappingC-*
+                dc.w    Enemy_BeakWalkerSpriteMappingC-*
                 dc.w    3
-                dc.w    Enemy_Stage10WaspSpriteMappingD-*
+                dc.w    Enemy_BeakWalkerSpriteMappingD-*
                 dc.w    4
-                dc.w    Enemy_Stage10WaspSpriteMappingC-*
+                dc.w    Enemy_BeakWalkerSpriteMappingC-*
                 dc.w    3
-                dc.w    Enemy_Stage10WaspSpriteMappingB-*
+                dc.w    Enemy_BeakWalkerSpriteMappingB-*
                 dc.w    $FF

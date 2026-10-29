@@ -7,7 +7,7 @@ OrphanedFloatingOscillator:                             ; was: sub_2FCF6
                 move.w  #2,$46(a5)
                 move.w  #$C500,2(a5)
                 move.w  #$480,$E(a5)
-                move.l  #SharedCombatSpriteFrame00,8(a5)
+                move.l  #Effect_SpriteFrame00,8(a5)
                 move.w  #$A050,$2A(a5)
                 move.w  $10(a5),$4C(a5)
                 move.w  $14(a5),$4E(a5)
@@ -482,7 +482,7 @@ Stage18_SegmentedWormUpdateFallingSegment:              ; was: sub_30366
 Stage18_SegmentedWormEmitFallingParticle:
                 jsr     (Projectile_FindFreeOrClearReusableSlot).l
                 bne.w   Entity_UpdateReturn
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 movea.w a0,a4
                 jsr     (Projectile_InitType88).l
                 bsr.w   Stage18_SegmentedWormInitializeParticleVelocity

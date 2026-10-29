@@ -709,7 +709,7 @@ Boss_SpawnSirenePeriodicProjectile:                     ; was: sub_57D88
                 move.w  #$490,(a0)
                 move.w  #$E100,2(a0)
                 move.w  #$8480,$E(a0)
-                move.l  #SharedCombatSpriteAnimation22,8(a0)
+                move.l  #Effect_SpriteAnimation22,8(a0)
                 clr.w   $C(a0)
                 move.b  #4,$20(a0)
                 move.b  #$40,$21(a0)                    ; '@'
@@ -767,7 +767,7 @@ Projectile_ConvertSireneHomingToParticle:               ; was: loc_57E66
                                         ; Projectile_UpdateSireneHoming+40   j
                 move.b  #$2F,d0                         ; '/'
                 jsr     (Sound_QueueSFXRequest).l
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 ; Sirene's battle-effect initializer sets Entity57 to type $48C, not the player

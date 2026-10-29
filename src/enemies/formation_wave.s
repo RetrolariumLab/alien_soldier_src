@@ -22,7 +22,7 @@ Enemy_FormationWavePrepareAimedShot:                    ; was: loc_32F04
                 jsr     (Projectile_InitializeTwoSpeedShot).l
 Enemy_FormationWaveFinishUpdate:                        ; was: loc_32F24
                                         ; Enemy_FormationWaveMain+14   j
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Enemy_FormationWaveMain
 ; Dispatches a formation member through its motion-state table

@@ -42,30 +42,30 @@ Projectile_MissirayVerticalShotSpriteMapping02: dc.w    $6800, $700, $E1F8  ; wa
 Projectile_MissirayVerticalShotSpriteMapping03: dc.w    $6800, $700, $E0F8  ; was: word_EB3FC
                                         ; Projectile_MissirayFallingShotDescend+14   o
                 dc.w    $E808, $700, $FFF8
-Enemy_Stage11FishSpriteMapping00:   dc.w    $6842, $D00, $5EF  ; was: word_EB408
-                                        ; Enemy_Stage11FishWaitForInnerEdgeState_Finish   o
+Enemy_GunCraftSpriteMapping00:  dc.w    $6842, $D00, $5EF  ; was: word_EB408
+                                        ; Enemy_GunCraftWaitForInnerEdgeState_Finish   o
                 dc.w    $6810, $F00, $F600
                 dc.w    $684A, $100, $5E7
                 dc.w    $6820, $E00, $F6E0
                 dc.w    $683A, $100, $E6DF
                 dc.w    $682C, $400, $EEF
                 dc.w    $E82E, $E00, $DEE7
-Enemy_Stage11FishSpriteMapping01:   dc.w    $683A, $100, $E6DF  ; was: word_EB432
-                                        ; Enemy_Stage11FishBrakeInwardMotionState_Finish   o
+Enemy_GunCraftSpriteMapping01:  dc.w    $683A, $100, $E6DF  ; was: word_EB432
+                                        ; Enemy_GunCraftBrakeInwardMotionState_Finish   o
                 dc.w    $6852, $700, $5EF
                 dc.w    $684C, $600, $5FF
                 dc.w    $6820, $E00, $F6E0
                 dc.w    $6810, $F00, $F600
                 dc.w    $682C, $400, $EEF
                 dc.w    $E82E, $E00, $DEE7
-Enemy_Stage11FishSpriteMapping02:   dc.w    $6860, $600, $F4ED  ; was: word_EB45C
+Enemy_GunCraftSpriteMapping02:  dc.w    $6860, $600, $F4ED  ; was: word_EB45C
                 dc.w    $685A, $600, $FCFD
                 dc.w    $6820, $E00, $F6E0
                 dc.w    $6810, $F00, $F600
                 dc.w    $683A, $100, $E6DF
                 dc.w    $682C, $400, $EEF
                 dc.w    $E82E, $E00, $DEE7
-Enemy_Stage11FishSpriteMapping03:   dc.w    $683C, $C00, $F6  ; was: word_EB486
+Enemy_GunCraftSpriteMapping03:  dc.w    $683C, $C00, $F6  ; was: word_EB486
                 dc.w    $E840, $400, $F8F6
 Projectile_MissirayFallingShotSpriteAnimation:  dc.w    Projectile_MissirayVerticalShotSpriteMapping00-*  ; was: off_EB492
                 dc.w    1

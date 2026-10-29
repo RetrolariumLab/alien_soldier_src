@@ -5,7 +5,7 @@ Object_UpdateProximityPickupEmitterType48:              ; was: sub_2B6D4
                 move.w  $14(a5),$48(a5)
                 addq.w  #2,4(a5)
                 move.w  #$E300,2(a5)
-                move.l  #SharedCombatSpriteAnimation22,8(a5)
+                move.l  #Effect_SpriteAnimation22,8(a5)
                 move.w  #$C80,d0
                 btst    #1,$5F(a5)
                 beq.s   Object_UpdateProximityPickupEmitterType48_StoreSpriteAttributes
@@ -152,7 +152,7 @@ Projectile_UpdateGravityBounceType84_BounceAndConvertToType88:  ; was: loc_2B8C0
                 asr.l   #1,d0
                 move.l  d0,$18(a5)
                 move.l  #$FFFEC000,$1C(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Projectile_UpdateGravityBounceType84
 ; Spawn a type-$1D0 arc hazard with the caller's horizontal velocity
@@ -166,7 +166,7 @@ Projectile_SpawnTrailingArcHazardType1D0:               ; was: sub_2B8E0
                 move.w  #$1D0,(a0)
                 move.w  #$EF00,2(a0)
                 move.w  #$C80,$E(a0)
-                move.l  #SharedCombatSpriteAnimation22,8(a0)
+                move.l  #Effect_SpriteAnimation22,8(a0)
                 move.b  #$3C,$20(a0)                    ; '<'
                 move.w  #$18,$26(a0)
                 move.b  #$40,$21(a0)                    ; '@'
@@ -185,7 +185,7 @@ Projectile_UpdateTrailingArcHazardType1D0:              ; was: sub_2B93E
                 bne.s   Projectile_UpdateTrailingArcHazardType1D0_ApplyGravityAndCheckImpact
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_UpdateTrailingArcHazardType1D0_ApplyGravityAndCheckImpact
-                move.l  #SharedCombatSpriteAnimation08,8(a0)
+                move.l  #Effect_SpriteAnimation08,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.b  (RandomNumberState).w,d0
@@ -211,7 +211,7 @@ Projectile_UpdateTrailingArcHazardType1D0_ConvertToType88:  ; was: loc_2B9AA
                                         ; Projectile_UpdateTrailingArcHazardType1D0+68   j
                 clr.l   $18(a5)
                 move.l  #$FFFF0000,$1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Projectile_UpdateTrailingArcHazardType1D0
 ; Update type-$104 controller and emit type-$108 hazards from above the screen
@@ -262,7 +262,7 @@ Projectile_UpdateTopFallingHazardType108:               ; was: sub_2BA5E
                 tst.w   (StageSpawnCountdown).w
                 bmi.s   Projectile_UpdateTopFallingHazardType108_CheckTerrain
 Projectile_UpdateTopFallingHazardType108_ConvertToType88:  ; was: loc_2BA64
-                move.l  #SharedCombatSpriteAnimation02,8(a5)
+                move.l  #Effect_SpriteAnimation02,8(a5)
                 move.l  #$FFFF0000,$1C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------

@@ -437,14 +437,14 @@ Boss_UpdateDefeatExplosionAndSpawnDebrisReturn:         ; was: locret_3FFC2
                 rts
 ; End of function Boss_UpdateDefeatExplosionAndSpawnDebris
 ; ---------------------------------------------------------------------------
-Boss_DefeatExplosionDebrisAnimations:   dc.l    SharedCombatSpriteAnimation00  ; was: off_3FFC4
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation01
-                dc.l    SharedCombatSpriteAnimation04
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation06
+Boss_DefeatExplosionDebrisAnimations:   dc.l    Effect_SpriteAnimation00  ; was: off_3FFC4
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation01
+                dc.l    Effect_SpriteAnimation04
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation06
 
 ; Advance Gusthead's defeat palette step and start its four-frame hold
 Boss_GustheadAdvanceDefeatPaletteFadeState:             ; was: sub_3FFE4

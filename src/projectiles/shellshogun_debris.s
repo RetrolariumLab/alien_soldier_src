@@ -16,7 +16,7 @@ Boss_ShellshogunSpawnFallingDebrisNext:                 ; was: loc_3716A
                 move.w  #$ED80,2(a0)
                 move.w  #$8480,$E(a0)
                 move.b  #$10,$20(a0)
-                move.l  #SharedCombatSpriteAnimation24,8(a0)
+                move.l  #Effect_SpriteAnimation24,8(a0)
                 clr.w   $C(a5)
                 move.b  #$80,$21(a0)
                 move.l  #$FE06FE06,$28(a0)

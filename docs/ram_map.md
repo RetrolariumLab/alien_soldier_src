@@ -669,7 +669,7 @@ loaded tile base with the active palette or orientation bits.
 | `EnemyProjectileTileAttr` | `$FFFF8272` | Shared enemy-projectile setup.        |
 | `BirdEnemyTileAttr`       | `$FFFF8274` | Bird-family setup.                    |
 | `PhaseEnemyTileAttr`      | `$FFFF8276` | Phase-pattern enemy setup.            |
-| `Stage10WaspTileAttr`     | `$FFFF8278` | Stage 10 wasp setup.                  |
+| `BeakWalkerTileAttr`      | `$FFFF8278` | beak walker setup.                    |
 | `CirclingEnemyTileAttr`   | `$FFFF827A` | Circling-enemy and Stage 9 fly setup. |
 
 ## Reviewed player targeting and health-feedback fields

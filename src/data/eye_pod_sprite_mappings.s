@@ -1,7 +1,7 @@
-; Sprite mappings and animation streams selected by Enemy_PhasePatternAnimationBySelector
+; Sprite mappings and animation streams selected by Enemy_EyePodAnimationBySelector
 ; Selector suffixes record the exact $5C value used by the caller
 
-Enemy_PhasePatternSpriteMappingA:   dc.w    $601C, $400, $1FF0  ; was: word_EA86C
+Enemy_EyePodSpriteMappingA: dc.w    $601C, $400, $1FF0  ; was: word_EA86C
                                         ; ROM:000EADE6   o
                 dc.w    $681C, $400, $1F00
                 dc.w    $600C, $500, $D7F0
@@ -14,7 +14,7 @@ Enemy_PhasePatternSpriteMappingA:   dc.w    $601C, $400, $1FF0  ; was: word_EA86
                 dc.w    $682E, $700, $F700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingB:   dc.w    $6010, $D00, $E7E0  ; was: word_EA8B4
+Enemy_EyePodSpriteMappingB: dc.w    $6010, $D00, $E7E0  ; was: word_EA8B4
                                         ; ROM:000EADE2   o
                 dc.w    $6026, $700, $F7F0
                 dc.w    $6826, $700, $F700
@@ -27,7 +27,7 @@ Enemy_PhasePatternSpriteMappingB:   dc.w    $6010, $D00, $E7E0  ; was: word_EA8B
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingC:   dc.w    $601E, $700, $F7F0  ; was: word_EA8FC
+Enemy_EyePodSpriteMappingC: dc.w    $601E, $700, $F7F0  ; was: word_EA8FC
                                         ; ROM:000EADDE   o
                 dc.w    $681E, $700, $F700
                 dc.w    $601C, $400, $1FF0
@@ -40,8 +40,8 @@ Enemy_PhasePatternSpriteMappingC:   dc.w    $601E, $700, $F7F0  ; was: word_EA8F
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingD:   dc.w    $683E, $500, $FFF8  ; was: word_EA944
-                                        ; ROM:Enemy_PhasePatternSelector0CAnimation   o
+Enemy_EyePodSpriteMappingD: dc.w    $683E, $500, $FFF8  ; was: word_EA944
+                                        ; ROM:Enemy_EyePodSelector0CAnimation   o
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
                 dc.w    $601C, $400, $1FF0
@@ -54,7 +54,7 @@ Enemy_PhasePatternSpriteMappingD:   dc.w    $683E, $500, $FFF8  ; was: word_EA94
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingE:   dc.w    $683E, $500, $FFFA  ; was: word_EA992
+Enemy_EyePodSpriteMappingE: dc.w    $683E, $500, $FFFA  ; was: word_EA992
                                         ; ROM:000EAE1A   o
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
@@ -68,7 +68,7 @@ Enemy_PhasePatternSpriteMappingE:   dc.w    $683E, $500, $FFFA  ; was: word_EA99
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingF:   dc.w    $683E, $500, $FFFC  ; was: word_EA9E0
+Enemy_EyePodSpriteMappingF: dc.w    $683E, $500, $FFFC  ; was: word_EA9E0
                                         ; ROM:000EAE16   o
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
@@ -82,7 +82,7 @@ Enemy_PhasePatternSpriteMappingF:   dc.w    $683E, $500, $FFFC  ; was: word_EA9E
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingG:   dc.w    $683E, $500, $FFFD  ; was: word_EAA2E
+Enemy_EyePodSpriteMappingG: dc.w    $683E, $500, $FFFD  ; was: word_EAA2E
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
                 dc.w    $601C, $400, $1FF0
@@ -95,7 +95,7 @@ Enemy_PhasePatternSpriteMappingG:   dc.w    $683E, $500, $FFFD  ; was: word_EAA2
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingH:   dc.w    $683E, $500, $FFF6  ; was: word_EAA7C
+Enemy_EyePodSpriteMappingH: dc.w    $683E, $500, $FFF6  ; was: word_EAA7C
                                         ; ROM:000EAE32   o
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
@@ -109,7 +109,7 @@ Enemy_PhasePatternSpriteMappingH:   dc.w    $683E, $500, $FFF6  ; was: word_EAA7
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingI:   dc.w    $683E, $500, $FFF4  ; was: word_EAACA
+Enemy_EyePodSpriteMappingI: dc.w    $683E, $500, $FFF4  ; was: word_EAACA
                                         ; ROM:000EAE2E   o
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
@@ -123,7 +123,7 @@ Enemy_PhasePatternSpriteMappingI:   dc.w    $683E, $500, $FFF4  ; was: word_EAAC
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingJ:   dc.w    $683E, $500, $FFF3  ; was: word_EAB18
+Enemy_EyePodSpriteMappingJ: dc.w    $683E, $500, $FFF3  ; was: word_EAB18
                 dc.w    $6036, $700, $F7F0
                 dc.w    $6836, $700, $F700
                 dc.w    $601C, $400, $1FF0
@@ -136,7 +136,7 @@ Enemy_PhasePatternSpriteMappingJ:   dc.w    $683E, $500, $FFF3  ; was: word_EAB1
                 dc.w    $6818, $C00, $1700
                 dc.w    $6000, $B00, $F7D8
                 dc.w    $E800, $B00, $F710
-Enemy_PhasePatternSpriteMappingK:   dc.w    $6026, $700, $F7F0  ; was: word_EAB66
+Enemy_EyePodSpriteMappingK: dc.w    $6026, $700, $F7F0  ; was: word_EAB66
                                         ; ROM:000EAE52   o
                 dc.w    $6826, $700, $F700
                 dc.w    $6018, $C00, $17E0
@@ -151,7 +151,7 @@ Enemy_PhasePatternSpriteMappingK:   dc.w    $6026, $700, $F7F0  ; was: word_EAB6
                 dc.w    $680C, $500, $D700
                 dc.w    $6010, $D00, $E7E0
                 dc.w    $E810, $D00, $E700
-Enemy_PhasePatternSpriteMappingL:   dc.w    $602E, $700, $F4F0  ; was: word_EABBA
+Enemy_EyePodSpriteMappingL: dc.w    $602E, $700, $F4F0  ; was: word_EABBA
                                         ; ROM:000EAE4E   o
                 dc.w    $682E, $700, $F400
                 dc.w    $6018, $C00, $14E0
@@ -166,8 +166,8 @@ Enemy_PhasePatternSpriteMappingL:   dc.w    $602E, $700, $F4F0  ; was: word_EABB
                 dc.w    $680C, $500, $D400
                 dc.w    $6010, $D00, $E4E0
                 dc.w    $E810, $D00, $E400
-Enemy_PhasePatternSpriteMappingM:   dc.w    $6026, $700, $F1F0  ; was: word_EAC0E
-                                        ; ROM:Enemy_PhasePatternSelector18Animation   o
+Enemy_EyePodSpriteMappingM: dc.w    $6026, $700, $F1F0  ; was: word_EAC0E
+                                        ; ROM:Enemy_EyePodSelector18Animation   o
                 dc.w    $6826, $700, $F1FF
                 dc.w    $6018, $C00, $11E0
                 dc.w    $6000, $B00, $F1D8
@@ -181,8 +181,8 @@ Enemy_PhasePatternSpriteMappingM:   dc.w    $6026, $700, $F1F0  ; was: word_EAC0
                 dc.w    $680C, $500, $D100
                 dc.w    $6010, $D00, $E1E0
                 dc.w    $E810, $D00, $E100
-Enemy_PhasePatternSpriteMappingN:   dc.w    $6000, $B00, $EED8  ; was: word_EAC62
-                                        ; ROM:Enemy_PhasePatternSelector1CAnimation   o
+Enemy_EyePodSpriteMappingN: dc.w    $6000, $B00, $EED8  ; was: word_EAC62
+                                        ; ROM:Enemy_EyePodSelector1CAnimation   o
                 dc.w    $6818, $C00, $E00
                 dc.w    $6800, $B00, $EE10
                 dc.w    $6018, $C00, $EE0
@@ -197,7 +197,7 @@ Enemy_PhasePatternSpriteMappingN:   dc.w    $6000, $B00, $EED8  ; was: word_EAC6
                 dc.w    $680C, $500, $CE00
                 dc.w    $6010, $D00, $DEE0
                 dc.w    $E810, $D00, $DE00
-Enemy_PhasePatternSpriteMappingO:   dc.w    $6000, $B00, $EED8  ; was: word_EACBC
+Enemy_EyePodSpriteMappingO: dc.w    $6000, $B00, $EED8  ; was: word_EACBC
                                         ; ROM:000EAE6E   o
                 dc.w    $6818, $C00, $E00
                 dc.w    $6800, $B00, $EE10
@@ -213,7 +213,7 @@ Enemy_PhasePatternSpriteMappingO:   dc.w    $6000, $B00, $EED8  ; was: word_EACB
                 dc.w    $680C, $500, $CE00
                 dc.w    $6010, $D00, $DEE0
                 dc.w    $E810, $D00, $DE00
-Enemy_PhasePatternSpriteMappingP:   dc.w    $6000, $B00, $EFD8  ; was: word_EAD16
+Enemy_EyePodSpriteMappingP: dc.w    $6000, $B00, $EFD8  ; was: word_EAD16
                                         ; ROM:000EAE6A   o
                 dc.w    $6018, $C00, $FE0
                 dc.w    $6818, $C00, $F00
@@ -229,7 +229,7 @@ Enemy_PhasePatternSpriteMappingP:   dc.w    $6000, $B00, $EFD8  ; was: word_EAD1
                 dc.w    $680C, $500, $CF00
                 dc.w    $6010, $D00, $DFE0
                 dc.w    $E810, $D00, $DF00
-Enemy_PhasePatternSpriteMappingQ:   dc.w    $6000, $B00, $F0D8  ; was: word_EAD70
+Enemy_EyePodSpriteMappingQ: dc.w    $6000, $B00, $F0D8  ; was: word_EAD70
                 dc.w    $6018, $C00, $10E0
                 dc.w    $6818, $C00, $1000
                 dc.w    $6800, $B00, $F010
@@ -244,91 +244,91 @@ Enemy_PhasePatternSpriteMappingQ:   dc.w    $6000, $B00, $F0D8  ; was: word_EAD7
                 dc.w    $680C, $500, $D000
                 dc.w    $6010, $D00, $E0E0
                 dc.w    $E810, $D00, $E000
-Enemy_PhasePatternSelector08Animation:  dc.w    Enemy_PhasePatternSpriteMappingA-*  ; was: off_EADCA
+Enemy_EyePodSelector08Animation:    dc.w    Enemy_EyePodSpriteMappingA-*  ; was: off_EADCA
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingB-*
+                dc.w    Enemy_EyePodSpriteMappingB-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingC-*
+                dc.w    Enemy_EyePodSpriteMappingC-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingD-*
+                dc.w    Enemy_EyePodSpriteMappingD-*
                 dc.w    $FF
-Enemy_PhasePatternSelector0CAnimation:  dc.w    Enemy_PhasePatternSpriteMappingD-*  ; was: off_EADDA
+Enemy_EyePodSelector0CAnimation:    dc.w    Enemy_EyePodSpriteMappingD-*  ; was: off_EADDA
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingC-*
+                dc.w    Enemy_EyePodSpriteMappingC-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingB-*
+                dc.w    Enemy_EyePodSpriteMappingB-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingA-*
+                dc.w    Enemy_EyePodSpriteMappingA-*
                 dc.w    $FF
-Enemy_PhasePatternSelector04Animation:  dc.w    Enemy_PhasePatternSpriteMappingD-*  ; was: off_EADEA
+Enemy_EyePodSelector04Animation:    dc.w    Enemy_EyePodSpriteMappingD-*  ; was: off_EADEA
                                         ; ROM:000EAE02   o
                 dc.w    $70
-                dc.w    Enemy_PhasePatternSpriteMappingC-*
+                dc.w    Enemy_EyePodSpriteMappingC-*
                 dc.w    1
-                dc.w    Enemy_PhasePatternSpriteMappingB-*
+                dc.w    Enemy_EyePodSpriteMappingB-*
                 dc.w    1
-                dc.w    Enemy_PhasePatternSpriteMappingA-*
+                dc.w    Enemy_EyePodSpriteMappingA-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingB-*
+                dc.w    Enemy_EyePodSpriteMappingB-*
                 dc.w    1
-                dc.w    Enemy_PhasePatternSpriteMappingC-*
+                dc.w    Enemy_EyePodSpriteMappingC-*
                 dc.w    1
-                dc.w    Enemy_PhasePatternSelector04Animation-*
+                dc.w    Enemy_EyePodSelector04Animation-*
                 dc.w    0
-Enemy_PhasePatternSelector10Animation:  dc.w    Enemy_PhasePatternSpriteMappingD-*  ; was: off_EAE06
+Enemy_EyePodSelector10Animation:    dc.w    Enemy_EyePodSpriteMappingD-*  ; was: off_EAE06
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingE-*
+                dc.w    Enemy_EyePodSpriteMappingE-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingF-*
+                dc.w    Enemy_EyePodSpriteMappingF-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingG-*
+                dc.w    Enemy_EyePodSpriteMappingG-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingF-*
+                dc.w    Enemy_EyePodSpriteMappingF-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingE-*
+                dc.w    Enemy_EyePodSpriteMappingE-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingD-*
+                dc.w    Enemy_EyePodSpriteMappingD-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingH-*
+                dc.w    Enemy_EyePodSpriteMappingH-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingI-*
+                dc.w    Enemy_EyePodSpriteMappingI-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingJ-*
+                dc.w    Enemy_EyePodSpriteMappingJ-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingI-*
+                dc.w    Enemy_EyePodSpriteMappingI-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingH-*
+                dc.w    Enemy_EyePodSpriteMappingH-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingD-*
+                dc.w    Enemy_EyePodSpriteMappingD-*
                 dc.w    $FF
-Enemy_PhasePatternSelector14Animation:  dc.w    Enemy_PhasePatternSpriteMappingK-*  ; was: off_EAE3A
+Enemy_EyePodSelector14Animation:    dc.w    Enemy_EyePodSpriteMappingK-*  ; was: off_EAE3A
                 dc.w    4
-                dc.w    Enemy_PhasePatternSpriteMappingL-*
+                dc.w    Enemy_EyePodSpriteMappingL-*
                 dc.w    4
-                dc.w    Enemy_PhasePatternSpriteMappingM-*
+                dc.w    Enemy_EyePodSpriteMappingM-*
                 dc.w    4
-                dc.w    Enemy_PhasePatternSpriteMappingN-*
+                dc.w    Enemy_EyePodSpriteMappingN-*
                 dc.w    $FF
-Enemy_PhasePatternSelector18Animation:  dc.w    Enemy_PhasePatternSpriteMappingM-*  ; was: off_EAE4A
+Enemy_EyePodSelector18Animation:    dc.w    Enemy_EyePodSpriteMappingM-*  ; was: off_EAE4A
                 dc.w    5
-                dc.w    Enemy_PhasePatternSpriteMappingL-*
+                dc.w    Enemy_EyePodSpriteMappingL-*
                 dc.w    5
-                dc.w    Enemy_PhasePatternSpriteMappingK-*
+                dc.w    Enemy_EyePodSpriteMappingK-*
                 dc.w    5
-                dc.w    Enemy_PhasePatternSpriteMappingD-*
+                dc.w    Enemy_EyePodSpriteMappingD-*
                 dc.w    $FF
-Enemy_PhasePatternSelector1CAnimation:  dc.w    Enemy_PhasePatternSpriteMappingN-*  ; was: off_EAE5A
+Enemy_EyePodSelector1CAnimation:    dc.w    Enemy_EyePodSpriteMappingN-*  ; was: off_EAE5A
                                         ; ROM:000EAE72   o
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingO-*
+                dc.w    Enemy_EyePodSpriteMappingO-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingP-*
+                dc.w    Enemy_EyePodSpriteMappingP-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingQ-*
+                dc.w    Enemy_EyePodSpriteMappingQ-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingP-*
+                dc.w    Enemy_EyePodSpriteMappingP-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSpriteMappingO-*
+                dc.w    Enemy_EyePodSpriteMappingO-*
                 dc.w    2
-                dc.w    Enemy_PhasePatternSelector1CAnimation-*
+                dc.w    Enemy_EyePodSelector1CAnimation-*
                 dc.w    0

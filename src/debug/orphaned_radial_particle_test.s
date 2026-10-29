@@ -93,7 +93,7 @@ Debug_SetupRadialTestParticleSprite:                    ; was: sub_2F2A4
                 move.w  $14(a5),$14(a0)
                 move.b  #$60,$20(a0)                    ; '`'
                 move.w  #$480,$E(a0)
-                move.l  #SharedCombatSpriteFrame35,8(a0)
+                move.l  #Effect_SpriteFrame35,8(a0)
                 move.w  #8,$48(a0)
                 rts
 ; End of function Debug_SetupRadialTestParticleSprite

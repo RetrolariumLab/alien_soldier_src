@@ -28,7 +28,7 @@ listing up to tag 3.0; keep them current by hand when modules move.
 | `0x02C254-0x02CB85` | Bugmax debris, shared enemy spawning/movement, and stage actors                                                 |     3 | static/hypothesis        |
 | `0x02CB86-0x02D27B` | projectile-attack and ship enemies, shared helpers, and phase/debris states                                     |     3 | static/hypothesis        |
 | `0x02D27C-0x02DF7D` | circling and Stage 9 flies, Viblack shots, and bird enemies                                                     |     3 | static/hypothesis        |
-| `0x02DF7E-0x02F1A1` | stage 10/12 enemies, Stage 11 fish, and Xi-Tiger entrance sequences                                             |     5 | static/hypothesis        |
+| `0x02DF7E-0x02F1A1` | stage 10/12 enemies, Stage 11 gun craft, and Xi-Tiger entrance sequences                                        |     5 | static/hypothesis        |
 | `0x02F1A2-0x030D8F` | orphaned radial-particle test, stage environment, yacht, stage 18, and stage 15 fragment hazards                |     6 | static/runtime           |
 | `0x030D90-0x0323E1` | stage 11 rising hazards, type-$390 linked chain, Destroyer Proto, and shared hit-reactive projectiles           |     6 | static/runtime           |
 | `0x0323E2-0x033F2F` | Victor, Wolf Garopa rewards, formation waves, Stage 21 asteroids, rising-shot effects, and Missiray projectiles |     8 | static/hypothesis        |

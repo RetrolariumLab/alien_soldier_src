@@ -13,7 +13,7 @@ Boss_InitArtemisRadialEmitter:                          ; was: loc_589FC
                 move.w  #$488,(a0)
                 move.w  #$C100,2(a0)
                 move.w  #$480,$E(a0)
-                move.l  #SharedCombatSpriteFrame06,8(a0)
+                move.l  #Effect_SpriteFrame06,8(a0)
                 move.b  $B00(a5),$20(a0)
                 subq.b  #4,$20(a0)
                 lea     (Math_SineTable).l,a1
@@ -118,7 +118,7 @@ Projectile_ConvertArtemisEmitterToEffect:               ; was: loc_58B50
                 move.l  d0,$1C(a5)
 Projectile_InitArtemisEmitterEffect:                    ; was: loc_58B68
                 move.w  #3,(PlaneAShakeLevel).w
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_ReflectArtemisEmitter:                       ; was: loc_58B7C

@@ -54,7 +54,7 @@ Boss_ShieldViperDefeatObjectAccelerationReturn:         ; was: locret_4F22A
 Boss_ShieldViperSpawnDefeatBurst:                       ; was: sub_4F22C
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_ShieldViperDefeatBurstReturn
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 jsr     (Projectile_InitType88).l
                 clr.b   $20(a0)
                 move.w  $10(a5),$10(a0)

@@ -408,14 +408,14 @@ Boss_ZLeoSpawnParticles_Return:                         ; was: locret_2254A
 ; ---------------------------------------------------------------------------
 Boss_ZLeoParticleXOffsets:          dc.w    $20, 0, $FFE0, 0  ; was: word_2254C
 Boss_ZLeoParticleYOffsets:          dc.w    0, $A, $FFF0, 0  ; was: word_22554
-Boss_ZLeoParticleSpritePointers:    dc.l    SharedCombatSpriteAnimation00  ; was: off_2255C
-                dc.l    SharedCombatSpriteAnimation01
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation00
+Boss_ZLeoParticleSpritePointers:    dc.l    Effect_SpriteAnimation00  ; was: off_2255C
+                dc.l    Effect_SpriteAnimation01
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation00
 
 ; Spawns the impact object that starts the Z-Leo ending transition
 Boss_ZLeoSpawnImpactObject:                             ; was: sub_2257C

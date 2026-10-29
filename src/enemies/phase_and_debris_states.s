@@ -1,142 +1,142 @@
-Enemy_PhasePatternController:                           ; was: sub_2D020
+Enemy_EyePodController:                                 ; was: sub_2D020
                 tst.w   4(a5)
-                beq.s   Enemy_PhasePatternController_UpdateState
+                beq.s   Enemy_EyePodController_UpdateState
                 tst.w   $24(a5)
-                bmi.w   Enemy_ResetPhasePattern
+                bmi.w   Enemy_ResetEyePod
                 tst.w   (StageSpawnCountdown).w
-                bpl.w   Enemy_ResetPhasePattern
+                bpl.w   Enemy_ResetEyePod
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
-Enemy_PhasePatternController_UpdateState:               ; was: loc_2D040
-                bsr.s   Enemy_DispatchPhasePatternState
-                bra.w   Enemy_ApplyPhasePatternAnimationSelector
-; End of function Enemy_PhasePatternController
+Enemy_EyePodController_UpdateState:                     ; was: loc_2D040
+                bsr.s   Enemy_DispatchEyePodState
+                bra.w   Enemy_ApplyEyePodAnimationSelector
+; End of function Enemy_EyePodController
 ; Dispatches the phase-pattern enemy's current state
-Enemy_DispatchPhasePatternState:                        ; was: sub_2D046
+Enemy_DispatchEyePodState:                              ; was: sub_2D046
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
-                lea     Enemy_PhasePatternStateOffsets(pc,d0.w),a0
+                lea     Enemy_EyePodStateOffsets(pc,d0.w),a0
                 adda.w  (a0),a0
                 jmp     (a0)
-; End of function Enemy_DispatchPhasePatternState
+; End of function Enemy_DispatchEyePodState
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternStateOffsets: dc.w    Enemy_PhasePatternInit-*  ; was: off_2D056
-                dc.w    Enemy_PhasePatternWaitState-*
-                dc.w    Enemy_PhasePatternAirborneState-*
-                dc.w    Enemy_PhasePattern_WaitBeforeAttack-*
-                dc.w    Enemy_PhasePattern_BeginHorizontalMotion-*
-                dc.w    Enemy_PhasePattern_StopHorizontalMotion-*
-                dc.w    Enemy_PhasePattern_Restart-*
+Enemy_EyePodStateOffsets:   dc.w    Enemy_EyePodInit-*  ; was: off_2D056
+                dc.w    Enemy_EyePodWaitState-*
+                dc.w    Enemy_EyePodAirborneState-*
+                dc.w    Enemy_EyePod_WaitBeforeAttack-*
+                dc.w    Enemy_EyePod_BeginHorizontalMotion-*
+                dc.w    Enemy_EyePod_StopHorizontalMotion-*
+                dc.w    Enemy_EyePod_Restart-*
 
 ; Initializes the phase-pattern sprite and first wait interval
-Enemy_PhasePatternInit:                                 ; was: sub_2D064
+Enemy_EyePodInit:                                       ; was: sub_2D064
                 moveq   #0,d0
-                bsr.w   Enemy_SetupPhasePatternSprite
+                bsr.w   Enemy_SetupEyePodSprite
                 move.w  #4,$5C(a5)
                 move.w  #$100,$48(a5)
                 addq.w  #2,4(a5)
 ; Waits, and leaps when the player presses the bit-5 button
-Enemy_PhasePatternWaitState:                            ; was: loc_2D07A
+Enemy_EyePodWaitState:                                  ; was: loc_2D07A
                 subq.w  #1,$48(a5)
-                beq.s   Enemy_PhasePatternWaitState_Timeout
+                beq.s   Enemy_EyePodWaitState_Timeout
                 btst    #5,(ControllerPressedState).w
-                beq.s   Enemy_PhasePatternWaitState_Return
+                beq.s   Enemy_EyePodWaitState_Return
                 addq.w  #2,4(a5)
                 btst    #4,$E(a5)
-                bne.s   Enemy_PhasePatternWaitState_Return
+                bne.s   Enemy_EyePodWaitState_Return
                 move.l  #$FFFA0000,$1C(a5)
-Enemy_PhasePatternWaitState_Return:                     ; was: locret_2D09C
-                                        ; Enemy_PhasePatternInit+2E   j
+Enemy_EyePodWaitState_Return:                           ; was: locret_2D09C
+                                        ; Enemy_EyePodInit+2E   j
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternWaitState_Timeout:                    ; was: loc_2D09E
+Enemy_EyePodWaitState_Timeout:                          ; was: loc_2D09E
                 move.w  #$20,$48(a5)                    ; ' '
                 move.w  #6,4(a5)
                 move.w  #$10,$5C(a5)
                 rts
-; End of function Enemy_PhasePatternInit
+; End of function Enemy_EyePodInit
 ; Applies gravity and returns the phase-pattern enemy to a surface on contact
-Enemy_PhasePatternAirborneState:                        ; was: sub_2D0B2
+Enemy_EyePodAirborneState:                              ; was: sub_2D0B2
                 cmpi.l  #$80000,$1C(a5)
-                bge.s   Enemy_PhasePatternAirborneState_SelectProbe
+                bge.s   Enemy_EyePodAirborneState_SelectProbe
                 addi.l  #$4000,$1C(a5)
-Enemy_PhasePatternAirborneState_SelectProbe:            ; was: loc_2D0C4
+Enemy_EyePodAirborneState_SelectProbe:                  ; was: loc_2D0C4
                 moveq   #0,d0
                 tst.l   $1C(a5)
-                bmi.s   Enemy_PhasePatternAirborneState_ProbeCeiling
+                bmi.s   Enemy_EyePodAirborneState_ProbeCeiling
                 move.w  #$20,d1                         ; ' '
-                bra.s   Enemy_PhasePatternAirborneState_CheckTerrain
+                bra.s   Enemy_EyePodAirborneState_CheckTerrain
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternAirborneState_ProbeCeiling:           ; was: loc_2D0D2
+Enemy_EyePodAirborneState_ProbeCeiling:                 ; was: loc_2D0D2
                 move.w  #$FFE4,d1
-Enemy_PhasePatternAirborneState_CheckTerrain:           ; was: loc_2D0D6
+Enemy_EyePodAirborneState_CheckTerrain:                 ; was: loc_2D0D6
                 jsr     (Collision_InitBufferPointers).l
                 move.w  d2,d2
-                beq.s   Enemy_PhasePatternAirborneState_Return
+                beq.s   Enemy_EyePodAirborneState_Return
                 move.w  #2,4(a5)
                 move.w  #4,(PlaneAShakeLevel).w
                 move.w  #4,(PlaneBShakeLevel).w
                 tst.l   $1C(a5)
-                bmi.s   Enemy_PhasePatternAirborneState_AlignCeiling
+                bmi.s   Enemy_EyePodAirborneState_AlignCeiling
                 bclr    #4,$E(a5)
                 moveq   #0,d0
                 move.w  #$20,d1                         ; ' '
                 jsr     (Physics_AlignToTerrain).l
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternAirborneState_AlignCeiling:           ; was: loc_2D10C
+Enemy_EyePodAirborneState_AlignCeiling:                 ; was: loc_2D10C
                 bset    #4,$E(a5)
                 moveq   #0,d0
                 move.w  #$FFE4,d1
                 jsr     (Physics_AlignToTerrainTop).l
-Enemy_PhasePatternAirborneState_Return:                 ; was: locret_2D11E
+Enemy_EyePodAirborneState_Return:                       ; was: locret_2D11E
                 rts
-; End of function Enemy_PhasePatternAirborneState
+; End of function Enemy_EyePodAirborneState
 ; Holds the landed pose, then selects animation $14 and advances
-Enemy_PhasePattern_WaitBeforeAttack:                    ; was: sub_2D120
+Enemy_EyePod_WaitBeforeAttack:                          ; was: sub_2D120
                 subq.w  #1,$48(a5)
-                bne.s   Enemy_PhasePattern_WaitBeforeAttack_Return
+                bne.s   Enemy_EyePod_WaitBeforeAttack_Return
                 move.w  #$14,$5C(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_WaitBeforeAttack_Return:             ; was: locret_2D136
+Enemy_EyePod_WaitBeforeAttack_Return:                   ; was: locret_2D136
                 rts
-; End of function Enemy_PhasePattern_WaitBeforeAttack
+; End of function Enemy_EyePod_WaitBeforeAttack
 ; Starts a one-unit leftward drift and selects animation $1C
-Enemy_PhasePattern_BeginHorizontalMotion:               ; was: sub_2D138
+Enemy_EyePod_BeginHorizontalMotion:                     ; was: sub_2D138
                 subq.w  #1,$48(a5)
-                bne.s   Enemy_PhasePattern_BeginHorizontalMotion_Return
+                bne.s   Enemy_EyePod_BeginHorizontalMotion_Return
                 move.w  #$1C,$5C(a5)
                 move.w  #$FFFF,$18(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_BeginHorizontalMotion_Return:        ; was: locret_2D154
+Enemy_EyePod_BeginHorizontalMotion_Return:              ; was: locret_2D154
                 rts
-; End of function Enemy_PhasePattern_BeginHorizontalMotion
+; End of function Enemy_EyePod_BeginHorizontalMotion
 ; Stops the drift and selects animation $18
-Enemy_PhasePattern_StopHorizontalMotion:                ; was: sub_2D156
+Enemy_EyePod_StopHorizontalMotion:                      ; was: sub_2D156
                 subq.w  #1,$48(a5)
-                bne.s   Enemy_PhasePattern_StopHorizontalMotion_Return
+                bne.s   Enemy_EyePod_StopHorizontalMotion_Return
                 clr.w   $18(a5)
                 move.w  #$18,$5C(a5)
                 move.w  #$20,$48(a5)                    ; ' '
                 addq.w  #2,4(a5)
-Enemy_PhasePattern_StopHorizontalMotion_Return:         ; was: locret_2D170
+Enemy_EyePod_StopHorizontalMotion_Return:               ; was: locret_2D170
                 rts
-; End of function Enemy_PhasePattern_StopHorizontalMotion
+; End of function Enemy_EyePod_StopHorizontalMotion
 ; Rearms the long wait and returns to the waiting state
-Enemy_PhasePattern_Restart:                             ; was: sub_2D172
+Enemy_EyePod_Restart:                                   ; was: sub_2D172
                 subq.w  #1,$48(a5)
-                bne.s   Enemy_PhasePattern_Restart_Return
+                bne.s   Enemy_EyePod_Restart_Return
                 move.w  #$100,$48(a5)
                 move.w  #4,$5C(a5)
                 move.w  #2,4(a5)
-Enemy_PhasePattern_Restart_Return:                      ; was: locret_2D18A
+Enemy_EyePod_Restart_Return:                            ; was: locret_2D18A
                 rts
-; End of function Enemy_PhasePattern_Restart
+; End of function Enemy_EyePod_Restart
 ; Returns the object to type $290 and its initial state when the wave ends
-Enemy_ResetPhasePattern:                                ; was: sub_2D18C
-                                        ; Enemy_PhasePatternController+12   j
+Enemy_ResetEyePod:                                      ; was: sub_2D18C
+                                        ; Enemy_EyePodController+12   j
                 clr.w   4(a5)
                 move.w  #$290,(a5)
                 move.w  #$40,$48(a5)                    ; '@'
@@ -145,7 +145,7 @@ Enemy_ResetPhasePattern:                                ; was: sub_2D18C
                 clr.b   $22(a5)
                 clr.l   $18(a5)
                 rts
-; End of function Enemy_ResetPhasePattern
+; End of function Enemy_ResetEyePod
 ; Updates the bouncing defeat-debris object and emits randomized child particles
 Enemy_UpdateBouncingDebrisSpawner:                      ; was: sub_2D1AC
                 bsr.w   Enemy_UpdateBlinkVisibility
@@ -211,7 +211,7 @@ Effect_SetRandomParticleMapping:                        ; was: sub_2D258
                 rts
 ; End of function Effect_SetRandomParticleMapping
 ; ---------------------------------------------------------------------------
-Effect_RandomParticleMappings:  dc.l    SharedCombatSpriteAnimation00  ; was: off_2D26C
-                dc.l    SharedCombatSpriteAnimation01
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation01
+Effect_RandomParticleMappings:  dc.l    Effect_SpriteAnimation00  ; was: off_2D26C
+                dc.l    Effect_SpriteAnimation01
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation01

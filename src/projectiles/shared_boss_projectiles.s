@@ -224,7 +224,7 @@ Effect_InitSharedExplosion:                             ; was: loc_2A2A4
 Effect_ConfigureSharedExplosion:                        ; was: loc_2A2C8
                 move.w  d0,$E(a0)
                 move.w  #$E500,2(a0)
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 clr.w   $C(a0)
                 move.b  #$10,$20(a0)
                 move.w  #3,$48(a0)

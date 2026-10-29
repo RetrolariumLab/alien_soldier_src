@@ -69,7 +69,7 @@ Weapon_StateHandlerOffsets: dc.w    Weapon_UpdateStateAndAmmoRegenReturn-Weapon_
 
 ; Returns the display index associated with WeaponStateIndex
 Weapon_GetStateDisplayIndex:                            ; was: sub_1799A
-                                        ; UI_UpdateWeaponSelectionObject+B2   p
+                                        ; Pickup_UpdateWeaponCapsule+B2   p
                 movea.w (WeaponSlotOffset).w,a0
                 adda.w  #(WeaponSlotConfig0-M68K_RAM),a0
                 move.w  (WeaponStateIndex).w,d0
@@ -101,7 +101,7 @@ WeaponSelect_Initialize:                                ; was: sub_179C2
                 bsr.w   Sys_ClearObjectBlocks17
                 movea.w #(PlayerEffectObjectPool-M68K_RAM),a0
                 move.w  #$10,(a0)
-                move.l  #SharedCombatSpriteAnimation13,8(a0)
+                move.l  #Effect_SpriteAnimation13,8(a0)
                 move.w  #$E080,2(a0)
                 move.w  #$80,$10(a0)
                 move.w  #$80,$14(a0)

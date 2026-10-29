@@ -157,7 +157,7 @@ Projectile_RisingShotEmitShot:                          ; was: sub_33B14
                 andi.w  #$FEFF,2(a0)
                 move.b  $20(a5),$20(a0)
                 addq.b  #4,$20(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.b  $29(a5),d0
@@ -242,7 +242,7 @@ Projectile_Stage24RisingShotUpdateArc:                  ; was: sub_33C22
                 add.l   d0,$1C(a5)
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_Stage24RisingShotArcReturn
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_Stage24RisingShotArcReturn:                  ; was: locret_33C48
@@ -269,7 +269,7 @@ Projectile_Stage24RisingShotEmitTopEdgeTrail:           ; was: sub_33C72
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_Stage24RisingShotResetTrailDelay
                 move.w  #$10,(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Sprite_InitType160).l
                 move.b  #$60,$20(a0)                    ; '`'
                 move.l  #$FE02F40C,$2C(a0)
@@ -288,7 +288,7 @@ Projectile_Stage24RisingShotTrailReturn:                ; was: locret_33CD6
 Projectile_Stage24RisingShotFinishTopEdgeBurst:         ; was: loc_33CD8
                 move.w  $4A(a5),d0
                 sub.w   d0,$14(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; End of function Projectile_Stage24RisingShotEmitTopEdgeTrail
 ; Spawns three radial particles and plays the burst sound
@@ -317,7 +317,7 @@ Projectile_Stage24RisingShotSpawnBurstParticle:         ; was: sub_33D26
                 bne.s   Projectile_Stage24RisingShotSpawnBurstParticleReturn
                 jsr     (Sprite_InitType160).l
                 move.b  #$60,$20(a0)                    ; '`'
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.l  d2,$18(a0)
@@ -479,7 +479,7 @@ Projectile_MissirayBulletSpawnImpactParticle:           ; was: sub_33F06
                 add.w   $10(a5),d0
                 move.w  d0,$10(a0)
                 move.w  $14(a5),$14(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Sprite_InitType160).l
                 move.b  #$60,$20(a0)                    ; '`'
                 andi.w  #$FEFF,2(a0)

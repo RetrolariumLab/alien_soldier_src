@@ -55,11 +55,11 @@ Projectile_BugmaxDebrisSpawner_InitializeParticle:      ; was: loc_2C2CC
                 jsr     (Projectile_InitType88).l
                 btst    #0,(RandomNumberState+2).w
                 beq.s   Projectile_BugmaxDebrisSpawner_UseAnimation05
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 bra.s   Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread
 ; ---------------------------------------------------------------------------
 Projectile_BugmaxDebrisSpawner_UseAnimation05:          ; was: loc_2C2E4
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
 ; Selects X within the centered D1 span and Y at either half of D2 from center
 Projectile_BugmaxDebrisSpawner_PositionParticleInConfiguredSpread:  ; was: loc_2C2EC
                 move.b  (RandomNumberState).w,d0

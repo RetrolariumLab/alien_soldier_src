@@ -125,7 +125,7 @@ Boss_Epsilon1FallWithDefeatDebrisState:                 ; was: sub_46912
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1FallWithDefeatDebrisReturn
                 jsr     (Projectile_InitType88).l
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.w  #$FFFF,$1C(a0)
@@ -147,7 +147,7 @@ Boss_Epsilon1FinishDefeatFall:                          ; was: loc_46964
 Boss_Epsilon1TriggerFinalExplosionState:                ; was: sub_46986
                 subq.w  #1,$48(a5)
                 bpl.s   Boss_Epsilon1TriggerFinalExplosionReturn
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 move.w  #$480,$E(a5)
                 move.w  #$EC80,2(a5)
                 clr.w   $C(a5)
@@ -493,7 +493,7 @@ Boss_Epsilon1WaitToDestroyLinkedPartState:              ; was: sub_46CCC
                 subq.w  #1,$48(a1)
                 bpl.s   Boss_Epsilon1WaitToDestroyLinkedPartReturn
                 move.w  #$EC80,2(a1)
-                move.l  #SharedCombatSpriteAnimation00,8(a1)
+                move.l  #Effect_SpriteAnimation00,8(a1)
                 move.w  #$480,$E(a1)
                 clr.w   $C(a1)
                 addq.w  #2,4(a1)
@@ -513,7 +513,7 @@ Boss_Epsilon1WaitForLinkedPartExplosionReturn:          ; was: locret_46D02
 Boss_Epsilon1SpawnLinkedPartDebrisState:                ; was: sub_46D04
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1SpawnLinkedPartDebrisReturn
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Projectile_InitType88).l
                 move.b  (RandomNumberState).w,d0
                 add.w   a5,d0

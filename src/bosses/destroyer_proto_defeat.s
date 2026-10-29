@@ -61,14 +61,14 @@ Boss_DestroyerProtoEmitDefeatParticle:                  ; was: sub_31DF6
                 rts
 ; End of function Boss_DestroyerProtoEmitDefeatParticle
 ; ---------------------------------------------------------------------------
-Boss_DestroyerProtoDefeatParticleMappingTable:  dc.l    SharedCombatSpriteAnimation00  ; was: off_31E7C
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation01
-                dc.l    SharedCombatSpriteAnimation04
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation06
+Boss_DestroyerProtoDefeatParticleMappingTable:  dc.l    Effect_SpriteAnimation00  ; was: off_31E7C
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation01
+                dc.l    Effect_SpriteAnimation04
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation06
 
 ; Runs the defeat particle, palette, and arena-rotation effects until removal
 Boss_DestroyerProtoUpdateDefeatExplosion:               ; was: sub_31E9C

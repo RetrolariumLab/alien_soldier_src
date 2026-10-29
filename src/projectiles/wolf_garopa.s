@@ -644,7 +644,7 @@ Projectile_WolfGaropaReflectOrbShotHorizontally:        ; was: loc_50B24
                 neg.l   $18(a5)
 Projectile_WolfGaropaConvertOrbShotToType160:           ; was: loc_50B28
                 neg.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation03,8(a5)
+                move.l  #Effect_SpriteAnimation03,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_WolfGaropaCheckOrbShotArenaBounds:           ; was: loc_50B3A

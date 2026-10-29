@@ -2,242 +2,242 @@
   "schema": "alien-soldier.object-art",
   "schema_version": 1,
   "mappings": {
-    "SharedCombatSpriteFrame00": {
+    "Effect_SpriteFrame00": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame01": {
+    "Effect_SpriteFrame01": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame02": {
+    "Effect_SpriteFrame02": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame03": {
+    "Effect_SpriteFrame03": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame04": {
+    "Effect_SpriteFrame04": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame05": {
+    "Effect_SpriteFrame05": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame06": {
+    "Effect_SpriteFrame06": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame07": {
+    "Effect_SpriteFrame07": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame08": {
+    "Effect_SpriteFrame08": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame09": {
+    "Effect_SpriteFrame09": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame10": {
+    "Effect_SpriteFrame10": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame11": {
+    "Effect_SpriteFrame11": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame12": {
+    "Effect_SpriteFrame12": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame13": {
+    "Effect_SpriteFrame13": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame14": {
+    "Effect_SpriteFrame14": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame15": {
+    "Effect_SpriteFrame15": {
       "attribute": "$9C80",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame19": {
+    "Effect_SpriteFrame19": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame21": {
+    "Effect_SpriteFrame21": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame22": {
+    "Effect_SpriteFrame22": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame23": {
+    "Effect_SpriteFrame23": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame24": {
+    "Effect_SpriteFrame24": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame25": {
+    "Effect_SpriteFrame25": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame26": {
+    "Effect_SpriteFrame26": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame27": {
+    "Effect_SpriteFrame27": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame28": {
+    "Effect_SpriteFrame28": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame29": {
+    "Effect_SpriteFrame29": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame30": {
+    "Effect_SpriteFrame30": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame31": {
+    "Effect_SpriteFrame31": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame32": {
+    "Effect_SpriteFrame32": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame37": {
+    "Effect_SpriteFrame37": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame38": {
+    "Effect_SpriteFrame38": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame40": {
+    "Effect_SpriteFrame40": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame41": {
+    "Effect_SpriteFrame41": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame42": {
+    "Effect_SpriteFrame42": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame43": {
+    "Effect_SpriteFrame43": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame44": {
+    "Effect_SpriteFrame44": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame45": {
+    "Effect_SpriteFrame45": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame56": {
+    "Effect_SpriteFrame56": {
       "attribute": "$8480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame59": {
+    "Effect_SpriteFrame59": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame62": {
+    "Effect_SpriteFrame62": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame63": {
+    "Effect_SpriteFrame63": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame64": {
+    "Effect_SpriteFrame64": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame65": {
+    "Effect_SpriteFrame65": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame66": {
+    "Effect_SpriteFrame66": {
       "attribute": "$0480",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame67": {
+    "Effect_SpriteFrame67": {
       "attribute": "$0C80",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame68": {
+    "Effect_SpriteFrame68": {
       "attribute": "$0C80",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "SharedCombatSpriteFrame69": {
+    "Effect_SpriteFrame69": {
       "attribute": "$0C80",
       "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "WeaponSelect_AnimatedSpriteMapping00": {
+    "Pickup_WeaponCapsuleSpriteMapping00": {
       "attribute": "$0000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
@@ -245,7 +245,7 @@
       ],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "WeaponSelect_AnimatedSpriteMapping01": {
+    "Pickup_WeaponCapsuleSpriteMapping01": {
       "attribute": "$0000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
@@ -253,14 +253,14 @@
       ],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "WeaponSelect_AnimatedSpriteMapping02": {
+    "Pickup_WeaponCapsuleSpriteMapping02": {
       "attribute": "$8000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
         ["SharedSceneAndStageTileArt9000", "$9000"]
       ]
     },
-    "WeaponSelect_AnimatedSpriteMapping03": {
+    "Pickup_WeaponCapsuleSpriteMapping03": {
       "attribute": "$8000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
@@ -268,7 +268,7 @@
       ],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "WeaponSelect_AnimatedSpriteMapping04": {
+    "Pickup_WeaponCapsuleSpriteMapping04": {
       "attribute": "$0000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
@@ -276,7 +276,7 @@
       ],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "WeaponSelect_AnimatedSpriteMapping05": {
+    "Pickup_WeaponCapsuleSpriteMapping05": {
       "attribute": "$0000",
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
@@ -287,7 +287,7 @@
         ["SharedStagePaletteCommand", 0]
       ]
     },
-    "Enemy_BehaviorSpriteMapping01": {
+    "Enemy_GrinnerSpriteMapping01": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -295,7 +295,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping02": {
+    "Enemy_GrinnerSpriteMapping02": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -303,7 +303,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping03": {
+    "Enemy_GrinnerSpriteMapping03": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -311,7 +311,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping04": {
+    "Enemy_GrinnerSpriteMapping04": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -319,42 +319,42 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping05": {
+    "Enemy_GrinnerSpriteMapping05": {
       "attribute": "$0B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping06": {
+    "Enemy_GrinnerSpriteMapping06": {
       "attribute": "$0B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping07": {
+    "Enemy_GrinnerSpriteMapping07": {
       "attribute": "$0B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping08": {
+    "Enemy_GrinnerSpriteMapping08": {
       "attribute": "$0B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping09": {
+    "Enemy_GrinnerSpriteMapping09": {
       "attribute": "$8B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping10": {
+    "Enemy_GrinnerSpriteMapping10": {
       "attribute": "$8B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping11": {
+    "Enemy_GrinnerSpriteMapping11": {
       "attribute": "$8B00",
       "art": [["StageSharedTileArtSource00", "$6000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping12": {
+    "Enemy_GrinnerSpriteMapping12": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -362,7 +362,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping13": {
+    "Enemy_GrinnerSpriteMapping13": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -370,7 +370,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_BehaviorSpriteMapping14": {
+    "Enemy_GrinnerSpriteMapping14": {
       "attribute": "$0B00",
       "art": [
         ["StageSharedTileArtSource00", "$6000"],
@@ -378,27 +378,27 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "PeriodicShotEnemySpriteMapping00": {
+    "Enemy_EggSpitterSpriteMapping00": {
       "attribute": "$8B80",
       "art": [["StageSharedTileArtSource02", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "PeriodicShotEnemySpriteMapping03": {
+    "Enemy_EggSpitterSpriteMapping03": {
       "attribute": "$8B80",
       "art": [["StageSharedTileArtSource02", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "PeriodicShotEnemySpriteMapping05": {
+    "Enemy_EggSpitterSpriteMapping05": {
       "attribute": "$8B80",
       "art": [["StageSharedTileArtSource02", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "PeriodicShotEnemySpriteMapping06": {
+    "Enemy_EggSpitterSpriteMapping06": {
       "attribute": "$8B80",
       "art": [["StageSharedTileArtSource02", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping00": {
+    "Enemy_GunnerSpriteMapping00": {
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
@@ -406,7 +406,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping01": {
+    "Enemy_GunnerSpriteMapping01": {
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
@@ -414,7 +414,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping02": {
+    "Enemy_GunnerSpriteMapping02": {
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
@@ -422,7 +422,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping03": {
+    "Enemy_GunnerSpriteMapping03": {
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
@@ -430,17 +430,17 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping13": {
+    "Enemy_GunnerSpriteMapping13": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource04", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping14": {
+    "Enemy_GunnerSpriteMapping14": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource04", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_ProjectileSpriteMapping15": {
+    "Enemy_GunnerSpriteMapping15": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource04", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
@@ -500,72 +500,72 @@
       "art": [["StageSharedTileArtSource06", "$7000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_PhasePatternSpriteMappingA": {
+    "Enemy_EyePodSpriteMappingA": {
       "attribute": "$8C00",
       "art": [["StageSharedTileArtSource08", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_PhasePatternSpriteMappingB": {
+    "Enemy_EyePodSpriteMappingB": {
       "attribute": "$8C00",
       "art": [["StageSharedTileArtSource08", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_PhasePatternSpriteMappingC": {
+    "Enemy_EyePodSpriteMappingC": {
       "attribute": "$8C00",
       "art": [["StageSharedTileArtSource08", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_PhasePatternSpriteMappingD": {
+    "Enemy_EyePodSpriteMappingD": {
       "attribute": "$8C00",
       "art": [["StageSharedTileArtSource08", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingA": {
+    "Enemy_BeakWalkerSpriteMappingA": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingB": {
+    "Enemy_BeakWalkerSpriteMappingB": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingC": {
+    "Enemy_BeakWalkerSpriteMappingC": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingD": {
+    "Enemy_BeakWalkerSpriteMappingD": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingG": {
+    "Enemy_BeakWalkerSpriteMappingG": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingH": {
+    "Enemy_BeakWalkerSpriteMappingH": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingI": {
+    "Enemy_BeakWalkerSpriteMappingI": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingJ": {
+    "Enemy_BeakWalkerSpriteMappingJ": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_Stage10WaspSpriteMappingK": {
+    "Enemy_BeakWalkerSpriteMappingK": {
       "attribute": "$0C00",
       "art": [["StageSharedTileArtSource0A", "$8000"]],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingAnimationSpriteMappingA": {
+    "Enemy_BeeSpriteMappingA": {
       "attribute": "$8C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -574,7 +574,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingAnimationSpriteMappingB": {
+    "Enemy_BeeSpriteMappingB": {
       "attribute": "$8C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -583,7 +583,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingAnimationSpriteMappingC": {
+    "Enemy_BeeSpriteMappingC": {
       "attribute": "$8C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -592,7 +592,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingAnimationSpriteMappingD": {
+    "Enemy_BeeSpriteMappingD": {
       "attribute": "$8C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -601,7 +601,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingAnimationSpriteMappingE": {
+    "Enemy_BeeSpriteMappingE": {
       "attribute": "$8C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -610,7 +610,7 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
-    "Enemy_CirclingRotationSpriteMapping4": {
+    "Enemy_FlySpriteMapping4": {
       "attribute": "$1C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -619,7 +619,7 @@
       ],
       "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
     },
-    "Enemy_CirclingRotationSpriteMapping3": {
+    "Enemy_FlySpriteMapping3": {
       "attribute": "$0C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -628,7 +628,7 @@
       ],
       "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
     },
-    "Enemy_CirclingRotationSpriteMapping2": {
+    "Enemy_FlySpriteMapping2": {
       "attribute": "$0C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -637,7 +637,7 @@
       ],
       "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
     },
-    "Enemy_CirclingRotationSpriteMapping1": {
+    "Enemy_FlySpriteMapping1": {
       "attribute": "$0C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -646,7 +646,7 @@
       ],
       "palettes": [["Boss_FlyingNeoPaletteCommands", 32]]
     },
-    "Enemy_CirclingRotationSpriteMapping0": {
+    "Enemy_FlySpriteMapping0": {
       "attribute": "$0C00",
       "art": [
         ["StageSharedTileArtSource0C", "$6000"],
@@ -670,12 +670,12 @@
       "art": [["Stage22And24TileArt", "$8000"]],
       "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
     },
-    "Enemy_Stage11FishSpriteMapping00": {
+    "Enemy_GunCraftSpriteMapping00": {
       "attribute": "$0C00",
       "art": [["Stage22And24TileArt", "$8000"]],
       "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
     },
-    "Enemy_Stage11FishSpriteMapping03": {
+    "Enemy_GunCraftSpriteMapping03": {
       "attribute": "$0C00",
       "art": [["Stage22And24TileArt", "$8000"]],
       "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
@@ -2021,47 +2021,47 @@
       "art": [["Boss_ZLeoTileArt1", "$7000"]],
       "palettes": [["Boss_ZLeoPaletteCommands", 0]]
     },
-    "IndexedObjectSpriteMapping00": {
+    "Enemy_RisingAlienSpriteMapping00": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping01": {
+    "Enemy_RisingAlienSpriteMapping01": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping02": {
+    "Enemy_RisingAlienSpriteMapping02": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping03": {
+    "Enemy_RisingAlienSpriteMapping03": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping04": {
+    "Enemy_RisingAlienSpriteMapping04": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping05": {
+    "Enemy_RisingAlienSpriteMapping05": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping06": {
+    "Enemy_RisingAlienSpriteMapping06": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping07": {
+    "Enemy_RisingAlienSpriteMapping07": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "IndexedObjectSpriteMapping08": {
+    "Enemy_RisingAlienSpriteMapping08": {
       "attribute": "$02DF",
       "art": [["Stage5To7TileArt1", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
@@ -2536,7 +2536,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$10",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2545,7 +2545,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2554,7 +2554,7 @@
       "index": 2,
       "type": "$1C",
       "parameter": "$15",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2563,7 +2563,7 @@
       "index": 3,
       "type": "$1C",
       "parameter": "$18",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2572,7 +2572,7 @@
       "index": 4,
       "type": "$44",
       "parameter": "$4",
-      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "mapping": "Enemy_EggSpitterSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -2581,7 +2581,7 @@
       "index": 5,
       "type": "$1C",
       "parameter": "$10",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2590,7 +2590,7 @@
       "index": 6,
       "type": "$1C",
       "parameter": "$10",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2599,7 +2599,7 @@
       "index": 7,
       "type": "$8C",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "mapping": "Enemy_GunnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2608,7 +2608,7 @@
       "index": 8,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -2617,7 +2617,7 @@
       "index": 9,
       "type": "$44",
       "parameter": "$0",
-      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "mapping": "Enemy_EggSpitterSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -2626,7 +2626,7 @@
       "index": 10,
       "type": "$1E0",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "mapping": "Enemy_GunnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2635,7 +2635,7 @@
       "index": 11,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2644,7 +2644,7 @@
       "index": 12,
       "type": "$44",
       "parameter": "$0",
-      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "mapping": "Enemy_EggSpitterSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -2653,7 +2653,7 @@
       "index": 13,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -2662,7 +2662,7 @@
       "index": 14,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2671,7 +2671,7 @@
       "index": 15,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2680,7 +2680,7 @@
       "index": 16,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2689,7 +2689,7 @@
       "index": 17,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2698,7 +2698,7 @@
       "index": 18,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2707,7 +2707,7 @@
       "index": 19,
       "type": "$1E0",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "mapping": "Enemy_GunnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2716,7 +2716,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2725,7 +2725,7 @@
       "index": 1,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2734,7 +2734,7 @@
       "index": 2,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2743,7 +2743,7 @@
       "index": 3,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2752,7 +2752,7 @@
       "index": 4,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$8300"
     },
@@ -2761,7 +2761,7 @@
       "index": 5,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -2770,7 +2770,7 @@
       "index": 6,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2779,7 +2779,7 @@
       "index": 7,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2788,7 +2788,7 @@
       "index": 8,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2797,7 +2797,7 @@
       "index": 9,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2806,7 +2806,7 @@
       "index": 10,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2815,7 +2815,7 @@
       "index": 11,
       "type": "$44",
       "parameter": "$4",
-      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "mapping": "Enemy_EggSpitterSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -2824,7 +2824,7 @@
       "index": 12,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2833,7 +2833,7 @@
       "index": 13,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2842,7 +2842,7 @@
       "index": 15,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2851,7 +2851,7 @@
       "index": 16,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2860,7 +2860,7 @@
       "index": 17,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     },
@@ -2869,7 +2869,7 @@
       "index": 18,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2878,7 +2878,7 @@
       "index": 20,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2887,7 +2887,7 @@
       "index": 21,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2896,7 +2896,7 @@
       "index": 22,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2905,7 +2905,7 @@
       "index": 23,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2914,7 +2914,7 @@
       "index": 24,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2923,7 +2923,7 @@
       "index": 25,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2932,7 +2932,7 @@
       "index": 26,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2941,7 +2941,7 @@
       "index": 28,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2950,7 +2950,7 @@
       "index": 29,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2959,7 +2959,7 @@
       "index": 30,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping00",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping00",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -2968,7 +2968,7 @@
       "index": 31,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2977,7 +2977,7 @@
       "index": 33,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -2986,7 +2986,7 @@
       "index": 34,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -2995,7 +2995,7 @@
       "index": 35,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3004,7 +3004,7 @@
       "index": 36,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3013,7 +3013,7 @@
       "index": 37,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3022,7 +3022,7 @@
       "index": 38,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3031,7 +3031,7 @@
       "index": 39,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3040,7 +3040,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3049,7 +3049,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3058,7 +3058,7 @@
       "index": 2,
       "type": "$28C",
       "parameter": "$0",
-      "mapping": "Enemy_PhasePatternSpriteMappingD",
+      "mapping": "Enemy_EyePodSpriteMappingD",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3067,7 +3067,7 @@
       "index": 3,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3076,7 +3076,7 @@
       "index": 7,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping04",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -3085,7 +3085,7 @@
       "index": 9,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3094,7 +3094,7 @@
       "index": 10,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     },
@@ -3103,7 +3103,7 @@
       "index": 11,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3112,7 +3112,7 @@
       "index": 12,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3121,7 +3121,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3130,7 +3130,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3139,7 +3139,7 @@
       "index": 2,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3148,7 +3148,7 @@
       "index": 3,
       "type": "$48",
       "parameter": "$2",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$1C80"
     },
@@ -3157,7 +3157,7 @@
       "index": 4,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3166,7 +3166,7 @@
       "index": 5,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3175,7 +3175,7 @@
       "index": 6,
       "type": "$48",
       "parameter": "$2",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$1C80"
     },
@@ -3184,7 +3184,7 @@
       "index": 7,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -3193,7 +3193,7 @@
       "index": 8,
       "type": "$28C",
       "parameter": "$0",
-      "mapping": "Enemy_PhasePatternSpriteMappingD",
+      "mapping": "Enemy_EyePodSpriteMappingD",
       "frame": 0,
       "attribute": "$8C00"
     },
@@ -3202,7 +3202,7 @@
       "index": 9,
       "type": "$48",
       "parameter": "$2",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$1C80"
     },
@@ -3211,7 +3211,7 @@
       "index": 10,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3220,7 +3220,7 @@
       "index": 11,
       "type": "$48",
       "parameter": "$2",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$1C80"
     },
@@ -3229,7 +3229,7 @@
       "index": 12,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3238,7 +3238,7 @@
       "index": 13,
       "type": "$48",
       "parameter": "$2",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$1C80"
     },
@@ -3247,7 +3247,7 @@
       "index": 14,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3256,7 +3256,7 @@
       "index": 16,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3265,7 +3265,7 @@
       "index": 18,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -3274,7 +3274,7 @@
       "index": 20,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3283,7 +3283,7 @@
       "index": 21,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3292,7 +3292,7 @@
       "index": 22,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -3310,7 +3310,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3319,7 +3319,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3328,7 +3328,7 @@
       "index": 2,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3346,7 +3346,7 @@
       "index": 4,
       "type": "$44",
       "parameter": "$0",
-      "mapping": "PeriodicShotEnemySpriteMapping00",
+      "mapping": "Enemy_EggSpitterSpriteMapping00",
       "frame": 0,
       "attribute": "$0B80"
     },
@@ -3364,7 +3364,7 @@
       "index": 6,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3373,7 +3373,7 @@
       "index": 7,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3382,7 +3382,7 @@
       "index": 8,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3391,7 +3391,7 @@
       "index": 9,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -3400,7 +3400,7 @@
       "index": 10,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3418,7 +3418,7 @@
       "index": 12,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3427,7 +3427,7 @@
       "index": 13,
       "type": "$12C",
       "parameter": "$8",
-      "mapping": "IndexedObjectSpriteMapping02",
+      "mapping": "Enemy_RisingAlienSpriteMapping02",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3436,7 +3436,7 @@
       "index": 14,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3454,7 +3454,7 @@
       "index": 16,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3463,7 +3463,7 @@
       "index": 17,
       "type": "$12C",
       "parameter": "$8000",
-      "mapping": "IndexedObjectSpriteMapping02",
+      "mapping": "Enemy_RisingAlienSpriteMapping02",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3526,7 +3526,7 @@
       "index": 24,
       "type": "$12C",
       "parameter": "$8008",
-      "mapping": "IndexedObjectSpriteMapping02",
+      "mapping": "Enemy_RisingAlienSpriteMapping02",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3535,7 +3535,7 @@
       "index": 0,
       "type": "$12C",
       "parameter": "$8",
-      "mapping": "IndexedObjectSpriteMapping02",
+      "mapping": "Enemy_RisingAlienSpriteMapping02",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3544,7 +3544,7 @@
       "index": 1,
       "type": "$12C",
       "parameter": "$18",
-      "mapping": "IndexedObjectSpriteMapping05",
+      "mapping": "Enemy_RisingAlienSpriteMapping05",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3553,7 +3553,7 @@
       "index": 2,
       "type": "$12C",
       "parameter": "$10",
-      "mapping": "IndexedObjectSpriteMapping03",
+      "mapping": "Enemy_RisingAlienSpriteMapping03",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3562,7 +3562,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3571,7 +3571,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3580,7 +3580,7 @@
       "index": 2,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3589,7 +3589,7 @@
       "index": 3,
       "type": "$8C",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping32",
+      "mapping": "Enemy_GunnerSpriteMapping32",
       "frame": 0,
       "attribute": "$0B80"
     },
@@ -3634,7 +3634,7 @@
       "index": 8,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -3661,7 +3661,7 @@
       "index": 11,
       "type": "$8C",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping00",
+      "mapping": "Enemy_GunnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B80"
     },
@@ -3670,7 +3670,7 @@
       "index": 12,
       "type": "$12C",
       "parameter": "$8020",
-      "mapping": "IndexedObjectSpriteMapping09",
+      "mapping": "Enemy_RisingAlienSpriteMapping09",
       "frame": 0,
       "attribute": "$02DF"
     },
@@ -3679,7 +3679,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3688,7 +3688,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$11",
-      "mapping": "Enemy_BehaviorSpriteMapping05",
+      "mapping": "Enemy_GrinnerSpriteMapping05",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3697,7 +3697,7 @@
       "index": 2,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3706,7 +3706,7 @@
       "index": 3,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3715,7 +3715,7 @@
       "index": 4,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3724,7 +3724,7 @@
       "index": 5,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3733,7 +3733,7 @@
       "index": 6,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -3742,7 +3742,7 @@
       "index": 7,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3751,7 +3751,7 @@
       "index": 8,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3760,7 +3760,7 @@
       "index": 9,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3769,7 +3769,7 @@
       "index": 10,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3778,7 +3778,7 @@
       "index": 11,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3787,7 +3787,7 @@
       "index": 12,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3796,7 +3796,7 @@
       "index": 0,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$0480"
     },
@@ -3814,7 +3814,7 @@
       "index": 5,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3823,7 +3823,7 @@
       "index": 6,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3841,7 +3841,7 @@
       "index": 8,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping05",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping05",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -3913,7 +3913,7 @@
       "index": 18,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3940,7 +3940,7 @@
       "index": 21,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3949,7 +3949,7 @@
       "index": 22,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -3994,7 +3994,7 @@
       "index": 5,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4003,7 +4003,7 @@
       "index": 6,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4012,7 +4012,7 @@
       "index": 7,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping04",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -4021,7 +4021,7 @@
       "index": 8,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4039,7 +4039,7 @@
       "index": 10,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4048,7 +4048,7 @@
       "index": 11,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4057,7 +4057,7 @@
       "index": 12,
       "type": "$8C",
       "parameter": "$0",
-      "mapping": "Enemy_ProjectileSpriteMapping32",
+      "mapping": "Enemy_GunnerSpriteMapping32",
       "frame": 0,
       "attribute": "$0C00"
     },
@@ -4084,7 +4084,7 @@
       "index": 15,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4093,7 +4093,7 @@
       "index": 16,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4102,7 +4102,7 @@
       "index": 17,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4111,7 +4111,7 @@
       "index": 18,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$0480"
     },
@@ -4129,7 +4129,7 @@
       "index": 21,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping00",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping00",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -4138,7 +4138,7 @@
       "index": 0,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4147,7 +4147,7 @@
       "index": 1,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping12",
+      "mapping": "Enemy_GrinnerSpriteMapping12",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4156,7 +4156,7 @@
       "index": 2,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4174,7 +4174,7 @@
       "index": 4,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -4192,7 +4192,7 @@
       "index": 6,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4210,7 +4210,7 @@
       "index": 8,
       "type": "$2C0",
       "parameter": "$0",
-      "mapping": "Enemy_Stage10WaspSpriteMappingA",
+      "mapping": "Enemy_BeakWalkerSpriteMappingA",
       "frame": 0,
       "attribute": "$0C00"
     },
@@ -4246,7 +4246,7 @@
       "index": 16,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4255,7 +4255,7 @@
       "index": 17,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4273,7 +4273,7 @@
       "index": 19,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4282,7 +4282,7 @@
       "index": 22,
       "type": "$36C",
       "parameter": "$80",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0300"
     },
@@ -4300,7 +4300,7 @@
       "index": 24,
       "type": "$36C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4309,7 +4309,7 @@
       "index": 25,
       "type": "$36C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4318,7 +4318,7 @@
       "index": 0,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     },
@@ -4327,7 +4327,7 @@
       "index": 1,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping02",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping02",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -4336,7 +4336,7 @@
       "index": 2,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -4345,7 +4345,7 @@
       "index": 3,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -4354,7 +4354,7 @@
       "index": 4,
       "type": "$1C",
       "parameter": "$0",
-      "mapping": "Enemy_BehaviorSpriteMapping00",
+      "mapping": "Enemy_GrinnerSpriteMapping00",
       "frame": 0,
       "attribute": "$8B00"
     },
@@ -4381,7 +4381,7 @@
       "index": 2,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping02",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping02",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -4390,7 +4390,7 @@
       "index": 3,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     },
@@ -4408,7 +4408,7 @@
       "index": 2,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4417,7 +4417,7 @@
       "index": 3,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4435,7 +4435,7 @@
       "index": 5,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4444,7 +4444,7 @@
       "index": 6,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4453,7 +4453,7 @@
       "index": 7,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4462,7 +4462,7 @@
       "index": 8,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4471,7 +4471,7 @@
       "index": 9,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4480,7 +4480,7 @@
       "index": 10,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4489,7 +4489,7 @@
       "index": 11,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4498,7 +4498,7 @@
       "index": 12,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4507,7 +4507,7 @@
       "index": 13,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4516,7 +4516,7 @@
       "index": 14,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4525,7 +4525,7 @@
       "index": 15,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4534,7 +4534,7 @@
       "index": 16,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4543,7 +4543,7 @@
       "index": 17,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4552,7 +4552,7 @@
       "index": 18,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4561,7 +4561,7 @@
       "index": 19,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4579,7 +4579,7 @@
       "index": 21,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4588,7 +4588,7 @@
       "index": 22,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4606,7 +4606,7 @@
       "index": 24,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$0480"
     },
@@ -4615,7 +4615,7 @@
       "index": 25,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4624,7 +4624,7 @@
       "index": 26,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4633,7 +4633,7 @@
       "index": 27,
       "type": "$48",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame67",
+      "mapping": "Effect_SpriteFrame67",
       "frame": 0,
       "attribute": "$0C80"
     },
@@ -4642,7 +4642,7 @@
       "index": 28,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping04",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping04",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -4651,7 +4651,7 @@
       "index": 29,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4660,7 +4660,7 @@
       "index": 30,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4669,7 +4669,7 @@
       "index": 31,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4678,7 +4678,7 @@
       "index": 32,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4687,7 +4687,7 @@
       "index": 33,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4696,7 +4696,7 @@
       "index": 34,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4705,7 +4705,7 @@
       "index": 35,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4714,7 +4714,7 @@
       "index": 36,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4723,7 +4723,7 @@
       "index": 37,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4732,7 +4732,7 @@
       "index": 38,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4741,7 +4741,7 @@
       "index": 39,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4750,7 +4750,7 @@
       "index": 40,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4759,7 +4759,7 @@
       "index": 41,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4768,7 +4768,7 @@
       "index": 42,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4777,7 +4777,7 @@
       "index": 43,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4786,7 +4786,7 @@
       "index": 44,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4795,7 +4795,7 @@
       "index": 45,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4804,7 +4804,7 @@
       "index": 46,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4813,7 +4813,7 @@
       "index": 47,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4822,7 +4822,7 @@
       "index": 48,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4831,7 +4831,7 @@
       "index": 49,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4840,7 +4840,7 @@
       "index": 50,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$0B00"
     },
@@ -4849,7 +4849,7 @@
       "index": 51,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping05",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping05",
       "frame": 0,
       "attribute": "$0000"
     },
@@ -4876,7 +4876,7 @@
       "index": 1,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -4885,7 +4885,7 @@
       "index": 2,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -4930,7 +4930,7 @@
       "index": 7,
       "type": "$24C",
       "parameter": "$0",
-      "mapping": "WeaponSelect_AnimatedSpriteMapping03",
+      "mapping": "Pickup_WeaponCapsuleSpriteMapping03",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -4975,7 +4975,7 @@
       "index": 12,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     },
@@ -4984,7 +4984,7 @@
       "index": 13,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -4993,7 +4993,7 @@
       "index": 14,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5002,7 +5002,7 @@
       "index": 15,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5011,7 +5011,7 @@
       "index": 16,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5038,7 +5038,7 @@
       "index": 19,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5056,7 +5056,7 @@
       "index": 21,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5074,7 +5074,7 @@
       "index": 23,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5092,7 +5092,7 @@
       "index": 25,
       "type": "$2A0",
       "parameter": "$0",
-      "mapping": "Enemy_CirclingAnimationSpriteMappingA",
+      "mapping": "Enemy_BeeSpriteMappingA",
       "frame": 0,
       "attribute": "$8B80"
     },
@@ -5101,7 +5101,7 @@
       "index": 0,
       "type": "$20",
       "parameter": "$0",
-      "mapping": "SharedCombatSpriteFrame19",
+      "mapping": "Effect_SpriteFrame19",
       "frame": 0,
       "attribute": "$8480"
     }

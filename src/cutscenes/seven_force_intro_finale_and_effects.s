@@ -94,10 +94,10 @@ Entity_SevenForceSpawnRandomExplosion:                  ; was: loc_55352
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Entity_SevenForceSpawnRandomExplosionReturn
                 jsr     (Sprite_InitType160).l
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 btst    #0,(RandomNumberState).w
                 beq.s   Entity_SevenForceInitRandomExplosionMotion
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
 Entity_SevenForceInitRandomExplosionMotion:             ; was: loc_5538A
                 move.b  #0,$20(a0)
                 moveq   #0,d0

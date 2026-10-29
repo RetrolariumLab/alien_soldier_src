@@ -295,11 +295,11 @@ Boss_JokerInitializeType160DefeatEffect:                ; was: loc_3B624
                 ext.l   d0
                 asl.l   #2,d0
                 move.l  d0,$18(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  #$FFFE,$1C(a0)
                 btst    #0,(RandomNumberState).w
                 beq.s   Boss_JokerPositionDefeatEffect
-                move.l  #SharedCombatSpriteAnimation06,8(a0)
+                move.l  #Effect_SpriteAnimation06,8(a0)
                 clr.w   $1C(a0)
 Boss_JokerPositionDefeatEffect:                         ; was: loc_3B65E
                                         ; Boss_JokerSpawnDefeatEffect+4E   j

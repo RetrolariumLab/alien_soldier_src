@@ -14,7 +14,7 @@ Projectile_MadamBarbarDebrisInitializeType160:          ; was: loc_3AE5A
                 move.b  #$BC,d0
                 jsr     (Sound_QueueSFXRequest).l
                 move.w  #2,(PlaneAShakeLevel).w
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_MadamBarbarDebrisUpdateActive:               ; was: loc_3AE78

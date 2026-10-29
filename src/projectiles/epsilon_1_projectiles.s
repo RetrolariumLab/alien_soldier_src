@@ -127,7 +127,7 @@ Projectile_Epsilon1AnimateSpreadProjectileReturn:
 ; Converts a spread projectile to type-$88 debris after it crosses the lower bound
 Projectile_Epsilon1ConvertSpreadProjectileToDebris:     ; was: sub_4724E
                 clr.b   $21(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 clr.l   $18(a5)
                 move.w  $1C(a5),d0
@@ -304,7 +304,7 @@ Projectile_Epsilon1BarrageRowFlightState:
 
 ; Converts a barrage-row projectile to type-$88 debris below the playfield
 Projectile_Epsilon1ConvertBarrageRowProjectileToDebris:  ; was: sub_47440
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 clr.l   $18(a5)
                 move.w  $1C(a5),d0
@@ -343,7 +343,7 @@ Boss_Epsilon1DeactivateRingObjectAndLink:
                 movea.w $4E(a5),a0
                 beq.s   Boss_Epsilon1DispatchRingObjectState
                 jsr     (Projectile_InitType88).l
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.w  2(a5),d0
@@ -411,7 +411,7 @@ Boss_Epsilon1SelectRingLaunchAngleSample:
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1WaitForRingLaunchWindowReturn
                 jsr     (Sprite_InitType160).l
-                move.l  #SharedCombatSpriteAnimation04,8(a0)
+                move.l  #Effect_SpriteAnimation04,8(a0)
                 move.w  #$480,$E(a0)
                 move.w  $10(a5),$10(a0)
                 addi.w  #8,$10(a0)
@@ -419,7 +419,7 @@ Boss_Epsilon1SelectRingLaunchAngleSample:
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_Epsilon1WaitForRingLaunchWindowReturn
                 jsr     (Sprite_InitType160).l
-                move.l  #SharedCombatSpriteAnimation04,8(a0)
+                move.l  #Effect_SpriteAnimation04,8(a0)
                 move.w  #$480,$E(a0)
                 move.w  $10(a5),$10(a0)
                 addi.w  #-8,$10(a0)
@@ -513,7 +513,7 @@ Boss_Epsilon1PositionReleasedRingObjectLink:
                 jsr     (Projectile_InitType88).l
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  $1C(a5),d0
                 neg.w   d0
                 asr.w   #2,d0
@@ -556,7 +556,7 @@ Boss_Epsilon1SpawnRingObjectDefeatDebris:
                 andi.w  #3,d0
                 subq.w  #2,d0
                 move.w  d0,$18(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
 Boss_Epsilon1UpdateRingObjectDefeatFallReturn:
                                         ; Boss_Epsilon1UpdateRingObjectDefeatFallState+20   j
                 rts
@@ -592,7 +592,7 @@ Boss_Epsilon1ExplodeRingObjectState:                    ; was: sub_4779E
                 lea     (Epsilon1RowOffsetTable).w,a1
                 move.w  #$FF00,(a1,d0.w)
                 addq.w  #2,4(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 move.w  #$FFFF,$1C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Boss_Epsilon1ExplodeRingObjectState

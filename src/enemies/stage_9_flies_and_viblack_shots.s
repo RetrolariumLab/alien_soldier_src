@@ -47,7 +47,7 @@ Enemy_Stage9FlyOrbitState:                              ; was: loc_2D6E8
                 move.w  $4A(a5),d0
                 add.w   d0,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
-                bsr.w   Enemy_UpdateCirclingRotationSprite
+                bsr.w   Enemy_UpdateFlySprite
                 move.w  $50(a5),d2
                 move.w  $50(a5),d3
                 bsr.w   Enemy_UpdateCircularMotionAndFire
@@ -127,7 +127,7 @@ Projectile_ViblackSideShotInitState:                    ; was: sub_2D7C8
                 move.b  #2,$25(a5)
                 move.w  #$80,$4C(a5)
                 addq.w  #2,4(a5)
-                bsr.w   Enemy_UpdateCirclingRotationSprite
+                bsr.w   Enemy_UpdateFlySprite
                 move.w  #2,$1C(a5)
                 move.w  (PlayerCenterX).w,d0
                 sub.w   $10(a5),d0
@@ -174,7 +174,7 @@ Projectile_ViblackSideShotBeginTurnState:               ; was: sub_2D834
 Projectile_ViblackSideShotTurnAndLaunchState:           ; was: sub_2D844
                 move.w  $4E(a5),d0
                 add.w   d0,$4C(a5)
-                bsr.w   Enemy_UpdateCirclingRotationSprite
+                bsr.w   Enemy_UpdateFlySprite
                 subq.w  #1,$48(a5)
                 bne.s   Projectile_ViblackSideShotTurnAndLaunchState_Return
                 move.w  #$1C0,$48(a5)

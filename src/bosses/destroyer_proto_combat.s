@@ -218,7 +218,7 @@ Boss_DestroyerProtoSpawnSpreadProjectile:               ; was: sub_31AA2
 Projectile_InitSharedHitReactiveShot:                   ; was: loc_31B02
                                         ; Boss_VictorSpawnSplitShotWave+4E   p
                 move.w  #$EC00,2(a0)
-                move.l  #SharedCombatSpriteAnimation16,8(a0)
+                move.l  #Effect_SpriteAnimation16,8(a0)
                 clr.w   $C(a0)
                 move.w  #$8480,$E(a0)
                 move.b  #$40,$21(a0)                    ; '@'

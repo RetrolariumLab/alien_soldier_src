@@ -256,14 +256,14 @@ Segment_MissiraySpawnDefeatParticleReturn:              ; was: locret_546DC
                 rts
 ; End of function Segment_MissiraySpawnDefeatParticle
 ; ---------------------------------------------------------------------------
-Segment_MissirayDefeatParticleAnimations:   dc.l    SharedCombatSpriteAnimation00  ; was: off_546DE
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation18
-                dc.l    SharedCombatSpriteAnimation00
-                dc.l    SharedCombatSpriteAnimation19
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation20
+Segment_MissirayDefeatParticleAnimations:   dc.l    Effect_SpriteAnimation00  ; was: off_546DE
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation18
+                dc.l    Effect_SpriteAnimation00
+                dc.l    Effect_SpriteAnimation19
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation20
 
 Segment_MissirayDefeatNoOpState:                        ; was: nullsub_125
                 rts
@@ -357,7 +357,7 @@ Boss_MissiraySpawnAttachedProximityShot:                ; was: sub_547D8
                 bne.s   Boss_MissiraySpawnAttachedProximityShotReturn
                 move.w  #$404,(a0)
                 move.w  #$EC00,2(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 move.w  #$8480,$E(a0)
                 move.w  d5,$10(a0)
                 move.w  d6,$14(a0)

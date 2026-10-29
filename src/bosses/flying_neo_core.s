@@ -334,7 +334,7 @@ Boss_FlyingNeoDefeatLaunchType88PartState:              ; was: sub_3C3E2
                 move.w  #$70,$48(a5)                    ; 'p'
                 bsr.w   Boss_FlyingNeoQueueFixedTileRowTransfer
                 movea.w #(EleventhEntityType-M68K_RAM),a0
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.l  #$FFFEE000,$18(a0)
                 tst.w   $54(a5)
                 beq.s   Boss_FlyingNeoInitializeLaunchedType88Part
@@ -355,7 +355,7 @@ Boss_FlyingNeoDefeatParticleRainState:                  ; was: sub_3C428
                 bne.s   Boss_FlyingNeoUpdateDefeatParticleRainTimer
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_FlyingNeoUpdateDefeatParticleRainTimer
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.l  #$FFFF1000,$1C(a0)
                 jsr     (Projectile_InitType88).l
                 clr.b   $20(a0)

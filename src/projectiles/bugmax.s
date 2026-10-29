@@ -20,7 +20,7 @@ Projectile_BugmaxEmitPeriodicTrailParticle:             ; was: loc_4D3D4
                 move.b  $20(a5),$20(a0)
                 addq.b  #4,$20(a0)
                 andi.w  #$7FFF,$E(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (RandomNumber).l
                 move.b  (RandomNumberState).w,d0
                 andi.w  #3,d0
@@ -99,7 +99,7 @@ Projectile_BugmaxHandleSpecialHitFragmentCollision:     ; was: loc_4D4CE
 Projectile_BugmaxConvertHitFragmentToParticle:          ; was: loc_4D4DC
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_BugmaxSettleSpecialHitFragmentAtFloor:       ; was: loc_4D4F2
@@ -222,7 +222,7 @@ Projectile_BugmaxUpdateSpreadFlight:                    ; was: sub_4D608
                 jsr     (Projectile_InitType88).l
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  #$FFFE,$1C(a0)
                 rts
 ; ---------------------------------------------------------------------------
@@ -236,7 +236,7 @@ Projectile_BugmaxCheckSpreadTerrainOrFinalTransition:   ; was: loc_4D668
                 tst.w   (SharedScratchLong10+2).w
                 beq.s   Projectile_BugmaxSpreadFlightReturn
 Projectile_BugmaxConvertSpreadToParticle:               ; was: loc_4D67C
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 move.w  #$FFFE,$1C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------

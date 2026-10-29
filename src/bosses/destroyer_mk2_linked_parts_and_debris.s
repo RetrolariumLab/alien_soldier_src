@@ -138,7 +138,7 @@ Object_DestroyerMk2UpdateFallingCentralPart:            ; was: sub_4B7A0
                 bne.s   Object_DestroyerMk2CheckFallingCentralPartBounds
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Object_DestroyerMk2CheckFallingCentralPartBounds
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 move.b  $20(a5),$20(a0)
                 move.l  $10(a5),$10(a0)
                 move.l  $14(a5),$14(a0)
@@ -432,7 +432,7 @@ Object_DestroyerMk2InitializeFragmentRecordLoop:        ; was: loc_4BAAA
                 move.l  #$FF02FF02,$2C(a0)
                 move.w  #$80,$26(a0)
                 move.w  #$6D00,2(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 move.w  #$8480,$E(a0)
                 clr.w   $C(a0)
                 move.l  $10(a5),$10(a0)
@@ -533,7 +533,7 @@ Object_TransitionDebrisConvertAfterCollision:           ; was: loc_4BBB4
                 jsr     (Sound_QueueSFXRequest).l
                 subq.w  #1,(QuaternaryEntityWork52).w
                 clr.b   $21(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 move.w  $1C(a5),d0
                 neg.w   d0
@@ -751,14 +751,14 @@ Projectile_DestroyerMk2DebrisSpawnReturn:               ; was: locret_4BE98
                 rts
 ; End of function Projectile_DestroyerMk2DebrisMain
 ; ---------------------------------------------------------------------------
-Projectile_DestroyerMk2DebrisMappingTable:  dc.l    SharedCombatSpriteAnimation00  ; was: off_4BE9A
-                dc.l    SharedCombatSpriteAnimation03
-                dc.l    SharedCombatSpriteAnimation01
-                dc.l    SharedCombatSpriteAnimation04
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation05
-                dc.l    SharedCombatSpriteAnimation02
-                dc.l    SharedCombatSpriteAnimation06
+Projectile_DestroyerMk2DebrisMappingTable:  dc.l    Effect_SpriteAnimation00  ; was: off_4BE9A
+                dc.l    Effect_SpriteAnimation03
+                dc.l    Effect_SpriteAnimation01
+                dc.l    Effect_SpriteAnimation04
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation05
+                dc.l    Effect_SpriteAnimation02
+                dc.l    Effect_SpriteAnimation06
 
 Object_DestroyerMk2StageGateReturn:                     ; was: nullsub_108
                                         ; Object_DestroyerMk2ActivateFromLinkedState+14   j

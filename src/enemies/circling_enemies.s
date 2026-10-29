@@ -29,50 +29,50 @@ Enemy_UpdateCirclingAnimation:                          ; was: sub_2D2D2
                 beq.s   Enemy_UpdateCirclingAnimation_Return
                 move.w  #$ED00,2(a5)
                 subq.w  #4,d0
-                move.l  Enemy_CirclingAnimationMappings(pc,d0.w),8(a5)
+                move.l  Enemy_BeeMappings(pc,d0.w),8(a5)
                 clr.w   $C(a5)
 Enemy_UpdateCirclingAnimation_Return:                   ; was: locret_2D2EA
                 rts
 ; End of function Enemy_UpdateCirclingAnimation
 ; ---------------------------------------------------------------------------
-Enemy_CirclingAnimationMappings:    dc.l    Enemy_CirclingLoopAnimation  ; was: off_2D2EC
+Enemy_BeeMappings:  dc.l    Enemy_BeeLoopAnimation      ; was: off_2D2EC
 
 ; Selects sprite mapping and attributes from the current rotation angle
-Enemy_UpdateCirclingRotationSprite:                     ; was: sub_2D2F0
+Enemy_UpdateFlySprite:                                  ; was: sub_2D2F0
                                         ; Enemy_CirclingExitOrbitState+C   p
                 move.w  $4C(a5),d0
                 addi.w  #$10,d0
                 andi.w  #$1E0,d0
                 lsr.w   #3,d0
-                move.l  Enemy_CirclingRotationMappings(pc,d0.w),8(a5)
+                move.l  Enemy_FlyMappings(pc,d0.w),8(a5)
                 clr.w   $C(a5)
                 lsr.w   #1,d0
                 move.w  (CirclingEnemyTileAttr).w,d1
                 andi.w  #$F7FF,d1
                 or.w    (GlobalSpritePriorityBit).w,d1
-                or.w    Enemy_CirclingRotationAttributes(pc,d0.w),d1
+                or.w    Enemy_FlyAttributes(pc,d0.w),d1
                 move.w  d1,$E(a5)
                 move.w  #$CD00,2(a5)
                 rts
-; End of function Enemy_UpdateCirclingRotationSprite
+; End of function Enemy_UpdateFlySprite
 ; ---------------------------------------------------------------------------
-Enemy_CirclingRotationMappings: dc.l    Enemy_CirclingRotationSpriteMapping0  ; was: off_2D326
-                dc.l    Enemy_CirclingRotationSpriteMapping1
-                dc.l    Enemy_CirclingRotationSpriteMapping2
-                dc.l    Enemy_CirclingRotationSpriteMapping3
-                dc.l    Enemy_CirclingRotationSpriteMapping4
-                dc.l    Enemy_CirclingRotationSpriteMapping3
-                dc.l    Enemy_CirclingRotationSpriteMapping2
-                dc.l    Enemy_CirclingRotationSpriteMapping1
-                dc.l    Enemy_CirclingRotationSpriteMapping0
-                dc.l    Enemy_CirclingRotationSpriteMapping1
-                dc.l    Enemy_CirclingRotationSpriteMapping2
-                dc.l    Enemy_CirclingRotationSpriteMapping3
-                dc.l    Enemy_CirclingRotationSpriteMapping4
-                dc.l    Enemy_CirclingRotationSpriteMapping3
-                dc.l    Enemy_CirclingRotationSpriteMapping2
-                dc.l    Enemy_CirclingRotationSpriteMapping1
-Enemy_CirclingRotationAttributes:
+Enemy_FlyMappings:  dc.l    Enemy_FlySpriteMapping0     ; was: off_2D326
+                dc.l    Enemy_FlySpriteMapping1
+                dc.l    Enemy_FlySpriteMapping2
+                dc.l    Enemy_FlySpriteMapping3
+                dc.l    Enemy_FlySpriteMapping4
+                dc.l    Enemy_FlySpriteMapping3
+                dc.l    Enemy_FlySpriteMapping2
+                dc.l    Enemy_FlySpriteMapping1
+                dc.l    Enemy_FlySpriteMapping0
+                dc.l    Enemy_FlySpriteMapping1
+                dc.l    Enemy_FlySpriteMapping2
+                dc.l    Enemy_FlySpriteMapping3
+                dc.l    Enemy_FlySpriteMapping4
+                dc.l    Enemy_FlySpriteMapping3
+                dc.l    Enemy_FlySpriteMapping2
+                dc.l    Enemy_FlySpriteMapping1
+Enemy_FlyAttributes:
                 dc.w    $800, $1800, $1800, $1800, $1800, $1000, $1000, $1000  ; was: word_2D366
                 dc.w    0, 0, 0, 0, $800, $800, $800, $800
 
@@ -239,7 +239,7 @@ Enemy_CirclingOrbitState:                               ; was: sub_2D55E
                 move.w  $4A(a5),d0
                 add.w   d0,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
-                bsr.w   Enemy_UpdateCirclingRotationSprite
+                bsr.w   Enemy_UpdateFlySprite
                 move.w  #$10,d2
                 move.w  #$10,d3
                 bsr.w   Enemy_UpdateCircularMotionAndFire
@@ -287,7 +287,7 @@ Enemy_CirclingOrbitState_BeginExit:                     ; was: loc_2D5DE
 Enemy_CirclingExitOrbitState:                           ; was: sub_2D5F0
                 addi.w  #$10,$4C(a5)
                 andi.w  #$1FF,$4C(a5)
-                bsr.w   Enemy_UpdateCirclingRotationSprite
+                bsr.w   Enemy_UpdateFlySprite
                 move.w  #$10,d2
                 move.w  #$10,d3
                 bsr.w   Enemy_UpdateCircularMotionAndFire

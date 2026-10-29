@@ -1,5 +1,5 @@
 ; Shared enemy and projectile state machines
-Enemy_BehaviorController:                               ; was: sub_2C6A8
+Enemy_GrinnerController:                                ; was: sub_2C6A8
                 tst.w   4(a5)
                 beq.s   Enemy_DispatchBehaviorState
                 tst.w   $24(a5)
@@ -7,38 +7,38 @@ Enemy_BehaviorController:                               ; was: sub_2C6A8
                 tst.w   (StageSpawnCountdown).w
                 bpl.w   Enemy_ConvertToDefeatProjectile
                 btst    #7,$22(a5)
-                beq.s   Enemy_BehaviorController_UpdateDelay
+                beq.s   Enemy_GrinnerController_UpdateDelay
                 btst    #4,$22(a5)
-                bne.s   Enemy_BehaviorController_UpdateDelay
+                bne.s   Enemy_GrinnerController_UpdateDelay
                 bsr.w   Enemy_ConvertToDefeatProjectile
                 addq.w  #1,$4A(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorController_UpdateDelay:                   ; was: loc_2C6D8
-                                        ; Enemy_BehaviorController+24   j
+Enemy_GrinnerController_UpdateDelay:                    ; was: loc_2C6D8
+                                        ; Enemy_GrinnerController+24   j
                 cmpi.w  #$FF00,$5A(a5)
                 bmi.w   Enemy_ConvertToDefeatProjectile
                 subq.w  #1,$5A(a5)
-                bpl.s   Enemy_BehaviorController_RefreshRandom
+                bpl.s   Enemy_GrinnerController_RefreshRandom
                 move.w  #$13,$5E(a5)
-Enemy_BehaviorController_RefreshRandom:                 ; was: loc_2C6EE
+Enemy_GrinnerController_RefreshRandom:                  ; was: loc_2C6EE
                 jsr     (RandomNumber).l
                 clr.w   6(a5)
 ; Dispatches enemy to behavior state handler and updates animation
 Enemy_DispatchBehaviorState:                            ; was: loc_2C6F8
                 bsr.s   Enemy_StateDispatcher
                 bra.w   Enemy_UpdateBehaviorAnimation
-; End of function Enemy_BehaviorController
+; End of function Enemy_GrinnerController
 ; Dispatches enemy to appropriate state handler
 Enemy_StateDispatcher:                                  ; was: sub_2C6FE
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
-                movea.w Enemy_BehaviorStateOffsets(pc,d0.w),a0
+                movea.w Enemy_GrinnerStateOffsets(pc,d0.w),a0
                 adda.l  #Enemy_MainStateMachine,a0
                 jmp     (a0)
 ; End of function Enemy_StateDispatcher
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorStateOffsets: dc.w    Enemy_MainStateMachine-Enemy_MainStateMachine  ; was: off_2C712
+Enemy_GrinnerStateOffsets:  dc.w    Enemy_MainStateMachine-Enemy_MainStateMachine  ; was: off_2C712
                 dc.w    Enemy_MainStateMachine_UpdateState-Enemy_MainStateMachine
                 dc.w    Enemy_ExecuteMovementPattern-Enemy_MainStateMachine
                 dc.w    Enemy_MainStateMachine_TerrainCheck-Enemy_MainStateMachine
@@ -47,7 +47,7 @@ Enemy_BehaviorStateOffsets: dc.w    Enemy_MainStateMachine-Enemy_MainStateMachin
 
 ; Main enemy state machine with movement and attack patterns
 Enemy_MainStateMachine:                                 ; was: sub_2C71E
-                                        ; ROM:Enemy_BehaviorStateOffsets   o
+                                        ; ROM:Enemy_GrinnerStateOffsets   o
                 moveq   #0,d0
                 bsr.w   Enemy_SetupBehaviorSprite
 Enemy_MainStateMachine_StartMove:                       ; was: loc_2C724
@@ -249,50 +249,50 @@ Anim_UpdateEnemyAnimation:                              ; was: sub_2C970
                 move.w  $5C(a5),d0
                 beq.s   Anim_UpdateEnemyAnimation_Return
                 subq.w  #4,d0
-                move.l  PeriodicShotEnemySpriteAnimationPointers(pc,d0.w),8(a5)
+                move.l  Enemy_EggSpitterSpriteAnimationPointers(pc,d0.w),8(a5)
                 clr.w   $C(a5)
 Anim_UpdateEnemyAnimation_Return:                       ; was: locret_2C982
                 rts
 ; End of function Anim_UpdateEnemyAnimation
 ; ---------------------------------------------------------------------------
-PeriodicShotEnemySpriteAnimationPointers:   dc.l    PeriodicShotEnemyWaitSpriteAnimation  ; was: off_2C984
-                dc.l    PeriodicShotEnemyTransitionSpriteAnimation
-                dc.l    PeriodicShotEnemyAttackSpriteAnimation
+Enemy_EggSpitterSpriteAnimationPointers:    dc.l    Enemy_EggSpitterWaitSpriteAnimation  ; was: off_2C984
+                dc.l    Enemy_EggSpitterTransitionSpriteAnimation
+                dc.l    Enemy_EggSpitterAttackSpriteAnimation
 
 ; Index $11 of the handler table: drives the periodic-shot enemy
-Enemy_PeriodicShotController:                           ; was: sub_2C990
+Enemy_EggSpitterController:                             ; was: sub_2C990
                 tst.b   $21(a5)
-                beq.s   Enemy_PeriodicShotController_RunState
+                beq.s   Enemy_EggSpitterController_RunState
                 clr.w   6(a5)
                 tst.w   $24(a5)
-                bpl.s   Enemy_PeriodicShotController_RunState
+                bpl.s   Enemy_EggSpitterController_RunState
                 jsr     (Effect_SpawnExplosionB).l
                 moveq   #3,d0
                 jmp     Pickup_SpawnRandomFromCurrentObject
 ; ---------------------------------------------------------------------------
 ; Runs the periodic-shot state and then its animation update
-Enemy_PeriodicShotController_RunState:                  ; was: loc_2C9AE
-                                        ; Enemy_PeriodicShotController+E   j
-                bsr.s   Enemy_DispatchPeriodicShotState
+Enemy_EggSpitterController_RunState:                    ; was: loc_2C9AE
+                                        ; Enemy_EggSpitterController+E   j
+                bsr.s   Enemy_DispatchEggSpitterState
                 bra.w   Anim_UpdateEnemyAnimation
-; End of function Enemy_PeriodicShotController
+; End of function Enemy_EggSpitterController
 ; Dispatches the four periodic-shot states by offset from the first
-Enemy_DispatchPeriodicShotState:                        ; was: sub_2C9B4
+Enemy_DispatchEggSpitterState:                          ; was: sub_2C9B4
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
-                movea.w Enemy_PeriodicShotStateOffsets(pc,d0.w),a0
+                movea.w Enemy_EggSpitterStateOffsets(pc,d0.w),a0
                 adda.l  #Enemy_InitializeWithHealth,a0
                 jmp     (a0)
-; End of function Enemy_DispatchPeriodicShotState
+; End of function Enemy_DispatchEggSpitterState
 ; ---------------------------------------------------------------------------
-Enemy_PeriodicShotStateOffsets: dc.w    Enemy_InitializeWithHealth-Enemy_InitializeWithHealth  ; was: off_2C9C8
+Enemy_EggSpitterStateOffsets:   dc.w    Enemy_InitializeWithHealth-Enemy_InitializeWithHealth  ; was: off_2C9C8
                 dc.w    Enemy_InitializeWaitState-Enemy_InitializeWithHealth
                 dc.w    Enemy_AdvanceTimedState-Enemy_InitializeWithHealth
                 dc.w    Enemy_UpdatePeriodicShots-Enemy_InitializeWithHealth
 
 ; Initializes enemy with health value and sprite setup
 Enemy_InitializeWithHealth:                             ; was: sub_2C9D0
-                                        ; ROM:Enemy_PeriodicShotStateOffsets   o
+                                        ; ROM:Enemy_EggSpitterStateOffsets   o
                 move.w  #$62,$24(a5)                    ; 'b'
                 bsr.w   Sprite_InitializeEnemySprite
                 clr.w   $48(a5)
@@ -358,26 +358,26 @@ Anim_UpdateProjectileAnimation:                         ; was: sub_2CA7C
                 move.w  $5C(a5),d0
                 beq.s   Anim_UpdateProjectileAnimation_Return
                 subq.w  #4,d0
-                move.l  Enemy_ProjectileAnimationPointers(pc,d0.w),8(a5)
+                move.l  Enemy_GunnerAnimationPointers(pc,d0.w),8(a5)
                 clr.w   $C(a5)
 Anim_UpdateProjectileAnimation_Return:                  ; was: locret_2CA8E
                 rts
 ; End of function Anim_UpdateProjectileAnimation
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAnimationPointers:  dc.l    Enemy_ProjectileAnimation00  ; was: off_2CA90
-                dc.l    Enemy_ProjectileAnimation01
-                dc.l    Enemy_ProjectileAnimation02
-                dc.l    Enemy_ProjectileAnimation03
-                dc.l    Enemy_ProjectileAnimation04
-                dc.l    Enemy_ProjectileAnimation05
-                dc.l    Enemy_ProjectileAnimation06
-                dc.l    Enemy_ProjectileAnimation07
-                dc.l    Enemy_ProjectileAnimation08
-                dc.l    Enemy_ProjectileAnimation09
+Enemy_GunnerAnimationPointers:  dc.l    Enemy_GunnerAnimation00  ; was: off_2CA90
+                dc.l    Enemy_GunnerAnimation01
+                dc.l    Enemy_GunnerAnimation02
+                dc.l    Enemy_GunnerAnimation03
+                dc.l    Enemy_GunnerAnimation04
+                dc.l    Enemy_GunnerAnimation05
+                dc.l    Enemy_GunnerAnimation06
+                dc.l    Enemy_GunnerAnimation07
+                dc.l    Enemy_GunnerAnimation08
+                dc.l    Enemy_GunnerAnimation09
 
 ; Sets horizontal velocity based on entity flip direction
 Physics_SetHorizontalVelocityByFlip:                    ; was: sub_2CAB8
-                                        ; Enemy_ProjectileAttackInit+B6   p
+                                        ; Enemy_GunnerInit+B6   p
                 btst    #3,$E(a5)
                 bne.s   Physics_SetHorizontalVelocityByFlip_SetLeft
                 move.l  #$30000,$18(a5)
@@ -389,7 +389,7 @@ Physics_SetHorizontalVelocityByFlip_SetLeft:            ; was: loc_2CACA
 ; End of function Physics_SetHorizontalVelocityByFlip
 ; Applies friction to horizontal velocity by decrementing/incrementing by $4000 toward zero
 Physics_ApplyHorizontalFriction:                        ; was: sub_2CAD4
-                                        ; sub_2CD54:Enemy_ProjectileAttackGroundState_UpdateMovement   p
+                                        ; sub_2CD54:Enemy_GunnerGroundState_UpdateMovement   p
                 move.l  $18(a5),d0
                 beq.s   Physics_ApplyHorizontalFriction_Return
                 bmi.s   Physics_ApplyHorizontalFriction_AdjustNegative
@@ -440,12 +440,12 @@ Sprite_SetDirectionalAnimation:                         ; was: loc_2CB38
                 rts
 ; End of function Enemy_CalculateDirectionalSprite
 ; ---------------------------------------------------------------------------
-Enemy_DirectionalAnimationPointers: dc.l    Enemy_ProjectileAnimation03  ; was: off_2CB56
-                dc.l    Enemy_ProjectileAnimation06
-                dc.l    Enemy_ProjectileAnimation04
-                dc.l    Enemy_ProjectileAnimation06+1
-                dc.l    Enemy_ProjectileAnimation03+1
-                dc.l    Enemy_ProjectileAnimation04+1
-                dc.l    Enemy_ProjectileAnimation05
-                dc.l    Enemy_ProjectileAnimation04
+Enemy_DirectionalAnimationPointers: dc.l    Enemy_GunnerAnimation03  ; was: off_2CB56
+                dc.l    Enemy_GunnerAnimation06
+                dc.l    Enemy_GunnerAnimation04
+                dc.l    Enemy_GunnerAnimation06+1
+                dc.l    Enemy_GunnerAnimation03+1
+                dc.l    Enemy_GunnerAnimation04+1
+                dc.l    Enemy_GunnerAnimation05
+                dc.l    Enemy_GunnerAnimation04
 Enemy_DirectionalSpriteOffsets: dc.w    $12F8, $C06, 0, $F406, $EEF8, $F4E8, $E4, $CE8  ; was: word_2CB76

@@ -84,7 +84,7 @@ Projectile_ZLeoOrbTrySpawnRemovalPickup:                ; was: loc_53070
 Projectile_ZLeoOrbReflectVelocity:                      ; was: loc_53080
                 neg.l   $18(a5)
                 neg.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_ZLeoOrbCheckBounds:                          ; was: loc_53096
@@ -173,7 +173,7 @@ Projectile_ZLeoLaserResolveOrbitState:                  ; was: loc_5319A
                 bne.w   Projectile_ZLeoLaserLaunchHorizontal
 Projectile_ZLeoLaserConvertToParticle:                  ; was: loc_531B2
                 move.w  #3,(PlaneAShakeLevel).w
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_ZLeoLaserUpdateExpandingOrbit:               ; was: loc_531C6
@@ -234,7 +234,7 @@ Projectile_ZLeoHorizontalLaserMain:                     ; was: loc_53282
                 move.w  #3,(PlaneAShakeLevel).w
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation32,8(a5)
+                move.l  #Effect_SpriteAnimation32,8(a5)
                 jmp     Sprite_InitType160FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_ZLeoHorizontalLaserTrySpawnTrail:            ; was: loc_532B0
@@ -244,7 +244,7 @@ Projectile_ZLeoHorizontalLaserTrySpawnTrail:            ; was: loc_532B0
 Projectile_ZLeoLaserSpawnTrailParticle:                 ; was: loc_532BA
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.s   Projectile_ZLeoLaserReturn
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 jsr     (Projectile_InitType88).l
                 move.b  (RandomNumberState).w,d0
                 andi.w  #$F,d0

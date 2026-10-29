@@ -98,7 +98,7 @@ Projectile_SharpsteelSpawnPickupFromFallingShot:
 Projectile_SharpsteelConvertFallingShotToDebris:
                                         ; Projectile_SharpsteelFallingShotMain+5E   j
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation03,8(a5)
+                move.l  #Effect_SpriteAnimation03,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_SharpsteelHandleFallingShotLowerBoundary:
@@ -209,7 +209,7 @@ Effect_SharpsteelTryEmitDefeatFragmentDebris:
                 neg.l   d0
                 asr.l   #3,d0
                 move.l  d0,$18(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Projectile_InitType88).l
 Effect_SharpsteelUpdateDefeatFragmentVelocity:
                                         ; Effect_SharpsteelDefeatFragmentMain+46   j

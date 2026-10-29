@@ -331,7 +331,7 @@ Collision_CheckTerrainTile:                             ; was: sub_144F2
 ; End of function Collision_CheckTerrainTile
 ; Aligns entity Y position to terrain surface clearing velocity
 Physics_AlignToTerrain:                                 ; was: sub_14534
-                                        ; Enemy_PhasePatternAirborneState+52   p
+                                        ; Enemy_EyePodAirborneState+52   p
                 move.w  d1,d4
                 sub.w   (PrimaryCameraYPosition).w,d4
                 andi.w  #7,d4

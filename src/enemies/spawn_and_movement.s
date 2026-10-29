@@ -189,7 +189,7 @@ Enemy_SetupBehaviorSprite_ApplyAttributes:              ; was: loc_2C4FC
                 move.b  #$C0,$21(a5)
                 move.l  #$F010F808,$2C(a5)
                 move.l  #$E420E818,$28(a5)
-                lea     Enemy_BehaviorSpriteParameters(pc),a0
+                lea     Enemy_GrinnerSpriteParameters(pc),a0
                 nop
                 moveq   #0,d1
                 move.b  (a0,d0.w),$27(a5)
@@ -200,7 +200,7 @@ Enemy_SetupBehaviorSprite_ApplyAttributes:              ; was: loc_2C4FC
                 rts
 ; End of function Enemy_SetupBehaviorSprite
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorSpriteParameters: dc.b    $18, 4, $11, 0  ; was: byte_2C538
+Enemy_GrinnerSpriteParameters:  dc.b    $18, 4, $11, 0  ; was: byte_2C538
 
 ; Updates animation pointer based on current state index
 Enemy_UpdateBehaviorAnimation:                          ; was: sub_2C53C
@@ -208,17 +208,17 @@ Enemy_UpdateBehaviorAnimation:                          ; was: sub_2C53C
                 move.w  $5C(a5),d0
                 beq.s   Enemy_UpdateBehaviorAnimation_Return
                 subq.w  #4,d0
-                move.l  Enemy_BehaviorSpriteAnimationPointers(pc,d0.w),8(a5)
+                move.l  Enemy_GrinnerSpriteAnimationPointers(pc,d0.w),8(a5)
                 clr.w   $C(a5)
 Enemy_UpdateBehaviorAnimation_Return:                   ; was: locret_2C54E
                 rts
 ; End of function Enemy_UpdateBehaviorAnimation
 ; ---------------------------------------------------------------------------
-Enemy_BehaviorSpriteAnimationPointers:  dc.l    Enemy_BehaviorWaitSpriteAnimation  ; was: off_2C550
-                dc.l    Enemy_BehaviorMovementSpriteAnimation
-                dc.l    Enemy_BehaviorGroundedSpriteAnimation
-                dc.l    Enemy_BehaviorAttackCooldownSpriteAnimation
-                dc.l    Enemy_BehaviorDefeatSpriteAnimation
+Enemy_GrinnerSpriteAnimationPointers:   dc.l    Enemy_GrinnerWaitSpriteAnimation  ; was: off_2C550
+                dc.l    Enemy_GrinnerMovementSpriteAnimation
+                dc.l    Enemy_GrinnerGroundedSpriteAnimation
+                dc.l    Enemy_GrinnerAttackCooldownSpriteAnimation
+                dc.l    Enemy_GrinnerDefeatSpriteAnimation
 
 ; Applies horizontal acceleration with speed limits
 Enemy_AccelerateHorizontal:                             ; was: sub_2C564
@@ -302,12 +302,12 @@ Enemy_SpawnTrackedProjectile_SetParameters:             ; was: loc_2C612
 ; End of function Enemy_SpawnTrackedProjectile
 ; Converts a defeated enemy into the shared falling defeat object
 Enemy_ConvertToDefeatProjectile:                        ; was: sub_2C622
-                                        ; Enemy_BehaviorController+12   j
+                                        ; Enemy_GrinnerController+12   j
                 move.w  #$1D4,(a5)
                 clr.w   $24(a5)
                 clr.b   $21(a5)
                 clr.b   $22(a5)
-                move.l  #Enemy_BehaviorDefeatSpriteAnimation,8(a5)
+                move.l  #Enemy_GrinnerDefeatSpriteAnimation,8(a5)
                 clr.w   $C(a5)
                 move.w  #$10,$48(a5)
                 clr.w   $4A(a5)

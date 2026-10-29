@@ -39,7 +39,7 @@ Enemy_BirdAnimationMappings:    dc.l    Enemy_BirdAnimation00  ; was: off_2DAA0
 
 ; Updates sprite horizontal flip based on velocity
 Enemy_UpdateHorizontalFlipFromVelocity:                 ; was: sub_2DAB0
-                                        ; Enemy_Stage10WaspController+5C   j
+                                        ; Enemy_BeakWalkerController+5C   j
                 tst.l   $18(a5)
                 beq.s   Enemy_UpdateHorizontalFlipFromVelocity_Return
                 btst    #7,$18(a5)
@@ -69,7 +69,7 @@ Enemy_BirdController:                                   ; was: sub_2DACE
                 jsr     (Sound_QueueSFXRequest).l
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 clr.w   $C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
@@ -438,13 +438,13 @@ Enemy_UpdateBirdDefeatDebris_EmitParticles:             ; was: loc_2DF1A
                 bne.s   Enemy_UpdateBirdDefeatDebris_Return
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 jsr     (Sprite_InitType160).l
                 subq.w  #1,$4A(a5)
                 bne.s   Enemy_UpdateBirdDefeatDebris_Return
                 moveq   #2,d0
                 moveq   #4,d1
-                movea.l #SharedCombatSpriteAnimation00,a1
+                movea.l #Effect_SpriteAnimation00,a1
                 jsr     (Effect_SpawnRadialParticlePattern).l
                 move.b  #$BC,d0
                 jsr     (Sound_QueueSFXRequest).l

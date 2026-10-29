@@ -25,7 +25,7 @@ Effect_ConvertCurrentToTypeC4Burst:                     ; was: sub_2A32A
                 add.w   d1,d0
                 move.w  d0,$E(a0)
                 move.w  #$E100,2(a0)
-                move.l  #SharedCombatSpriteAnimation33,8(a0)
+                move.l  #Effect_SpriteAnimation33,8(a0)
                 clr.w   $C(a0)
                 move.b  #$10,$20(a0)
                 move.w  #3,$48(a0)
@@ -99,7 +99,7 @@ Boss_CaterpillarSpawnExplosion:                         ; was: sub_2A418
                                         ; Boss_CaterpillarFourPhaseSegment+40   j
                 movea.w a5,a0
                 bsr.w   Projectile_InitType88
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 clr.l   $18(a0)
                 move.l  #$FFFC0000,$1C(a0)
                 move.b  #4,$20(a0)
@@ -208,7 +208,7 @@ Projectile_FallingSpawner:                              ; was: sub_2A578
                 move.w  #2,$48(a5)
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Projectile_FallingSpawner_Return
-                move.l  #SharedCombatSpriteAnimation04,8(a0)
+                move.l  #Effect_SpriteAnimation04,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.l  #$FFFEE000,$1C(a0)
@@ -222,7 +222,7 @@ Projectile_FallingSpawner_Return:                       ; was: locret_2A5B4
 Enemy_SpawnQuadProjectiles:                             ; was: sub_2A5B6
                                         ; Projectile_ViblackSideShotBeginBurst+14   j
                 movea.w a5,a0
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 bsr.w   Sprite_InitType160FromCurrent
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
@@ -233,7 +233,7 @@ Enemy_SpawnQuadProjectiles:                             ; was: sub_2A5B6
 Enemy_SpawnQuadProjectiles_Loop:                        ; was: loc_2A5D6
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Enemy_SpawnQuadProjectiles_Return
-                move.l  #SharedCombatSpriteAnimation03,8(a0)
+                move.l  #Effect_SpriteAnimation03,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 move.w  (a2)+,$18(a0)
@@ -552,7 +552,7 @@ Effect_InitDebrisSprite:                                ; was: sub_2A85E
                 move.w  #$174,(a0)
                 move.w  #$EDC0,2(a0)
                 move.w  #$480,$E(a0)
-                move.l  #SharedCombatSpriteAnimation03,8(a0)
+                move.l  #Effect_SpriteAnimation03,8(a0)
                 clr.w   $C(a0)
                 move.w  (GlobalSpritePriorityBit).w,d0
                 or.w    d0,$E(a0)
@@ -616,15 +616,15 @@ Object_InitIndexedSpriteGraphics_Return:                ; was: locret_2A922
                 rts
 ; End of function Object_InitIndexedSpriteGraphics
 ; ---------------------------------------------------------------------------
-Object_IndexedSpriteAnimationPointers:  dc.l    IndexedObjectSpriteAnimation00  ; was: off_2A924
+Object_IndexedSpriteAnimationPointers:  dc.l    Enemy_RisingAlienSpriteAnimation00  ; was: off_2A924
 Object_IndexedSpriteAttributes:         dc.l    $2DF6000  ; was: dword_2A928
-                dc.l    IndexedObjectSpriteAnimation01
+                dc.l    Enemy_RisingAlienSpriteAnimation01
                 dc.l    $2DF6000
-                dc.l    IndexedObjectSpriteAnimation02
+                dc.l    Enemy_RisingAlienSpriteAnimation02
                 dc.l    $2DF6000
-                dc.l    IndexedObjectSpriteAnimation03
+                dc.l    Enemy_RisingAlienSpriteAnimation03
                 dc.l    $2DF6400
-                dc.l    IndexedObjectSpriteAnimation04
+                dc.l    Enemy_RisingAlienSpriteAnimation04
                 dc.l    $2DF6000
 
 ; Loads object graphics attributes and stamps its pattern into the terrain map

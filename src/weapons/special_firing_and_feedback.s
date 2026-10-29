@@ -245,7 +245,7 @@ Effect_CreateDebrisParticle:                            ; was: loc_18862
                 move.w  d2,$14(a0)
                 jsr     (Sprite_InitType160).l
                 move.w  #$334,(a0)
-                move.l  #SharedCombatSpriteAnimation21,8(a0)
+                move.l  #Effect_SpriteAnimation21,8(a0)
                 move.b  #$40,$21(a0)                    ; '@'
                 clr.b   $23(a0)
                 move.w  #1,$26(a0)

@@ -13,7 +13,7 @@ Projectile_TerobusterHomingMissileConvertToImpact:      ; was: loc_38EC2
                                         ; Projectile_TerobusterHomingMissileUpdate+12   j
                 neg.l   $18(a5)
                 neg.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation02,8(a5)
+                move.l  #Effect_SpriteAnimation02,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_TerobusterHomingMissileUpdateFlight:         ; was: loc_38ED8

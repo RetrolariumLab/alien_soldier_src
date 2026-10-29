@@ -235,11 +235,11 @@ Boss_ViblackSpawnNearbyDefeatParticle:                  ; was: sub_44128
                 subi.w  #$10,d0
                 add.w   $10(a5),d0
                 move.w  d0,$10(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 move.w  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 beq.s   Boss_ViblackInitializeNearbyDefeatParticle
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
 Boss_ViblackInitializeNearbyDefeatParticle:             ; was: loc_44178
                 jsr     (Projectile_InitType88).l
                 move.w  (FrameCounter).w,d0
@@ -264,11 +264,11 @@ Boss_ViblackSpawnWideDefeatParticle:                    ; was: sub_4418E
                 subi.w  #$80,d0
                 add.w   $10(a5),d0
                 move.w  d0,$10(a0)
-                move.l  #SharedCombatSpriteAnimation18,8(a0)
+                move.l  #Effect_SpriteAnimation18,8(a0)
                 move.w  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 beq.s   Boss_ViblackSelectWideDefeatParticleVelocity
-                move.l  #SharedCombatSpriteAnimation04,8(a0)
+                move.l  #Effect_SpriteAnimation04,8(a0)
 Boss_ViblackSelectWideDefeatParticleVelocity:           ; was: loc_441D6
                 move.w  (RandomNumberState).w,d0
                 andi.w  #1,d0
@@ -297,11 +297,11 @@ Boss_ViblackInitializeTransitionParticle:               ; was: loc_44212
                 ext.l   d0
                 asl.l   #3,d0
                 move.l  d0,$18(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.w  #$FFFD,$1C(a0)
                 btst    #0,(RandomNumberState).w
                 beq.s   Boss_ViblackPositionTransitionDebris
-                move.l  #SharedCombatSpriteAnimation18,8(a0)
+                move.l  #Effect_SpriteAnimation18,8(a0)
                 clr.w   $1C(a0)
 Boss_ViblackPositionTransitionDebris:                   ; was: loc_44246
                                         ; Boss_ViblackSpawnTransitionDebris+4C   j

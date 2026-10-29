@@ -55,7 +55,7 @@ Boss_Stage3OrbitingFormationReleaseNextPart:            ; was: loc_33FB6
                 asl.l   #4,d1
                 move.l  d0,$18(a0)
                 move.l  d1,$1C(a0)
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Sprite_InitType160).l
                 adda.w  #$60,a0                         ; '`'
                 dbf     d7,Boss_Stage3OrbitingFormationReleaseNextPart

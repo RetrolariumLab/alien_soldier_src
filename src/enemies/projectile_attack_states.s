@@ -3,7 +3,7 @@ Enemy_ConvertToAlternateDefeatProjectile:               ; was: sub_2CB86
                 clr.w   $24(a5)
                 clr.b   $21(a5)
                 clr.b   $22(a5)
-                move.l  #Enemy_ProjectileAnimation08,8(a5)
+                move.l  #Enemy_GunnerAnimation08,8(a5)
                 clr.w   $C(a5)
                 move.w  #$10,$48(a5)
                 move.l  #$FFFB2000,$1C(a5)
@@ -32,153 +32,153 @@ Enemy_UpdateAlternateDefeatProjectile_Return:           ; was: locret_2CBF6
                 rts
 ; End of function Enemy_UpdateAlternateDefeatProjectile
 ; Updates the enemy family that alternates movement and projectile attacks
-Enemy_ProjectileAttackController:                       ; was: sub_2CBF8
+Enemy_GunnerController:                                 ; was: sub_2CBF8
                 tst.w   4(a5)
-                beq.s   Enemy_ProjectileAttackController_UpdateState
+                beq.s   Enemy_GunnerController_UpdateState
                 clr.w   6(a5)
                 tst.w   $24(a5)
-                bpl.s   Enemy_ProjectileAttackController_UpdateState
+                bpl.s   Enemy_GunnerController_UpdateState
                 bsr.w   Enemy_BeginDefeatFall
 ; Dispatches the current attack state and updates its animation
-Enemy_ProjectileAttackController_UpdateState:           ; was: loc_2CC0C
-                                        ; Enemy_ProjectileAttackController+E   j
+Enemy_GunnerController_UpdateState:                     ; was: loc_2CC0C
+                                        ; Enemy_GunnerController+E   j
                 bsr.s   Enemy_DispatchProjectileAttackState
                 bra.w   Anim_UpdateProjectileAnimation
-; End of function Enemy_ProjectileAttackController
+; End of function Enemy_GunnerController
 ; Dispatches projectile to state handler
 Enemy_DispatchProjectileAttackState:                    ; was: sub_2CC12
                 clr.w   $5C(a5)
                 move.w  4(a5),d0
-                movea.w Enemy_ProjectileAttackStateOffsets(pc,d0.w),a0
-                adda.l  #Enemy_ProjectileAttackInit,a0
+                movea.w Enemy_GunnerStateOffsets(pc,d0.w),a0
+                adda.l  #Enemy_GunnerInit,a0
                 jmp     (a0)
 ; End of function Enemy_DispatchProjectileAttackState
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAttackStateOffsets: dc.w    Enemy_ProjectileAttackInit-Enemy_ProjectileAttackInit  ; was: off_2CC26
-                dc.w    Enemy_ProjectileAttackIdleState-Enemy_ProjectileAttackInit
-                dc.w    Enemy_ProjectileAttackApproachState-Enemy_ProjectileAttackInit
-                dc.w    Enemy_ProjectileAttackAirborneState-Enemy_ProjectileAttackInit
-                dc.w    Enemy_ProjectileAttackAirborneState-Enemy_ProjectileAttackInit
-                dc.w    Enemy_DefeatFallState-Enemy_ProjectileAttackInit
-                dc.w    Enemy_ProjectileAttackGroundState-Enemy_ProjectileAttackInit
+Enemy_GunnerStateOffsets:   dc.w    Enemy_GunnerInit-Enemy_GunnerInit  ; was: off_2CC26
+                dc.w    Enemy_GunnerIdleState-Enemy_GunnerInit
+                dc.w    Enemy_GunnerApproachState-Enemy_GunnerInit
+                dc.w    Enemy_GunnerAirborneState-Enemy_GunnerInit
+                dc.w    Enemy_GunnerAirborneState-Enemy_GunnerInit
+                dc.w    Enemy_DefeatFallState-Enemy_GunnerInit
+                dc.w    Enemy_GunnerGroundState-Enemy_GunnerInit
 
 ; Installs the sprite and health, then falls into the idle entry
-Enemy_ProjectileAttackInit:                             ; was: sub_2CC34
-                                        ; ROM:Enemy_ProjectileAttackStateOffsets   o
+Enemy_GunnerInit:                                       ; was: sub_2CC34
+                                        ; ROM:Enemy_GunnerStateOffsets   o
                 move.w  #$1E,$24(a5)
                 bsr.w   Sprite_InitializeProjectileSprite
-Enemy_ProjectileAttack_BeginIdle:                       ; was: loc_2CC3E
-                                        ; Enemy_ProjectileAttackAirborneState+30   j
+Enemy_Gunner_BeginIdle:                                 ; was: loc_2CC3E
+                                        ; Enemy_GunnerAirborneState+30   j
                 move.w  #2,4(a5)
                 move.w  #4,$5C(a5)
                 move.w  #$60,$48(a5)                    ; '`'
                 clr.l   $18(a5)
 ; Holds position until the timer expires, then attacks nearby or approaches
-Enemy_ProjectileAttackIdleState:                        ; was: loc_2CC54
+Enemy_GunnerIdleState:                                  ; was: loc_2CC54
                 jsr     (Physics_EntityWallCheck).l
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
-                beq.w   Enemy_ProjectileAttack_BeginAirborne
+                beq.w   Enemy_Gunner_BeginAirborne
                 subq.w  #1,$48(a5)
-                bpl.s   Enemy_ProjectileAttack_ApplyFriction
+                bpl.s   Enemy_Gunner_ApplyFriction
                 move.w  #$FFFF,$48(a5)
                 bsr.w   Enemy_FacePlayer
                 cmpi.w  #$60,d0                         ; '`'
-                bpl.s   Enemy_ProjectileAttack_CheckMoveTimer
-                bra.w   Enemy_ProjectileAttack_BeginGroundAttack
+                bpl.s   Enemy_Gunner_CheckMoveTimer
+                bra.w   Enemy_Gunner_BeginGroundAttack
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAttack_CheckMoveTimer:                  ; was: loc_2CC84
+Enemy_Gunner_CheckMoveTimer:                            ; was: loc_2CC84
                 tst.w   $48(a5)
-                bmi.w   Enemy_ProjectileAttack_BeginApproach
-Enemy_ProjectileAttack_ApplyFriction:                   ; was: loc_2CC8C
+                bmi.w   Enemy_Gunner_BeginApproach
+Enemy_Gunner_ApplyFriction:                             ; was: loc_2CC8C
                 bra.w   Physics_ApplyHorizontalFriction
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAttack_BeginApproach:                   ; was: loc_2CC90
+Enemy_Gunner_BeginApproach:                             ; was: loc_2CC90
                 move.w  #4,4(a5)
                 move.w  #8,$5C(a5)
 ; Tracks player position and adjusts projectile direction
-Enemy_ProjectileAttackApproachState:                    ; was: loc_2CC9C
+Enemy_GunnerApproachState:                              ; was: loc_2CC9C
                 jsr     (Physics_EntityWallCheck).l
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
-                beq.w   Enemy_ProjectileAttack_BeginAirborne
+                beq.w   Enemy_Gunner_BeginAirborne
                 bsr.w   Enemy_FacePlayer
                 cmpi.w  #$50,d0                         ; 'P'
-                bmi.w   Enemy_ProjectileAttack_BeginIdle
+                bmi.w   Enemy_Gunner_BeginIdle
                 btst    #1,7(a5)
-                bne.w   Enemy_ProjectileAttack_BeginLeap
+                bne.w   Enemy_Gunner_BeginLeap
                 btst    #0,7(a5)
-                bne.w   Enemy_ProjectileAttack_BeginLeap
+                bne.w   Enemy_Gunner_BeginLeap
                 bra.w   Physics_SetHorizontalVelocityByFlip
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAttack_BeginLeap:                       ; was: loc_2CCD6
-                                        ; Enemy_ProjectileAttackInit+9A   j
+Enemy_Gunner_BeginLeap:                                 ; was: loc_2CCD6
+                                        ; Enemy_GunnerInit+9A   j
                 move.w  #8,4(a5)
                 move.w  #$24,$5C(a5)                    ; '$'
                 move.l  #$FFFA4000,$1C(a5)
                 bsr.w   Physics_SetHorizontalVelocityByFlip
-; End of function Enemy_ProjectileAttackInit
+; End of function Enemy_GunnerInit
 ; Applies gravity with max falling speed $7C000, checks terrain and player collision
-Enemy_ProjectileAttackAirborneState:                    ; was: sub_2CCEE
+Enemy_GunnerAirborneState:                              ; was: sub_2CCEE
                 jsr     (Physics_EntityExtendedWallCheck).l
                 cmpi.l  #$7C000,$1C(a5)
-                bmi.s   Enemy_ProjectileAttack_ApplyGravity
+                bmi.s   Enemy_Gunner_ApplyGravity
                 move.l  #$7C000,$1C(a5)
-                bra.s   Enemy_ProjectileAttack_CheckGround
+                bra.s   Enemy_Gunner_CheckGround
 ; ---------------------------------------------------------------------------
-Enemy_ProjectileAttack_ApplyGravity:                    ; was: loc_2CD08
+Enemy_Gunner_ApplyGravity:                              ; was: loc_2CD08
                 addi.l  #$6000,$1C(a5)
-                bmi.s   Enemy_ProjectileAttack_CheckCeiling
-Enemy_ProjectileAttack_CheckGround:                     ; was: loc_2CD12
+                bmi.s   Enemy_Gunner_CheckCeiling
+Enemy_Gunner_CheckGround:                               ; was: loc_2CD12
                 jsr     (Physics_CheckLowerTerrainWhenDescending).l
                 btst    #0,6(a5)
-                bne.w   Enemy_ProjectileAttack_BeginIdle
-Enemy_ProjectileAttack_CheckCeiling:                    ; was: loc_2CD22
+                bne.w   Enemy_Gunner_BeginIdle
+Enemy_Gunner_CheckCeiling:                              ; was: loc_2CD22
                 jmp     Physics_CheckUpperTerrainWhenRising
-; End of function Enemy_ProjectileAttackAirborneState
+; End of function Enemy_GunnerAirborneState
 ; Sets state 6, halves horizontal velocity, branches to gravity/collision routine
-Enemy_ProjectileAttack_BeginAirborne:                   ; was: sub_2CD28
-                                        ; Enemy_ProjectileAttackInit+7A   j
+Enemy_Gunner_BeginAirborne:                             ; was: sub_2CD28
+                                        ; Enemy_GunnerInit+7A   j
                 move.w  #6,4(a5)
                 move.w  #$28,$5C(a5)                    ; '('
                 move.l  $18(a5),d0
                 asr.l   #1,d0
                 move.l  d0,$18(a5)
-                bra.w   Enemy_ProjectileAttackAirborneState
-; End of function Enemy_ProjectileAttack_BeginAirborne
+                bra.w   Enemy_GunnerAirborneState
+; End of function Enemy_Gunner_BeginAirborne
 ; Enters state $C, the ground attack, with a $36-frame window
-Enemy_ProjectileAttack_BeginGroundAttack:               ; was: sub_2CD42
+Enemy_Gunner_BeginGroundAttack:                         ; was: sub_2CD42
                 move.w  #$C,4(a5)
                 move.w  #$10,$5C(a5)
                 move.w  #$36,$48(a5)                    ; '6'
-; End of function Enemy_ProjectileAttack_BeginGroundAttack
+; End of function Enemy_Gunner_BeginGroundAttack
 ; Ground-based enemy movement with projectile spawning at specific timing
-Enemy_ProjectileAttackGroundState:                      ; was: sub_2CD54
+Enemy_GunnerGroundState:                                ; was: sub_2CD54
                 jsr     (Physics_EntityWallCheck).l
                 jsr     (Physics_CheckLowerTerrain).l
                 btst    #0,6(a5)
-                beq.w   Enemy_ProjectileAttack_BeginAirborne
+                beq.w   Enemy_Gunner_BeginAirborne
                 subq.w  #1,$48(a5)
-                bmi.w   Enemy_ProjectileAttack_BeginIdle
+                bmi.w   Enemy_Gunner_BeginIdle
                 cmpi.w  #$1E,$48(a5)
-                bne.s   Enemy_ProjectileAttackGroundState_UpdateMovement
+                bne.s   Enemy_GunnerGroundState_UpdateMovement
                 moveq   #$18,d5
                 moveq   #$FFFFFFFA,d6
                 move.l  #$38000,d7
                 btst    #3,$E(a5)
-                beq.s   Enemy_ProjectileAttackGroundState_SpawnProjectile
+                beq.s   Enemy_GunnerGroundState_SpawnProjectile
                 neg.w   d5
                 neg.l   d7
-Enemy_ProjectileAttackGroundState_SpawnProjectile:      ; was: loc_2CD90
+Enemy_GunnerGroundState_SpawnProjectile:                ; was: loc_2CD90
                 jsr     (Projectile_SpawnTrailingArcHazardType1D0).l
-Enemy_ProjectileAttackGroundState_UpdateMovement:       ; was: loc_2CD96
+Enemy_GunnerGroundState_UpdateMovement:                 ; was: loc_2CD96
                 bsr.w   Physics_ApplyHorizontalFriction
                 cmpi.w  #$10,$48(a5)
-                bmi.s   Enemy_ProjectileAttackGroundState_Return
+                bmi.s   Enemy_GunnerGroundState_Return
                 bsr.w   Enemy_FacePlayer
-Enemy_ProjectileAttackGroundState_Return:               ; was: locret_2CDA6
+Enemy_GunnerGroundState_Return:                         ; was: locret_2CDA6
                 rts
-; End of function Enemy_ProjectileAttackGroundState
+; End of function Enemy_GunnerGroundState
 ; Converts the current enemy to its falling defeat state
 Enemy_BeginDefeatFall:                                  ; was: sub_2CDA8
                 move.w  #$A,4(a5)

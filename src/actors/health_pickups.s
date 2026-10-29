@@ -36,7 +36,7 @@ Pickup_SelectLargeSize:                                 ; was: loc_2BD18
 ; End of function UnreferencedPickup_SpawnLargeFromCurrentObjectViaThunk
 ; Selects a pickup size randomly with the caller-provided mask
 Pickup_SpawnRandomFromCurrentObject:                    ; was: sub_2BD1E
-                                        ; Enemy_PeriodicShotController+18   j
+                                        ; Enemy_EggSpitterController+18   j
                 movea.w a5,a0
 Pickup_SelectRandomSize:                                ; was: loc_2BD20
                                         ; Boss_WolfGaropaSpawnFiniteRewardPickups+2A   p
@@ -88,8 +88,8 @@ Pickup_InitializeSelectedSize:                          ; was: loc_2BD46
 ; ---------------------------------------------------------------------------
 Pickup_SoundIds:                dc.b    $46, $47        ; was: byte_2BDA2
 Pickup_HealthRestoreAmounts:    dc.w    $1E, $64        ; was: word_2BDA4
-Pickup_SpriteMappings:          dc.l    SharedCombatSpriteAnimation28  ; was: off_2BDA8
-                dc.l    SharedCombatSpriteAnimation27
+Pickup_SpriteMappings:          dc.l    Effect_SpriteAnimation28  ; was: off_2BDA8
+                dc.l    Effect_SpriteAnimation27
 
 ; Updates health-pickup lifetime, collection, display priority, and motion
 Pickup_Update:                                          ; was: sub_2BDB0

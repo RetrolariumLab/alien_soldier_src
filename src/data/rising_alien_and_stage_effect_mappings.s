@@ -1,97 +1,97 @@
 Terrain_StampObjectSpriteMapping:   dc.w    $FFEE, $FF  ; was: word_19C4A4
-IndexedObjectSpriteMapping00:       dc.w    $8800, $500, $F4F8  ; was: word_19C4A8
+Enemy_RisingAlienSpriteMapping00:   dc.w    $8800, $500, $F4F8  ; was: word_19C4A8
                                         ; ROM:0019C4EA   o
-IndexedObjectSpriteMapping01:   dc.w    $8804, $500, $F4F8  ; was: word_19C4AE
+Enemy_RisingAlienSpriteMapping01:   dc.w    $8804, $500, $F4F8  ; was: word_19C4AE
                                         ; ROM:0019C4FA   o
-IndexedObjectSpriteMapping02:   dc.w    $8004, $500, $F4F8  ; was: word_19C4B4
-                                        ; ROM:IndexedObjectSpriteAnimation01   o
-IndexedObjectSpriteMapping03:   dc.w    $8808, $500, $F4F8  ; was: word_19C4BA
-IndexedObjectSpriteMapping04:   dc.w    $880C, $500, $F4F8  ; was: word_19C4C0
+Enemy_RisingAlienSpriteMapping02:   dc.w    $8004, $500, $F4F8  ; was: word_19C4B4
+                                        ; ROM:Enemy_RisingAlienSpriteAnimation01   o
+Enemy_RisingAlienSpriteMapping03:   dc.w    $8808, $500, $F4F8  ; was: word_19C4BA
+Enemy_RisingAlienSpriteMapping04:   dc.w    $880C, $500, $F4F8  ; was: word_19C4C0
                                         ; ROM:0019C512   o
-IndexedObjectSpriteMapping05:   dc.w    $8810, $400, $FCF8  ; was: word_19C4C6
+Enemy_RisingAlienSpriteMapping05:   dc.w    $8810, $400, $FCF8  ; was: word_19C4C6
                                         ; ROM:0019C536   o
-IndexedObjectSpriteMapping06:   dc.w    $8812, $400, $FCF8  ; was: word_19C4CC
+Enemy_RisingAlienSpriteMapping06:   dc.w    $8812, $400, $FCF8  ; was: word_19C4CC
                                         ; ROM:0019C53A   o
-IndexedObjectSpriteMapping07:   dc.w    $880C, $500, $F4F9  ; was: word_19C4D2
+Enemy_RisingAlienSpriteMapping07:   dc.w    $880C, $500, $F4F9  ; was: word_19C4D2
                                         ; ROM:0019C51E   o
-IndexedObjectSpriteMapping08:   dc.w    $880C, $500, $F4F7  ; was: word_19C4D8
+Enemy_RisingAlienSpriteMapping08:   dc.w    $880C, $500, $F4F7  ; was: word_19C4D8
                                         ; ROM:0019C526   o
-IndexedObjectSpriteAnimation00: dc.w    IndexedObjectSpriteMapping02-*  ; was: off_19C4DE
+Enemy_RisingAlienSpriteAnimation00: dc.w    Enemy_RisingAlienSpriteMapping02-*  ; was: off_19C4DE
                                         ; ROM:0019C4EE   o
                 dc.w    6
-                dc.w    IndexedObjectSpriteMapping00-*
+                dc.w    Enemy_RisingAlienSpriteMapping00-*
                 dc.w    6
-                dc.w    IndexedObjectSpriteMapping01-*
+                dc.w    Enemy_RisingAlienSpriteMapping01-*
                 dc.w    6
-                dc.w    IndexedObjectSpriteMapping00-*
+                dc.w    Enemy_RisingAlienSpriteMapping00-*
                 dc.w    6
-                dc.w    IndexedObjectSpriteAnimation00-*
+                dc.w    Enemy_RisingAlienSpriteAnimation00-*
                 dc.w    0
-IndexedObjectSpriteAnimation01: dc.w    IndexedObjectSpriteMapping02-*  ; was: off_19C4F2
+Enemy_RisingAlienSpriteAnimation01: dc.w    Enemy_RisingAlienSpriteMapping02-*  ; was: off_19C4F2
                                         ; ROM:0019C502   o
                 dc.w    $13
-                dc.w    IndexedObjectSpriteMapping00-*
+                dc.w    Enemy_RisingAlienSpriteMapping00-*
                 dc.w    $13
-                dc.w    IndexedObjectSpriteMapping01-*
+                dc.w    Enemy_RisingAlienSpriteMapping01-*
                 dc.w    $13
-                dc.w    IndexedObjectSpriteMapping00-*
+                dc.w    Enemy_RisingAlienSpriteMapping00-*
                 dc.w    $13
-                dc.w    IndexedObjectSpriteAnimation01-*
+                dc.w    Enemy_RisingAlienSpriteAnimation01-*
                 dc.w    0
-IndexedObjectSpriteAnimation02: dc.w    IndexedObjectSpriteMapping03-*  ; was: off_19C506
+Enemy_RisingAlienSpriteAnimation02: dc.w    Enemy_RisingAlienSpriteMapping03-*  ; was: off_19C506
                                         ; ROM:0019C52A   o
                 dc.w    $30
-                dc.w    IndexedObjectSpriteMapping04-*
+                dc.w    Enemy_RisingAlienSpriteMapping04-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping07-*
+                dc.w    Enemy_RisingAlienSpriteMapping07-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping04-*
+                dc.w    Enemy_RisingAlienSpriteMapping04-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping08-*
+                dc.w    Enemy_RisingAlienSpriteMapping08-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping04-*
+                dc.w    Enemy_RisingAlienSpriteMapping04-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping07-*
+                dc.w    Enemy_RisingAlienSpriteMapping07-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping04-*
+                dc.w    Enemy_RisingAlienSpriteMapping04-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteMapping08-*
+                dc.w    Enemy_RisingAlienSpriteMapping08-*
                 dc.w    5
-                dc.w    IndexedObjectSpriteAnimation02-*
+                dc.w    Enemy_RisingAlienSpriteAnimation02-*
                 dc.w    0
-IndexedObjectSpriteAnimation03: dc.w    IndexedObjectSpriteMapping05-*  ; was: off_19C52E
+Enemy_RisingAlienSpriteAnimation03: dc.w    Enemy_RisingAlienSpriteMapping05-*  ; was: off_19C52E
                                         ; ROM:0019C542   o
                 dc.w    $30
-                dc.w    IndexedObjectSpriteMapping06-*
+                dc.w    Enemy_RisingAlienSpriteMapping06-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping05-*
+                dc.w    Enemy_RisingAlienSpriteMapping05-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping06-*
+                dc.w    Enemy_RisingAlienSpriteMapping06-*
                 dc.w    $30
-                dc.w    IndexedObjectSpriteMapping05-*
+                dc.w    Enemy_RisingAlienSpriteMapping05-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteAnimation03-*
+                dc.w    Enemy_RisingAlienSpriteAnimation03-*
                 dc.w    0
-IndexedObjectSpriteMapping09:   dc.w    0, $700, $E0F0  ; was: word_19C546
+Enemy_RisingAlienSpriteMapping09:   dc.w    0, $700, $E0F0  ; was: word_19C546
                                         ; ROM:0019C566   o
                 dc.w    $8800, $700, $E000
-IndexedObjectSpriteMapping10:   dc.w    8, $700, $E0F0  ; was: word_19C552
+Enemy_RisingAlienSpriteMapping10:   dc.w    8, $700, $E0F0  ; was: word_19C552
                                         ; ROM:0019C56A   o
                 dc.w    $8808, $700, $E000
-IndexedObjectSpriteAnimation04: dc.w    IndexedObjectSpriteMapping09-*  ; was: off_19C55E
+Enemy_RisingAlienSpriteAnimation04: dc.w    Enemy_RisingAlienSpriteMapping09-*  ; was: off_19C55E
                                         ; ROM:0019C576   o
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping10-*
+                dc.w    Enemy_RisingAlienSpriteMapping10-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping09-*
+                dc.w    Enemy_RisingAlienSpriteMapping09-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping10-*
+                dc.w    Enemy_RisingAlienSpriteMapping10-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping09-*
+                dc.w    Enemy_RisingAlienSpriteMapping09-*
                 dc.w    9
-                dc.w    IndexedObjectSpriteMapping10-*
+                dc.w    Enemy_RisingAlienSpriteMapping10-*
                 dc.w    $30
-                dc.w    IndexedObjectSpriteAnimation04-*
+                dc.w    Enemy_RisingAlienSpriteAnimation04-*
                 dc.w    0
 Stage8_FlyingNeoCompositeSpriteMapping: dc.w    $2810, $700, $D8E8  ; was: word_19C57A
                 dc.w    $2800, $F00, $D8F8

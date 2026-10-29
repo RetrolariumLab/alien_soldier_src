@@ -154,7 +154,7 @@ Projectile_DirectionalVelocityWaveTable:    dc.l    0, $1C170  ; was: dword_2B16
 
 ; Select normal/hard speed, then initialize a type-$148 two-speed shot
 Projectile_InitializeDifficultyScaledTwoSpeedShot:      ; was: sub_2B206
-                                        ; Enemy_Stage11FishFireVolleyState+48   p
+                                        ; Enemy_GunCraftFireVolleyState+48   p
                 moveq   #$A,d7
                 tst.w   (DifficultyMode).w
                 beq.s   Projectile_InitializeTwoSpeedShot
@@ -172,7 +172,7 @@ Projectile_InitializeTwoSpeedShot:                      ; was: loc_2B210
                 addi.w  #$480,d2
                 move.w  d2,$E(a0)
                 move.b  d3,$20(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 clr.w   $C(a0)
                 clr.b   $21(a0)
                 clr.b   $23(a0)
@@ -217,7 +217,7 @@ Projectile_UpdateTwoSpeedShotPhase:                     ; was: loc_2B2C0
                 bpl.s   Projectile_TwoSpeedShotReturn
                 addq.w  #2,4(a5)
                 move.b  #$40,$21(a5)                    ; '@'
-                move.l  #SharedCombatSpriteAnimation24,8(a5)
+                move.l  #Effect_SpriteAnimation24,8(a5)
                 clr.w   $C(a5)
                 move.l  $50(a5),$18(a5)
                 move.l  $54(a5),$1C(a5)
@@ -274,7 +274,7 @@ Projectile_ApplyJetsripperTwoSpeedShotParameters:       ; was: loc_2B35C
                 addi.w  #$480,d2
                 move.w  d2,$E(a0)
                 move.b  d3,$20(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 clr.w   $C(a0)
                 clr.b   $21(a0)
                 clr.b   $23(a0)
@@ -320,7 +320,7 @@ Projectile_UpdateType254TwoSpeedShotPhase:              ; was: loc_2B40C
                 bpl.s   Projectile_Type254TwoSpeedShotReturn
                 addq.w  #2,4(a5)
                 move.b  #$40,$21(a5)                    ; '@'
-                move.l  #SharedCombatSpriteAnimation24,8(a5)
+                move.l  #Effect_SpriteAnimation24,8(a5)
                 clr.w   $C(a5)
                 move.l  $50(a5),$18(a5)
                 move.l  $54(a5),$1C(a5)
@@ -417,13 +417,13 @@ Projectile_InitializeDelayedCollisionShotVelocity:      ; was: loc_2B50A
 Projectile_AimedDelayedCollisionShotDescriptor: dc.w    $37  ; field_0  ; was: stru_2B526
                                         ; sub_2B4BE   o
                 dc.w    9                               ; field_2
-                dc.l    SharedCombatSpriteAnimation06   ; field_4
-                dc.l    SharedCombatSpriteAnimation16   ; field_8
+                dc.l    Effect_SpriteAnimation06        ; field_4
+                dc.l    Effect_SpriteAnimation16        ; field_8
                 dc.w    0                               ; field_C
 Projectile_FixedAngleDelayedCollisionShotDescriptor:    dc.w    $38  ; field_0  ; was: stru_2B534
                 dc.w    $A                              ; field_2
-                dc.l    SharedCombatSpriteAnimation06   ; field_4
-                dc.l    SharedCombatSpriteAnimation16   ; field_8
+                dc.l    Effect_SpriteAnimation06        ; field_4
+                dc.l    Effect_SpriteAnimation16        ; field_8
                 dc.w    1                               ; field_C
 
 ; Arm a type-$17C shot when its initial animation completes, then test impact
@@ -490,7 +490,7 @@ Projectile_SpawnDelayedCollisionShotImpact:             ; was: loc_2B5D2
                 asr.l   #2,d1
                 move.l  d0,$18(a0)
                 move.l  d1,$1C(a0)
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 jmp     Sprite_InitType160
 ; End of function Projectile_UpdateDelayedCollisionShot
 ; Initialize Terobuster's type-$54 gravity shot with a randomized animation phase
@@ -558,7 +558,7 @@ Projectile_SelectWolfGaropaDirectionMapping:            ; was: sub_2B6B2
                 rts
 ; End of function Projectile_SelectWolfGaropaDirectionMapping
 ; ---------------------------------------------------------------------------
-Projectile_WolfGaropaDirectionMappings: dc.l    SharedCombatSpriteFrame10  ; was: off_2B6C4
-                dc.l    SharedCombatSpriteFrame11
-                dc.l    SharedCombatSpriteFrame09
-                dc.l    SharedCombatSpriteFrame12
+Projectile_WolfGaropaDirectionMappings: dc.l    Effect_SpriteFrame10  ; was: off_2B6C4
+                dc.l    Effect_SpriteFrame11
+                dc.l    Effect_SpriteFrame09
+                dc.l    Effect_SpriteFrame12

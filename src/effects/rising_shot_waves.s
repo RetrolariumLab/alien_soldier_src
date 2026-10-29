@@ -12,11 +12,11 @@ Effect_RisingShotWaveControllerStates:  dc.w    Effect_RisingShotWaveInit-*  ; w
                 dc.w    Effect_RisingShotWaveLaunchPattern-*
                 dc.w    Effect_RisingShotWaveWaitForNextPattern-*
 
-; Initializes the controller and its optional Stage 11 fish-wave companion
+; Initializes the controller and its optional Stage 11 gun-craft wave companion
 Effect_RisingShotWaveInit:                              ; was: sub_3367A
                 clr.w   $4A(a5)
                 cmpi.w  #$3E0,(Entity57Type).w
-                beq.s   Effect_RisingShotWaveSkipFishController
+                beq.s   Effect_RisingShotWaveSkipGunCraftController
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Effect_RisingShotWaveBeginDelay
                 move.w  #$454,(a0)
@@ -26,7 +26,7 @@ Effect_RisingShotWaveBeginDelay:                        ; was: loc_33696
                 move.w  #$200,$48(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Effect_RisingShotWaveSkipFishController:                ; was: loc_336A2
+Effect_RisingShotWaveSkipGunCraftController:            ; was: loc_336A2
                 addq.w  #4,4(a5)
                 rts
 ; End of function Effect_RisingShotWaveInit

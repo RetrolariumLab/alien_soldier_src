@@ -182,7 +182,7 @@ Boss_GustheadFinalizeSegmentSetup:                      ; was: loc_3F38C
                 dbf     d7,Boss_GustheadSetupArmLoop
                 move.w  #$10,(a0)
                 move.w  #$6100,2(a0)
-                move.l  #SharedCombatSpriteAnimation12,8(a0)
+                move.l  #Effect_SpriteAnimation12,8(a0)
                 move.w  #$480,$E(a0)
                 rts
 ; End of function Boss_GustheadInitializeRootAndParts

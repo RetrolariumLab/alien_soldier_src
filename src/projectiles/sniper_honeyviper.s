@@ -207,7 +207,7 @@ Projectile_SniperHoneyviperBouncingShotConvertToDebris:  ; was: loc_374A6
                 move.l  $18(a5),d0
                 asr.l   #2,d0
                 move.l  d0,$18(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_SniperHoneyviperBouncingShotReturn:          ; was: locret_374C4

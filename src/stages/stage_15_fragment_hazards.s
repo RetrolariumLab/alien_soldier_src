@@ -142,7 +142,7 @@ Projectile_SpawnFragmentCluster:                        ; was: sub_30670
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Entity_UpdateReturn
                 move.w  #$ED00,2(a0)
-                move.l  #SharedCombatSpriteAnimation13,8(a0)
+                move.l  #Effect_SpriteAnimation13,8(a0)
                 move.w  #$3A4,(a0)
                 move.w  d3,$4E(a0)
                 move.w  d4,$50(a0)
@@ -452,7 +452,7 @@ Projectile_FragmentConvertToImpact:                     ; was: sub_30A76
                 clr.b   $22(a5)
                 move.w  #$8480,$E(a5)
                 move.w  #$EC00,2(a5)
-                move.l  #SharedCombatSpriteAnimation32,8(a5)
+                move.l  #Effect_SpriteAnimation32,8(a5)
                 clr.w   $C(a5)
                 clr.b   $21(a5)
                 move.b  #$BC,d0

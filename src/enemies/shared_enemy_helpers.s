@@ -53,21 +53,21 @@ Enemy_UpdateBlinkVisibility_Show:                       ; was: loc_2CF82
                 rts
 ; End of function Enemy_UpdateBlinkVisibility
 ; Initializes display, collision, and phase-control fields for the phase enemy
-Enemy_SetupPhasePatternSprite:                          ; was: sub_2CF8A
+Enemy_SetupEyePodSprite:                                ; was: sub_2CF8A
                 move.w  #$EF00,2(a5)
                 move.w  (PhaseEnemyTileAttr).w,d1
                 or.w    (GlobalSpritePriorityBit).w,d1
                 move.w  d1,$E(a5)
                 btst    #7,$5F(a5)
-                beq.s   Enemy_SetupPhasePatternSprite_StoreCommonFields
+                beq.s   Enemy_SetupEyePodSprite_StoreCommonFields
                 bclr    #4,$E(a5)
-Enemy_SetupPhasePatternSprite_StoreCommonFields:        ; was: loc_2CFAA
+Enemy_SetupEyePodSprite_StoreCommonFields:              ; was: loc_2CFAA
                 move.b  #$48,$20(a5)                    ; 'H'
                 move.b  #$C0,$21(a5)
                 move.b  #5,$23(a5)
                 move.l  #$E020E818,$2C(a5)
                 move.l  #$E020E818,$28(a5)
-                lea     Enemy_PhasePatternSetupFieldBytes(pc),a0
+                lea     Enemy_EyePodSetupFieldBytes(pc),a0
                 nop
                 moveq   #0,d1
                 move.b  (a0,d0.w),$27(a5)
@@ -76,25 +76,25 @@ Enemy_SetupPhasePatternSprite_StoreCommonFields:        ; was: loc_2CFAA
                 asl.w   #4,d1
                 move.w  d1,$5A(a5)
                 rts
-; End of function Enemy_SetupPhasePatternSprite
+; End of function Enemy_SetupEyePodSprite
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternSetupFieldBytes:  dc.w    $1864, $1100  ; was: word_2CFEC
+Enemy_EyePodSetupFieldBytes:    dc.w    $1864, $1100    ; was: word_2CFEC
 
 ; Applies a nonzero field-$5C animation selector and resets its frame counter
-Enemy_ApplyPhasePatternAnimationSelector:               ; was: sub_2CFF0
+Enemy_ApplyEyePodAnimationSelector:                     ; was: sub_2CFF0
                 move.w  $5C(a5),d0
-                beq.s   Enemy_ApplyPhasePatternAnimationSelector_Return
+                beq.s   Enemy_ApplyEyePodAnimationSelector_Return
                 subq.w  #4,d0
-                move.l  Enemy_PhasePatternAnimationBySelector(pc,d0.w),8(a5)
+                move.l  Enemy_EyePodAnimationBySelector(pc,d0.w),8(a5)
                 clr.w   $C(a5)
-Enemy_ApplyPhasePatternAnimationSelector_Return:        ; was: locret_2D002
+Enemy_ApplyEyePodAnimationSelector_Return:              ; was: locret_2D002
                 rts
-; End of function Enemy_ApplyPhasePatternAnimationSelector
+; End of function Enemy_ApplyEyePodAnimationSelector
 ; ---------------------------------------------------------------------------
-Enemy_PhasePatternAnimationBySelector:  dc.l    Enemy_PhasePatternSelector04Animation  ; was: off_2D004
-                dc.l    Enemy_PhasePatternSelector08Animation
-                dc.l    Enemy_PhasePatternSelector0CAnimation
-                dc.l    Enemy_PhasePatternSelector10Animation
-                dc.l    Enemy_PhasePatternSelector14Animation
-                dc.l    Enemy_PhasePatternSelector18Animation
-                dc.l    Enemy_PhasePatternSelector1CAnimation
+Enemy_EyePodAnimationBySelector:    dc.l    Enemy_EyePodSelector04Animation  ; was: off_2D004
+                dc.l    Enemy_EyePodSelector08Animation
+                dc.l    Enemy_EyePodSelector0CAnimation
+                dc.l    Enemy_EyePodSelector10Animation
+                dc.l    Enemy_EyePodSelector14Animation
+                dc.l    Enemy_EyePodSelector18Animation
+                dc.l    Enemy_EyePodSelector1CAnimation

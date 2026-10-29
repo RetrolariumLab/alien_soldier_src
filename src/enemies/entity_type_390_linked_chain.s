@@ -325,7 +325,7 @@ Projectile_SpawnRandomAngleShot:                        ; was: sub_3146C
                                         ; EntityType390_TerminalFallAndFire+28   p
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 jsr     (Projectile_InitType88).l
                 movea.w a0,a4
                 jsr     (RandomNumber).l

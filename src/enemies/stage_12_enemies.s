@@ -158,7 +158,7 @@ Enemy_ConvertStage12ObjectToDefeatDebris:               ; was: sub_2E43A
                 clr.l   $1C(a5)
                 move.b  #$BC,d0
                 jsr     (Sound_QueueSFXRequest).l
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 clr.w   $C(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------

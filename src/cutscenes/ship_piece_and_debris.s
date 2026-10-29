@@ -111,7 +111,7 @@ ShipPiece_UpdateCountdown:                              ; was: sub_9274
 ShipPiece_ConvertToExplosion:                           ; was: loc_928C
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jsr     (Projectile_InitType88FromCurrent).l
                 move.b  #$BB,d0
                 jsr     (Sound_QueueSFXRequest).l

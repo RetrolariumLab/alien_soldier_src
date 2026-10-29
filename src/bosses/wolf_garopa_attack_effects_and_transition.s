@@ -179,11 +179,11 @@ Boss_WolfGaropaTrySpawnDefeatDebris:                    ; was: loc_50ED4
                 subi.w  #$20,d0                         ; ' '
                 add.w   $10(a5),d0
                 move.w  d0,$10(a0)
-                move.l  #SharedCombatSpriteAnimation18,8(a0)
+                move.l  #Effect_SpriteAnimation18,8(a0)
                 move.w  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 beq.s   Boss_WolfGaropaInitializeDefeatDebris
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
 Boss_WolfGaropaInitializeDefeatDebris:                  ; was: loc_50F26
                 jsr     (Projectile_InitType88).l
                 move.w  (FrameCounter).w,d0

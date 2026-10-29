@@ -92,7 +92,7 @@ Boss_WolfGaropaCalculateOrbEmitterPosition:             ; was: sub_50C5C
 Boss_WolfGaropaSpawnOrbExplosion:                       ; was: sub_50C88
                 jsr     (Projectile_FindFreeSlotReverse).l
                 bne.w   Boss_WolfGaropaOrbExplosionReturn
-                move.l  #SharedCombatSpriteAnimation07,8(a0)
+                move.l  #Effect_SpriteAnimation07,8(a0)
                 jsr     (Effect_SpawnExplosionType188).l
                 move.b  #4,$20(a0)
                 move.w  #$EC00,2(a0)

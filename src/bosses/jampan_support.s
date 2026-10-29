@@ -240,7 +240,7 @@ Boss_JampanFireShieldShotBurstState:                    ; was: sub_4A2B2
                 bne.s   Boss_JampanFireShieldShotBurstReturn
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_JampanResetShieldShotTimer
-                move.l  #SharedCombatSpriteAnimation03,8(a0)
+                move.l  #Effect_SpriteAnimation03,8(a0)
                 move.l  $10(a5),$10(a0)
                 move.l  $14(a5),$14(a0)
                 move.l  #$4000,$1C(a0)
@@ -254,7 +254,7 @@ Boss_JampanFireShieldShotBurstReturn:                   ; was: locret_4A2EE
 ; ---------------------------------------------------------------------------
 Boss_JampanConvertShieldToProjectile:                   ; was: loc_4A2F0
                                         ; Boss_JampanFireShieldShotBurstState+34   j
-                move.l  #SharedCombatSpriteAnimation00,8(a5)
+                move.l  #Effect_SpriteAnimation00,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Boss_JampanFireShieldShotBurstState
 Boss_JampanShieldNoOpState08:                           ; was: nullsub_102

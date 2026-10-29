@@ -65,7 +65,7 @@ Boss_DeepStriderSpawnNextDefeatBurst:                   ; was: loc_3ECE6
                 move.b  #$30,d0                         ; '0'
                 jsr     (Sound_QueueSFXRequest).l
                 jsr     (Projectile_InitType1A8).l
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.l  d4,$1C(a0)
                 move.w  #$150,$14(a0)
                 move.w  d5,$10(a0)
@@ -89,11 +89,11 @@ Boss_DeepStriderSpawnDefeatDebris:                      ; was: sub_3ED26
                 jsr     (Projectile_FindFreeOrClearReusableSlot).l
                 bne.s   Boss_DeepStriderSpawnDefeatDebrisReturn
                 jsr     (Sprite_InitType160).l
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
                 move.b  (RandomNumberState).w,d1
                 andi.w  #3,d1
                 bne.s   Boss_DeepStriderApplyDefeatDebrisMotion
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
 Boss_DeepStriderApplyDefeatDebrisMotion:                ; was: loc_3ED62
                 move.w  (RandomNumberState).w,d0
                 andi.w  #$1F,d0

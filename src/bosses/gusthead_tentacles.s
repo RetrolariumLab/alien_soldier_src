@@ -52,7 +52,7 @@ Boss_GustheadSpawnScrollingDebris:                      ; was: sub_4019A
                 jsr     (Sound_QueueSFXRequest).l
 Boss_GustheadSpawnScrollingDebrisObject:                ; was: loc_401CC
                 move.w  #$1E4,(a0)
-                move.l  #SharedCombatSpriteFrame35,8(a0)
+                move.l  #Effect_SpriteFrame35,8(a0)
                 move.w  #$480,$E(a0)
                 move.w  #$CC40,2(a0)
                 move.b  #$7C,$20(a0)                    ; '|'
@@ -171,7 +171,7 @@ Boss_GustheadEdgeDebrisBeginPickupRelease:              ; was: loc_4033E
 Boss_GustheadEdgeDebrisConvertToEffect:                 ; was: loc_40342
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Boss_GustheadEdgeDebrisDispatchState:                   ; was: loc_40358
@@ -285,7 +285,7 @@ Boss_GustheadFourWayDebrisBeginPickupRelease:           ; was: loc_40482
 Boss_GustheadFourWayDebrisConvertToEffect:              ; was: loc_40486
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Boss_GustheadApplyFourWayDebrisPhysics:                 ; was: loc_4049C
@@ -312,7 +312,7 @@ Boss_GustheadDeactivateFourWayDebrisOutOfBounds:        ; was: loc_404D4
 Boss_GustheadConvertCurrentDebrisToEffect:              ; was: sub_404DC
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; End of function Boss_GustheadConvertCurrentDebrisToEffect
 ; Converts edge or four-way debris at the floor to an upward type-$88 effect
@@ -562,7 +562,7 @@ Boss_GustheadReleaseDebrisAsPickup:                     ; was: sub_4076E
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_GustheadSpawnPickupFromDebris
                 jsr     (Projectile_InitType88).l
-                move.l  #SharedCombatSpriteAnimation05,8(a0)
+                move.l  #Effect_SpriteAnimation05,8(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
 Boss_GustheadSpawnPickupFromDebris:                     ; was: loc_40798

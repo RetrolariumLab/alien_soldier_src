@@ -5,7 +5,7 @@ Projectile_Epsilon1ConvertOnGlobalMode:                 ; was: sub_477D8
                 btst    #2,(PrimaryEntityWork4C).w
                 beq.s   Projectile_Epsilon1GlobalModeReturn
 Projectile_Epsilon1ConvertToType88:                     ; was: loc_477E8
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_Epsilon1GlobalModeReturn:                    ; was: locret_477F6

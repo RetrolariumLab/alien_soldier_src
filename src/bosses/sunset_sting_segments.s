@@ -155,7 +155,7 @@ Boss_SunsetStingSegmentReattachState:                   ; was: sub_434E2
 ; Converts a primary segment into generic defeat debris
 Boss_SunsetStingSegmentConvertToDebrisState:            ; was: sub_434F6
                 jsr     (Projectile_InitType88FromCurrent).l
-                move.l  #SharedCombatSpriteAnimation05,8(a5)
+                move.l  #Effect_SpriteAnimation05,8(a5)
                 rts
 ; End of function Boss_SunsetStingSegmentConvertToDebrisState
 ; Secondary segment handler
@@ -520,7 +520,7 @@ Projectile_SpawnSunsetStingSegmentShot:                 ; was: sub_438E6
                 move.w  #$8480,d0
                 or.w    (GlobalSpritePriorityBit).w,d0
                 move.w  d0,$E(a0)
-                move.l  #SharedCombatSpriteFrame35,8(a0)
+                move.l  #Effect_SpriteFrame35,8(a0)
                 move.b  #4,$20(a0)
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)

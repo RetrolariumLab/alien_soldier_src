@@ -415,7 +415,7 @@ Boss_JetsripperFallingSegmentBeginFall:                 ; was: loc_36276
                 move.l  #$FFFC0000,$1C(a5)
                 jsr     (Projectile_FindFreeSlotForward).l
                 bne.s   Boss_JetsripperFallingSegmentReturn
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 jsr     (Projectile_InitType88).l
                 clr.b   $20(a0)
                 move.w  $10(a5),$10(a0)

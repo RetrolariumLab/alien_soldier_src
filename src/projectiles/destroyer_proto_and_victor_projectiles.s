@@ -88,7 +88,7 @@ Projectile_DestroyerProtoInitFromPart:                  ; was: sub_3216C
                 move.l  #$F808F808,$2C(a0)
                 move.l  #$F010F010,$28(a0)
                 move.w  #$64,$26(a0)                    ; 'd'
-                move.l  #SharedCombatSpriteAnimation13,8(a0)
+                move.l  #Effect_SpriteAnimation13,8(a0)
                 move.w  #$3B8,(a0)
                 move.w  $40(a4),d0
                 addi.w  #$10,d0
@@ -263,7 +263,7 @@ Projectile_HitReactiveShotAllocateImpact:               ; was: loc_323B8
                 bne.s   Projectile_HitReactiveShotRemove
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 jsr     (Sprite_InitType160).l
 Projectile_HitReactiveShotRemove:                       ; was: loc_323DA
                 move.w  #$1000,2(a5)

@@ -79,7 +79,7 @@ Weapon_HandleExplosiveImpact_InitExplosion:             ; was: loc_18B44
                 move.w  #$480,d0
                 or.w    (GlobalSpritePriorityBit).w,d0
                 move.w  d0,$E(a5)
-                move.l  #SharedCombatSpriteAnimation01,8(a5)
+                move.l  #Effect_SpriteAnimation01,8(a5)
                 clr.w   $C(a5)
                 move.w  #5,$26(a5)
                 tst.w   (DifficultyMode).w
@@ -232,7 +232,7 @@ Weapon_UpdateSeekingMissile:                            ; was: sub_18D5E
                 beq.s   Weapon_UpdateSeekingMissile_TickLifetime
 Weapon_UpdateSeekingMissile_InitImpact:                 ; was: loc_18D6E
                 move.w  #3,$48(a5)
-                move.l  #SharedCombatSpriteAnimation12,8(a5)
+                move.l  #Effect_SpriteAnimation12,8(a5)
                 clr.l   $18(a5)
                 clr.l   $1C(a5)
                 jmp     Effect_InitType188FromCurrent
@@ -535,7 +535,7 @@ Effect_SpawnPlayerDeathSpark_Initialize:                ; was: loc_190E6
                 move.w  #$480,$E(a0)
                 move.w  (GlobalSpritePriorityBit).w,d0
                 or.w    d0,$E(a0)
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 clr.w   $C(a0)
                 lea     (Math_SineTable).l,a1
                 move.w  (RandomNumberState).w,d0
@@ -597,7 +597,7 @@ Effect_InitPlayerMotionProjectile_SpawnChild:           ; was: loc_191B8
                 moveq   #$B,d7
                 jsr     (Sys_FindFreeObjectSlot).l
                 bne.w   Effect_InitPlayerMotionProjectile_Return
-                move.l  #SharedCombatSpriteAnimation02,8(a0)
+                move.l  #Effect_SpriteAnimation02,8(a0)
                 jsr     (Sprite_InitType160).l
                 move.b  $20(a5),$20(a0)
                 lea     (Math_SineTable).l,a1

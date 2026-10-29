@@ -801,7 +801,7 @@ Boss_BugmaxRiseWithFinalParticles:                      ; was: sub_4D304
                 move.b  $20(a5),$20(a0)
                 andi.w  #$7FFF,$E(a0)
                 addq.b  #4,$20(a0)
-                move.l  #SharedCombatSpriteAnimation00,8(a0)
+                move.l  #Effect_SpriteAnimation00,8(a0)
 Boss_BugmaxFinalRiseReturn:                             ; was: locret_4D372
                 rts
 ; End of function Boss_BugmaxRiseWithFinalParticles

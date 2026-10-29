@@ -207,7 +207,7 @@ Player_SpawnTripleShot_FaceLeft:                        ; was: loc_1765E
                 move.w  #$1E0,d6
 Player_SpawnTripleShot_Loop:                            ; was: loc_17664
                                         ; Player_SpawnTripleShot+30   j
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 bsr.s   Player_InitShotProjectile
                 addi.w  #$40,d6                         ; '@'
                 dbf     d7,Player_SpawnTripleShot_Loop
@@ -223,7 +223,7 @@ Orphaned_PlayerSpawnRadialShot:
                 addi.w  #$80,d6
 Orphaned_PlayerSpawnRadialShotLoop:                     ; was: loc_1768C
                                         ; Orphaned_PlayerSpawnRadialShot+22   j
-                move.l  #SharedCombatSpriteAnimation01,8(a0)
+                move.l  #Effect_SpriteAnimation01,8(a0)
                 bsr.s   Player_InitShotProjectile
                 addi.w  #$40,d6                         ; '@'
                 dbf     d7,Orphaned_PlayerSpawnRadialShotLoop
@@ -409,10 +409,10 @@ Effect_UpdateFacingFlags_Return:                        ; was: locret_178D8
 ; End of function Effect_UpdateFacingFlags
 ; ---------------------------------------------------------------------------
 Weapon_AmmoRegenStepDelays:         dc.w    0, 1, 3, 3, $12, 5  ; was: word_178DA
-WeaponSelect_SpriteFramePointers:   dc.l    WeaponSelect_AnimatedSpriteMapping00  ; was: off_178E6
-                                        ; sub_2BBC0:UI_UpdateWeaponSelectionObject_LoadSelectedAnimatedMapping   o
-                dc.l    WeaponSelect_AnimatedSpriteMapping01
-                dc.l    WeaponSelect_AnimatedSpriteMapping02
-                dc.l    WeaponSelect_AnimatedSpriteMapping03
-                dc.l    WeaponSelect_AnimatedSpriteMapping04
-                dc.l    WeaponSelect_AnimatedSpriteMapping05
+WeaponSelect_SpriteFramePointers:   dc.l    Pickup_WeaponCapsuleSpriteMapping00  ; was: off_178E6
+                                        ; sub_2BBC0:Pickup_UpdateWeaponCapsule_LoadSelectedAnimatedMapping   o
+                dc.l    Pickup_WeaponCapsuleSpriteMapping01
+                dc.l    Pickup_WeaponCapsuleSpriteMapping02
+                dc.l    Pickup_WeaponCapsuleSpriteMapping03
+                dc.l    Pickup_WeaponCapsuleSpriteMapping04
+                dc.l    Pickup_WeaponCapsuleSpriteMapping05

@@ -416,7 +416,7 @@ StandardEnemyTileAttr           equ     $FFFF8270       ; was: word_FF8270
 EnemyProjectileTileAttr         equ     $FFFF8272       ; was: word_FF8272
 BirdEnemyTileAttr               equ     $FFFF8274       ; was: word_FF8274
 PhaseEnemyTileAttr              equ     $FFFF8276       ; was: word_FF8276
-Stage10WaspTileAttr             equ     $FFFF8278       ; was: word_FF8278
+BeakWalkerTileAttr              equ     $FFFF8278       ; was: word_FF8278
 CirclingEnemyTileAttr           equ     $FFFF827A       ; was: word_FF827A
 SpecialTargetCount              equ     $FFFF829E       ; was: word_FF829E
 StageAssetCommandBuffer         equ     $FFFF82A0       ; was: byte_FF82A0

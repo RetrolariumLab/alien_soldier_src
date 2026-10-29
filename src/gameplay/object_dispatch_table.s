@@ -6,7 +6,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Entity_NullUpdateHandler4
                 dc.l    Effect_UpdateKnockbackParticle
                 dc.l    Effect_UpdateImpactParticleSpawner
-                dc.l    Enemy_BehaviorController
+                dc.l    Enemy_GrinnerController
                 dc.l    Pickup_MaxHealthUpgradeMain
                 dc.l    Boss_SniperHoneyviperMainHandler
                 dc.l    Entity_NullUpdateHandler4
@@ -16,7 +16,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Anim_UpdateSpriteFrame
                 dc.l    Player_UpdateTargetSight
                 dc.l    UI_DebugSpriteEditor
-                dc.l    Enemy_PeriodicShotController
+                dc.l    Enemy_EggSpitterController
                 dc.l    Object_UpdateProximityPickupEmitterType48
                 dc.l    Projectile_UpdateEightDirectionShotCollision
                 dc.l    Projectile_ActivateEightDirectionShot
@@ -34,7 +34,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Projectile_UpdateGravityAndHorizontalDrag
                 dc.l    Projectile_UpdateGravityBounceType84
                 dc.l    Physics_ApplyGravity
-                dc.l    Enemy_ProjectileAttackController
+                dc.l    Enemy_GunnerController
                 dc.l    Enemy_BirdController
                 dc.l    Physics_AccelerateUpward
                 dc.l    Projectile_SniperHoneyviperOscillatingShot
@@ -146,7 +146,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Boss_DestroyerMk2Main
                 dc.l    Object_DestroyerMk2ComponentMain
                 dc.l    Object_DestroyerMk2HorizontalPartMain
-                dc.l    UI_WeaponSelectionObject
+                dc.l    Pickup_WeaponCapsule
                 dc.l    Effect_UpdateDashTrail
                 dc.l    Projectile_UpdateType254TwoSpeedShotCollision
                 dc.l    Object_DestroyerMk2MovingPartMain
@@ -162,7 +162,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Projectile_Epsilon1BarrageRowProjectileMain
                 dc.l    Boss_Epsilon1RingObjectMain
                 dc.l    Boss_CaterpillarShipTransitionSegment
-                dc.l    Enemy_PhasePatternController
+                dc.l    Enemy_EyePodController
                 dc.l    Enemy_UpdateBouncingDebrisSpawner
                 dc.l    Boss_CaterpillarShipController
                 dc.l    Boss_SnakeMain
@@ -175,8 +175,8 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Projectile_UpdateOscillatingContactHazardType2B4
                 dc.l    Boss_ViblackMain
                 dc.l    Projectile_FallingShotController
-                dc.l    Enemy_Stage10WaspController
-                dc.l    Enemy_UpdateStage10WaspDefeatDebris
+                dc.l    Enemy_BeakWalkerController
+                dc.l    Enemy_UpdateBeakWalkerDefeatDebris
                 dc.l    TunnelTransition_ObjectMain
                 dc.l    Enemy_Stage12FloaterController
                 dc.l    Enemy_UpdateStage12DefeatDebris
@@ -203,7 +203,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Effect_BackStringerSegmentFlash
                 dc.l    Projectile_BackStringerAngledShotMain
                 dc.l    Pickup_MaxHealthUpgradeCollectedFeedback
-                dc.l    UI_WeaponSelectionCommitFeedback
+                dc.l    Pickup_WeaponCapsuleCommitFeedback
                 dc.l    Object_RemoveOnFlagOrAnimationEnd
                 dc.l    Projectile_BugmaxHitFragmentController
                 dc.l    Projectile_BugmaxSpreadController
@@ -274,9 +274,9 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Boss_ValkirieAlternateMain
                 dc.l    Boss_UpdateSylpheed
                 dc.l    Stage18_SegmentedWormMain
-                dc.l    Enemy_Stage11FishController
+                dc.l    Enemy_GunCraftController
                 dc.l    Entity_UpdateMedusaFallingPart
-                dc.l    Stage11_FishWaveController
+                dc.l    Stage11_GunCraftWaveController
                 dc.l    Projectile_Stage21AsteroidDebrisMain
                 dc.l    Cutscene_XiTigerTrainEntranceController
                 dc.l    Cutscene_XiTigerBossEntranceController

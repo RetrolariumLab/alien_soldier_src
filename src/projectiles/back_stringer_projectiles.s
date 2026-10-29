@@ -165,7 +165,7 @@ Projectile_BackStringerConvertAngledShotToImpact:       ; was: loc_45976
                 asr.l   #3,d0
                 neg.l   d0
                 move.l  d0,$1C(a5)
-                move.l  #SharedCombatSpriteAnimation02,8(a5)
+                move.l  #Effect_SpriteAnimation02,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
 Projectile_BackStringerUpdateAngledShotFlight:          ; was: loc_4599C
