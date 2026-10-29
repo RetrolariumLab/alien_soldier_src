@@ -8,9 +8,9 @@ Object_SelectAlternatingGraphicsFrameReturn:            ; CODE XREF: Object_Sele
                 rts
 ; End of function Object_SelectAlternatingGraphicsFrame
 ; ---------------------------------------------------------------------------
-; Nine labelled eight-direction frame-table bases used by Seven Forces parts
+; Nine labelled eight-direction frame-table bases used by Seven Force parts
 ; Table1 has an extra unlabelled eight-pointer run after its first eight slots
-SevenForceRotationFrameTable0: dc.l    SevenForceRotationSpriteFrame00  ; DATA XREF: ROM:00059EB8   o  ; was: off_59D42
+SevenForceRotationFrameTable0:  dc.l    SevenForceRotationSpriteFrame00  ; DATA XREF: ROM:00059EB8   o  ; was: off_59D42
                                         ; ROM:00059EE4   o
                 dc.l    SevenForceRotationSpriteFrame01
                 dc.l    SevenForceRotationSpriteFrame02
@@ -19,7 +19,7 @@ SevenForceRotationFrameTable0: dc.l    SevenForceRotationSpriteFrame00  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame05
                 dc.l    SevenForceRotationSpriteFrame06
                 dc.l    SevenForceRotationSpriteFrame07
-SevenForceRotationFrameTable1: dc.l    SevenForceRotationSpriteFrame07  ; DATA XREF: ROM:00059EA4   o  ; was: off_59D62
+SevenForceRotationFrameTable1:  dc.l    SevenForceRotationSpriteFrame07  ; DATA XREF: ROM:00059EA4   o  ; was: off_59D62
                                         ; ROM:00059ECC   o
                 dc.l    SevenForceRotationSpriteFrame06
                 dc.l    SevenForceRotationSpriteFrame05
@@ -37,7 +37,7 @@ SevenForceRotationFrameTable1: dc.l    SevenForceRotationSpriteFrame07  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame13
                 dc.l    SevenForceRotationSpriteFrame14
                 dc.l    SevenForceRotationSpriteFrame15
-SevenForceRotationFrameTable2: dc.l    SevenForceRotationSpriteFrame15  ; DATA XREF: ROM:00059EA0   o  ; was: off_59DA2
+SevenForceRotationFrameTable2:  dc.l    SevenForceRotationSpriteFrame15  ; DATA XREF: ROM:00059EA0   o  ; was: off_59DA2
                                         ; ROM:0005A034   o
                 dc.l    SevenForceRotationSpriteFrame14
                 dc.l    SevenForceRotationSpriteFrame13
@@ -46,7 +46,7 @@ SevenForceRotationFrameTable2: dc.l    SevenForceRotationSpriteFrame15  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame10
                 dc.l    SevenForceRotationSpriteFrame09
                 dc.l    SevenForceRotationSpriteFrame08
-SevenForceRotationFrameTable3: dc.l    SevenForceRotationSpriteFrame16  ; DATA XREF: ROM:00059EF4   o  ; was: off_59DC2
+SevenForceRotationFrameTable3:  dc.l    SevenForceRotationSpriteFrame16  ; DATA XREF: ROM:00059EF4   o  ; was: off_59DC2
                                         ; ROM:00059F6E   o
                 dc.l    SevenForceRotationSpriteFrame17
                 dc.l    SevenForceRotationSpriteFrame18
@@ -55,7 +55,7 @@ SevenForceRotationFrameTable3: dc.l    SevenForceRotationSpriteFrame16  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame21
                 dc.l    SevenForceRotationSpriteFrame22
                 dc.l    SevenForceRotationSpriteFrame23
-SevenForceRotationFrameTable4: dc.l    SevenForceRotationSpriteFrame23  ; DATA XREF: ROM:00059EDC   o  ; was: off_59DE2
+SevenForceRotationFrameTable4:  dc.l    SevenForceRotationSpriteFrame23  ; DATA XREF: ROM:00059EDC   o  ; was: off_59DE2
                                         ; ROM:00059F66   o
                 dc.l    SevenForceRotationSpriteFrame22
                 dc.l    SevenForceRotationSpriteFrame21
@@ -64,7 +64,7 @@ SevenForceRotationFrameTable4: dc.l    SevenForceRotationSpriteFrame23  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame18
                 dc.l    SevenForceRotationSpriteFrame17
                 dc.l    SevenForceRotationSpriteFrame16
-SevenForceRotationFrameTable5: dc.l    SevenForceRotationSpriteFrame24  ; DATA XREF: ROM:00059EC4   o  ; was: off_59E02
+SevenForceRotationFrameTable5:  dc.l    SevenForceRotationSpriteFrame24  ; DATA XREF: ROM:00059EC4   o  ; was: off_59E02
                                         ; ROM:00059EEC   o
                 dc.l    SevenForceRotationSpriteFrame25
                 dc.l    SevenForceRotationSpriteFrame26
@@ -73,7 +73,7 @@ SevenForceRotationFrameTable5: dc.l    SevenForceRotationSpriteFrame24  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame29
                 dc.l    SevenForceRotationSpriteFrame30
                 dc.l    SevenForceRotationSpriteFrame31
-SevenForceRotationFrameTable6: dc.l    SevenForceRotationSpriteFrame31  ; DATA XREF: ROM:00059EB0   o  ; was: off_59E22
+SevenForceRotationFrameTable6:  dc.l    SevenForceRotationSpriteFrame31  ; DATA XREF: ROM:00059EB0   o  ; was: off_59E22
                                         ; ROM:00059ED4   o
                 dc.l    SevenForceRotationSpriteFrame30
                 dc.l    SevenForceRotationSpriteFrame29
@@ -82,7 +82,7 @@ SevenForceRotationFrameTable6: dc.l    SevenForceRotationSpriteFrame31  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame26
                 dc.l    SevenForceRotationSpriteFrame25
                 dc.l    SevenForceRotationSpriteFrame24
-SevenForceRotationFrameTable7: dc.l    SevenForceRotationSpriteFrame32  ; DATA XREF: ROM:00059EB4   o  ; was: off_59E42
+SevenForceRotationFrameTable7:  dc.l    SevenForceRotationSpriteFrame32  ; DATA XREF: ROM:00059EB4   o  ; was: off_59E42
                 dc.l    SevenForceRotationSpriteFrame33
                 dc.l    SevenForceRotationSpriteFrame34
                 dc.l    SevenForceRotationSpriteFrame35
@@ -90,7 +90,7 @@ SevenForceRotationFrameTable7: dc.l    SevenForceRotationSpriteFrame32  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame37
                 dc.l    SevenForceRotationSpriteFrame38
                 dc.l    SevenForceRotationSpriteFrame39
-SevenForceRotationFrameTable8: dc.l    SevenForceRotationSpriteFrame39  ; DATA XREF: ROM:00059EC8   o  ; was: off_59E62
+SevenForceRotationFrameTable8:  dc.l    SevenForceRotationSpriteFrame39  ; DATA XREF: ROM:00059EC8   o  ; was: off_59E62
                 dc.l    SevenForceRotationSpriteFrame38
                 dc.l    SevenForceRotationSpriteFrame37
                 dc.l    SevenForceRotationSpriteFrame36
@@ -99,11 +99,11 @@ SevenForceRotationFrameTable8: dc.l    SevenForceRotationSpriteFrame39  ; DATA X
                 dc.l    SevenForceRotationSpriteFrame33
                 dc.l    SevenForceRotationSpriteFrame32
 ; Low-bit-tagged inline descriptors: words copied to child $E, $8, and $A
-SevenForceInlinePartDescriptor0:   dc.w    $42D, $F00, $F0F0  ; DATA XREF: ROM:00059E98   o  ; was: word_59E82
+SevenForceInlinePartDescriptor0:    dc.w    $42D, $F00, $F0F0  ; DATA XREF: ROM:00059E98   o  ; was: word_59E82
                                         ; ROM:0005A038   o
-SevenForceInlinePartDescriptor1:   dc.w    $43D, $A00, $F4F4  ; DATA XREF: ROM:00059E9C   o  ; was: word_59E88
+SevenForceInlinePartDescriptor1:    dc.w    $43D, $A00, $F4F4  ; DATA XREF: ROM:00059E9C   o  ; was: word_59E88
                                         ; ROM:Boss_ValkirieAuxiliaryMetaspritePartDescriptors   o
-SevenForceInlinePartDescriptor2:   dc.w    $446, $500, $F8F8  ; DATA XREF: ROM:00059EAC   o  ; was: word_59E8E
+SevenForceInlinePartDescriptor2:    dc.w    $446, $500, $F8F8  ; DATA XREF: ROM:00059EAC   o  ; was: word_59E8E
                                         ; ROM:00059EC0   o
 ; Primary Valkirie metasprite initialization and neutral-pose data
 Boss_ValkirieMetaspritePartDescriptors: dc.l    Boss_ValkirieMetaspriteFrame+$400000  ; DATA XREF: Entity_InitValkirieBattleState0+10   o  ; was: off_59E94

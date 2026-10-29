@@ -11,7 +11,7 @@ Stage18_RenderLockedTilemap:                            ; CODE XREF: Stage18_Upd
                 nop
                 bra.w   Tilemap_QueueColumnFromDescriptor
 ; End of function Stage18_UpdateScrollAndRenderTilemap
-; Advances the Destroyer MK2 approach scroll and renders the Stage 18 tilemap
+; Advances the Destroyer-Mk2 approach scroll and renders the Stage 18 tilemap
 Stage18_UpdateDestroyerMk2Scroll:                       ; CODE XREF: Stage18_InitializeDestroyerMk2Encounter   p  ; was: sub_10044
                 cmpi.w  #$91,(PlayerXPosition).w
                 bpl.s   Stage18_AdvanceDestroyerMk2Scroll

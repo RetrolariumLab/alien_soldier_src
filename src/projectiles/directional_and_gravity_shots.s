@@ -362,21 +362,21 @@ Projectile_SpawnType254TwoSpeedShotImpact:              ; CODE XREF: Projectile_
                 movea.l #Weapon_ImpactSpriteFrames,a1
                 bra.w   Sprite_InitFromTable
 ; End of function Projectile_UpdateType254TwoSpeedShotCollision
-; Allocate one Destroyer MK2 projected shot at (d3,d4)
-Boss_DestroyerMK2SpawnProjectedShot:                    ; CODE XREF: Boss_DestroyerMK2UpdateProjectedSweep+18   p  ; was: sub_2B49E
-                                        ; Boss_DestroyerMK2EmitFourProjectedEffects+46   p
+; Allocate one Destroyer-Mk2 projected shot at (d3,d4)
+Boss_DestroyerMk2SpawnProjectedShot:                    ; CODE XREF: Boss_DestroyerMk2UpdateProjectedSweep+18   p  ; was: sub_2B49E
+                                        ; Boss_DestroyerMk2EmitFourProjectedEffects+46   p
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Boss_DestroyerMK2ProjectedShotSpawnReturn
+                bne.s   Boss_DestroyerMk2ProjectedShotSpawnReturn
                 move.w  d3,$10(a0)
                 move.w  d4,$14(a0)
                 movea.l Projectile_DelayedCollisionShotDescriptorTable(pc,d1.w),a4
                 bra.s   Projectile_InitializeDelayedCollisionShotFromDescriptor
 ; ---------------------------------------------------------------------------
-Boss_DestroyerMK2ProjectedShotSpawnReturn:              ; CODE XREF: Boss_DestroyerMK2SpawnProjectedShot+6   j  ; was: locret_2B4B4
+Boss_DestroyerMk2ProjectedShotSpawnReturn:              ; CODE XREF: Boss_DestroyerMk2SpawnProjectedShot+6   j  ; was: locret_2B4B4
                 rts
-; End of function Boss_DestroyerMK2SpawnProjectedShot
+; End of function Boss_DestroyerMk2SpawnProjectedShot
 ; ---------------------------------------------------------------------------
-Projectile_DelayedCollisionShotDescriptorTable: dc.l    Projectile_AimedDelayedCollisionShotDescriptor  ; DATA XREF: Boss_DestroyerMK2SpawnProjectedShot+10   r  ; was: off_2B4B6
+Projectile_DelayedCollisionShotDescriptorTable: dc.l    Projectile_AimedDelayedCollisionShotDescriptor  ; DATA XREF: Boss_DestroyerMk2SpawnProjectedShot+10   r  ; was: off_2B4B6
                 dc.l    Projectile_FixedAngleDelayedCollisionShotDescriptor
 
 ; Initialize the aimed delayed-collision-shot descriptor
@@ -384,7 +384,7 @@ Projectile_InitializeAimedDelayedCollisionShot:         ; CODE XREF: Enemy_Spawn
                                         ; Projectile_SniperHoneyviperOscillatingShot+3A   p
                 lea     Projectile_AimedDelayedCollisionShotDescriptor(pc),a4
                 nop
-Projectile_InitializeDelayedCollisionShotFromDescriptor:  ; CODE XREF: Boss_DestroyerMK2SpawnProjectedShot+14   j  ; was: loc_2B4C4
+Projectile_InitializeDelayedCollisionShotFromDescriptor:  ; CODE XREF: Boss_DestroyerMk2SpawnProjectedShot+14   j  ; was: loc_2B4C4
                 move.w  (a4)+,$26(a0)
                 move.w  (a4)+,d7
                 move.l  (a4)+,8(a0)

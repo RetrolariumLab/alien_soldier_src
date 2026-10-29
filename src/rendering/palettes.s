@@ -315,8 +315,8 @@ Boss_JampanPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $C, $CC, $A, $AA, 8,
                                         ; DATA XREF: ROM:Boss_JampanAssetSet   o
                                         ; Boss_JampanReinitializePostDefeatObjectsState+6   o
                 dc.b    0, $A, 0, $E, 2, 4, 2, $26, 2, $48, 4, $6A, 6, $8C, 8, $AE
-Boss_DestroyerMK2PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $80, 0, $28, $F, $FF, 0, $6C  ; was: byte_C57E
-                                        ; DATA XREF: ROM:Boss_DestroyerMK2AssetSet   o
+Boss_DestroyerMk2PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $80, 0, $28, $F, $FF, 0, $6C  ; was: byte_C57E
+                                        ; DATA XREF: ROM:Boss_DestroyerMk2AssetSet   o
                 dc.b    0, $EA, 4, $22, 4, $46, 4, $88, 8, $CC, 0, 6, 2, $C, 6, $6E
 Boss_BugmaxPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 6, $AC, 4, $8A, 2, $68, $F, $FF, 2, $46  ; was: byte_C59E
                                         ; DATA XREF: ROM:Boss_BugmaxAssetSet   o

@@ -7,15 +7,15 @@ symbols. The earlier releases' tests checked their headers, exact lengths,
 decoded tile counts and the pointers that use them; `make verify` keeps their
 bytes.
 
-| Second archive ROM address | First symbol                                | Second symbol                            | Decoded tiles |
-| -------------------------- | ------------------------------------------- | ---------------------------------------- | ------------: |
-| `$104F32`                  | `Stage15TileArt`                            | `Stage15TileArt2`                        |            28 |
-| `$105B9E`                  | `Stage22And24TileArt`                       | `Stage22And24TileArt2`                   |           123 |
-| `$123172`                  | `Boss_BackStringerTileArt`                  | `Boss_BackStringerTileArt2`              |            27 |
-| `$1291DE`                  | `EntityType3F0TileArt`                      | `UnreferencedEntityType3F0TileArt2`      |           303 |
-| `$138EE4`                  | `Boss_WolfGaropaTileArt1`                   | `UnreferencedWolfGaropaTileArt2`         |            75 |
-| `$13D42A`                  | `Boss_ZLeoTileArt1`                         | `UnreferencedZLeoTileArt2`               |           322 |
-| `$188A16`                  | `StoryScreenMappingData6000`                | `UnreferencedIntroSceneSpriteArt`        |           194 |
+| Second archive ROM address | First symbol                               | Second symbol                           | Decoded tiles |
+| -------------------------- | ------------------------------------------ | --------------------------------------- | ------------: |
+| `$104F32`                  | `Stage15TileArt`                           | `Stage15TileArt2`                       |            28 |
+| `$105B9E`                  | `Stage22And24TileArt`                      | `Stage22And24TileArt2`                  |           123 |
+| `$123172`                  | `Boss_BackStringerTileArt`                 | `Boss_BackStringerTileArt2`             |            27 |
+| `$1291DE`                  | `EntityType3F0TileArt`                     | `UnreferencedEntityType3F0TileArt2`     |           303 |
+| `$138EE4`                  | `Boss_WolfGaropaTileArt1`                  | `UnreferencedWolfGaropaTileArt2`        |            75 |
+| `$13D42A`                  | `Boss_ZLeoTileArt1`                        | `UnreferencedZLeoTileArt2`              |           322 |
+| `$188A16`                  | `StoryScreenMappingData6000`               | `UnreferencedIntroSceneSpriteArt`       |           194 |
 | `$1BE2CA`                  | `SevenForceVictoryCutsceneMappingData4020` | `UnreferencedSevenForceCutsceneTileArt` |            44 |
 
 The first six second archives are in `data/artcomp/`; the last two follow

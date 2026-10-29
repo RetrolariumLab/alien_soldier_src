@@ -13,7 +13,7 @@ Stage18_UpdateInitialScroll:                            ; DATA XREF: ROM:Stage_L
 Stage18And19_SharedReturn:                              ; CODE XREF: Stage_InitializeStage19+A   p  ; was: locret_E4FA
                 rts
 ; End of function Stage18_UpdateInitialScroll
-; Update Stage 18 to the Destroyer MK2 approach boundary
+; Update Stage 18 to the Destroyer-Mk2 approach boundary
 Stage18_UpdateScrollToDestroyerMk2Approach:             ; DATA XREF: ROM:0000E43A   o  ; was: sub_E4FC
                 jsr     (Stage18_UpdateScrollAndRenderTilemap).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
@@ -21,7 +21,7 @@ Stage18_UpdateScrollToDestroyerMk2Approach:             ; DATA XREF: ROM:0000E43
                 bmi.s   Stage_LateGameStateReturn
                 bra.w   Stage_TransitionToNextPhase
 ; End of function Stage18_UpdateScrollToDestroyerMk2Approach
-; Clamp Stage 18 and submit Destroyer MK2's asset set
+; Clamp Stage 18 and submit Destroyer-Mk2's asset set
 Stage18_InitializeDestroyerMk2Encounter:                ; DATA XREF: ROM:0000E43C   o  ; was: sub_E512
                 jsr     (Stage18_UpdateDestroyerMk2Scroll).l
                 bsr.w   Stage18And19_UpdateHorizontalParallax
@@ -34,10 +34,10 @@ Stage18_InitializeDestroyerMk2Encounter:                ; DATA XREF: ROM:0000E43
                 move.w  d0,(CameraXLowerBound).w
                 move.w  d0,(CameraXUpperBound).w
                 move.w  #$8000,(GlobalSpritePriorityBit).w
-                lea     (Boss_DestroyerMK2AssetSet).l,a1
+                lea     (Boss_DestroyerMk2AssetSet).l,a1
                 jmp     Boss_LoadAssetSet
 ; End of function Stage18_InitializeDestroyerMk2Encounter
-; Wait for Destroyer MK2 to clear, then start the time bonus and preload
+; Wait for Destroyer-Mk2 to clear, then start the time bonus and preload
 Stage18_UpdateDestroyerMk2Encounter:                    ; DATA XREF: ROM:0000E43E   o  ; was: sub_E54E
                 tst.w   (Entity_ObjectPool).w
                 bne.s   Stage18_UpdateDestroyerMk2Encounter_UpdateCamera
@@ -46,7 +46,7 @@ Stage18_UpdateDestroyerMk2Encounter_UpdateCamera:       ; CODE XREF: Stage18_Upd
                 jsr     (Camera_UpdateHorizontalTowardsPlayer).l
                 bra.w   Stage18And19_UpdateHorizontalParallax
 ; End of function Stage18_UpdateDestroyerMk2Encounter
-; Start the final Stage 18 post-Destroyer-MK2 transition state
+; Start the final Stage 18 post-Destroyer-Mk2 transition state
 Stage18_StartPostDestroyerMk2Transition:                ; DATA XREF: ROM:0000E440   o  ; was: sub_E562
                 bsr.w   Stage_StartNextPhaseBanner
                 jsr     (Camera_UpdateHorizontalTowardsPlayer).l

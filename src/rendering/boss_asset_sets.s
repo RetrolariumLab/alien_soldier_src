@@ -208,13 +208,13 @@ Boss_Epsilon1GraphicsLoadList:  dc.w    7               ; field_0  ; was: stru_1
                 dc.l    SharedBossMappingData2020       ; field_2
                 dc.w    $2020                           ; field_6
                 dc.w    $FFFF
-Boss_DestroyerMK2AssetSet:  dc.w    $240                ; field_0  ; was: stru_1151C
+Boss_DestroyerMk2AssetSet:  dc.w    $240                ; field_0  ; was: stru_1151C
                                         ; DATA XREF: Stage18_InitializeDestroyerMk2Encounter   o
-                dc.l    Boss_DestroyerMK2GraphicsLoadList  ; field_2
-                dc.l    Boss_DestroyerMK2PaletteCommand  ; field_6
-Boss_DestroyerMK2GraphicsLoadList:  dc.w    7           ; field_0  ; was: stru_11526
-                                        ; DATA XREF: ROM:Boss_DestroyerMK2AssetSet   o
-                dc.l    Boss_DestroyerMK2TileArt        ; field_2
+                dc.l    Boss_DestroyerMk2GraphicsLoadList  ; field_2
+                dc.l    Boss_DestroyerMk2PaletteCommand  ; field_6
+Boss_DestroyerMk2GraphicsLoadList:  dc.w    7           ; field_0  ; was: stru_11526
+                                        ; DATA XREF: ROM:Boss_DestroyerMk2AssetSet   o
+                dc.l    Boss_DestroyerMk2TileArt        ; field_2
                 dc.w    $6000                           ; field_6
                 dc.w    6                               ; field_0
                 dc.l    SharedBossMappingData2020       ; field_2

@@ -1186,45 +1186,45 @@
       "art": [["Boss_JampanTileArt", "$6000"]],
       "palettes": [["Boss_JampanPaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2SpawnedProjectileMapping": {
+    "Boss_DestroyerMk2SpawnedProjectileMapping": {
       "attribute": "$4300",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2ComponentMapping": {
+    "Boss_DestroyerMk2ComponentMapping": {
       "attribute": "$FB00",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2ProjectileMapping": {
+    "Boss_DestroyerMk2ProjectileMapping": {
       "attribute": "$FB00",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2OrbitingPartMapping0": {
+    "Boss_DestroyerMk2OrbitingPartMapping0": {
       "attribute": "$E300",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2OrbitingPartMapping1": {
+    "Boss_DestroyerMk2OrbitingPartMapping1": {
       "attribute": "$E300",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2OrbitingPartMapping2": {
+    "Boss_DestroyerMk2OrbitingPartMapping2": {
       "attribute": "$EB00",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2OrbitingPartMapping3": {
+    "Boss_DestroyerMk2OrbitingPartMapping3": {
       "attribute": "$6B00",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
-    "Boss_DestroyerMK2OrbitingPartMapping4": {
+    "Boss_DestroyerMk2OrbitingPartMapping4": {
       "attribute": "$6300",
-      "art": [["Boss_DestroyerMK2TileArt", "$6000"]],
-      "palettes": [["Boss_DestroyerMK2PaletteCommand", 0]]
+      "art": [["Boss_DestroyerMk2TileArt", "$6000"]],
+      "palettes": [["Boss_DestroyerMk2PaletteCommand", 0]]
     },
     "SevenForceRotationSpriteFrame00": {
       "attribute": "$6300",

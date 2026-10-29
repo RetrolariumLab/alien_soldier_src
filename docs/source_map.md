@@ -40,7 +40,7 @@ listing up to tag 3.0; keep them current by hand when modules move.
 | `0x03D0AE-0x040CED` | Caterpillar, Xi-Tiger, Deep Strider, Gusthead, and Snake                                                        |    12 | hypothesis               |
 | `0x040CEE-0x045ACF` | dormant type-$1C0 family, Sunset Sting, Viblack, and Back Stringer systems                                      |    13 | static/runtime           |
 | `0x045AD0-0x04912D` | Epsilon 1 and Sharpsteel systems                                                                                |     9 | hypothesis               |
-| `0x04912E-0x04BEBB` | Jampan and Destroyer MK2 systems                                                                                |     7 | hypothesis               |
+| `0x04912E-0x04BEBB` | Jampan and Destroyer-Mk2 systems                                                                                |     7 | hypothesis               |
 | `0x04BEBC-0x04DDD1` | Bugmax systems                                                                                                  |     5 | hypothesis               |
 | `0x04DDD2-0x050CD3` | Shield Viper and Wolf Garopa systems                                                                            |     8 | hypothesis               |
 | `0x050CD4-0x0537A7` | Valkirie transition, Z-Leo, and Valkirie Force                                                                  |     8 | hypothesis               |

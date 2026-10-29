@@ -1,103 +1,103 @@
-; Shared Seven Forces directional mappings followed by Stage 24 scene-object data
+; Shared Seven Force directional mappings followed by Stage 24 scene-object data
 ; Rotation-frame suffixes preserve ROM order across the eight-direction pointer tables
 
-SevenForceRotationSpriteFrame00:   dc.w    $4E, 0, $FAE7  ; DATA XREF: ROM:SevenForcesRotationFrameTable0   o  ; was: word_ECC86
+SevenForceRotationSpriteFrame00:    dc.w    $4E, 0, $FAE7  ; DATA XREF: ROM:SevenForceRotationFrameTable0   o  ; was: word_ECC86
                                         ; ROM:00059D7E   o
                 dc.w    $8042, $E00, $F2EF
-SevenForceRotationSpriteFrame01:   dc.w    $8036, $E00, $F2EF  ; DATA XREF: ROM:00059D46   o  ; was: word_ECC92
+SevenForceRotationSpriteFrame01:    dc.w    $8036, $E00, $F2EF  ; DATA XREF: ROM:00059D46   o  ; was: word_ECC92
                                         ; ROM:00059D7A   o
-SevenForceRotationSpriteFrame02:   dc.w    $35, 0, $BEF  ; DATA XREF: ROM:00059D4A   o  ; was: word_ECC98
+SevenForceRotationSpriteFrame02:    dc.w    $35, 0, $BEF  ; DATA XREF: ROM:00059D4A   o  ; was: word_ECC98
                                         ; ROM:00059D76   o
                 dc.w    $8029, $E00, $F3EF
-SevenForceRotationSpriteFrame03:   dc.w    $801D, $B00, $F2F6  ; DATA XREF: ROM:00059D4E   o  ; was: word_ECCA4
+SevenForceRotationSpriteFrame03:    dc.w    $801D, $B00, $F2F6  ; DATA XREF: ROM:00059D4E   o  ; was: word_ECCA4
                                         ; ROM:00059D72   o
-SevenForceRotationSpriteFrame04:   dc.w    $1C, 0, $11FC  ; DATA XREF: ROM:00059D52   o  ; was: word_ECCAA
+SevenForceRotationSpriteFrame04:    dc.w    $1C, 0, $11FC  ; DATA XREF: ROM:00059D52   o  ; was: word_ECCAA
                                         ; ROM:00059D6E   o
                 dc.w    $8010, $B00, $F1F4
-SevenForceRotationSpriteFrame05:   dc.w    $9868, $B00, $F1F4  ; DATA XREF: ROM:00059D56   o  ; was: word_ECCB6
+SevenForceRotationSpriteFrame05:    dc.w    $9868, $B00, $F1F4  ; DATA XREF: ROM:00059D56   o  ; was: word_ECCB6
                                         ; ROM:00059D6A   o
-SevenForceRotationSpriteFrame06:   dc.w    $1867, 0, $90D  ; DATA XREF: ROM:00059D5A   o  ; was: word_ECCBC
+SevenForceRotationSpriteFrame06:    dc.w    $1867, 0, $90D  ; DATA XREF: ROM:00059D5A   o  ; was: word_ECCBC
                                         ; ROM:00059D66   o
                 dc.w    $985B, $B00, $F1F5
-SevenForceRotationSpriteFrame07:   dc.w    $984F, $E00, $F3F3  ; DATA XREF: ROM:00059D5E   o  ; was: word_ECCC8
-                                        ; ROM:SevenForcesRotationFrameTable1   o
+SevenForceRotationSpriteFrame07:    dc.w    $984F, $E00, $F3F3  ; DATA XREF: ROM:00059D5E   o  ; was: word_ECCC8
+                                        ; ROM:SevenForceRotationFrameTable1   o
                 dc.w    $184E, 0, $FD12
                 dc.w    $9842, $E00, $F5F2
-SevenForceRotationSpriteFrame08:   dc.w    $8074, $A00, $F3F5  ; DATA XREF: ROM:00059D82   o  ; was: word_ECCDA
+SevenForceRotationSpriteFrame08:    dc.w    $8074, $A00, $F3F5  ; DATA XREF: ROM:00059D82   o  ; was: word_ECCDA
                                         ; ROM:00059DBE   o
-SevenForceRotationSpriteFrame09:   dc.w    $98B5, $A00, $F2F4  ; DATA XREF: ROM:00059D86   o  ; was: word_ECCE0
+SevenForceRotationSpriteFrame09:    dc.w    $98B5, $A00, $F2F4  ; DATA XREF: ROM:00059D86   o  ; was: word_ECCE0
                                         ; ROM:00059DBA   o
-SevenForceRotationSpriteFrame10:   dc.w    $18B4, 0, $EBFC  ; DATA XREF: ROM:00059D8A   o  ; was: word_ECCE6
+SevenForceRotationSpriteFrame10:    dc.w    $18B4, 0, $EBFC  ; DATA XREF: ROM:00059D8A   o  ; was: word_ECCE6
                                         ; ROM:00059DB6   o
                 dc.w    $98AB, $A00, $F3F4
-SevenForceRotationSpriteFrame11:   dc.w    $98A2, $A00, $F3F4  ; DATA XREF: ROM:00059D8E   o  ; was: word_ECCF2
+SevenForceRotationSpriteFrame11:    dc.w    $98A2, $A00, $F3F4  ; DATA XREF: ROM:00059D8E   o  ; was: word_ECCF2
                                         ; ROM:00059DB2   o
-SevenForceRotationSpriteFrame12:   dc.w    $9899, $A00, $F2F4  ; DATA XREF: ROM:00059D92   o  ; was: word_ECCF8
+SevenForceRotationSpriteFrame12:    dc.w    $9899, $A00, $F2F4  ; DATA XREF: ROM:00059D92   o  ; was: word_ECCF8
                                         ; ROM:00059DAE   o
-SevenForceRotationSpriteFrame13:   dc.w    $9890, $A00, $F3F3  ; DATA XREF: ROM:00059D96   o  ; was: word_ECCFE
+SevenForceRotationSpriteFrame13:    dc.w    $9890, $A00, $F3F3  ; DATA XREF: ROM:00059D96   o  ; was: word_ECCFE
                                         ; ROM:00059DAA   o
-SevenForceRotationSpriteFrame14:   dc.w    $188F, 0, $FCEC  ; DATA XREF: ROM:00059D9A   o  ; was: word_ECD04
+SevenForceRotationSpriteFrame14:    dc.w    $188F, 0, $FCEC  ; DATA XREF: ROM:00059D9A   o  ; was: word_ECD04
                                         ; ROM:00059DA6   o
                 dc.w    $9886, $A00, $F4F4
-SevenForceRotationSpriteFrame15:   dc.w    $987D, $A00, $F4F4  ; DATA XREF: ROM:00059D9E   o  ; was: word_ECD10
-                                        ; ROM:SevenForcesRotationFrameTable2   o
-SevenForceRotationSpriteFrame16:   dc.w    $88D9, $900, $F7F3  ; DATA XREF: ROM:SevenForcesRotationFrameTable3   o  ; was: word_ECD16
+SevenForceRotationSpriteFrame15:    dc.w    $987D, $A00, $F4F4  ; DATA XREF: ROM:00059D9E   o  ; was: word_ECD10
+                                        ; ROM:SevenForceRotationFrameTable2   o
+SevenForceRotationSpriteFrame16:    dc.w    $88D9, $900, $F7F3  ; DATA XREF: ROM:SevenForceRotationFrameTable3   o  ; was: word_ECD16
                                         ; ROM:00059DFE   o
-SevenForceRotationSpriteFrame17:   dc.w    $98D3, $900, $F7F3  ; DATA XREF: ROM:00059DC6   o  ; was: word_ECD1C
+SevenForceRotationSpriteFrame17:    dc.w    $98D3, $900, $F7F3  ; DATA XREF: ROM:00059DC6   o  ; was: word_ECD1C
                                         ; ROM:00059DFA   o
-SevenForceRotationSpriteFrame18:   dc.w    $98CA, $A00, $F5F3  ; DATA XREF: ROM:00059DCA   o  ; was: word_ECD22
+SevenForceRotationSpriteFrame18:    dc.w    $98CA, $A00, $F5F3  ; DATA XREF: ROM:00059DCA   o  ; was: word_ECD22
                                         ; ROM:00059DF6   o
-SevenForceRotationSpriteFrame19:   dc.w    $98C4, $600, $F5FA  ; DATA XREF: ROM:00059DCE   o  ; was: word_ECD28
+SevenForceRotationSpriteFrame19:    dc.w    $98C4, $600, $F5FA  ; DATA XREF: ROM:00059DCE   o  ; was: word_ECD28
                                         ; ROM:00059DF2   o
-SevenForceRotationSpriteFrame20:   dc.w    $98BE, $600, $F4F9  ; DATA XREF: ROM:00059DD2   o  ; was: word_ECD2E
+SevenForceRotationSpriteFrame20:    dc.w    $98BE, $600, $F4F9  ; DATA XREF: ROM:00059DD2   o  ; was: word_ECD2E
                                         ; ROM:00059DEE   o
-SevenForceRotationSpriteFrame21:   dc.w    $90C4, $600, $F5F8  ; DATA XREF: ROM:00059DD6   o  ; was: word_ECD34
+SevenForceRotationSpriteFrame21:    dc.w    $90C4, $600, $F5F8  ; DATA XREF: ROM:00059DD6   o  ; was: word_ECD34
                                         ; ROM:00059DEA   o
-SevenForceRotationSpriteFrame22:   dc.w    $90CA, $A00, $F5F6  ; DATA XREF: ROM:00059DDA   o  ; was: word_ECD3A
+SevenForceRotationSpriteFrame22:    dc.w    $90CA, $A00, $F5F6  ; DATA XREF: ROM:00059DDA   o  ; was: word_ECD3A
                                         ; ROM:00059DE6   o
-SevenForceRotationSpriteFrame23:   dc.w    $90D3, $900, $F7F6  ; DATA XREF: ROM:00059DDE   o  ; was: word_ECD40
-                                        ; ROM:SevenForcesRotationFrameTable4   o
-SevenForceRotationSpriteFrame24:   dc.w    $8105, $D00, $F7EE  ; DATA XREF: ROM:SevenForcesRotationFrameTable5   o  ; was: word_ECD46
+SevenForceRotationSpriteFrame23:    dc.w    $90D3, $900, $F7F6  ; DATA XREF: ROM:00059DDE   o  ; was: word_ECD40
+                                        ; ROM:SevenForceRotationFrameTable4   o
+SevenForceRotationSpriteFrame24:    dc.w    $8105, $D00, $F7EE  ; DATA XREF: ROM:SevenForceRotationFrameTable5   o  ; was: word_ECD46
                                         ; ROM:00059E3E   o
-SevenForceRotationSpriteFrame25:   dc.w    $101, $500, $F6FF  ; DATA XREF: ROM:00059E06   o  ; was: word_ECD4C
+SevenForceRotationSpriteFrame25:    dc.w    $101, $500, $F6FF  ; DATA XREF: ROM:00059E06   o  ; was: word_ECD4C
                                         ; ROM:00059E3A   o
                 dc.w    $80FD, $500, $F9EF
-SevenForceRotationSpriteFrame26:   dc.w    $F5, $700, $ED02  ; DATA XREF: ROM:00059E0A   o  ; was: word_ECD58
+SevenForceRotationSpriteFrame26:    dc.w    $F5, $700, $ED02  ; DATA XREF: ROM:00059E0A   o  ; was: word_ECD58
                                         ; ROM:00059E36   o
                 dc.w    $80EF, $600, $F5F2
-SevenForceRotationSpriteFrame27:   dc.w    $E7, $500, $F0F9  ; DATA XREF: ROM:00059E0E   o  ; was: word_ECD64
+SevenForceRotationSpriteFrame27:    dc.w    $E7, $500, $F0F9  ; DATA XREF: ROM:00059E0E   o  ; was: word_ECD64
                                         ; ROM:00059E32   o
                 dc.w    $80EB, $500, $F6
-SevenForceRotationSpriteFrame28:   dc.w    $88DF, $700, $F1F8  ; DATA XREF: ROM:00059E12   o  ; was: word_ECD70
+SevenForceRotationSpriteFrame28:    dc.w    $88DF, $700, $F1F8  ; DATA XREF: ROM:00059E12   o  ; was: word_ECD70
                                         ; ROM:00059E2E   o
-SevenForceRotationSpriteFrame29:   dc.w    $8EB, $500, $FA  ; DATA XREF: ROM:00059E16   o  ; was: word_ECD76
+SevenForceRotationSpriteFrame29:    dc.w    $8EB, $500, $FA  ; DATA XREF: ROM:00059E16   o  ; was: word_ECD76
                                         ; ROM:00059E2A   o
                 dc.w    $88E7, $500, $F0F7
-SevenForceRotationSpriteFrame30:   dc.w    $8F5, $700, $EDEE  ; DATA XREF: ROM:00059E1A   o  ; was: word_ECD82
+SevenForceRotationSpriteFrame30:    dc.w    $8F5, $700, $EDEE  ; DATA XREF: ROM:00059E1A   o  ; was: word_ECD82
                                         ; ROM:00059E26   o
                 dc.w    $88EF, $600, $F5FE
-SevenForceRotationSpriteFrame31:   dc.w    $901, $500, $F6F2  ; DATA XREF: ROM:00059E1E   o  ; was: word_ECD8E
-                                        ; ROM:SevenForcesRotationFrameTable6   o
+SevenForceRotationSpriteFrame31:    dc.w    $901, $500, $F6F2  ; DATA XREF: ROM:00059E1E   o  ; was: word_ECD8E
+                                        ; ROM:SevenForceRotationFrameTable6   o
                 dc.w    $88FD, $500, $F902
-SevenForceRotationSpriteFrame32:   dc.w    $891D, $500, $F8F8  ; DATA XREF: ROM:SevenForcesRotationFrameTable7   o  ; was: word_ECD9A
+SevenForceRotationSpriteFrame32:    dc.w    $891D, $500, $F8F8  ; DATA XREF: ROM:SevenForceRotationFrameTable7   o  ; was: word_ECD9A
                                         ; ROM:00059E7E   o
-SevenForceRotationSpriteFrame33:   dc.w    $8921, $500, $F8F8  ; DATA XREF: ROM:00059E46   o  ; was: word_ECDA0
+SevenForceRotationSpriteFrame33:    dc.w    $8921, $500, $F8F8  ; DATA XREF: ROM:00059E46   o  ; was: word_ECDA0
                                         ; ROM:00059E7A   o
-SevenForceRotationSpriteFrame34:   dc.w    $8925, $500, $F8F8  ; DATA XREF: ROM:00059E4A   o  ; was: word_ECDA6
+SevenForceRotationSpriteFrame34:    dc.w    $8925, $500, $F8F8  ; DATA XREF: ROM:00059E4A   o  ; was: word_ECDA6
                                         ; ROM:00059E76   o
-SevenForceRotationSpriteFrame35:   dc.w    $8929, $500, $F9F8  ; DATA XREF: ROM:00059E4E   o  ; was: word_ECDAC
+SevenForceRotationSpriteFrame35:    dc.w    $8929, $500, $F9F8  ; DATA XREF: ROM:00059E4E   o  ; was: word_ECDAC
                                         ; ROM:00059E72   o
-SevenForceRotationSpriteFrame36:   dc.w    $910D, $500, $F8F9  ; DATA XREF: ROM:00059E52   o  ; was: word_ECDB2
+SevenForceRotationSpriteFrame36:    dc.w    $910D, $500, $F8F9  ; DATA XREF: ROM:00059E52   o  ; was: word_ECDB2
                                         ; ROM:00059E6E   o
-SevenForceRotationSpriteFrame37:   dc.w    $9111, $500, $F8F9  ; DATA XREF: ROM:00059E56   o  ; was: word_ECDB8
+SevenForceRotationSpriteFrame37:    dc.w    $9111, $500, $F8F9  ; DATA XREF: ROM:00059E56   o  ; was: word_ECDB8
                                         ; ROM:00059E6A   o
-SevenForceRotationSpriteFrame38:   dc.w    $9115, $500, $F9FA  ; DATA XREF: ROM:00059E5A   o  ; was: word_ECDBE
+SevenForceRotationSpriteFrame38:    dc.w    $9115, $500, $F9FA  ; DATA XREF: ROM:00059E5A   o  ; was: word_ECDBE
                                         ; ROM:00059E66   o
-SevenForceRotationSpriteFrame39:   dc.w    $9119, $500, $F9F9  ; DATA XREF: ROM:00059E5E   o  ; was: word_ECDC4
-                                        ; ROM:SevenForcesRotationFrameTable8   o
+SevenForceRotationSpriteFrame39:    dc.w    $9119, $500, $F9F9  ; DATA XREF: ROM:00059E5E   o  ; was: word_ECDC4
+                                        ; ROM:SevenForceRotationFrameTable8   o
 ; ---------------------------------------------------------------------------
 ; Valkirie transition metasprite followed by Stage 24 scene-object mappings
-Boss_ValkirieMetaspriteFrame:   dc.w    $961, $100, $4EC  ; DATA XREF: Entity_InitSevenForcesTransitionSprite+10   o  ; was: word_ECDCA
+Boss_ValkirieMetaspriteFrame:   dc.w    $961, $100, $4EC  ; DATA XREF: Entity_InitSevenForceTransitionSprite+10   o  ; was: word_ECDCA
                                         ; ROM:Boss_ValkirieMetaspritePartDescriptors   o
                 dc.w    $956, $200, $ECEC
                 dc.w    $959, $D00, $4F4
@@ -132,7 +132,7 @@ Stage24SceneObject_SpriteFrame05:   dc.w    $486C, $700, $F8  ; DATA XREF: ROM:0
                 dc.w    $4832, $400, $FBF6
                 dc.w    $C82A, $700, $DBF6
 Stage24SceneObject_SpriteAnimation: dc.w    Stage24SceneObject_SpriteFrame00-*  ; DATA XREF: Stage24SceneObject_HoldExpandedFrame+C   o  ; was: off_ECE90
-                                        ; Entity_InitSevenForcesIntro+18   o
+                                        ; Entity_InitSevenForceIntro+18   o
                 dc.w    9
                 dc.w    Stage24SceneObject_SpriteFrame01-*
                 dc.w    8

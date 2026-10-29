@@ -609,7 +609,7 @@ SevenForcePlaneASpeed           equ     SharedPoseTileLong
 SevenForcePatchB                equ     $FFFF961A       ; was: word_FF961A
 SevenForcePlaneBSpeed           equ     $FFFF961C       ; was: dword_FF961C
 SharedWordWorkspace             equ     $FFFF9620       ; was: word_FF9620
-DestroyerMK2RowSpeeds           equ     SharedWordWorkspace
+DestroyerMk2RowSpeeds           equ     SharedWordWorkspace
 ShieldViperAngleDelay           equ     SharedWordWorkspace
 SevenForceFadeValue             equ     SharedWordWorkspace
 SevenForceAltPatchD             equ     $FFFF9622       ; was: word_FF9622
@@ -638,10 +638,10 @@ FlyingNeoAngleTapBase           equ     $FFFF9806       ; was: byte_FF9806
 JetsripperAngleTapBase          equ     $FFFF9808       ; was: byte_FF9808
 SunsetStingWaveTable            equ     $FFFF9810       ; was: word_FF9810
 BossBackdropBandBufferA         equ     $FFFF981E       ; was: byte_FF981E
-DestroyerMK2ScrollRows          equ     $FFFF9820       ; was: word_FF9820
+DestroyerMk2ScrollRows          equ     $FFFF9820       ; was: word_FF9820
 ResultsSummaryRowBuffer         equ     $FFFF9852       ; was: word_FF9852
 TileInterpolationBlockB         equ     $FFFF9880       ; was: word_FF9880
-DestroyerMK2ScrollTable         equ     $FFFF98B0       ; was: word_FF98B0
+DestroyerMk2ScrollTable         equ     $FFFF98B0       ; was: word_FF98B0
 SharedSceneOverlayWord          equ     $FFFF9900       ; was: word_FF9900
 TileInterpolationBlockC         equ     SharedSceneOverlayWord
 PasswordPrimaryBuffer           equ     SharedSceneOverlayWord

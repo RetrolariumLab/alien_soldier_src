@@ -47,7 +47,7 @@ OrphanedFloatingOscillator_Return:                      ; CODE XREF: OrphanedFlo
                                         ; OrphanedFloatingOscillator+9A   j
                 rts
 ; End of function OrphanedFloatingOscillator
-; Stage 18 moving platform used before and during the Destroyer-MK2 arena
+; Stage 18 moving platform used before and during the Destroyer-Mk2 arena
 ; Pinned TAS evidence: active at frame 41500 with mapping Stage18MovingPlatformSpriteMapping
 Stage18_MovingPlatform:                                 ; DATA XREF: ROM:Entity_UpdateHandlerTable   o  ; was: sub_2FDAA
                 bclr    #7,$E(a5)

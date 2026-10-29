@@ -143,14 +143,14 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; DATA XREF: Proj
                 dc.l    Boss_JampanOffsetAttackObjectMain
                 dc.l    Boss_JampanShieldMain
                 dc.l    Boss_JampanPostDefeatObjectMain
-                dc.l    Boss_DestroyerMK2Main
-                dc.l    Object_DestroyerMK2ComponentMain
-                dc.l    Object_DestroyerMK2HorizontalPartMain
+                dc.l    Boss_DestroyerMk2Main
+                dc.l    Object_DestroyerMk2ComponentMain
+                dc.l    Object_DestroyerMk2HorizontalPartMain
                 dc.l    UI_WeaponSelectionObject
                 dc.l    Effect_UpdateDashTrail
                 dc.l    Projectile_UpdateType254TwoSpeedShotCollision
-                dc.l    Object_DestroyerMK2MovingPartMain
-                dc.l    Object_DestroyerMK2FragmentGroupMain
+                dc.l    Object_DestroyerMk2MovingPartMain
+                dc.l    Object_DestroyerMk2FragmentGroupMain
                 dc.l    Object_TransitionDebrisMain
                 dc.l    Boss_Epsilon1Main
                 dc.l    Anim_RunCallbackScript

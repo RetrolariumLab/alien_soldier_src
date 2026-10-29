@@ -33,8 +33,8 @@ Boss_Epsilon1TileArt:       binclude "data/artcomp/tiles_1233B4.bin"  ; was: til
 Boss_Epsilon1TileArt_End:                               ; was: tiles_1233B4_End
 Boss_JampanTileArt:         binclude "data/artcomp/tiles_12453E.bin"  ; was: tiles_12453E
 Boss_JampanTileArt_End:                                 ; was: tiles_12453E_End
-Boss_DestroyerMK2TileArt:   binclude "data/artcomp/tiles_124CCE.bin"  ; was: tiles_124CCE
-Boss_DestroyerMK2TileArt_End:                           ; was: tiles_124CCE_End
+Boss_DestroyerMk2TileArt:   binclude "data/artcomp/tiles_124CCE.bin"  ; was: tiles_124CCE
+Boss_DestroyerMk2TileArt_End:                           ; was: tiles_124CCE_End
 EntityType3ECTileArt:       binclude "data/artcomp/tiles_125902.bin"  ; entity type $3EC art  ; was: tiles_125902
                                         ; Referenced by EntityType3ECGraphicsLoadList
 EntityType3ECTileArt_End:                               ; was: tiles_125902_End
