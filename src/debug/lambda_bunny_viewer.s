@@ -28,9 +28,9 @@ Debug_LambdaBunnyViewerInitialize:                      ; was: sub_50FD0
                 movea.w a5,a4
                 move.w  #$300,(MetaspriteBaseTileWord).w
                 moveq   #$14,d7
-                movea.l #Boss_ValkirieMetaspriteDescriptors,a0
-                movea.l #Boss_ValkiriePartRadii,a1
-                movea.l #Boss_ValkiriePartLinks,a2
+                movea.l #Boss_LambdaBunnyMetaspriteDescriptors,a0
+                movea.l #Boss_LambdaBunnyPartRadii,a1
+                movea.l #Boss_LambdaBunnyPartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.w  #$3EC,(a5)
                 move.w  #$CC00,2(a5)

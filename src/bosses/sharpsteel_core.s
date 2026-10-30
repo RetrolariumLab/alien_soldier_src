@@ -41,7 +41,7 @@ Boss_SharpsteelStates:  dc.w    Boss_SharpsteelWaitForPlayerReadyState-Boss_Shar
                 dc.w    Boss_SharpsteelFarRangeBladeAttackState-Boss_SharpsteelStateReturn
                 dc.w    Boss_SharpsteelDiveAttackState-Boss_SharpsteelStateReturn
                 dc.w    Boss_SharpsteelPostDiveDelayState-Boss_SharpsteelStateReturn
-                dc.w    Boss_SharpsteelFallingShotCycleState-Boss_SharpsteelStateReturn
+                dc.w    Boss_SharpsteelShrimpCycleState-Boss_SharpsteelStateReturn
                 dc.w    Boss_SharpsteelWaitBeforeAttackSelectionState-Boss_SharpsteelStateReturn
                 dc.w    Boss_SharpsteelSelectDistanceAttackState-Boss_SharpsteelStateReturn
                 dc.w    Boss_SharpsteelWaitForComplexAlignmentState-Boss_SharpsteelStateReturn
@@ -185,7 +185,7 @@ Boss_SharpsteelAdvanceBladePartOffsetState:             ; was: loc_47E14
 Boss_SharpsteelFinishBladePartOffsetAdvance:
                 bclr    #3,$182(a5)
                 addq.w  #2,4(a5)
-                bsr.w   Boss_SharpsteelInitializeFallingShotCycle
+                bsr.w   Boss_SharpsteelInitializeShrimpCycle
 ; End of function Boss_SharpsteelWaitForPlayerAfterBladeEntranceState
 ; Accelerates the blade assembly while its fixed-point travel value remains nonnegative
 Boss_SharpsteelAccelerateBladeAssemblyState:            ; was: sub_47E36
@@ -284,7 +284,7 @@ Boss_SharpsteelPublishBladePartTargets:                 ; was: sub_47F24
                 rts
 ; End of function Boss_SharpsteelPublishBladePartTargets
 ; Initializes the vertical opening and later ten-shot falling-projectile cycle
-Boss_SharpsteelInitializeFallingShotCycle:              ; was: sub_47F3E
+Boss_SharpsteelInitializeShrimpCycle:                   ; was: sub_47F3E
                                         ; Boss_SharpsteelOpeningVerticalTurnState+F0   p
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -305,7 +305,7 @@ Boss_SharpsteelInitializeFallingShotCycle:              ; was: sub_47F3E
                 bsr.w   Boss_SharpsteelSetInnerBladeGroupSizes
                 moveq   #$18,d0
                 bra.w   Boss_SharpsteelSelectOuterBladeGroup
-; End of function Boss_SharpsteelInitializeFallingShotCycle
+; End of function Boss_SharpsteelInitializeShrimpCycle
 ; Loads the sixth blade-target history sample into the active target field
 Boss_SharpsteelLoadBladeTargetHistoryTail:              ; was: sub_47F9C
                                         ; Boss_SharpsteelInitializeAttackSelection+10   p
@@ -589,20 +589,20 @@ Boss_SharpsteelStopAfterDive:
                 move.w  a5,$4A(a5)
                 bsr.w   Boss_SharpsteelDisableCoreSegmentCollision
 ; End of function Boss_SharpsteelInitializePostDiveDelay
-; Waits after the dive, then selects a falling-shot cycle or the next phase
+; Waits after the dive, then selects a shrimp cycle or the next phase
 Boss_SharpsteelPostDiveDelayState:                      ; was: sub_482C2
                 subq.w  #1,$11C(a5)
                 bpl.w   Boss_SharpsteelStateReturn
 Boss_SharpsteelSelectPostDiveCycle:
                 subq.w  #1,$35C(a5)
-                bpl.s   Boss_SharpsteelInitializeFallingShotCycleFromDelay
+                bpl.s   Boss_SharpsteelInitializeShrimpCycleFromDelay
                 move.b  (RandomNumberState).w,d0
                 andi.w  #3,d0
                 addq.w  #6,d0
                 move.w  d0,$35C(a5)
-                bra.w   Boss_SharpsteelInitializeFallingShotCycleFromSelection
+                bra.w   Boss_SharpsteelInitializeShrimpCycleFromSelection
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelInitializeFallingShotCycleFromDelay:
+Boss_SharpsteelInitializeShrimpCycleFromDelay:
                 move.w  #6,4(a5)
                 clr.w   $58(a5)
                 move.w  #$FFFF,$C(a5)
@@ -619,7 +619,7 @@ Boss_SharpsteelInitializeFallingShotCycleFromDelay:
                 bsr.w   Boss_SharpsteelConfigureBladeGraphicsSetB
                 bsr.w   Boss_SharpsteelClearBladePartPriorityBits
                 bsr.w   Boss_SharpsteelSetOuterBladeGroupSizes
-                bsr.w   Boss_SharpsteelSpawnTenFallingShots
+                bsr.w   Boss_SharpsteelSpawnTenShrimp
                 move.b  #$4C,d0                         ; 'L'
                 jsr     (Sound_QueueSFXRequest).l
 ; End of function Boss_SharpsteelPostDiveDelayState
@@ -689,24 +689,24 @@ Boss_SharpsteelUpdateBladeAssemblySweepPose:
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelInitializeFallingShotCycleFromSelection:
+Boss_SharpsteelInitializeShrimpCycleFromSelection:
                 move.w  #$26,4(a5)                      ; '&'
-                bsr.w   Boss_SharpsteelInitializeFallingShotCycle
+                bsr.w   Boss_SharpsteelInitializeShrimpCycle
 ; End of function Boss_SharpsteelOpeningVerticalTurnState
-; Runs the falling-shot cycle until its fixed-point travel accumulator expires
-Boss_SharpsteelFallingShotCycleState:                   ; was: sub_4843A
+; Runs the shrimp cycle until its fixed-point travel accumulator expires
+Boss_SharpsteelShrimpCycleState:                        ; was: sub_4843A
                 subi.l  #$22000,$2FC(a5)
-                bmi.s   Boss_SharpsteelFinishFallingShotCycle
+                bmi.s   Boss_SharpsteelFinishShrimpCycle
                 cmpi.w  #$60,$2FC(a5)                   ; '`'
-                bmi.s   Boss_SharpsteelUpdateFallingShotCyclePose
-                bsr.w   Boss_SharpsteelFallingShotCycleThresholdHook
-Boss_SharpsteelUpdateFallingShotCyclePose:
+                bmi.s   Boss_SharpsteelUpdateShrimpCyclePose
+                bsr.w   Boss_SharpsteelShrimpCycleThresholdHook
+Boss_SharpsteelUpdateShrimpCyclePose:
                 bsr.w   Boss_SharpsteelLoadBladeTargetHistoryTail
                 lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
 ; ---------------------------------------------------------------------------
-Boss_SharpsteelFinishFallingShotCycle:
+Boss_SharpsteelFinishShrimpCycle:
                 addq.w  #2,4(a5)
                 move.w  #$20,$11C(a5)                   ; ' '
                 move.b  #$10,$E1(a5)
@@ -718,10 +718,10 @@ Boss_SharpsteelWaitBeforeAttackSelectionState:          ; was: loc_4846E
                 lea     Boss_SharpsteelAssemblyDelayPoses(pc),a1
                 nop
                 bra.w   Boss_SharpsteelUpdateBladeAssembly
-; End of function Boss_SharpsteelFallingShotCycleState
-Boss_SharpsteelFallingShotCycleThresholdHook:
+; End of function Boss_SharpsteelShrimpCycleState
+Boss_SharpsteelShrimpCycleThresholdHook:
                 rts
-; End of function Boss_SharpsteelFallingShotCycleThresholdHook
+; End of function Boss_SharpsteelShrimpCycleThresholdHook
 
 ; Initializes state $2C and its position, velocity, hitboxes, and animation data
 Boss_SharpsteelInitializeComplexPhase:

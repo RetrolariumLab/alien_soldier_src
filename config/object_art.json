@@ -4,23 +4,35 @@
   "mappings": {
     "Boss_AntroidBlinkAlternateMapping": {
       "attribute": "$AB00",
-      "art": [["Boss_AntroidTileArt", "$6000"]]
+      "art": [["Boss_AntroidTileArt", "$6000"]],
+      "palettes": [
+        ["Boss_AntroidPaletteCommand", 0],
+        ["PostStageFullPaletteCommand", 0],
+        ["Boss_BackStringerPaletteCommand", 0]
+      ]
     },
     "Boss_AntroidBlinkDefaultMapping": {
       "attribute": "$AB00",
-      "art": [
-        ["Boss_AntroidTileArt", "$6000"],
-        ["Boss_JetsripperTileArt", "$6000"]
-      ],
+      "art": [["Boss_AntroidTileArt", "$6000"]],
       "palettes": [["Boss_AntroidPaletteCommand", 0]]
     },
     "Boss_BackStringerPartAngleMapping0": {
       "attribute": "$8B00",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerPartAngleMapping1": {
       "attribute": "$8B00",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerPartAngleMapping2": {
       "attribute": "$9300",
@@ -32,11 +44,21 @@
     },
     "Boss_BackStringerPartAngleMapping3": {
       "attribute": "$9300",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerPartAngleMapping4": {
       "attribute": "$9300",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerPartAngleMapping5": {
       "attribute": "$9300",
@@ -73,7 +95,12 @@
     },
     "Boss_BackStringerRotationMappingA1": {
       "attribute": "$9B00",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerRotationMappingA2": {
       "attribute": "$9B00",
@@ -111,11 +138,21 @@
     },
     "Boss_BackStringerRotationMappingA6": {
       "attribute": "$8B00",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["Boss_BackStringerPaletteCommand", 0],
+        ["Boss_ShieldViperPaletteCommand", 0],
+        ["SevenForceValkiriePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerRotationMappingA7": {
       "attribute": "$8300",
-      "art": [["Boss_BackStringerTileArt", "$6000"]]
+      "art": [["Boss_BackStringerTileArt", "$6000"]],
+      "palettes": [
+        ["Boss_BackStringerPaletteCommand", 0],
+        ["Boss_ShieldViperPaletteCommand", 0],
+        ["SevenForceValkiriePaletteCommand", 0]
+      ]
     },
     "Boss_BackStringerRotationMappingC0": {
       "attribute": "$8B00",
@@ -253,7 +290,8 @@
     },
     "Boss_DeepStriderRotationMappingA3": {
       "attribute": "$6B00",
-      "art": [["Boss_DeepStriderTileArt", "$6000"]]
+      "art": [["Boss_DeepStriderTileArt", "$6000"]],
+      "palettes": [["Boss_DeepStriderPaletteCommand", 0]]
     },
     "Boss_DeepStriderRotationMappingB0": {
       "attribute": "$6B00",
@@ -275,7 +313,8 @@
     },
     "Boss_DeepStriderRotationMappingB3": {
       "attribute": "$6B00",
-      "art": [["Boss_DeepStriderTileArt", "$6000"]]
+      "art": [["Boss_DeepStriderTileArt", "$6000"]],
+      "palettes": [["Boss_DeepStriderPaletteCommand", 0]]
     },
     "Boss_DeepStriderRotationMappingC0": {
       "attribute": "$7300",
@@ -566,15 +605,18 @@
     },
     "Boss_JokerRotationMappingA1": {
       "attribute": "$9B00",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [["Boss_JokerPaletteCommand", 0]]
     },
     "Boss_JokerRotationMappingA2": {
       "attribute": "$9300",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [["Boss_JokerPaletteCommand", 0]]
     },
     "Boss_JokerRotationMappingA3": {
       "attribute": "$9B00",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [["Boss_JokerPaletteCommand", 0]]
     },
     "Boss_JokerRotationMappingA4": {
       "attribute": "$9B00",
@@ -647,7 +689,12 @@
     },
     "Boss_JokerRotationMappingE1": {
       "attribute": "$8300",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 552],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_JokerRotationMappingE2": {
       "attribute": "$8300",
@@ -660,11 +707,17 @@
     },
     "Boss_JokerRotationMappingE3": {
       "attribute": "$9300",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [["Boss_JokerPaletteCommand", 0]]
     },
     "Boss_JokerRotationMappingE4": {
       "attribute": "$9300",
-      "art": [["Boss_JokerTileArt", "$6000"]]
+      "art": [["Boss_JokerTileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 552],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Boss_JokerRotationMappingE5": {
       "attribute": "$9300",
@@ -683,6 +736,34 @@
       "attribute": "$9300",
       "art": [["Boss_JokerTileArt", "$6000"]],
       "palettes": [["Boss_JokerPaletteCommand", 0]]
+    },
+    "Boss_LambdaBunnyMetaspriteMappingA": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Boss_LambdaBunnyMetaspriteMappingB": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Boss_LambdaBunnyMetaspriteMappingC": {
+      "attribute": "$C300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Boss_LambdaBunnyMetaspriteMappingD": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Boss_LambdaBunnyPackedSpriteMappings": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["Boss_LambdaBunnyPaletteCommand", 0]
+      ]
     },
     "Boss_SharpsteelBladeGraphicsAMapping0": {
       "attribute": "$CB00",
@@ -973,11 +1054,13 @@
     },
     "Boss_SniperHoneyviperTentacleSpriteMapping02": {
       "attribute": "$D300",
-      "art": [["Boss_SniperHoneyviperTileArt", "$6000"]]
+      "art": [["Boss_SniperHoneyviperTileArt", "$6000"]],
+      "palettes": [["Boss_SniperHoneyviperPaletteCommand", 0]]
     },
     "Boss_SniperHoneyviperTentacleSpriteMapping03": {
       "attribute": "$D300",
-      "art": [["Boss_SniperHoneyviperTileArt", "$6000"]]
+      "art": [["Boss_SniperHoneyviperTileArt", "$6000"]],
+      "palettes": [["Boss_SniperHoneyviperPaletteCommand", 0]]
     },
     "Boss_SniperHoneyviperTentacleSpriteMapping04": {
       "attribute": "$CB00",
@@ -1383,6 +1466,40 @@
         ["Boss_VictorPaletteCommand", 0]
       ]
     },
+    "Boss_ZLeoCoreMappingA": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoCoreMappingB": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoCoreMappingC": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [
+        ["Boss_ZLeoPaletteCommands", 0],
+        ["Boss_VictorPaletteCommand", 0]
+      ]
+    },
+    "Boss_ZLeoCoreMappingD": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
+    "Boss_ZLeoCoreMappingE": {
+      "attribute": "$4380",
+      "art": [["Boss_ZLeoTileArt1", "$7000"]],
+      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
+    },
     "Boss_ZLeoIntroFarSidePartMapping": {
       "attribute": "$4380",
       "art": [
@@ -1415,42 +1532,12 @@
       "art": [["Boss_ZLeoTileArt1", "$7000"]],
       "palettes": [["Boss_ZLeoPaletteCommands", 0]]
     },
-    "Boss_ZLeoValkirieForceSharedMappingA": {
-      "attribute": "$4380",
-      "art": [["Boss_ZLeoTileArt1", "$7000"]],
-      "palettes": [
-        ["Boss_ZLeoPaletteCommands", 0],
-        ["Boss_VictorPaletteCommand", 0]
-      ]
-    },
-    "Boss_ZLeoValkirieForceSharedMappingB": {
-      "attribute": "$4380",
-      "art": [["Boss_ZLeoTileArt1", "$7000"]],
-      "palettes": [
-        ["Boss_ZLeoPaletteCommands", 0],
-        ["Boss_VictorPaletteCommand", 0]
-      ]
-    },
-    "Boss_ZLeoValkirieForceSharedMappingC": {
-      "attribute": "$4380",
-      "art": [["Boss_ZLeoTileArt1", "$7000"]],
-      "palettes": [
-        ["Boss_ZLeoPaletteCommands", 0],
-        ["Boss_VictorPaletteCommand", 0]
-      ]
-    },
-    "Boss_ZLeoValkirieForceSharedMappingD": {
-      "attribute": "$4380",
-      "art": [["Boss_ZLeoTileArt1", "$7000"]],
-      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
-    },
-    "Boss_ZLeoValkirieForceSharedMappingE": {
-      "attribute": "$4380",
-      "art": [["Boss_ZLeoTileArt1", "$7000"]],
-      "palettes": [["Boss_ZLeoPaletteCommands", 0]]
-    },
     "Credits_XiTigerSpriteFrame": {
-      "attribute": "$8000"
+      "attribute": "$8000",
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["SireneAndLateStagePaletteCommandBank", 230]
+      ]
     },
     "Cutscene_XiTigerEntranceAirborneMapping": {
       "attribute": "$EC00",
@@ -1474,7 +1561,28 @@
     },
     "Cutscene_XiTigerEntrancePreJumpAndLandingMapping": {
       "attribute": "$EC00",
-      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]]
+      "art": [["Stage9XiTigerEntranceTileArt", "$8000"]],
+      "palettes": [["XiTigerCutscenePaletteCommand", 0]]
+    },
+    "Debug_LambdaBunnyViewerExtendedGunMapping": {
+      "attribute": "$C300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Debug_LambdaBunnyViewerFixedPartMapping": {
+      "attribute": "$C300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Debug_LambdaBunnyViewerPartPairMappingA": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
+    },
+    "Debug_LambdaBunnyViewerPartPairMappingC": {
+      "attribute": "$4300",
+      "art": [["Boss_LambdaBunnyTileArt", "$6000"]],
+      "palettes": [["Boss_LambdaBunnyPaletteCommand", 0]]
     },
     "Effect_SpriteFrame00": {
       "attribute": "$8480",
@@ -1488,7 +1596,12 @@
     },
     "Effect_SpriteFrame02": {
       "attribute": "$8480",
-      "art": [["SharedSceneAndStageTileArt9000", "$9000"]]
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 78],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Effect_SpriteFrame03": {
       "attribute": "$8480",
@@ -1645,7 +1758,12 @@
     },
     "Effect_SpriteFrame41": {
       "attribute": "$8480",
-      "art": [["SharedSceneAndStageTileArt9000", "$9000"]]
+      "art": [["SharedSceneAndStageTileArt9000", "$9000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Effect_SpriteFrame42": {
       "attribute": "$8480",
@@ -1773,15 +1891,39 @@
     },
     "EndingPlanetDebrisSpriteMappingA": {
       "attribute": "$8100",
-      "art": [["EndingSequenceTileArt2000", "$2000"]]
+      "art": [["EndingSequenceTileArt2000", "$2000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 206],
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage17PaletteCommandBank", 32],
+        ["Stage17PaletteCommandBank", 96],
+        ["Stage17PaletteCommandBank", 160]
+      ]
     },
     "EndingPlanetDebrisSpriteMappingB": {
       "attribute": "$8100",
-      "art": [["EndingSequenceTileArt2000", "$2000"]]
+      "art": [["EndingSequenceTileArt2000", "$2000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 206],
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage17PaletteCommandBank", 32],
+        ["Stage17PaletteCommandBank", 96],
+        ["Stage17PaletteCommandBank", 160]
+      ]
     },
     "EndingPlanetDebrisSpriteMappingC": {
       "attribute": "$8100",
-      "art": [["EndingSequenceTileArt2000", "$2000"]]
+      "art": [["EndingSequenceTileArt2000", "$2000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 206],
+        ["Stage17PaletteCommandBank", 0],
+        ["Stage17PaletteCommandBank", 32],
+        ["Stage17PaletteCommandBank", 96],
+        ["Stage17PaletteCommandBank", 160]
+      ]
     },
     "EndingPlanetSpriteMappingsB": {
       "attribute": "$8900",
@@ -1835,11 +1977,21 @@
     },
     "Enemy_BeakWalkerSpriteMappingL": {
       "attribute": "$0400",
-      "art": [["StageSharedTileArtSource0A", "$8000"]]
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 78],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Enemy_BeakWalkerSpriteMappingM": {
       "attribute": "$0400",
-      "art": [["StageSharedTileArtSource0A", "$8000"]]
+      "art": [["StageSharedTileArtSource0A", "$8000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 78],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Enemy_BeeSpriteMappingA": {
       "attribute": "$8C00",
@@ -1993,6 +2145,21 @@
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
     },
+    "Enemy_FishSpriteMappingA": {
+      "attribute": "$8000",
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Enemy_FishSpriteMappingB": {
+      "attribute": "$8800",
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
+    "Enemy_FishSpriteMappingC": {
+      "attribute": "$8800",
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
+    },
     "Enemy_FlySpriteMapping0": {
       "attribute": "$8B00",
       "art": [
@@ -2006,7 +2173,6 @@
       "attribute": "$9B00",
       "art": [
         ["Boss_BackStringerTileArt", "$6000"],
-        ["StageSharedTileArtSource0C", "$6000"],
         ["StageSharedTileArtSource0C", "$7000"],
         ["StageSharedTileArtSource0C", "$8000"]
       ],
@@ -2015,9 +2181,6 @@
     "Enemy_FlySpriteMapping2": {
       "attribute": "$9B00",
       "art": [
-        ["Boss_BackStringerTileArt", "$6000"],
-        ["Boss_DestroyerMk2TileArt", "$6000"],
-        ["Stage9XiTigerEntranceTileArt", "$8000"],
         ["StageSharedTileArtSource0C", "$6000"],
         ["StageSharedTileArtSource0C", "$7000"],
         ["StageSharedTileArtSource0C", "$8000"]
@@ -2027,8 +2190,6 @@
     "Enemy_FlySpriteMapping3": {
       "attribute": "$9B00",
       "art": [
-        ["Boss_BackStringerTileArt", "$6000"],
-        ["Stage9XiTigerEntranceTileArt", "$8000"],
         ["StageSharedTileArtSource0C", "$6000"],
         ["StageSharedTileArtSource0C", "$7000"],
         ["StageSharedTileArtSource0C", "$8000"]
@@ -2157,7 +2318,8 @@
     },
     "Enemy_GunCraftSpriteMapping01": {
       "attribute": "$0400",
-      "art": [["Stage22And24TileArt", "$8000"]]
+      "art": [["Stage22And24TileArt", "$8000"]],
+      "palettes": [["DestroyerProtoIntroPaletteCommands", 0]]
     },
     "Enemy_GunCraftSpriteMapping02": {
       "attribute": "$0400",
@@ -2173,7 +2335,6 @@
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
-        ["StageSharedTileArtSource04", "$8000"],
         ["StageSharedTileArtSource06", "$8000"]
       ],
       "palettes": [
@@ -2186,7 +2347,6 @@
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
-        ["StageSharedTileArtSource04", "$8000"],
         ["StageSharedTileArtSource06", "$8000"]
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
@@ -2195,7 +2355,6 @@
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
-        ["StageSharedTileArtSource04", "$8000"],
         ["StageSharedTileArtSource06", "$8000"]
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
@@ -2204,7 +2363,6 @@
       "attribute": "$0B80",
       "art": [
         ["StageSharedTileArtSource04", "$7000"],
-        ["StageSharedTileArtSource04", "$8000"],
         ["StageSharedTileArtSource06", "$8000"]
       ],
       "palettes": [["SharedStagePaletteCommand", 0]]
@@ -2235,15 +2393,30 @@
     },
     "Enemy_GunnerSpriteMapping30": {
       "attribute": "$8C00",
-      "art": [["StageSharedTileArtSource04", "$8000"]]
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Enemy_GunnerSpriteMapping31": {
       "attribute": "$8C00",
-      "art": [["StageSharedTileArtSource04", "$8000"]]
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Enemy_GunnerSpriteMapping32": {
       "attribute": "$8C00",
-      "art": [["StageSharedTileArtSource04", "$8000"]]
+      "art": [["StageSharedTileArtSource04", "$8000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Enemy_RisingAlienSpriteMapping00": {
       "attribute": "$02DF",
@@ -2303,18 +2476,18 @@
       "art": [["Stage7InitialTileArt", "$5BE0"]],
       "palettes": [["CreditsAndEarlyStagePaletteCommandBank", 552]]
     },
-    "Enemy_Stage10BeetleSpriteMappingA": {
+    "Enemy_ShrimpSpriteMappingA": {
       "attribute": "$8000",
       "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "Enemy_Stage10BeetleSpriteMappingB": {
-      "attribute": "$8800",
+    "Enemy_ShrimpSpriteMappingB": {
+      "attribute": "$9000",
       "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
-    "Enemy_Stage10BeetleSpriteMappingC": {
-      "attribute": "$8800",
+    "Enemy_ShrimpSpriteMappingC": {
+      "attribute": "$9000",
       "art": [["Stage10To13TileArt0000", "$0000"]],
       "palettes": [["CommonPaletteCommand", 0]]
     },
@@ -2330,10 +2503,8 @@
     },
     "FrontendSegaScreenSpriteMapping": {
       "attribute": "$C200",
-      "art": [
-        ["Credits_SegaTileArt", "$A000"],
-        ["SegaScreenTileArt", "$A000"]
-      ]
+      "art": [["SegaScreenTileArt", "$A000"]],
+      "tables": [["SegaScreenPalette", 2]]
     },
     "Midgame_LightningSpriteMapping00": {
       "attribute": "$01E8",
@@ -2357,7 +2528,13 @@
     },
     "Midgame_LightningSpriteMapping04": {
       "attribute": "$01E8",
-      "art": [["Stage8And9TileArt2", "$3D00"]]
+      "art": [["Stage8And9TileArt2", "$3D00"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Boss_FlyingNeoPaletteCommands", 32],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Midgame_LightningSpriteMapping05": {
       "attribute": "$01E8",
@@ -2409,6 +2586,11 @@
       "art": [
         ["SharedMenuType3DataF680", "$F680"],
         ["SharedSceneAndStageTileArt9000", "$9000"]
+      ],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 452],
+        ["SharedStagePaletteCommand", 0]
       ]
     },
     "Pickup_WeaponCapsuleSpriteMapping00": {
@@ -2862,10 +3044,7 @@
     },
     "SevenForceRotationSpriteFrame00": {
       "attribute": "$6300",
-      "art": [
-        ["SevenForceValkirieTileArt", "$6000"],
-        ["Stage20TileArt", "$6000"]
-      ],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["SevenForceValkiriePaletteCommand", 0],
         ["EntityType3F4PaletteCommands", 0]
@@ -2900,26 +3079,17 @@
     },
     "SevenForceRotationSpriteFrame05": {
       "attribute": "$6B00",
-      "art": [
-        ["SevenForceValkirieTileArt", "$6000"],
-        ["Stage20TileArt", "$6000"]
-      ],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [["EntityType3F4PaletteCommands", 0]]
     },
     "SevenForceRotationSpriteFrame06": {
       "attribute": "$6B00",
-      "art": [
-        ["SevenForceValkirieTileArt", "$6000"],
-        ["Stage20TileArt", "$6000"]
-      ],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [["SevenForceValkiriePaletteCommand", 0]]
     },
     "SevenForceRotationSpriteFrame07": {
       "attribute": "$6B00",
-      "art": [
-        ["SevenForceValkirieTileArt", "$6000"],
-        ["Stage20TileArt", "$6000"]
-      ],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [["EntityType3F4PaletteCommands", 0]]
     },
     "SevenForceRotationSpriteFrame08": {
@@ -2967,10 +3137,7 @@
     },
     "SevenForceRotationSpriteFrame13": {
       "attribute": "$7300",
-      "art": [
-        ["Boss_DestroyerMk2TileArt", "$6000"],
-        ["SevenForceValkirieTileArt", "$6000"]
-      ],
+      "art": [["SevenForceValkirieTileArt", "$6000"]],
       "palettes": [
         ["Stage17PaletteCommandBank", 0],
         ["Stage15PaletteCommands", 0],
@@ -3177,21 +3344,6 @@
         ["Boss_Epsilon1PaletteCommands", 0]
       ]
     },
-    "SharedFloaterDebrisProjectileSpriteMappingA": {
-      "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]],
-      "palettes": [["CommonPaletteCommand", 0]]
-    },
-    "SharedFloaterDebrisProjectileSpriteMappingB": {
-      "attribute": "$9000",
-      "art": [["Stage10To13TileArt0000", "$0000"]],
-      "palettes": [["CommonPaletteCommand", 0]]
-    },
-    "SharedFloaterDebrisProjectileSpriteMappingC": {
-      "attribute": "$9000",
-      "art": [["Stage10To13TileArt0000", "$0000"]],
-      "palettes": [["CommonPaletteCommand", 0]]
-    },
     "SharedProjectileSpriteMappingB": {
       "attribute": "$C000",
       "art": [["Stage10To13TileArt0000", "$0000"]],
@@ -3253,19 +3405,23 @@
     },
     "Stage12_TeddyBearSpriteMappingA": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
     },
     "Stage12_TeddyBearSpriteMappingB": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
     },
     "Stage12_TeddyBearSpriteMappingC": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
     },
     "Stage12_TeddyBearSpriteMappingD": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [["CommonPaletteCommand", 0]]
     },
     "Stage12_TeddyBearSpriteMappingI": {
       "attribute": "$0800",
@@ -3284,7 +3440,12 @@
     },
     "Stage12_TeddyBearSpriteMappingL": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 78],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Stage12_TeddyBearSpriteMappingM": {
       "attribute": "$8000",
@@ -3293,7 +3454,12 @@
     },
     "Stage12_TeddyBearSpriteMappingN": {
       "attribute": "$8000",
-      "art": [["Stage10To13TileArt0000", "$0000"]]
+      "art": [["Stage10To13TileArt0000", "$0000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 78],
+        ["SharedStagePaletteCommand", 0]
+      ]
     },
     "Stage15_FallingRockSpriteMapping": {
       "attribute": "$A300",
@@ -3305,7 +3471,13 @@
     },
     "Stage15_FragmentEmitterSpriteMapping": {
       "attribute": "$A300",
-      "art": [["Stage15TileArt", "$6000"]]
+      "art": [["Stage15TileArt", "$6000"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["FlyingNeoAndMidgamePaletteCommandBank", 142],
+        ["Stage15PaletteCommands", 0],
+        ["Stage15PaletteCommands", 32]
+      ]
     },
     "Stage18And19_MovingPlatformSpriteMapping": {
       "attribute": "$4470",
@@ -3466,9 +3638,16 @@
     },
     "XiTigerCutscene_DisplayObjectSpriteMapping": {
       "attribute": "$E3C0",
-      "art": [["XiTigerCutsceneTileArt7800", "$7800"]]
+      "art": [["XiTigerCutsceneTileArt7800", "$7800"]],
+      "palettes": [
+        ["CommonPaletteCommand", 0],
+        ["CreditsAndEarlyStagePaletteCommandBank", 618],
+        ["Boss_FlyingNeoPaletteCommands", 32],
+        ["SharedStagePaletteCommand", 0]
+      ]
     }
   },
+  "outlines": ["Boss_LovePenguinSecondFormSpriteMapping"],
   "spawns": [
     {
       "list": "Stage1_ObjectSpawnList",
@@ -5158,7 +5337,7 @@
       "index": 13,
       "type": "$2CC",
       "parameter": "$0",
-      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "mapping": "Enemy_ShrimpSpriteMappingA",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -5167,7 +5346,7 @@
       "index": 14,
       "type": "$2CC",
       "parameter": "$0",
-      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "mapping": "Enemy_ShrimpSpriteMappingA",
       "frame": 0,
       "attribute": "$8000"
     },
@@ -5203,7 +5382,7 @@
       "index": 18,
       "type": "$2CC",
       "parameter": "$0",
-      "mapping": "SharedFloaterDebrisProjectileSpriteMappingA",
+      "mapping": "Enemy_ShrimpSpriteMappingA",
       "frame": 0,
       "attribute": "$8000"
     },

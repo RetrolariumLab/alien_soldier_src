@@ -23,9 +23,9 @@ Boss_ValkirieForceInit:                                 ; was: sub_53528
                 movea.w a5,a4
                 move.w  #$300,(MetaspriteBaseTileWord).w
                 moveq   #$19,d7
-                movea.l #Boss_ZLeoValkirieForceSharedMetaspriteData,a0
-                movea.l #Boss_ZLeoValkirieForceSharedMetaspriteData,a1
-                movea.l #Boss_ZLeoValkirieForceSharedMetaspriteData,a2
+                movea.l #Boss_ZLeoCoreMetaspriteData,a0
+                movea.l #Boss_ZLeoCoreMetaspriteData,a1
+                movea.l #Boss_ZLeoCoreMetaspriteData,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
                 move.w  #$3FC,(a5)
                 move.w  #$CC00,2(a5)
@@ -205,7 +205,7 @@ Boss_ValkirieForceApplyInterpolatedPartAngles:          ; was: loc_53646
 ; End of function Boss_ValkirieForceUpdatePose
 ; Calculates nineteen-channel interpolation deltas for the next pose keyframe
 Boss_ValkirieForceCalculatePoseDeltas:                  ; was: sub_53758
-                lea     (Boss_ZLeoValkirieForceSharedMetaspriteData).l,a1
+                lea     (Boss_ZLeoCoreMetaspriteData).l,a1
                 moveq   #$12,d7
                 movea.w #(SharedScratchLong0-M68K_RAM),a2
                 move.w  d3,$C(a5)

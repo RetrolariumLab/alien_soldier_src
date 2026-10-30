@@ -109,7 +109,7 @@ Boss_GustheadDeactivateScrollingDebris:                 ; was: loc_40286
                 bset    #4,2(a5)
                 rts
 ; End of function Boss_GustheadUpdateScrollingDebris
-; Spawns falling debris at the arena edge selected by scroll direction
+; Spawns a shrimp or a fish at the arena edge selected by scroll direction
 Boss_GustheadSpawnEdgeDebris:                           ; was: sub_4028E
                 move.w  (FrameCounter).w,d0
                 andi.w  #$1F,d0
@@ -147,15 +147,15 @@ Boss_GustheadAssignRandomDebrisMapping:                 ; was: sub_402F8
                 andi.w  #3,d0
                 add.w   d0,d0
                 add.w   d0,d0
-                move.l  Boss_GustheadRandomDebrisMappings(pc,d0.w),8(a0)
+                move.l  Boss_GustheadShrimpAndFishAnimations(pc,d0.w),8(a0)
                 move.w  #$8000,$E(a0)
                 rts
 ; End of function Boss_GustheadAssignRandomDebrisMapping
 ; ---------------------------------------------------------------------------
-Boss_GustheadRandomDebrisMappings:  dc.l    SharedFloaterDebrisProjectileAlternating5And4Animation  ; was: off_40318
-                dc.l    Enemy_Stage10BeetleLoopAnimation
-                dc.l    SharedFloaterDebrisProjectileAlternating3And2Animation
-                dc.l    Enemy_Stage10BeetleLoopAnimation
+Boss_GustheadShrimpAndFishAnimations:   dc.l    Enemy_ShrimpSlowAnimation  ; was: off_40318
+                dc.l    Enemy_FishLoopAnimation
+                dc.l    Enemy_ShrimpFastAnimation
+                dc.l    Enemy_FishLoopAnimation
 
 ; Handles collision and state dispatch for type-$1E8 edge debris
 Boss_GustheadEdgeDebrisMain:                            ; was: sub_40328

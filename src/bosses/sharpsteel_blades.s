@@ -342,7 +342,7 @@ Boss_SharpsteelSelectBladeGraphicsTableA:
 ; End of function Boss_SharpsteelConfigureBladeGraphicsSetA
 ; Configures blade-part mappings and tile attributes for graphics set B
 Boss_SharpsteelConfigureBladeGraphicsSetB:              ; was: sub_488A0
-                                        ; Boss_SharpsteelInitializeFallingShotCycle+4A   p
+                                        ; Boss_SharpsteelInitializeShrimpCycle+4A   p
                 move.w  #$EB90,$24E(a5)
                 move.w  #$E00,$248(a5)
                 move.w  #$F0F4,$24A(a5)

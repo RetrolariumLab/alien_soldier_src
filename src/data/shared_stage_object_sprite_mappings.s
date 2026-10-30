@@ -10,20 +10,20 @@ SharedProjectileSpriteMappingD: dc.w    $E91B, $A00, $F4F4  ; was: word_1A0CB8
                                         ; ROM:001A0EA2   o
 ; Mappings shared by the Stage 12 floater, Gusthead debris, and a Sharpsteel projectile
 
-SharedFloaterDebrisProjectileSpriteMappingA:    dc.w    $C950, $B00, $F0F4  ; was: word_1A0CBE
+Enemy_ShrimpSpriteMappingA: dc.w    $C950, $B00, $F0F4  ; was: word_1A0CBE
                                         ; ROM:001A0F22   o
-SharedFloaterDebrisProjectileSpriteMappingB:    dc.w    $C95C, $B00, $F0F4  ; was: word_1A0CC4
+Enemy_ShrimpSpriteMappingB: dc.w    $C95C, $B00, $F0F4  ; was: word_1A0CC4
                                         ; ROM:001A0F32   o
-SharedFloaterDebrisProjectileSpriteMappingC:    dc.w    $C15C, $B00, $F0F4  ; was: word_1A0CCA
+Enemy_ShrimpSpriteMappingC: dc.w    $C15C, $B00, $F0F4  ; was: word_1A0CCA
                                         ; ROM:001A0F3A   o
 ; Direct mappings for individual stage objects
 
 Stage10And12_MovingPlatformSpriteMapping:   dc.w    $6170, $E00, $F8E0  ; was: word_1A0CD0
                 dc.w    $E970, $E00, $F800
-Enemy_Stage10BeetleSpriteMappingA:  dc.w    $C949, $800, $FCF4  ; was: word_1A0CDC
+Enemy_FishSpriteMappingA:   dc.w    $C949, $800, $FCF4  ; was: word_1A0CDC
                                         ; ROM:001A0F4A   o
-Enemy_Stage10BeetleSpriteMappingB:  dc.w    $D94C, $800, $FAF2  ; was: word_1A0CE2
-Enemy_Stage10BeetleSpriteMappingC:  dc.w    $C94C, $800, $FEF2  ; was: word_1A0CE8
+Enemy_FishSpriteMappingB:   dc.w    $D94C, $800, $FAF2  ; was: word_1A0CE2
+Enemy_FishSpriteMappingC:   dc.w    $C94C, $800, $FEF2  ; was: word_1A0CE8
 ; Stage 12 Teddy Bear mapping group
 
 Stage12_TeddyBearSpriteMappingA:    dc.w    $497C, $900, $ECF2  ; was: word_1A0CEE
@@ -191,38 +191,38 @@ Stage12_TeddyBearAnimationVariantB: dc.w    Stage12_TeddyBearSpriteMappingG-*  ;
                 dc.w    2
                 dc.w    Stage12_TeddyBearAnimationVariantB-*
                 dc.w    0
-SharedFloaterDebrisProjectileAlternating5And4Animation: dc.w    SharedFloaterDebrisProjectileSpriteMappingA-*  ; was: off_1A0F1A
-                                        ; ROM:Boss_GustheadRandomDebrisMappings   o
+Enemy_ShrimpSlowAnimation:  dc.w    Enemy_ShrimpSpriteMappingA-*  ; was: off_1A0F1A
+                                        ; ROM:Boss_GustheadShrimpAndFishAnimations   o
                 dc.w    5
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingB-*
+                dc.w    Enemy_ShrimpSpriteMappingB-*
                 dc.w    4
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingA-*
+                dc.w    Enemy_ShrimpSpriteMappingA-*
                 dc.w    5
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingC-*
+                dc.w    Enemy_ShrimpSpriteMappingC-*
                 dc.w    4
-                dc.w    SharedFloaterDebrisProjectileAlternating5And4Animation-*
+                dc.w    Enemy_ShrimpSlowAnimation-*
                 dc.w    0
-SharedFloaterDebrisProjectileAlternating3And2Animation: dc.w    SharedFloaterDebrisProjectileSpriteMappingA-*  ; was: off_1A0F2E
+Enemy_ShrimpFastAnimation:  dc.w    Enemy_ShrimpSpriteMappingA-*  ; was: off_1A0F2E
                                         ; ROM:00040320   o
                 dc.w    3
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingB-*
+                dc.w    Enemy_ShrimpSpriteMappingB-*
                 dc.w    2
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingA-*
+                dc.w    Enemy_ShrimpSpriteMappingA-*
                 dc.w    3
-                dc.w    SharedFloaterDebrisProjectileSpriteMappingC-*
+                dc.w    Enemy_ShrimpSpriteMappingC-*
                 dc.w    2
-                dc.w    SharedFloaterDebrisProjectileAlternating3And2Animation-*
+                dc.w    Enemy_ShrimpFastAnimation-*
                 dc.w    0
-Enemy_Stage10BeetleLoopAnimation:   dc.w    Enemy_Stage10BeetleSpriteMappingA-*  ; was: off_1A0F42
-                                        ; Enemy_Stage10BeetleController+2C   o
+Enemy_FishLoopAnimation:    dc.w    Enemy_FishSpriteMappingA-*  ; was: off_1A0F42
+                                        ; Enemy_FishController+2C   o
                 dc.w    2
-                dc.w    Enemy_Stage10BeetleSpriteMappingB-*
+                dc.w    Enemy_FishSpriteMappingB-*
                 dc.w    3
-                dc.w    Enemy_Stage10BeetleSpriteMappingA-*
+                dc.w    Enemy_FishSpriteMappingA-*
                 dc.w    2
-                dc.w    Enemy_Stage10BeetleSpriteMappingC-*
+                dc.w    Enemy_FishSpriteMappingC-*
                 dc.w    3
-                dc.w    Enemy_Stage10BeetleLoopAnimation-*
+                dc.w    Enemy_FishLoopAnimation-*
                 dc.w    0
 Stage12_TeddyBearAnimationVariantC: dc.w    Stage12_TeddyBearSpriteMappingO-*  ; was: off_1A0F56
                 dc.w    9

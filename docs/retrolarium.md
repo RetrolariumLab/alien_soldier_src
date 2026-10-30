@@ -54,10 +54,15 @@ VRAM, which the source does not tie to each mapping. `config/object_art.json`
 records what play showed, by mapping block: the attribute objects drew it with
 (base tile, palette line, priority), the art payloads its tiles were found in
 with the VRAM address each was loaded at, and the palette commands that wrote
-the colour lines its pieces use. It was taken in MAME by starting every stage
-through the password screen and logging each mapping the renderer drew, with the
-VRAM and colour RAM the CPU had written. A block it does not list borrows the
-record of another block of its file; one with none draws as outlines.
+the colour lines its pieces use, or, where the code copies a colour table into a
+line itself (the SEGA logo's `SegaScreenPalette`), that table and line as
+`tables`. It was taken in MAME by starting every stage through the password
+screen and logging each mapping the renderer drew, with the VRAM and colour RAM
+the CPU had written. Lambda Bunny's blocks were taken the same way with stage 2
+loading its asset set in place of Antroid's: the viewer it runs draws its sprite
+mappings (`lambda_bunny_sprite_mappings.s`) in its own art and colours. A block
+it does not list borrows the record of another block of its file; one with none
+draws as outlines.
 
 Its `spawns` list says what each placement of the stages' spawn lists draws, so
 the studio's levels show the objects in their art: the list and index, the type
@@ -66,6 +71,10 @@ and frame it first drew and the attribute it drew with. In MAME each placement
 was put into a free slot of its range as `Sys_SpawnObject` does, at the stage's
 start, and its first mapping logged. A placement it does not list (a few never
 draw on their own) shows as a marker.
+
+Its `outlines` list names mapping blocks the game never draws (Love Penguin's
+second form hangs the game before it does, see `docs/love_penguin.md`); they
+draw as outlines, never in another block's art.
 
 ## Checking the repository
 

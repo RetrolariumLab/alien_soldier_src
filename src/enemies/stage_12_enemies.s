@@ -1,4 +1,4 @@
-Enemy_InitStage12FloatingSprite:                        ; was: sub_2E2BE
+Enemy_InitStage12ShrimpSprite:                          ; was: sub_2E2BE
                                         ; Enemy_Stage12LauncherInitState+2   p
                 move.w  #$EF00,2(a5)
                 moveq   #0,d1
@@ -7,7 +7,7 @@ Enemy_InitStage12FloatingSprite:                        ; was: sub_2E2BE
                 move.b  #$10,$20(a5)
                 move.l  #$FE02FE02,$2C(a5)
                 move.l  #$F808F808,$28(a5)
-                lea     Enemy_Stage12FloatingSpriteParameters(pc),a0
+                lea     Enemy_Stage12ShrimpSpriteParameters(pc),a0
                 nop
                 moveq   #0,d1
                 move.b  (a0,d0.w),$27(a5)
@@ -16,24 +16,24 @@ Enemy_InitStage12FloatingSprite:                        ; was: sub_2E2BE
                 asl.w   #4,d1
                 move.w  d1,$5A(a5)
                 rts
-; End of function Enemy_InitStage12FloatingSprite
+; End of function Enemy_InitStage12ShrimpSprite
 ; ---------------------------------------------------------------------------
-Enemy_Stage12FloatingSpriteParameters:  dc.w    $1804, $1100, $1802, $1100  ; was: word_2E304
+Enemy_Stage12ShrimpSpriteParameters:    dc.w    $1804, $1100, $1802, $1100  ; was: word_2E304
 
-; Selects the current floating-enemy animation mapping
-Enemy_UpdateStage12FloatingAnimation:                   ; was: sub_2E30C
+; Selects the current shrimp animation
+Enemy_UpdateStage12ShrimpAnimation:                     ; was: sub_2E30C
                                         ; Enemy_Stage12LauncherController+2C   j
                 move.w  $5C(a5),d0
-                beq.s   Enemy_UpdateStage12FloatingAnimation_Return
+                beq.s   Enemy_UpdateStage12ShrimpAnimation_Return
                 subq.w  #4,d0
-                move.l  Enemy_Stage12FloatingAnimationMappings(pc,d0.w),8(a5)
+                move.l  Enemy_Stage12ShrimpAnimations(pc,d0.w),8(a5)
                 clr.w   $C(a5)
-Enemy_UpdateStage12FloatingAnimation_Return:            ; was: locret_2E31E
+Enemy_UpdateStage12ShrimpAnimation_Return:              ; was: locret_2E31E
                 rts
-; End of function Enemy_UpdateStage12FloatingAnimation
+; End of function Enemy_UpdateStage12ShrimpAnimation
 ; ---------------------------------------------------------------------------
-Enemy_Stage12FloatingAnimationMappings: dc.l    SharedFloaterDebrisProjectileAlternating5And4Animation  ; was: off_2E320
-                dc.l    SharedFloaterDebrisProjectileAlternating3And2Animation
+Enemy_Stage12ShrimpAnimations:  dc.l    Enemy_ShrimpSlowAnimation  ; was: off_2E320
+                dc.l    Enemy_ShrimpFastAnimation
 
 ; Updates the Stage 12 floater or converts it to shared defeat debris
 Enemy_Stage12FloaterController:                         ; was: sub_2E328
@@ -49,7 +49,7 @@ Enemy_Stage12FloaterController:                         ; was: sub_2E328
                 clr.w   6(a5)
 Enemy_Stage12FloaterController_UpdateState:             ; was: loc_2E352
                 bsr.s   Enemy_DispatchStage12FloaterState
-                bra.w   Enemy_UpdateStage12FloatingAnimation
+                bra.w   Enemy_UpdateStage12ShrimpAnimation
 ; End of function Enemy_Stage12FloaterController
 ; Dispatches the Stage 12 floater's current state
 Enemy_DispatchStage12FloaterState:                      ; was: sub_2E358
@@ -71,7 +71,7 @@ Enemy_Stage12FloaterStateOffsets:   dc.w    Enemy_Stage12FloaterInitState-*  ; w
 ; Initializes the floater sprite and first player-distance wait state
 Enemy_Stage12FloaterInitState:                          ; was: sub_2E376
                 moveq   #0,d0
-                bsr.w   Enemy_InitStage12FloatingSprite
+                bsr.w   Enemy_InitStage12ShrimpSprite
                 move.w  #4,$5C(a5)
                 addq.w  #2,4(a5)
 ; Waits until the player is close enough to start upward motion
@@ -333,7 +333,7 @@ Enemy_Stage12LauncherController:                        ; was: sub_2E5EA
                 clr.w   6(a5)
 Enemy_Stage12LauncherController_UpdateState:            ; was: loc_2E614
                 bsr.s   Enemy_DispatchStage12LauncherState
-                bra.w   Enemy_UpdateStage12FloatingAnimation
+                bra.w   Enemy_UpdateStage12ShrimpAnimation
 ; End of function Enemy_Stage12LauncherController
 ; Dispatches the Stage 12 launcher's current state
 Enemy_DispatchStage12LauncherState:                     ; was: sub_2E61A
@@ -353,7 +353,7 @@ Enemy_Stage12LauncherStateOffsets:  dc.w    Enemy_Stage12LauncherInitState-*  ; 
 ; Initializes the launcher and attaches it to the yacht
 Enemy_Stage12LauncherInitState:                         ; was: sub_2E634
                 moveq   #4,d0
-                bsr.w   Enemy_InitStage12FloatingSprite
+                bsr.w   Enemy_InitStage12ShrimpSprite
                 move.b  #0,$20(a5)
                 move.b  #$80,$21(a5)
                 move.b  #$40,$23(a5)                    ; '@'

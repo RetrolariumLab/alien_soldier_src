@@ -66,6 +66,24 @@ in the moving region, mostly palette/config constants. A targeted shift probe
 can confirm a candidate. Pointers into the fixed `org` regions beginning at
 `$82324`, `$E8000`, `$180000`, and `$1FFFFF` correctly do not shift.
 
+## The second form never runs
+
+Type `$1C8`, the second form, is spawned by nothing in the stock game. Put in
+place of the first form's type in its asset set and brought into stage 2 in
+MAME, it hangs the game in its graphics state, the frame it starts: VRAM is
+never written again. `Boss_LovePenguinSecondFormLoadGraphicsState` passes
+`Boss_LovePenguinSecondFormObjectInitTable` to `Object_InitGroupFromTable`,
+which reads 14-byte entries (an object address, two bytes, two longwords, two
+bytes; Antroid's table has that shape), but the table holds ten 10-byte entries:
+an address, then `$1408 $E41C $E41C $0010` or `$1008 $F010 $F010 $0010`. Read 14
+bytes at a time, it never lands on its `$FFFE` end and runs on into the code
+after it. The table predates the reader's present entry format, so the form
+cannot have been played in this build. It loads no art of its own either: its
+`Tilemap_QueueIndexedRows` calls write name-table rows, and its sprite mapping
+`Boss_LovePenguinSecondFormSpriteMapping` indexes whatever art is at its tiles.
+`config/object_art.json` lists that mapping under `outlines`, so the studio
+draws it as an outline, not in the first form's art.
+
 ## Remaining limits
 
 The ROM-level identity of family A's art, any stock route selecting its asset

@@ -180,9 +180,9 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    TunnelTransition_ObjectMain
                 dc.l    Enemy_Stage12FloaterController
                 dc.l    Enemy_UpdateStage12DefeatDebris
-                dc.l    Enemy_Stage10BeetleController
+                dc.l    Enemy_FishController
                 dc.l    Enemy_UpdateStage10BeetleDefeatDebris
-                dc.l    Stage10_BeetleWaveController
+                dc.l    Stage10_FishWaveController
                 dc.l    Enemy_Stage12TurretController
                 dc.l    Enemy_Stage12LauncherController
                 dc.l    Projectile_Epsilon1BarrageEmitterMain
@@ -216,7 +216,7 @@ Entity_UpdateHandlerTable:  dc.l    Entity_NullUpdateHandler4  ; was: off_5DC
                 dc.l    Projectile_BackStringerChainFalling
                 dc.l    Projectile_SniperHoneyviperBouncingShot
                 dc.l    Projectile_BackStringerReboundShotMain
-                dc.l    Projectile_SharpsteelFallingShotMain
+                dc.l    Projectile_SharpsteelShrimpMain
                 dc.l    Stage12_TeddyBearMain
                 dc.l    Enemy_ShipPatrolController
                 dc.l    Boss_ShieldViperBodyRecordMain

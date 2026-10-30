@@ -8,21 +8,21 @@ Boss_ZLeoIntroSidePartMapping:  dc.w    $2837, $200, $8E8  ; was: word_ED39A
                                         ; Boss_ZLeoIntroInit+164   o
                 dc.w    $2833, $300, $F0
                 dc.w    $A823, $700, $F0F8
-Boss_ZLeoValkirieForceSharedMappingE:   dc.w    $284A, $500, $8F8  ; was: word_ED3AC
+Boss_ZLeoCoreMappingE:  dc.w    $284A, $500, $8F8       ; was: word_ED3AC
                 dc.w    $A83A, $F00, $E8F0
-Boss_ZLeoIntroPartRowMapping:           dc.w    $A84E, $200, $F3FC  ; was: word_ED3B8
-Boss_ZLeoIntroLowerPartMapping:         dc.w    $A851, $100, $F8FC  ; was: word_ED3BE
-Boss_ZLeoValkirieForceSharedMappingA:   dc.w    $2867, 0, $CEC  ; was: word_ED3C4
+Boss_ZLeoIntroPartRowMapping:   dc.w    $A84E, $200, $F3FC  ; was: word_ED3B8
+Boss_ZLeoIntroLowerPartMapping: dc.w    $A851, $100, $F8FC  ; was: word_ED3BE
+Boss_ZLeoCoreMappingA:          dc.w    $2867, 0, $CEC  ; was: word_ED3C4
                                         ; ROM:000355B8   o
                 dc.w    $2868, $C00, $CF4
                 dc.w    $2863, $300, $ECEC
                 dc.w    $A853, $F00, $ECF4
-Boss_ZLeoValkirieForceSharedMappingB:   dc.w    $386C, $D00, $F0  ; was: word_ED3DC
+Boss_ZLeoCoreMappingB:  dc.w    $386C, $D00, $F0        ; was: word_ED3DC
                                         ; ROM:000355C4   o
                 dc.w    $A86C, $D00, $F0F0
-Boss_ZLeoValkirieForceSharedMappingD:   dc.w    $A874, $A00, $F4F4  ; was: word_ED3E8
+Boss_ZLeoCoreMappingD:  dc.w    $A874, $A00, $F4F4      ; was: word_ED3E8
                                         ; ROM:000355DC   o
-Boss_ZLeoValkirieForceSharedMappingC:   dc.w    $A87D, $500, $F8F8  ; was: word_ED3EE
+Boss_ZLeoCoreMappingC:  dc.w    $A87D, $500, $F8F8      ; was: word_ED3EE
                                         ; ROM:000355D0   o
 Boss_ZLeoBladeDirectionMapping0:    dc.w    $3889, $D00, $E0  ; was: word_ED3F4
                 dc.w    $3881, $D00, 0

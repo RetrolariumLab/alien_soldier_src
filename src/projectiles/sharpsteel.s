@@ -1,27 +1,27 @@
-; Sharpsteel falling shots, defeat fragments, and blade shots
-; Emits two groups totalling ten type-$364 falling shots
-Boss_SharpsteelSpawnTenFallingShots:                    ; was: sub_48DA0
+; Sharpsteel's shrimp, defeat fragments, and blade shots
+; Emits two groups totalling ten type-$364 shrimp
+Boss_SharpsteelSpawnTenShrimp:                          ; was: sub_48DA0
                 lea     (Math_SineTable).l,a4
                 moveq   #0,d5
                 moveq   #0,d6
                 moveq   #$12,d4
                 moveq   #5,d7
-                bsr.s   Projectile_SharpsteelEmitFallingShotLoop
+                bsr.s   Projectile_SharpsteelEmitShrimpLoop
                 moveq   #$10,d4
                 moveq   #3,d7
-; End of function Boss_SharpsteelSpawnTenFallingShots
+; End of function Boss_SharpsteelSpawnTenShrimp
 ; Emits one configured group using sine-derived velocities and fixed spawn offsets
-Projectile_SharpsteelEmitFallingShotLoop:               ; was: sub_48DB4
-                                        ; Projectile_SharpsteelEmitFallingShotLoop+70   j
+Projectile_SharpsteelEmitShrimpLoop:                    ; was: sub_48DB4
+                                        ; Projectile_SharpsteelEmitShrimpLoop+70   j
                 jsr     (Projectile_FindFreeSlotReverse).l
-                bne.s   Projectile_SharpsteelEmitFallingShotReturn
+                bne.s   Projectile_SharpsteelEmitShrimpReturn
                 move.w  #$364,(a0)
                 move.w  #$EC00,2(a0)
                 move.w  #0,$E(a0)
-                move.l  #SharedFloaterDebrisProjectileAlternating5And4Animation,8(a0)
+                move.l  #Enemy_ShrimpSlowAnimation,8(a0)
                 move.b  #$20,$20(a0)                    ; ' '
                 moveq   #0,d0
-                move.b  Projectile_SharpsteelFallingShotAngleIndices(pc,d5.w),d0
+                move.b  Projectile_SharpsteelShrimpAngleIndices(pc,d5.w),d0
                 asl.w   #1,d0
                 move.w  -$80(a4,d0.w),d1
                 move.w  (a4,d0.w),d2
@@ -32,38 +32,38 @@ Projectile_SharpsteelEmitFallingShotLoop:               ; was: sub_48DB4
                 move.l  d1,$1C(a0)
                 asr.l   #1,d2
                 move.l  d2,$18(a0)
-                move.b  Projectile_SharpsteelFallingShotSpawnOffsets(pc,d6.w),d0
+                move.b  Projectile_SharpsteelShrimpSpawnOffsets(pc,d6.w),d0
                 ext.w   d0
-                bpl.s   Projectile_SharpsteelSetFallingShotSpawnPosition
+                bpl.s   Projectile_SharpsteelSetShrimpSpawnPosition
                 ori.w   #$800,$E(a0)
-Projectile_SharpsteelSetFallingShotSpawnPosition:
+Projectile_SharpsteelSetShrimpSpawnPosition:
                 addi.w  #$120,d0
                 move.w  d0,$10(a0)
-                move.b  Projectile_SharpsteelFallingShotSpawnOffsets+1(pc,d6.w),d0
+                move.b  Projectile_SharpsteelShrimpSpawnOffsets+1(pc,d6.w),d0
                 ext.w   d0
                 addi.w  #$160,d0
                 move.w  d0,$14(a0)
                 addq.w  #1,d5
                 addq.w  #2,d6
-                dbf     d7,Projectile_SharpsteelEmitFallingShotLoop
-Projectile_SharpsteelEmitFallingShotReturn:
+                dbf     d7,Projectile_SharpsteelEmitShrimpLoop
+Projectile_SharpsteelEmitShrimpReturn:
                 rts
-; End of function Projectile_SharpsteelEmitFallingShotLoop
+; End of function Projectile_SharpsteelEmitShrimpLoop
 ; ---------------------------------------------------------------------------
-Projectile_SharpsteelFallingShotAngleIndices:   dc.b    $B4, $B8, $BC, $C4, $C8, $CC, $B6, $BA, $C6, $CA
-Projectile_SharpsteelFallingShotSpawnOffsets:   dc.b    $D0, 0, $E0, $F8, $F0, $F0, $10, $F0, $20, $F8
-                                        ; Projectile_SharpsteelEmitFallingShotLoop+5E   r
+Projectile_SharpsteelShrimpAngleIndices:    dc.b    $B4, $B8, $BC, $C4, $C8, $CC, $B6, $BA, $C6, $CA
+Projectile_SharpsteelShrimpSpawnOffsets:    dc.b    $D0, 0, $E0, $F8, $F0, $F0, $10, $F0, $20, $F8
+                                        ; Projectile_SharpsteelEmitShrimpLoop+5E   r
                 dc.b    $30, 0, $C0, $24, $D0, $20, $30, $20, $40, $24
 
 ; Type-$364 Sharpsteel shot: rises, arms while falling, and handles hits or bounds
-Projectile_SharpsteelFallingShotMain:                   ; was: sub_48E48
+Projectile_SharpsteelShrimpMain:                        ; was: sub_48E48
                 tst.w   (StageSpawnCountdown).w
-                bpl.w   Projectile_SharpsteelConvertFallingShotToDebris
+                bpl.w   Projectile_SharpsteelConvertShrimpToDebris
                 addi.l  #$B00,$1C(a5)
                 tst.w   4(a5)
-                bne.s   Projectile_SharpsteelHandleFallingShotCollision
+                bne.s   Projectile_SharpsteelHandleShrimpCollision
                 tst.w   $1C(a5)
-                bmi.s   Projectile_SharpsteelFallingShotReturn
+                bmi.s   Projectile_SharpsteelShrimpReturn
                 addq.w  #2,4(a5)
                 bset    #4,$E(a5)
                 bset    #7,$E(a5)
@@ -72,38 +72,38 @@ Projectile_SharpsteelFallingShotMain:                   ; was: sub_48E48
                 move.w  #$64,$26(a5)                    ; 'd'
                 move.l  #$F60AF60A,$28(a5)
                 move.l  #$FC04FC04,$2C(a5)
-Projectile_SharpsteelFallingShotReturn:
-                                        ; Projectile_SharpsteelFallingShotMain+D4   j
+Projectile_SharpsteelShrimpReturn:
+                                        ; Projectile_SharpsteelShrimpMain+D4   j
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SharpsteelHandleFallingShotCollision:
+Projectile_SharpsteelHandleShrimpCollision:
                 bclr    #7,$22(a5)
-                beq.s   Projectile_SharpsteelCheckFallingShotDurability
+                beq.s   Projectile_SharpsteelCheckShrimpDurability
                 bclr    #4,$22(a5)
-                beq.s   Projectile_SharpsteelConvertFallingShotToDebris
-                bra.s   Projectile_SharpsteelSpawnPickupFromFallingShot
+                beq.s   Projectile_SharpsteelConvertShrimpToDebris
+                bra.s   Projectile_SharpsteelSpawnPickupFromShrimp
 ; ---------------------------------------------------------------------------
-Projectile_SharpsteelCheckFallingShotDurability:
+Projectile_SharpsteelCheckShrimpDurability:
                 tst.w   $24(a5)
-                bpl.s   Projectile_SharpsteelHandleFallingShotLowerBoundary
-Projectile_SharpsteelSpawnPickupFromFallingShot:
+                bpl.s   Projectile_SharpsteelHandleShrimpLowerBoundary
+Projectile_SharpsteelSpawnPickupFromShrimp:
                 jsr     (Projectile_FindFreeSlotForward).l
-                bne.s   Projectile_SharpsteelConvertFallingShotToDebris
+                bne.s   Projectile_SharpsteelConvertShrimpToDebris
                 move.w  $10(a5),$10(a0)
                 move.w  $14(a5),$14(a0)
                 moveq   #$15,d0
                 jsr     (Pickup_SelectRandomSize).l
                 move.w  #$E440,2(a0)
                 move.l  #$2000,$1C(a0)
-Projectile_SharpsteelConvertFallingShotToDebris:
-                                        ; Projectile_SharpsteelFallingShotMain+5E   j
+Projectile_SharpsteelConvertShrimpToDebris:
+                                        ; Projectile_SharpsteelShrimpMain+5E   j
                 clr.l   $1C(a5)
                 move.l  #Effect_SpriteAnimation03,8(a5)
                 jmp     Projectile_InitType88FromCurrent
 ; ---------------------------------------------------------------------------
-Projectile_SharpsteelHandleFallingShotLowerBoundary:
+Projectile_SharpsteelHandleShrimpLowerBoundary:
                 cmpi.w  #$150,$14(a5)
-                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionRegion
+                bmi.s   Projectile_SharpsteelCheckShrimpDeflectionRegion
                 move.w  $E(a5),d0
                 andi.w  #$8000,d0
                 movem.l d0,-(sp)
@@ -113,30 +113,30 @@ Projectile_SharpsteelHandleFallingShotLowerBoundary:
                 or.w    d0,$E(a5)
                 rts
 ; ---------------------------------------------------------------------------
-Projectile_SharpsteelCheckFallingShotDeflectionRegion:
+Projectile_SharpsteelCheckShrimpDeflectionRegion:
                 tst.w   $48(a5)
-                bne.w   Projectile_SharpsteelFallingShotReturn
+                bne.w   Projectile_SharpsteelShrimpReturn
                 movea.w #(Entity57Type-M68K_RAM),a0
                 move.w  $10(a0),d0
                 cmp.w   $10(a5),d0
-                bpl.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
+                bpl.s   Projectile_SharpsteelCheckShrimpDeflectionReturn
                 addi.w  #$F0,d0
                 cmp.w   $10(a5),d0
-                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
+                bmi.s   Projectile_SharpsteelCheckShrimpDeflectionReturn
                 move.w  $14(a0),d0
                 subi.w  #$A,d0
                 cmp.w   $14(a5),d0
-                bpl.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
+                bpl.s   Projectile_SharpsteelCheckShrimpDeflectionReturn
                 addi.w  #$10,d0
                 cmp.w   $14(a5),d0
-                bmi.s   Projectile_SharpsteelCheckFallingShotDeflectionReturn
+                bmi.s   Projectile_SharpsteelCheckShrimpDeflectionReturn
                 addq.w  #1,$48(a5)
                 bclr    #4,$E(a5)
                 move.w  #$FFFE,$1C(a5)
-Projectile_SharpsteelCheckFallingShotDeflectionReturn:
-                                        ; Projectile_SharpsteelFallingShotMain+EE   j
+Projectile_SharpsteelCheckShrimpDeflectionReturn:
+                                        ; Projectile_SharpsteelShrimpMain+EE   j
                 rts
-; End of function Projectile_SharpsteelFallingShotMain
+; End of function Projectile_SharpsteelShrimpMain
 ; Starts defeat presentation and initializes fourteen embedded type-$3BC fragments
 Boss_SharpsteelBeginDefeatFragmentBurst:                ; was: sub_48F62
                 move.b  #1,(SoundFadeOutDelay).w

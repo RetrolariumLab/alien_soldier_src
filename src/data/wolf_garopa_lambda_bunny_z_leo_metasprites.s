@@ -69,61 +69,61 @@ Boss_WolfGaropaPartLinks:   dc.w    0, 0, 0             ; was: word_3538A
                 dc.w    $604, $46C3, $4188
                 dc.w    $189, $47E8, $7E9
                 dc.w    $48A8
-; Valkirie directional frames and primary metasprite definition
+; Lambda Bunny's directional frames and primary metasprite definition
 ; Three eight-pointer rotation tables; C is selected without A/B's high-bit flags
-Boss_ValkirieRotationFramesA:   dc.l    Boss_ValkirieRotationAMapping0  ; was: off_353BC
+Boss_LambdaBunnyRotationFramesA:    dc.l    Boss_LambdaBunnyRotationAMapping0  ; was: off_353BC
                                         ; ROM:0003544C   o
-                dc.l    Boss_ValkirieRotationAMapping1
-                dc.l    Boss_ValkirieRotationAMapping2
-                dc.l    Boss_ValkirieRotationAMapping3
-                dc.l    Boss_ValkirieRotationAMapping4
-                dc.l    Boss_ValkirieRotationAMapping5
-                dc.l    Boss_ValkirieRotationAMapping6
-                dc.l    Boss_ValkirieRotationAMapping7
-Boss_ValkirieRotationFramesB:   dc.l    Boss_ValkirieRotationBMapping0  ; was: off_353DC
+                dc.l    Boss_LambdaBunnyRotationAMapping1
+                dc.l    Boss_LambdaBunnyRotationAMapping2
+                dc.l    Boss_LambdaBunnyRotationAMapping3
+                dc.l    Boss_LambdaBunnyRotationAMapping4
+                dc.l    Boss_LambdaBunnyRotationAMapping5
+                dc.l    Boss_LambdaBunnyRotationAMapping6
+                dc.l    Boss_LambdaBunnyRotationAMapping7
+Boss_LambdaBunnyRotationFramesB:    dc.l    Boss_LambdaBunnyRotationBMapping0  ; was: off_353DC
                                         ; ROM:00035434   o
-                dc.l    Boss_ValkirieRotationBMapping1
-                dc.l    Boss_ValkirieRotationBMapping2
-                dc.l    Boss_ValkirieRotationBMapping3
-                dc.l    Boss_ValkirieRotationBMapping4
-                dc.l    Boss_ValkirieRotationBMapping5
-                dc.l    Boss_ValkirieRotationBMapping6
-                dc.l    Boss_ValkirieRotationBMapping7
-Boss_ValkirieRotationFramesC:   dc.l    Boss_ValkirieSharedRotationCMappingA  ; was: off_353FC
+                dc.l    Boss_LambdaBunnyRotationBMapping1
+                dc.l    Boss_LambdaBunnyRotationBMapping2
+                dc.l    Boss_LambdaBunnyRotationBMapping3
+                dc.l    Boss_LambdaBunnyRotationBMapping4
+                dc.l    Boss_LambdaBunnyRotationBMapping5
+                dc.l    Boss_LambdaBunnyRotationBMapping6
+                dc.l    Boss_LambdaBunnyRotationBMapping7
+Boss_LambdaBunnyRotationFramesC:    dc.l    Boss_LambdaBunnyRotationCMappingA  ; was: off_353FC
                                         ; ROM:00035464   o
-                dc.l    Boss_ValkirieSharedRotationCMappingB
-                dc.l    Boss_ValkirieSharedRotationCMappingB
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingA
-Boss_ValkirieMetaspriteDescriptors: dc.l    Boss_ValkirieMetaspriteMappingB+$400000  ; was: off_3541C
+                dc.l    Boss_LambdaBunnyRotationCMappingB
+                dc.l    Boss_LambdaBunnyRotationCMappingB
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingA
+Boss_LambdaBunnyMetaspriteDescriptors:  dc.l    Boss_LambdaBunnyMetaspriteMappingB+$400000  ; was: off_3541C
                 dc.l    0
-                dc.l    Boss_ValkiriePackedSpriteMappings+$400000
+                dc.l    Boss_LambdaBunnyPackedSpriteMappings+$400000
                 dc.l    0
-                dc.l    Boss_ValkirieRotationFramesB+$18000000
-                dc.l    Boss_ValkirieMetaspriteMappingC+$400000
-                dc.l    Boss_ValkirieRotationFramesB+$18000000
-                dc.l    Boss_ValkirieRotationFramesA+$18000000
+                dc.l    Boss_LambdaBunnyRotationFramesB+$18000000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingC+$400000
+                dc.l    Boss_LambdaBunnyRotationFramesB+$18000000
+                dc.l    Boss_LambdaBunnyRotationFramesA+$18000000
                 dc.l    0
-                dc.l    Boss_ValkirieRotationFramesB+$18000000
-                dc.l    Boss_ValkirieMetaspriteMappingC+$400000
-                dc.l    Boss_ValkirieRotationFramesB+$18000000
-                dc.l    Boss_ValkirieRotationFramesA+$18000000
+                dc.l    Boss_LambdaBunnyRotationFramesB+$18000000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingC+$400000
+                dc.l    Boss_LambdaBunnyRotationFramesB+$18000000
+                dc.l    Boss_LambdaBunnyRotationFramesA+$18000000
                 dc.l    0
-                dc.l    Boss_ValkirieRotationFramesC
-                dc.l    Boss_ValkirieMetaspriteMappingD+$400000
-                dc.l    Boss_ValkirieMetaspriteMappingA+$400000
+                dc.l    Boss_LambdaBunnyRotationFramesC
+                dc.l    Boss_LambdaBunnyMetaspriteMappingD+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingA+$400000
                 dc.l    0
-                dc.l    Boss_ValkirieRotationFramesC
-                dc.l    Boss_ValkirieMetaspriteMappingD+$400000
-                dc.l    Boss_ValkirieMetaspriteMappingA+$400000
-Boss_ValkiriePartRadii: dc.w    0, $A, $8A95            ; was: word_35470
+                dc.l    Boss_LambdaBunnyRotationFramesC
+                dc.l    Boss_LambdaBunnyMetaspriteMappingD+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingA+$400000
+Boss_LambdaBunnyPartRadii:  dc.w    0, $A, $8A95        ; was: word_35470
                 dc.w    $909D, $A0A, $1510
                 dc.w    $1D0A, $E1C, $100A
                 dc.w    $E1C, $1000
-Boss_ValkiriePartLinks: dc.w    $8009, 0, $8007         ; was: word_35486
+Boss_LambdaBunnyPartLinks:  dc.w    $8009, 0, $8007     ; was: word_35486
                 dc.w    $60, $8124, $8123
                 dc.w    $81E4, $81E3, $60
                 dc.w    $830F, $830E, $83CF
@@ -131,54 +131,54 @@ Boss_ValkiriePartLinks: dc.w    $8009, 0, $8007         ; was: word_35486
                 dc.w    $84E9, $85A8, $C0
                 dc.w    $866C, $866B, $872A
 ; Alternate Valkirie data reused as rotation frames and interpolation pose bytes
-Boss_ValkirieAlternateRotationFramesAndNeutralPose: dc.l    Boss_ValkirieRotationAMapping0  ; was: off_354B0
+Boss_ValkirieAlternateRotationFramesAndNeutralPose: dc.l    Boss_LambdaBunnyRotationAMapping0  ; was: off_354B0
                                         ; ROM:00035540   o
-                dc.l    Boss_ValkirieRotationAMapping1
-                dc.l    Boss_ValkirieRotationAMapping2
-                dc.l    Boss_ValkirieRotationAMapping3
-                dc.l    Boss_ValkirieRotationAMapping4
-                dc.l    Boss_ValkirieRotationAMapping5
-                dc.l    Boss_ValkirieRotationAMapping6
-                dc.l    Boss_ValkirieRotationAMapping7
-Boss_ValkirieAlternateRotationFramesB:  dc.l    Boss_ValkirieRotationBMapping0  ; was: off_354D0
+                dc.l    Boss_LambdaBunnyRotationAMapping1
+                dc.l    Boss_LambdaBunnyRotationAMapping2
+                dc.l    Boss_LambdaBunnyRotationAMapping3
+                dc.l    Boss_LambdaBunnyRotationAMapping4
+                dc.l    Boss_LambdaBunnyRotationAMapping5
+                dc.l    Boss_LambdaBunnyRotationAMapping6
+                dc.l    Boss_LambdaBunnyRotationAMapping7
+Boss_ValkirieAlternateRotationFramesB:  dc.l    Boss_LambdaBunnyRotationBMapping0  ; was: off_354D0
                                         ; ROM:00035528   o
-                dc.l    Boss_ValkirieRotationBMapping1
-                dc.l    Boss_ValkirieRotationBMapping2
-                dc.l    Boss_ValkirieRotationBMapping3
-                dc.l    Boss_ValkirieRotationBMapping4
-                dc.l    Boss_ValkirieRotationBMapping5
-                dc.l    Boss_ValkirieRotationBMapping6
-                dc.l    Boss_ValkirieRotationBMapping7
-Boss_ValkirieAlternateRotationFramesC:  dc.l    Boss_ValkirieSharedRotationCMappingA  ; was: off_354F0
+                dc.l    Boss_LambdaBunnyRotationBMapping1
+                dc.l    Boss_LambdaBunnyRotationBMapping2
+                dc.l    Boss_LambdaBunnyRotationBMapping3
+                dc.l    Boss_LambdaBunnyRotationBMapping4
+                dc.l    Boss_LambdaBunnyRotationBMapping5
+                dc.l    Boss_LambdaBunnyRotationBMapping6
+                dc.l    Boss_LambdaBunnyRotationBMapping7
+Boss_ValkirieAlternateRotationFramesC:  dc.l    Boss_LambdaBunnyRotationCMappingA  ; was: off_354F0
                                         ; ROM:00035558   o
-                dc.l    Boss_ValkirieSharedRotationCMappingB
-                dc.l    Boss_ValkirieSharedRotationCMappingB
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingC
-                dc.l    Boss_ValkirieSharedRotationCMappingA
-                dc.l    Boss_ValkirieMetaspriteMappingB+$400000
+                dc.l    Boss_LambdaBunnyRotationCMappingB
+                dc.l    Boss_LambdaBunnyRotationCMappingB
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingC
+                dc.l    Boss_LambdaBunnyRotationCMappingA
+                dc.l    Boss_LambdaBunnyMetaspriteMappingB+$400000
                 dc.l    0
-                dc.l    Boss_ValkiriePackedSpriteMappings+$400000
+                dc.l    Boss_LambdaBunnyPackedSpriteMappings+$400000
                 dc.l    0
                 dc.l    Boss_ValkirieAlternateRotationFramesB+$18000000
-                dc.l    Boss_ValkirieMetaspriteMappingC+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingC+$400000
                 dc.l    Boss_ValkirieAlternateRotationFramesB+$18000000
                 dc.l    Boss_ValkirieAlternateRotationFramesAndNeutralPose+$18000000
                 dc.l    0
                 dc.l    Boss_ValkirieAlternateRotationFramesB+$18000000
-                dc.l    Boss_ValkirieMetaspriteMappingC+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingC+$400000
                 dc.l    Boss_ValkirieAlternateRotationFramesB+$18000000
                 dc.l    Boss_ValkirieAlternateRotationFramesAndNeutralPose+$18000000
                 dc.l    0
                 dc.l    Boss_ValkirieAlternateRotationFramesC
-                dc.l    Boss_ValkirieMetaspriteMappingD+$400000
-                dc.l    Boss_ValkirieMetaspriteMappingA+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingD+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingA+$400000
                 dc.l    0
                 dc.l    Boss_ValkirieAlternateRotationFramesC
-                dc.l    Boss_ValkirieMetaspriteMappingD+$400000
-                dc.l    Boss_ValkirieMetaspriteMappingA+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingD+$400000
+                dc.l    Boss_LambdaBunnyMetaspriteMappingA+$400000
                 dc.w    0, $A, $8A95
                 dc.w    $909D, $A0A, $1510
                 dc.w    $1D0A, $E1C, $100A
@@ -191,23 +191,23 @@ Boss_ValkirieAlternateRotationFramesC:  dc.l    Boss_ValkirieSharedRotationCMapp
                 dc.w    $85A8, $C0, $866C
                 dc.w    $866B, $872A
 ; Z-Leo definition also reused by Valkirie Force as setup and interpolation data
-Boss_ZLeoValkirieForceSharedMetaspriteData: dc.l    0   ; was: dword_355A4
+Boss_ZLeoCoreMetaspriteData:    dc.l    0               ; was: dword_355A4
                                         ; Boss_ValkirieForceInit+10   o
                 dc.l    0
                 dc.l    0
-                dc.l    Boss_ZLeoValkirieForceSharedMappingA+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingB+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingA+$400000
+                dc.l    Boss_ZLeoCoreMappingA+$400000
+                dc.l    Boss_ZLeoCoreMappingB+$400000
+                dc.l    Boss_ZLeoCoreMappingA+$400000
                 dc.l    Boss_ZLeoBladeDirectionMapping2+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingA+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingB+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingC+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingB+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingC+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingD+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingC+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingD+$400000
-                dc.l    Boss_ZLeoValkirieForceSharedMappingE+$400000
+                dc.l    Boss_ZLeoCoreMappingA+$400000
+                dc.l    Boss_ZLeoCoreMappingB+$400000
+                dc.l    Boss_ZLeoCoreMappingC+$400000
+                dc.l    Boss_ZLeoCoreMappingB+$400000
+                dc.l    Boss_ZLeoCoreMappingC+$400000
+                dc.l    Boss_ZLeoCoreMappingD+$400000
+                dc.l    Boss_ZLeoCoreMappingC+$400000
+                dc.l    Boss_ZLeoCoreMappingD+$400000
+                dc.l    Boss_ZLeoCoreMappingE+$400000
 Boss_ZLeoPartRadii: dc.w    $38, $3818, $1818           ; was: word_355E4
                 dc.w    $1E18, $280C, $1C10
                 dc.w    $200C, $1C1A

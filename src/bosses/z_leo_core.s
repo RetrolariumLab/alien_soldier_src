@@ -145,7 +145,7 @@ Boss_ZLeoIntroInit:                                     ; was: sub_51C32
                 movea.w a5,a4
                 move.w  #$380,(MetaspriteBaseTileWord).w
                 moveq   #$F,d7
-                movea.l #Boss_ZLeoValkirieForceSharedMetaspriteData,a0
+                movea.l #Boss_ZLeoCoreMetaspriteData,a0
                 movea.l #Boss_ZLeoPartRadii,a1
                 movea.l #Boss_ZLeoPartLinks,a2
                 jsr     (Sprite_InitializeLinkedMetaspriteParts).l
