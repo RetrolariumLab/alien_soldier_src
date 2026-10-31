@@ -36,24 +36,24 @@ Credits_ActivateScreen:                                 ; was: loc_1E1BE
                 rts
 ; End of function Credits_InitializeScreen
 ; ---------------------------------------------------------------------------
-Credits_IntroAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1E204
-                dc.l    CreditsAndEndingTileArt         ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    CreditsAndTransitionTileArtE000  ; field_2
-                dc.w    $E000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
+Credits_IntroAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_1E204
+                dc.l    CreditsAndEndingTileArt         ; source
+                dc.w    $6000                           ; destination: VRAM $6000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    CreditsAndTransitionTileArtE000  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
                 dc.w    $FFFF
 Credits_IntroVRAMTransferParameters:    dc.l    $FFFF7000, $FFFF6000, $FFFF4000, $4000  ; was: dword_1E236
 

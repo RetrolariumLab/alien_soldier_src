@@ -267,6 +267,127 @@
         "",
         ""
       ]
+    },
+    "boss_readers": {
+      "schema_version": 1,
+      "played_builders": ["Boss_ShieldViperInitialize"],
+      "traversals": [
+        "Sprite_BeginMetaspritePartTraversal",
+        "Sprite_SetMetaspriteTraversalPointers",
+        "Sprite_UpdateMetaspriteEightFrameRotation",
+        "Sprite_UpdateMetaspriteFourFrameRotationAndLoadCount",
+        "Boss_BackStringerUpdateSegmentChainAndLoadCount"
+      ],
+      "reach_traversal": "Boss_BackStringerUpdateSegmentChainAndLoadCount",
+      "checked_builders": [
+        "Boss_AntroidInitializeBattleState",
+        "Boss_BackStringerInitializeState",
+        "Boss_BugmaxMain",
+        "Boss_CaterpillarInitSegments",
+        "Boss_DeepStriderIntroRise",
+        "Boss_DestroyerMK2Main",
+        "Boss_DestroyerMk2Main",
+        "Boss_Epsilon1Main",
+        "Boss_FlyingNeoSetup",
+        "Boss_GustheadInitializeRootAndParts",
+        "Boss_InitArtemisState0",
+        "Boss_InitMedusaState0",
+        "Boss_InitSireneMetasprite",
+        "Boss_InitSylpheed",
+        "Boss_JampanMain",
+        "Boss_JetsripperInitBody",
+        "Boss_JokerInitializeMetasprite",
+        "Boss_LovePenguinInitDispatcher",
+        "Boss_MadamBarbarSetupState",
+        "Boss_MissirayMain",
+        "Boss_SharpssteelInitializeState",
+        "Boss_SharpsteelInitializeState",
+        "Boss_ShellshogunSetupPhase",
+        "Boss_ShieldViperInitialize",
+        "Boss_SunsetStingInit",
+        "Boss_TerobusterSetup",
+        "Boss_ViblackMain",
+        "Boss_WolfGaropaInitialize",
+        "Boss_XiTigerSetup",
+        "Boss_ZLeoIntroInit",
+        "EntityType1C0_InitDispatcher",
+        "Entity_InitValkirieBattleState0",
+        "Entity_VictorSubtypeDispatcher"
+      ]
+    },
+    "boss_palette_previews": {
+      "schema_version": 1,
+      "bosses": {
+        "Boss_ShellshogunSetupPhase": {
+          "pose": 0
+        },
+        "Entity_InitValkirieBattleState0": {
+          "title": "Valkirie",
+          "pose": 0
+        },
+        "Boss_SunsetStingInit": {
+          "part_offsets": {
+            "1": [0, -24],
+            "2": [0, -48],
+            "3": [0, -48],
+            "4": [0, -48],
+            "5": [0, -48],
+            "6": [0, -48],
+            "7": [0, -48],
+            "8": [0, -48],
+            "9": [0, -48],
+            "10": [0, -48],
+            "11": [0, -48],
+            "12": [0, -48],
+            "13": [0, -48],
+            "14": [0, -48],
+            "15": [0, -48],
+            "16": [0, -48],
+            "17": [0, -48]
+          }
+        },
+        "Boss_GustheadInitializeRootAndParts": {
+          "chains": [
+            {
+              "parts": [1, 2, 3, 4],
+              "direction": [1, 0]
+            },
+            {
+              "parts": [5, 6, 7, 8],
+              "direction": [0, 1]
+            },
+            {
+              "parts": [9, 10, 11, 12],
+              "direction": [-1, 0]
+            },
+            {
+              "parts": [13, 14, 15, 16],
+              "direction": [0, -1]
+            }
+          ],
+          "pixel_scale": 2
+        },
+        "Boss_CaterpillarInitSegments": {
+          "part_positions": {
+            "1": [128, 88]
+          },
+          "palette": {
+            "body_columns": 30,
+            "part_positions": {
+              "1": [-712, 88]
+            },
+            "hidden_parts": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+          }
+        },
+        "Boss_ShieldViperInitialize": {
+          "part_positions": {
+            "25": [36, -16]
+          }
+        },
+        "Boss_JampanMain": {
+          "hidden_parts": [22, 23, 24, 25, 26, 27]
+        }
+      }
     }
   },
   "guard": [
@@ -284,6 +405,9 @@
     "Honeyviper",
     "Jampan",
     "Jetsripper",
+    "Kaede Nanase",
+    "Lambda Bunny",
+    "Love Penguin",
     "Madam Barbar",
     "Medusa Force",
     "Missiray",

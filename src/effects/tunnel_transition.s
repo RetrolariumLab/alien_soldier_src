@@ -31,9 +31,9 @@ TunnelTransition_LoadGraphics:                          ; was: sub_27968
                 rts
 ; End of function TunnelTransition_LoadGraphics
 ; ---------------------------------------------------------------------------
-TunnelTransition_GraphicsLoadDescriptor:    dc.w    7   ; field_0  ; was: stru_27982
-                dc.l    CreditsAndTransitionTileArtE000  ; field_2
-                dc.w    $E000                           ; field_6
+TunnelTransition_GraphicsLoadDescriptor:    dc.w    7   ; command: LZSS to VRAM  ; was: stru_27982
+                dc.l    CreditsAndTransitionTileArtE000  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
                 dc.w    $FFFF
 
 ; Configures the tunnel transition's raster and buffer modes

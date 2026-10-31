@@ -34,6 +34,11 @@ moves code, run `make test-full` too: it plays the attract run in MAME on the
 build with every procedure moved and compares the game's RAM with the
 original's.
 
+For data-format changes, update [the format guide](docs/data_formats.md) with
+the reader, binary layout, editable fields and capacity or round-trip limits.
+The [3.0 release scope](README.md#release-scope) retains the current checks; the
+full MAME scenario migration and further test simplification are 3.1 work.
+
 ## Naming a symbol
 
 Read [`docs/naming.md`](docs/naming.md) first. In short:

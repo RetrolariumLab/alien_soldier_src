@@ -468,9 +468,9 @@ Stage7_InitializeScrollState:                           ; was: sub_CCA2
                 bra.s   Stage7_UpdateScrollToTerobuster
 ; End of function Stage7_InitializeScrollState
 ; ---------------------------------------------------------------------------
-Stage7_InitialTileAssetLoadList:    dc.w    7           ; field_0  ; was: stru_CCBE
-                dc.l    Stage7InitialTileArt            ; field_2
-                dc.w    $5BE0                           ; field_6
+Stage7_InitialTileAssetLoadList:    dc.w    7           ; command: LZSS to VRAM  ; was: stru_CCBE
+                dc.l    Stage7InitialTileArt            ; source
+                dc.w    $5BE0                           ; destination: VRAM $5BE0
                 dc.w    $FFFF
 
 ; Updates Stage 7 scroll checking transition boundaries

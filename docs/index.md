@@ -11,7 +11,9 @@ Start with the [README](../README.md) and [contributing](../CONTRIBUTING.md).
 
 `make help` lists the targets. The research and release tooling of the earlier
 releases (runtime scenarios in Gens, symbol exports, the naming workflow and the
-audits) stays at their tags, up to `source-reconstruction-3.0`.
+audits) stays in earlier tagged snapshots. The
+[release scope](../README.md#release-scope) separates the current 3.0 checks
+from the full MAME migration and further test simplification planned for 3.1.
 
 ## Understand or change the source
 
@@ -36,5 +38,8 @@ address-ordered neighbour.
 ## Edit content
 
 [Editing in Retrolarium](retrolarium.md): the game opens in Retrolarium Studio
-through `alien_soldier.rlj`, and the kit reads and writes its twenty data
-formats. The [tile codec](tile_codec_spec.md) describes the hardest of them.
+through `alien_soldier.rlj`. [Authored data formats](data_formats.md) describes
+the extracted segments, binary layouts, fourteen editable project documents and
+three derived views, with their size limits and round-trip guarantees. The
+[tile codec](tile_codec_spec.md) gives the detailed bitstream specification and
+the remaining encoder optimization problem.

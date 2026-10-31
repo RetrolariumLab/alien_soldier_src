@@ -94,9 +94,9 @@ DebugMenuInitialAssetLoadList:  dc.w    3               ; was: stru_1356E
 DebugMenuActiveAssetLoadList:   dc.w    3               ; was: stru_13578
                 dc.l    SharedMenuType3DataF680         ; field_2
                 dc.w    $F680                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedGameplayTileArtD000       ; field_2
-                dc.w    $D000                           ; field_6
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedGameplayTileArtD000       ; source
+                dc.w    $D000                           ; destination: VRAM $D000
                 dc.w    $FFFF
 
 DebugMenu_UpdateActive:                                 ; was: sub_1358A

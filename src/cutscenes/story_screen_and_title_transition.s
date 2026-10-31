@@ -37,18 +37,18 @@ StoryScreen_ClearPlaneB:                                ; was: loc_4894
                 rts
 ; End of function StoryScreen_Initialize
 ; ---------------------------------------------------------------------------
-StoryScreenAssetCommands:   dc.w    7                   ; field_0  ; was: stru_48DA
-                dc.l    StoryScreenTileArt0000          ; field_2
-                dc.w    0                               ; field_6
-                dc.w    6                               ; field_0
-                dc.l    StoryScreenMappingData4000      ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    StoryScreenMappingData6000      ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
+StoryScreenAssetCommands:   dc.w    7                   ; command: LZSS to VRAM  ; was: stru_48DA
+                dc.l    StoryScreenTileArt0000          ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    StoryScreenMappingData4000      ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    StoryScreenMappingData6000      ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
                 dc.w    $FFFF
 
 ; Runs one story-screen frame and dispatches the current sequence state

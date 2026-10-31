@@ -251,9 +251,9 @@ Stage_LoadStage15VisualAssets:                          ; was: sub_12068
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_LoadStage15VisualAssets
 ; ---------------------------------------------------------------------------
-Stage15VisualAssetLoadList: dc.w    7                   ; field_0  ; was: stru_12086
-                dc.l    Stage15TileArt                  ; field_2
-                dc.w    $6000                           ; field_6
+Stage15VisualAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_12086
+                dc.l    Stage15TileArt                  ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 ; Loads the shared palette and compact tile commands for Stage 16
@@ -311,9 +311,9 @@ Stage_LoadStage20VisualAssets:                          ; was: sub_12112
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_LoadStage20VisualAssets
 ; ---------------------------------------------------------------------------
-Stage20VisualAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1211E
-                dc.l    Stage20TileArt                  ; field_2
-                dc.w    $6000                           ; field_6
+Stage20VisualAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_1211E
+                dc.l    Stage20TileArt                  ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 ; Loads the direct tile-asset list for Stage 21
@@ -323,9 +323,9 @@ Stage_LoadStage21VisualAssets:                          ; was: sub_12128
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_LoadStage21VisualAssets
 ; ---------------------------------------------------------------------------
-Stage21VisualAssetLoadList: dc.w    7                   ; field_0  ; was: stru_12134
-                dc.l    Stage21TileArt8000              ; field_2
-                dc.w    $8000                           ; field_6
+Stage21VisualAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_12134
+                dc.l    Stage21TileArt8000              ; source
+                dc.w    $8000                           ; destination: VRAM $8000
                 dc.w    $FFFF
 
 ; Loads the direct tile-asset list for Stage 22
@@ -335,9 +335,9 @@ Stage_LoadStage22VisualAssets:                          ; was: sub_1213E
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_LoadStage22VisualAssets
 ; ---------------------------------------------------------------------------
-Stage22VisualAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1214A
-                dc.l    Stage22And24TileArt             ; field_2
-                dc.w    $8000                           ; field_6
+Stage22VisualAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_1214A
+                dc.l    Stage22And24TileArt             ; source
+                dc.w    $8000                           ; destination: VRAM $8000
                 dc.w    $FFFF
 
 ; Deliberate no-op visual loader for Stage 23
@@ -351,9 +351,9 @@ Stage_LoadStage24VisualAssets:                          ; was: sub_12156
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_LoadStage24VisualAssets
 ; ---------------------------------------------------------------------------
-Stage24VisualAssetLoadList: dc.w    7                   ; field_0  ; was: stru_12162
-                dc.l    Stage22And24TileArt             ; field_2
-                dc.w    $8000                           ; field_6
+Stage24VisualAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_12162
+                dc.l    Stage22And24TileArt             ; source
+                dc.w    $8000                           ; destination: VRAM $8000
                 dc.w    $FFFF
 
 ; Unreferenced duplicate loader for the Stage 20 tile asset
@@ -363,9 +363,9 @@ UnreferencedReloadStage20TileAsset:
                 jmp     (Data_ProcessPointer).l
 ; End of function UnreferencedReloadStage20TileAsset
 ; ---------------------------------------------------------------------------
-UnreferencedStage20TileReloadList:  dc.w    7           ; field_0  ; was: stru_12178
-                dc.l    Stage20TileArt                  ; field_2
-                dc.w    $6000                           ; field_6
+UnreferencedStage20TileReloadList:  dc.w    7           ; command: LZSS to VRAM  ; was: stru_12178
+                dc.l    Stage20TileArt                  ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 UnreferencedVisualAssetNoOpBeforeSecondaryLoader:       ; was: nullsub_33
@@ -387,9 +387,9 @@ UnreferencedLoadSharedGameplayTileAsset:
                 jmp     (Data_ProcessPointer).l
 ; End of function UnreferencedLoadSharedGameplayTileAsset
 ; ---------------------------------------------------------------------------
-UnreferencedSharedGameplayTileAssetLoadList:    dc.w    7  ; field_0  ; was: stru_12194
-                dc.l    UnreferencedSharedGameplayTileArt  ; field_2
-                dc.w    $6000                           ; field_6
+UnreferencedSharedGameplayTileAssetLoadList:    dc.w    7  ; command: LZSS to VRAM  ; was: stru_12194
+                dc.l    UnreferencedSharedGameplayTileArt  ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 ; Initializes Xi-Tiger stage RAM, configuration, weapon selection, and player state

@@ -17,21 +17,21 @@ ZLeoEnding_InitializeScene:                             ; was: sub_1EDC2
                 rts
 ; End of function ZLeoEnding_InitializeScene
 ; ---------------------------------------------------------------------------
-ZLeoEnding_AssetLoadDescriptors:    dc.w    7           ; field_0  ; was: stru_1EE12
-                dc.l    Stage26ZLeoEndingTileArt0000    ; field_2
-                dc.w    0                               ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage26ZLeoEndingMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage26ZLeoEndingMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage21To26SharedMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+ZLeoEnding_AssetLoadDescriptors:    dc.w    7           ; command: LZSS to VRAM  ; was: stru_1EE12
+                dc.l    Stage26ZLeoEndingTileArt0000    ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage26ZLeoEndingMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage26ZLeoEndingMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage21To26SharedMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Updates the player, Z-Leo ending controller, objects, projectiles, and tilemap
@@ -126,33 +126,33 @@ WeaponSetup_ActivateScreen:                             ; was: loc_1EEEA
                 jmp     (Gfx_FadePaletteTransition).l
 ; End of function WeaponSetup_InitializeScreen
 ; ---------------------------------------------------------------------------
-WeaponSetup_AssetLoadDescriptors:   dc.w    3           ; field_0  ; was: stru_1EFB8
-                dc.l    WeaponSetupType3Data5800        ; field_2
-                dc.w    $5800                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $E000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    WeaponSetupTileArtE300          ; field_2
-                dc.w    $E300                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    StageEntryAndWeaponSetupTileArtDE00  ; field_2
-                dc.w    $DE00                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    WeaponSetupMappingData6000      ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    WeaponSetupMappingData4020      ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedGameplayTileArtD000       ; field_2
-                dc.w    $D000                           ; field_6
-                dc.w    3                               ; field_0 ; another compression type?
-                dc.l    SharedMenuType3DataF680         ; field_2
-                dc.w    $F680                           ; field_6
+WeaponSetup_AssetLoadDescriptors:   dc.w    3           ; command: decompress tiles to VRAM  ; was: stru_1EFB8
+                dc.l    WeaponSetupType3Data5800        ; source
+                dc.w    $5800                           ; destination: VRAM $5800
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    WeaponSetupTileArtE300          ; source
+                dc.w    $E300                           ; destination: VRAM $E300
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    StageEntryAndWeaponSetupTileArtDE00  ; source
+                dc.w    $DE00                           ; destination: VRAM $DE00
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    WeaponSetupMappingData6000      ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    WeaponSetupMappingData4020      ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedGameplayTileArtD000       ; source
+                dc.w    $D000                           ; destination: VRAM $D000
+                dc.w    3                               ; command: decompress tiles to VRAM ; another compression type?
+                dc.l    SharedMenuType3DataF680         ; source
+                dc.w    $F680                           ; destination: VRAM $F680
                 dc.w    $FFFF
 
 ; Initializes the weapon-setup screen's three color lookup tables in RAM

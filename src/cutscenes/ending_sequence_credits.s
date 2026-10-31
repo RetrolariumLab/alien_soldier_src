@@ -39,24 +39,24 @@ EndingSequence_Initialize:                              ; was: sub_7B30
                 rts
 ; End of function EndingSequence_Initialize
 ; ---------------------------------------------------------------------------
-EndingSequence_AssetLoads:  dc.w    7                   ; field_0  ; was: stru_7BF2
-                dc.l    EndingSequenceTileArt2000       ; field_2
-                dc.w    $2000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    CreditsAndEndingTileArt         ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    EndingSequenceMappingData9600   ; field_2
-                dc.w    $9600                           ; field_6
+EndingSequence_AssetLoads:  dc.w    7                   ; command: LZSS to VRAM  ; was: stru_7BF2
+                dc.l    EndingSequenceTileArt2000       ; source
+                dc.w    $2000                           ; destination: VRAM $2000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    CreditsAndEndingTileArt         ; source
+                dc.w    $6000                           ; destination: VRAM $6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    EndingSequenceMappingData9600   ; source
+                dc.w    $9600                           ; destination: RAM $FF9600
                 dc.w    $FFFF
 
 ; Runs the palette effect and dispatches the complete credits-to-planet sequence

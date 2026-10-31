@@ -103,21 +103,21 @@ Credits_InitXiTiger_InitVerticalScrollLoop:             ; was: loc_20A64
                 rts
 ; End of function Credits_InitXiTiger
 ; ---------------------------------------------------------------------------
-Credits_XiTigerAssetLoadList:   dc.w    7               ; field_0  ; was: stru_20B4A
-                dc.l    CreditsAndEndingTileArt         ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedCreditsTileArtB000        ; field_2
-                dc.w    $B000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
+Credits_XiTigerAssetLoadList:   dc.w    7               ; command: LZSS to VRAM  ; was: stru_20B4A
+                dc.l    CreditsAndEndingTileArt         ; source
+                dc.w    $4000                           ; destination: VRAM $4000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedCreditsTileArtB000        ; source
+                dc.w    $B000                           ; destination: VRAM $B000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
                 dc.w    $FFFF
 
 ; Main loop for credits sequence processing objects and graphics

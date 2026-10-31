@@ -21,7 +21,7 @@ from that origin or from a name that sounds plausible.
   renaming a definition.
 - Record corrections to earlier generated semantic names with their evidence
   basis in the commit that makes them (the name audit of the earlier releases
-  stays at their tags, up to 3.0).
+  stays in earlier tagged snapshots).
 - Rename all references atomically and require `make verify-revisions`
   afterward.
 - Do not infer behavior solely from a caller name that is itself provisional.
@@ -38,9 +38,9 @@ releases' lint checked them; keep to them by hand):
 - the name is a declared hardware exception.
 
 The vocabulary is the set of owners the source already uses; the closed list of
-Source Reconstruction 1.0 to 3.0 (`config/source_policy.json` at those tags) was
-adopted from the reviewed state of the source rather than designed in advance,
-so it records which subsystems this program actually has. Add an owner
+earlier preservation releases (`config/source_policy.json` in those snapshots)
+was adopted from the reviewed state of the source rather than designed in
+advance, so it records which subsystems this program actually has. Add an owner
 deliberately, not by accident.
 
 The hardware exceptions are the definitions in `src/equals.inc`, `src/ports.inc`

@@ -18,12 +18,12 @@ StageReady_Initialize:                                  ; was: sub_1DFB6
                 jmp     Sound_QueueStageBGMOrStop
 ; End of function StageReady_Initialize
 ; ---------------------------------------------------------------------------
-StageEntryAssetLoadList:    dc.w    3                   ; field_0  ; was: stru_1E012
-                dc.l    SharedMenuType3DataF680         ; field_2
-                dc.w    $F680                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    StageEntryAndWeaponSetupTileArtDE00  ; field_2
-                dc.w    $DE00                           ; field_6
+StageEntryAssetLoadList:    dc.w    3                   ; command: decompress tiles to VRAM  ; was: stru_1E012
+                dc.l    SharedMenuType3DataF680         ; source
+                dc.w    $F680                           ; destination: VRAM $F680
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    StageEntryAndWeaponSetupTileArtDE00  ; source
+                dc.w    $DE00                           ; destination: VRAM $DE00
                 dc.w    $FFFF
 
 ; Alternates READY during the stage-entry delay, then starts stage loading

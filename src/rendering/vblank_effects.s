@@ -168,9 +168,9 @@ VBlank_InitSplitVScrollEffect_Update:                   ; was: loc_1572
                 rts
 ; End of function VBlank_InitSplitVScrollEffect
 ; ---------------------------------------------------------------------------
-HBlank_WriteSplitVScroll2AndStop_InstallList:   dc.w    0  ; field_0  ; was: stru_1594
-                dc.l    HBlank_WriteSplitVScroll2AndStop_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_WriteSplitVScroll2AndStop_InstallList:   dc.w    0  ; command: copy to RAM  ; was: stru_1594
+                dc.l    HBlank_WriteSplitVScroll2AndStop_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_WriteSplitVScroll2AndStop_CopyLength:    dc.w    $20  ; was: word_159E
 
@@ -262,9 +262,9 @@ VBlank_InitStoryDisplayEffect_PrepareHBlankPort:        ; was: loc_16D6
                 rts
 ; End of function VBlank_InitStoryDisplayEffect
 ; ---------------------------------------------------------------------------
-HBlank_UpdateStoryDisplay_InstallList:  dc.w    0       ; field_0  ; was: stru_16E6
-                dc.l    HBlank_UpdateStoryDisplay_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_UpdateStoryDisplay_InstallList:  dc.w    0       ; command: copy to RAM  ; was: stru_16E6
+                dc.l    HBlank_UpdateStoryDisplay_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_UpdateStoryDisplay_CopyLength:   dc.w    $40     ; was: word_16F0
 
@@ -299,9 +299,9 @@ VBlank_InitGameOverVScrollPairEffect_SelectBuffer:      ; was: loc_175E
                 rts
 ; End of function VBlank_InitGameOverVScrollPairEffect
 ; ---------------------------------------------------------------------------
-HBlank_WriteVScrollPair_InstallList:    dc.w    0       ; field_0  ; was: stru_1764
-                dc.l    HBlank_WriteVScrollPair_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_WriteVScrollPair_InstallList:    dc.w    0       ; command: copy to RAM  ; was: stru_1764
+                dc.l    HBlank_WriteVScrollPair_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_WriteVScrollPair_CopyLength: dc.w    $40         ; was: word_176E
 
@@ -352,9 +352,9 @@ VBlank_InitStage10Effect_StoreHBlankData:               ; was: loc_1834
                 rts
 ; End of function VBlank_InitStage10Effect
 ; ---------------------------------------------------------------------------
-HBlank_UpdateStage10Display_InstallList:    dc.w    0   ; field_0  ; was: stru_183C
-                dc.l    HBlank_UpdateStage10Display_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_UpdateStage10Display_InstallList:    dc.w    0   ; command: copy to RAM  ; was: stru_183C
+                dc.l    HBlank_UpdateStage10Display_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_UpdateStage10Display_CopyLength: dc.w    $200    ; was: word_1846
 
@@ -438,9 +438,9 @@ VBlank_InitCRAMWriteEffect_SelectBuffer:                ; was: loc_1928
                 rts
 ; End of function VBlank_InitCRAMWriteEffect
 ; ---------------------------------------------------------------------------
-HBlank_WriteCRAMColor5_InstallList: dc.w    0           ; field_0  ; was: stru_193E
-                dc.l    HBlank_WriteCRAMColor5_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_WriteCRAMColor5_InstallList: dc.w    0           ; command: copy to RAM  ; was: stru_193E
+                dc.l    HBlank_WriteCRAMColor5_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_WriteCRAMColor5_CopyLength:  dc.w    $20         ; was: word_1948
 

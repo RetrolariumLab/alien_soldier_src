@@ -64,18 +64,18 @@ Stage19_UpdateInitialScrollAndLoadTiles:                ; was: sub_E570
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage19_UpdateInitialScrollAndLoadTiles
 ; ---------------------------------------------------------------------------
-Stage19_InitialTileAssetLoadList:   dc.w    7           ; field_0  ; was: stru_E594
-                dc.l    Stage19InitialTileArt0000       ; field_2
-                dc.w    0                               ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage19InitialMappingData6000   ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage19InitialMappingData4020   ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage19InitialMappingData7800   ; field_2
-                dc.w    $7800                           ; field_6
+Stage19_InitialTileAssetLoadList:   dc.w    7           ; command: LZSS to VRAM  ; was: stru_E594
+                dc.l    Stage19InitialTileArt0000       ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage19InitialMappingData6000   ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage19InitialMappingData4020   ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage19InitialMappingData7800   ; source
+                dc.w    $7800                           ; destination: RAM $FF7800
                 dc.w    $FFFF
 
 ; Update Stage 19 to the first Jampan approach boundary

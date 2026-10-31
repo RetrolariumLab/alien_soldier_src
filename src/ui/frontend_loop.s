@@ -30,15 +30,15 @@ Frontend_ActivateSegaSequence:                          ; was: loc_1CEB6
                 rts
 ; End of function Frontend_InitializeSegaSequence
 ; ---------------------------------------------------------------------------
-FrontendSegaSequenceAssetLoadList:  dc.w    7           ; field_0  ; was: stru_1CEFC
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $C000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $E000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $D000                           ; field_6
+FrontendSegaSequenceAssetLoadList:  dc.w    7           ; command: LZSS to VRAM  ; was: stru_1CEFC
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $C000                           ; destination: VRAM $C000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $D000                           ; destination: VRAM $D000
                 dc.w    $FFFF
 
 ; Main game loop update with object processing

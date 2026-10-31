@@ -133,9 +133,9 @@ VBlank_InitBufferedVDPControlEffect_ApplyRegisters:     ; was: loc_1AB2
                 rts
 ; End of function VBlank_InitBufferedVDPControlEffect
 ; ---------------------------------------------------------------------------
-HBlank_WriteVDPControl_InstallList: dc.w    0           ; field_0  ; was: stru_1AC8
-                dc.l    HBlank_WriteVDPControl_CopyLength  ; field_2
-                dc.w    $EE00                           ; field_6
+HBlank_WriteVDPControl_InstallList: dc.w    0           ; command: copy to RAM  ; was: stru_1AC8
+                dc.l    HBlank_WriteVDPControl_CopyLength  ; source
+                dc.w    $EE00                           ; destination: RAM $FFEE00
                 dc.w    $FFFF
 HBlank_WriteVDPControl_CopyLength:  dc.w    $20         ; was: word_1AD2
 

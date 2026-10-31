@@ -348,9 +348,9 @@ Boss_ZLeoRenderBattleEntry:                             ; was: loc_51F34
                 nop
                 bra.w   Boss_ZLeoRenderCompositeFrame
 ; ---------------------------------------------------------------------------
-Boss_ZLeoBattleEntryEffectDescriptor:   dc.w    6       ; field_0  ; was: stru_51F50
-                dc.l    Stage25ZLeoEntryMappingData2020  ; field_2
-                dc.w    $4020                           ; field_6
+Boss_ZLeoBattleEntryEffectDescriptor:   dc.w    6       ; command: LZSS to RAM  ; was: stru_51F50
+                dc.l    Stage25ZLeoEntryMappingData2020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
                 dc.w    $FFFF
 ; ---------------------------------------------------------------------------
 Boss_ZLeoFinishBattleEntry:                             ; was: loc_51F5A

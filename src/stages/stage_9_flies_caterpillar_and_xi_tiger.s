@@ -81,9 +81,9 @@ Stage9_FlyCorridor_WriteVisibleRowOffset:               ; was: loc_D1C8
                 bra.s   Stage9_FlyCorridor_CheckVisibleRowOffset
 ; End of function Stage9_UpdateFlyCorridorScroll
 ; ---------------------------------------------------------------------------
-Stage9_CaterpillarTileAssetLoadList:    dc.w    7       ; field_0  ; was: stru_D1D0
-                dc.l    Stage9CaterpillarTileArt        ; field_2
-                dc.w    $6000                           ; field_6
+Stage9_CaterpillarTileAssetLoadList:    dc.w    7       ; command: LZSS to VRAM  ; was: stru_D1D0
+                dc.l    Stage9CaterpillarTileArt        ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 ; Seed the secondary camera used by the Caterpillar ship traversal
@@ -211,9 +211,9 @@ Stage9_UpdateCaterpillarShipTraversal_Return:           ; was: locret_D38A
 ; End of function Stage9_UpdateCaterpillarShipTraversal
 ; ---------------------------------------------------------------------------
 Stage9_CaterpillarShipColumnTransferDescriptor: dc.w    $FFFF, $7000, $FFFF, $6800, $FFFF, $2000, 0, $6000  ; was: word_D38C
-Stage9_XiTigerEntranceTileAssetLoadList:        dc.w    7  ; field_0  ; was: stru_D39C
-                dc.l    Stage9XiTigerEntranceTileArt    ; field_2
-                dc.w    $8000                           ; field_6
+Stage9_XiTigerEntranceTileAssetLoadList:        dc.w    7  ; command: LZSS to VRAM  ; was: stru_D39C
+                dc.l    Stage9XiTigerEntranceTileArt    ; source
+                dc.w    $8000                           ; destination: VRAM $8000
                 dc.w    $FFFF
 
 ; Scroll the Caterpillar ship out, then select the Xi-Tiger transition route

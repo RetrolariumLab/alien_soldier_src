@@ -33,9 +33,9 @@ Results_ActivatePostStageSummary_Return:                ; was: locret_1DCB0
 ResultsPostStageCompletionAssetLoadList:    dc.w    7   ; was: stru_1DCB2
                 dc.l    ResultsPostStageCompletionTileArt2000  ; field_2
                 dc.w    $2000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    ResultsPostStageCompletionMappingData2020  ; field_2
-                dc.w    $2020                           ; field_6
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    ResultsPostStageCompletionMappingData2020  ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
                 dc.w    $FFFF
 ResultsPostStageCompletionTilemapRows:  dc.b    $69, 0, $20, 0, $F, 0, 1, 2, 3, 4  ; was: byte_1DCC4
                 dc.b    5, 6, 7, 8, 9, $A, $B, $C, $D, $E

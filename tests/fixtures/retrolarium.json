@@ -1,0 +1,896 @@
+{
+  "schema": "alien-soldier.retrolarium-tests",
+  "schema_version": 1,
+  "description": "Independent reference facts transcribed from the existing Kit and Studio assertions; not generated from their export results. Tagged objects retain Python tuple, set, byte-string and integer-key mapping types.",
+  "kit": {
+    "a_project_saved_with_maps_as_mappings_still_applies": {
+      "values": {
+        "source_symbol": "Stage1To4MappingData4000"
+      },
+      "evidence_notes": [
+        "Kits before this one read the maps an asset list loads as sprite",
+        "mappings; a project saved then keeps those blocks."
+      ]
+    },
+    "the_sequencer_writes_what_the_driver_writes": {
+      "values": {
+        "expected_w_value_for_f_in_range_19_23_for_w_in_song_f_if_w_port_w_address_1_181": {
+          "set": [192]
+        },
+        "expected_w_port_w_address_w_value_for_w_in_effect_1": {
+          "tuple": [1, 101, 177]
+        },
+        "expected_voices": [176, 177],
+        "source_symbol": "Sound_BGM_8E",
+        "source_symbol_2": "Sound_BGM_83",
+        "source_symbol_3": "Sound_SFX_DD",
+        "source_symbol_4": "Sound_SFX_A1",
+        "source_symbol_5": "Sound_BGM_84"
+      },
+      "evidence_notes": [
+        "Each case was checked write for write against the game's own",
+        "driver in MAME (every song and effect matches it frame by frame).",
+        "A pan animation stepped past its end reads on into the next one:",
+        "FM5 of the song $8E pans to both sides, not to the left alone.",
+        "Pan mode 4 runs past both jump tables into the restart: FM1 of",
+        "the song $83 writes its pan every frame of a note.",
+        "$E9 sets AM over the effect's first voice bytes ($31 for FM5's",
+        "third operator).",
+        "An effect's channels run in the driver's record order, FM4 first.",
+        "The writes of a frame take time: a key-on comes after its key-off."
+      ]
+    },
+    "stages_form_levels_by_block_set": {
+      "values": {
+        "expected_sets_stage1to4mapping_data6000": [0, 1, 2, 3],
+        "expected_sets_stage8and9mapping_data6000": [7, 8],
+        "expected_scenes_14_area_height": 224,
+        "expected_len_scenes_14_area_parts": 2,
+        "expected_key_web_key_for_key_in_x_y_width_height": {
+          "x": 4192,
+          "y": 0,
+          "width": 320,
+          "height": 256
+        },
+        "expected_space_x_space_y_space_height": {
+          "tuple": [0, 2560, 224]
+        },
+        "expected_backdrop_x_backdrop_y_backdrop_height": {
+          "tuple": [0, 2816, 256]
+        },
+        "expected_len_scenes_7_arenas": 1,
+        "expected_web_list_web_palettes": {
+          "tuple": ["Boss_BackStringerGraphicsLoadList", [["Boss_BackStringerPaletteCommand", 0]]]
+        },
+        "expected_scenes_16_area_y": -16,
+        "expected_scenes_15": "floor",
+        "expected_fight_width_fight_shown": {
+          "tuple": [
+            384,
+            {
+              "x": 1024,
+              "y": -64
+            }
+          ]
+        },
+        "expected_fight_planes_0_fight_planes_1_patterns": {
+          "tuple": [null, 4294918144]
+        },
+        "expected_fight_lists": ["Boss_ZLeoBattleEntryEffectDescriptor"],
+        "expected_fight_palettes": [["Boss_ZLeoPaletteCommands", 0]],
+        "expected_scenes_index_get_plane_b_quarter_for_index_in_0_3_7": [true, true, false],
+        "expected_scenes_7_planes_0_fixed_x": 3072,
+        "expected_airborne_planes_1_y_offset": 2320,
+        "expected_load_list_for_load_in_scenes_8_later": [
+          "Stage9_CaterpillarTileAssetLoadList",
+          "Stage9_XiTigerEntranceTileAssetLoadList"
+        ],
+        "expected_scenes_6_lists": "Stage7_InitialTileAssetLoadList",
+        "sets_key": "Stage1To4MappingData6000",
+        "sets_key_2": "Stage8And9MappingData6000"
+      },
+      "evidence_notes": [
+        "Each stage starts at its camera and ends a screen past where it",
+        "pins the camera for its boss.",
+        "Xi-Tiger's handlers move the camera but never draw the map: the",
+        "picture stays where the entry drew it, at the record's X.",
+        "Sunset Sting's stage climbs before its boss.",
+        "After Viblack the fight moves to Back Stringer's web, apart.",
+        "The 256 lines streamed down from row 0, coloured by the boss",
+        "Viblack brings in.",
+        "The Destroyer Prototype fights in the empty space the asteroid field",
+        "climbs to (camera Y $F600); the moons and surface streamed from row",
+        "$B00 once it is gone are Shield Viper's (stage 22 restarts there).",
+        "Epsilon 1's parallax works the camera Y out as $28 - $18: the rows",
+        "sit 16 pixels lower, the floor under the player.",
+        "Its floor is a raster split: rows of blocks the initializer writes",
+        "into plane B's other name table, shown from line 200 down.",
+        "Z-Leo moves his fight to (0, $100) and rises to $240, with his own",
+        "maps; that screen is shown above the stage.",
+        "It is as wide as his core room (the camera follows him across it)",
+        "and shown over the room the corridor ends in, where the stage's",
+        "plane B reads the same rows.",
+        "His rise streams plane B with plane A's patterns ($4000).",
+        "... the patterns his battle entry loads at $4020, in his colours.",
+        "The first level's stages scroll plane B at a quarter speed; the",
+        "train's rows run on their own.",
+        "The train streams plane B (the train) with plane A's camera X and",
+        "leaves plane A as the entry drew it at $C00.",
+        "Flying-Neo widens the pinned camera by $A0 and swings it from Y $60",
+        "to $80, over plane B streamed $910 rows lower.",
+        "Xi-Tiger's screen is apart: the art its handlers load turns the",
+        "train into clouds, and plane B is blanked.",
+        "Stage 7's first state loads the counter alien's art at once.",
+        "Stage 16 pins its camera between two X bounds: a column."
+      ]
+    },
+    "stage_initializers_rewrite_their_maps": {
+      "values": {
+        "expected_scenes_19_transforms": [
+          {
+            "routine": "update-indices",
+            "ram": "0xFFFF4000",
+            "groups": 192,
+            "add": 32768,
+            "tiles": 384
+          }
+        ],
+        "expected_scenes_0_transforms": []
+      },
+      "evidence_notes": ["Stage 19 reaches the call through a branch into stage 18's code."]
+    },
+    "a_stage_loads_more_maps_as_its_camera_moves": {
+      "values": {
+        "expected_factory_camera_x_factory_list": {
+          "tuple": [3456, "Stage19_InitialTileAssetLoadList"]
+        },
+        "expected_write_source_for_write_in_factory_map_writes": "Stage19InitialMappingData6000",
+        "expected_scenes_17_later": []
+      },
+      "evidence_notes": ["Stage 19 starts on stage 18's snow and swaps in the factory at $D80."]
+    },
+    "a_loader_plays_the_shared_tail_it_falls_into": {
+      "values": {
+        "expected_scenes_index_lists": "Stage21To23SharedAssetLoadList"
+      },
+      "evidence_notes": []
+    },
+    "a_staging_buffer_is_no_map": {
+      "values": {
+        "expected_tiles": {
+          "set": ["Boss_BackStringerTileArt2", "Stage18WormTileArt"]
+        }
+      },
+      "evidence_notes": []
+    },
+    "bosses_draw_with_their_asset_sets": {
+      "values": {
+        "expected_anchored_attribute_2047": 768,
+        "expected_anchored_loads": {
+          "source": "Boss_JokerTileArt",
+          "command": 7,
+          "vram": 24576
+        },
+        "expected_anchored_palettes_1": ["Boss_JokerPaletteCommand", 0],
+        "expected_group_title_for_group_in_exported_groups": "Back Stringer",
+        "expected_contexts_multi_form_rotation_sprite_frame29_palettes_1": ["SevenForceValkiriePaletteCommand", 0],
+        "expected_alien": "Stage7InitialTileArt",
+        "expected_load_source_for_load_in_burst_loads": "EndingSequenceTileArt2000",
+        "expected_blocks": "Stage1To4MappingData4000",
+        "reference": {
+          "tuple": [
+            {
+              "commands": [["Boss_JetsripperPaletteCommand", 0]]
+            },
+            3
+          ]
+        },
+        "contexts_key": "Boss_JokerRotationMappingA0",
+        "contexts_key_2": "EndingPlanetBurstSpriteMappingB",
+        "contexts_key_3": "SevenForceRotationSpriteFrame29",
+        "contexts_key_4": "Enemy_RisingAlienSpriteMapping09",
+        "art_key": "Boss_JetsripperTileArt"
+      },
+      "evidence_notes": [
+        "Joker, as the tool-assisted run draws him: his art at $6000 (tile",
+        "$300), in his palette command's colours.",
+        "A boss's file play never drew takes its context from the source:",
+        "the art its asset set loads, ending in the set's palette command.",
+        "Blocks drawn from a boss's art take its colours, whatever play",
+        "matched (the Seven Force).",
+        "A borrowed block a stage spawns draws with that stage's art: stage",
+        "7's counter alien from the art its first state loads.",
+        "A screen's code draws the ending planet's burst in that screen's art.",
+        "Maps an asset list loads are no sprite mappings.",
+        "A boss's art shows in its palette command's line."
+      ]
+    },
+    "the_recorded_object_art_fits_the_source": {
+      "values": {
+        "expected_len_seen": 100,
+        "expected_frame_attribute_2047": 1152,
+        "expected_frame_loads": {
+          "source": "SharedSceneAndStageTileArt9000",
+          "command": 7,
+          "vram": 36864
+        },
+        "expected_len_spawns": 250,
+        "expected_first_type_first_parameter": {
+          "tuple": [28, 16]
+        },
+        "expected_contexts": "Boss_LovePenguinSecondFormSpriteMapping",
+        "expected_table_label_table_line_for_table_in_sega_tables": [
+          {
+            "tuple": ["SegaScreenPalette", 2]
+          }
+        ],
+        "expected_sega_tables_0_colours_3": [0, 3822, 3776],
+        "expected_art_sega_screen_tile_art_line": 2,
+        "contexts_key": "Effect_SpriteFrame00",
+        "contexts_key_2": "FrontendSegaScreenSpriteMapping",
+        "art_key": "SegaScreenTileArt",
+        "item_list_reference": "Stage1_ObjectSpawnList"
+      },
+      "evidence_notes": [
+        "The shared explosion frames draw from the art every stage loads at $9000.",
+        "Most placements of the stages' spawn lists record what they draw.",
+        "Love Penguin's second form hangs the game before it draws: an outline.",
+        "The SEGA logo's colours are a table its code copies into line 2."
+      ]
+    },
+    "art_is_grouped_by_what_draws_with_it": {
+      "values": {
+        "expected_payloads_player_phoenix_dash_attack_sprite_art_piece00_group": "hero",
+        "expected_payloads_credits_scene17mapping_data_group": "map",
+        "payloads_key": "Player_PhoenixDashAttackSpriteArtPiece00",
+        "payloads_key_2": "Credits_Scene17MappingData"
+      },
+      "evidence_notes": ["The player's pieces, the credits' screen maps and a stage's art."]
+    },
+    "the_credits_scenes_come_from_their_table": {
+      "values": {
+        "expected_len_scenes": 20,
+        "expected_table_vram": {
+          "tuple": [49152, 57344]
+        },
+        "expected_len_scene_palette_colours": 16
+      },
+      "evidence_notes": []
+    },
+    "jointed_bosses_read_as_skeletons_with_poses_and_animations": {
+      "values": {
+        "name_references": {
+          "tuple": ["Antroid", "Terobuster", "Shellshogun", "Joker", "Xi-Tiger", "Z-Leo", "Madam Barbar"]
+        },
+        "name_references_2": {
+          "tuple": ["Valkirie battle", "Medusa", "Sylpheed", "Artemis", "Sirene"]
+        },
+        "expected_checked": "Sharpsteel",
+        "expected_direct_poses_direct_sequences_direct_channels": {
+          "tuple": [null, [], 0]
+        },
+        "expected_trailing_settle": 30,
+        "expected_len_jointed_parts_jointed_channels_jointed_timing": {
+          "tuple": [26, 15, "set"]
+        },
+        "expected_jointed_asset_set": "Boss_AntroidAssetSet",
+        "expected_row_offset_for_row_in_document_poses_jointed_poses_9": [0, 16, 32, 48, 64, 80, 96, 112, 144],
+        "expected_len_jointed_sequences": 16,
+        "expected_jointed_parts_25_parent": 24,
+        "expected_jointed_joints_25": 14,
+        "expected_jointed_side_field": 6,
+        "expected_jointed_parts_14_angle": 448,
+        "expected_jointed_facing_256_set": [2],
+        "expected_len_document_cosine": 256,
+        "expected_sequences_boss_jointed_idle_poses_commands": [
+          {
+            "pose": 6,
+            "frames": 32,
+            "steps": 32
+          },
+          {
+            "pose": 7,
+            "frames": 32,
+            "steps": 32
+          }
+        ],
+        "expected_retry_end_retry_next": {
+          "tuple": ["next", "Boss_AntroidJumpSlamFirstArcPoses"]
+        },
+        "expected_sequences_boss_jointed_jump_attack_poses_commands": {
+          "sound": 208
+        },
+        "expected_additive_timing": "add",
+        "expected_index_for_index_part_in_enumerate_anchored_parts_if_part_get_anchor": [19, 20, 21, 22],
+        "expected_airborne_traversed": [2, 8],
+        "expected_part_get_reach_false_part_get_from_reach_false_for_part_in_extended_rea": [
+          {
+            "tuple": [true, false]
+          },
+          {
+            "tuple": [true, true]
+          },
+          {
+            "tuple": [false, true]
+          }
+        ],
+        "expected_forms_medusa_palettes_1": ["SevenForceMedusaPaletteCommand", 0],
+        "expected_forms_sylpheed_palettes_1": ["SevenForceSylpheedPaletteCommand", 0],
+        "expected_forms_valkirie_alternate_channels": 12,
+        "expected_viewer_asset_set_len_document_poses_viewer_poses": {
+          "tuple": ["Boss_LambdaBunnyAssetSet", 2]
+        },
+        "expected_index_part_source_for_index_part_in_enumerate_wolf_parts_if_part_kind_m": [
+          {
+            "tuple": [26, "Boss_WolfGaropaInitialPartMapping"]
+          },
+          {
+            "tuple": [27, "Boss_WolfGaropaOrbDirectionMapping0"]
+          },
+          {
+            "tuple": [28, "Boss_WolfGaropaNearPlayerMapping"]
+          },
+          {
+            "tuple": [29, "Boss_WolfGaropaOrbAlternateMapping"]
+          }
+        ],
+        "expected_airborne_parts_10_source": "Boss_FlyingNeoAuxiliaryPartMappingA",
+        "expected_part_kind_part_size_for_part_in_airborne_parts_11_14": [
+          {
+            "tuple": ["sprite", 10]
+          },
+          {
+            "tuple": ["sprite", 10]
+          },
+          {
+            "tuple": ["sprite", 10]
+          }
+        ],
+        "expected_airborne_tables": "FF9900",
+        "sequences_key": "Boss_AntroidJumpSlamRetryPoses",
+        "extended_reach_symbols_key": "Boss_BackStringerPartAngleFrameTable",
+        "forms_key": "Wolf Garopa",
+        "sequences_key_2": "Boss_AntroidIdlePoses",
+        "sequences_key_3": "Boss_AntroidJumpAttackPoses",
+        "forms_key_2": "Valkirie alternate",
+        "boss_title_reference": "Deep Strider",
+        "boss_title_reference_2": "Sirene",
+        "boss_title_reference_3": "Antroid",
+        "boss_title_reference_4": "Terobuster",
+        "boss_title_reference_5": "Joker",
+        "boss_title_reference_6": "Flying-Neo",
+        "boss_title_reference_7": "Back Stringer",
+        "extended_reach_symbols_key_2": "Boss_BackStringerPartAngleMapping0",
+        "forms_key_3": "Medusa",
+        "forms_key_4": "Sylpheed",
+        "boss_id_reference": "Debug_LambdaBunnyViewerInitialize"
+      },
+      "evidence_notes": [
+        "The Seven Force's forms read each from its own file and what it",
+        "calls; Sirene's tentacles follow a history of the frames before.",
+        "Sharpsteel's animations are written as bytes; Deep Strider's code",
+        "alone turns it (fields its setup gives, four-frame tables).",
+        "The poses are the table offsets its animations name: all rows but one.",
+        "A foot hangs from the leg chain and turns with the last leg channel;",
+        "the side the pose code tests is field 6.",
+        "Terobuster adds a signed count to its steps; Joker's hands and feet",
+        "are anchors its renderer's code places.",
+        "Flying-Neo's renderer walks from its third slot, eight parts; its",
+        "code puts the second beside the boss.",
+        "Back Stringer's arms hang in threes from the points half a bone",
+        "past the part above; its arms pick their mappings from a table.",
+        "Each Seven Force form draws in its own colours, its set's command;",
+        "the alternate Valkirie steps twelve channels of its own.",
+        "A debug viewer builds a boss the game cut, in the $3EC set's art:",
+        "one animation between two poses. No text names it: the game",
+        "repository's name for its entity type does.",
+        "Wolf Garopa's horse's head and neck and its rider's head and arm are",
+        "records its setup fills by hand, placed by the code after its",
+        "renderer by their pixel places.",
+        "Flying-Neo's head is a mapping, its tail sprites of their own that",
+        "swing on a sine table its code builds in RAM."
+      ]
+    },
+    "big_bosses_have_their_plane_b_bodies": {
+      "values": {
+        "expected_bodies_camera_only_x_bodies_camera_only_y": {
+          "tuple": [-64, -32]
+        },
+        "expected_bodies_camera_only_cells_0_3_6": [57984, 57985, 57986],
+        "expected_bodies_armoured_x_bodies_armoured_y": {
+          "tuple": [-60, -32]
+        },
+        "expected_len_bodies_armoured_cells": 8,
+        "expected_bodies_additive_x_bodies_additive_y": {
+          "tuple": [-76, -50]
+        },
+        "expected_bodies_mounted_x_bodies_mounted_y": {
+          "tuple": [-48, -80]
+        },
+        "expected_bodies_rising_plane_bodies_rising_x_bodies_rising_y": {
+          "tuple": ["A", -96, -68]
+        },
+        "expected_len_bodies_rising_cells": 24,
+        "expected_bodies_rising_cells_8_2": [25281, 25282],
+        "expected_bodies_flying_airborne_x_bodies_flying_airborne_y": {
+          "tuple": [-48, -24]
+        },
+        "expected_faces_mounted_faces_armoured_faces_jointed": {
+          "tuple": [0, 256, null]
+        },
+        "bodies_key": "Antroid",
+        "bodies_key_2": "Flying-Neo",
+        "faces_key": "Wolf Garopa",
+        "faces_key_2": "Shellshogun",
+        "bodies_key_3": "Xi-Tiger",
+        "bodies_key_4": "Terobuster",
+        "bodies_key_5": "Joker",
+        "bodies_key_6": "Z-Leo"
+      },
+      "evidence_notes": [
+        "Where MAME's plane B and scroll put them: Xi-Tiger's patterns",
+        "moved down $80 tiles by its setup, Shellshogun's as loaded.",
+        "Joker's scrolls down line by line; at rest it sits as the others do.",
+        "Wolf Garopa scrolls by fields of its own; Z-Leo's body is plane A's,",
+        "six rows its code queues as it rises, its tile indices moved $280.",
+        "Flying-Neo's line and column scroll follow it; its set has no",
+        "palette but still loads the patterns. Its tiles carry the sky.",
+        "A boss shows facing as its setup builds its body."
+      ]
+    },
+    "chain_bosses_bring_the_code_that_places_their_records": {
+      "values": {
+        "title_references": {
+          "tuple": ["Jetsripper", "Gusthead", "Caterpillar", "Sunset Sting"]
+        },
+        "reference": {
+          "tuple": [{}, "B"]
+        },
+        "reference_2": {
+          "tuple": [64, [0, 0]]
+        },
+        "expected_len_pose_code_state_table_tree_boss_radial_segment_states": 7,
+        "expected_machine_read_segment_2_machine_read_segment_68_2": {
+          "tuple": [496, 128]
+        },
+        "expected_abs_reach_0_abs_reach_1": 16,
+        "expected_body_plane_len_body_cells_len_body_cells_0": {
+          "tuple": ["B", 24, 8]
+        },
+        "expected_machine_read_core_record_20_2": 320,
+        "expected_found_title": "position_field",
+        "found_key": "Sunset Sting",
+        "source_symbol": "Boss_SunsetStingSegmentMapping",
+        "source_symbol_2": "Boss_SunsetStingSegmentStates",
+        "found_key_2": "Jampan",
+        "found_key_3": "Jetsripper"
+      },
+      "evidence_notes": [
+        "Bosses whose records other code places come as plane bodies, their",
+        "records where they stand.",
+        "Jetsripper's chain hangs on its body ($40/$44); Sunset Sting's",
+        "record draws nothing, so its ring is shown around its middle.",
+        "Sunset Sting's segments dispatch on a state table; settled, they",
+        "orbit at their full radius ($80) around the core, each on the",
+        "mapping its angle picks.",
+        "Its stem and head are plane B's cells its code queues, as the",
+        "tool-assisted run shows them: centred on it, its line scroll being",
+        "its X, at the top of the screen.",
+        "Its visible core, which its intro brings down to the floor under",
+        "it, stands there, not at the origin its setup leaves it at."
+      ]
+    },
+    "plane_bosses_bring_the_bodies_their_code_queues": {
+      "values": {
+        "expected_bodies": {
+          "Missiray": {
+            "tuple": ["B", -160, -32]
+          },
+          "Destroyer-Mk2": {
+            "tuple": ["A", -64, -80]
+          },
+          "Jampan": {
+            "tuple": ["B", -36, -36]
+          },
+          "Bugmax": {
+            "tuple": ["B", -40, -40]
+          }
+        },
+        "expected_len_column_body_cells_len_column_body_cells_0": {
+          "tuple": [12, 40]
+        },
+        "expected_column_body_columns_8_12": [0, 0, 0, 0],
+        "expected_set_column_body_columns_8": {
+          "set": [-16]
+        },
+        "expected_len_destroyer_body_cells_len_destroyer_body_cells_0": {
+          "tuple": [20, 16]
+        },
+        "expected_raster_body_plane_raster_body_x_raster_body_y": {
+          "tuple": ["A", -256, -56]
+        },
+        "expected_len_raster_body_cells_len_raster_body_cells_0": {
+          "tuple": [16, 64]
+        },
+        "expected_set_raster_body_columns_12_20_set_raster_body_columns_12": {
+          "tuple": [
+            {
+              "set": [0]
+            },
+            {
+              "set": [8]
+            }
+          ]
+        },
+        "title_references": {
+          "tuple": ["Missiray", "Destroyer-Mk2", "Jampan", "Bugmax"]
+        },
+        "found_key": "Destroyer-Mk2",
+        "found_key_2": "Missiray",
+        "found_key_3": "Epsilon 1"
+      },
+      "evidence_notes": [
+        "As Gens's states of the fights hold them: the name-table cells",
+        "the boss's code queues, and their corner from the boss as the",
+        "scroll shows it.",
+        "Its segments lift the plane's columns: the middle (its head) stays.",
+        "Epsilon 1 as it waits to fight: four bands of its body and the",
+        "wings its animated columns draw, across all of plane A, the wings",
+        "eight lines below the body under its column scroll."
+      ]
+    },
+    "the_streamed_stands_on_the_ship_its_stage_streams": {
+      "values": {
+        "expected_stream_descriptor_stream_camera_y": {
+          "tuple": ["Stage9_CaterpillarShipColumnTransferDescriptor", 63744]
+        },
+        "expected_body_plane_len_body_cells_len_body_cells_0": {
+          "tuple": ["B", 10, 242]
+        },
+        "expected_word_57344_for_row_in_body_cells_for_word_in_row_if_word_2047": {
+          "set": [57344]
+        },
+        "expected_y_body_y": 24,
+        "boss_title_reference": "Caterpillar"
+      },
+      "evidence_notes": [
+        "Stage 9 spawns the Caterpillar ($128), then streams plane B from",
+        "the secondary camera, the map read from row $700.",
+        "Map X $210 to $99F, ten rows, all on line 3 over the sprites.",
+        "As in Gens's states of the fight: a segment stands at map X $58 -",
+        "$80 of the plane, 24 lines below the ship's top on its column."
+      ]
+    },
+    "sprite_body_and_stage_body_come_with_their_planes_and_own_sprites": {
+      "values": {
+        "expected_sprite_body_body_plane_sprite_body_body_x_sprite_body_body_y": {
+          "tuple": ["B", -40, -40]
+        },
+        "expected_core_kind_core_size_core_x_core_y_core_attribute": {
+          "tuple": ["sprite", 14, -16, -8, 25388]
+        },
+        "expected_word_0_16_word_0_20": {
+          "tuple": [452, 256]
+        },
+        "expected_ring": [
+          {
+            "tuple": [-26, 31]
+          },
+          {
+            "tuple": [3, 40]
+          },
+          {
+            "tuple": [31, 25]
+          },
+          {
+            "tuple": [40, -4]
+          },
+          {
+            "tuple": [25, -32]
+          },
+          {
+            "tuple": [-4, -41]
+          },
+          {
+            "tuple": [-32, -26]
+          },
+          {
+            "tuple": [-41, 3]
+          }
+        ],
+        "expected_stages_spawning_scenes_tree_696_camera_x": 1632,
+        "expected_body_plane_body_x_body_y_len_body_cells_len_body_cells_0": {
+          "tuple": ["B", -160, -24, 8, 40]
+        },
+        "expected_set_body_columns": {
+          "set": [0]
+        },
+        "expected_load_source_for_load_in_stage_body_loads": "Stage14To16TileArt0000",
+        "expected_stage_body_palettes_1": ["Boss_ViblackIntroPaletteCommand", 0],
+        "found_key": "Victor",
+        "found_key_2": "Viblack"
+      },
+      "evidence_notes": [
+        "As in Gens's states of their fights: Victor 32 frames in, flying",
+        "in at $1C4 with its velocity; its core, eyes and ring are sprites",
+        "the records hold themselves.",
+        "Viblack lifts its stage's blocks into plane B (stage 16 holds the",
+        "camera at $660 for it), shown level as it stands between rocks."
+      ]
+    },
+    "cut_jointed_waves_its_tentacles_as_it_comes_in": {
+      "values": {
+        "expected_body_plane_body_x_body_y_len_body_cells_len_body_cells_0": {
+          "tuple": ["B", -36, -36, 12, 12]
+        },
+        "expected_sum_1_for_part_in_cut_boss_parts_if_part_kind_mapping": 25,
+        "expected_cut_boss_parts_1_source": "Boss_LovePenguinEarlyFormPartMapping",
+        "expected_word_0_4_word_0_16_word_0_20": {
+          "tuple": [6, 385, 271]
+        },
+        "expected_index_tuple_word_index_field_word_0_field_32768_65536_32768_for_field_i": {
+          "mapping": [
+            [
+              5,
+              {
+                "tuple": [88, 75]
+              }
+            ],
+            [
+              10,
+              {
+                "tuple": [110, 35]
+              }
+            ],
+            [
+              15,
+              {
+                "tuple": [115, -10]
+              }
+            ],
+            [
+              20,
+              {
+                "tuple": [102, -53]
+              }
+            ],
+            [
+              24,
+              {
+                "tuple": [-42, -83]
+              }
+            ]
+          ]
+        },
+        "boss_title_reference": "Love Penguin"
+      },
+      "evidence_notes": [
+        "As MAME runs the cut boss in Antroid's place, 141 frames in: its",
+        "face in plane B, 24 tentacle segments placed down their tree",
+        "(pointers flagged in their top byte), its message on screen."
+      ]
+    },
+    "bosses_bring_what_their_setup_leaves_in_their_records": {
+      "values": {
+        "expected_angle_mounted_index_for_index_in_range_1_5": [504, 504, 288, 288],
+        "expected_machine_read_slot_574_2_machine_read_slot_668_2": {
+          "tuple": [51296, 400]
+        },
+        "expected_armoured_parts_index_attribute_for_index_in_1_6_8_13": [35584, 33536, 768, 33536],
+        "expected_len_angle_flying_airborne_index_for_index_in_range_12_20": 8,
+        "expected_body_command_body_x_body_y_body_part": {
+          "tuple": ["Debug_LambdaBunnyViewerLeftHeadColumns", -39, -52, 1]
+        },
+        "found_key": "Shellshogun",
+        "found_key_2": "Lambda Bunny",
+        "source_symbol": "Wolf Garopa",
+        "source_symbol_2": "Flying-Neo"
+      },
+      "evidence_notes": [
+        "Wolf Garopa's hind legs hang from anchors its builder turns back,",
+        "Shellshogun draws its arms over its belly and turns its sword with",
+        "its hand before its renderer, Flying-Neo's tail has waved a while,",
+        "and the debug viewer's body rides on its first part."
+      ]
+    },
+    "path_following_lays_its_body_down_its_heads_path": {
+      "values": {
+        "expected_path_boss_chain_path_boss_position_field_path_boss_centre": {
+          "tuple": ["Boss_ShieldViperUpdate", 16, [0, 0]]
+        },
+        "expected_sum_1_for_part_in_path_boss_parts_if_part_kind_mapping": 25,
+        "expected_head": [8, 310, 242, 64896],
+        "expected_index_place_index_for_index_in_1_6_12_18_24": {
+          "mapping": [
+            [
+              1,
+              {
+                "tuple": [5, -27]
+              }
+            ],
+            [
+              6,
+              {
+                "tuple": [64, -47]
+              }
+            ],
+            [
+              12,
+              {
+                "tuple": [27, 34]
+              }
+            ],
+            [
+              18,
+              {
+                "tuple": [18, -44]
+              }
+            ],
+            [
+              24,
+              {
+                "tuple": [74, -16]
+              }
+            ]
+          ]
+        },
+        "boss_title_reference": "Shield Viper"
+      },
+      "evidence_notes": [
+        "The head and 24 body records drawn; the orbit shot waits hidden.",
+        "Run as the studio runs it, it is Gens's state of the fight 472",
+        "frames in: the head circling while its message is on screen, its",
+        "body on the path behind it."
+      ]
+    },
+    "a_capture_knows_the_object_records_and_the_bosses": {
+      "values": {
+        "expected_capture_pool_tree": {
+          "tuple": [16762400, 16768160]
+        },
+        "expected_types": 48,
+        "expected_types_2": 1072
+      },
+      "evidence_notes": [
+        "Sixty $60-byte records from $FFC620, the end the walker compares",
+        "with; the bosses are the types their asset sets install."
+      ]
+    },
+    "pose_code_runs_as_the_game_runs_it": {
+      "values": {
+        "expected_named_get_machine_read_bosses_slot_index_96_8_4_for_index_in_1_2": [
+          "Boss_BackStringerPartAngleMapping1",
+          "Boss_BackStringerPartAngleMapping4"
+        ],
+        "boss_title_reference": "Antroid",
+        "boss_title_reference_2": "Back Stringer"
+      },
+      "evidence_notes": [
+        "The foot's angle is the sum of its leg's channels and the body's",
+        "(14, 13, 12 and 2), each byte doubled.",
+        "Back Stringer's arms take a mapping from a table by angle (an",
+        "eighth of a turn later), four per arm."
+      ]
+    },
+    "poses_and_animations_write_back": {
+      "values": {
+        "source_symbol": "Boss_AntroidIdlePoses",
+        "boss_title_reference": "Antroid"
+      },
+      "evidence_notes": ["A step count of zero would divide by zero; an end and the offsets stay."]
+    }
+  },
+  "studio": {
+    "minimum_stages": 20,
+    "minimum_block_sets": 10,
+    "minimum_screens": 20,
+    "priority_stage": 19,
+    "priority_add": 32768,
+    "first_set_stages": [0, 1, 2, 3],
+    "separate_arena_stage": 15,
+    "separate_arena_document": "arena-16-1",
+    "inline_arena_stage": 24,
+    "inline_parts": 2,
+    "wide_arena_stage": 7,
+    "apart_stage": 8,
+    "floor_stage": 16,
+    "floor_height": 24,
+    "hero_mapping": "Player_DirectionalSecondarySpriteMapping00",
+    "hero_minimum_art": 10,
+    "logo_mapping": "FrontendSegaScreenSpriteMapping",
+    "logo_palette_line": 2,
+    "logo_colours": [0, 3822, 3776],
+    "idle_title": "Antroid",
+    "idle_animation": "Boss_AntroidIdlePoses",
+    "idle_initial_pose": 6,
+    "idle_minimum_documents": 10,
+    "idle_keys": 2,
+    "idle_total_frames": 66,
+    "idle_end_frames": [32, 65],
+    "idle_minimum_pieces": 15,
+    "idle_key_steps": [33, 33],
+    "voices": 48,
+    "drums": 22,
+    "first_voice": "Voice $10",
+    "coded_title": "Deep Strider",
+    "object_preview_contexts": [
+      {
+        "block": "Boss_DeepStriderRotationMappingB1",
+        "boss": "Boss_DeepStriderIntroRise"
+      },
+      {
+        "block": "Boss_DeepStriderRotationMappingC1",
+        "boss": "Boss_DeepStriderIntroRise"
+      },
+      {
+        "block": "Boss_DeepStriderRootMapping",
+        "boss": "Boss_DeepStriderIntroRise"
+      },
+      {
+        "block": "Boss_BackStringerPartAngleMapping7",
+        "boss": "Boss_BackStringerInitializeState"
+      },
+      {
+        "block": "SevenForceRotationSpriteFrame00",
+        "boss": "Entity_InitValkirieBattleState0"
+      },
+      {
+        "block": "SevenForceRotationSpriteFrame05",
+        "boss": "Entity_InitValkirieBattleState0"
+      }
+    ],
+    "object_preview_palettes": [
+      {
+        "block": "Stage24SceneObject_SpriteFrame02",
+        "commands": [
+          ["CommonPaletteCommand", 0],
+          ["SevenForceIntroPaletteCommand", 0]
+        ]
+      },
+      {
+        "block": "Stage24SceneObject_SpriteFrame01",
+        "commands": [
+          ["CommonPaletteCommand", 0],
+          ["SevenForceIntroPaletteCommand", 0]
+        ]
+      },
+      {
+        "block": "EndingPlanetSpriteMappingsA",
+        "commands": [
+          ["CommonPaletteCommand", 0],
+          ["Boss_Epsilon1PaletteCommands", 32],
+          ["Boss_Epsilon1PaletteCommands", 96]
+        ]
+      },
+      {
+        "block": "EndingPlanetSpriteMappingsB",
+        "commands": [
+          ["CommonPaletteCommand", 0],
+          ["Boss_Epsilon1PaletteCommands", 32],
+          ["Boss_Epsilon1PaletteCommands", 96]
+        ]
+      },
+      {
+        "block": "EndingPlanetBurstSpriteMappingA",
+        "commands": [
+          ["CommonPaletteCommand", 0],
+          ["Boss_Epsilon1PaletteCommands", 32],
+          ["Boss_Epsilon1PaletteCommands", 96]
+        ]
+      }
+    ],
+    "object_outline_previews": [
+      "CutsceneFirstPlanetGridSpriteMappings",
+      "CutsceneSecondPlanetGridSpriteMappings",
+      "CutsceneFirstShipGridSpriteMappings",
+      "CutsceneSecondShipGridSpriteMappings",
+      "CutsceneStarRowSpriteMappings"
+    ],
+    "compact_boss_preview": {
+      "boss": "Boss_CaterpillarInitSegments",
+      "object_minimum_width": 1900,
+      "palette_maximum_width": 300,
+      "head_part": "1"
+    }
+  }
+}

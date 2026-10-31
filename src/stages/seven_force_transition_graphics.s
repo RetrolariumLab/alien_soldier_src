@@ -367,24 +367,24 @@ Stage_SevenForceInitializeArtemisCameraAndAssets:       ; was: sub_EE62
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_SevenForceInitializeArtemisCameraAndAssets
 ; ---------------------------------------------------------------------------
-Gfx_ArtemisInitialAssetTransfers:   dc.w    7           ; field_0 ; was: stru_EEA6
-                dc.l    SevenForceArtemisTileArt0000    ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SevenForceArtemisTileArt1F00    ; field_2
-                dc.w    $1F00                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceArtemisMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceArtemisMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceArtemisMappingData6800  ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceArtemisMappingData2020  ; field_2
-                dc.w    $2020                           ; field_6
+Gfx_ArtemisInitialAssetTransfers:   dc.w    7           ; command: LZSS to VRAM ; was: stru_EEA6
+                dc.l    SevenForceArtemisTileArt0000    ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SevenForceArtemisTileArt1F00    ; source
+                dc.w    $1F00                           ; destination: VRAM $1F00
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceArtemisMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceArtemisMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceArtemisMappingData6800  ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceArtemisMappingData2020  ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
                 dc.w    $FFFF
 
 ; Initializes the Artemis tilemap transfer
@@ -447,15 +447,15 @@ Cutscene_SevenForceLoadGraphics:                        ; was: sub_EF7A
                 jmp     (Data_ProcessPointer).l
 ; End of function Cutscene_SevenForceLoadGraphics
 ; ---------------------------------------------------------------------------
-Gfx_SevenForceCutsceneAssetTransfers:   dc.w    7       ; field_0 ; was: stru_EF92
-                dc.l    SevenForceVictoryCutsceneTileArt1F00  ; field_2
-                dc.w    $1F00                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceVictoryCutsceneMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SevenForceVictoryCutsceneMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
+Gfx_SevenForceCutsceneAssetTransfers:   dc.w    7       ; command: LZSS to VRAM ; was: stru_EF92
+                dc.l    SevenForceVictoryCutsceneTileArt1F00  ; source
+                dc.w    $1F00                           ; destination: VRAM $1F00
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceVictoryCutsceneMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SevenForceVictoryCutsceneMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
                 dc.w    $FFFF
 
 ; Initializes tilemap update with scroll parameters

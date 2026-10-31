@@ -8,9 +8,11 @@ payloads of interface art and is built around something tile graphics actually
 have: edges that continue onto the row below. Its decoder lives in the ROM at
 `TileCodec_DecodeTile`.
 
-We can read the format and write it back. What we cannot yet do is write it
-*well*: our encoder emits about half as many bytes again as the original. The
-open problem is at the end.
+We can read the format and write it back. The standalone run-only encoder below
+emits about half as many bytes again as the original. Retrolarium Kit's
+source-guided encoder preserves unedited bytes and can recolour the original
+streams within their slots; arbitrary new art may still exceed that capacity.
+The general optimization problem remains open and is described at the end.
 
 ## The unit of work
 

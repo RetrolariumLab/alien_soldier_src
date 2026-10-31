@@ -2,7 +2,7 @@
 
 The table below is an orientation layer: `src/main.s` and the assembler listing
 are the exact ownership. The ranges and file counts were checked against the
-listing up to tag 3.0; keep them current by hand when modules move.
+listing from an earlier snapshot; keep them current by hand when modules move.
 
 | ROM range           | Broad owner                                                                                                     | Files | Confidence               |
 | ------------------- | --------------------------------------------------------------------------------------------------------------- | ----: | ------------------------ |

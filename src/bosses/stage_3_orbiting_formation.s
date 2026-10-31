@@ -248,9 +248,9 @@ Boss_Stage3OrbitingFormationInitNextPart:               ; was: loc_341F2
                 rts
 ; End of function Boss_Stage3OrbitingFormationInit
 ; ---------------------------------------------------------------------------
-Boss_Stage3OrbitingFormationTileLoadRequest:    dc.w    7  ; field_0  ; was: stru_34266
-                dc.l    Boss_Stage3OrbitingFormationTileArt  ; field_2
-                dc.w    $6000                           ; field_6
+Boss_Stage3OrbitingFormationTileLoadRequest:    dc.w    7  ; command: LZSS to VRAM  ; was: stru_34266
+                dc.l    Boss_Stage3OrbitingFormationTileArt  ; source
+                dc.w    $6000                           ; destination: VRAM $6000
                 dc.w    $FFFF
 
 ; Removes the controller after the defeat transition

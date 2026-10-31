@@ -18,7 +18,13 @@ in Gens against the Japanese ROM, converted to Retrolarium's run-length
 The recording goes on into stage 1, and the earlier releases also kept a
 longplay and a tool-assisted run. MAME plays those Gens inputs differently once
 the player moves through a stage (no frame offset brings them back in step), so
-they stay at the earlier tags until they are ported to MAME.
+they stay in earlier tagged snapshots. Completing that migration, including the
+remaining runtime scenarios, longplay and tool-assisted run, is planned for 3.1.
+The existing attract fixture is the MAME coverage included in the unified 3.0
+release; it does not cover a complete playthrough or the European revision. Both
+revisions are checked separately by the byte-exact build and zero-edit Studio
+checks, which do not establish equivalent runtime coverage. See the
+[release scope](../README.md#release-scope).
 
 ## Content boundary
 

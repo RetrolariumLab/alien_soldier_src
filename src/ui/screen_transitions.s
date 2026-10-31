@@ -71,9 +71,9 @@ Frontend_InitializeTitleTransition_CopyPalette:         ; was: loc_1D1BA
                 rts
 ; End of function Frontend_InitializeTitleTransition
 ; ---------------------------------------------------------------------------
-FrontendTitleTransitionAssetLoadList:   dc.w    7       ; field_0  ; was: stru_1D254
-                dc.l    FrontendTitleTransitionTileArtA000  ; field_2
-                dc.w    $A000                           ; field_6
+FrontendTitleTransitionAssetLoadList:   dc.w    7       ; command: LZSS to VRAM  ; was: stru_1D254
+                dc.l    FrontendTitleTransitionTileArtA000  ; source
+                dc.w    $A000                           ; destination: VRAM $A000
                 dc.w    $FFFF
 FrontendTitleTransitionPalette: dc.l    0, $EEE0F00     ; was: dword_1D25E
                 dc.l    2, $E240602

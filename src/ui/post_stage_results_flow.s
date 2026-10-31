@@ -55,21 +55,21 @@ Results_FinalizePostStageSetup:                         ; was: loc_1D6F4
                 rts
 ; End of function Results_InitializePostStageFlow
 ; ---------------------------------------------------------------------------
-ResultsPostStageAssetLoadList:  dc.w    3               ; field_0  ; was: stru_1D70A
-                dc.l    ResultsPostStageType3Data0000   ; field_2
-                dc.w    0                               ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData6000  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedCreditsResultsMappingData4020  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $D000                           ; field_6
+ResultsPostStageAssetLoadList:  dc.w    3               ; command: decompress tiles to VRAM  ; was: stru_1D70A
+                dc.l    ResultsPostStageType3Data0000   ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData6000  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedCreditsResultsMappingData4020  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $D000                           ; destination: VRAM $D000
                 dc.w    $FFFF
 
 ; Re-enters the post-stage completion state after the secondary options path

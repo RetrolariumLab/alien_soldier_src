@@ -40,9 +40,9 @@ GameOver_InitializeScreen_Activate:                     ; was: loc_275E2
                 rts
 ; End of function GameOver_InitializeScreen
 ; ---------------------------------------------------------------------------
-GameOver_GraphicsLoadDescriptor:    dc.w    7           ; field_0  ; was: stru_27676
-                dc.l    GameOverTileArtA000             ; field_2
-                dc.w    $A000                           ; field_6
+GameOver_GraphicsLoadDescriptor:    dc.w    7           ; command: LZSS to VRAM  ; was: stru_27676
+                dc.l    GameOverTileArtA000             ; source
+                dc.w    $A000                           ; destination: VRAM $A000
                 dc.w    $FFFF
 
 ; Copies 16 transition-buffer blocks, then dispatches the game-over state

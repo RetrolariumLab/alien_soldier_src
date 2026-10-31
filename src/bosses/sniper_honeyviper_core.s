@@ -95,12 +95,12 @@ Boss_SniperHoneyviperLoadInitialAssetsAfterBackgroundRowsReturn:  ; was: locret_
                 rts
 ; End of function Boss_SniperHoneyviperLoadInitialAssetsAfterBackgroundRows
 ; ---------------------------------------------------------------------------
-Boss_SniperHoneyviperInitialAssetDescriptors:   dc.w    7  ; field_0  ; was: stru_36532
-                dc.l    Boss_SniperHoneyviperTileArt    ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedBossMappingData2020       ; field_2
-                dc.w    $2020                           ; field_6
+Boss_SniperHoneyviperInitialAssetDescriptors:   dc.w    7  ; command: LZSS to VRAM  ; was: stru_36532
+                dc.l    Boss_SniperHoneyviperTileArt    ; source
+                dc.w    $6000                           ; destination: VRAM $6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedBossMappingData2020       ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
                 dc.w    $FFFF
 
 ; Waits for the asset loader, queues the indexed tile columns, and seeds the

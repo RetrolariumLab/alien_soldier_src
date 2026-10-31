@@ -1611,5 +1611,5 @@ or a claim that every alias has one universal semantic role. Its size is
 intentional: comparing mutually exclusive scene overlays in one address-space
 reference is safer than splitting a single memory owner into unrelated pages.
 The exact definitions remain in `src/ram_addrs.inc`; the semantic evidence of
-the earlier releases stays in `config/name_audit.json` at their tags (up to
-3.0).
+the earlier releases stays in `config/name_audit.json` in earlier tagged
+snapshots.

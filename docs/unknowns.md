@@ -202,7 +202,7 @@ their observable command-like byte structure. See `docs/payload_archives.md`.
 ## Resolved naming work
 
 The naming policy, the exact-address evidence and the reviewed duplicate groups
-of the earlier releases stay at their tags (up to 3.0), with the audits that
+of the earlier releases stay in earlier tagged snapshots, with the audits that
 checked them. Resolving an unknown does not delete its ID or strengthen old
 evidence. Keep the CODE, DATA and VIS entries above in step with the source
 comments that cite them.

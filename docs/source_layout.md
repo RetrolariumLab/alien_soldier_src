@@ -19,8 +19,8 @@ The Source Reconstruction 1.0 layout is normally 200-700 lines per cohesive
 module, with a default hard ceiling of 1,000 lines. The sole possible exception
 is one concrete boss whose state machine and private data cannot be split
 without harming readability. Exceptions are reviewed individually. The earlier
-releases' lint enforced the 1,000-line ceiling (tags up to 3.0 keep it, with the
-migration plan that set the baseline); keep to it by hand.
+releases' lint enforced the 1,000-line ceiling (earlier snapshots keep it, with
+the migration plan that set the baseline); keep to it by hand.
 
 At the Source Reconstruction 1.0 snapshot, the 17 modules above the preferred
 700-line target were all concrete boss modules (703–869 lines); none exceeded
@@ -89,10 +89,11 @@ inside a single block. The `org` directives that skip those gaps are what holds
 that arrangement.
 
 The earlier releases checked the rule against the assembler listing with a
-ceiling of zero (`make verify-layout`, tags up to 3.0); a change that moves art
-must keep every uncompressed payload inside one block. Compressed art is exempt,
-because the 68000 expands it rather than the VDP transferring it; three
-`artcomp` payloads cross a boundary in the canonical image and always have.
+ceiling of zero (`make verify-layout` in earlier tagged snapshots); a change
+that moves art must keep every uncompressed payload inside one block. Compressed
+art is exempt, because the 68000 expands it rather than the VDP transferring it;
+three `artcomp` payloads cross a boundary in the canonical image and always
+have.
 
 Not every emulator wraps the DMA source inside the 128 KiB block as hardware
 does, so playing a moved ROM cannot replace this static invariant: a crossing
@@ -125,10 +126,10 @@ by a label, a table slot by another instruction. In five modules a short branch
 stops reaching its target across an inserted word, and those stay as they are.
 
 The earlier releases also moved the content and the code statically, without an
-emulator (`make verify-relocation`, tags up to 3.0), and reported every value
-that equals the address of a symbol which moved without moving with it. Both
-defects found this way were the same shape: a 32-bit address encoded as two
-`dc.w` constants, in the stage tile asset command lists and in
+emulator (`make verify-relocation` in earlier tagged snapshots), and reported
+every value that equals the address of a symbol which moved without moving with
+it. Both defects found this way were the same shape: a 32-bit address encoded as
+two `dc.w` constants, in the stage tile asset command lists and in
 `Boss_LovePenguinBodyPartInitTable`.
 
 Precision is the hard part, because with fifteen thousand symbols a four-byte

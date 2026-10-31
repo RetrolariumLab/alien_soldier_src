@@ -241,9 +241,9 @@ Stage12_UpdateScrollToExitTiles:                        ; was: sub_DB2E
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage12_UpdateScrollToExitTiles
 ; ---------------------------------------------------------------------------
-Stage12_ExitTileAssetLoadList:  dc.w    7               ; field_0  ; was: stru_DB5A
-                dc.l    Stage12And13TileArt0000         ; field_2
-                dc.w    0                               ; field_6
+Stage12_ExitTileAssetLoadList:  dc.w    7               ; command: LZSS to VRAM  ; was: stru_DB5A
+                dc.l    Stage12And13TileArt0000         ; source
+                dc.w    0                               ; destination: VRAM $0000
                 dc.w    $FFFF
 
 ; Continue Stage 12 from the tile handoff to the Sharpsteel approach

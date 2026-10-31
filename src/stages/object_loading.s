@@ -41,9 +41,9 @@ Stage_LoadSharedMappings:                               ; was: sub_1176A
                 jmp     (LoadObjData).l
 ; End of function Stage_LoadSharedMappings
 ; ---------------------------------------------------------------------------
-Stage_SharedMappingsLoadList:   dc.w    7               ; field_0  ; was: stru_11776
-                dc.l    SharedGameplayTileArtD000       ; field_2
-                dc.w    $D000                           ; field_6
+Stage_SharedMappingsLoadList:   dc.w    7               ; command: LZSS to VRAM  ; was: stru_11776
+                dc.l    SharedGameplayTileArtD000       ; source
+                dc.w    $D000                           ; destination: VRAM $D000
                 dc.w    $FFFF
 
 ; Loads the base Stage 1 (Xi-Tiger) asset list
@@ -56,36 +56,36 @@ Stage_LoadStage1To4Assets:                              ; was: sub_11780
                 nop
 ; End of function Stage_LoadStage1To4Assets
 ; ---------------------------------------------------------------------------
-Stage1To4AssetLoadList: dc.w    7                       ; field_0  ; was: stru_11790
-                dc.l    Stage1To4TileArt0               ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage1To4TileArt1               ; field_2
-                dc.w    $2B80                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage1AndShellshogunSharedTileArt  ; field_2
-                dc.w    $5AC0                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage1To4MappingData6000        ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage1To4MappingData4000        ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage1To4MappingData6800        ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage1To4MappingData2000        ; field_2
-                dc.w    $2000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage1To4MappingData7800        ; field_2
-                dc.w    $7800                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage1To4AssetLoadList: dc.w    7                       ; command: LZSS to VRAM  ; was: stru_11790
+                dc.l    Stage1To4TileArt0               ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage1To4TileArt1               ; source
+                dc.w    $2B80                           ; destination: VRAM $2B80
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage1AndShellshogunSharedTileArt  ; source
+                dc.w    $5AC0                           ; destination: VRAM $5AC0
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage1To4MappingData6000        ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage1To4MappingData4000        ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage1To4MappingData6800        ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage1To4MappingData2000        ; source
+                dc.w    $2000                           ; destination: RAM $FF2000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage1To4MappingData7800        ; source
+                dc.w    $7800                           ; destination: RAM $FF7800
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Loads initial object set for Stage 4
@@ -99,34 +99,34 @@ Stage_LoadStage4Assets:                                 ; was: sub_117E2
                 nop
 ; End of function Stage_LoadStage4Assets
 ; ---------------------------------------------------------------------------
-Stage4AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_117F6
-                dc.l    Stage3And4TileArt               ; field_2
-                dc.w    $2B80                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage1AndShellshogunSharedTileArt  ; field_2
-                dc.w    $5AC0                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage3And4MappingData6800       ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage3And4MappingData2000       ; field_2
-                dc.w    $2000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage4AssetLoadList:    dc.w    7                       ; command: LZSS to VRAM  ; was: stru_117F6
+                dc.l    Stage3And4TileArt               ; source
+                dc.w    $2B80                           ; destination: VRAM $2B80
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage1AndShellshogunSharedTileArt  ; source
+                dc.w    $5AC0                           ; destination: VRAM $5AC0
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage3And4MappingData6800       ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage3And4MappingData2000       ; source
+                dc.w    $2000                           ; destination: RAM $FF2000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
-Boss_ShellshogunAssetLoadList:  dc.w    7               ; field_0  ; was: stru_11820
-                dc.l    Stage3And4TileArt               ; field_2
-                dc.w    $2B80                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage1AndShellshogunSharedTileArt  ; field_2
-                dc.w    $5AC0                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage3And4MappingData6800       ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage3And4MappingData2000       ; field_2
-                dc.w    $2000                           ; field_6
+Boss_ShellshogunAssetLoadList:  dc.w    7               ; command: LZSS to VRAM  ; was: stru_11820
+                dc.l    Stage3And4TileArt               ; source
+                dc.w    $2B80                           ; destination: VRAM $2B80
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage1AndShellshogunSharedTileArt  ; source
+                dc.w    $5AC0                           ; destination: VRAM $5AC0
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage3And4MappingData6800       ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage3And4MappingData2000       ; source
+                dc.w    $2000                           ; destination: RAM $FF2000
                 dc.w    $FFFF
 
 ; Loads object set for Stages 5 to 7
@@ -140,27 +140,27 @@ Stage_LoadStage5To7Assets:                              ; was: sub_11842
                 nop
 ; End of function Stage_LoadStage5To7Assets
 ; ---------------------------------------------------------------------------
-Stage5To7AssetLoadList: dc.w    7                       ; field_0  ; was: stru_11852
-                dc.l    Stage5To7TileArt0               ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage5To7TileArt1               ; field_2
-                dc.w    $5BE0                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage5To7MappingData6000        ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage5To7MappingData4000        ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage5To7MappingData7800        ; field_2
-                dc.w    $7800                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage5To7AssetLoadList: dc.w    7                       ; command: LZSS to VRAM  ; was: stru_11852
+                dc.l    Stage5To7TileArt0               ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage5To7TileArt1               ; source
+                dc.w    $5BE0                           ; destination: VRAM $5BE0
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage5To7MappingData6000        ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage5To7MappingData4000        ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage5To7MappingData7800        ; source
+                dc.w    $7800                           ; destination: RAM $FF7800
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Loads assets for Stage 8 (train/Flying-Neo)
@@ -173,27 +173,27 @@ Stage_LoadStage8Assets:                                 ; was: sub_1188C
                 nop
 ; End of function Stage_LoadStage8Assets
 ; ---------------------------------------------------------------------------
-Stage8AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_1189C
-                dc.l    Stage8And9TileArt0              ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage8And9TileArt1              ; field_2
-                dc.w    $3AC0                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage8And9TileArt2              ; field_2
-                dc.w    $3D00                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage8And9MappingData6000       ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage8And9MappingData4000       ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage8AssetLoadList:    dc.w    7                       ; command: LZSS to VRAM  ; was: stru_1189C
+                dc.l    Stage8And9TileArt0              ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage8And9TileArt1              ; source
+                dc.w    $3AC0                           ; destination: VRAM $3AC0
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage8And9TileArt2              ; source
+                dc.w    $3D00                           ; destination: VRAM $3D00
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage8And9MappingData6000       ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage8And9MappingData4000       ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Loads object set for Stage 9
@@ -206,36 +206,36 @@ Stage_LoadStage9Assets:                                 ; was: sub_118D6
                 nop
 ; End of function Stage_LoadStage9Assets
 ; ---------------------------------------------------------------------------
-Stage9AssetLoadList:    dc.w    7                       ; field_0  ; was: stru_118E6
-                dc.l    Stage8And9TileArt0              ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage8And9TileArt1              ; field_2
-                dc.w    $3AC0                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage8And9TileArt2              ; field_2
-                dc.w    $3D00                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage8And9MappingData6000       ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage8And9MappingData4000       ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage9MappingData6800           ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage9MappingData2020           ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage8And9TileArt1              ; field_2
-                dc.w    $9600                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage9AssetLoadList:    dc.w    7                       ; command: LZSS to VRAM  ; was: stru_118E6
+                dc.l    Stage8And9TileArt0              ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage8And9TileArt1              ; source
+                dc.w    $3AC0                           ; destination: VRAM $3AC0
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage8And9TileArt2              ; source
+                dc.w    $3D00                           ; destination: VRAM $3D00
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage8And9MappingData6000       ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage8And9MappingData4000       ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage9MappingData6800           ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage9MappingData2020           ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage8And9TileArt1              ; source
+                dc.w    $9600                           ; destination: RAM $FF9600
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Loads Stage 10 enemy configuration
@@ -252,42 +252,42 @@ Stage_LoadStage10To12Assets:                            ; was: sub_11938
                 jmp     Gfx_AdjustSelectedTileBlocks
 ; End of function Stage_LoadStage10To12Assets
 ; ---------------------------------------------------------------------------
-Stage10To12AssetLoadList:   dc.w    7                   ; field_0  ; was: stru_1195A
-                dc.l    Stage10To13TileArt0000          ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage10To13TileArt4000          ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage10To12TileArt0             ; field_2
-                dc.w    $3720                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage10To12TileArt1             ; field_2
-                dc.w    $1840                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To12MappingData6000      ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To12MappingData4020      ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To13MappingData6800      ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To13MappingData2020      ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7400                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10TeleportSharedAssetData  ; field_2
-                dc.w    $7800                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+Stage10To12AssetLoadList:   dc.w    7                   ; command: LZSS to VRAM  ; was: stru_1195A
+                dc.l    Stage10To13TileArt0000          ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage10To13TileArt4000          ; source
+                dc.w    $4000                           ; destination: VRAM $4000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage10To12TileArt0             ; source
+                dc.w    $3720                           ; destination: VRAM $3720
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage10To12TileArt1             ; source
+                dc.w    $1840                           ; destination: VRAM $1840
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To12MappingData6000      ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To12MappingData4020      ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To13MappingData6800      ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To13MappingData2020      ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7400                           ; destination: RAM $FF7400
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10TeleportSharedAssetData  ; source
+                dc.w    $7800                           ; destination: RAM $FF7800
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 Stage10To12TileBlockAdjustmentDescriptor:   dc.b    $40, 0, $D1, $D2, $D3, $D5, $D6, $D7, $DC, $E4  ; was: byte_119BC
                 dc.b    $FF, 0
@@ -306,42 +306,42 @@ Stage_LoadStage13Assets:                                ; was: sub_119C8
                 jmp     Gfx_LoadTilesLoop
 ; End of function Stage_LoadStage13Assets
 ; ---------------------------------------------------------------------------
-TeleportAssetLoadList:  dc.w    7                       ; field_0  ; was: stru_119FA
-                dc.l    Stage10To13TileArt0000          ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage12And13TileArt0000         ; field_2
-                dc.w    0                               ; field_6
-                dc.w    7                               ; field_0
-                dc.l    Stage10To13TileArt4000          ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage13MappingData6000          ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage13MappingData4020          ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To13MappingData6800      ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10To13MappingData2020      ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7400                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage10TeleportSharedAssetData  ; field_2
-                dc.w    $7800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Stage13TileArt                  ; field_2
-                dc.w    $9600                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
+TeleportAssetLoadList:  dc.w    7                       ; command: LZSS to VRAM  ; was: stru_119FA
+                dc.l    Stage10To13TileArt0000          ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage12And13TileArt0000         ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    Stage10To13TileArt4000          ; source
+                dc.w    $4000                           ; destination: VRAM $4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage13MappingData6000          ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage13MappingData4020          ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To13MappingData6800      ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10To13MappingData2020      ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7400                           ; destination: RAM $FF7400
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage10TeleportSharedAssetData  ; source
+                dc.w    $7800                           ; destination: RAM $FF7800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Stage13TileArt                  ; source
+                dc.w    $9600                           ; destination: RAM $FF9600
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
                 dc.w    $FFFF
 
 ; Loads object data for stage 16/17 (Sylpheed)

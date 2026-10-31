@@ -11,7 +11,7 @@ first instruction after the owning label, which is how the earlier rename tool
 wrote it; such a marker belongs to the most recent definition, and both sides
 stay unique. Reviewed RAM renames add mappings such as `; was: word_FFA284`, so
 the total may grow but never fall below the original 4,822 (the source lint of
-the earlier releases, up to tag 3.0, checked this). Reviewed preserved-data
+the earlier preservation releases checked this). Reviewed preserved-data
 definitions retain their exact imported spelling too; for example,
 `Sound_UnreferencedSFXChannelPointers` records `; was: unused_10` after its six
 pointer values were identified.

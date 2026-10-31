@@ -49,9 +49,9 @@ AlternateTransition_LoadGraphics:                       ; was: sub_2695C
                 rts
 ; End of function AlternateTransition_LoadGraphics
 ; ---------------------------------------------------------------------------
-AlternateTransition_GraphicsLoadDescriptor: dc.w    7   ; field_0  ; was: stru_26976
-                dc.l    CreditsAndTransitionTileArtE000  ; field_2
-                dc.w    $E000                           ; field_6
+AlternateTransition_GraphicsLoadDescriptor: dc.w    7   ; command: LZSS to VRAM  ; was: stru_26976
+                dc.l    CreditsAndTransitionTileArtE000  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
                 dc.w    $FFFF
 
 ; Configures the alternate transition's raster and buffer modes
@@ -127,9 +127,9 @@ TransitionEffect_LoadGraphics:                          ; was: sub_26A34
                 rts
 ; End of function TransitionEffect_LoadGraphics
 ; ---------------------------------------------------------------------------
-TransitionEffect_GraphicsLoadDescriptor:    dc.w    7   ; field_0  ; was: stru_26A4E
-                dc.l    CreditsAndTransitionTileArtE000  ; field_2
-                dc.w    $E000                           ; field_6
+TransitionEffect_GraphicsLoadDescriptor:    dc.w    7   ; command: LZSS to VRAM  ; was: stru_26A4E
+                dc.l    CreditsAndTransitionTileArtE000  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
                 dc.w    $FFFF
 
 ; Configures the standard transition's raster and buffer modes

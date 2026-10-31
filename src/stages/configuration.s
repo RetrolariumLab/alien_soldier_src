@@ -253,12 +253,12 @@ Stage17_WriteMinus16ToStridedEntityWords:               ; was: loc_12452
                 jmp     (Data_ProcessPointer).l
 ; End of function Stage_InitializeStage17Boss
 ; ---------------------------------------------------------------------------
-Stage17TileAssetCommands:   dc.w    7                   ; field_0  ; was: stru_12488
-                dc.l    Boss_Epsilon1TileArt            ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    Epsilon1MappingData2020         ; field_2
-                dc.w    $2020                           ; field_6
+Stage17TileAssetCommands:   dc.w    7                   ; command: LZSS to VRAM  ; was: stru_12488
+                dc.l    Boss_Epsilon1TileArt            ; source
+                dc.w    $6000                           ; destination: VRAM $6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    Epsilon1MappingData2020         ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
                 dc.w    $FFFF
 Stage17IndexedTilemapRowData:   dc.w    $4E00, $4000, $900, $292A, $2B2C, $2D2E, $2F30, $3132  ; was: word_1249A
 

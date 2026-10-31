@@ -233,44 +233,44 @@ Frontend_TitleAssetLoadDescriptors: dc.w    3           ; field_0  ; was: stru_A
                                         ; Frontend_InitializeSegaScreen+1C   o
                 dc.l    SharedTitleAndOptionsType3DataA  ; field_2
                 dc.w    0                               ; field_6
-                dc.w    3                               ; field_0
-                dc.l    SharedTitleAndOptionsType3DataB  ; field_2
-                dc.w    $2000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    FrontendTitleTileArt3000        ; field_2
-                dc.w    $3000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    FrontendTitleMappingData6000    ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    FrontendTitleMappingData4000    ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataA  ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataB  ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
+                dc.w    3                               ; command: decompress tiles to VRAM
+                dc.l    SharedTitleAndOptionsType3DataB  ; source
+                dc.w    $2000                           ; destination: VRAM $2000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    FrontendTitleTileArt3000        ; source
+                dc.w    $3000                           ; destination: VRAM $3000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    FrontendTitleMappingData6000    ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    FrontendTitleMappingData4000    ; source
+                dc.w    $4000                           ; destination: RAM $FF4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataA  ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataB  ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
                 dc.w    $FFFF
 Options_AssetLoadDescriptors:   dc.w    3               ; field_0  ; was: stru_A1F8
                                         ; UI_InitSecondaryOptionsMenu+C   o
                 dc.l    SharedTitleAndOptionsType3DataA  ; field_2
                 dc.w    $2000                           ; field_6
-                dc.w    3                               ; field_0
-                dc.l    SharedTitleAndOptionsType3DataB  ; field_2
-                dc.w    $4000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataA  ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataB  ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
+                dc.w    3                               ; command: decompress tiles to VRAM
+                dc.l    SharedTitleAndOptionsType3DataB  ; source
+                dc.w    $4000                           ; destination: VRAM $4000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataA  ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataB  ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
 Options_OnLabelTiles:   dc.w    $8332, $8330, $8300, $8300, $FFFF  ; was: word_A220
                                         ; sub_9DA0   o
 Options_OffLabelTiles:  dc.w    $8332, $8320, $8320, $FFFF  ; was: word_A22A

@@ -24,21 +24,21 @@ Frontend_InitializeTransitionScene:                     ; was: sub_1D3DA
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function Frontend_InitializeTransitionScene
 ; ---------------------------------------------------------------------------
-FrontendTransitionAssetLoadList:    dc.w    7           ; field_0  ; was: stru_1D420
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $E000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $D000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataA  ; field_2
-                dc.w    $6000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingDataB  ; field_2
-                dc.w    $4020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedFrontendAndTransitionMappingData7000  ; field_2
-                dc.w    $7000                           ; field_6
+FrontendTransitionAssetLoadList:    dc.w    7           ; command: LZSS to VRAM  ; was: stru_1D420
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $D000                           ; destination: VRAM $D000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataA  ; source
+                dc.w    $6000                           ; destination: RAM $FF6000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingDataB  ; source
+                dc.w    $4020                           ; destination: RAM $FF4020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedFrontendAndTransitionMappingData7000  ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
                 dc.w    $FFFF
 
 ; Attributes: thunk
@@ -63,18 +63,18 @@ Cutscene_InitializeScene:                               ; was: sub_1D450
                 jmp     Scroll_PreparePlaneBuffersAndRegisterShadows
 ; End of function Cutscene_InitializeScene
 ; ---------------------------------------------------------------------------
-CutsceneSceneAssetLoadList: dc.w    7                   ; field_0  ; was: stru_1D492
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $C000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $E000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedFrontendAndTransitionTileArt  ; field_2
-                dc.w    $D000                           ; field_6
+CutsceneSceneAssetLoadList: dc.w    7                   ; command: LZSS to VRAM  ; was: stru_1D492
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $C000                           ; destination: VRAM $C000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $E000                           ; destination: VRAM $E000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedFrontendAndTransitionTileArt  ; source
+                dc.w    $D000                           ; destination: VRAM $D000
                 dc.w    $FFFF
 
 ; Updates the cutscene-frame selector from horizontal input and loads that frame

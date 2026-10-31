@@ -26,27 +26,27 @@ XiTigerCutscene_AssetLoadDescriptors:   dc.w    7       ; type 7; was: stru_1E8A
                 dc.w    6                               ; type 6; block indices
                 dc.l    XiTigerCutsceneTilemapBlockIndices  ; 64 decoded bytes
                 dc.w    $6000                           ; RAM destination $FFFF6000
-                dc.w    3                               ; field_0
-                dc.l    XiTigerCutsceneType3Data0000    ; field_2
-                dc.w    0                               ; field_6
-                dc.w    6                               ; field_0
-                dc.l    XiTigerCutsceneMappingData2020  ; field_2
-                dc.w    $2020                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    XiTigerCutsceneMappingData6800  ; field_2
-                dc.w    $6800                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedSceneAndStageTileArt9000  ; field_2
-                dc.w    $9000                           ; field_6
-                dc.w    6                               ; field_0
-                dc.l    SharedMappingData7000           ; field_2
-                dc.w    $7000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    SharedGameplayTileArtD000       ; field_2
-                dc.w    $D000                           ; field_6
-                dc.w    7                               ; field_0
-                dc.l    XiTigerCutsceneTileArt7800      ; field_2
-                dc.w    $7800                           ; field_6
+                dc.w    3                               ; command: decompress tiles to VRAM
+                dc.l    XiTigerCutsceneType3Data0000    ; source
+                dc.w    0                               ; destination: VRAM $0000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    XiTigerCutsceneMappingData2020  ; source
+                dc.w    $2020                           ; destination: RAM $FF2020
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    XiTigerCutsceneMappingData6800  ; source
+                dc.w    $6800                           ; destination: RAM $FF6800
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedSceneAndStageTileArt9000  ; source
+                dc.w    $9000                           ; destination: VRAM $9000
+                dc.w    6                               ; command: LZSS to RAM
+                dc.l    SharedMappingData7000           ; source
+                dc.w    $7000                           ; destination: RAM $FF7000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    SharedGameplayTileArtD000       ; source
+                dc.w    $D000                           ; destination: VRAM $D000
+                dc.w    7                               ; command: LZSS to VRAM
+                dc.l    XiTigerCutsceneTileArt7800      ; source
+                dc.w    $7800                           ; destination: VRAM $7800
                 dc.w    $FFFF
 
 ; Updates the HUD and dispatches the current Xi Tiger cutscene state

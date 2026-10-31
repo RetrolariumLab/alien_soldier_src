@@ -7,10 +7,24 @@ from its own source. Every pointer is symbolic, so code and data can move.
 
 Source Reconstruction 1.0 (tag `source-reconstruction-1.0`) rebuilt the Japanese
 cartridge. 2.0 added the European cartridge, the Z80 source and fixed-format
-content editing. In 3.0 the editing moved to Retrolarium: the game opens in
-Retrolarium Studio and Kit through `alien_soldier.rlj`. 3.1 keeps only what
-builds and checks the source: both ROMs byte for byte, a build with every
-procedure moved, and a recorded run in MAME on it.
+content editing. The 3.0 release brings these together with Retrolarium Studio
+and Kit editing through `alien_soldier.rlj`, source relocation checks, and
+game-owned names, reader catalogs and regression references.
+
+## Release scope
+
+This working tree targets one Source Reconstruction 3.0 release. It includes
+both cartridge builds, the reconstructed Z80 program, content editing and its
+fixed-capacity codecs, the game-owned metadata and tests' reference data, and
+the checks listed below. [Authored data formats](docs/data_formats.md) describes
+the layouts and the limits of editing them.
+
+MAME coverage currently consists of the Japanese attract movie on the relocated
+build: menus, sound tests and the four in-game demos. It does not establish a
+full-game replay or European runtime coverage. Porting the remaining historical
+runtime scenarios, longplay and tool-assisted inputs fully to MAME, and further
+simplifying the test suite, are planned for 3.1. The existing checks remain the
+3.0 baseline; the plan does not mean those migrations are complete.
 
 ## Build and verify
 
@@ -62,6 +76,8 @@ edits.
   [the subsystem map](docs/source_map.md) gives the architecture.
 - [RAM map](docs/ram_map.md), [naming](docs/naming.md) and
   [unknowns](docs/unknowns.md) cover names, evidence and open questions.
+- [Authored data formats](docs/data_formats.md) covers extracted segments,
+  source tables, editor documents and round-trip constraints.
 - [Sound driver](docs/sound_driver.md) explains the 68000 and Z80 halves.
 - [The documentation index](docs/index.md) lists everything else;
   [contributing](CONTRIBUTING.md) describes the change workflow.
