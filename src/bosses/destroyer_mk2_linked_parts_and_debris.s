@@ -562,8 +562,8 @@ Gfx_DestroyerMk2PaletteCycleReturn:                     ; was: locret_4BC1A
                 rts
 ; End of function Gfx_DestroyerMk2CyclePaletteWords
 ; ---------------------------------------------------------------------------
-Gfx_DestroyerMk2PrimaryPaletteCycleTable:   dc.w    $2C8, $A6, $84, $62, $40, $20, $40, $62, $84, $A6  ; was: word_4BC1C
-Gfx_DestroyerMk2SecondaryPaletteCycleTable: dc.w    $64, $44, $42, $22, $20, 0, $20, $22, $42, $44  ; was: word_4BC30
+Gfx_DestroyerMk2PrimaryPaletteCycleTable:   binclude "data/palettes/04BC1C.bin"  ; was: word_4BC1C
+Gfx_DestroyerMk2SecondaryPaletteCycleTable: binclude "data/palettes/04BC30.bin"  ; was: word_4BC30
 
 ; Updates the fixed and orbiting linked-object geometry
 Boss_DestroyerMk2UpdateLinkedObjectGeometry:            ; was: sub_4BC44

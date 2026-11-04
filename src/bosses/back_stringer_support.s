@@ -20,11 +20,11 @@ Boss_BackStringerUpdatePalette:                         ; was: sub_44F60
                 rts
 ; End of function Boss_BackStringerUpdatePalette
 ; ---------------------------------------------------------------------------
-Boss_BackStringerPaletteCycleColor0:    dc.w    $AEA, $4C, $2A, 8, 6, 8, $2A, $4C  ; was: word_44F8E
+Boss_BackStringerPaletteCycleColor0:    binclude "data/palettes/044F8E.bin"  ; was: word_44F8E
                                         ; Boss_BackStringerUpdatePalette+14   r
-Boss_BackStringerPaletteCycleColor1:    dc.w    $8C8, $A, 8, 6, 4, 6, 8, $A  ; was: word_44F9E
+Boss_BackStringerPaletteCycleColor1:    binclude "data/palettes/044F9E.bin"  ; was: word_44F9E
                                         ; Boss_BackStringerUpdatePalette+1E   r
-Boss_BackStringerPaletteCycleColor2:    dc.w    $6A6, 4, 2, 0, 0, 0, 2, 4  ; was: word_44FAE
+Boss_BackStringerPaletteCycleColor2:    binclude "data/palettes/044FAE.bin"  ; was: word_44FAE
                                         ; Boss_BackStringerUpdatePalette+28   r
 
 ; Updates arm sprite orientation

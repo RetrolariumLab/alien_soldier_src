@@ -608,4 +608,4 @@ Boss_MissirayRunAttackAndCyclePaletteReturn:            ; was: locret_53E5E
                 rts
 ; End of function Boss_MissirayRunAttackAndCyclePalette
 ; ---------------------------------------------------------------------------
-Boss_MissirayAttackPaletteCycleColors:  dc.w    $EEE, $E0E, $EEE, $E0  ; was: word_53E60
+Boss_MissirayAttackPaletteCycleColors:  binclude "data/palettes/053E60.bin"  ; was: word_53E60

@@ -136,7 +136,7 @@ Boss_ViblackIntroSetup:                                 ; was: loc_43A30
 ; ---------------------------------------------------------------------------
 Boss_ViblackTileLoadCommand:                dc.w    $4000, $8E8F, $9091, $9293, $9899, $9A9B, $9C9D, $A2FF  ; was: word_43AE0
 Boss_ViblackIndexedRowTransferDescriptor:   dc.w    $6000, $4000, $901, $8E8F, $9091, $9293, $9899, $9A9B, 0, 0, $9C9D, 0, 0  ; was: word_43AF0
-Boss_ViblackPaletteCycleEntries:            dc.w    $D, $E302, $E304, $E306, $E30C, $E30A, $E30C, $E30E, $E310, $E312, $E314, $E316, $E318, $E31A, $E31E  ; was: word_43B0A
+Boss_ViblackPaletteCycleEntries:            binclude "data/palettes/043B0A.bin"  ; was: word_43B0A
                                         ; Boss_ViblackInit+A6   o
 
 ; Descends toward the stage-surface threshold and prepares the active arena

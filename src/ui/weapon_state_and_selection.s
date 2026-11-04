@@ -502,7 +502,7 @@ Weapon_UpdateState10PaletteColor:                       ; was: loc_17E26
                 rts
 ; End of function Weapon_ConfigureState10MotionAndPalette
 ; ---------------------------------------------------------------------------
-Weapon_State10PaletteColorCycle:    dc.w    $EEE, $EA6, $ECC, $E44  ; was: word_17E3E
+Weapon_State10PaletteColorCycle:    binclude "data/palettes/017E3E.bin"  ; was: word_17E3E
                                         ; Weapon_ConfigureState10MotionAndPalette+3C   r
 
 ; Advances the state-twelve icon animation and queues its DMA transfer

@@ -1,4 +1,4 @@
-SegaScreenPalette:          dc.w    0, $EEE, $EC0, $EA0, $E80, $E60, $E40, $E20, $E00, $C00, $A00, $800, $E00, $E00, $E00, $EEE
+SegaScreenPalette:          binclude "data/palettes/0E8000.bin"
 UnidentifiedSegaTilemap:    dc.w    $8040, $8041, $8042, $8043, $8044, $8045, $8046, $8047
                 dc.w    $8048, $8049, $804A, $804B, $804C, $804D, $804E, $804F
                 dc.w    $8050, $8051, $8052, $8053, $8054, $8055, $8056, $8057

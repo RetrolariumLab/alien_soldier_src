@@ -75,10 +75,7 @@ FrontendTitleTransitionAssetLoadList:   dc.w    7       ; command: LZSS to VRAM 
                 dc.l    FrontendTitleTransitionTileArtA000  ; source
                 dc.w    $A000                           ; destination: VRAM $A000
                 dc.w    $FFFF
-FrontendTitleTransitionPalette: dc.l    0, $EEE0F00     ; was: dword_1D25E
-                dc.l    2, $E240602
-                dc.l    $AE0000, 0
-                dc.l    0, 0
+FrontendTitleTransitionPalette: binclude "data/palettes/01D25E.bin"  ; was: dword_1D25E
 
 ; Dispatches the seven-state transition from the title patterns into the story screen
 Frontend_DispatchTitleTransition:                       ; was: sub_1D27E

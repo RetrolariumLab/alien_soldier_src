@@ -44,8 +44,9 @@ stream. The archive at `$1BE2CA` ends at `$1BE722`; its 64-byte remainder is
 latter has three six-byte sprite-command-shaped records, with the final record's
 high bit set. The 64-byte tail also begins with command-shaped records, but its
 full purpose and visual owner remain unverified. Both retain role-neutral names
-pending a reader trace. All 128 `artcomp` assets now end exactly at the first
-archive's header-defined boundary. The extracted asset count is 589.
+pending a reader trace. That audit left 128 `artcomp` assets, each ending at the
+first archive's header-defined boundary, and brought the extracted asset count
+to 589.
 
 ## Stage 4 rendering report: not reproduced in controlled shifts
 

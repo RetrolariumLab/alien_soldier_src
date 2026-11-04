@@ -118,7 +118,7 @@ Boss_Epsilon1CyclePaletteColorReturn:                   ; was: locret_478E8
                 rts
 ; End of function Boss_Epsilon1CyclePaletteColor
 ; ---------------------------------------------------------------------------
-Boss_Epsilon1PaletteColorCycle: dc.w    $E, $C, $A, 8, 6, 4, 2, 0, 2, 4, 6, 8, $A, $C  ; was: word_478EA
+Boss_Epsilon1PaletteColorCycle: binclude "data/palettes/0478EA.bin"  ; was: word_478EA
 
 ; Builds the twenty-word horizontal-scroll profile and six rotating-row samples
 Boss_Epsilon1BuildScrollProfile:                        ; was: sub_47906

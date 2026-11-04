@@ -163,168 +163,72 @@ Gfx_LoadPaletteCommand_CopyColors:                      ; was: loc_BA20
                 rts
 ; End of function Gfx_LoadPaletteCommand
 ; ---------------------------------------------------------------------------
-CommonPaletteCommand:   dc.b    $42, $E, 0, 0, $E, $EE, 0, $EE, 0, $AE, 0, $6E, 0, $E, 0, 4  ; was: byte_BA2A
-                dc.b    0, $48, 2, $20, 4, $42, 8, $86, $C, $CA, 6, 0, 8, $40, $C, $84
-FrontendPaletteCommands:    dc.b    0, $3F, 0, 0, 0, $60, $C, $EA, 0, 0, 0, 0, 0, 0, 0, 0  ; was: byte_BA4A
+CommonPaletteCommand:       binclude "data/palettes/00BA2A.bin"  ; was: byte_BA2A
+FrontendPaletteCommands:    binclude "data/palettes/00BA4A.bin"  ; was: byte_BA4A
                                         ; StoryTitle_SetupLogoReveal+78   o
-                dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 6, 0, $E, $EC, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 2, 0, 2, $22, $C, $22, $E, $42, 0, $E0, 0, 0
-                dc.b    $E, $22, $E, $EE, 0, $6E, $A, $EE, 0, $28, 0, 4, $C, $EE, 0, 0
-                dc.b    0, $CE, 0, 0, 0, 0, 2, 0, 0, 2, 0, 4, 0, 6, 0, 8
-                dc.b    0, $A, 0, $C, 0, $2E, 0, $4E, 0, 0, 8, 0, $E, $62, $E, $CA
-                dc.b    0, 0, 2, 1, 0, 4, 0, $8E
-StageReadyPaletteCommand:   dc.b    $42, 1, 0, 2, 0, $6E, 2, 1, 6, 0, $E, $80, $22, 1, 4, 0  ; was: byte_BAD2
-                dc.b    8, $40, $42, 1, 6, 0, $E, $EC, $62, 1, 0, 6, 0, $AE
-PostStageFullPaletteCommand:    dc.b    0, $3F, 0, 0, 0, $20, 2, $E6, 0, $2E, 0, $E, 0, 8, 0, 4  ; was: byte_BAF0
+StageReadyPaletteCommand:       binclude "data/palettes/00BAD2.bin"  ; was: byte_BAD2
+PostStageFullPaletteCommand:    binclude "data/palettes/00BAF0.bin"  ; was: byte_BAF0
                                         ; Results_InitializeSecondaryOptionsReturn+50   o
-                dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 0, 0, 4, $22, 0, $4C, 0, $2A, 0, 8, 0, 0
-                dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 6, 0, $E, $EC, $C, $AA, $A, $88, 8, $66, 6, $44
-                dc.b    4, $22, 0, $A, 0, 0, $A, $AA, 6, $66, 2, $22, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 0, 6, 0, $AE, 0, $26, 0, 4, 0, 2, 0, 0
-                dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0
-CreditsAndEarlyStagePaletteCommandBank: binclude "data/mappings/byte_BB72.bin"  ; was: byte_BB72
+CreditsAndEarlyStagePaletteCommandBank:     binclude "data/mappings/byte_BB72.bin"  ; was: byte_BB72
 CreditsAndEarlyStagePaletteCommandBank_End:
-FlyingNeoAndMidgamePaletteCommandBank:  binclude "data/other/byte_BE1E.bin"  ; was: byte_BE1E
+FlyingNeoAndMidgamePaletteCommandBank:      binclude "data/other/byte_BE1E.bin"  ; was: byte_BE1E
 FlyingNeoAndMidgamePaletteCommandBank_End:
-Stage17PaletteCommandBank:              dc.b    $62, $E, 2, 0, $E, $EE, 0, $6E, 6, $EE, 2, $84, 8, $EA, $C, $EE  ; was: byte_BF2C
-                dc.b    4, 0, 6, $20, 8, $42, $A, $64, $C, $86, $E, $A8, $E, $CA, $E, $EE
-                dc.b    2, $1E, $E, $EE, $E, $AA, $A, $68, $A, $44, 8, $22, 4, $22, $E, $86
-                dc.b    $E, $64, $E, $42, $A, $86, 6, $42, 2, $20, 2, 0, 0, 0, 0, $24
-                dc.b    0, 0, $E, $EE, $E, $CC, $E, $AA, $C, $66, 8, $44, 4, $22, 6, $88
-                dc.b    4, $66, 2, $44, 0, $22, 0, 0, 2, $68, 0, $46, 0, $24, $E, $EE
-                dc.b    2, $1E, 0, $20, $E, $EC, 2, $62, $E, $EC, $E, $CA, $A, $84, 8, $62
-                dc.b    4, $40, 2, $20, 0, $22, 2, $46, 2, $8A, 4, $CC, 6, $40, $E, $84
-                dc.b    0, 0, $C, $CC, $A, $88, 2, 0, 2, 2, 4, $24, 0, 2, 0, $20
-                dc.b    4, $64, 2, $48, 4, $8C, 0, $24, 4, $20, 6, $42, 8, $66, 0, $2A
-                dc.b    2, $1E, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, 8, $86, $E, $EC, $C, $CA
-                dc.b    $E, $EC, $E, $EE, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-                dc.b    2, $22, $E, $CC, 2, $24, 2, $66, 4, $88, $C, $CC, 0, $44, 8, $AA
-                dc.b    4, $46, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, 2, $44, 2, $42
-SevenForceSylpheedTransitionPaletteCommand: dc.b    $22, 6, 8, $CC, 2, $44, 4, $66, 6, $88, 8, $AA, 4, $66, 6, $88  ; was: byte_C00C
-SevenForceArtemisTransitionPaletteCommand:  dc.b    2, $1E, 0, 0, 0, $22, 2, $42, 6, $64, 0, $22, 2, $44, 4, $66  ; was: byte_C01C
-                dc.b    6, $88, $FF, $FF, 0, $22, 2, $44, 2, $66, 4, $AC, $A, $CE, $FF, $FF
-                dc.b    0, 0, 0, 0, 2, 0, 2, $22, 6, $44, 2, 0, 4, 0, 6, 0
-                dc.b    6, $20, 8, $42, $A, $64, $C, $86, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-SireneAndLateStagePaletteCommandBank:   binclude "data/other/byte_C05C.bin"  ; was: byte_C05C
+Stage17PaletteCommandBank:                  binclude "data/palettes/00BF2C.bin"  ; was: byte_BF2C
+SevenForceSylpheedTransitionPaletteCommand: binclude "data/palettes/00C00C.bin"  ; was: byte_C00C
+SevenForceArtemisTransitionPaletteCommand:  binclude "data/palettes/00C01C.bin"  ; was: byte_C01C
+SireneAndLateStagePaletteCommandBank:       binclude "data/other/byte_C05C.bin"  ; was: byte_C05C
 SireneAndLateStagePaletteCommandBank_End:
-SharedStagePaletteCommand:              dc.b    $62, $E, 0, 0, $E, $EE, $E, $A8, 0, 6, 0, $2A, 0, 0, 4, $6E  ; was: byte_C1A2
+SharedStagePaletteCommand:                  binclude "data/palettes/00C1A2.bin"  ; was: byte_C1A2
                                         ; sub_11EAA   o
-                dc.b    0, $46, 2, $8A, 6, $CC, 2, $24, 4, $6A, 8, $AE, 6, $22, $A, $62
-XiTigerCutscenePaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 0, $EE, 0, $AE, 0, $6E, 0, $E, 0, 4  ; was: byte_C1C2
-                dc.b    0, $48, 2, $20, 4, $42, 8, $86, $C, $CA, 6, 0, 8, $40, $C, $84
-Stage15PaletteCommands: dc.b    $62, $E, $E, $EE, $F, $FF, $A, $26, $A, $AA, 8, $88, $F, $FF, 6, $66  ; was: byte_C1E2
-                dc.b    4, $44, 2, $22, $C, $AA, $A, $88, 8, $66, 6, $44, 4, $22, 0, 0
-                dc.b    $62, 6, 0, 0, 2, $22, 2, $44, 4, $68, 8, $AC, 0, 0, $A, $CC
-DestroyerProtoIntroPaletteCommands: dc.b    $62, $E, $E, $EE, $E, $AA, $A, $66, 6, $22, 4, 0, 0, 0, 0, $AE  ; was: byte_C212
-                dc.b    0, $6C, 0, $28, 0, 0, 0, 4, 8, $CC, 6, $88, 4, $46, 2, $22
-                dc.b    $22, $E, $E, $EE, $E, $AA, $A, $66, 6, $22, 4, 0, 0, 0, 0, $AE
-                dc.b    0, $6C, 0, $28, 0, 0, 0, 4, 8, $CC, 6, $88, 4, $46, 2, $22
-Boss_JetsripperPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $C, $AA, $A, $88, 0, 0, 2, 2  ; was: byte_C252
-                dc.b    6, 4, $C, $48, 2, $24, 4, $46, 4, $AA, 0, $A, 0, 6, 0, 2
-Boss_AntroidPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $C, $AA, $A, $88, 0, 0, 0, 4  ; was: byte_C272
-                dc.b    0, $26, 0, $4A, 0, $6C, 2, $AE, 2, $22, 4, $44, 0, $2A, 4, $6E
-Boss_ShellshogunPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $C, $AA, $A, $88, 0, 0, 2, 4  ; was: byte_C292
-                dc.b    0, $2A, 2, $6E, 4, $40, 0, $88, 8, $CC, 2, $24, 0, $48, 6, $8C
-Boss_SniperHoneyviperPaletteCommand:    dc.b    $62, $E, 0, 0, $C, $EE, $C, $CC, $A, $AA, 6, $66, 0, 0, 4, $8C  ; was: byte_C2B2
-                dc.b    2, $6A, 0, $48, 0, $26, 4, $6A, 2, $2A, 0, 4, 8, $88, 4, $44
-Boss_MadamBarbarPaletteCommand: dc.b    $62, $E, 2, 2, $C, $EE, $A, $AA, 8, $88, 6, $66, 0, 0, 2, 4  ; was: byte_C2D2
-                dc.b    0, 8, 0, $C, 0, $4E, 8, $8E, 0, 6, 0, $48, 2, $8A, 4, $CC
-Boss_JokerPaletteCommand:   dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $E, $AA, $E, $88, 0, 0, 4, $22  ; was: byte_C2F2
-                dc.b    6, $44, $C, $68, 2, 6, 4, $2C, 8, $8E, 0, $42, 2, $84, 2, $CA
-Boss_TerobusterPaletteCommand:  dc.b    $62, $D, 2, 2, $E, $EE, $A, $AA, 8, $88, 6, $66, 0, 0, 2, $22  ; was: byte_C312
-                dc.b    4, $24, 8, $42, $C, $60, $E, $C0, 0, $CE, 0, $6A, 0, $26
-Boss_FlyingNeoPaletteCommands:  dc.b    $62, $E, 0, 2, $C, $EE, 0, 0, 0, 0, 8, $66, 0, 0, 6, $20  ; was: byte_C330
-                dc.b    2, 0, 4, $22, 0, 6, 0, $2A, 2, $6E, 0, $24, 2, $68, 6, $AC
-                dc.b    $62, $E, 2, 0, $C, $CC, 0, 0, 0, 0, $A, $88, 0, 0, 8, $46
-                dc.b    4, $24, 2, 2, 4, 2, $A, 6, 8, $6A, 4, $88, 2, $44, 0, $22
-Boss_XiTigerPaletteCommand: dc.b    $62, $E, 2, 0, $E, $EE, 0, 0, 0, 0, 0, 0, 0, 0, $C, $CA  ; was: byte_C370
-                dc.b    $A, $A6, $A, $64, 6, $42, 4, $8C, 0, $48, 0, 4, 2, $AC, 0, $46
-Boss_DeepStriderPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, 8, $88, $E, $AA, $E, $88, $F, $FF, 4, 0  ; was: byte_C390
-                dc.b    6, $20, 8, $40, $A, $62, $C, $A4, 2, 4, 2, 8, 2, $C, 4, $4E
-Boss_GustheadPaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, $C, $AA, $A, $88, 8, $66, $F, $FF, 6, $44  ; was: byte_C3B0
-                dc.b    4, $22, 4, 0, $A, $22, $E, $66, 0, $24, 0, $46, 0, $8A, 0, $CE
-Boss_SharpsteelPaletteCommand:  dc.b    $62, $E, 0, 0, $C, $EC, 8, $C8, 6, $64, 2, $20, $F, $FF, 8, $EE  ; was: byte_C3D0
-                dc.b    4, $AA, 0, $66, 0, $22, 0, 4, 0, $28, 0, $4C, 4, $8E, 8, $CE
-Boss_SnakePaletteCommand:   dc.b    $62, 8, 0, 0, $E, $EE, 8, $CE, 6, $8C, 6, $6C, $F, $FF, 4, $26  ; was: byte_C3F0
-                dc.b    2, 2, 4, $4A
-Boss_LovePenguinPaletteCommand: dc.b    $62, $E, 0, 2, $E, $EE, $A, $AA, 6, $66, 2, $22, $F, $FF, $A, $EE  ; was: byte_C404
-                dc.b    8, $CE, 6, $8C, 4, $6A, 2, $48, 0, $26, 0, 4, 0, 0, 0, $A
-Boss_VictorPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $E, $AA, $E, $88, $FF, $FF, $A, $46  ; was: byte_C424
-                dc.b    6, 2, 6, $6E, 4, $2C, 2, 8, 2, 4, 2, $26, 0, $48, 0, $8C
-Boss_SunsetStingPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $E, $CC, $E, $AA, $E, $88, $F, $FF, 0, 6  ; was: byte_C444
-                dc.b    0, $2A, 4, $6E, 0, $22, 2, $44, 2, $88, 0, $26, 0, $48, 0, $8C
-Boss_ViblackIntroPaletteCommand:    dc.b    2, $E, 0, 2, 0, $26, 0, $6A, 0, 0, 0, 0, 0, 0, 2, $AE  ; was: byte_C464
-                dc.b    4, $20, 6, $42, $A, $64, $C, $A8, $E, $CA, $E, $EC, 0, 0, $E, $EE
-Boss_ViblackPostBattlePaletteCommand:   dc.b    2, $E, 0, 2, 4, 6, 6, $28, 0, 0, 0, 0, 2, 0, 8, $4A  ; was: byte_C484
-                dc.b    2, $20, 4, $42, 6, $66, 8, $88, $A, $AA, $A, $CC, 0, 0, $A, $AA
-ViblackPostBattleScrollPaletteCommand:  dc.b    $22, $B, $E, $CA, $E, $C8, $E, $A6, $E, $84, $C, $62, $A, $40, 8, $20  ; was: byte_C4A4
-                dc.b    6, 0, 4, 0, 2, 0, 2, 0, 2, 0
-Boss_BackStringerPaletteCommand:    dc.b    $62, $E, 2, 0, $C, $EE, 2, $26, 8, $8A, 0, $24, $F, $FF, 0, $46  ; was: byte_C4BE
-                dc.b    2, $8A, 6, $CE, 0, $6E, 0, $2C, 0, 6, $F, $FF, 6, $68, $A, $AC
-Boss_Epsilon1PaletteCommands:   dc.b    $62, $E, 2, 0, 4, 4, 6, $26, 8, $4A, $A, $6C, $F, $FF, $C, $AE  ; was: byte_C4DE
+XiTigerCutscenePaletteCommand:          binclude "data/palettes/00C1C2.bin"  ; was: byte_C1C2
+Stage15PaletteCommands:                 binclude "data/palettes/00C1E2.bin"  ; was: byte_C1E2
+DestroyerProtoIntroPaletteCommands:     binclude "data/palettes/00C212.bin"  ; was: byte_C212
+Boss_JetsripperPaletteCommand:          binclude "data/palettes/00C252.bin"  ; was: byte_C252
+Boss_AntroidPaletteCommand:             binclude "data/palettes/00C272.bin"  ; was: byte_C272
+Boss_ShellshogunPaletteCommand:         binclude "data/palettes/00C292.bin"  ; was: byte_C292
+Boss_SniperHoneyviperPaletteCommand:    binclude "data/palettes/00C2B2.bin"  ; was: byte_C2B2
+Boss_MadamBarbarPaletteCommand:         binclude "data/palettes/00C2D2.bin"  ; was: byte_C2D2
+Boss_JokerPaletteCommand:               binclude "data/palettes/00C2F2.bin"  ; was: byte_C2F2
+Boss_TerobusterPaletteCommand:          binclude "data/palettes/00C312.bin"  ; was: byte_C312
+Boss_FlyingNeoPaletteCommands:          binclude "data/palettes/00C330.bin"  ; was: byte_C330
+Boss_XiTigerPaletteCommand:             binclude "data/palettes/00C370.bin"  ; was: byte_C370
+Boss_DeepStriderPaletteCommand:         binclude "data/palettes/00C390.bin"  ; was: byte_C390
+Boss_GustheadPaletteCommand:            binclude "data/palettes/00C3B0.bin"  ; was: byte_C3B0
+Boss_SharpsteelPaletteCommand:          binclude "data/palettes/00C3D0.bin"  ; was: byte_C3D0
+Boss_SnakePaletteCommand:               binclude "data/palettes/00C3F0.bin"  ; was: byte_C3F0
+Boss_LovePenguinPaletteCommand:         binclude "data/palettes/00C404.bin"  ; was: byte_C404
+Boss_VictorPaletteCommand:              binclude "data/palettes/00C424.bin"  ; was: byte_C424
+Boss_SunsetStingPaletteCommand:         binclude "data/palettes/00C444.bin"  ; was: byte_C444
+Boss_ViblackIntroPaletteCommand:        binclude "data/palettes/00C464.bin"  ; was: byte_C464
+Boss_ViblackPostBattlePaletteCommand:   binclude "data/palettes/00C484.bin"  ; was: byte_C484
+ViblackPostBattleScrollPaletteCommand:  binclude "data/palettes/00C4A4.bin"  ; was: byte_C4A4
+Boss_BackStringerPaletteCommand:        binclude "data/palettes/00C4BE.bin"  ; was: byte_C4BE
+Boss_Epsilon1PaletteCommands:           binclude "data/palettes/00C4DE.bin"  ; was: byte_C4DE
                                         ; Stage_LoadStage17Palettes+C   o
-                dc.b    $C, $CE, 0, $22, $E, $EE, 0, $46, 4, $8A, 6, $EE, 0, 0, 0, 0
-                dc.b    2, $1E, 0, 0, 0, $22, 2, $44, $E, $EE, $A, $EA, 6, $E6, 2, $C2
-                dc.b    0, $80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                dc.b    0, 0, 0, 0, 0, $24, 0, $46, 0, $68, 2, $8A, 4, $42, 6, $64
-                dc.b    8, $86, $A, $AA, $E, $EE, 4, 0, 8, $22, $C, $66, $E, $88, 2, $20
-                dc.b    $62, $E, 0, 0, $E, $EE, $E, $EC, $E, $A8, $E, $86, $E, $64, $E, $EC
-                dc.b    $E, $CA, $E, $A8, $E, $86, $E, $64, $C, $42, $A, $20, 6, $20, 4, 0
-Boss_JampanPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $C, $CC, $A, $AA, 8, $88, $F, $FF, 6, $66  ; was: byte_C55E
+Boss_JampanPaletteCommand:  binclude "data/palettes/00C55E.bin"  ; was: byte_C55E
                                         ; Boss_JampanReinitializePostDefeatObjectsState+6   o
-                dc.b    0, $A, 0, $E, 2, 4, 2, $26, 2, $48, 4, $6A, 6, $8C, 8, $AE
-Boss_DestroyerMk2PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $80, 0, $28, $F, $FF, 0, $6C  ; was: byte_C57E
-                dc.b    0, $EA, 4, $22, 4, $46, 4, $88, 8, $CC, 0, 6, 2, $C, 6, $6E
-Boss_BugmaxPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 6, $AC, 4, $8A, 2, $68, $F, $FF, 2, $46  ; was: byte_C59E
-                dc.b    0, $24, 2, 6, 2, $2A, 2, $6C, 0, 0, 2, 2, 6, $24, 8, $68
-Boss_LambdaBunnyPaletteCommand: dc.b    $62, $E, 0, 0, $E, $EE, $A, $AC, 2, $AC, 8, $EE, $F, $FF, 0, $48  ; was: byte_C5BE
+Boss_DestroyerMk2PaletteCommand:    binclude "data/palettes/00C57E.bin"  ; was: byte_C57E
+Boss_BugmaxPaletteCommand:          binclude "data/palettes/00C59E.bin"  ; was: byte_C59E
+Boss_LambdaBunnyPaletteCommand:     binclude "data/palettes/00C5BE.bin"  ; was: byte_C5BE
                                         ; Selected by the dormant Stage 18 late-phase path
-                dc.b    0, 4, 2, 4, 2, $A, $C, $8E, 2, 2, 6, $44, $A, $A8, $E, $CA
-EntityType3F0PaletteCommand:    dc.b    $62, $E, 0, 0, $E, $EE, 0, 6, 0, $48, 0, $8C, $F, $FF, 4, 0  ; was: byte_C5DE
+EntityType3F0PaletteCommand:    binclude "data/palettes/00C5DE.bin"  ; was: byte_C5DE
                                         ; Selected by the dormant Stage 18 late-phase path
-                dc.b    $A, 0, $E, $20, $E, $60, $C, $AA, 8, $66, 6, $44, 4, $22, 0, $2E
-EntityType3F4PaletteCommands:   dc.b    $62, $E, 0, 0, $E, $EE, $E, $CA, $C, $86, $A, $42, $F, $FF, 4, 0  ; was: byte_C5FE
+EntityType3F4PaletteCommands:   binclude "data/palettes/00C5FE.bin"  ; was: byte_C5FE
                                         ; Selected by the dormant Stage 18 late-phase path
-                dc.b    2, 2, 2, 6, 4, $2A, $A, $6E, 6, $CC, 2, $8A, 0, $46, 8, $20
-                dc.b    $62, $E, 0, 0, $E, $EE, 2, 2, 4, $24, 6, $46, $F, $FF, 8, $68
-                dc.b    $A, $8A, $C, $AC, $E, $CE, 0, 4, 0, 8, 0, $C, 2, $4E, 6, $8E
-EntityType3FCPaletteCommands:   dc.b    $62, $E, 0, 0, $E, $EE, 2, $20, 4, $42, 4, $64, $F, $FF, 6, $AA  ; was: byte_C63E
+EntityType3FCPaletteCommands:   binclude "data/palettes/00C63E.bin"  ; was: byte_C63E
                                         ; Identity beyond entity type $3FC is unproven
-                dc.b    4, $CE, 2, $8C, 2, $6A, 2, $46, 4, $24, 4, $44, 6, $66, $A, $AA
-                dc.b    $62, $E, 0, 0, $E, $EE, 8, $6E, 4, $2C, 2, 8, $F, $FF, 2, $24
-                dc.b    0, $46, 2, $8A, 6, $CC, 0, $6E, 0, $2C, 0, 6, 2, 4, $A, $86
-SevenForceValkiriePaletteCommand:   dc.b    $62, $E, 2, 4, $E, $EE, $A, $CA, 4, $66, 0, $44, $F, $FF, 2, $CE  ; was: byte_C67E
-                dc.b    0, $8C, 0, $8E, 0, $4C, 0, $2A, 2, 8, 0, $68, 6, $AE, $A, $EE
-SevenForceMedusaPaletteCommand: dc.b    $62, $E, 6, 0, $E, $EE, 6, $66, 4, $44, 4, $42, $F, $FF, $A, $AA  ; was: byte_C69E
-                dc.b    8, $66, $E, $48, $C, $26, $A, $24, 8, 2, 0, $26, 0, $8C, $E, $AC
-SevenForceSylpheedPaletteCommand:   dc.b    $62, $E, 2, $20, $E, $EE, 2, $8C, 0, $46, 2, $42, $F, $FF, 0, $C8  ; was: byte_C6BE
-                dc.b    0, $84, 4, $C6, 2, $84, 0, $62, 0, $42, 0, $40, 0, $6C, 4, $EA
-SevenForceArtemisPaletteCommand:    dc.b    $62, $E, 4, 2, $E, $EE, 6, $6C, 4, $48, 2, $24, $F, $FF, $A, $8A  ; was: byte_C6DE
-                dc.b    6, $68, $C, $CA, $A, $88, 8, $66, 2, $22, 0, $28, 0, $6E, $C, $CC
-SevenForceSirenePaletteCommand: dc.b    $62, $E, 2, 2, $E, $EE, 6, $EE, 2, $8A, 2, $22, $F, $FF, $E, $A8  ; was: byte_C6FE
-                dc.b    $A, $64, $E, $A8, $E, $62, $C, $22, 8, 2, 4, 2, 4, $84, $E, $EC
-SevenForceSireneTimedPaletteCommandA:   dc.b    $62, $E, 0, 2, $E, $EE, $E, $A4, 8, $62, 4, $22, $F, $FF, 0, $AC  ; was: byte_C71E
-                dc.b    0, $46, 4, $8E, 0, $4E, 0, $A, 0, 6, 0, 2, 0, $6C, 4, $EE
-SevenForceSireneTimedPaletteCommandB:   dc.b    $62, $E, 2, $22, $E, $EC, 0, $6C, 0, $26, 2, $22, $F, $FF, 4, $86  ; was: byte_C73E
-                dc.b    2, $44, $A, $44, 4, $20, 2, 2, 2, 0, 0, 2, 0, $AE, 8, $AA
-Boss_DestroyerProtoPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, 6, $E4, 0, $80, 0, $28, $F, $FF, 0, $6C  ; was: byte_C75E
-                dc.b    0, $AE, 4, $22, 4, $46, 4, $88, 8, $CC, 0, 6, $C, $60, $E, $A6
-Boss_ShieldViperPaletteCommand: dc.b    $62, $E, 0, 0, $A, $EE, 4, $CE, 0, $6C, 0, $2A, $F, $FF, 0, 6  ; was: byte_C77E
-                dc.b    2, $8E, 0, $4E, 0, $E, 0, $A, 2, 6, $E, $EE, $A, $24, $E, $A4
-Boss_WolfGaropaPaletteCommand:  dc.b    $62, $E, 2, 0, $E, $EE, $E, $EC, $C, $AA, 8, $88, $F, $FF, 4, $44  ; was: byte_C79E
-                dc.b    2, $22, 0, $24, 0, $48, 2, $8E, 4, 2, 8, $24, $C, $6A, 0, $E
-Boss_MissirayPaletteCommand:    dc.b    $62, $E, $E, $EE, $C, $AA, $A, $64, 8, $22, 4, 0, $F, $FF, 8, $CC  ; was: byte_C7BE
-                dc.b    4, $88, 2, $44, 2, $22, 8, $6E, 2, $E, 0, 6, 0, 0, $F, $FF
-Boss_ZLeoPaletteCommands:   dc.b    $62, $E, 0, 0, $E, $EE, $E, $88, 8, $44, 4, $22, $F, $FF, 2, 0  ; was: byte_C7DE
-                dc.b    0, 2, 0, 4, 0, $24, 0, $46, 2, $68, 4, $AC, 6, $CE, 0, $AE
-                dc.b    $62, $E, 0, 0, $E, $EE, $F, $FF, $F, $FF, 0, $28, 0, 8, 0, $6C
-                dc.b    0, $AE, 4, 2, 6, $24, 8, $46, $C, $8A, 0, 6, 2, $C, 6, $6E
-SevenForceIntroPaletteCommand:  dc.b    $62, $E, 0, 0, $E, $EE, $A, $CE, 4, $8C, 2, $68, $FF, $FF, $A, $AA  ; was: byte_C81E
-                dc.b    6, $66, $E, $CC, $C, $AA, 8, $66, 6, $42, 4, $22, $E, $CC, $FF, $FF
+SevenForceValkiriePaletteCommand:       binclude "data/palettes/00C67E.bin"  ; was: byte_C67E
+SevenForceMedusaPaletteCommand:         binclude "data/palettes/00C69E.bin"  ; was: byte_C69E
+SevenForceSylpheedPaletteCommand:       binclude "data/palettes/00C6BE.bin"  ; was: byte_C6BE
+SevenForceArtemisPaletteCommand:        binclude "data/palettes/00C6DE.bin"  ; was: byte_C6DE
+SevenForceSirenePaletteCommand:         binclude "data/palettes/00C6FE.bin"  ; was: byte_C6FE
+SevenForceSireneTimedPaletteCommandA:   binclude "data/palettes/00C71E.bin"  ; was: byte_C71E
+SevenForceSireneTimedPaletteCommandB:   binclude "data/palettes/00C73E.bin"  ; was: byte_C73E
+Boss_DestroyerProtoPaletteCommand:      binclude "data/palettes/00C75E.bin"  ; was: byte_C75E
+Boss_ShieldViperPaletteCommand:         binclude "data/palettes/00C77E.bin"  ; was: byte_C77E
+Boss_WolfGaropaPaletteCommand:          binclude "data/palettes/00C79E.bin"  ; was: byte_C79E
+Boss_MissirayPaletteCommand:            binclude "data/palettes/00C7BE.bin"  ; was: byte_C7BE
+Boss_ZLeoPaletteCommands:               binclude "data/palettes/00C7DE.bin"  ; was: byte_C7DE
+SevenForceIntroPaletteCommand:          binclude "data/palettes/00C81E.bin"  ; was: byte_C81E
 
 ; Main stage dispatcher jump table

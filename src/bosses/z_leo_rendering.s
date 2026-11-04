@@ -9,7 +9,7 @@ Boss_ZLeoRotateAttackPalette:                           ; was: sub_52512
                 rts
 ; End of function Boss_ZLeoRotateAttackPalette
 ; ---------------------------------------------------------------------------
-Boss_ZLeoAttackPaletteCycleTable:   dc.w    $2A2, $EEE, $6C6, 0, $AEC, $40, $4E8, 0, $EEC, $62, $6EC, 0, $EEE, $AEA, $EEC, 0  ; was: word_52530
+Boss_ZLeoAttackPaletteCycleTable:   binclude "data/palettes/052530.bin"  ; was: word_52530
                                         ; Boss_ZLeoRotateAttackPalette+10   r
 
 ; Begin the rising return from the scrolling drop attack

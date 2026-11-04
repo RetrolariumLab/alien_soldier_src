@@ -557,7 +557,7 @@ WeaponSetup_WriteHighlightPaletteColors:                ; was: loc_1F7D4
                 rts
 ; End of function WeaponSetup_UpdateHighlightPalette
 ; ---------------------------------------------------------------------------
-WeaponSetup_HighlightPaletteColor1Cycle:    dc.w    $400, $400, $400, $400, $400, $200, 0, $600  ; was: word_1F7E6
-WeaponSetup_HighlightPaletteColor2Cycle:    dc.w    $EEE, $EEC, $ECA, $CA8, $A86, $864, $642, $EEE  ; was: word_1F7F6
-WeaponSetup_BackgroundPaletteColor2Cycle:   dc.w    $200, $400, $622, $844, $A66, $C88, $CAA, $ACC, $8EE, $6CE  ; was: word_1F806
-WeaponSetup_BackgroundPaletteColor1Cycle:   dc.w    $48E, $24E, $2C, $A, 8, 6, 4, 2, 0, 0  ; was: word_1F81A
+WeaponSetup_HighlightPaletteColor1Cycle:    binclude "data/palettes/01F7E6.bin"  ; was: word_1F7E6
+WeaponSetup_HighlightPaletteColor2Cycle:    binclude "data/palettes/01F7F6.bin"  ; was: word_1F7F6
+WeaponSetup_BackgroundPaletteColor2Cycle:   binclude "data/palettes/01F806.bin"  ; was: word_1F806
+WeaponSetup_BackgroundPaletteColor1Cycle:   binclude "data/palettes/01F81A.bin"  ; was: word_1F81A

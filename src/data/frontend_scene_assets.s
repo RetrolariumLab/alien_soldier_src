@@ -15,14 +15,8 @@ FrontendUnreferencedMappingData:    binclude "data/mappings/unused.bin"
 FrontendUnreferencedMappingData_End:
 FrontendUnreferencedTileArt:        binclude "data/artcomp/tiles_180F84.bin"  ; was: tiles_180F84
 FrontendUnreferencedTileArt_End:                        ; was: tiles_180F84_End
-SharedFrontendAndTransitionTileArt: dc.b    0, $C4, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0  ; was: byte_18140E
+SharedFrontendAndTransitionTileArt: binclude "data/artcomp/18140E.bin"  ; was: byte_18140E
                                         ; ROM:0001CF04   o
-                dc.b    $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $FF, $DD, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F
-                dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0
-                dc.b    $FF, $DD, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F
-                dc.b    0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $FF, $DD, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0
-                dc.b    0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F, 0, 0, $5F
-                dc.b    0, 0, $FF, $DD, 0, 0
 FrontendTitleTileArt3000:       binclude "data/artcomp/tiles_1814D4.bin"  ; was: tiles_1814D4
 FrontendTitleTileArt3000_End:                           ; was: tiles_1814D4_End
 FrontendTitleMappingData6000:   dc.b    0, $44, $26, 0, $17, 2, 3, 4, 5, 6, 7, 8, 9, $C, $D, $E, $F, $10, $11, $12, $13, $16, $17, $18, $19, $1A, $1B, $1C, $1D, $80, $1F, $20  ; was: byte_182C9C

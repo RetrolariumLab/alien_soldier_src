@@ -46,11 +46,10 @@ cartridge, and the 68000 include consumes that generated image, never a verbatim
 extracted asset; `make verify` compares the whole ROM, the Z80 program inside it
 included.
 
-The ROM layout check still checks all 589 asset positions. It accepts the
-assembled driver at the original asset's position only when its size and hash
-match, and rejects a build that includes both the extracted and the assembled
-driver. Indirect and self-modifying control flow in the driver is not fully
-named yet.
+The ROM layout check covers the asset positions. It accepts the assembled driver
+at the original asset's position only when its size and hash match, and rejects
+a build that includes both the extracted and the assembled driver. Indirect and
+self-modifying control flow in the driver is not fully named yet.
 
 ## 68000 request interface
 

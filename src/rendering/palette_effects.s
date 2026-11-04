@@ -85,7 +85,7 @@ Palette_UpdateLightningFlash_StoreColors:               ; was: loc_4148
                 rts
 ; End of function Palette_UpdateLightningFlash
 ; ---------------------------------------------------------------------------
-Palette_LightningFlashColorPairs:   dc.w    $E60, $E80, $EA0, $EC0  ; was: word_4156
+Palette_LightningFlashColorPairs:   binclude "data/palettes/004156.bin"  ; was: word_4156
 
 ; Alternates six Epsilon-1 palette entries between the two frame sets
 Palette_UpdateEpsilon1Colors:                           ; was: sub_415E
@@ -106,8 +106,8 @@ Palette_UpdateEpsilon1Colors_Copy:                      ; was: loc_4172
                 rts
 ; End of function Palette_UpdateEpsilon1Colors
 ; ---------------------------------------------------------------------------
-Palette_Epsilon1OddFrameColors:     dc.w    $A22, $C44, $E86, $ECA, 0, $44  ; was: word_4190
-Palette_Epsilon1EvenFrameColors:    dc.w    $C22, $E44, $EA6, $EEC, $46, 0  ; was: word_419C
+Palette_Epsilon1OddFrameColors:     binclude "data/palettes/004190.bin"  ; was: word_4190
+Palette_Epsilon1EvenFrameColors:    binclude "data/palettes/00419C.bin"  ; was: word_419C
 
 ; Updates the shared stage 13-16 color cycles in active and shadow palettes
 Palette_UpdateMidgameColors:                            ; was: sub_41A8

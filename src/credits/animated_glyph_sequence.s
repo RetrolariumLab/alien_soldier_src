@@ -251,7 +251,7 @@ UnreferencedCreditsGlyph_UpdatePaletteRampReturn:       ; was: locret_22074
                 rts
 ; End of function UnreferencedCreditsGlyph_UpdatePaletteRamp
 ; ---------------------------------------------------------------------------
-CreditsGlyph_PaletteRamp:   dc.w    $222, $444, $666, $888, $AAA, $CCC, $EEE  ; was: word_22076
+CreditsGlyph_PaletteRamp:   binclude "data/palettes/022076.bin"  ; was: word_22076
 
 ; Collapses the orbit radius, then derives the hold timer from the record delay
 CreditsGlyph_CollapseOrbitAndSetHold:                   ; was: sub_22084

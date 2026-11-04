@@ -15,19 +15,20 @@ cartridge identities.
 
 ## The segments
 
-The Japanese manifest contains 589 segments. The table groups them rather than
+The Japanese manifest contains 867 segments. The table groups them rather than
 repeating all the ranges and hashes; the manifest is the complete inventory for
 both revisions, including EU overrides under `profiles/`.
 
 | Directory    | JP segments | Contents and interpretation                                                                                 |
 | ------------ | ----------: | ----------------------------------------------------------------------------------------------------------- |
-| `artcomp/`   |         128 | LZSS tile art; each archive has its own length header                                                       |
+| `artcomp/`   |         133 | LZSS tile art; each archive has its own length header                                                       |
 | `artunc/`    |         289 | Raw 4bpp tiles, bare or in DMA-length-prefixed blocks; includes fonts                                       |
 | `mappings/`  |          76 | Compressed plane data and related payloads; a directory name alone does not determine the format            |
 | `other/`     |          55 | Interface art, maps, text, demo streams, palette data and miscellaneous tables, classified by their readers |
 | `credits/`   |           1 | Animated credits glyph stream                                                                               |
 | `cutscenes/` |           1 | Game-over perspective lookup                                                                                |
-| `sound/`     |          39 | Music, effects, FM instruments, DAC banks and the preserved Z80 image                                       |
+| `sound/`     |         210 | Music, effects, FM instruments, envelopes, DAC banks and the preserved Z80 image                            |
+| `palettes/`  |         102 | Palette command banks and colour tables                                                                     |
 
 Extraction is not a claim that every segment is editable. For example, an
 unreferenced archive stays preserved even when no Studio view owns it. Some

@@ -406,9 +406,8 @@ XiTigerCutscene_UpdateLayerPositions:                   ; was: loc_1ECA0
                 rts
 ; End of function XiTigerCutscene_UpdateWaveAndLayerPositions
 ; ---------------------------------------------------------------------------
-XiTigerCutscene_AlternatingPaletteFrames:   dc.w    $26, $68C, 2, 0  ; was: word_1ED28
+XiTigerCutscene_AlternatingPaletteFrames:   binclude "data/palettes/01ED28.bin"  ; was: word_1ED28
                                         ; XiTigerCutscene_UpdateWaveAndLayerPositions+E6   r
-                dc.w    $48, $248, 4, 0
 
 ; Spawns the two marker sprites at symmetric horizontal offsets
 XiTigerCutscene_SpawnMarkerPair:                        ; was: sub_1ED38

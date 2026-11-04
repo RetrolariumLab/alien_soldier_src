@@ -117,7 +117,7 @@ Stage12_YachtDestructionState:                          ; was: loc_2F706
                 bra.w   Stage12_YachtUpdatePlaneOffsets
 ; End of function Stage12_YachtBeginMotion
 ; ---------------------------------------------------------------------------
-Stage12_YachtDestructionPaletteCycle:   dc.w    $A, $E322, $E324, $E326, $E328, $E32A, $E32C, $E32E, $E332, $E334, $E336, $E338
+Stage12_YachtDestructionPaletteCycle:   binclude "data/palettes/02F726.bin"
 
 ; Oscillates the yacht vertically between its two waterline limits
 Stage12_YachtUpdateVerticalBob:                         ; was: sub_2F73E

@@ -228,7 +228,7 @@ Frontend_AnimateMenuPalette:                            ; was: sub_A190
                 rts
 ; End of function Frontend_AnimateMenuPalette
 ; ---------------------------------------------------------------------------
-Frontend_MenuPaletteCycleColors:    dc.w    $E00, $E44, $4C4, $40  ; was: word_A1AE
+Frontend_MenuPaletteCycleColors:    binclude "data/palettes/00A1AE.bin"  ; was: word_A1AE
 Frontend_TitleAssetLoadDescriptors: dc.w    3           ; field_0  ; was: stru_A1B6
                                         ; Frontend_InitializeSegaScreen+1C   o
                 dc.l    SharedTitleAndOptionsType3DataA  ; field_2

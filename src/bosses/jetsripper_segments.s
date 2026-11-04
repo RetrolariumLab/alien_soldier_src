@@ -352,7 +352,7 @@ Boss_JetsripperWritePalette:                            ; was: loc_361B8
                 rts
 ; End of function Boss_JetsripperUpdatePalette
 ; ---------------------------------------------------------------------------
-Boss_JetsripperPaletteFrames:   dc.w    $46, $28A, $4CE, 0, 2, 6, $2A, 0, $AAA, $CCC, $EEE, 0  ; was: word_361C6
+Boss_JetsripperPaletteFrames:   binclude "data/palettes/0361C6.bin"  ; was: word_361C6
                                         ; Boss_JetsripperUpdatePalette+20   r
 
 ; Clamps segment Y position to maximum 0x144

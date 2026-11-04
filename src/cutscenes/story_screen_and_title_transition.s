@@ -342,8 +342,8 @@ StoryTitle_UpdateRevealPalette:                         ; was: sub_4D02
                 rts
 ; End of function StoryTitle_UpdateRevealPalette
 ; ---------------------------------------------------------------------------
-StoryTitle_RepeatedPaletteColorRamp:    dc.w    $EEE, $CCE, $AAE, $88C, $66C, $44C, $22A, $A, $A  ; was: word_4D1E
-StoryTitle_FirstPaletteColorRamp:       dc.w    $666, $666, $666, $444, $444, $224, $222, 2, 2  ; was: word_4D30
+StoryTitle_RepeatedPaletteColorRamp:    binclude "data/palettes/004D1E.bin"  ; was: word_4D1E
+StoryTitle_FirstPaletteColorRamp:       binclude "data/palettes/004D30.bin"  ; was: word_4D30
 
 ; Expands each logo character, then stages the completed spaced logo
 StoryTitle_RevealLogoCharacters:                        ; was: sub_4D42

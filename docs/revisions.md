@@ -31,8 +31,8 @@ make verify-revisions
 The European image preserves its own header product code, checksum, territory
 field, complete two-megabyte checksum loop, region-warning layout, PAL sound
 cadence, story timings and renderer, title layout, credits timings, and Stage 15
-Sunset Sting transition. Only two of the 589 extracted JP payloads have
-different bytes: the primary and accent story rows. The other 587 payloads are
+Sunset Sting transition. Only two of the 867 extracted JP payloads have
+different bytes: the primary and accent story rows. The other 865 payloads are
 shared exactly.
 
 The region split also exposed two address literals that were accidentally valid

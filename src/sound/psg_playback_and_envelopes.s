@@ -242,20 +242,14 @@ Sound_PitchEnvelopePointerTable:    dc.l    Sound_PitchEnvelope_1  ; was: off_84
                 dc.l    Sound_PitchEnvelope_6
                 dc.l    Sound_PitchEnvelope_7
                 dc.l    Sound_PitchEnvelope_8
-Sound_PitchEnvelope_1:  dc.b    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $F  ; was: byte_84CE8
-                dc.b    $10, $11, $12, $13, $14, $83
-Sound_PitchEnvelope_2:  dc.b    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $A, $B, $C, $D, $E, $F  ; was: byte_84CFE
-                dc.b    $10, $11, $12, $13, $14, $80
-Sound_PitchEnvelope_3:  dc.b    $D8, $E2, $EC, $F6, 0, $A, $14, $1E, $28, $83  ; was: byte_84D14
-Sound_PitchEnvelope_4:  dc.b    $D8, $E2, $EC, $F6, 0, $A, $14, $1E, $28, $80  ; was: byte_84D1E
-Sound_PitchEnvelope_6:  dc.b    4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1  ; was: byte_84D28
-Sound_PitchEnvelope_5:  dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1  ; was: byte_84D38
-                dc.b    1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2
-                dc.b    3, 3, 3, 3, 3, 3, 3, 3, 4, $83
-Sound_PitchEnvelope_7:  dc.b    2, $83                  ; was: byte_84D62
-Sound_PitchEnvelope_8:  dc.b    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2  ; was: byte_84D64
-                dc.b    3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6
-                dc.b    6, 6, 6, 6, 7, 7, 7, $83
+Sound_PitchEnvelope_1:  binclude "data/sound/envelopes/pitch_01.bin"  ; was: byte_84CE8
+Sound_PitchEnvelope_2:  binclude "data/sound/envelopes/pitch_02.bin"  ; was: byte_84CFE
+Sound_PitchEnvelope_3:  binclude "data/sound/envelopes/pitch_03.bin"  ; was: byte_84D14
+Sound_PitchEnvelope_4:  binclude "data/sound/envelopes/pitch_04.bin"  ; was: byte_84D1E
+Sound_PitchEnvelope_6:  binclude "data/sound/envelopes/pitch_06.bin"  ; was: byte_84D28
+Sound_PitchEnvelope_5:  binclude "data/sound/envelopes/pitch_05.bin"  ; was: byte_84D38
+Sound_PitchEnvelope_7:  binclude "data/sound/envelopes/pitch_07.bin"  ; was: byte_84D62
+Sound_PitchEnvelope_8:  binclude "data/sound/envelopes/pitch_08.bin"  ; was: byte_84D64
 ; PSG attenuation streams selected by channel field $B
 Sound_PSGVolumeEnvelopePointerTable:    dc.l    Sound_PSGVolumeEnvelope_1  ; was: off_84D8C
                                         ; Sound_DriverInterfaceTable+$14   o
@@ -268,19 +262,13 @@ Sound_PSGVolumeEnvelopePointerTable:    dc.l    Sound_PSGVolumeEnvelope_1  ; was
                 dc.l    Sound_PSGVolumeEnvelope_8
                 dc.l    Sound_PSGVolumeEnvelope_9
                 dc.l    Sound_PSGVolumeEnvelope_10
-Sound_PSGVolumeEnvelope_1:  dc.b    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5  ; was: byte_84DB4
-                dc.b    5, 5, 6, 6, 6, 7, $83
-Sound_PSGVolumeEnvelope_2:  dc.b    0, 2, 4, 6, 8, $10, $83  ; was: byte_84DCB
-Sound_PSGVolumeEnvelope_3:  dc.b    0, 0, 1, 1, 3, 3, 4, 5, $83  ; was: byte_84DD2
-Sound_PSGVolumeEnvelope_4:  dc.b    0, 0, 2, 3, 4, 4, 5, 5, 5, 6, $83  ; was: byte_84DDB
-Sound_PSGVolumeEnvelope_6:  dc.b    4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1  ; was: byte_84DE6
-Sound_PSGVolumeEnvelope_5:  dc.b    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1  ; was: byte_84DF6
-                dc.b    1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2
-                dc.b    3, 3, 3, 3, 3, 3, 3, 3, 4, $83
-Sound_PSGVolumeEnvelope_7:  dc.b    2, $83              ; was: byte_84E20
-Sound_PSGVolumeEnvelope_8:  dc.b    0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2  ; was: byte_84E22
-                dc.b    3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6
-                dc.b    6, 6, 6, 6, 7, 7, 7, $83
-Sound_PSGVolumeEnvelope_9:  dc.b    8, 8, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 4, 4  ; was: byte_84E4A
-                dc.b    4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 0, $81
-Sound_PSGVolumeEnvelope_10: dc.b    8, 7, 6, 5, 4, 3, 3, 2, 2, 1, 1, 0, $81, 0  ; was: byte_84E6A
+Sound_PSGVolumeEnvelope_1:  binclude "data/sound/envelopes/volume_01.bin"  ; was: byte_84DB4
+Sound_PSGVolumeEnvelope_2:  binclude "data/sound/envelopes/volume_02.bin"  ; was: byte_84DCB
+Sound_PSGVolumeEnvelope_3:  binclude "data/sound/envelopes/volume_03.bin"  ; was: byte_84DD2
+Sound_PSGVolumeEnvelope_4:  binclude "data/sound/envelopes/volume_04.bin"  ; was: byte_84DDB
+Sound_PSGVolumeEnvelope_6:  binclude "data/sound/envelopes/volume_06.bin"  ; was: byte_84DE6
+Sound_PSGVolumeEnvelope_5:  binclude "data/sound/envelopes/volume_05.bin"  ; was: byte_84DF6
+Sound_PSGVolumeEnvelope_7:  binclude "data/sound/envelopes/volume_07.bin"  ; was: byte_84E20
+Sound_PSGVolumeEnvelope_8:  binclude "data/sound/envelopes/volume_08.bin"  ; was: byte_84E22
+Sound_PSGVolumeEnvelope_9:  binclude "data/sound/envelopes/volume_09.bin"  ; was: byte_84E4A
+Sound_PSGVolumeEnvelope_10: binclude "data/sound/envelopes/volume_10.bin"  ; was: byte_84E6A

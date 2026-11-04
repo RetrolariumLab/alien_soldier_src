@@ -427,7 +427,5 @@ Gfx_ApplySevenForceBattleFlashPalette:                  ; was: loc_5695E
                 rts
 ; End of function Gfx_UpdateSevenForceBattlePalette
 ; ---------------------------------------------------------------------------
-SevenForce_BattleFlashPaletteColors:    dc.w    $28A, $8EE, $CEE, $28A, $8EE, $CEE, $68  ; was: word_56972
+SevenForce_BattleFlashPaletteColors:    binclude "data/palettes/056972.bin"  ; was: word_56972
                                         ; Gfx_UpdateSevenForceBattlePalette+22   r
-                dc.w    $4CE, $6EC, $A8, $6E, $8AC, $28A, $8EE
-                dc.w    $CEE, $28A, $8EE, $CEE, $28A, $8EE, $CEE

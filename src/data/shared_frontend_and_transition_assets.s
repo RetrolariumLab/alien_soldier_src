@@ -22,30 +22,18 @@ SharedCreditsResultsMappingData6000_End:                ; was: byte_18CC50_End
 SharedCreditsResultsMappingData4020:    binclude "data/mappings/byte_18CD7C.bin"  ; was: byte_18CD7C
 SharedCreditsResultsMappingData4020_End:                ; was: byte_18CD7C_End
 CreditsAndTransitionTileArtE000:                        ; was: byte_18D562
-                dc.b    0, $EB, $60, $E5, $9E, $9F, $5F, 0, 0, $5B, 0, 0, $62, $E5, $9D, $9D, $9E, $9F, $5F, 0, 0, $59, 0, 0, $42, $E5, $9D, $FD, 7, $5F, 0, 0
+                binclude "data/artcomp/18D562.bin"
                                         ; ROM:AlternateTransition_GraphicsLoadDescriptor   o
-                dc.b    $F0, $7F, $FD, 7, $5F, 0, 0, $FC, $7F, $FD, $8B, $5F, 0, 0, $FC, $7F, $FE, $F, $5F, 0, 0, $FC, $7F, $FE, $93, $5F, 0, 0, $FC, $7F, $FF, $17
-                dc.b    $5F, 0, 0, $8B, $F7, $4E, $E5, $9D, $60, $E5, $9E, $9F, $5F, 0, 0, $E0, $41, $50, $E5, $9D, $FC, $83, $5B, 0, 0, $FC, $7F, $FD, 7, $5D, 0, 0
-                dc.b    $FC, $FF, $FD, $8B, $5D, 0, 0, $FD, $7F, $FE, $F, $5D, 0, 0, $FD, $FF, $FE, $93, $5D, 0, 0, $FE, $7F, $FF, $17, $5D, 0, 0, $FE, $FF, $FF, $9B
-                dc.b    $5D, 0, 0, 0, 0, $5E, $E5, $9D, $60, $E5, $9E, $9F, $5C, 0, 0, $5F, $E5, $9D, $FC, $83, $FC, $7F, $5F, $E5, $9D, $FD, 7, $FC, $FF, $5F, $E5, $9D
-                dc.b    $FD, $8B, $FD, $7F, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $51, $E5, $9D, $5F, $E5, $9D, $5F
-                dc.b    $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D
-                dc.b    $5F, $E5, $9D, $5F, $E5, $9D, $5F, $E5, $9D, $FF, $DD, 0, $9D, $FF
 GameOverTileArtA000:        binclude "data/artcomp/tiles_18D650.bin"  ; was: tiles_18D650
 GameOverTileArtA000_End:                                ; was: tiles_18D650_End
 SharedMenuType3DataF680:    binclude "data/other/byte_18DA38.bin"  ; was: byte_18DA38
 SharedMenuType3DataF680_End:                            ; was: byte_18DA38_End
 SharedGameplayTileArtD000:                              ; was: byte_18DF92
-                dc.b    0, $65, $5F, $C7, $F8, $B0, $41, $56, 0, 0, $64, $C7, $CC, $CD, $CE, $CF, $D0, $BF, $5F, $C7, $F8, $FC, $7F, $C0, $7F, $80, $FF, 0, $DC, $62, $C7, $DD
+                binclude "data/artcomp/18DF92.bin"
                                         ; ROM:00013580   o
-                dc.b    $DE, $DF, $BF, $5F, $C7, $F8, $FC, $FF, $C8, $7F, 0, $EC, $62, $C7, $ED, $EE, $EF, $BF, $5F, $C7, $F8, $FD, $7F, $C8, $FF, $5F, $F8, $C7, $FD, $FF, $86, $15
-                dc.b    1, 2, $20, $82, $1A, 1, $20, 2, $88, 3, $90, $B, $FC, $7F, $59, $C7, $F8, $BA, $7F, $3E, $EE, $5F, $C7, $F8, $FE, $FF, $94, $87, $88, $8B, $C0, $8F
-                dc.b    $5F, $C7, $F8, $FF, $7F, $EC, $8F, $FF
 WeaponSetupType3Data5800:   binclude "data/other/byte_18DFFA.bin"  ; was: byte_18DFFA
 WeaponSetupType3Data5800_End:                           ; was: byte_18DFFA_End
-WeaponSetupTileArtE300:     dc.b    0, $54, $20, 0, 1, $CA, $D3, $5F, $C2, $D2, $94, $41, 0, $D3, $58, 0, 0, $80, $7F, $5F, 0, 0, $90, $77, $FC, $7F, $FC, $7F, $5D, 0, 0, $FC  ; was: byte_18E24C
-                dc.b    $FF, $FC, $FF, $5D, 0, 0, $FD, $7F, $FD, $7F, $5D, 0, 0, $FD, $FF, $FD, $FF, $5D, 0, 0, $FE, $7F, $FE, $7F, $5D, 0, 0, $FE, $FF, $FE, $FF, $5D
-                dc.b    0, 0, $FF, $7F, $C7, $9E, $20, 0, 1, $CA, $D3, $5F, $D2, $D2, $90, $41, 1, $C2, $D3, $57, 0, 0
+WeaponSetupTileArtE300:     binclude "data/artcomp/18E24C.bin"  ; was: byte_18E24C
 WeaponSetupMappingData4020:                             ; was: byte_18E2A2
                 dc.b    0, $AC, $7F, $6B, $93, $92, $91, $90, $93, $92, $91, $90, $93, $92, $91, $90, $93, $92, $91, $90, $8F, $8E, $8D, $8C, $8F, $8E, $8D, $8C, $8F, $8E, $8D, $8C
                 dc.b    $8F, $8E, $8D, $8C, $8B, $7F, $6B, $8A, $89, $88, $8B, $8A, $89, $88, $8B, $8A, $89, $88, $8B, $8A, $89, $88, $87, $86, $85, $84, $87, $86, $85, $84, $87, $86
